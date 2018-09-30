@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -92,6 +93,8 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+
     }
 
     private void populateAutoComplete() {
@@ -100,6 +103,12 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
         }
 
         getLoaderManager().initLoader(0, null, this);
+    }
+
+    //Log in the main activity (Ikaras998)
+    private void activate_session() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     private boolean mayRequestContacts() {
@@ -324,20 +333,22 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
             }
 
             // TODO: register the new account here.
-            return true;
+            return false;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            showProgress(false);
 
-            if (success) {
+            if(success){
+                //open the main activity then terminate the login activity (Ikaras998)
+                activate_session();
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
+            showProgress(false);
         }
 
         @Override
