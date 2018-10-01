@@ -49,8 +49,10 @@ public class MenuActivity extends AppCompatActivity implements MainFragment.OnFr
 
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        }
 
         return navigationView;
     }
@@ -88,10 +90,12 @@ public class MenuActivity extends AppCompatActivity implements MainFragment.OnFr
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit();
+        if (fragment != null) {
+            fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit();
+            menuItem.setChecked(true);
+            setTitle(menuItem.getTitle());
+        }
 
-        menuItem.setChecked(true);
-        setTitle(menuItem.getTitle());
         drawerLayout.closeDrawers();
     }
 
