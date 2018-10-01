@@ -14,8 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 
-public class MenuActivity extends AppCompatActivity implements AboutZuluzuluFragment.OnFragmentInteractionListener {
+public class MenuActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, AboutZuluzuluFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
 
@@ -28,6 +29,8 @@ public class MenuActivity extends AppCompatActivity implements AboutZuluzuluFrag
 
         NavigationView navigationView = initNavigationView();
         initDrawerContent(navigationView);
+
+        selectItem(navigationView.getMenu().getItem(0));
     }
 
     @Override
@@ -68,11 +71,14 @@ public class MenuActivity extends AppCompatActivity implements AboutZuluzuluFrag
         Fragment fragment = null;
         Class fragmentClass;
         switch (menuItem.getItemId()) {
+            case R.id.nav_main:
+                fragmentClass = MainFragment.class;
+                break;
             case R.id.nav_about:
                 fragmentClass = AboutZuluzuluFragment.class;
                 break;
             default:
-                fragmentClass = AboutZuluzuluFragment.class;
+                fragmentClass = MainFragment.class;
         }
 
         try {
