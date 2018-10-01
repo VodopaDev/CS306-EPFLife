@@ -3,28 +3,31 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import android.location.Location;
 import android.media.Image;
 
+import java.util.Date;
 import java.util.List;
 
-public class Association {
+public class Event {
 
     private int id;
     private String name;
     private String description;
     private Image icon;
 
-    private Location pos;
+    private int chat_id;
+    private int asso_id;
     private List<Integer> admins;
 
-    private int main_chat_id;
-    private List<Integer> chats;
-    private List<Integer> events;
+    private Location pos;
+    private Date start_date;
+    private Date end_date;
 
     // TODO: Get data from cloud service using the id
-    public Association(int id){
+    public Event(int id) {
+
         this.id = id;
     }
 
-    // TODO: Add a method to add/remove one User to admins, same for chats and events
+    // TODO: Add a method to add/remove one User to admins (instead of getting/setting the admins list)
     // TODO: Check inputs before changing fields
     public int getId() {
         return id;
@@ -54,11 +57,18 @@ public class Association {
         this.icon = icon;
     }
 
-    public Location getPos() {
-        return pos;
+    public int getChat_id() {
+        return chat_id;
     }
-    public void setPos(Location pos) {
-        this.pos = pos;
+    public void setChat_id(int chat_id) {
+        this.chat_id = chat_id;
+    }
+
+    public int getAsso_id() {
+        return asso_id;
+    }
+    public void setAsso_id(int asso_id) {
+        this.asso_id = asso_id;
     }
 
     public List<Integer> getAdmins() {
@@ -68,24 +78,25 @@ public class Association {
         this.admins = admins;
     }
 
-    public int getMain_chat_id() {
-        return main_chat_id;
+    public Location getPos() {
+        return pos;
     }
-    public void setMain_chat_id(int main_chat_id) {
-        this.main_chat_id = main_chat_id;
-    }
-
-    public List<Integer> getChats() {
-        return chats;
-    }
-    public void setChats(List<Integer> chats) {
-        this.chats = chats;
+    public void setPos(Location pos) {
+        this.pos = pos;
     }
 
-    public List<Integer> getEvents() {
-        return events;
+    public Date getStart_date() {
+        return start_date;
     }
-    public void setEvents(List<Integer> events) {
-        this.events = events;
+    public void setStart_date(Date start_date) {
+        this.start_date = start_date;
     }
+
+    public Date getEnd_date() {
+        return end_date;
+    }
+    public void setEnd_date(Date end_date) {
+        this.end_date = end_date;
+    }
+
 }

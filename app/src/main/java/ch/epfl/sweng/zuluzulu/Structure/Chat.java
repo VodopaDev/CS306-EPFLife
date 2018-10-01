@@ -13,11 +13,12 @@ public class Chat {
     private List<Integer> users;
     private List<Integer> admins;
 
-    // TODO: Get data from cloud service using the id;
+    // TODO: Get data from cloud service using the id
     public Chat(int id) {
         this.id = id;
     }
 
+    // TODO: Add a method to add/remove one User from users or admins, same for messages
     // TODO: Check inputs before changing fields
     public int getId() {
         return id;
