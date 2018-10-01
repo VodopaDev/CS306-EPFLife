@@ -1,8 +1,13 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
+import android.widget.EditText;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,8 +23,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class LoginTequilaTest {
@@ -55,4 +59,35 @@ public class LoginTequilaTest {
         onView(withId(R.id.email_sign_in_button)).perform(click()).check(matches(isDisplayed()));
     }
 
+
+    @Test
+    public void acceptOnlyEPFL(){
+        onView(withId(R.id.email)).perform(typeText("user@epfl.ch")).perform(closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(replaceText("wrong_password")).perform(closeSoftKeyboard());
+        onView(withId(R.id.email_sign_in_button)).perform(click());
+        onView(withId(R.id.email)).check(matches(hasNoErrorText()));
+
+        onView(withId(R.id.email)).perform(replaceText("user@not_epfl.ch")).perform(closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(replaceText("wrong_password")).perform(closeSoftKeyboard());
+        onView(withId(R.id.email_sign_in_button)).perform(click());
+        onView(withId(R.id.email)).check(matches(not(hasNoErrorText())));
+    }
+
+    /**
+     * Class test if there is an error message in a EditText
+     */
+    private static Matcher<View> hasNoErrorText() {
+        return new BoundedMatcher<View, EditText>(EditText.class) {
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("has no error text: ");
+            }
+
+            @Override
+            protected boolean matchesSafely(EditText view) {
+                return view.getError() == null;
+            }
+        };
+    }
 }
