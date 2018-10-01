@@ -365,7 +365,7 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
             }
 
             // REMOVED_TODO: register the new account here.
-            // We do not want to offer registration. (Dahn)
+            // We do not want to offer registration.(Dahn)
 
             return false;
         }
