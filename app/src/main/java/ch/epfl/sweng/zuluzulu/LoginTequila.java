@@ -50,6 +50,7 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -61,12 +62,19 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
     private View mProgressView;
     private View mLoginFormView;
 
+    /**
+     * Create the login instance
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_tequila);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+
+        // TODO c'est pour les contacts c'est ça ?
+        // TODO Si oui, inutile pour notre application
         populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -91,8 +99,6 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
-
     }
 
     private void populateAutoComplete() {
@@ -103,12 +109,19 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
         getLoaderManager().initLoader(0, null, this);
     }
 
-    //Log in the main activity (Ikaras998)
+    /**
+     * Is executed once the session is active
+     * Log in the main activity
+     */
     private void activate_session() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * TODO Utile ?
+     * @return boolean
+     */
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
@@ -132,6 +145,7 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
     }
 
     /**
+     * TODO Same, pour les contacts
      * Callback received when a permissions request has been completed.
      */
     @Override
@@ -143,7 +157,6 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
             }
         }
     }
-
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -191,17 +204,28 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
+            /* Try to connect */
+            // TODO Call here the connexion try
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }
     }
 
+    /**
+     * Check if the mail is valid
+     * @param email email
+     * @return boolean
+     */
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
+    /**
+     * Check if the password is valid
+     * @param password password
+     * @return boolean
+     */
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
         return password.length() > 4;
@@ -243,6 +267,7 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
         }
     }
 
+    // TODO Pas utilisé. Supprimer ?
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
@@ -260,6 +285,11 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
     }
 
+    /**
+     * Called when a previously created loader has finished its load
+     * @param cursorLoader
+     * @param cursor
+     */
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> emails = new ArrayList<>();
@@ -322,6 +352,8 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
                 return false;
             }
 
+
+            // Check credidentials
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {

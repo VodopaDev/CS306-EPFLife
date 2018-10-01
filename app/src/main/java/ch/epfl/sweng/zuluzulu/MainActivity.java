@@ -23,13 +23,14 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
     private DrawerLayout drawerLayout;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.logoutButton);
-        mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
+        Button logoutButton = (Button) findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 logout();
