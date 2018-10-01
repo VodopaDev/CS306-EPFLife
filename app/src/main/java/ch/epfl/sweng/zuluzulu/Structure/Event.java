@@ -23,7 +23,6 @@ public class Event {
 
     // TODO: Get data from cloud service using the id
     public Event(int id) {
-
         this.id = id;
     }
 
