@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Menu"
         android:textSize="30sp"
+        android:textColor="@android:color/white"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
 </LinearLayout>
