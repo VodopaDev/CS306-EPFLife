@@ -8,7 +8,6 @@ import android.widget.EditText;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,10 +18,8 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
@@ -32,6 +29,10 @@ public class LoginTequilaTest {
     public final ActivityTestRule<LoginTequila> mActivityRule =
             new ActivityTestRule<>(LoginTequila.class);
 
+    /**
+     *
+     * Test connection is accepted with correct credentials
+     */
     @Test
     public void testCanLogIn() {
         //You have to test if it works for wrong credentials, if it logins properly and if you have any
@@ -44,6 +45,9 @@ public class LoginTequilaTest {
 
     }
 
+    /**
+     * Test connection is refused with bad credentials
+     */
     @Test
     public void testWrongLogIn() {
         //You have to test if it works for wrong credentials, if it logins properly and if you have any
@@ -59,7 +63,9 @@ public class LoginTequilaTest {
         onView(withId(R.id.email_sign_in_button)).perform(click()).check(matches(isDisplayed()));
     }
 
-
+    /**
+     * Check if the mail is correct (@epfl.ch)
+     */
     @Test
     public void acceptOnlyEPFL(){
         onView(withId(R.id.email)).perform(typeText("user@epfl.ch")).perform(closeSoftKeyboard());
@@ -71,6 +77,19 @@ public class LoginTequilaTest {
         onView(withId(R.id.password)).perform(replaceText("wrong_password")).perform(closeSoftKeyboard());
         onView(withId(R.id.email_sign_in_button)).perform(click());
         onView(withId(R.id.email)).check(matches(not(hasNoErrorText())));
+    }
+
+
+    /**
+     * Check if a wrong password return an error message
+     */
+    @Test
+    public void checkPasswords(){
+        onView(withId(R.id.email)).perform(replaceText("user@epfl.ch")).perform(closeSoftKeyboard());
+        // Test with a too small password
+        onView(withId(R.id.password)).perform(replaceText("wra")).perform(closeSoftKeyboard());
+        onView(withId(R.id.email_sign_in_button)).perform(click());
+        onView(withId(R.id.password)).check(matches(not(hasNoErrorText())));
     }
 
     /**
