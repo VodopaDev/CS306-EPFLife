@@ -35,6 +35,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
+ * TODO we will need to edit the mail form to a text form. We want a gaspar input, not a mail. (Dahn)
  */
 public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
@@ -48,7 +49,8 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
      * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
+            "user@epfl.ch:password",
+            "bar@example.com:world"
     };
 
     /**
@@ -73,7 +75,7 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
-        // TODO c'est pour les contacts c'est ça ?
+        // TODO c'est pour les contacts c'est ça ? (Dahn)
         // TODO Si oui, inutile pour notre application
         populateAutoComplete();
 
@@ -218,7 +220,7 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
      * @return boolean
      */
     private boolean isEmailValid(String email) {
-        return email.contains("@");
+        return email.contains("@epfl.ch");
     }
 
     /**
@@ -362,7 +364,9 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
                 }
             }
 
-            // TODO: register the new account here.
+            // REMOVED_TODO: register the new account here.
+            // We do not want to offer registration. (Dahn)
+
             return false;
         }
 
