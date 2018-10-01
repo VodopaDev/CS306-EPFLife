@@ -39,8 +39,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
         }
-        return super.onOptionsItemSelected(item);
     }
 
     private NavigationView initNavigationView() {
