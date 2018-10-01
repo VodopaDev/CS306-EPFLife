@@ -15,8 +15,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 public class MenuActivityTest {
     @Rule
-    public final ActivityTestRule<MenuActivity> mActivityRule =
-            new ActivityTestRule<>(MenuActivity.class);
+    public final ActivityTestRule<MainActivity> mActivityRule =
+            new ActivityTestRule<>(MainActivity.class);
     @Test
     public void testOpenNavigationView() {
         // Open Drawer to click on navigation.
