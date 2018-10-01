@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasErrorText;
@@ -39,5 +40,19 @@ public class LoginTequilaTest {
 
     }
 
+    @Test
+    public void testWrongLogIn() {
+        //You have to test if it works for wrong credentials, if it logins properly and if you have any
+        //other idea you are welcome to test them
+
+        onView(withId(R.id.email)).perform(typeText("not_user@epfl.ch")).perform(closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
+        onView(withId(R.id.email_sign_in_button)).perform(click()).check(matches(isDisplayed()));
+
+
+        onView(withId(R.id.email)).perform(replaceText("user@epfl.ch")).perform(closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(replaceText("wrong_password")).perform(closeSoftKeyboard());
+        onView(withId(R.id.email_sign_in_button)).perform(click()).check(matches(isDisplayed()));
+    }
 
 }
