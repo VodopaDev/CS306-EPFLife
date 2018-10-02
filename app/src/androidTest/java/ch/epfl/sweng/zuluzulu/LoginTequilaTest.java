@@ -76,7 +76,7 @@ public class LoginTequilaTest {
 
 
         onView(withId(R.id.username)).perform(replaceText("user")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(replaceText("wrong_password")).perform(closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(replaceText("wrong_password1")).perform(closeSoftKeyboard());
         onView(withId(R.id.sign_in_button)).perform(click()).check(matches(isDisplayed()));
     }
 
@@ -87,7 +87,7 @@ public class LoginTequilaTest {
     public void checkUserName() {
         // too short
         onView(withId(R.id.username)).perform(replaceText("abc")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(replaceText("wrong_password")).perform(closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(replaceText("wrong_password2")).perform(closeSoftKeyboard());
         onView(withId(R.id.sign_in_button)).perform(click());
         onView(withId(R.id.username)).check(matches(not(hasNoErrorText())));
     }
@@ -98,7 +98,7 @@ public class LoginTequilaTest {
     @Test
     public void checkPasswords() {
         // Test with a too small password
-        onView(withId(R.id.username)).perform(typeText("user")).perform(closeSoftKeyboard());
+        onView(withId(R.id.username)).perform(typeText("username")).perform(closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("wra")).perform(closeSoftKeyboard());
         onView(withId(R.id.sign_in_button)).perform(click());
         onView(withId(R.id.password)).check(matches(not(hasNoErrorText())));
