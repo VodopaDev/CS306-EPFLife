@@ -22,8 +22,7 @@ import android.widget.TextView;
 
 
 /**
- * A login screen that offers login via email/password.
- * TODO we will need to edit the mail form to a text form. We want a gaspar input, not a mail. (Dahn)
+ * A login screen that offers login via username/password.
  */
 public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
@@ -150,7 +149,7 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
     }
 
     /**
-     * Check if the mail is valid
+     * Check if the username is valid
      *
      * @param username username
      * @return boolean
