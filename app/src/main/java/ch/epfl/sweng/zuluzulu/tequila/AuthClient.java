@@ -1,7 +1,7 @@
 package ch.epfl.sweng.zuluzulu.tequila;
 
 
-import static java.lang.String.join;
+import android.text.TextUtils;
 
 /**
  * Client code for Tequila authentication.
@@ -14,7 +14,7 @@ public final class AuthClient {
                 "?response_type=code" +
                 "&client_id=" + HttpUtils.urlEncode(config.clientId) +
                 "&redirect_uri=" + HttpUtils.urlEncode(config.redirectUri) +
-                "&scope=" + join(",", config.scopes);
+                "&scope=" + TextUtils.join(",", config.scopes);
     }
 
     public static String extractCode(String redirectUri) {
