@@ -102,9 +102,9 @@ public class LoginTequilaTest {
      */
     @Test
     public void checkPasswords() {
-        onView(withId(R.id.username)).perform(replaceText("user")).perform(closeSoftKeyboard());
         // Test with a too small password
-        onView(withId(R.id.password)).perform(replaceText("wra")).perform(closeSoftKeyboard());
+        onView(withId(R.id.username)).perform(typeText("user")).perform(closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(typeText("wra")).perform(closeSoftKeyboard());
         onView(withId(R.id.sign_in_button)).perform(click());
         onView(withId(R.id.password)).check(matches(not(hasNoErrorText())));
     }
