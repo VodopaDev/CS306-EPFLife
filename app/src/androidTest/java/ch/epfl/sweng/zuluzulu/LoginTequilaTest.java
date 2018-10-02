@@ -85,12 +85,6 @@ public class LoginTequilaTest {
      */
     @Test
     public void checkUserName() {
-        /*
-        onView(withId(R.id.username)).perform(typeText("long_enough")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(replaceText("wrong_password")).perform(closeSoftKeyboard());
-        onView(withId(R.id.sign_in_button)).perform(click());
-        onView(withId(R.id.username)).check(matches(hasNoErrorText()));
-*/
         // too short
         onView(withId(R.id.username)).perform(replaceText("abc")).perform(closeSoftKeyboard());
         onView(withId(R.id.password)).perform(replaceText("wrong_password")).perform(closeSoftKeyboard());
