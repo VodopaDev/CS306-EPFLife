@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+/*
+        TODO removed to avoid conflict with the menu
+
         setContentView(R.layout.activity_main);
 
         Button logoutButton = (Button) findViewById(R.id.logoutButton);
@@ -36,19 +39,22 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                 logout();
             }
         });
-    }
 
-    private void logout(){
-        Intent intent = new Intent(this, LoginTequila.class);
-        startActivity(intent);
+
+*/
         setContentView(R.layout.activity_menu);
-
         drawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = initNavigationView();
         initDrawerContent(navigationView);
 
         selectItem(navigationView.getMenu().getItem(0));
+
+    }
+
+    private void logout(){
+        Intent intent = new Intent(this, LoginTequila.class);
+        startActivity(intent);
     }
 
     @Override

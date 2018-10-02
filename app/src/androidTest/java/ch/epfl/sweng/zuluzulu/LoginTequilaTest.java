@@ -58,7 +58,8 @@ public class LoginTequilaTest {
         onView(withId(R.id.username)).perform(typeText("user")).perform(closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
         onView(withId(R.id.sign_in_button)).perform(click());
-        onView(withId(R.id.logoutButton)).check(matches(isDisplayed()));
+        // TODO change by logout is displayed once logout is implemented
+        onView(withId(R.id.drawer_layout)).check(matches(isDisplayed()));
     }
 
     /**
