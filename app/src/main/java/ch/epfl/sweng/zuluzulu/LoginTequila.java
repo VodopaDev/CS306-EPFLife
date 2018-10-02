@@ -91,6 +91,14 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
     }
 
     /**
+     * Reset the errors
+     */
+    private void reset_errors(){
+        mUsernameView.setError(null);
+        mPasswordView.setError(null);
+    }
+
+    /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid username, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
@@ -101,8 +109,7 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
         }
 
         // Reset errors.
-        mUsernameView.setError(null);
-        mPasswordView.setError(null);
+        reset_errors();
 
         // Store values at the time of the login attempt.
         String username = mUsernameView.getText().toString();
@@ -125,7 +132,7 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
         }
 
         if (cancel) {
-            // AFocus the first form field with an error.
+            // Focus the first form field with an error.
             focusView.requestFocus();
         } else {
             // perform the user login attempt.
