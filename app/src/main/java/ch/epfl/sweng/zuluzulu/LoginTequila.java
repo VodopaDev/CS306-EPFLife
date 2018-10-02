@@ -38,8 +38,8 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
      * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "user@epfl.ch:password",
-            "bar@example.com:world"
+            "user:password",
+            "bar:world"
     };
 
     /**
@@ -47,7 +47,7 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
      */
     private UserLoginTask mAuthTask = null;
 
-    private EditText mEmailView;
+    private EditText mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -74,10 +74,10 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
             }
         });
 
-        mEmailView = (EditText) findViewById(R.id.email);
+        mUsernameView = (EditText) findViewById(R.id.username);
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button mSignInButon = (Button) findViewById(R.id.sign_in_button);
+        mSignInButon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -99,7 +99,7 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
 
     /**
      * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
+     * If there are form errors (invalid username, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
@@ -108,11 +108,11 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
         }
 
         // Reset errors.
-        mEmailView.setError(null);
+        mUsernameView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -125,18 +125,18 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
             cancel = true;
         }
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+        // Check for a valid username address.
+        if (TextUtils.isEmpty(username)) {
+            mUsernameView.setError(getString(R.string.error_field_required));
+            focusView = mUsernameView;
             cancel = true;
         } else if (TextUtils.isEmpty(password)) {
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
+        } else if (!isUsernameValid(username)) {
+            mUsernameView.setError(getString(R.string.error_invalid_username));
+            focusView = mUsernameView;
             cancel = true;
         }
 
@@ -150,7 +150,7 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
             /* Try to connect */
             // TODO Call here the connexion try
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(username, password);
             mAuthTask.execute((Void) null);
         }
     }
@@ -158,11 +158,11 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
     /**
      * Check if the mail is valid
      *
-     * @param email email
+     * @param username username
      * @return boolean
      */
-    private boolean isEmailValid(String email) {
-        return email.contains("@epfl.ch");
+    private boolean isUsernameValid(String username) {
+        return username.length() > 3;
     }
 
     /**
@@ -172,7 +172,7 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
      * @return boolean
      */
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
+        //TODO: Replace this with our futur logic
         return password.length() > 4;
     }
 
@@ -212,7 +212,6 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
         }
     }
 
-    // TODO Pas utilisé. Supprimer ?
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
@@ -267,11 +266,11 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mEmail;
+        private final String mUsername;
         private final String mPassword;
 
-        UserLoginTask(String email, String password) {
-            mEmail = email;
+        UserLoginTask(String username, String password) {
+            mUsername = username;
             mPassword = password;
         }
 
@@ -290,7 +289,7 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
             // Check credidentials
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
+                if (pieces[0].equals(mUsername)) {
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }

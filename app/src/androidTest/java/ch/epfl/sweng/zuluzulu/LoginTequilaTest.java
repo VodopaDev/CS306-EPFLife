@@ -30,69 +30,6 @@ public class LoginTequilaTest {
             new ActivityTestRule<>(LoginTequila.class);
 
     /**
-     *
-     * Test connection is accepted with correct credentials
-     */
-    @Test
-    public void testCanLogIn() {
-        //You have to test if it works for wrong credentials, if it logins properly and if you have any
-        //other idea you are welcome to test them
-
-        onView(withId(R.id.email)).perform(typeText("user@epfl.ch")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
-        onView(withId(R.id.email_sign_in_button)).perform(click());
-        onView(withId(R.id.logoutButton)).check(matches(isDisplayed()));
-
-    }
-
-    /**
-     * Test connection is refused with bad credentials
-     */
-    @Test
-    public void testWrongLogIn() {
-        //You have to test if it works for wrong credentials, if it logins properly and if you have any
-        //other idea you are welcome to test them
-
-        onView(withId(R.id.email)).perform(typeText("not_user@epfl.ch")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
-        onView(withId(R.id.email_sign_in_button)).perform(click()).check(matches(isDisplayed()));
-
-
-        onView(withId(R.id.email)).perform(replaceText("user@epfl.ch")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(replaceText("wrong_password")).perform(closeSoftKeyboard());
-        onView(withId(R.id.email_sign_in_button)).perform(click()).check(matches(isDisplayed()));
-    }
-
-    /**
-     * Check if the mail is correct (@epfl.ch)
-     */
-    @Test
-    public void acceptOnlyEPFL(){
-        onView(withId(R.id.email)).perform(typeText("user@epfl.ch")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(replaceText("wrong_password")).perform(closeSoftKeyboard());
-        onView(withId(R.id.email_sign_in_button)).perform(click());
-        onView(withId(R.id.email)).check(matches(hasNoErrorText()));
-
-        onView(withId(R.id.email)).perform(replaceText("user@not_epfl.ch")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(replaceText("wrong_password")).perform(closeSoftKeyboard());
-        onView(withId(R.id.email_sign_in_button)).perform(click());
-        onView(withId(R.id.email)).check(matches(not(hasNoErrorText())));
-    }
-
-
-    /**
-     * Check if a wrong password return an error message
-     */
-    @Test
-    public void checkPasswords(){
-        onView(withId(R.id.email)).perform(replaceText("user@epfl.ch")).perform(closeSoftKeyboard());
-        // Test with a too small password
-        onView(withId(R.id.password)).perform(replaceText("wra")).perform(closeSoftKeyboard());
-        onView(withId(R.id.email_sign_in_button)).perform(click());
-        onView(withId(R.id.password)).check(matches(not(hasNoErrorText())));
-    }
-
-    /**
      * Class test if there is an error message in a EditText
      */
     private static Matcher<View> hasNoErrorText() {
@@ -108,5 +45,66 @@ public class LoginTequilaTest {
                 return view.getError() == null;
             }
         };
+    }
+
+    /**
+     * Test connection is accepted with correct credentials
+     */
+    @Test
+    public void testCanLogIn() {
+        //You have to test if it works for wrong credentials, if it logins properly and if you have any
+        //other idea you are welcome to test them
+
+        onView(withId(R.id.username)).perform(typeText("user")).perform(closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
+        onView(withId(R.id.sign_in_button)).perform(click());
+        onView(withId(R.id.logoutButton)).check(matches(isDisplayed()));
+    }
+
+    /**
+     * Test connection is refused with bad credentials
+     */
+    @Test
+    public void testWrongLogIn() {
+        //You have to test if it works for wrong credentials, if it logins properly and if you have any
+        //other idea you are welcome to test them
+
+        onView(withId(R.id.username)).perform(typeText("not_user")).perform(closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
+        onView(withId(R.id.sign_in_button)).perform(click()).check(matches(isDisplayed()));
+
+
+        onView(withId(R.id.username)).perform(replaceText("user")).perform(closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(replaceText("wrong_password")).perform(closeSoftKeyboard());
+        onView(withId(R.id.sign_in_button)).perform(click()).check(matches(isDisplayed()));
+    }
+
+    /**
+     * Check if the username is correct (refuse too short)
+     */
+    @Test
+    public void checkUserName() {
+        onView(withId(R.id.username)).perform(typeText("long_enough")).perform(closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(replaceText("wrong_password")).perform(closeSoftKeyboard());
+        onView(withId(R.id.sign_in_button)).perform(click());
+        onView(withId(R.id.username)).check(matches(hasNoErrorText()));
+
+        // too short
+        onView(withId(R.id.username)).perform(replaceText("abc")).perform(closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(replaceText("wrong_password")).perform(closeSoftKeyboard());
+        onView(withId(R.id.sign_in_button)).perform(click());
+        onView(withId(R.id.username)).check(matches(not(hasNoErrorText())));
+    }
+
+    /**
+     * Check if a wrong password return an error message
+     */
+    @Test
+    public void checkPasswords() {
+        onView(withId(R.id.username)).perform(replaceText("user")).perform(closeSoftKeyboard());
+        // Test with a too small password
+        onView(withId(R.id.password)).perform(replaceText("wra")).perform(closeSoftKeyboard());
+        onView(withId(R.id.sign_in_button)).perform(click());
+        onView(withId(R.id.password)).check(matches(not(hasNoErrorText())));
     }
 }
