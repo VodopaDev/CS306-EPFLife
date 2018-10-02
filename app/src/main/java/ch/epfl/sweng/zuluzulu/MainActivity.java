@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
@@ -20,17 +23,38 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
     private DrawerLayout drawerLayout;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+/*
+        TODO removed to avoid conflict with the menu
 
+        setContentView(R.layout.activity_main);
+
+        Button logoutButton = (Button) findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logout();
+            }
+        });
+
+
+*/
+        setContentView(R.layout.activity_menu);
         drawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = initNavigationView();
         initDrawerContent(navigationView);
 
         selectItem(navigationView.getMenu().getItem(0));
+
+    }
+
+    private void logout(){
+        Intent intent = new Intent(this, LoginTequila.class);
+        startActivity(intent);
     }
 
     @Override
