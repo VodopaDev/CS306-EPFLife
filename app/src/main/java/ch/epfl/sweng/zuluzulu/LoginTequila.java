@@ -126,14 +126,10 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
+            // AFocus the first form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            /* Try to connect */
-            // TODO Call here the connexion try
             showProgress(true);
             mAuthTask = new UserLoginTask(username, password);
             mAuthTask.execute((Void) null);
