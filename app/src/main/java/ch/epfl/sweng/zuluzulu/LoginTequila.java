@@ -123,14 +123,6 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
             mUsernameView.setError(getString(R.string.error_field_required));
             focusView = mUsernameView;
             cancel = true;
-        } else if (TextUtils.isEmpty(password)) {
-            mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
-            cancel = true;
-        } else if (!isUsernameValid(username)) {
-            mUsernameView.setError(getString(R.string.error_invalid_username));
-            focusView = mUsernameView;
-            cancel = true;
         }
 
         if (cancel) {
