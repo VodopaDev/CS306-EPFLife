@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,6 +52,18 @@ public class LoginTest {
         };
     }
 
+    @Before
+    public void openLoginFragment() {
+        // Open Drawer to click on navigation.
+        onView(withId(R.id.drawer_layout))
+                .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+                .perform(DrawerActions.open()); // Open Drawer
+
+        // Click on the login item in the Drawer
+        onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.nav_login));
+    }
+
     /**
      * Test connection is accepted with correct credentials
      */
@@ -58,8 +71,6 @@ public class LoginTest {
     public void testCanLogIn() {
         //You have to test if it works for wrong credentials, if it logins properly and if you have any
         //other idea you are welcome to test them
-
-        init();
 
         onView(withId(R.id.username)).perform(typeText("user")).perform(closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
@@ -73,8 +84,6 @@ public class LoginTest {
     public void testWrongLogIn() {
         //You have to test if it works for wrong credentials, if it logins properly and if you have any
         //other idea you are welcome to test them
-
-        init();
 
         onView(withId(R.id.username)).perform(typeText("not_user")).perform(closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
@@ -91,7 +100,6 @@ public class LoginTest {
     @Test
     public void checkUserName() {
         // too short
-        init();
         onView(withId(R.id.username)).perform(replaceText("")).perform(closeSoftKeyboard());
         onView(withId(R.id.password)).perform(replaceText("wrong_password2")).perform(closeSoftKeyboard());
         onView(withId(R.id.sign_in_button)).perform(click());
@@ -104,21 +112,9 @@ public class LoginTest {
     @Test
     public void checkPasswords() {
         // Test with a too small password
-        init();
         onView(withId(R.id.username)).perform(typeText("username")).perform(closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("wra")).perform(closeSoftKeyboard());
         onView(withId(R.id.sign_in_button)).perform(click());
         onView(withId(R.id.password)).check(matches(not(hasNoErrorText())));
-    }
-
-    private void init() {
-        // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-                .perform(DrawerActions.open()); // Open Drawer
-
-        // Click on the login item in the Drawer
-        onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_login));
     }
 }
