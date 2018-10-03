@@ -1,39 +1,48 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Intent;
-import android.content.Loader;
+import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import ch.epfl.sweng.zuluzulu.R;
 
 /**
- * A login screen that offers login via username/password.
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link LoginFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link LoginFragment#newInstance} factory method to
+ * create an instance of this fragment.
  */
-public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "user:password",
-            "bar:world"
-    };
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -45,17 +54,60 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
     private View mProgressView;
     private View mLoginFormView;
 
+    private OnFragmentInteractionListener mListener;
+
+    public LoginFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment LoginFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static LoginFragment newInstance(String param1, String param2) {
+        LoginFragment fragment = new LoginFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     /**
      * Create the login instance
      *
      * @param savedInstanceState state
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_tequila);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
 
-        mPasswordView = (EditText) findViewById(R.id.password);
+    /**
+     * A dummy authentication store containing known user names and passwords.
+     * TODO: remove after connecting to a real authentication system.
+     */
+    private static final String[] DUMMY_CREDENTIALS = new String[]{
+            "user:password",
+            "bar:world"
+    };
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+
+        mPasswordView = (EditText) view.findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -67,18 +119,20 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
             }
         });
 
-        mUsernameView = (EditText) findViewById(R.id.username);
+        mUsernameView = (EditText) view.findViewById(R.id.username);
 
-        Button mSignInButon = (Button) findViewById(R.id.sign_in_button);
-        mSignInButon.setOnClickListener(new OnClickListener() {
+        Button mSignInButon = (Button) view.findViewById(R.id.sign_in_button);
+        mSignInButon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        mLoginFormView = view.findViewById(R.id.login_form);
+        mProgressView = view.findViewById(R.id.login_progress);
+
+        return view;
     }
 
     /**
@@ -86,8 +140,20 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
      * Log in the main activity
      */
     private void activate_session() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        // Todo Maybe need to redirect it to the mainFragment
+        Fragment fragment = null;
+        Class fragmentClass = MainFragment.class;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragment != null) {
+            System.out.println("yo");
+            fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment);
+        }
     }
 
     /**
@@ -199,23 +265,21 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
         }
     }
 
-
+    @NonNull
     @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+    public android.support.v4.content.Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
         return null;
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+    public void onLoadFinished(@NonNull android.support.v4.content.Loader<Cursor> loader, Cursor cursor) {
 
     }
-
 
     @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+    public void onLoaderReset(@NonNull android.support.v4.content.Loader<Cursor> loader) {
 
     }
-
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
@@ -265,7 +329,6 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
             if (success) {
                 //open the main activity then terminate the login activity (Ikaras998)
                 activate_session();
-                finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -279,5 +342,45 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
             showProgress(false);
         }
     }
-}
 
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
+
+}
