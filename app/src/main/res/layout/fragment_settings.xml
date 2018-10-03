@@ -23,7 +23,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="320dp"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:checked="false"
+        android:clickable="true" />
 
     <TextView
         android:id="@+id/text_night_light"
@@ -56,6 +58,7 @@
         android:layout_height="39dp"
         android:layout_marginLeft="300dp"
         android:layout_marginTop="100dp"
+        android:cursorVisible="true"
         android:text="Clear" />
 
 </FrameLayout>
