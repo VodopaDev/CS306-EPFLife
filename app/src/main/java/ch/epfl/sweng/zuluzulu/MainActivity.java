@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -18,7 +17,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, AboutZuluzuluFragment.OnFragmentInteractionListener, LoginFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -139,7 +138,16 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-        // Not used for the moment
+    public void onFragmentInteraction(String tag, Object data) {
+        switch(tag) {
+            case MainFragment.TAG:
+                // You get something from the main fragment
+                break;
+            case LoginFragment.TAG:
+                // You get something from the login fragment
+                break;
+            default:
+                // Should never happen
+        }
     }
 }
