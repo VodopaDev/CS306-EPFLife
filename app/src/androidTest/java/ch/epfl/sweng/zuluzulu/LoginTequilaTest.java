@@ -1,8 +1,11 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.support.test.espresso.contrib.DrawerActions;
+import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 
@@ -18,6 +21,7 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.not;
@@ -26,8 +30,8 @@ import static org.hamcrest.Matchers.not;
 public class LoginTequilaTest {
 
     @Rule
-    public final ActivityTestRule<LoginTequila> mActivityRule =
-            new ActivityTestRule<>(LoginTequila.class);
+    public final ActivityTestRule<MainActivity> mActivityRule =
+            new ActivityTestRule<>(MainActivity.class);
 
     /**
      * Class test if there is an error message in a EditText
@@ -55,11 +59,13 @@ public class LoginTequilaTest {
         //You have to test if it works for wrong credentials, if it logins properly and if you have any
         //other idea you are welcome to test them
 
+        init();
+
         onView(withId(R.id.username)).perform(typeText("user")).perform(closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
         onView(withId(R.id.sign_in_button)).perform(click());
         // TODO change by logout is displayed once logout is implemented
-        onView(withId(R.id.drawer_layout)).check(matches(isDisplayed()));
+        //onView(withId(R.id.drawer_layout)).check(matches(isDisplayed()));
     }
 
     /**
@@ -69,6 +75,8 @@ public class LoginTequilaTest {
     public void testWrongLogIn() {
         //You have to test if it works for wrong credentials, if it logins properly and if you have any
         //other idea you are welcome to test them
+
+        init();
 
         onView(withId(R.id.username)).perform(typeText("not_user")).perform(closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
@@ -86,6 +94,7 @@ public class LoginTequilaTest {
     @Test
     public void checkUserName() {
         // too short
+        init();
         onView(withId(R.id.username)).perform(replaceText("")).perform(closeSoftKeyboard());
         onView(withId(R.id.password)).perform(replaceText("wrong_password2")).perform(closeSoftKeyboard());
         onView(withId(R.id.sign_in_button)).perform(click());
@@ -98,9 +107,21 @@ public class LoginTequilaTest {
     @Test
     public void checkPasswords() {
         // Test with a too small password
+        init();
         onView(withId(R.id.username)).perform(typeText("username")).perform(closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("wra")).perform(closeSoftKeyboard());
         onView(withId(R.id.sign_in_button)).perform(click());
         onView(withId(R.id.password)).check(matches(not(hasNoErrorText())));
+    }
+
+    private void init() {
+        // Open Drawer to click on navigation.
+        onView(withId(R.id.drawer_layout))
+                .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+                .perform(DrawerActions.open()); // Open Drawer
+
+        // Click on the associations item in the the Drawer
+        onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.nav_login_logout));
     }
 }

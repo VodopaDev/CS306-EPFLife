@@ -151,6 +151,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
 
         FragmentManager fragmentManager = getFragmentManager();
         if (fragment != null) {
+            System.out.println("yo");
             fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment);
         }
     }
