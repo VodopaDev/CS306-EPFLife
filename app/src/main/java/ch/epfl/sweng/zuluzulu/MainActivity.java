@@ -90,12 +90,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
-    // Just methods to test the change of the menu
-    public void setAuthenticated(boolean authenticated) {
-        isAuthenticated = authenticated;
-        updateMenuItems();
-    }
-
     public boolean isAuthenticated() {
         return isAuthenticated;
     }
@@ -123,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             e.printStackTrace();
         }
 
-
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
@@ -141,7 +134,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public void onFragmentInteraction(String tag, Object data) {
         switch(tag) {
             case MainFragment.TAG:
-                // You get something from the main fragment
+                // For example we get the boolean that tells us if we clicked on the login/logout button in the main fragment
+                isAuthenticated = (Boolean) data;
+                updateMenuItems();
                 break;
             case LoginFragment.TAG:
                 // You get something from the login fragment

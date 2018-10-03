@@ -60,13 +60,12 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (testButton.getText().toString().equals("LOGIN")) {
-                    ((MainActivity) getActivity()).setAuthenticated(true);
+                    mListener.onFragmentInteraction(TAG, true);
                     testButton.setText("LOGOUT");
                 } else {
-                    ((MainActivity) getActivity()).setAuthenticated(false);
+                    mListener.onFragmentInteraction(TAG, false);
                     testButton.setText("LOGIN");
                 }
-
             }
         });
 
