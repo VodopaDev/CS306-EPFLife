@@ -27,7 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
-public class LoginTequilaTest {
+public class LoginTest {
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
