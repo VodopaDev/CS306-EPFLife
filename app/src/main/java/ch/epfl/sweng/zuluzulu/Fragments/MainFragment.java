@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
 
 /**
@@ -24,8 +25,6 @@ public class MainFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    private int nbClicks;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -70,13 +69,22 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        nbClicks = 0;
-        Button testButton = view.findViewById(R.id.main_fragment_test_button);
+        // A button to test some stuff, to be removed later
+        final Button testButton = view.findViewById(R.id.main_fragment_test_button);
+        if (((MainActivity) getActivity()).isAuthenticated()) {
+            testButton.setText("LOGOUT");
+        }
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nbClicks++;
-                System.out.println("click: " + nbClicks);
+                if (testButton.getText().toString().equals("LOGIN")) {
+                    ((MainActivity) getActivity()).setAuthenticated(true);
+                    testButton.setText("LOGOUT");
+                } else {
+                    ((MainActivity) getActivity()).setAuthenticated(false);
+                    testButton.setText("LOGIN");
+                }
+
             }
         });
 

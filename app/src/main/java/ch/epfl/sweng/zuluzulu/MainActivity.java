@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -20,6 +21,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, AboutZuluzuluFragment.OnFragmentInteractionListener, LoginFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
     private boolean isAuthenticated;
 
     @Override
@@ -32,8 +34,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         // Just a boolean for the moment, need to update this by the user profile later
         isAuthenticated = false;
 
-        NavigationView navigationView = initNavigationView();
-        initDrawerContent(navigationView);
+        navigationView = initNavigationView();
+        initDrawerContent();
 
         // The first seen fragment is the main fragment
         selectItem(navigationView.getMenu().getItem(0));
@@ -65,8 +67,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         return navigationView;
     }
 
-    private void initDrawerContent(NavigationView navigationView) {
-        updateMenuItems(navigationView);
+    private void initDrawerContent() {
+        updateMenuItems();
 
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         );
     }
 
-    private void updateMenuItems(NavigationView navigationView) {
+    private void updateMenuItems() {
         if (isAuthenticated) {
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_user);
@@ -87,6 +89,16 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_guest);
         }
+    }
+
+    // Just methods to test the change of the menu
+    public void setAuthenticated(boolean authenticated) {
+        isAuthenticated = authenticated;
+        updateMenuItems();
+    }
+
+    public boolean isAuthenticated() {
+        return isAuthenticated;
     }
 
     private void selectItem(MenuItem menuItem) {
@@ -112,11 +124,15 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             e.printStackTrace();
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+
         if (fragment != null) {
-            fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit();
-            menuItem.setChecked(true);
-            setTitle(menuItem.getTitle());
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            if (fragmentManager != null) {
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragmentContent, fragment).commit();
+                menuItem.setChecked(true);
+                setTitle(menuItem.getTitle());
+            }
         }
 
         drawerLayout.closeDrawers();
