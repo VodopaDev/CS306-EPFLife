@@ -3,12 +3,16 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import ch.epfl.sweng.zuluzulu.R;
+
+import static android.support.design.widget.Snackbar.LENGTH_SHORT;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,7 +69,17 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        Button button_clear = view.findViewById(R.id.button_clear_cache);
+        button_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar clear_snackbar = Snackbar.make(v, "Cache cleared", LENGTH_SHORT);
+                clear_snackbar.show();
+            }
+        });
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
