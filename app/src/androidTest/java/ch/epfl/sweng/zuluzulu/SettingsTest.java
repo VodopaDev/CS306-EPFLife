@@ -30,10 +30,10 @@ public class SettingsTest {
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_settings));
 
-        onView(withId(R.id.switch_night_light))
+        onView(withId(R.id.switch_notifications))
                 .perform((click()));
 
-        onView(withId(R.id.switch_notifications))
+        onView(withId(R.id.switch_night_light))
                 .perform(click());
 
         onView(withId(R.id.button_clear_cache))
