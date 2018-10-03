@@ -20,6 +20,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, AboutZuluzuluFragment.OnFragmentInteractionListener, LoginFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
+    private boolean isAuthentificated;
 
 
     @Override
@@ -29,11 +30,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
 
+        // Just a boolean for the moment, need to update this by the user profile later
+        isAuthentificated = false;
+
         NavigationView navigationView = initNavigationView();
         initDrawerContent(navigationView);
 
         selectItem(navigationView.getMenu().getItem(0));
-
     }
 
     @Override
@@ -63,6 +66,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     }
 
     private void initDrawerContent(NavigationView navigationView) {
+        if (isAuthentificated) {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.drawer_view_user);
+        }
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -81,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             case R.id.nav_main:
                 fragmentClass = MainFragment.class;
                 break;
-            case R.id.nav_login_logout:
+            case R.id.nav_login:
                 fragmentClass = LoginFragment.class;
                 break;
             case R.id.nav_about:
