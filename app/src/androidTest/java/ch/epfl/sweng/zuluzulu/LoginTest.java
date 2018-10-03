@@ -64,8 +64,6 @@ public class LoginTest {
         onView(withId(R.id.username)).perform(typeText("user")).perform(closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
         onView(withId(R.id.sign_in_button)).perform(click());
-        // TODO change by logout is displayed once logout is implemented
-        //onView(withId(R.id.drawer_layout)).check(matches(isDisplayed()));
     }
 
     /**
@@ -81,7 +79,6 @@ public class LoginTest {
         onView(withId(R.id.username)).perform(typeText("not_user")).perform(closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
         onView(withId(R.id.sign_in_button)).perform(click()).check(matches(isDisplayed()));
-
 
         onView(withId(R.id.username)).perform(replaceText("user")).perform(closeSoftKeyboard());
         onView(withId(R.id.password)).perform(replaceText("wrong_password1")).perform(closeSoftKeyboard());
@@ -120,8 +117,8 @@ public class LoginTest {
                 .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
                 .perform(DrawerActions.open()); // Open Drawer
 
-        // Click on the associations item in the the Drawer
+        // Click on the login item in the Drawer
         onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_login_logout));
+                .perform(NavigationViewActions.navigateTo(R.id.nav_login));
     }
 }

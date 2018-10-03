@@ -20,8 +20,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, AboutZuluzuluFragment.OnFragmentInteractionListener, LoginFragment.OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
-    private boolean isAuthentificated;
-
+    private boolean isAuthenticated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +30,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         drawerLayout = findViewById(R.id.drawer_layout);
 
         // Just a boolean for the moment, need to update this by the user profile later
-        isAuthentificated = false;
+        isAuthenticated = false;
 
         NavigationView navigationView = initNavigationView();
         initDrawerContent(navigationView);
 
+        // The first seen fragment is the main fragment
         selectItem(navigationView.getMenu().getItem(0));
     }
 
@@ -66,10 +66,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     }
 
     private void initDrawerContent(NavigationView navigationView) {
-        if (isAuthentificated) {
-            navigationView.getMenu().clear();
-            navigationView.inflateMenu(R.menu.drawer_view_user);
-        }
+        updateMenuItems(navigationView);
 
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -80,6 +77,16 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                     }
                 }
         );
+    }
+
+    private void updateMenuItems(NavigationView navigationView) {
+        if (isAuthenticated) {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.drawer_view_user);
+        } else {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.drawer_view_guest);
+        }
     }
 
     private void selectItem(MenuItem menuItem) {
