@@ -87,8 +87,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (isAuthenticated()) {
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_user);
+
+            // TODO remove c'était juste pour essayer
             MenuItem home = navigationView.getMenu().findItem(R.id.nav_main);
-            home.setTitle(user.getGaspar().toUpperCase());
+            home.setTitle("Home - " + user.getGaspar());
         } else {
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_guest);
