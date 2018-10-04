@@ -3,6 +3,8 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -80,6 +83,12 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "user:password",
+            "vincent:password",
+            "dahn:password",
+            "nicolas:password",
+            "luca:password",
+            "gaultier:password",
+            "yann:password",
             "bar:world"
     };
 
@@ -121,9 +130,12 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      * Is executed once the session is active
      * Log in the main activity
      */
-    private void activate_session() {
+    private void activate_session(User user) {
+        // Pass the user to the activity
+        mListener.passUser(user);
         // Todo Maybe need to redirect it to the mainFragment
     }
+
 
     /**
      * Reset the errors
@@ -295,9 +307,18 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
 
-            if (success) {
+            User.UserBuilder builder = new User.UserBuilder();
+            builder.setEmail("mail@epfl.ch");
+            builder.setSciper("1212");
+            builder.setGaspar(mUsername);
+            builder.setFirst_names(mUsername);
+            builder.setLast_names("");
+
+            User user = builder.buildAuthenticatedUser();
+
+            if (success && user != null) {
                 //open the main activity then terminate the login activity (Ikaras998)
-                activate_session();
+                activate_session(user);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -335,4 +356,6 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         super.onDetach();
         mListener = null;
     }
+
+
 }

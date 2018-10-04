@@ -16,12 +16,15 @@ import android.view.MenuItem;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private boolean isAuthenticated;
+
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +33,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        // Just a boolean for the moment, need to update this by the user profile later
-        isAuthenticated = false;
+        // Initial to guestUser
+        this.user = new User.UserBuilder().buildGuestUser();
 
         navigationView = initNavigationView();
         initDrawerContent();
@@ -81,9 +84,13 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
 
     private void updateMenuItems() {
-        if (isAuthenticated) {
+        if (isAuthenticated()) {
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_user);
+
+            // TODO remove c'était juste pour essayer
+            MenuItem home = navigationView.getMenu().findItem(R.id.nav_main);
+            home.setTitle("Home - " + user.getGaspar());
         } else {
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_guest);
@@ -91,12 +98,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
 
     public boolean isAuthenticated() {
-        return isAuthenticated;
-    }
-
-    public void setAuthenticated(boolean authenticated) {
-        isAuthenticated = authenticated;
-        updateMenuItems();
+        return user instanceof AuthenticatedUser;
     }
 
     private void selectItem(MenuItem menuItem) {
@@ -138,16 +140,17 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     @Override
     public void onFragmentInteraction(String tag, Object data) {
         switch(tag) {
-            case MainFragment.TAG:
-                // For example we get the boolean that tells us if we clicked on the login/logout button in the main fragment
-                isAuthenticated = (Boolean) data;
-                updateMenuItems();
-                break;
             case LoginFragment.TAG:
                 // You get something from the login fragment
                 break;
             default:
                 // Should never happen
         }
+    }
+
+    @Override
+    public void passUser(User user) {
+        this.user = user;
+        updateMenuItems();
     }
 }
