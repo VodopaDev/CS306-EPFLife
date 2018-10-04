@@ -3,9 +3,19 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import java.util.List;
 
 public class User {
+
+    /**
+     * This is the user ID, it is guaranteed to be unique.
+     */
+    private final String sciper;
+
+    private final String gaspar;
+
+    private final String email;
+
     private int id;
-    private String first_name;
-    private String last_name;
+    private String first_names;
+    private String last_names;
 
     private List<Integer> assos_id;
     private List<Integer> chats_id;
@@ -13,7 +23,10 @@ public class User {
 
     // TODO: Get data from cloud service using the id
     public User(int id) {
+        this.sciper = null;
         this.id = id;
+        this.gaspar = null;
+        email = null;
     }
 
     // TODO: Add a method to add/remove one Association to assos_id, same for chats and events
@@ -25,18 +38,18 @@ public class User {
         this.id = id;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirst_names() {
+        return first_names;
     }
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirst_names(String first_names) {
+        this.first_names = first_names;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLast_names() {
+        return last_names;
     }
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLast_names(String last_names) {
+        this.last_names = last_names;
     }
 
     public List<Integer> getAssos_id() {
