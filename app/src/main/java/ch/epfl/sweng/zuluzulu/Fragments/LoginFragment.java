@@ -125,9 +125,11 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      * Log in the main activity
      */
     private void activate_session(User user) {
-        
+        // Pass the user to the activity
+        mListener.passUser(user);
         // Todo Maybe need to redirect it to the mainFragment
     }
+
 
     /**
      * Reset the errors
@@ -348,4 +350,6 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         super.onDetach();
         mListener = null;
     }
+
+
 }

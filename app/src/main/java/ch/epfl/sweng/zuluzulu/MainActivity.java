@@ -16,12 +16,15 @@ import android.view.MenuItem;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private boolean isAuthenticated;
+
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,5 +152,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             default:
                 // Should never happen
         }
+    }
+
+    @Override
+    public void passUser(User user) {
+        this.user = user;
     }
 }
