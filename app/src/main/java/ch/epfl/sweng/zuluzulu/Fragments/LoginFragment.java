@@ -83,12 +83,12 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "user:password",
-            "Vincent:password",
-            "Dahn:password",
-            "Nicolas:password",
-            "Luca:password",
-            "Gaultier:password",
-            "Yann:password",
+            "vincent:password",
+            "dahn:password",
+            "nicolas:password",
+            "luca:password",
+            "gaultier:password",
+            "yann:password",
             "bar:world"
     };
 

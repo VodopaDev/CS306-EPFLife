@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     @Override
     public void passUser(User user) {
-        updateMenuItems();
         this.user = user;
+        updateMenuItems();
     }
 }
