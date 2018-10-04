@@ -5,58 +5,31 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 
 public class UserTest {
 
     @Test
-    public void idTest(){
-        int id = 4;
-        User user = new User(0);
-        user.setId(id);
-        assertEquals(id, user.getId());
-    }
+    public void canCreateAuthenticatedUser() {
+        User.UserBuilder builder = new User.UserBuilder();
+        builder.setEmail("mail@epfl.ch");
+        builder.setSciper("1212");
+        builder.setGaspar("test");
+        builder.setFirst_names("first_name");
+        builder.setLast_names("last_name");
 
-    @Test
-    public void firstNameTest(){
-        String name = "name";
-        User user = new User(0);
-        user.setFirst_names(name);
-        assertEquals(name, user.getFirst_names());
-    }
+        User user = builder.build();
 
-    @Test
-    public void lastNameTest(){
-        String name = "name";
-        User user = new User(0);
-        user.setLast_names(name);
-        assertEquals(name, user.getLast_names());
-    }
+        assertTrue(user instanceof AuthenticatedUser);
 
-    @Test
-    public void assosTest(){
-        List<Integer> list = Arrays.asList(1,2,3,4);
-        User user = new User(0);
-        user.setAssos_id(list);
-        assertEquals(list, user.getAssos_id());
+        assertEquals(user.getEmail(),"mail@epfl.ch");
+        assertEquals(user.getSciper(),"1212");
+        assertEquals(user.getGaspar(),"test");
+        assertEquals(user.getFirst_names(),"first_name");
+        assertEquals(user.getLast_names(),"last_name");
     }
-
-    @Test
-    public void chatsTest(){
-        List<Integer> list = Arrays.asList(1,2,3,4);
-        User user = new User(0);
-        user.setChats_id(list);
-        assertEquals(list, user.getChats_id());
-    }
-
-    @Test
-    public void eventsTest(){
-        List<Integer> list = Arrays.asList(1,2,3,4);
-        User user = new User(0);
-        user.setEvents_id(list);
-        assertEquals(list, user.getEvents_id());
-    }
-
 }

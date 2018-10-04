@@ -79,4 +79,16 @@ public final class AuthenticatedUser extends User {
     public void setEvents_id(List<Integer> events_id) {
         this.events_id = events_id;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getGaspar() {
+        return gaspar;
+    }
+
+    public String getSciper() {
+        return sciper;
+    }
 }

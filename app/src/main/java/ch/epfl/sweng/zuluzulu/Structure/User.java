@@ -4,18 +4,62 @@ import java.util.List;
 
 abstract public class User {
 
+    /* DEFINE ALL THE USER FUNCTION*/
+
+    public String getFirst_names() {
+        return null;
+    }
+
+    public String getLast_names() {
+        return null;
+    }
+
+    public List<Integer> getAssos_id() {
+        return null;
+    }
+
+    public void setAssos_id(List<Integer> assos_id) {
+
+    }
+
+    public List<Integer> getChats_id() {
+        return null;
+    }
+    public void setChats_id(List<Integer> chats_id) {
+    }
+
+    public List<Integer> getEvents_id() {
+        return null;
+    }
+    public void setEvents_id(List<Integer> events_id) {
+
+    }
+
+    public String getEmail() {
+        return null;
+    }
+
+    public String getGaspar() {
+        return null;
+    }
+
+    public String getSciper() {
+        return null;
+    }
+
+
 
     /**
      * This class is used to create a builder
      */
-    public final class UserBuilder{
+    public static final class UserBuilder{
         /**
          * This is the user ID, it is guaranteed to be unique.
          */
         private String sciper;
 
         /**
-         * Gaspar account - it's the username // TODO was in string in Profile. See if it's logic
+         * Gaspar account - it's the username // TODO was in string in Profile. See if it's logic or need to be number
          */
         private String gaspar;
 
@@ -41,7 +85,7 @@ abstract public class User {
         public UserBuilder() {};
 
         /**
-         * Set the sciper
+         * Set the sciper // TODO cf number ?
          * @param sciper User sciper number
          */
         public void setSciper(String sciper) {
@@ -99,7 +143,7 @@ abstract public class User {
          * Build an AuthenticatedUser
          * @return AuthenticatedUser or null
          */
-        public User buildAuthenticatedUser() {
+        public AuthenticatedUser buildAuthenticatedUser() {
             if( this.sciper != null
                     &&  this.email  != null
                     &&  this.gaspar != null
@@ -113,9 +157,9 @@ abstract public class User {
 
         /**
          * Build guest user
-         * @return Guest    
+         * @return Guest
          */
-        public User buildGuestUser() {
+        public Guest buildGuestUser() {
             return new Guest();
         }
     }
