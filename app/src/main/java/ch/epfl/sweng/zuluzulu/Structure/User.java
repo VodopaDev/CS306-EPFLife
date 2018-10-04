@@ -21,10 +21,6 @@ abstract public class User {
          */
         private String email;
 
-        /**
-         * User ID
-         */
-        private int id;
 
         /**
          * User first names (he can have few first names)
@@ -36,9 +32,7 @@ abstract public class User {
          */
         private String last_names;
 
-        public UserBuilder() {
-            setId(0);
-        }
+        public UserBuilder() {};
 
         public void setSciper(String sciper) {
             this.sciper = sciper;
@@ -60,8 +54,16 @@ abstract public class User {
             this.first_names = first_names;
         }
 
-        public void setId(int id) {
-            this.id = id;
+        public User build() {
+            if( this.sciper != null
+                &&  this.email  != null
+                &&  this.gaspar != null
+                &&  this.first_names != null
+                &&  this.last_names != null ){
+                return new AuthenticatedUser(this.sciper, this.gaspar, this.email, this.first_names, this.last_names);
+            }
+
+            return new Guest();
         }
     }
 }
