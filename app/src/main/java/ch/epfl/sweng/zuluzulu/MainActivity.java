@@ -148,6 +148,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
+
+    public User getUser() {
+        return user;
+    }
+
     @Override
     public void passUser(User user) {
         this.user = user;

@@ -25,12 +25,14 @@ abstract public class User {
     public List<Integer> getChats_id() {
         return null;
     }
+
     public void setChats_id(List<Integer> chats_id) {
     }
 
     public List<Integer> getEvents_id() {
         return null;
-   }
+    }
+
     public void setEvents_id(List<Integer> events_id) {
 
     }
@@ -48,11 +50,10 @@ abstract public class User {
     }
 
 
-
     /**
      * This class is used to create a builder
      */
-    public static final class UserBuilder{
+    public static final class UserBuilder {
         /**
          * This is the user ID, it is guaranteed to be unique.
          */
@@ -82,10 +83,14 @@ abstract public class User {
         /**
          * Create  an user builder
          */
-        public UserBuilder() {};
+        public UserBuilder() {
+        }
+
+        ;
 
         /**
          * Set the sciper // TODO cf number ?
+         *
          * @param sciper User sciper number
          */
         public void setSciper(String sciper) {
@@ -94,6 +99,7 @@ abstract public class User {
 
         /**
          * User gaspar - username
+         *
          * @param gaspar gaspar
          */
         public void setGaspar(String gaspar) {
@@ -102,16 +108,18 @@ abstract public class User {
 
         /**
          * User email
+         *
          * @param email email
          */
         public void setEmail(String email) {
-            if(email.contains("@")){
+            if (email.contains("@")) {
                 this.email = email;
             }
         }
 
         /**
          * User last names
+         *
          * @param last_names last names
          */
         public void setLast_names(String last_names) {
@@ -120,6 +128,7 @@ abstract public class User {
 
         /**
          * User last names
+         *
          * @param first_names last names
          */
         public void setFirst_names(String first_names) {
@@ -128,11 +137,12 @@ abstract public class User {
 
         /**
          * This function create a User and return the builded child
+         *
          * @return User Return a child of User
          */
         public User build() {
             User user = buildAuthenticatedUser();
-            if(user != null) {
+            if (user != null) {
                 return user;
             }
 
@@ -141,14 +151,15 @@ abstract public class User {
 
         /**
          * Build an AuthenticatedUser
+         *
          * @return AuthenticatedUser or null
          */
         public AuthenticatedUser buildAuthenticatedUser() {
-            if( this.sciper != null
-                    &&  this.email  != null
-                    &&  this.gaspar != null
-                    &&  this.first_names != null
-                    &&  this.last_names != null ){
+            if (this.sciper != null
+                    && this.email != null
+                    && this.gaspar != null
+                    && this.first_names != null
+                    && this.last_names != null) {
                 return new AuthenticatedUser(this.sciper, this.gaspar, this.email, this.first_names, this.last_names);
             }
 
@@ -157,6 +168,7 @@ abstract public class User {
 
         /**
          * Build guest user
+         *
          * @return Guest
          */
         public Guest buildGuestUser() {

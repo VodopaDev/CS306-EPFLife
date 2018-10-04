@@ -3,8 +3,6 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -39,17 +37,28 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  */
 public class LoginFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String TAG = "LOGIN_TAG";
-
+    /**
+     * A dummy authentication store containing known user names and passwords.
+     * TODO: remove after connecting to a real authentication system.
+     */
+    private static final String[] DUMMY_CREDENTIALS = new String[]{
+            "user:password",
+            "vincent:password",
+            "dahn:password",
+            "nicolas:password",
+            "luca:password",
+            "gaultier:password",
+            "yann:password",
+            "bar:world"
+    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
-
     private EditText mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-
     private OnFragmentInteractionListener mListener;
 
     public LoginFragment() {
@@ -76,21 +85,6 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "user:password",
-            "vincent:password",
-            "dahn:password",
-            "nicolas:password",
-            "luca:password",
-            "gaultier:password",
-            "yann:password",
-            "bar:world"
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -140,7 +134,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     /**
      * Reset the errors
      */
-    private void reset_errors(){
+    private void reset_errors() {
         mUsernameView.setError(null);
         mPasswordView.setError(null);
     }
@@ -262,6 +256,30 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
 
     }
 
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(TAG, uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -331,30 +349,6 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             mAuthTask = null;
             showProgress(false);
         }
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(TAG, uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
 
