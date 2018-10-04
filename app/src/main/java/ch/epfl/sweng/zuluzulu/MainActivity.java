@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     public void setAuthenticated(boolean authenticated) {
         isAuthenticated = authenticated;
+        updateMenuItems();
     }
 
     private void selectItem(MenuItem menuItem) {

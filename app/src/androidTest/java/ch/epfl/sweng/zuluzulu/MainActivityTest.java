@@ -52,6 +52,16 @@ public class MainActivityTest {
     }
 
     @Test
+    public void testUserCanOpenFriendsFragment() {
+        // Todo
+    }
+
+    @Test
+    public void testUserCanOpenChatFragment() {
+        // Todo
+    }
+
+    @Test
     public void testGuestCanOpenSettingsFragment() {
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_settings));
@@ -61,6 +71,11 @@ public class MainActivityTest {
     public void testGuestCanOpenLoginFragment() {
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_login));
+    }
+
+    @Test
+    public void testUserCanOpenLogoutFragment() {
+        // Todo
     }
 
     @Test
