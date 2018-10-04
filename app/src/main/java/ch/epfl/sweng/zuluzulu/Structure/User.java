@@ -30,7 +30,7 @@ abstract public class User {
 
     public List<Integer> getEvents_id() {
         return null;
-    }
+   }
     public void setEvents_id(List<Integer> events_id) {
 
     }
