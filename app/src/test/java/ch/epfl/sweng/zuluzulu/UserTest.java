@@ -56,7 +56,7 @@ public class UserTest {
 
 
     @Test
-    public void refuseWrongMail() {
+    public void refuseFakeMail() {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("fakemail");
         builder.setSciper("1212");
