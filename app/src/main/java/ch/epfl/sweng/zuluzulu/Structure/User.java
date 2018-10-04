@@ -9,14 +9,32 @@ public class User {
      */
     private final String sciper;
 
+    /**
+     * Gaspar account - it's the username
+     */
     private final String gaspar;
 
+    /**
+     * User email
+     */
     private final String email;
 
+    /**
+     * User ID // todo keep ? or replace by sciper ?
+     */
     private int id;
+
+    /**
+     * User first names (he can have few first names)
+     */
     private String first_names;
+
+    /**
+     * User last names, same remark as first_names
+     */
     private String last_names;
 
+    // TODO ??? A commenter
     private List<Integer> assos_id;
     private List<Integer> chats_id;
     private List<Integer> events_id;
