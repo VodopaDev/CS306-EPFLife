@@ -35,16 +35,16 @@ public final class AuthenticatedUser extends User {
     private List<Integer> events_id;
 
     // TODO: Get data from cloud service using the id
-    public AuthenticatedUser(String sciper, String gaspar, String email, String first_names, String last_names) {
-        this.sciper     = sciper;
-        this.gaspar     = gaspar;
-        this.email      = email;
-        this.first_names= first_names;
+    protected AuthenticatedUser(String sciper, String gaspar, String email, String first_names, String last_names) {
+        this.sciper = sciper;
+        this.gaspar = gaspar;
+        this.email = email;
+        this.first_names = first_names;
         this.last_names = last_names;
 
-        assos_id    = new ArrayList<>();
-        chats_id    = new ArrayList<>();
-        events_id   = new ArrayList<>();
+        assos_id = new ArrayList<>();
+        chats_id = new ArrayList<>();
+        events_id = new ArrayList<>();
     }
 
     // TODO: Add a method to add/remove one Association to assos_id, same for chats and events
@@ -69,6 +69,7 @@ public final class AuthenticatedUser extends User {
     public List<Integer> getChats_id() {
         return chats_id;
     }
+
     public void setChats_id(List<Integer> chats_id) {
         this.chats_id = chats_id;
     }
@@ -76,6 +77,7 @@ public final class AuthenticatedUser extends User {
     public List<Integer> getEvents_id() {
         return events_id;
     }
+
     public void setEvents_id(List<Integer> events_id) {
         this.events_id = events_id;
     }
