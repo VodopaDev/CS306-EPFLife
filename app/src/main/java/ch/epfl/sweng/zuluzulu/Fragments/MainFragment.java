@@ -7,9 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
-import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 
@@ -49,27 +47,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-
-        // A button to change the state of the user (guest/authenticated), to be removed later
-        final Button testButton = view.findViewById(R.id.main_fragment_test_button);
-        if (((MainActivity) getActivity()).isAuthenticated()) {
-            testButton.setText("LOGOUT");
-        }
-        testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (testButton.getText().toString().equals("LOGIN")) {
-                    mListener.onFragmentInteraction(TAG, true);
-                    testButton.setText("LOGOUT");
-                } else {
-                    mListener.onFragmentInteraction(TAG, false);
-                    testButton.setText("LOGIN");
-                }
-            }
-        });
-
-        return view;
+        return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
