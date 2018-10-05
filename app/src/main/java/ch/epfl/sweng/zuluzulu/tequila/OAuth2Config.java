@@ -16,7 +16,7 @@ public final class OAuth2Config {
     /**
      * This is a public value that simply identifies your app.
      */
-    public final String clientId; 
+    public final String clientId;
 
     /**
      * This value MUST be kept secret.
@@ -30,7 +30,7 @@ public final class OAuth2Config {
     /**
      * This is the URI that Tequila will redirect to after authenticating your users.
      */
-    public final String redirectUri; 
+    public final String redirectUri;
 
     public OAuth2Config(String[] scopes, String clientId, String clientSecret, String redirectUri) {
         this.scopes = scopes;

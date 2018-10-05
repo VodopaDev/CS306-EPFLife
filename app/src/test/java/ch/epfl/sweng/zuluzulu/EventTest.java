@@ -1,8 +1,10 @@
 package ch.epfl.sweng.zuluzulu;
+
 import org.junit.Test;
+
 import java.util.Arrays;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 
@@ -14,7 +16,7 @@ public class EventTest {
     // TODO: Add a test for Location and Image
 
     @Test
-    public void idTest(){
+    public void idTest() {
         int id = 4;
         Event event = new Event(0);
         event.setId(id);
@@ -22,7 +24,7 @@ public class EventTest {
     }
 
     @Test
-    public void mainChatIdTest(){
+    public void mainChatIdTest() {
         int chat_id = 4;
         Event event = new Event(0);
         event.setChat_id(chat_id);
@@ -30,7 +32,7 @@ public class EventTest {
     }
 
     @Test
-    public void nameTest(){
+    public void nameTest() {
         String name = "nom";
         Event event = new Event(0);
         event.setName(name);
@@ -38,7 +40,7 @@ public class EventTest {
     }
 
     @Test
-    public void descriptionTest(){
+    public void descriptionTest() {
         String desc = "random thing";
         Event event = new Event(0);
         event.setDescription(desc);
@@ -46,8 +48,8 @@ public class EventTest {
     }
 
     @Test
-    public void adminsTest(){
-        List<Integer> admins = Arrays.asList(2,3,4,5);
+    public void adminsTest() {
+        List<Integer> admins = Arrays.asList(2, 3, 4, 5);
 
         Event event = new Event(0);
         event.setAdmins(admins);
@@ -55,7 +57,7 @@ public class EventTest {
     }
 
     @Test
-    public void startDateTest(){
+    public void startDateTest() {
         Date start = new Date(2);
         Event event = new Event(0);
         event.setStart_date(start);
@@ -63,7 +65,7 @@ public class EventTest {
     }
 
     @Test
-    public void endDateTest(){
+    public void endDateTest() {
         Date end = new Date(2);
         Event event = new Event(0);
         event.setEnd_date(end);
@@ -71,7 +73,7 @@ public class EventTest {
     }
 
     @Test
-    public void assoIdTest(){
+    public void assoIdTest() {
         int asso_id = 4;
         Event event = new Event(0);
         event.setAsso_id(asso_id);

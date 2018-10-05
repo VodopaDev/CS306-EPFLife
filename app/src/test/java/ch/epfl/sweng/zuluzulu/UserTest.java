@@ -1,16 +1,14 @@
 package ch.epfl.sweng.zuluzulu;
+
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Guest;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 
 public class UserTest {
@@ -26,13 +24,13 @@ public class UserTest {
 
         User user = builder.build();
 
-        assertTrue(user instanceof AuthenticatedUser);
+        assertTrue(user.isConnected());
 
-        assertEquals(user.getEmail(),"mail@epfl.ch");
-        assertEquals(user.getSciper(),"1212");
-        assertEquals(user.getGaspar(),"test");
-        assertEquals(user.getFirst_names(),"first_name");
-        assertEquals(user.getLast_names(),"last_name");
+        assertEquals(user.getEmail(), "mail@epfl.ch");
+        assertEquals(user.getSciper(), "1212");
+        assertEquals(user.getGaspar(), "test");
+        assertEquals(user.getFirst_names(), "first_name");
+        assertEquals(user.getLast_names(), "last_name");
     }
 
     @Test
@@ -45,13 +43,13 @@ public class UserTest {
         Guest user2 = builder.buildGuestUser();
         assertNotNull(user2);
 
-        assertTrue(user instanceof Guest);
+        assertFalse(user.isConnected());
 
-        assertEquals(user.getEmail(),null);
-        assertEquals(user.getSciper(),null);
-        assertEquals(user.getGaspar(),null);
-        assertEquals(user.getFirst_names(),null);
-        assertEquals(user.getLast_names(),null);
+        assertEquals(user.getEmail(), null);
+        assertEquals(user.getSciper(), null);
+        assertEquals(user.getGaspar(), null);
+        assertEquals(user.getFirst_names(), null);
+        assertEquals(user.getLast_names(), null);
     }
 
 
@@ -66,7 +64,7 @@ public class UserTest {
 
         User user = builder.build();
 
-        assertTrue(user instanceof Guest);
+        assertFalse(user.isConnected());
     }
 
 }

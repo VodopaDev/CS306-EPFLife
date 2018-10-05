@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
@@ -98,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
 
     public boolean isAuthenticated() {
-        return user instanceof AuthenticatedUser;
+        return user.isConnected();
     }
 
     private void selectItem(MenuItem menuItem) {
@@ -139,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     @Override
     public void onFragmentInteraction(String tag, Object data) {
-        switch(tag) {
+        switch (tag) {
             case LoginFragment.TAG:
                 // You get something from the login fragment
                 break;
