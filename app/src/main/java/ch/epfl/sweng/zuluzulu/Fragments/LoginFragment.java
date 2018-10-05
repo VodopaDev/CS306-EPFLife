@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -24,36 +23,42 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link LoginFragment.OnFragmentInteractionListener} interface
+ * {@link OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link LoginFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class LoginFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    public static final String TAG = "LOGIN_TAG";
+    /**
+     * A dummy authentication store containing known user names and passwords.
+     * TODO: remove after connecting to a real authentication system.
+     */
+    private static final String[] DUMMY_CREDENTIALS = new String[]{
+            "user:password",
+            "vincent:password",
+            "dahn:password",
+            "nicolas:password",
+            "luca:password",
+            "gaultier:password",
+            "yann:password",
+            "bar:world"
+    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
-
     private EditText mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-
     private OnFragmentInteractionListener mListener;
 
     public LoginFragment() {
@@ -64,18 +69,11 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment LoginFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static LoginFragment newInstance(String param1, String param2) {
-        LoginFragment fragment = new LoginFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static LoginFragment newInstance() {
+        return new LoginFragment();
     }
 
     /**
@@ -86,20 +84,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "user:password",
-            "bar:world"
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -139,27 +124,17 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      * Is executed once the session is active
      * Log in the main activity
      */
-    private void activate_session() {
+    private void activate_session(User user) {
+        // Pass the user to the activity
+        mListener.passUser(user);
         // Todo Maybe need to redirect it to the mainFragment
-        Fragment fragment = null;
-        Class fragmentClass = MainFragment.class;
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        FragmentManager fragmentManager = getFragmentManager();
-        if (fragment != null) {
-            System.out.println("yo");
-            fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment);
-        }
     }
+
 
     /**
      * Reset the errors
      */
-    private void reset_errors(){
+    private void reset_errors() {
         mUsernameView.setError(null);
         mPasswordView.setError(null);
     }
@@ -281,6 +256,30 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
 
     }
 
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(TAG, uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -326,9 +325,18 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
 
-            if (success) {
+            User.UserBuilder builder = new User.UserBuilder();
+            builder.setEmail("mail@epfl.ch");
+            builder.setSciper("1212");
+            builder.setGaspar(mUsername);
+            builder.setFirst_names(mUsername);
+            builder.setLast_names("");
+
+            User user = builder.buildAuthenticatedUser();
+
+            if (success && user != null) {
                 //open the main activity then terminate the login activity (Ikaras998)
-                activate_session();
+                activate_session(user);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -341,45 +349,6 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             mAuthTask = null;
             showProgress(false);
         }
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 
 

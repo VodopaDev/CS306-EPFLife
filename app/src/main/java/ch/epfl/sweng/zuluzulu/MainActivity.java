@@ -1,11 +1,11 @@
 package ch.epfl.sweng.zuluzulu;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -13,17 +13,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import java.util.Set;
-
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, AboutZuluzuluFragment.OnFragmentInteractionListener, LoginFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +34,14 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        NavigationView navigationView = initNavigationView();
-        initDrawerContent(navigationView);
+        // Initial to guestUser
+        this.user = new User.UserBuilder().buildGuestUser();
 
+        navigationView = initNavigationView();
+        initDrawerContent();
+
+        // The first seen fragment is the main fragment
         selectItem(navigationView.getMenu().getItem(0));
-
     }
 
     @Override
@@ -65,7 +70,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         return navigationView;
     }
 
-    private void initDrawerContent(NavigationView navigationView) {
+    private void initDrawerContent() {
+        updateMenuItems();
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -77,6 +84,24 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         );
     }
 
+    private void updateMenuItems() {
+        if (isAuthenticated()) {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.drawer_view_user);
+
+            // TODO remove c'était juste pour essayer
+            MenuItem home = navigationView.getMenu().findItem(R.id.nav_main);
+            home.setTitle("Home - " + user.getGaspar());
+        } else {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.drawer_view_guest);
+        }
+    }
+
+    public boolean isAuthenticated() {
+        return user instanceof AuthenticatedUser;
+    }
+
     private void selectItem(MenuItem menuItem) {
         Fragment fragment = null;
         Class fragmentClass;
@@ -84,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             case R.id.nav_main:
                 fragmentClass = MainFragment.class;
                 break;
-            case R.id.nav_login_logout:
+            case R.id.nav_login:
                 fragmentClass = LoginFragment.class;
                 break;
             case R.id.nav_about:
@@ -103,18 +128,38 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             e.printStackTrace();
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragment != null) {
-            fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit();
-            menuItem.setChecked(true);
-            setTitle(menuItem.getTitle());
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            if (fragmentManager != null) {
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragmentContent, fragment).commit();
+                menuItem.setChecked(true);
+                setTitle(menuItem.getTitle());
+            }
         }
 
         drawerLayout.closeDrawers();
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-        // Not used for the moment
+    public void onFragmentInteraction(String tag, Object data) {
+        switch(tag) {
+            case LoginFragment.TAG:
+                // You get something from the login fragment
+                break;
+            default:
+                // Should never happen
+        }
+    }
+
+
+    public User getUser() {
+        return user;
+    }
+
+    @Override
+    public void passUser(User user) {
+        this.user = user;
+        updateMenuItems();
     }
 }

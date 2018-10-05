@@ -52,7 +52,7 @@ public class SettingsTest {
                                 childAtPosition(
                                         withId(R.id.nav_view),
                                         0)),
-                        5),
+                        3),
                         isDisplayed()));
         navigationMenuItemView.perform(click());
 
