@@ -93,4 +93,9 @@ public final class AuthenticatedUser extends User {
     public String getSciper() {
         return sciper;
     }
+
+    @Override
+    public boolean isConnected() {
+        return true;
+    }
 }

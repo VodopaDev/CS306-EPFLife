@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -26,7 +27,7 @@ public class UserTest {
 
         User user = builder.build();
 
-        assertTrue(user instanceof AuthenticatedUser);
+        assertTrue(user.isConnected());
 
         assertEquals(user.getEmail(),"mail@epfl.ch");
         assertEquals(user.getSciper(),"1212");
@@ -45,7 +46,7 @@ public class UserTest {
         Guest user2 = builder.buildGuestUser();
         assertNotNull(user2);
 
-        assertTrue(user instanceof Guest);
+        assertFalse(user.isConnected());
 
         assertEquals(user.getEmail(),null);
         assertEquals(user.getSciper(),null);
@@ -66,7 +67,7 @@ public class UserTest {
 
         User user = builder.build();
 
-        assertTrue(user instanceof Guest);
+        assertFalse(user.isConnected());
     }
 
 }

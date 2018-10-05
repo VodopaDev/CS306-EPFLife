@@ -49,6 +49,12 @@ abstract public class User {
         return null;
     }
 
+    /**
+     * Return true if the User is connected. False instead
+     * @return True if connected
+     */
+    abstract public boolean isConnected();
+
 
     /**
      * This class is used to create a builder

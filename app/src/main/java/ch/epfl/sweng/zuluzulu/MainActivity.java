@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
 
     public boolean isAuthenticated() {
-        return user instanceof AuthenticatedUser;
+        return user.isConnected();
     }
 
     private void selectItem(MenuItem menuItem) {
