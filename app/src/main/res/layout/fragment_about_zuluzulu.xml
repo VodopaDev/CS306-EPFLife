@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@android:color/darker_gray"
+    tools:background="#e2e5e6"
     tools:context=".Fragments.AboutZuluzuluFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -15,7 +15,8 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
-        android:background="@android:color/background_light"
+        android:background="#d9d8d8"
+        android:paddingLeft="2dp"
         android:text="Creators:\nLuca Barras, Nicolas Jomeau, Vincent Gürtler, Dahn Youssehfi, Gotié, Yann"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="18sp" />
@@ -26,9 +27,32 @@
         android:layout_height="100dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
+        android:paddingLeft="2dp"
         android:text="Date: xx/xx/2018"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="18sp"
-        tools:background="@android:color/background_light"
+        tools:background="#d9d8d8"
         tools:layout_marginTop="110dp" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="215dp"
+        android:background="#d9d8d8"
+        android:paddingLeft="2dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="320dp"
+        android:background="#d9d8d8"
+        android:paddingLeft="2dp"
+        android:text="TextView" />
 </FrameLayout>
