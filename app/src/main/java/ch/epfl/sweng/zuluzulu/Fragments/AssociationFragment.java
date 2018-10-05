@@ -3,7 +3,10 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +15,19 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Association;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +41,8 @@ public class AssociationFragment extends Fragment {
     public static final String TAG = "ASSOCIATION_TAG";
 
     private OnFragmentInteractionListener mListener;
+    private List<DocumentReference> assos_all_ref;
+    private List<Association> assos_all;
     private Button button_all;
     private Button button_fav;
     private LinearLayout buttons_layout;
@@ -46,8 +62,23 @@ public class AssociationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        assos_all = new ArrayList<>();
+        assos_all_ref = new ArrayList<>();
 
+        FirebaseApp.initializeApp(getContext());
+        DocumentReference db = FirebaseFirestore.getInstance().document("assos_info/all_assos");
+        db.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                assos_all_ref = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
 
+                for(int i = 0; i < assos_all_ref.size(); i++){
+                    Association asso = new Association(assos_all_ref.get(i));
+                    assos_all.add(asso);
+                    Log.d("Boucle iteration","#"+i);
+                }
+            }
+        });
     }
 
     @Override

@@ -2,14 +2,22 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.location.Location;
 import android.media.Image;
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
 
 public class Association {
+    private boolean isLoaded;
 
     private int id;
     private String name;
-    private String description;
+    private String short_desc;
+    private String long_desc;
     private Image icon;
 
     private Location pos;
@@ -20,8 +28,21 @@ public class Association {
     private List<Integer> events;
 
     // TODO: Get data from cloud service using the id
-    public Association(int id) {
-        this.id = id;
+    public Association(DocumentReference ref) {
+        isLoaded = false;
+
+        ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot result = task.getResult();
+                id = ((Long) result.get("id")).intValue();
+                name = result.get("name").toString();
+                short_desc = result.get("short_desc").toString();
+                long_desc = result.get("long_desc").toString();
+                isLoaded = true;
+            }
+        });
+
     }
 
     // TODO: Add a method to add/remove one User to admins, same for chats and events
@@ -29,72 +50,16 @@ public class Association {
     public int getId() {
         return id;
     }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
-
-    public void setName(String name) {
-        this.name = name;
+    public String getShortDesc(){
+        return short_desc;
     }
-
-    public String getDescription() {
-        return description;
+    public String getLongDesc(){
+        return long_desc;
     }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Image getIcon() {
-        return icon;
-    }
-
-    public void setIcon(Image icon) {
-        this.icon = icon;
-    }
-
-    public Location getPos() {
-        return pos;
-    }
-
-    public void setPos(Location pos) {
-        this.pos = pos;
-    }
-
-    public List<Integer> getAdmins() {
-        return admins;
-    }
-
-    public void setAdmins(List<Integer> admins) {
-        this.admins = admins;
-    }
-
-    public int getMain_chat_id() {
-        return main_chat_id;
-    }
-
-    public void setMain_chat_id(int main_chat_id) {
-        this.main_chat_id = main_chat_id;
-    }
-
-    public List<Integer> getChats() {
-        return chats;
-    }
-
-    public void setChats(List<Integer> chats) {
-        this.chats = chats;
-    }
-
-    public List<Integer> getEvents() {
-        return events;
-    }
-
-    public void setEvents(List<Integer> events) {
-        this.events = events;
+    public boolean isLoaded() {
+        return isLoaded;
     }
 }
