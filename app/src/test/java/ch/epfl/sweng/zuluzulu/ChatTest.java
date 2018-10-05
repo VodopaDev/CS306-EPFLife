@@ -1,4 +1,5 @@
 package ch.epfl.sweng.zuluzulu;
+
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -11,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 public class ChatTest {
 
     @Test
-    public void idTest(){
+    public void idTest() {
         int id = 4;
         Chat chat = new Chat(0);
         chat.setId(id);
@@ -19,7 +20,7 @@ public class ChatTest {
     }
 
     @Test
-    public void nameTest(){
+    public void nameTest() {
         String name = "name";
         Chat chat = new Chat(0);
         chat.setName(name);
@@ -27,31 +28,31 @@ public class ChatTest {
     }
 
     @Test
-    public void usersTest(){
-        List<Integer> list = Arrays.asList(0,2,3,5);
+    public void usersTest() {
+        List<Integer> list = Arrays.asList(0, 2, 3, 5);
         Chat chat = new Chat(0);
         chat.setUsers(list);
         assertEquals(list, chat.getUsers());
     }
 
     @Test
-    public void adminsTest(){
-        List<Integer> list = Arrays.asList(0,2,3,5);
+    public void adminsTest() {
+        List<Integer> list = Arrays.asList(0, 2, 3, 5);
         Chat chat = new Chat(0);
         chat.setAdmins(list);
         assertEquals(list, chat.getAdmins());
     }
 
     @Test
-    public void messagesTest(){
-        List<String> list = Arrays.asList("l","wkdsk");
+    public void messagesTest() {
+        List<String> list = Arrays.asList("l", "wkdsk");
         Chat chat = new Chat(0);
         chat.setMessages(list);
         assertEquals(list, chat.getMessages());
     }
 
     @Test
-    public void assoIdTest(){
+    public void assoIdTest() {
         int id = 4;
         Chat chat = new Chat(0);
         chat.setAsso_id(id);
@@ -59,10 +60,10 @@ public class ChatTest {
     }
 
     @Test
-    public void eventIdTest(){
+    public void eventIdTest() {
         int id = 4;
         Chat chat = new Chat(0);
         chat.setEvent_id(id);
-        assertEquals(id,chat.getEvent_id());
+        assertEquals(id, chat.getEvent_id());
     }
 }

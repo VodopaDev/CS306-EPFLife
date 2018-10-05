@@ -1,19 +1,20 @@
 package ch.epfl.sweng.zuluzulu;
 
 import org.junit.Test;
+
 import java.util.Arrays;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class AssociationTest {
 
     // TODO: add a test for Location and Image
 
     @Test
-    public void idTest(){
+    public void idTest() {
         int id = 4;
         Association asso = new Association(0);
         asso.setId(id);
@@ -21,7 +22,7 @@ public class AssociationTest {
     }
 
     @Test
-    public void mainChatIdTest(){
+    public void mainChatIdTest() {
         int chat_id = 4;
         Association asso = new Association(0);
         asso.setMain_chat_id(chat_id);
@@ -29,7 +30,7 @@ public class AssociationTest {
     }
 
     @Test
-    public void nameTest(){
+    public void nameTest() {
         String name = "nom";
         Association asso = new Association(0);
         asso.setName(name);
@@ -37,7 +38,7 @@ public class AssociationTest {
     }
 
     @Test
-    public void descriptionTest(){
+    public void descriptionTest() {
         String desc = "random thing";
         Association asso = new Association(0);
         asso.setDescription(desc);
@@ -45,8 +46,8 @@ public class AssociationTest {
     }
 
     @Test
-    public void adminsTest(){
-        List<Integer> admins = Arrays.asList(2,3,4,5);
+    public void adminsTest() {
+        List<Integer> admins = Arrays.asList(2, 3, 4, 5);
 
         Association asso = new Association(0);
         asso.setAdmins(admins);
@@ -54,8 +55,8 @@ public class AssociationTest {
     }
 
     @Test
-    public void eventsTest(){
-        List<Integer> events = Arrays.asList(3,4,5);
+    public void eventsTest() {
+        List<Integer> events = Arrays.asList(3, 4, 5);
 
         Association asso = new Association(0);
         asso.setEvents(events);
@@ -63,8 +64,8 @@ public class AssociationTest {
     }
 
     @Test
-    public void chatsTest(){
-        List<Integer> chats = Arrays.asList(3,4,5);
+    public void chatsTest() {
+        List<Integer> chats = Arrays.asList(3, 4, 5);
 
         Association asso = new Association(0);
         asso.setChats(chats);
@@ -72,7 +73,7 @@ public class AssociationTest {
     }
 
     @Test
-    public void Test(){
+    public void Test() {
         int id = 4;
         Association asso = new Association(0);
         asso.setId(id);

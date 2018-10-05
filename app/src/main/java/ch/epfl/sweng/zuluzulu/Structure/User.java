@@ -51,6 +51,7 @@ abstract public class User {
 
     /**
      * Return true if the User is connected. False instead
+     *
      * @return True if connected
      */
     abstract public boolean isConnected();
