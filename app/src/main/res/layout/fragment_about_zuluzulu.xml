@@ -3,14 +3,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:background="@android:color/darker_gray"
     tools:context=".Fragments.AboutZuluzuluFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="About Zuluzulu !"
-        android:textSize="30sp" />
 
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@android:color/background_light"
+        android:text="Creators:\nLuca Barras, Nicolas Jomeau, Vincent Gürtler, Dahn Youssehfi, Gotié, Yann"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/Date"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:text="Date: xx/xx/2018"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="18sp"
+        tools:background="@android:color/background_light"
+        tools:layout_marginTop="110dp" />
 </FrameLayout>
