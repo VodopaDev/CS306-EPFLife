@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
             // TODO remove c'était juste pour essayer
             MenuItem home = navigationView.getMenu().findItem(R.id.nav_main);
-            home.setTitle("Home - " + user.getGaspar());
+            home.setTitle("Home - " + user.getGaspar().to);
         } else {
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_guest);
@@ -156,5 +156,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public void passUser(User user) {
         this.user = user;
         updateMenuItems();
+        selectItem(navigationView.getMenu().findItem(R.id.nav_main));
     }
 }
