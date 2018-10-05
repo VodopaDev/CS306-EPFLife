@@ -2,9 +2,11 @@ package ch.epfl.sweng.zuluzulu;
 
 
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -12,12 +14,15 @@ import android.view.ViewParent;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -33,19 +38,12 @@ public class SettingsTest {
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
-    @Test
-    public void settingsTest() {
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withContentDescription("Navigate up"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.LinearLayout")),
-                                                0)),
-                                1),
-                        isDisplayed()));
-        appCompatImageButton.perform(click());
-
+    @Before
+    public void openDrawer() {
+        // Open Drawer to click on navigation.
+        onView(withId(R.id.drawer_layout))
+                .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+                .perform(DrawerActions.open()); // Open Drawer
         ViewInteraction navigationMenuItemView = onView(
                 allOf(childAtPosition(
                         allOf(withId(R.id.design_navigation_view),
@@ -55,57 +53,25 @@ public class SettingsTest {
                         3),
                         isDisplayed()));
         navigationMenuItemView.perform(click());
+    }
 
-        ViewInteraction switch_ = onView(
-                allOf(withId(R.id.switch_night_light),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.FrameLayout")),
-                                        0),
-                                1),
-                        isDisplayed()));
-        switch_.perform(click());
+    @Test
+    public void clickOnNightLightSwitchBis() {
+        onView(withId(R.id.switch_night_light))
+                .perform(click());
 
-        ViewInteraction switch_2 = onView(
-                allOf(withId(R.id.switch_notifications),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.FrameLayout")),
-                                        0),
-                                3),
-                        isDisplayed()));
-        switch_2.perform(click());
+    }
 
-        ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.button_clear_cache), withText("Clear"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.FrameLayout")),
-                                        0),
-                                5),
-                        isDisplayed()));
-        appCompatButton.perform(click());
+    @Test
+    public void clickOnNotificationSwitchTest() {
+        onView(withId(R.id.switch_notifications))
+                .perform(click());
+    }
 
-        ViewInteraction appCompatImageButton2 = onView(
-                allOf(withContentDescription("Navigate up"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.LinearLayout")),
-                                                0)),
-                                1),
-                        isDisplayed()));
-        appCompatImageButton2.perform(click());
-
-        ViewInteraction navigationMenuItemView2 = onView(
-                allOf(childAtPosition(
-                        allOf(withId(R.id.design_navigation_view),
-                                childAtPosition(
-                                        withId(R.id.nav_view),
-                                        0)),
-                        1),
-                        isDisplayed()));
-        navigationMenuItemView2.perform(click());
+    @Test
+    public void clickOnClearButtonTest() {
+        onView(withId(R.id.button_clear_cache))
+                .perform(click());
     }
 
     private static Matcher<View> childAtPosition(
