@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
@@ -89,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
             // TODO remove c'était juste pour essayer
             MenuItem home = navigationView.getMenu().findItem(R.id.nav_main);
-            home.setTitle("Home - " + user.getGaspar().toUpperCase());
+            home.setTitle("Home - " + user.getGaspar());
         } else {
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_guest);
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
 
     public boolean isAuthenticated() {
-        return user.isConnected();
+        return user instanceof AuthenticatedUser;
     }
 
     private void selectItem(MenuItem menuItem) {
@@ -112,6 +114,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case R.id.nav_about:
                 fragmentClass = AboutZuluzuluFragment.class;
+                break;
+            case R.id.nav_settings:
+                fragmentClass = SettingsFragment.class;
                 break;
             default:
                 fragmentClass = MainFragment.class;
@@ -138,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     @Override
     public void onFragmentInteraction(String tag, Object data) {
-        switch (tag) {
+        switch(tag) {
             case LoginFragment.TAG:
                 // You get something from the login fragment
                 break;
@@ -156,6 +161,5 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public void passUser(User user) {
         this.user = user;
         updateMenuItems();
-        selectItem(navigationView.getMenu().findItem(R.id.nav_main));
     }
 }
