@@ -19,17 +19,17 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class MenuAsGuestTest {
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void openDrawer() {
-        // Open Drawer to click on navigation.
+        // Open the menu
         onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-                .perform(DrawerActions.open()); // Open Drawer
+                .check(matches(isClosed(Gravity.LEFT)))
+                .perform(DrawerActions.open());
     }
 
     @Test
@@ -49,16 +49,6 @@ public class MainActivityTest {
     public void testGuestCanOpenAssociationsFragment() {
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_associations));
-    }
-
-    @Test
-    public void testUserCanOpenFriendsFragment() {
-        // Todo
-    }
-
-    @Test
-    public void testUserCanOpenChatFragment() {
-        // Todo
     }
 
     @Test

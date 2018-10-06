@@ -161,5 +161,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public void passUser(User user) {
         this.user = user;
         updateMenuItems();
+        selectItem(navigationView.getMenu().findItem(R.id.nav_main));
     }
 }
