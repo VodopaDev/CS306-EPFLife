@@ -145,7 +145,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public void onFragmentInteraction(String tag, Object data) {
         switch(tag) {
             case LoginFragment.TAG:
-                // You get something from the login fragment
+                this.user = (User) data;
+                updateMenuItems();
+                selectItem(navigationView.getMenu().findItem(R.id.nav_main));
                 break;
             default:
                 // Should never happen
@@ -155,11 +157,5 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     public User getUser() {
         return user;
-    }
-
-    @Override
-    public void passUser(User user) {
-        this.user = user;
-        updateMenuItems();
     }
 }
