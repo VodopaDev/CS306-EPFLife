@@ -51,7 +51,8 @@ public class AssociationFragment extends Fragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static AssociationFragment newInstance(String param1, String param2) {
+    public static AssociationFragment newInstance(String
+                                                          param1, String param2) {
         AssociationFragment fragment = new AssociationFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);

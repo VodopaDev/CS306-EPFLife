@@ -73,8 +73,4 @@ public class AssociationCard extends RelativeLayout {
     private View getView(){
         return rootView;
     }
-
-    public static View cardView(Context context, DocumentReference ref){
-        return (new AssociationCard(context, ref)).getView();
-    }
 }
