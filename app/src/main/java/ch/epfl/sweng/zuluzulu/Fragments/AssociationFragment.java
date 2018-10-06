@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +21,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
-import ch.epfl.sweng.zuluzulu.AssociationCard;
+import ch.epfl.sweng.zuluzulu.View.AssociationCard;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 
@@ -37,7 +35,7 @@ import ch.epfl.sweng.zuluzulu.R;
  * create an instance of this fragment.
  */
 public class AssociationFragment extends Fragment {
-    public static final String TAG = "ASSOCIATION_TAG";
+    private static final String TAG = "ASSOCIATION_TAG";
 
     private OnFragmentInteractionListener mListener;
 
@@ -61,12 +59,7 @@ public class AssociationFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_association, container, false);
         vlayout_assos_all = view.findViewById(R.id.vlayout_assos_all);
         vlayout_assos_fav = view.findViewById(R.id.vlayout_assos_fav);

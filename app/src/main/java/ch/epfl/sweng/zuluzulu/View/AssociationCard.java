@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.View;
 
 import android.content.Context;
 import android.net.Uri;
@@ -16,6 +16,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import ch.epfl.sweng.zuluzulu.R;
 
 public class AssociationCard extends RelativeLayout {
     private int id;
