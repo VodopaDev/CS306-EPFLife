@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -48,7 +49,7 @@ public class AssociationCard extends RelativeLayout {
                 card_asso_name.setText(result.get("name").toString());
                 card_asso_short_desc.setText(result.get("short_desc").toString());
 
-                /*
+
                 StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("assos/asso"+id+"_icon.png");
                 mStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
@@ -59,7 +60,6 @@ public class AssociationCard extends RelativeLayout {
                                 .into(card_asso_image);
                     }
                 });
-                */
 
                 // TODO: make a click go to an association details page
                 setOnClickListener(new View.OnClickListener() {
