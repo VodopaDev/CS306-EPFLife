@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,10 +22,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
+import ch.epfl.sweng.zuluzulu.AssociationCard;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.Association;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -98,7 +98,9 @@ public class AssociationFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 List<DocumentReference> assos_all_ref = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
-                loadAssociationsList(assos_all_ref, vlayout_assos_all);
+                for(int i = 0; i < assos_all_ref.size(); i++){
+                    vlayout_assos_all.addView(new AssociationCard(getContext(), assos_all_ref.get(i)));
+                }
             }
         });
 
@@ -116,13 +118,6 @@ public class AssociationFragment extends Fragment {
         */
 
         return view;
-    }
-
-    private void loadAssociationsList(List<DocumentReference> refs, LinearLayout container){
-        for(int i = 0; i < refs.size(); i++){
-            Association asso = new Association(refs.get(i), getContext());
-            container.addView(asso.getCardView());
-        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

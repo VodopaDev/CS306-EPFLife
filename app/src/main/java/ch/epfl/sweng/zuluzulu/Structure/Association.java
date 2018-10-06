@@ -6,6 +6,9 @@ import android.location.Location;
 import android.media.Image;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +31,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
+import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
 
 public class Association{
@@ -37,7 +45,8 @@ public class Association{
     private String name;
     private String short_desc;
     private String long_desc;
-    private Image icon;
+
+    private Uri icon;
     private Location pos;
     private List<Integer> admins;
 
@@ -45,36 +54,31 @@ public class Association{
     private List<Integer> chats;
     private List<Integer> events;
 
-    private View card_view;
-
     public Association(DocumentReference ref, Context context) {
         this.ref = ref;
         id = 0;
         name = "";
         short_desc = "";
         long_desc = "";
-        card_view = View.inflate(context, R.layout.card_association, null);
 
         ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot result = task.getResult();
-                id = ((Long) result.get("id")).intValue();
-                name = result.get("name").toString();
-                short_desc = result.get("short_desc").toString();
-                long_desc = result.get("long_desc").toString();
+                if(task.isSuccessful()) {
+                    DocumentSnapshot result = task.getResult();
+                    id = ((Long) result.get("id")).intValue();
+                    name = result.get("name").toString();
+                    short_desc = result.get("short_desc").toString();
+                    long_desc = result.get("long_desc").toString();
 
-                downloadIcon();
-                ((TextView)card_view.findViewById(R.id.card_asso_name)).setText(name);
-                ((TextView)card_view.findViewById(R.id.card_asso_short_desc)).setText(short_desc);
-
-                // TODO: make a click go to an association details page
-                card_view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                });
+                    StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("assos/asso" + id + "_icon.png");
+                    mStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            icon = uri;
+                        }
+                    });
+                }
             }
         });
     }
@@ -84,29 +88,5 @@ public class Association{
     public int getId() {
         return id;
     }
-    public String getName() {
-        return name;
-    }
-    public String getShortDesc(){
-        return short_desc;
-    }
-    public String getLongDesc(){
-        return long_desc;
-    }
-    public View getCardView(){
-        return card_view;
-    }
 
-    private void downloadIcon(){
-        StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("assos/asso"+id+"_icon.png");
-        mStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Glide.with(card_view.getContext())
-                        .load(uri)
-                        .centerCrop()
-                        .into((ImageView)card_view.findViewById(R.id.card_asso_image));
-            }
-        });
-    }
 }
