@@ -1,27 +1,36 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.media.Image;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.R;
 
 public class Association{
-    private boolean isLoaded;
     DocumentReference ref;
 
     private int id;
@@ -38,7 +47,6 @@ public class Association{
 
     private View card_view;
 
-    // TODO: Get data from cloud service using the id
     public Association(DocumentReference ref, Context context) {
         this.ref = ref;
         id = 0;
@@ -56,14 +64,19 @@ public class Association{
                 short_desc = result.get("short_desc").toString();
                 long_desc = result.get("long_desc").toString();
 
+                downloadIcon();
                 ((TextView)card_view.findViewById(R.id.card_asso_name)).setText(name);
                 ((TextView)card_view.findViewById(R.id.card_asso_short_desc)).setText(short_desc);
+
+                // TODO: make a click go to an association details page
+                card_view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
             }
         });
-    }
-
-    public void loadOnlineValues(){
-
     }
 
     // TODO: Add a method to add/remove one User to admins, same for chats and events
@@ -82,5 +95,18 @@ public class Association{
     }
     public View getCardView(){
         return card_view;
+    }
+
+    private void downloadIcon(){
+        StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("assos/asso"+id+"_icon.png");
+        mStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(card_view.getContext())
+                        .load(uri)
+                        .centerCrop()
+                        .into((ImageView)card_view.findViewById(R.id.card_asso_image));
+            }
+        });
     }
 }
