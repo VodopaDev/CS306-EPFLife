@@ -1,25 +1,34 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import android.content.Context;
 import android.location.Location;
 import android.media.Image;
 import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
-public class Association {
+import ch.epfl.sweng.zuluzulu.R;
+
+public class Association{
     private boolean isLoaded;
+    DocumentReference ref;
 
     private int id;
     private String name;
     private String short_desc;
     private String long_desc;
     private Image icon;
-
     private Location pos;
     private List<Integer> admins;
 
@@ -27,9 +36,16 @@ public class Association {
     private List<Integer> chats;
     private List<Integer> events;
 
+    private View card_view;
+
     // TODO: Get data from cloud service using the id
-    public Association(DocumentReference ref) {
-        isLoaded = false;
+    public Association(DocumentReference ref, Context context) {
+        this.ref = ref;
+        id = 0;
+        name = "";
+        short_desc = "";
+        long_desc = "";
+        card_view = View.inflate(context, R.layout.card_association, null);
 
         ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -39,9 +55,14 @@ public class Association {
                 name = result.get("name").toString();
                 short_desc = result.get("short_desc").toString();
                 long_desc = result.get("long_desc").toString();
-                isLoaded = true;
+
+                ((TextView)card_view.findViewById(R.id.card_asso_name)).setText(name);
+                ((TextView)card_view.findViewById(R.id.card_asso_short_desc)).setText(short_desc);
             }
         });
+    }
+
+    public void loadOnlineValues(){
 
     }
 
@@ -59,7 +80,7 @@ public class Association {
     public String getLongDesc(){
         return long_desc;
     }
-    public boolean isLoaded() {
-        return isLoaded;
+    public View getCardView(){
+        return card_view;
     }
 }

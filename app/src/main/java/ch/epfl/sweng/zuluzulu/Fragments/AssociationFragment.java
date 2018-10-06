@@ -3,7 +3,6 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -41,11 +40,13 @@ public class AssociationFragment extends Fragment {
     public static final String TAG = "ASSOCIATION_TAG";
 
     private OnFragmentInteractionListener mListener;
-    private List<DocumentReference> assos_all_ref;
-    private List<Association> assos_all;
-    private Button button_all;
-    private Button button_fav;
-    private LinearLayout buttons_layout;
+
+    private Button button_assos_all;
+    private Button button_assos_fav;
+    private LinearLayout vlayout_assos_all;
+    private LinearLayout vlayout_assos_fav;
+    private ScrollView scroll_assos_all;
+    private ScrollView scroll_assos_fav;
 
     public AssociationFragment() {
         // Required empty public constructor
@@ -62,37 +63,66 @@ public class AssociationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        assos_all = new ArrayList<>();
-        assos_all_ref = new ArrayList<>();
-
-        FirebaseApp.initializeApp(getContext());
-        DocumentReference db = FirebaseFirestore.getInstance().document("assos_info/all_assos");
-        db.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                assos_all_ref = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
-
-                for(int i = 0; i < assos_all_ref.size(); i++){
-                    Association asso = new Association(assos_all_ref.get(i));
-                    assos_all.add(asso);
-                    Log.d("Boucle iteration","#"+i);
-                }
-            }
-        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_association, container, false);
-        buttons_layout = view.findViewById(R.id.assos_layout);
+        vlayout_assos_all = view.findViewById(R.id.vlayout_assos_all);
+        vlayout_assos_fav = view.findViewById(R.id.vlayout_assos_fav);
+        button_assos_all = view.findViewById(R.id.button_assos_all);
+        button_assos_fav = view.findViewById(R.id.button_assos_fav);
+        scroll_assos_all = view.findViewById(R.id.scroll_assos_all);
+        scroll_assos_fav = view.findViewById(R.id.scroll_assos_fav);
 
-        for(int i = 0; i < 100; i++){
-            TextView text = new TextView(getContext());
-            text.setText("text test" + i);
-            buttons_layout.addView(text);
-        }
+        button_assos_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scroll_assos_all.setVisibility(View.VISIBLE);
+                scroll_assos_fav.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        button_assos_fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scroll_assos_all.setVisibility(View.INVISIBLE);
+                scroll_assos_fav.setVisibility(View.VISIBLE);
+            }
+        });
+
+
+        FirebaseApp.initializeApp(getContext());
+        FirebaseFirestore.getInstance().document("assos_info/all_assos")
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                List<DocumentReference> assos_all_ref = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
+                loadAssociationsList(assos_all_ref, vlayout_assos_all);
+            }
+        });
+
+        // TODO: add a check if the User is authentificated and load favorites
+        /*
+        if()
+            FirebaseFirestore.getInstance().document("assos_info/all_assos")
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                List<DocumentReference> assos_all_fav = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
+                loadAssociationsList(assos_all_fav, vlayout_assos_fav);
+            }
+        });
+        */
 
         return view;
+    }
+
+    private void loadAssociationsList(List<DocumentReference> refs, LinearLayout container){
+        for(int i = 0; i < refs.size(); i++){
+            Association asso = new Association(refs.get(i), getContext());
+            container.addView(asso.getCardView());
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
