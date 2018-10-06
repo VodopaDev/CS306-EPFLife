@@ -64,11 +64,6 @@ public class MenuAsGuestTest {
     }
 
     @Test
-    public void testUserCanOpenLogoutFragment() {
-        // Todo
-    }
-
-    @Test
     public void testCanOpenAboutFragment() {
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_about));
