@@ -10,12 +10,20 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
+import java.util.PropertyResourceBundle;
 
-public class Association{
+import ch.epfl.sweng.zuluzulu.View.AssociationCard;
+
+public class Association implements Comparable<Association> {
+    private static final String DOCUMENT_PATH = "assos_info/asso";
+    private static final String IMAGE_PATH = "assos/asso";
+    private static final String ICON_EXT = "_icon.png";
+
     private final DocumentReference ref;
 
     private int id;
@@ -31,12 +39,11 @@ public class Association{
     private List<Integer> chats;
     private List<Integer> events;
 
-    public Association(DocumentReference ref, Context context) {
+    private boolean hasLoaded;
+
+    public Association(DocumentReference ref) {
         this.ref = ref;
-        id = 0;
-        name = "";
-        short_desc = "";
-        long_desc = "";
+        hasLoaded = false;
 
         ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -48,11 +55,12 @@ public class Association{
                     short_desc = result.get("short_desc").toString();
                     long_desc = result.get("long_desc").toString();
 
-                    StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("assos/asso" + id + "_icon.png");
+                    StorageReference mStorage = FirebaseStorage.getInstance().getReference().child(IMAGE_PATH + id + ICON_EXT);
                     mStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
                             icon = uri;
+                            hasLoaded = true;
                         }
                     });
                 }
@@ -60,4 +68,41 @@ public class Association{
         });
     }
 
+    public String getName(){
+        return name;
+    }
+
+    public String getShortDesc(){
+        return short_desc;
+    }
+
+    public String getLongDesc(){
+        return long_desc;
+    }
+
+    public Uri getIcon(){
+        return icon;
+    }
+
+    public static Association fromRef(DocumentReference ref){
+        return new Association(ref);
+    }
+
+    public static Association fromId(int id){
+        return fromRef(FirebaseFirestore.getInstance().document(DOCUMENT_PATH + id));
+    }
+
+    public boolean hasLoaded(){
+        return hasLoaded;
+    }
+
+    public AssociationCard getCardView(Context context){
+        while (!hasLoaded){}
+        return new AssociationCard(context, this);
+    }
+
+    @Override
+    public int compareTo(@NonNull Association asso) {
+        return name.compareTo(asso.name);
+    }
 }

@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.util.SortedList;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +22,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
+import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.View.AssociationCard;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -39,7 +44,7 @@ public class AssociationFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private List<AssociationCard> card_list;
+    private ArrayList<Association> assos_all;
     private Button button_assos_all;
     private Button button_assos_fav;
     private LinearLayout vlayout_assos_all;
@@ -63,7 +68,8 @@ public class AssociationFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_association, container, false);
-        card_list = new ArrayList<>();
+
+        assos_all = new ArrayList<>();
         vlayout_assos_all = view.findViewById(R.id.vlayout_assos_all);
         vlayout_assos_fav = view.findViewById(R.id.vlayout_assos_fav);
         button_assos_all = view.findViewById(R.id.button_assos_all);
@@ -94,10 +100,15 @@ public class AssociationFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 List<DocumentReference> assos_all_ref = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
+
                 for(int i = 0; i < assos_all_ref.size(); i++){
-                    AssociationCard card = new AssociationCard(getContext(), assos_all_ref.get(i));
-                    card_list.add(card);
-                    vlayout_assos_all.addView(card);
+                    assos_all.add(Association.fromRef(assos_all_ref.get(i)));
+                }
+
+                Log.d("ASSOS_ALL","Filling finished with count=" + assos_all.size());
+
+                for(int i = 0; i < assos_all.size(); i++){
+                    vlayout_assos_all.addView(assos_all.get(i).getCardView(getContext()));
                 }
             }
         });
@@ -116,14 +127,6 @@ public class AssociationFragment extends Fragment {
         */
 
         return view;
-    }
-
-    public boolean hasLoaded(){
-        for(int i = 0; i < card_list.size(); i++){
-            if(!card_list.get(i).hasLoaded())
-                return false;
-        }
-        return true;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
