@@ -93,8 +93,6 @@ abstract public class User {
         public UserBuilder() {
         }
 
-        ;
-
         /**
          * Set the sciper // TODO cf number ?
          *

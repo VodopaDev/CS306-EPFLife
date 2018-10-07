@@ -8,6 +8,7 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 
@@ -45,11 +46,11 @@ public class UserTest {
 
         assertFalse(user.isConnected());
 
-        assertEquals(user.getEmail(), null);
-        assertEquals(user.getSciper(), null);
-        assertEquals(user.getGaspar(), null);
-        assertEquals(user.getFirst_names(), null);
-        assertEquals(user.getLast_names(), null);
+        assertNull(user.getEmail());
+        assertNull(user.getSciper());
+        assertNull(user.getGaspar());
+        assertNull(user.getFirst_names());
+        assertNull(user.getLast_names());
     }
 
 

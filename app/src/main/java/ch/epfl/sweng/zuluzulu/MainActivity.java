@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
@@ -88,10 +89,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (isAuthenticated()) {
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_user);
-
-            // TODO remove c'était juste pour essayer
-            MenuItem home = navigationView.getMenu().findItem(R.id.nav_main);
-            home.setTitle("Home - " + user.getGaspar());
         } else {
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_guest);
@@ -114,6 +111,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case R.id.nav_about:
                 fragmentClass = AboutZuluzuluFragment.class;
+                break;
+            case R.id.nav_associations:
+                fragmentClass = AssociationFragment.class;
                 break;
             case R.id.nav_settings:
                 fragmentClass = SettingsFragment.class;

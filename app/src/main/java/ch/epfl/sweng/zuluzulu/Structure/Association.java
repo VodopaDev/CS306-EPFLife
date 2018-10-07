@@ -1,17 +1,29 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import android.content.Context;
 import android.location.Location;
-import android.media.Image;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
-public class Association {
+public class Association{
+    private final DocumentReference ref;
 
     private int id;
     private String name;
-    private String description;
-    private Image icon;
+    private String short_desc;
+    private String long_desc;
 
+    private Uri icon;
     private Location pos;
     private List<Integer> admins;
 
@@ -19,82 +31,33 @@ public class Association {
     private List<Integer> chats;
     private List<Integer> events;
 
-    // TODO: Get data from cloud service using the id
-    public Association(int id) {
-        this.id = id;
+    public Association(DocumentReference ref, Context context) {
+        this.ref = ref;
+        id = 0;
+        name = "";
+        short_desc = "";
+        long_desc = "";
+
+        ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()) {
+                    DocumentSnapshot result = task.getResult();
+                    id = ((Long) result.get("id")).intValue();
+                    name = result.get("name").toString();
+                    short_desc = result.get("short_desc").toString();
+                    long_desc = result.get("long_desc").toString();
+
+                    StorageReference mStorage = FirebaseStorage.getInstance().getReference().child("assos/asso" + id + "_icon.png");
+                    mStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            icon = uri;
+                        }
+                    });
+                }
+            }
+        });
     }
 
-    // TODO: Add a method to add/remove one User to admins, same for chats and events
-    // TODO: Check inputs before changing fields
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Image getIcon() {
-        return icon;
-    }
-
-    public void setIcon(Image icon) {
-        this.icon = icon;
-    }
-
-    public Location getPos() {
-        return pos;
-    }
-
-    public void setPos(Location pos) {
-        this.pos = pos;
-    }
-
-    public List<Integer> getAdmins() {
-        return admins;
-    }
-
-    public void setAdmins(List<Integer> admins) {
-        this.admins = admins;
-    }
-
-    public int getMain_chat_id() {
-        return main_chat_id;
-    }
-
-    public void setMain_chat_id(int main_chat_id) {
-        this.main_chat_id = main_chat_id;
-    }
-
-    public List<Integer> getChats() {
-        return chats;
-    }
-
-    public void setChats(List<Integer> chats) {
-        this.chats = chats;
-    }
-
-    public List<Integer> getEvents() {
-        return events;
-    }
-
-    public void setEvents(List<Integer> events) {
-        this.events = events;
-    }
 }
