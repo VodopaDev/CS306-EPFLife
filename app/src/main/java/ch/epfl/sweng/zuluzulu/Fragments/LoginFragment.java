@@ -126,8 +126,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      */
     private void activate_session(User user) {
         // Pass the user to the activity
-        mListener.passUser(user);
-        // Todo Maybe need to redirect it to the mainFragment
+        mListener.onFragmentInteraction(TAG, user);
     }
 
 

@@ -1,12 +1,8 @@
 package ch.epfl.sweng.zuluzulu;
 
-import android.os.AsyncTask;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.TextView;
-
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import org.junit.Before;

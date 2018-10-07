@@ -17,6 +17,8 @@ import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
@@ -94,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
 
     public boolean isAuthenticated() {
-        return user.isConnected();
+        return user instanceof AuthenticatedUser;
     }
 
     private void selectItem(MenuItem menuItem) {
@@ -112,6 +114,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case R.id.nav_associations:
                 fragmentClass = AssociationFragment.class;
+                break;
+            case R.id.nav_settings:
+                fragmentClass = SettingsFragment.class;
                 break;
             default:
                 fragmentClass = MainFragment.class;
@@ -138,9 +143,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     @Override
     public void onFragmentInteraction(String tag, Object data) {
-        switch (tag) {
+        switch(tag) {
             case LoginFragment.TAG:
-                // You get something from the login fragment
+                this.user = (User) data;
+                updateMenuItems();
+                selectItem(navigationView.getMenu().findItem(R.id.nav_main));
                 break;
             default:
                 // Should never happen
@@ -150,11 +157,5 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     public User getUser() {
         return user;
-    }
-
-    @Override
-    public void passUser(User user) {
-        this.user = user;
-        updateMenuItems();
     }
 }
