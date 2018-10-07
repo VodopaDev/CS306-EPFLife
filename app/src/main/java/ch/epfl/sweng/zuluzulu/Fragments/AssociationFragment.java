@@ -39,6 +39,7 @@ public class AssociationFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    private List<AssociationCard> card_list;
     private Button button_assos_all;
     private Button button_assos_fav;
     private LinearLayout vlayout_assos_all;
@@ -62,6 +63,7 @@ public class AssociationFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_association, container, false);
+        card_list = new ArrayList<>();
         vlayout_assos_all = view.findViewById(R.id.vlayout_assos_all);
         vlayout_assos_fav = view.findViewById(R.id.vlayout_assos_fav);
         button_assos_all = view.findViewById(R.id.button_assos_all);
@@ -93,7 +95,9 @@ public class AssociationFragment extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 List<DocumentReference> assos_all_ref = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
                 for(int i = 0; i < assos_all_ref.size(); i++){
-                    vlayout_assos_all.addView(new AssociationCard(getContext(), assos_all_ref.get(i)));
+                    AssociationCard card = new AssociationCard(getContext(), assos_all_ref.get(i));
+                    card_list.add(card);
+                    vlayout_assos_all.addView(card);
                 }
             }
         });
@@ -112,6 +116,14 @@ public class AssociationFragment extends Fragment {
         */
 
         return view;
+    }
+
+    public boolean hasLoaded(){
+        for(int i = 0; i < card_list.size(); i++){
+            if(!card_list.get(i).hasLoaded())
+                return false;
+        }
+        return true;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
