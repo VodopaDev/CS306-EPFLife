@@ -88,7 +88,6 @@ public class AssociationFragment extends Fragment {
         });
 
 
-        FirebaseApp.initializeApp(getContext());
         FirebaseFirestore.getInstance().document("assos_info/all_assos")
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
