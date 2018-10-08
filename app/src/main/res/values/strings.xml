@@ -22,4 +22,13 @@
     <string name="drawer_events">Events</string>
     <string name="drawer_login">Login/Logout</string>
     <string name="drawer_about_us">About us</string>
+    <string name="version">version:</string>
+    <string name="author">developped by:</string>
+    <string name="contact">Contact:</string>
+    <string name="support">Support:</string>
+    <string name="Group">ZuluZulu</string>
+    <string name="numVersion">1.0</string>
+    <string name="contactEmail">zuluzulu@epfl.ch</string>
+    <string name="supportEmail">EPFLife@epfl.ch</string>
+    <string name="applicationName">EPFLife</string>
 </resources>
