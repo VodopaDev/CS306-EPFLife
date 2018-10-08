@@ -78,7 +78,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                        selectItem(menuItem);
+                        if (!menuItem.isChecked()) {
+                            selectItem(menuItem);
+                        }
+                        drawerLayout.closeDrawers();
                         return true;
                     }
                 }
@@ -137,8 +140,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 setTitle(menuItem.getTitle());
             }
         }
-
-        drawerLayout.closeDrawers();
     }
 
     @Override
