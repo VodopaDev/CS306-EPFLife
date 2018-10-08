@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.util.SortedList;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.DocumentReference;
@@ -26,6 +28,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.View.AssociationCard;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -45,6 +48,7 @@ public class AssociationFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private ArrayList<Association> assos_all;
+
     private Button button_assos_all;
     private Button button_assos_fav;
     private LinearLayout vlayout_assos_all;
@@ -57,8 +61,7 @@ public class AssociationFragment extends Fragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static AssociationFragment newInstance(String
-                                                          param1, String param2) {
+    public static AssociationFragment newInstance(String param1, String param2) {
         AssociationFragment fragment = new AssociationFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -67,7 +70,7 @@ public class AssociationFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_association, container, false);
+        final View view = inflater.inflate(R.layout.fragment_association, container, false);
 
         assos_all = new ArrayList<>();
         vlayout_assos_all = view.findViewById(R.id.vlayout_assos_all);
@@ -93,8 +96,6 @@ public class AssociationFragment extends Fragment {
             }
         });
 
-
-        FirebaseApp.initializeApp(getContext());
         FirebaseFirestore.getInstance().document("assos_info/all_assos")
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -102,14 +103,16 @@ public class AssociationFragment extends Fragment {
                 List<DocumentReference> assos_all_ref = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
 
                 for(int i = 0; i < assos_all_ref.size(); i++){
-                    assos_all.add(Association.fromRef(assos_all_ref.get(i)));
+                    assos_all_ref.get(i).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            Association asso = new Association(documentSnapshot);
+                            assos_all.add(asso);
+                            vlayout_assos_all.addView(asso.getCardView(view.getContext()));
+                        }
+                    });
                 }
 
-                Log.d("ASSOS_ALL","Filling finished with count=" + assos_all.size());
-
-                for(int i = 0; i < assos_all.size(); i++){
-                    vlayout_assos_all.addView(assos_all.get(i).getCardView(getContext()));
-                }
             }
         });
 
@@ -127,13 +130,6 @@ public class AssociationFragment extends Fragment {
         */
 
         return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(TAG, uri);
-        }
     }
 
     @Override

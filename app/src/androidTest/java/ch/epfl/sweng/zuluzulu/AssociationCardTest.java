@@ -1,11 +1,13 @@
 package ch.epfl.sweng.zuluzulu;
 
 import android.support.test.InstrumentationRegistry;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.TextView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -17,6 +19,10 @@ import static org.junit.Assert.assertEquals;
 public class AssociationCardTest {
 
     private AssociationCard card;
+
+    @Rule
+    public final ActivityTestRule<MainActivity> mActivityRule =
+            new ActivityTestRule<>(MainActivity.class);
 
     @Before
     public void createCard(){
@@ -36,4 +42,6 @@ public class AssociationCardTest {
         TextView short_desc = card.findViewById(R.id.card_asso_short_desc);
         assertEquals("Representing all students at EPFL", short_desc.getText());
     }
+
+
 }

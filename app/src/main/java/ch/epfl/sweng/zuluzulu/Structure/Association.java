@@ -4,27 +4,23 @@ import android.content.Context;
 import android.location.Location;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
-import java.util.PropertyResourceBundle;
 
 import ch.epfl.sweng.zuluzulu.View.AssociationCard;
 
+/**
+ * A simple class describing an Association
+ * Has diverse getters and some functions to create views
+ */
 public class Association implements Comparable<Association> {
-    private static final String DOCUMENT_PATH = "assos_info/asso";
     private static final String IMAGE_PATH = "assos/asso";
     private static final String ICON_EXT = "_icon.png";
-
-    private final DocumentReference ref;
 
     private int id;
     private String name;
@@ -39,68 +35,103 @@ public class Association implements Comparable<Association> {
     private List<Integer> chats;
     private List<Integer> events;
 
-    private boolean hasLoaded;
+    /**
+     * Create an association using a DocumentSnapshot
+     * @param snap the document snapshot
+     * @throws IllegalArgumentException if the snapshot isn't an Association's snapshot
+     */
+    public Association(DocumentSnapshot snap) {
+        if(!snapshotIsValid(snap))
+            throw new IllegalArgumentException(snap.toString());
 
-    public Association(DocumentReference ref) {
-        this.ref = ref;
-        hasLoaded = false;
+        id = ((Long) snap.get("id")).intValue();
+        name = snap.get("name").toString();
+        short_desc = snap.get("short_desc").toString();
+        long_desc = snap.get("long_desc").toString();
+        icon = null;
 
-        ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()) {
-                    DocumentSnapshot result = task.getResult();
-                    id = ((Long) result.get("id")).intValue();
-                    name = result.get("name").toString();
-                    short_desc = result.get("short_desc").toString();
-                    long_desc = result.get("long_desc").toString();
 
-                    StorageReference mStorage = FirebaseStorage.getInstance().getReference().child(IMAGE_PATH + id + ICON_EXT);
-                    mStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            icon = uri;
-                            hasLoaded = true;
-                        }
-                    });
+        FirebaseStorage.getInstance()
+                .getReference()
+                .child(IMAGE_PATH + id + ICON_EXT)
+                .getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    icon = uri;
                 }
-            }
         });
     }
 
+    /**
+     * Return the Association's id
+     * @return the id
+     */
+    public int getId(){
+        return id;
+    }
+
+    /**
+     * Return the Association's name
+     * @return the name
+     */
     public String getName(){
         return name;
     }
 
+    /**
+     * Return the Association's short description
+     * @return the short description
+     */
     public String getShortDesc(){
         return short_desc;
     }
 
+    /**
+     * Return the Association's long description
+     * @return the long description
+     */
     public String getLongDesc(){
         return long_desc;
     }
 
+    /**
+     * Return the Association's icon Uri
+     * @return the icon Uri
+     */
+    @Nullable
     public Uri getIcon(){
         return icon;
     }
 
-    public static Association fromRef(DocumentReference ref){
-        return new Association(ref);
-    }
-
-    public static Association fromId(int id){
-        return fromRef(FirebaseFirestore.getInstance().document(DOCUMENT_PATH + id));
-    }
-
-    public boolean hasLoaded(){
-        return hasLoaded;
-    }
-
+    /**
+     * Return an AssociationCard view of the Association
+     * @param context context to build the View
+     * @return the AssociationCard
+     */
     public AssociationCard getCardView(Context context){
-        while (!hasLoaded){}
         return new AssociationCard(context, this);
     }
 
+    /**
+     * Check if a DocumentSnapshot correspond to an Association's one
+     * @param snap the DocumentSnapshot
+     * @return true if it is a valid snapshot, false otherwise
+     */
+    private boolean snapshotIsValid(DocumentSnapshot snap){
+        return !(snap == null
+                || snap.get("id") == null
+                || snap.get("short_desc") == null
+                || snap.get("long_desc") == null
+                || snap.get("name") == null
+                );
+    }
+
+    /**
+     * Compare two Associations using their name
+     * @param asso the other Association to compare
+     * @return compareTo of both Associations names
+     */
     @Override
     public int compareTo(@NonNull Association asso) {
         return name.compareTo(asso.name);

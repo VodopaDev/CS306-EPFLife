@@ -21,7 +21,6 @@ public class AssociationTest {
 
     @Before
     public void createAssociation(){
-        FirebaseApp.initializeApp();
         asso = Association.fromId(1);
         while(!asso.hasLoaded()){}
     }
