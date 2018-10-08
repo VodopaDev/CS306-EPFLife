@@ -57,6 +57,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
+    /**
+     * Create the navigation view and the toolbar
+     *
+     * @return The navigation view
+     */
     private NavigationView initNavigationView() {
         NavigationView navigationView = findViewById(R.id.nav_view);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -71,9 +76,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         return navigationView;
     }
 
+    /**
+     * Attach the drawer_view to the navigation view and set a listener on the menu
+     */
     private void initDrawerContent() {
         updateMenuItems();
-
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -88,6 +95,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         );
     }
 
+    /**
+     * Attach the drawer_view to the navigation view
+     */
     private void updateMenuItems() {
         if (isAuthenticated()) {
             navigationView.getMenu().clear();
@@ -102,6 +112,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         return user instanceof AuthenticatedUser;
     }
 
+    /**
+     * Create a new fragment and replace it in the activity
+     *
+     * @param menuItem The item that corresponds to a fragment on the menu
+     */
     private void selectItem(MenuItem menuItem) {
         Fragment fragment = null;
         Class fragmentClass;
@@ -154,8 +169,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 // Should never happen
         }
     }
-
-
+    
     public User getUser() {
         return user;
     }
