@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         initDrawerContent();
 
         // The first seen fragment is the main fragment
-        selectItem(navigationView.getMenu().getItem(0));
+        selectItem(navigationView.getMenu().findItem(R.id.nav_main));
     }
 
     @Override
