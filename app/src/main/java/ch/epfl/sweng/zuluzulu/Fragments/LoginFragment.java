@@ -1,49 +1,80 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Intent;
-import android.content.Loader;
+import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
+import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
- * A login screen that offers login via username/password.
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link LoginFragment#newInstance} factory method to
+ * create an instance of this fragment.
  */
-public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<Cursor> {
-
+public class LoginFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    public static final String TAG = "LOGIN_TAG";
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "user:password",
+            "vincent:password",
+            "dahn:password",
+            "nicolas:password",
+            "luca:password",
+            "gaultier:password",
+            "yann:password",
             "bar:world"
     };
-
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
-
     private EditText mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private OnFragmentInteractionListener mListener;
+
+    public LoginFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment LoginFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static LoginFragment newInstance() {
+        return new LoginFragment();
+    }
 
     /**
      * Create the login instance
@@ -51,11 +82,17 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
      * @param savedInstanceState state
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_tequila);
+    }
 
-        mPasswordView = (EditText) findViewById(R.id.password);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+
+        mPasswordView = (EditText) view.findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -67,33 +104,36 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
             }
         });
 
-        mUsernameView = (EditText) findViewById(R.id.username);
+        mUsernameView = (EditText) view.findViewById(R.id.username);
 
-        Button mSignInButon = (Button) findViewById(R.id.sign_in_button);
-        mSignInButon.setOnClickListener(new OnClickListener() {
+        Button mSignInButon = (Button) view.findViewById(R.id.sign_in_button);
+        mSignInButon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        mLoginFormView = view.findViewById(R.id.login_form);
+        mProgressView = view.findViewById(R.id.login_progress);
+
+        return view;
     }
 
     /**
      * Is executed once the session is active
      * Log in the main activity
      */
-    private void activate_session() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+    private void activate_session(User user) {
+        // Pass the user to the activity
+        mListener.onFragmentInteraction(TAG, user);
     }
+
 
     /**
      * Reset the errors
      */
-    private void reset_errors(){
+    private void reset_errors() {
         mUsernameView.setError(null);
         mPasswordView.setError(null);
     }
@@ -199,23 +239,45 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
         }
     }
 
-
+    @NonNull
     @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+    public android.support.v4.content.Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
         return null;
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+    public void onLoadFinished(@NonNull android.support.v4.content.Loader<Cursor> loader, Cursor cursor) {
 
     }
-
 
     @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+    public void onLoaderReset(@NonNull android.support.v4.content.Loader<Cursor> loader) {
 
     }
 
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(TAG, uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
@@ -262,10 +324,18 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
 
-            if (success) {
+            User.UserBuilder builder = new User.UserBuilder();
+            builder.setEmail("mail@epfl.ch");
+            builder.setSciper("1212");
+            builder.setGaspar(mUsername);
+            builder.setFirst_names(mUsername);
+            builder.setLast_names("");
+
+            User user = builder.buildAuthenticatedUser();
+
+            if (success && user != null) {
                 //open the main activity then terminate the login activity (Ikaras998)
-                activate_session();
-                finish();
+                activate_session(user);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -279,5 +349,6 @@ public class LoginTequila extends AppCompatActivity implements LoaderCallbacks<C
             showProgress(false);
         }
     }
-}
 
+
+}

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1065084877520",
+    "firebase_url": "https://softdep-7cf7a.firebaseio.com",
+    "project_id": "softdep-7cf7a",
+    "storage_bucket": "softdep-7cf7a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1065084877520:android:1693f523b03574ff",
+        "android_client_info": {
+          "package_name": "ch.epfl.sweng.zuluzulu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1065084877520-jrg08da8bt2pvpn49tdef1q4pjessbkg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ch.epfl.sweng.zuluzulu",
+            "certificate_hash": "377adcb50ff90c21b3ec804afefe21c011269034"
+          }
+        },
+        {
+          "client_id": "1065084877520-fgumm1rbn2229a6d2sc4o1g4cld875r2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPECop2l63IGSfgbgEXk5KZ3QWRkxFPBI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1065084877520-fgumm1rbn2229a6d2sc4o1g4cld875r2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

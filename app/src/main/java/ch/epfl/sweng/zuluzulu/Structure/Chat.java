@@ -23,6 +23,7 @@ public class Chat {
     public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -30,6 +31,7 @@ public class Chat {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -37,6 +39,7 @@ public class Chat {
     public int getEvent_id() {
         return event_id;
     }
+
     public void setEvent_id(int event_id) {
         this.event_id = event_id;
     }
@@ -44,6 +47,7 @@ public class Chat {
     public int getAsso_id() {
         return asso_id;
     }
+
     public void setAsso_id(int asso_id) {
         this.asso_id = asso_id;
     }
@@ -51,6 +55,7 @@ public class Chat {
     public List<String> getMessages() {
         return messages;
     }
+
     public void setMessages(List<String> messages) {
         this.messages = messages;
     }
@@ -58,6 +63,7 @@ public class Chat {
     public List<Integer> getUsers() {
         return users;
     }
+
     public void setUsers(List<Integer> users) {
         this.users = users;
     }
@@ -65,6 +71,7 @@ public class Chat {
     public List<Integer> getAdmins() {
         return admins;
     }
+
     public void setAdmins(List<Integer> admins) {
         this.admins = admins;
     }
