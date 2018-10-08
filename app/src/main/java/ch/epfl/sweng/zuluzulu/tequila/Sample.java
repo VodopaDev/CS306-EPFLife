@@ -7,18 +7,18 @@ import java.util.Map;
 
 /**
  * Sample for Tequila OAuth2 authentication.
- *
+ * <p>
  * NOTE: This is simplified code for demo purposes.
- *       In a real Android app, the redirect URI would be a custom scheme ("myapp://..."),
- *       the app would open the code request URL in the Android browser and wait for the user
- *       to come back automatically via the redirect.
- *       Then, the app would make a request to its server (which holds the client secret,
- *       since a secret cannot be kept on a mobile client as anybody can reverse-engineer it)
- *       to get the OAuth2 tokens.
- *
+ * In a real Android app, the redirect URI would be a custom scheme ("myapp://..."),
+ * the app would open the code request URL in the Android browser and wait for the user
+ * to come back automatically via the redirect.
+ * Then, the app would make a request to its server (which holds the client secret,
+ * since a secret cannot be kept on a mobile client as anybody can reverse-engineer it)
+ * to get the OAuth2 tokens.
+ * <p>
  * NOTE: The code is not ideal; it does not handle IO exceptions (and associated resource disposal),
- *       does just enough to handle URL parameters, it is not testable, and so on.
- *       Do not copy/paste this and call it a day; understand what it does, and rewrite it cleanly.
+ * does just enough to handle URL parameters, it is not testable, and so on.
+ * Do not copy/paste this and call it a day; understand what it does, and rewrite it cleanly.
  *
  * @author Solal Pirelli
  */

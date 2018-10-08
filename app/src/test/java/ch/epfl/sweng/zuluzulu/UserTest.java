@@ -1,62 +1,71 @@
 package ch.epfl.sweng.zuluzulu;
+
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
+import ch.epfl.sweng.zuluzulu.Structure.Guest;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static org.junit.Assert.assertEquals;
-
-import ch.epfl.sweng.zuluzulu.Structure.User;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 
 public class UserTest {
 
     @Test
-    public void idTest(){
-        int id = 4;
-        User user = new User(0);
-        user.setId(id);
-        assertEquals(id, user.getId());
+    public void canCreateAuthenticatedUser() {
+        User.UserBuilder builder = new User.UserBuilder();
+        builder.setEmail("mail@epfl.ch");
+        builder.setSciper("1212");
+        builder.setGaspar("test");
+        builder.setFirst_names("first_name");
+        builder.setLast_names("last_name");
+
+        User user = builder.build();
+
+        assertTrue(user.isConnected());
+
+        assertEquals(user.getEmail(), "mail@epfl.ch");
+        assertEquals(user.getSciper(), "1212");
+        assertEquals(user.getGaspar(), "test");
+        assertEquals(user.getFirst_names(), "first_name");
+        assertEquals(user.getLast_names(), "last_name");
     }
 
     @Test
-    public void firstNameTest(){
-        String name = "name";
-        User user = new User(0);
-        user.setFirst_name(name);
-        assertEquals(name, user.getFirst_name());
+    public void canCreateGuestUser() {
+        User.UserBuilder builder = new User.UserBuilder();
+        builder.setLast_names("last_name");
+
+        User user = builder.build();
+
+        Guest user2 = builder.buildGuestUser();
+        assertNotNull(user2);
+
+        assertFalse(user.isConnected());
+
+        assertNull(user.getEmail());
+        assertNull(user.getSciper());
+        assertNull(user.getGaspar());
+        assertNull(user.getFirst_names());
+        assertNull(user.getLast_names());
     }
 
-    @Test
-    public void lastNameTest(){
-        String name = "name";
-        User user = new User(0);
-        user.setLast_name(name);
-        assertEquals(name, user.getLast_name());
-    }
 
     @Test
-    public void assosTest(){
-        List<Integer> list = Arrays.asList(1,2,3,4);
-        User user = new User(0);
-        user.setAssos_id(list);
-        assertEquals(list, user.getAssos_id());
-    }
+    public void refuseFakeMail() {
+        User.UserBuilder builder = new User.UserBuilder();
+        builder.setEmail("fakemail");
+        builder.setSciper("1212");
+        builder.setGaspar("test");
+        builder.setFirst_names("first_name");
+        builder.setLast_names("last_name");
 
-    @Test
-    public void chatsTest(){
-        List<Integer> list = Arrays.asList(1,2,3,4);
-        User user = new User(0);
-        user.setChats_id(list);
-        assertEquals(list, user.getChats_id());
-    }
+        User user = builder.build();
 
-    @Test
-    public void eventsTest(){
-        List<Integer> list = Arrays.asList(1,2,3,4);
-        User user = new User(0);
-        user.setEvents_id(list);
-        assertEquals(list, user.getEvents_id());
+        assertFalse(user.isConnected());
     }
 
 }

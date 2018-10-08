@@ -1,60 +1,48 @@
 package ch.epfl.sweng.zuluzulu;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, AboutZuluzuluFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-/*
-        TODO removed to avoid conflict with the menu
 
         setContentView(R.layout.activity_main);
-
-        Button logoutButton = (Button) findViewById(R.id.logoutButton);
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logout();
-            }
-        });
-
-
-*/
-        setContentView(R.layout.activity_menu);
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        NavigationView navigationView = initNavigationView();
-        initDrawerContent(navigationView);
+        // Initial to guestUser
+        this.user = new User.UserBuilder().buildGuestUser();
 
-        selectItem(navigationView.getMenu().getItem(0));
+        navigationView = initNavigationView();
+        initDrawerContent();
 
-    }
-
-    private void logout(){
-        Intent intent = new Intent(this, LoginTequila.class);
-        startActivity(intent);
+        // The first seen fragment is the main fragment
+        selectItem(navigationView.getMenu().findItem(R.id.nav_main));
     }
 
     @Override
@@ -69,6 +57,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         }
     }
 
+    /**
+     * Create the navigation view and the toolbar
+     *
+     * @return The navigation view
+     */
     private NavigationView initNavigationView() {
         NavigationView navigationView = findViewById(R.id.nav_view);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -83,18 +76,47 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
         return navigationView;
     }
 
-    private void initDrawerContent(NavigationView navigationView) {
+    /**
+     * Attach the drawer_view to the navigation view and set a listener on the menu
+     */
+    private void initDrawerContent() {
+        updateMenuItems();
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                        selectItem(menuItem);
+                        if (!menuItem.isChecked()) {
+                            selectItem(menuItem);
+                        }
+                        drawerLayout.closeDrawers();
                         return true;
                     }
                 }
         );
     }
 
+    /**
+     * Attach the drawer_view to the navigation view
+     */
+    private void updateMenuItems() {
+        if (isAuthenticated()) {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.drawer_view_user);
+        } else {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.drawer_view_guest);
+        }
+    }
+
+    public boolean isAuthenticated() {
+        return user instanceof AuthenticatedUser;
+    }
+
+    /**
+     * Create a new fragment and replace it in the activity
+     *
+     * @param menuItem The item that corresponds to a fragment on the menu
+     */
     private void selectItem(MenuItem menuItem) {
         Fragment fragment = null;
         Class fragmentClass;
@@ -102,8 +124,17 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             case R.id.nav_main:
                 fragmentClass = MainFragment.class;
                 break;
+            case R.id.nav_login:
+                fragmentClass = LoginFragment.class;
+                break;
             case R.id.nav_about:
                 fragmentClass = AboutZuluzuluFragment.class;
+                break;
+            case R.id.nav_associations:
+                fragmentClass = AssociationFragment.class;
+                break;
+            case R.id.nav_settings:
+                fragmentClass = SettingsFragment.class;
                 break;
             default:
                 fragmentClass = MainFragment.class;
@@ -115,18 +146,31 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             e.printStackTrace();
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragment != null) {
-            fragmentManager.beginTransaction().replace(R.id.fragmentContent, fragment).commit();
-            menuItem.setChecked(true);
-            setTitle(menuItem.getTitle());
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            if (fragmentManager != null) {
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragmentContent, fragment).commit();
+                menuItem.setChecked(true);
+                setTitle(menuItem.getTitle());
+            }
         }
-
-        drawerLayout.closeDrawers();
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-        // Not used for the moment
+    public void onFragmentInteraction(String tag, Object data) {
+        switch(tag) {
+            case LoginFragment.TAG:
+                this.user = (User) data;
+                updateMenuItems();
+                selectItem(navigationView.getMenu().findItem(R.id.nav_main));
+                break;
+            default:
+                // Should never happen
+        }
+    }
+    
+    public User getUser() {
+        return user;
     }
 }
