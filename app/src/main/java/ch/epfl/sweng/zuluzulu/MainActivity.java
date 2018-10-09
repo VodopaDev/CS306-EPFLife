@@ -47,13 +47,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         Intent i = getIntent();
         if(Intent.ACTION_SEND.equals(i.getAction())){
-            System.out.println("TEST1");
             selectItem(navigationView.getMenu().findItem(R.id.nav_login));
-            System.out.println("TES2T");
         } else {
-            System.out.println("TESt3");
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
-            System.out.println("TESt4");
         }
     }
 
