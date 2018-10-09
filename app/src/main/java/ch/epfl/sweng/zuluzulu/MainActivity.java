@@ -161,8 +161,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             }
         }
 
-        updateMenuItems();
-
     }
 
     @Override
