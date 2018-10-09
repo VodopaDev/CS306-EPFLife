@@ -43,10 +43,6 @@ public class AboutZuluzuluFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        System.out.println("TEST");
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setData(Uri.parse("epflife://login?id=com.example.android"));
-        startActivity(intent);
         super.onCreate(savedInstanceState);
     }
 
