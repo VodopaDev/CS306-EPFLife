@@ -136,6 +136,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case R.id.nav_settings:
                 fragmentClass = SettingsFragment.class;
                 break;
+            case R.id.nav_logout:
+                this.user = new User.UserBuilder().buildGuestUser();
+                updateMenuItems();
+                fragmentClass = MainFragment.class;
+                break;
             default:
                 fragmentClass = MainFragment.class;
         }
@@ -155,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 setTitle(menuItem.getTitle());
             }
         }
+
     }
 
     @Override
@@ -167,9 +173,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             default:
                 // Should never happen
+                throw new AssertionError("Invalid message");
         }
     }
-    
+
     public User getUser() {
         return user;
     }
