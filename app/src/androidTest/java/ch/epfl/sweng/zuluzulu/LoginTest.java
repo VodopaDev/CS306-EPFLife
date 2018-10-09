@@ -52,12 +52,18 @@ public class LoginTest {
         };
     }
 
-    @Before
-    public void openLoginFragment() {
+    // TODO ADD TO TEST UTILS
+    private void openDrawer(){
         // Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout))
                 .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
                 .perform(DrawerActions.open()); // Open Drawer
+
+    }
+
+    @Before
+    public void openLoginFragment() {
+        openDrawer();
 
         // Click on the login item in the Drawer
         onView(withId(R.id.nav_view))
@@ -75,6 +81,10 @@ public class LoginTest {
         onView(withId(R.id.username)).perform(typeText("user")).perform(closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
         onView(withId(R.id.sign_in_button)).perform(click());
+
+
+        openDrawer();
+        onView(withId(R.id.nav_logout)).check(matches(isDisplayed()));
     }
 
     /**
