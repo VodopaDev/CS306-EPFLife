@@ -35,32 +35,39 @@ public class Association implements Comparable<Association> {
     private List<Integer> chats;
     private List<Integer> events;
 
+    public Association(DocumentSnapshot snap){
+        this(snap, null);
+    }
+
     /**
      * Create an association using a DocumentSnapshot
      * @param snap the document snapshot
      * @throws IllegalArgumentException if the snapshot isn't an Association's snapshot
      */
-    public Association(DocumentSnapshot snap) {
+    public Association(DocumentSnapshot snap, Uri iconUri) {
         if(!snapshotIsValid(snap))
             throw new IllegalArgumentException(snap.toString());
 
         id = ((Long) snap.get("id")).intValue();
-        name = snap.get("name").toString();
-        short_desc = snap.get("short_desc").toString();
-        long_desc = snap.get("long_desc").toString();
-        icon = null;
+        name = snap.getString("name");
+        short_desc = snap.getString("short_desc");
+        long_desc = snap.getString("long_desc");
 
-
-        FirebaseStorage.getInstance()
-                .getReference()
-                .child(IMAGE_PATH + id + ICON_EXT)
-                .getDownloadUrl()
-                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri uri) {
-                    icon = uri;
-                }
-        });
+        if(iconUri == null) {
+            FirebaseStorage.getInstance()
+                    .getReference()
+                    .child(IMAGE_PATH + id + ICON_EXT)
+                    .getDownloadUrl()
+                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            icon = uri;
+                        }
+                    });
+        }
+        else{
+            icon = iconUri;
+        }
     }
 
     /**
@@ -104,6 +111,7 @@ public class Association implements Comparable<Association> {
         return icon;
     }
 
+    // TODO: add a test about this in CardViewTest
     /**
      * Return an AssociationCard view of the Association
      * @param context context to build the View
@@ -121,9 +129,9 @@ public class Association implements Comparable<Association> {
     private boolean snapshotIsValid(DocumentSnapshot snap){
         return !(snap == null
                 || snap.get("id") == null
-                || snap.get("short_desc") == null
-                || snap.get("long_desc") == null
-                || snap.get("name") == null
+                || snap.getString("short_desc") == null
+                || snap.getString("long_desc") == null
+                || snap.getString("name") == null
                 );
     }
 

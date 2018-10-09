@@ -27,7 +27,7 @@ public class AssociationCard extends RelativeLayout implements Comparable<Associ
     /**
      * Default base constructor (not to be used!)
      * Gives the base View of an Association
-     * @param context
+     * @param context the context to build the Card
      * @throws IllegalArgumentException if the context is null
      */
     public AssociationCard(Context context){
@@ -40,7 +40,7 @@ public class AssociationCard extends RelativeLayout implements Comparable<Associ
 
     /**
      * Base constructor using an Association to set up texts and picture
-     * @param context
+     * @param context the context to build the Card
      * @param asso the association to get data from
      * @throws IllegalArgumentException if the context or the Association is null
      */
