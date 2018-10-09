@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.Structure.User;
+
 /**
  * Sample for Tequila OAuth2 authentication.
  * <p>
@@ -33,7 +35,7 @@ public final class Sample {
         String code = AuthClient.extractCode(redirectUri);
         Map<String, String> tokens = AuthServer.fetchTokens(config, code);
 
-        Profile profile = AuthServer.fetchProfile(tokens.get("Tequila.profile"));
+        User profile = AuthServer.fetchUser(tokens.get("Tequila.profile"));
         System.out.println(profile);
     }
 
