@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -42,6 +43,10 @@ public class AboutZuluzuluFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        System.out.println("TEST");
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setData(Uri.parse("epflife://login?id=com.example.android"));
+        startActivity(intent);
         super.onCreate(savedInstanceState);
     }
 

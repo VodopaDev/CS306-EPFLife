@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -42,7 +43,17 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         initDrawerContent();
 
         // The first seen fragment is the main fragment
-        selectItem(navigationView.getMenu().findItem(R.id.nav_main));
+
+        Intent i = getIntent();
+        if(Intent.ACTION_SEND.equals(i.getAction())){
+            System.out.println("TEST1");
+            selectItem(navigationView.getMenu().findItem(R.id.nav_login));
+            System.out.println("TES2T");
+        } else {
+            System.out.println("TESt3");
+            selectItem(navigationView.getMenu().findItem(R.id.nav_main));
+            System.out.println("TESt4");
+        }
     }
 
     @Override
