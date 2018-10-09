@@ -44,11 +44,12 @@ public class LogoutTest {
         openDrawer();
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
 
-        openDrawer();
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_login));
+        openLoginFragment();
     }
 
-
+    /**
+     * Open the drawer
+     */
     private void openDrawer(){
         // Open Drawer to click on navigation.
         onView(withId(R.id.drawer_layout))
@@ -57,6 +58,9 @@ public class LogoutTest {
 
     }
 
+    /**
+     * Open the login gragment in the drawer
+     */
     private void openLoginFragment() {
         openDrawer();
 
