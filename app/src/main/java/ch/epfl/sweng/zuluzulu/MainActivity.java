@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 this.user = new User.UserBuilder().buildGuestUser();
                 updateMenuItems();
                 fragmentClass = MainFragment.class;
+                menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
                 break;
             default:
                 fragmentClass = MainFragment.class;
