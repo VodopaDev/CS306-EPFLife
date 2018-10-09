@@ -136,6 +136,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case R.id.nav_settings:
                 fragmentClass = SettingsFragment.class;
                 break;
+            case R.id.nav_logout:
+                this.user = new User.UserBuilder().buildGuestUser();
+                fragmentClass = MainFragment.class;
+                updateMenuItems();
+                break;
             default:
                 fragmentClass = MainFragment.class;
         }
@@ -169,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 // Should never happen
         }
     }
-    
+
     public User getUser() {
         return user;
     }
