@@ -15,7 +15,7 @@ import android.view.MenuItem;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
                 break;
             case R.id.nav_chat:
-                fragmentClass = ChatFragment.class;
+                fragmentClass = ChannelFragment.class;
                 break;
             default:
                 fragmentClass = MainFragment.class;
