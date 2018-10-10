@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -19,7 +18,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -71,16 +69,17 @@ public class AssociationFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 List<DocumentReference> assos_all_ref = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
-
-                for(int i = 0; i < assos_all_ref.size(); i++){
-                    assos_all_ref.get(i).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            Association asso = new Association(documentSnapshot);
-                            assos_all.add(asso);
-                            assos_adapter.sort(Association.getComparator());
-                        }
-                    });
+                if(assos_all_ref != null) {
+                    for (int i = 0; i < assos_all_ref.size(); i++) {
+                        assos_all_ref.get(i).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                Association asso = new Association(documentSnapshot);
+                                assos_all.add(asso);
+                                assos_adapter.sort(Association.getComparator());
+                            }
+                        });
+                    }
                 }
 
             }
