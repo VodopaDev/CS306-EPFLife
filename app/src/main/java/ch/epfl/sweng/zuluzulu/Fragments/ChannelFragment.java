@@ -11,16 +11,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -44,8 +43,6 @@ public class ChannelFragment extends Fragment {
 
     private User user;
 
-    private DatabaseReference dbr = FirebaseDatabase.getInstance().getReference().getRoot();
-
     private OnFragmentInteractionListener mListener;
 
     public ChannelFragment() {
@@ -56,7 +53,7 @@ public class ChannelFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment ChatFragment.
+     * @return A new instance of fragment ChannelFragment.
      */
     public static ChannelFragment newInstance(User user) {
         ChannelFragment fragment = new ChannelFragment();
@@ -77,28 +74,29 @@ public class ChannelFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_channel, container, false);
+        final View view = inflater.inflate(R.layout.fragment_channel, container, false);
         listView = view.findViewById(R.id.channels);
-        adapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, listOfChannels);
-        listView.setAdapter(adapter);
 
-        dbr.addValueEventListener(new ValueEventListener() {
+        FirebaseApp.initializeApp(getContext());
+        FirebaseFirestore.getInstance().document("channels_info/all_channels")
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Set<String> set = new HashSet<>();
-                Iterator iterator = dataSnapshot.getChildren().iterator();
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                List<DocumentReference> channels_all_ref = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
+                for(int i = 0; i < channels_all_ref.size(); i++){
 
-                while (iterator.hasNext()) {
-                    set.add(((DataSnapshot) iterator.next()).getKey());
+                    DocumentReference ref = channels_all_ref.get(i);
+                    ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            DocumentSnapshot result = task.getResult();
+                            String name = (String) result.get("name");
+                            listOfChannels.add(name);
+                            adapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, listOfChannels);
+                            listView.setAdapter(adapter);
+                        }
+                    });
                 }
-                adapter.clear();
-                adapter.addAll(set);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 
