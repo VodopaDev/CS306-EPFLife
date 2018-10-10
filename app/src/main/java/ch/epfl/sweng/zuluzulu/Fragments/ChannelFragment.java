@@ -79,7 +79,7 @@ public class ChannelFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_channel, container, false);
-        listView = view.findViewById(R.id.chat_messages);
+        listView = view.findViewById(R.id.channels);
         adapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, listOfChannels);
         listView.setAdapter(adapter);
 

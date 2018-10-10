@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
@@ -118,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * @param menuItem The item that corresponds to a fragment on the menu
      */
     private void selectItem(MenuItem menuItem) {
-        Fragment fragment = null;
         Class fragmentClass;
         switch (menuItem.getItemId()) {
             case R.id.nav_main:
@@ -149,22 +149,32 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 fragmentClass = MainFragment.class;
         }
 
+        Fragment fragment = null;
         try {
             fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
             e.printStackTrace();
         }
 
+        if (openFragment(fragment)) {
+            // Opening the fragment worked
+            menuItem.setChecked(true);
+            setTitle(menuItem.getTitle());
+        }
+    }
+
+    private boolean openFragment(Fragment fragment) {
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
-                menuItem.setChecked(true);
-                setTitle(menuItem.getTitle());
+                return true;
             }
         }
-
+        return false;
     }
 
     @Override
@@ -174,6 +184,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 this.user = (User) data;
                 updateMenuItems();
                 selectItem(navigationView.getMenu().findItem(R.id.nav_main));
+                break;
+            case ChannelFragment.TAG:
+                int channelID = (Integer) data;
+                openFragment(ChatFragment.newInstance(user, channelID));
                 break;
             default:
                 // Should never happen
