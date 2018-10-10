@@ -7,8 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,7 +24,6 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.View.ChannelView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,10 +37,11 @@ public class ChannelFragment extends Fragment {
     public static final String TAG = "CHANNEL_TAG";
     private static final String ARG_USER = "ARG_USER";
 
+    private ListView listView;
+    private ArrayList<String> listOfChannels = new ArrayList<>();
+    private ArrayAdapter adapter;
+
     private User user;
-    private List<ChannelView> channelViewList;
-    private LinearLayout vlayout_channels;
-    private ScrollView scroll_channels;
 
     private OnFragmentInteractionListener mListener;
 
@@ -63,13 +64,18 @@ public class ChannelFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            user = (User) getArguments().getSerializable(ARG_USER);
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_channel, container, false);
-        vlayout_channels = view.findViewById(R.id.vlayout_channels);
-        scroll_channels = view.findViewById(R.id.scroll_channels);
-
-        channelViewList = new ArrayList<>();
+        final View view = inflater.inflate(R.layout.fragment_channel, container, false);
+        listView = view.findViewById(R.id.channels);
 
         FirebaseApp.initializeApp(getContext());
         FirebaseFirestore.getInstance().document("channels_info/all_channels")
@@ -78,10 +84,27 @@ public class ChannelFragment extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 List<DocumentReference> channels_all_ref = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
                 for(int i = 0; i < channels_all_ref.size(); i++){
-                    ChannelView channelView = new ChannelView(getContext(), channels_all_ref.get(i));
-                    channelViewList.add(channelView);
-                    vlayout_channels.addView(channelView);
+
+                    DocumentReference ref = channels_all_ref.get(i);
+                    ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            DocumentSnapshot result = task.getResult();
+                            String name = (String) result.get("name");
+                            listOfChannels.add(name);
+                            adapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, listOfChannels);
+                            listView.setAdapter(adapter);
+                        }
+                    });
                 }
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Todo Change the way the id is selected
+                mListener.onFragmentInteraction(TAG, position);
             }
         });
 
