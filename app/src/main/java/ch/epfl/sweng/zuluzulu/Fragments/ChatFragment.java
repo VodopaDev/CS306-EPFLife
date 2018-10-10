@@ -3,17 +3,29 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,10 +37,15 @@ import ch.epfl.sweng.zuluzulu.R;
  */
 public class ChatFragment extends Fragment {
     public static final String TAG = "CHAT_TAG";
+    private static final String ARG_USER = "ARG_USER";
 
     private ListView listView;
-    private ArrayList<String> listOfMessages = new ArrayList<>();
+    private ArrayList<String> listOfChannels = new ArrayList<>();
     private ArrayAdapter adapter;
+
+    private User user;
+
+    private DatabaseReference dbr = FirebaseDatabase.getInstance().getReference().getRoot();
 
     private OnFragmentInteractionListener mListener;
 
@@ -42,13 +59,20 @@ public class ChatFragment extends Fragment {
      *
      * @return A new instance of fragment ChatFragment.
      */
-    public static ChatFragment newInstance() {
-        return new ChatFragment();
+    public static ChatFragment newInstance(User user) {
+        ChatFragment fragment = new ChatFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_USER, user);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            user = (User) getArguments().getSerializable(ARG_USER);
+        }
     }
 
     @Override
@@ -56,8 +80,35 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
         listView = view.findViewById(R.id.chat_messages);
-        adapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, listOfMessages);
+        adapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, listOfChannels);
         listView.setAdapter(adapter);
+
+        dbr.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Set<String> set = new HashSet<>();
+                Iterator iterator = dataSnapshot.getChildren().iterator();
+
+                while (iterator.hasNext()) {
+                    set.add(((DataSnapshot) iterator.next()).getKey());
+                }
+                adapter.clear();
+                adapter.addAll(set);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Todo Let the user click on a channel to enter in it
+            }
+        });
 
         return view;
     }
