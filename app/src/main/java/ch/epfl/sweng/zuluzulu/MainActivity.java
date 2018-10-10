@@ -119,43 +119,33 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * @param menuItem The item that corresponds to a fragment on the menu
      */
     private void selectItem(MenuItem menuItem) {
-        Class fragmentClass;
+        Fragment fragment = null;
         switch (menuItem.getItemId()) {
             case R.id.nav_main:
-                fragmentClass = MainFragment.class;
+                fragment = MainFragment.newInstance();
                 break;
             case R.id.nav_login:
-                fragmentClass = LoginFragment.class;
+                fragment = LoginFragment.newInstance();
                 break;
             case R.id.nav_about:
-                fragmentClass = AboutZuluzuluFragment.class;
+                fragment = AboutZuluzuluFragment.newInstance();
                 break;
             case R.id.nav_associations:
-                fragmentClass = AssociationFragment.class;
+                fragment = AssociationFragment.newInstance();
                 break;
             case R.id.nav_settings:
-                fragmentClass = SettingsFragment.class;
+                fragment = SettingsFragment.newInstance();
                 break;
             case R.id.nav_logout:
                 this.user = new User.UserBuilder().buildGuestUser();
                 updateMenuItems();
-                fragmentClass = MainFragment.class;
                 menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
                 break;
             case R.id.nav_chat:
-                fragmentClass = ChannelFragment.class;
+                fragment = ChannelFragment.newInstance(user);
                 break;
             default:
-                fragmentClass = MainFragment.class;
-        }
-
-        Fragment fragment = null;
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
+                fragment = MainFragment.newInstance();
         }
 
         if (openFragment(fragment)) {
