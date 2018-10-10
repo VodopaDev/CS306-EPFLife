@@ -41,8 +41,9 @@
             android:layout_height="match_parent"
             android:layout_weight="0.8"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name" />
+            android:inputType="text"
+            android:text=""
+            android:hint="Message"/>
 
         <Button
             android:id="@+id/chat_send_button"
