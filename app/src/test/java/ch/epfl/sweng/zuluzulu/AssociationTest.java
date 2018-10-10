@@ -23,44 +23,44 @@ public class AssociationTest {
     private static final String LONG_DESC = "Blah blah blah blah blah";
     private static final String ICON_URI_STRING = "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso1_icon.png?alt=media&token=391a7bfc-1597-4935-9afe-e08ecd734e03";
 
-    private Association asso1;// = Mockito.mock(Association.class);
+    private Association asso1;
     private Association asso2;
-    private final Uri icon_uri = Mockito.mock(Uri.class);
-    private final DocumentSnapshot mockedValidDataSnap1 = Mockito.mock(DocumentSnapshot.class);
-    private final DocumentSnapshot mockedValidDataSnap2 = Mockito.mock(DocumentSnapshot.class);
-    private final DocumentSnapshot mockedInvalidDataSnap = Mockito.mock(DocumentSnapshot.class);
+    private final Uri mocked_icon_uri = Mockito.mock(Uri.class);
+    private final DocumentSnapshot mocked_valid_datasnap1 = Mockito.mock(DocumentSnapshot.class);
+    private final DocumentSnapshot mocked_valid_datasnap2 = Mockito.mock(DocumentSnapshot.class);
+    private final DocumentSnapshot mocked_invalid_datasnap = Mockito.mock(DocumentSnapshot.class);
 
     @Before
-    public void createMockDocumentSnapshot(){
-        Mockito.when(icon_uri.getPath()).thenReturn(ICON_URI_STRING);
+    public void init(){
+        Mockito.when(mocked_icon_uri.getPath()).thenReturn(ICON_URI_STRING);
 
-        Mockito.when(mockedValidDataSnap1.getString("name")).thenReturn(NAME1);
-        Mockito.when(mockedValidDataSnap1.getString("long_desc")).thenReturn(LONG_DESC);
-        Mockito.when(mockedValidDataSnap1.getString("short_desc")).thenReturn(SHORT_DESC);
-        Mockito.when(mockedValidDataSnap1.get("id")).thenReturn(1L);
+        Mockito.when(mocked_valid_datasnap1.getString("name")).thenReturn(NAME1);
+        Mockito.when(mocked_valid_datasnap1.getString("long_desc")).thenReturn(LONG_DESC);
+        Mockito.when(mocked_valid_datasnap1.getString("short_desc")).thenReturn(SHORT_DESC);
+        Mockito.when(mocked_valid_datasnap1.get("id")).thenReturn(1L);
 
-        Mockito.when(mockedValidDataSnap2.getString("name")).thenReturn(NAME2);
-        Mockito.when(mockedValidDataSnap2.getString("long_desc")).thenReturn(LONG_DESC);
-        Mockito.when(mockedValidDataSnap2.getString("short_desc")).thenReturn(SHORT_DESC);
-        Mockito.when(mockedValidDataSnap2.get("id")).thenReturn(1L);
+        Mockito.when(mocked_valid_datasnap2.getString("name")).thenReturn(NAME2);
+        Mockito.when(mocked_valid_datasnap2.getString("long_desc")).thenReturn(LONG_DESC);
+        Mockito.when(mocked_valid_datasnap2.getString("short_desc")).thenReturn(SHORT_DESC);
+        Mockito.when(mocked_valid_datasnap2.get("id")).thenReturn(1L);
 
-        Mockito.when(mockedInvalidDataSnap.getString("name")).thenReturn(NAME1);
-        Mockito.when(mockedInvalidDataSnap.getString("long_desc")).thenReturn(null);
-        Mockito.when(mockedInvalidDataSnap.getString("short_desc")).thenReturn(SHORT_DESC);
-        Mockito.when(mockedInvalidDataSnap.get("id")).thenReturn(1L);
+        Mockito.when(mocked_invalid_datasnap.getString("name")).thenReturn(NAME1);
+        Mockito.when(mocked_invalid_datasnap.getString("long_desc")).thenReturn(null);
+        Mockito.when(mocked_invalid_datasnap.getString("short_desc")).thenReturn(SHORT_DESC);
+        Mockito.when(mocked_invalid_datasnap.get("id")).thenReturn(1L);
 
-        asso1 = new Association(mockedValidDataSnap1, icon_uri);
-        asso2 = new Association(mockedValidDataSnap2, icon_uri);
+        asso1 = new Association(mocked_valid_datasnap1, mocked_icon_uri);
+        asso2 = new Association(mocked_valid_datasnap2, mocked_icon_uri);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void invalidSnapThrowIllegalArgumentException(){
-        new Association(mockedInvalidDataSnap);
+        new Association(mocked_invalid_datasnap);
     }
 
     @Test
-    public void validSnapDoesntThrowException(){
-        new Association(mockedValidDataSnap1, icon_uri);
+    public void validSnapNoThrowException(){
+        new Association(mocked_valid_datasnap1, mocked_icon_uri);
     }
 
     @Test
@@ -92,7 +92,7 @@ public class AssociationTest {
     @Test
     public void comparableToIsCorrect(){
         assertEquals(NAME1.compareTo(NAME2),
-                asso1.compareTo(asso2));
+                Association.getComparator().compare(asso1,asso2));
     }
 
 }

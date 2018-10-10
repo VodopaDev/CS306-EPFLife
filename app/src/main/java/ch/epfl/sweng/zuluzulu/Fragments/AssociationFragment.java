@@ -7,9 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -19,12 +19,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.View.AssociationAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,13 +41,12 @@ public class AssociationFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private ArrayList<Association> assos_all;
+    private ArrayList<Association> assos_fav;
+    private AssociationAdapter assos_adapter;
 
+    private ListView listview_assos;
     private Button button_assos_all;
     private Button button_assos_fav;
-    private LinearLayout vlayout_assos_all;
-    private LinearLayout vlayout_assos_fav;
-    private ScrollView scroll_assos_all;
-    private ScrollView scroll_assos_fav;
 
     public AssociationFragment() {
         // Required empty public constructor
@@ -61,32 +61,10 @@ public class AssociationFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_association, container, false);
-
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         assos_all = new ArrayList<>();
-        vlayout_assos_all = view.findViewById(R.id.vlayout_assos_all);
-        vlayout_assos_fav = view.findViewById(R.id.vlayout_assos_fav);
-        button_assos_all = view.findViewById(R.id.button_assos_all);
-        button_assos_fav = view.findViewById(R.id.button_assos_fav);
-        scroll_assos_all = view.findViewById(R.id.scroll_assos_all);
-        scroll_assos_fav = view.findViewById(R.id.scroll_assos_fav);
-
-        button_assos_all.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scroll_assos_all.setVisibility(View.VISIBLE);
-                scroll_assos_fav.setVisibility(View.INVISIBLE);
-            }
-        });
-
-        button_assos_fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scroll_assos_all.setVisibility(View.INVISIBLE);
-                scroll_assos_fav.setVisibility(View.VISIBLE);
-            }
-        });
+        assos_adapter = new AssociationAdapter(getContext(), assos_all);
 
         FirebaseFirestore.getInstance().document("assos_info/all_assos")
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -100,13 +78,26 @@ public class AssociationFragment extends Fragment {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             Association asso = new Association(documentSnapshot);
                             assos_all.add(asso);
-                            vlayout_assos_all.addView(asso.getCardView(view.getContext()));
+                            assos_adapter.sort(Association.getComparator());
                         }
                     });
                 }
 
             }
         });
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_association, container, false);
+
+        listview_assos = view.findViewById(R.id.listview_assos);
+        button_assos_all = view.findViewById(R.id.button_assos_all);
+        button_assos_fav = view.findViewById(R.id.button_assos_fav);
+
+        listview_assos.setAdapter(assos_adapter);
+
+
 
         // TODO: add a check if the User is authenticated and load favorites
         /*

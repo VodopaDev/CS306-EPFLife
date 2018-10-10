@@ -1,24 +1,21 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import android.content.Context;
 import android.location.Location;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.util.Comparator;
 import java.util.List;
-
-import ch.epfl.sweng.zuluzulu.View.AssociationCard;
 
 /**
  * A simple class describing an Association
  * Has diverse getters and some functions to create views
  */
-public class Association implements Comparable<Association> {
+public class Association {
     private static final String IMAGE_PATH = "assos/asso";
     private static final String ICON_EXT = "_icon.png";
 
@@ -46,7 +43,7 @@ public class Association implements Comparable<Association> {
      */
     public Association(DocumentSnapshot snap, Uri iconUri) {
         if(!snapshotIsValid(snap))
-            throw new IllegalArgumentException(snap.toString());
+            throw new NullPointerException();
 
         id = ((Long) snap.get("id")).intValue();
         name = snap.getString("name");
@@ -111,16 +108,6 @@ public class Association implements Comparable<Association> {
         return icon;
     }
 
-    // TODO: add a test about this in CardViewTest
-    /**
-     * Return an AssociationCard view of the Association
-     * @param context context to build the View
-     * @return the AssociationCard
-     */
-    public AssociationCard getCardView(Context context){
-        return new AssociationCard(context, this);
-    }
-
     /**
      * Check if a DocumentSnapshot correspond to an Association's one
      * @param snap the DocumentSnapshot
@@ -136,12 +123,15 @@ public class Association implements Comparable<Association> {
     }
 
     /**
-     * Compare two Associations using their name
-     * @param asso the other Association to compare
-     * @return compareTo of both Associations names
+     * Return a Comparator for two Associations using their names
+     * @return compareTo of two Associations names
      */
-    @Override
-    public int compareTo(@NonNull Association asso) {
-        return name.compareTo(asso.name);
+    public static Comparator<Association> getComparator(){
+        return new Comparator<Association>() {
+            @Override
+            public int compare(Association o1, Association o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        };
     }
 }
