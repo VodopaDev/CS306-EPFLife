@@ -20,11 +20,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
+
+
+            <intent-filter android:label="filter_view_example_gizmos">
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="epflife" android:host="login" />
+                <data android:scheme="epflife"
+                    android:host="login" />
             </intent-filter>
         </activity>
     </application>

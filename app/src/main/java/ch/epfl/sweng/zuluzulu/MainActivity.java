@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         // The first seen fragment is the main fragment
 
         Intent i = getIntent();
-        if(Intent.ACTION_SEND.equals(i.getAction())){
+        if(Intent.ACTION_VIEW.equals(i.getAction())){
             selectItem(navigationView.getMenu().findItem(R.id.nav_login));
         } else {
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
@@ -136,10 +136,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 fragmentClass = LoginFragment.class;
                 break;
             case R.id.nav_about:
-                // Launch app with login
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setData(Uri.parse("epflife://login?id=com.example.android"));
-                startActivity(intent);
                 fragmentClass = AboutZuluzuluFragment.class;
                 break;
             case R.id.nav_associations:
