@@ -23,8 +23,10 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 public class ChatFragment extends Fragment {
     public static final String TAG = "CHAT_TAG";
     private static final String ARG_USER = "ARG_USER";
+    private static final String ARG_CHANNEL_ID = "ARG_CHANNEL_ID";
 
     private User user;
+    private int channelID;
 
     private OnFragmentInteractionListener mListener;
 
@@ -38,10 +40,11 @@ public class ChatFragment extends Fragment {
      *
      * @return A new instance of fragment ChatFragment.
      */
-    public static ChatFragment newInstance(User user) {
+    public static ChatFragment newInstance(User user, int channelID) {
         ChatFragment fragment = new ChatFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);
+        args.putInt(ARG_CHANNEL_ID, channelID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,6 +54,7 @@ public class ChatFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
+            channelID = getArguments().getInt(ARG_CHANNEL_ID);
         }
     }
 
