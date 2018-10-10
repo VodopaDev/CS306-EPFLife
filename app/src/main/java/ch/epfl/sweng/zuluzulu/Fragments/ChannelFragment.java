@@ -31,7 +31,7 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * Activities that contain this fragment must implement the
  * {@link OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ChatFragment#newInstance} factory method to
+ * Use the {@link ChannelFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class ChannelFragment extends Fragment {
@@ -58,8 +58,8 @@ public class ChannelFragment extends Fragment {
      *
      * @return A new instance of fragment ChatFragment.
      */
-    public static ChatFragment newInstance(User user) {
-        ChatFragment fragment = new ChatFragment();
+    public static ChannelFragment newInstance(User user) {
+        ChannelFragment fragment = new ChannelFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);
         fragment.setArguments(args);
