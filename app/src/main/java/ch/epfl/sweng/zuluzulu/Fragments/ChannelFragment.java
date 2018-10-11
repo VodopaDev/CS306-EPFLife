@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,8 +20,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.zuluzulu.Adapters.ChannelAdapter;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
@@ -41,8 +42,8 @@ public class ChannelFragment extends Fragment {
     private FirebaseFirestore db;
 
     private ListView listView;
-    private ArrayList<String> listOfChannels = new ArrayList<>();
-    private ArrayAdapter adapter;
+    private ArrayList<Channel> listOfChannels = new ArrayList<>();
+    private ChannelAdapter adapter;
 
     private User user;
 
@@ -78,9 +79,9 @@ public class ChannelFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_channel, container, false);
-        listView = view.findViewById(R.id.channels);
+        listView = view.findViewById(R.id.channels_list_view);
 
-        adapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, listOfChannels);
+        adapter = new ChannelAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
 
         db = FirebaseFirestore.getInstance();
@@ -93,8 +94,10 @@ public class ChannelFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                String name = (String) document.get("name");
-                                listOfChannels.add(name);
+                                String name = document.getString("name");
+                                String description = document.getString("description");
+                                Channel channel = new Channel(name, description);
+                                listOfChannels.add(channel);
                             }
                             adapter.notifyDataSetChanged();
                         } else {
