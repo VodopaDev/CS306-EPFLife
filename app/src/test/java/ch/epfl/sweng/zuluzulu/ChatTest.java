@@ -1,14 +1,15 @@
 package ch.epfl.sweng.zuluzulu;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import java.util.Arrays;
 import java.util.List;
-
 import ch.epfl.sweng.zuluzulu.Structure.Chat;
-
 import static org.junit.Assert.assertEquals;
 
+@RunWith(JUnit4.class)
 public class ChatTest {
 
     @Test
