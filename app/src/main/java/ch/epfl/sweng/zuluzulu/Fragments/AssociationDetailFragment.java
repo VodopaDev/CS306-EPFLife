@@ -1,5 +1,8 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -10,26 +13,28 @@ import android.view.ViewGroup;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
-import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class AssociationDetailFragment extends Fragment{
     private static final String TAG = "ASSOCIATION_DETAIL__TAG";
     private OnFragmentInteractionListener mListener;
 
-    private User user;
     private Association association;
 
-    public static AssociationDetailFragment newInstance(User user, Association association) {
-        if(user == null || association == null)
+    public static AssociationDetailFragment newInstance(Association association) {
+        if(association == null)
             throw new NullPointerException("Error creating an AssociationDetailFragment:\n" +
-                    "At least one of the parameters is null");
+                    "Association is null");
 
         AssociationDetailFragment fragment = new AssociationDetailFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        fragment.setUser(user);
         fragment.setAssociation(association);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -38,14 +43,33 @@ public class AssociationDetailFragment extends Fragment{
         return view;
     }
 
-    private void setUser(User user){
-        assert(user != null);
-        this.user = user;
-    }
-
     private void setAssociation(Association association){
         assert (association != null);
         this.association = association;
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(TAG, uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
 

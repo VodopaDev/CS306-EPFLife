@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.View;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,12 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import java.util.List;
+
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
+import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
  * An ArrayAdapter for Associations
@@ -61,7 +66,7 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
             row.setTag(holder);
         }
 
-        Association asso = data.get(position);
+        final Association asso = data.get(position);
         holder.name.setText(asso.getName());
         holder.short_desc.setText(asso.getShortDesc());
 
@@ -77,6 +82,13 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
         } else {
             initIcon(asso.getIcon(), holder.icon);
         }
+
+        row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AssociationDetailFragment fragment = AssociationDetailFragment.newInstance(asso);
+            }
+        });
 
         return row;
     }

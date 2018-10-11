@@ -178,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 updateMenuItems();
                 selectItem(navigationView.getMenu().findItem(R.id.nav_main));
                 break;
+
             default:
                 // Should never happen
                 throw new AssertionError("Invalid message");
