@@ -17,11 +17,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -124,10 +126,12 @@ public class ChatFragment extends Fragment {
             public void onClick(View v) {
                 String senderName = user.getFirst_names();
                 String msg = textEdit.getText().toString();
+                Timestamp time = Timestamp.now();
 
                 Map<String, Object> data = new HashMap<>();
                 data.put("senderName", senderName);
                 data.put("msg", msg);
+                data.put("time", time);
 
                 db.collection("channels/channel" + channelID + "/messages")
                         .add(data)
@@ -168,6 +172,7 @@ public class ChatFragment extends Fragment {
 
     private void updateChat() {
         db.collection("channels/channel" + channelID + "/messages")
+                .orderBy("time", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
