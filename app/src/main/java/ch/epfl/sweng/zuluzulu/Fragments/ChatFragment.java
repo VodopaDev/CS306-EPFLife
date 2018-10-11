@@ -50,6 +50,9 @@ public class ChatFragment extends Fragment {
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_CHANNEL_ID = "ARG_CHANNEL_ID";
 
+    private static final String CHANNEL_DOCUMENT_NAME = "channels/channel";
+    private static final String MESSAGES_COLLECTION_NAME = "messages";
+
     private FirebaseFirestore db;
 
     private Button sendButton;
@@ -57,6 +60,7 @@ public class ChatFragment extends Fragment {
     private ListView listView;
     private List<String> messages = new ArrayList<>();
     private ArrayAdapter adapter;
+    private String collection_path;
 
     private User user;
     private int channelID;
@@ -100,6 +104,8 @@ public class ChatFragment extends Fragment {
         textEdit = view.findViewById(R.id.chat_message);
         listView = view.findViewById(R.id.chat_list_view);
 
+        collection_path = CHANNEL_DOCUMENT_NAME + channelID + "/" + MESSAGES_COLLECTION_NAME;
+
         // We always see the last message
         listView.setStackFromBottom(true);
 
@@ -108,7 +114,7 @@ public class ChatFragment extends Fragment {
 
         db = FirebaseFirestore.getInstance();
 
-        db.collection("channels/channel" + channelID + "/messages")
+        db.collection(collection_path)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
@@ -133,7 +139,7 @@ public class ChatFragment extends Fragment {
                 data.put("msg", msg);
                 data.put("time", time);
 
-                db.collection("channels/channel" + channelID + "/messages")
+                db.collection(collection_path)
                         .add(data)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
@@ -171,7 +177,7 @@ public class ChatFragment extends Fragment {
     }
 
     private void updateChat() {
-        db.collection("channels/channel" + channelID + "/messages")
+        db.collection(collection_path)
                 .orderBy("time", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

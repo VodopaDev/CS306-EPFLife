@@ -36,6 +36,7 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 public class ChannelFragment extends Fragment {
     public static final String TAG = "CHANNEL_TAG";
     private static final String ARG_USER = "ARG_USER";
+    private static final String CHANNELS_COLLECTION_NAME = "channels";
 
     private FirebaseFirestore db;
 
@@ -83,7 +84,7 @@ public class ChannelFragment extends Fragment {
         listView.setAdapter(adapter);
 
         db = FirebaseFirestore.getInstance();
-        db.collection("channels")
+        db.collection(CHANNELS_COLLECTION_NAME)
                 .orderBy("id", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
