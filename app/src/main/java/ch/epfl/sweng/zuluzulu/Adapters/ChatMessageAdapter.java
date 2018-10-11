@@ -38,8 +38,8 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
         TextView senderName = messageView.findViewById(R.id.chat_message_senderName);
         senderName.setText(currentChatMessage.getSenderName());
 
-        TextView msg = messageView.findViewById(R.id.chat_message_msg);
-        msg.setText(currentChatMessage.getMessage());
+        TextView message = messageView.findViewById(R.id.chat_message_msg);
+        message.setText(currentChatMessage.getMessage());
 
         return messageView;
     }
