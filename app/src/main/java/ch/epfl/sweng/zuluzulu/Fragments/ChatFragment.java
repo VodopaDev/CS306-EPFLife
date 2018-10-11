@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +15,9 @@ import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +38,8 @@ public class ChatFragment extends Fragment {
     public static final String TAG = "CHAT_TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_CHANNEL_ID = "ARG_CHANNEL_ID";
+
+    private FirebaseFirestore db;
 
     private Button sendButton;
     private EditText textEdit;
@@ -90,27 +92,26 @@ public class ChatFragment extends Fragment {
         adapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, messages);
         listView.setAdapter(adapter);
 
-        FirebaseApp.initializeApp(getContext());
-        FirebaseFirestore.getInstance().document("channels_info/channel" + channelID + "/messages/all_messages").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                List<DocumentReference> messages_all_ref = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
-                for (int i = 0; i < messages_all_ref.size(); i++) {
-                    DocumentReference ref = messages_all_ref.get(i);
-                    ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            DocumentSnapshot result = task.getResult();
-                            String senderName = (String) result.get("senderName");
-                            String msg = (String) result.get("msg");
-                            messages.add(msg);
-                            adapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, messages);
-                            listView.setAdapter(adapter);
+        db = FirebaseFirestore.getInstance();
+
+        db.collection("channels/channel" + channelID + "/messages")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                String senderName = (String) document.get("senderName");
+                                String msg = (String) document.get("msg");
+                                messages.add(msg);
+                            }
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
                         }
-                    });
-                }
-            }
-        });
+                    }
+                });
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
