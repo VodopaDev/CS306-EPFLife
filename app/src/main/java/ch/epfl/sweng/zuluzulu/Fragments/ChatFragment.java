@@ -98,6 +98,9 @@ public class ChatFragment extends Fragment {
         textEdit = view.findViewById(R.id.chat_message);
         listView = view.findViewById(R.id.chat_list_view);
 
+        // We always see the last message
+        listView.setStackFromBottom(true);
+
         adapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, messages);
         listView.setAdapter(adapter);
 
@@ -112,7 +115,7 @@ public class ChatFragment extends Fragment {
                             return;
                         }
 
-                        read();
+                        updateChat();
                     }
                 });
 
@@ -163,7 +166,7 @@ public class ChatFragment extends Fragment {
         mListener = null;
     }
 
-    private void read() {
+    private void updateChat() {
         db.collection("channels/channel" + channelID + "/messages")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
