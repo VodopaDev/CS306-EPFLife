@@ -33,8 +33,13 @@
     <string name="supportEmail">EPFLife@epfl.ch</string>
     <string name="applicationName">EPFLife</string>
 
-    <!-- Assos card names -->
+    <!-- AssociationFragment related -->
     <string name="fragment_assos_button_all">All</string>
     <string name="fragment_assos_button_fav">Favorites</string>
+
+    <!-- Card layout of Association related -->
+    <string name="card_association_image_description">Association\'s icon</string>
+
+
 
 </resources>
