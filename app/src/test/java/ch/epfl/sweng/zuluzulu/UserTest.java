@@ -23,9 +23,9 @@ public class UserTest {
         builder.setFirst_names("first_name");
         builder.setLast_names("last_name");
 
-        User user = builder.build();
+        User user = builder.buildAuthenticatedUser();
 
-        assertTrue(user.isConnected());
+        assertNotNull(user);
 
         assertEquals(user.getEmail(), "mail@epfl.ch");
         assertEquals(user.getSciper(), "1212");
