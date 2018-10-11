@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -33,8 +32,10 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageAdapter;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
@@ -58,8 +59,8 @@ public class ChatFragment extends Fragment {
     private Button sendButton;
     private EditText textEdit;
     private ListView listView;
-    private List<String> messages = new ArrayList<>();
-    private ArrayAdapter adapter;
+    private List<ChatMessage> messages = new ArrayList<>();
+    private ChatMessageAdapter adapter;
     private String collection_path;
 
     private User user;
@@ -109,7 +110,7 @@ public class ChatFragment extends Fragment {
         // We always see the last message
         listView.setStackFromBottom(true);
 
-        adapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, messages);
+        adapter = new ChatMessageAdapter(view.getContext(), messages);
         listView.setAdapter(adapter);
 
         db = FirebaseFirestore.getInstance();
@@ -189,7 +190,8 @@ public class ChatFragment extends Fragment {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 String senderName = document.getString("senderName");
                                 String msg = document.getString("msg");
-                                messages.add(msg);
+                                ChatMessage message = new ChatMessage(senderName, msg);
+                                messages.add(message);
                             }
                             adapter.notifyDataSetChanged();
                         } else {
