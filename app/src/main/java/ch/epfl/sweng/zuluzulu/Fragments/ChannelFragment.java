@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +14,11 @@ import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -36,6 +35,8 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 public class ChannelFragment extends Fragment {
     public static final String TAG = "CHANNEL_TAG";
     private static final String ARG_USER = "ARG_USER";
+
+    private FirebaseFirestore db;
 
     private ListView listView;
     private ArrayList<String> listOfChannels = new ArrayList<>();
@@ -74,31 +75,30 @@ public class ChannelFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_channel, container, false);
+        View view = inflater.inflate(R.layout.fragment_channel, container, false);
         listView = view.findViewById(R.id.channels);
 
-        FirebaseApp.initializeApp(getContext());
-        FirebaseFirestore.getInstance().document("channels_info/all_channels")
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                List<DocumentReference> channels_all_ref = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
-                for(int i = 0; i < channels_all_ref.size(); i++){
+        adapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, listOfChannels);
+        listView.setAdapter(adapter);
 
-                    DocumentReference ref = channels_all_ref.get(i);
-                    ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            DocumentSnapshot result = task.getResult();
-                            String name = (String) result.get("name");
-                            listOfChannels.add(name);
-                            adapter = new ArrayAdapter(view.getContext(), android.R.layout.simple_list_item_1, listOfChannels);
-                            listView.setAdapter(adapter);
+        db = FirebaseFirestore.getInstance();
+        db.collection("channels")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                String name = (String) document.get("name");
+                                listOfChannels.add(name);
+                            }
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
                         }
-                    });
-                }
-            }
-        });
+                    }
+                });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
