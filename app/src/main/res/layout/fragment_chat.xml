@@ -16,13 +16,13 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintBottom_toTopOf="@+id/chat_hlinearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></ListView>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/chat_hlinearLayout"
         android:layout_width="395dp"
         android:layout_height="77dp"
         android:layout_marginBottom="8dp"
@@ -42,7 +42,6 @@
             android:layout_weight="0.8"
             android:ems="10"
             android:inputType="text"
-            android:text=""
             android:hint="Message"/>
 
         <Button
@@ -50,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="Button" />
+            android:text="Send" />
     </LinearLayout>
 
 
