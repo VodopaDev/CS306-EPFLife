@@ -83,7 +83,7 @@ public class ChatFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_chat, container, false);
+        View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
         sendButton = view.findViewById(R.id.chat_send_button);
         textEdit = view.findViewById(R.id.chat_message);
