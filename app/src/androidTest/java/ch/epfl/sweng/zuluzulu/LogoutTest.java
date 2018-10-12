@@ -34,9 +34,7 @@ public class LogoutTest {
         openLoginFragment();
 
         // Log on
-        onView(withId(R.id.username)).perform(typeText("user")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
-        onView(withId(R.id.sign_in_button)).perform(click());
+        Utility.login();
     }
 
     @Test

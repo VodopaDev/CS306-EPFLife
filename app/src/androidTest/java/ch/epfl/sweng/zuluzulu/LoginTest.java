@@ -80,10 +80,7 @@ public class LoginTest {
     public void testCanLogIn() {
         //You have to test if it works for wrong credentials, if it logins properly and if you have any
         //other idea you are welcome to test them
-
-        onView(withId(R.id.username)).perform(typeText("user")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
-        onView(withId(R.id.sign_in_button)).perform(click());
+        Utility.login();
 
         openDrawer();
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));

@@ -36,9 +36,8 @@ public class MenuAsAuthenticatedTest {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_login));
 
         // Login
-        onView(withId(R.id.username)).perform(typeText("vincent")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
-        onView(withId(R.id.sign_in_button)).perform(click());
+       Utility.login();
+
 
         // Open the menu again
         onView(withId(R.id.drawer_layout))
