@@ -109,9 +109,6 @@ public class ChatFragment extends Fragment {
 
         collection_path = CHANNEL_DOCUMENT_NAME + channelID + "/" + MESSAGES_COLLECTION_NAME;
 
-        // We always see the last message
-        listView.setStackFromBottom(true);
-
         adapter = new ChatMessageAdapter(view.getContext(), messages);
         listView.setAdapter(adapter);
 
@@ -161,7 +158,7 @@ public class ChatFragment extends Fragment {
 
         textEdit.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence text, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence text, int start, int before, int count) {
@@ -169,7 +166,7 @@ public class ChatFragment extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable text) {}
         });
 
         return view;
@@ -209,6 +206,7 @@ public class ChatFragment extends Fragment {
                                 messages.add(message);
                             }
                             adapter.notifyDataSetChanged();
+                            listView.setSelection(adapter.getCount() - 1);
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
