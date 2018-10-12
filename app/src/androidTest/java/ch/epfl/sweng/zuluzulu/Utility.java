@@ -28,7 +28,6 @@ public class Utility {
 
     /**
      * Open the menu from the mainActivity
-     * TODO Vincent, openMenu or open Drawer ?
      */
     public static void openMenu() {
         onView(withId(R.id.drawer_layout))
