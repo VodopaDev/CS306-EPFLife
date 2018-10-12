@@ -28,21 +28,17 @@ public class MenuAsAuthenticatedTest {
     @Before
     public void openDrawer() {
         // Open the menu
-        onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT)))
-                .perform(DrawerActions.open());
+        Utility.openMenu();
 
         // Navigate to the login
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_login));
 
         // Login
-       Utility.login();
+        Utility.login();
 
 
         // Open the menu again
-        onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT)))
-                .perform(DrawerActions.open());
+        Utility.openMenu();
     }
 
     @Test

@@ -27,9 +27,7 @@ public class MenuAsGuestTest {
     @Before
     public void openDrawer() {
         // Open the menu
-        onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT)))
-                .perform(DrawerActions.open());
+       Utility.openMenu();
     }
 
     @Test

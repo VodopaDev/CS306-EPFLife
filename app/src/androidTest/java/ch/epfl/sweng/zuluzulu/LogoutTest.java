@@ -50,10 +50,7 @@ public class LogoutTest {
      */
     private void openDrawer(){
         // Open Drawer to click on navigation.
-        onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-                .perform(DrawerActions.open()); // Open Drawer
-
+        Utility.openMenu();
     }
 
     /**
