@@ -103,7 +103,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        mPasswordView = (EditText) view.findViewById(R.id.password);
+        mPasswordView = view.findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -115,9 +115,9 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             }
         });
 
-        mUsernameView = (EditText) view.findViewById(R.id.username);
+        mUsernameView = view.findViewById(R.id.username);
 
-        Button mSignInButon = (Button) view.findViewById(R.id.sign_in_button);
+        Button mSignInButon = view.findViewById(R.id.sign_in_button);
         mSignInButon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
