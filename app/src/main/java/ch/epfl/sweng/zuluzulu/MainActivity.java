@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 fragment = AboutZuluzuluFragment.newInstance();
                 break;
             case R.id.nav_associations:
-                fragment = AssociationFragment.newInstance();
+                fragment = AssociationFragment.newInstance(user);
                 break;
             case R.id.nav_settings:
                 fragment = SettingsFragment.newInstance();
