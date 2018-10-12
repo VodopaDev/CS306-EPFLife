@@ -13,14 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.google.firebase.FirebaseApp;
-
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
@@ -33,10 +30,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FirebaseApp.initializeApp(getApplicationContext());
-
-        // Needed to use Firebase storage and Firestore
-        FirebaseApp.initializeApp(getApplicationContext());
 
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -125,67 +118,61 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      */
     private void selectItem(MenuItem menuItem) {
         Fragment fragment = null;
-        Class fragmentClass;
         switch (menuItem.getItemId()) {
             case R.id.nav_main:
-                fragmentClass = MainFragment.class;
+                fragment = MainFragment.newInstance();
                 break;
             case R.id.nav_login:
-                fragmentClass = LoginFragment.class;
+                fragment = LoginFragment.newInstance();
                 break;
             case R.id.nav_about:
-                fragmentClass = AboutZuluzuluFragment.class;
+                fragment = AboutZuluzuluFragment.newInstance();
                 break;
             case R.id.nav_associations:
-                fragmentClass = AssociationFragment.class;
+                fragment = AssociationFragment.newInstance();
                 break;
             case R.id.nav_settings:
-                fragmentClass = SettingsFragment.class;
+                fragment = SettingsFragment.newInstance();
                 break;
             case R.id.nav_logout:
                 this.user = new User.UserBuilder().buildGuestUser();
                 updateMenuItems();
-                fragmentClass = MainFragment.class;
                 menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
                 break;
             default:
-                fragmentClass = MainFragment.class;
+                fragment = MainFragment.newInstance();
         }
 
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (openFragment(fragment)) {
+            // Opening the fragment worked
+            menuItem.setChecked(true);
+            setTitle(menuItem.getTitle());
         }
+    }
 
+    private boolean openFragment(Fragment fragment) {
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
-                menuItem.setChecked(true);
-                setTitle(menuItem.getTitle());
+                return true;
             }
         }
-
+        return false;
     }
 
     @Override
     public void onFragmentInteraction(String tag, Object data) {
-        switch(tag) {
+        switch (tag) {
             case LoginFragment.TAG:
                 this.user = (User) data;
                 updateMenuItems();
                 selectItem(navigationView.getMenu().findItem(R.id.nav_main));
                 break;
-
             default:
                 // Should never happen
                 throw new AssertionError("Invalid message");
         }
-    }
-
-    public User getUser() {
-        return user;
     }
 }
