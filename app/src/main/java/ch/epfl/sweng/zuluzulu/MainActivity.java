@@ -15,6 +15,8 @@ import android.view.MenuItem;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
@@ -139,6 +141,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 updateMenuItems();
                 menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
                 break;
+            case R.id.nav_chat:
+                fragment = ChannelFragment.newInstance(user);
+                break;
             default:
                 fragment = MainFragment.newInstance();
         }
@@ -169,6 +174,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 this.user = (User) data;
                 updateMenuItems();
                 selectItem(navigationView.getMenu().findItem(R.id.nav_main));
+                break;
+            case ChannelFragment.TAG:
+                int channelID = (Integer) data;
+                openFragment(ChatFragment.newInstance(user, channelID));
                 break;
             default:
                 // Should never happen

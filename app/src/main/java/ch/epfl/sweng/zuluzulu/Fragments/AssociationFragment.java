@@ -23,6 +23,7 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.View.AssociationAdapter;
 
 /**
@@ -35,6 +36,9 @@ import ch.epfl.sweng.zuluzulu.View.AssociationAdapter;
  */
 public class AssociationFragment extends Fragment {
     private static final String TAG = "ASSOCIATION_TAG";
+    private static final String ARG_USER = "ARG_USER";
+
+    private User user;
 
     private OnFragmentInteractionListener mListener;
 
@@ -50,10 +54,10 @@ public class AssociationFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static AssociationFragment newInstance(String param1, String param2) {
+    public static AssociationFragment newInstance(User user) {
         AssociationFragment fragment = new AssociationFragment();
         Bundle args = new Bundle();
+        args.putSerializable(ARG_USER, user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,6 +65,10 @@ public class AssociationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            user = (User) getArguments().getSerializable(ARG_USER);
+        }
+
         assos_all = new ArrayList<>();
         assos_adapter = new AssociationAdapter(getContext(), assos_all);
 
