@@ -14,6 +14,15 @@ public final class AuthClient {
                 "?response_type=code" +
                 "&client_id=" + HttpUtils.urlEncode(config.clientId) +
                 "&redirect_uri=" + HttpUtils.urlEncode(config.redirectUri) +
+                "&scope=" + config.scopes[0];
+    }
+
+
+    public static String createCodeRequestUrlLogout(OAuth2Config config) {
+        return "https://tequila.epfl.ch/cgi-bin/OAuth2IdP/logout" +
+                "?response_type=code" +
+                "&client_id=" + HttpUtils.urlEncode(config.clientId) +
+                "&redirect_uri=" + HttpUtils.urlEncode(config.redirectUri) +
                 "&scope=" + TextUtils.join(",", config.scopes);
     }
 

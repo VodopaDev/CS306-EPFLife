@@ -37,6 +37,9 @@ public final class Sample {
 
         User profile = AuthServer.fetchUser(tokens.get("Tequila.profile"));
         System.out.println(profile);
+
+        String logout = AuthClient.createCodeRequestUrlLogout(config);
+        System.out.println(logout);
     }
 
     private static OAuth2Config readConfig() throws IOException {
