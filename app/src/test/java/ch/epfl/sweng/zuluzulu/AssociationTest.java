@@ -49,8 +49,8 @@ public class AssociationTest {
         Mockito.when(mocked_invalid_datasnap.getString("short_desc")).thenReturn(SHORT_DESC);
         Mockito.when(mocked_invalid_datasnap.get("id")).thenReturn(1L);
 
-        asso1 = new Association(mocked_valid_datasnap1, mocked_icon_uri);
-        asso2 = new Association(mocked_valid_datasnap2, mocked_icon_uri);
+        asso1 = new Association(mocked_valid_datasnap1);
+        asso2 = new Association(mocked_valid_datasnap2);
     }
 
     @Test(expected = NullPointerException.class)
@@ -60,7 +60,7 @@ public class AssociationTest {
 
     @Test
     public void validSnapNoThrowException(){
-        new Association(mocked_valid_datasnap1, mocked_icon_uri);
+        new Association(mocked_valid_datasnap1);
     }
 
     @Test
@@ -85,8 +85,8 @@ public class AssociationTest {
 
     @Test
     public void uriIsCorrect(){
-        assertNotNull(asso1.getIcon().getPath());
-        assertEquals(ICON_URI_STRING, asso1.getIcon().getPath());
+        assertNotNull(asso1.getIconUri().getPath());
+        assertEquals(ICON_URI_STRING, asso1.getIconUri().getPath());
     }
 
     @Test

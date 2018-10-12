@@ -7,15 +7,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +27,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.View.AssociationAdapter;
+import ch.epfl.sweng.zuluzulu.Adapters.AssociationAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,26 +75,27 @@ public class AssociationFragment extends Fragment {
         assos_all = new ArrayList<>();
         assos_adapter = new AssociationAdapter(getContext(), assos_all);
 
-        FirebaseFirestore.getInstance().document("assos_info/all_assos")
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                List<DocumentReference> assos_all_ref = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
-                if(assos_all_ref != null) {
-                    for (int i = 0; i < assos_all_ref.size(); i++) {
-                        assos_all_ref.get(i).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                Association asso = new Association(documentSnapshot);
-                                assos_all.add(asso);
-                                assos_adapter.sort(Association.getComparator());
-                            }
-                        });
-                    }
-                }
+        FirebaseFirestore.getInstance().collection("assos_info")
+                .orderBy("name")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
+                        for (int i = 0; i < snap_list.size(); i++){
+                            assos_all.add(new Association(snap_list.get(i)));
+                            assos_adapter.notifyDataSetChanged();
+                        }
 
-            }
-        });
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
     }
 
     @Override
@@ -103,6 +107,12 @@ public class AssociationFragment extends Fragment {
         button_assos_fav = view.findViewById(R.id.button_assos_fav);
 
         listview_assos.setAdapter(assos_adapter);
+        listview_assos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
 
 
 
