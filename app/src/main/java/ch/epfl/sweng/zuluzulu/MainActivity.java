@@ -17,10 +17,11 @@ import com.google.firebase.FirebaseApp;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
@@ -125,49 +126,51 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      */
     private void selectItem(MenuItem menuItem) {
         Fragment fragment = null;
-        Class fragmentClass;
         switch (menuItem.getItemId()) {
             case R.id.nav_main:
-                fragmentClass = MainFragment.class;
+                fragment = MainFragment.newInstance();
                 break;
             case R.id.nav_login:
-                fragmentClass = LoginFragment.class;
+                fragment = LoginFragment.newInstance();
                 break;
             case R.id.nav_about:
-                fragmentClass = AboutZuluzuluFragment.class;
+                fragment = AboutZuluzuluFragment.newInstance();
                 break;
             case R.id.nav_associations:
-                fragmentClass = AssociationFragment.class;
+                fragment = AssociationFragment.newInstance();
                 break;
             case R.id.nav_settings:
-                fragmentClass = SettingsFragment.class;
+                fragment = SettingsFragment.newInstance();
                 break;
             case R.id.nav_logout:
                 this.user = new User.UserBuilder().buildGuestUser();
                 updateMenuItems();
-                fragmentClass = MainFragment.class;
                 menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
                 break;
+            case R.id.nav_chat:
+                fragment = ChannelFragment.newInstance(user);
+                break;
             default:
-                fragmentClass = MainFragment.class;
+                fragment = MainFragment.newInstance();
         }
 
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (openFragment(fragment)) {
+            // Opening the fragment worked
+            menuItem.setChecked(true);
+            setTitle(menuItem.getTitle());
         }
+    }
 
+    private boolean openFragment(Fragment fragment) {
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
-                menuItem.setChecked(true);
-                setTitle(menuItem.getTitle());
+                return true;
             }
         }
-
+        return false;
     }
 
     @Override
@@ -177,6 +180,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 this.user = (User) data;
                 updateMenuItems();
                 selectItem(navigationView.getMenu().findItem(R.id.nav_main));
+                break;
+            case ChannelFragment.TAG:
+                int channelID = (Integer) data;
+                openFragment(ChatFragment.newInstance(user, channelID));
                 break;
             default:
                 // Should never happen
