@@ -112,8 +112,32 @@ public class ChatFragment extends Fragment {
         adapter = new ChatMessageAdapter(view.getContext(), messages);
         listView.setAdapter(adapter);
 
-        db = FirebaseFirestore.getInstance();
+        setUpDataOnChangeListener();
+        setUpSendButton();
+        setUpEditText();
 
+        return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    private void setUpDataOnChangeListener() {
+        db = FirebaseFirestore.getInstance();
         db.collection(collection_path)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -126,7 +150,9 @@ public class ChatFragment extends Fragment {
                         updateChat();
                     }
                 });
+    }
 
+    private void setUpSendButton() {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,7 +181,9 @@ public class ChatFragment extends Fragment {
                 });
             }
         });
+    }
 
+    private void setUpEditText() {
         textEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence text, int start, int count, int after) {}
@@ -168,25 +196,6 @@ public class ChatFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable text) {}
         });
-
-        return view;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     private void updateChat() {
