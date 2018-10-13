@@ -165,20 +165,24 @@ public class ChatFragment extends Fragment {
                 data.put("msg", msg);
                 data.put("time", time);
 
-                db.collection(collection_path)
-                        .add(data)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference ref) {
-                                Log.d(TAG, "DocumentSnapshot written with ID: " + ref.getId());
-                                textEdit.setText("");
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
+                addDataToFirestore(data);
+            }
+        });
+    }
+
+    private void addDataToFirestore(Map data) {
+        db.collection(collection_path)
+                .add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
+                    public void onSuccess(DocumentReference ref) {
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + ref.getId());
+                        textEdit.setText("");
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error adding document", e);
             }
         });
     }
