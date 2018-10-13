@@ -2,6 +2,8 @@ package ch.epfl.sweng.zuluzulu;
 
 
 import android.net.Uri;
+import android.util.Log;
+
 import com.google.firebase.firestore.DocumentSnapshot;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -37,16 +39,19 @@ public class AssociationTest {
         Mockito.when(mocked_valid_datasnap1.getString("name")).thenReturn(NAME1);
         Mockito.when(mocked_valid_datasnap1.getString("long_desc")).thenReturn(LONG_DESC);
         Mockito.when(mocked_valid_datasnap1.getString("short_desc")).thenReturn(SHORT_DESC);
+        Mockito.when(mocked_valid_datasnap1.getString("icon_uri")).thenReturn(ICON_URI_STRING);
         Mockito.when(mocked_valid_datasnap1.get("id")).thenReturn(1L);
 
         Mockito.when(mocked_valid_datasnap2.getString("name")).thenReturn(NAME2);
         Mockito.when(mocked_valid_datasnap2.getString("long_desc")).thenReturn(LONG_DESC);
         Mockito.when(mocked_valid_datasnap2.getString("short_desc")).thenReturn(SHORT_DESC);
+        Mockito.when(mocked_valid_datasnap2.getString("icon_uri")).thenReturn(ICON_URI_STRING);
         Mockito.when(mocked_valid_datasnap2.get("id")).thenReturn(1L);
 
         Mockito.when(mocked_invalid_datasnap.getString("name")).thenReturn(NAME1);
         Mockito.when(mocked_invalid_datasnap.getString("long_desc")).thenReturn(null);
         Mockito.when(mocked_invalid_datasnap.getString("short_desc")).thenReturn(SHORT_DESC);
+        Mockito.when(mocked_invalid_datasnap.getString("icon_uri")).thenReturn(null);
         Mockito.when(mocked_invalid_datasnap.get("id")).thenReturn(1L);
 
         asso1 = new Association(mocked_valid_datasnap1);
@@ -85,8 +90,7 @@ public class AssociationTest {
 
     @Test
     public void uriIsCorrect(){
-        assertNotNull(asso1.getIconUri().getPath());
-        assertEquals(ICON_URI_STRING, asso1.getIconUri().getPath());
+        assertEquals(Uri.parse(ICON_URI_STRING), asso1.getIconUri());
     }
 
     @Test

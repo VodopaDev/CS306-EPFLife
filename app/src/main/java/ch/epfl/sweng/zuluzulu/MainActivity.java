@@ -14,12 +14,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
+import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
@@ -179,6 +181,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 int channelID = (Integer) data;
                 openFragment(ChatFragment.newInstance(user, channelID));
                 break;
+            case AssociationDetailFragment.TAG:
+                Association asso = (Association)data;
+                openFragment(AssociationDetailFragment.newInstance(user, asso));
             default:
                 // Should never happen
                 throw new AssertionError("Invalid message");

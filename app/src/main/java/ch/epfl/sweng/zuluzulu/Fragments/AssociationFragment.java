@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,12 +39,11 @@ import ch.epfl.sweng.zuluzulu.Adapters.AssociationAdapter;
  * Use the {@link AssociationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AssociationFragment extends Fragment {
-    private static final String TAG = "ASSOCIATION_TAG";
+public class AssociationFragment extends Fragment{
+    private static final String TAG = "ASSOCIATIONS_TAG";
     private static final String ARG_USER = "ARG_USER";
 
     private User user;
-
     private OnFragmentInteractionListener mListener;
 
     private ArrayList<Association> assos_all;
@@ -93,7 +94,7 @@ public class AssociationFragment extends Fragment {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-
+                        Log.e("ASSO_LIST","Error fetching association date\n" + e.getMessage());
                     }
                 });
     }

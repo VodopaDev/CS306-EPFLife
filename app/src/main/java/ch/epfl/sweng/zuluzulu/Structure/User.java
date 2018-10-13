@@ -3,7 +3,7 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import java.io.Serializable;
 import java.util.List;
 
-abstract public class User  implements Serializable {
+abstract public class User implements Serializable {
 
     /* DEFINE ALL THE USER FUNCTION*/
 

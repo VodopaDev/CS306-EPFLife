@@ -30,6 +30,7 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
 
     private Context context;
     private List<Association> data;
+    private User user;
 
     /**
      * Basic constructor of an AssociationAdapter
@@ -70,6 +71,13 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
         holder.name.setText(asso.getName());
         holder.short_desc.setText(asso.getShortDesc());
         initIcon(asso.getIconUri(), holder.icon);
+
+        asso_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         return asso_view;
     }

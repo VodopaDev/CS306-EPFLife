@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,22 +12,31 @@ import android.view.ViewGroup;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class AssociationDetailFragment extends Fragment{
-    private static final String TAG = "ASSOCIATION_DETAIL__TAG";
+    public static final String TAG = "ASSOCIATION_DETAIL__TAG";
+    private static final String ARG_USER = "ARG_USER";
+    private static final String ARG_ASSO = "ARG_ASSO";
+
     private OnFragmentInteractionListener mListener;
 
     private Association association;
+    private User user;
 
-    public static AssociationDetailFragment newInstance(Association association) {
-        if(association == null)
+    public static AssociationDetailFragment newInstance(User user, Association asso) {
+        if(asso == null)
             throw new NullPointerException("Error creating an AssociationDetailFragment:\n" +
                     "Association is null");
+        if(user == null)
+            throw new NullPointerException("Error creating an AssociationDetailFragment:\n" +
+                    "User is null");
 
         AssociationDetailFragment fragment = new AssociationDetailFragment();
         Bundle args = new Bundle();
+        args.putSerializable(ARG_USER, user);
+        args.putSerializable(ARG_ASSO, asso);
         fragment.setArguments(args);
-        fragment.setAssociation(association);
         return fragment;
     }
 
@@ -41,11 +49,6 @@ public class AssociationDetailFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_association, container, false);
         return view;
-    }
-
-    private void setAssociation(Association association){
-        assert (association != null);
-        this.association = association;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

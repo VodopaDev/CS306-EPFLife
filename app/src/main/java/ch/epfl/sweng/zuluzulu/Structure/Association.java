@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * A simple class describing an Association
  * Has diverse getters and some functions to create views
  */
-public class Association {
+public class Association implements Serializable {
     private static final String IMAGE_PATH = "assos/asso";
     private static final String ICON_EXT = "_icon.png";
 
