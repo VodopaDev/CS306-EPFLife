@@ -2,6 +2,7 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.location.Location;
 import android.media.Image;
+import android.net.Uri;
 
 import java.util.Date;
 import java.util.List;
@@ -10,8 +11,12 @@ public class Event {
 
     private int id;
     private String name;
-    private String description;
-    private Image icon;
+    private String short_desc;
+    private String long_desc;
+
+    private static final String IMAGE_PATH = "events/ev";
+    private static final String ICON_EXT = "_icon.png";
+    private Uri icon;
 
     private int chat_id;
     private int asso_id;
@@ -44,19 +49,27 @@ public class Event {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getShort_desc() {
+        return short_desc;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setShort_desc(String description) {
+        this.short_desc = description;
     }
 
-    public Image getIcon() {
+    public String getLong_desc() {
+        return long_desc;
+    }
+
+    public void setLong_desc(String description) {
+        this.long_desc = description;
+    }
+
+    public Uri getIcon() {
         return icon;
     }
 
-    public void setIcon(Image icon) {
+    public void setIcon(Uri icon) {
         this.icon = icon;
     }
 
