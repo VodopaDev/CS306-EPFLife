@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -101,6 +102,7 @@ public class AssociationFragment extends Fragment{
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
                         Log.e("ASSO_LIST","Error fetching association date\n" + e.getMessage());
                     }
                 });
@@ -119,7 +121,10 @@ public class AssociationFragment extends Fragment{
         button_assos_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateListView(button_assos_fav, button_assos_all, assos_fav, listview_assos);
+                if(user.isConnected())
+                    updateListView(button_assos_fav, button_assos_all, assos_fav, listview_assos);
+                else
+                    Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
             }
         });
 
