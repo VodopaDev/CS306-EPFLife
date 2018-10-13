@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
+import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.User;
@@ -30,15 +32,19 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
 
     private Context context;
     private List<Association> data;
+
+    //Used for the OnClickListener
     private User user;
+    private OnFragmentInteractionListener mListener;
 
     /**
      * Basic constructor of an AssociationAdapter
      * @param context Context of the Fragment
      * @param data List of Associations to view
      */
-    public AssociationAdapter(Context context, List<Association> data){
+    public AssociationAdapter(Context context, List<Association> data, OnFragmentInteractionListener mListener){
         super(context, layout_resource_id, data);
+        this.mListener = mListener;
         this.context = context;
         this.data = data;
     }
@@ -67,7 +73,7 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
             asso_view.setTag(holder);
         }
 
-        Association asso = data.get(position);
+        final Association asso = data.get(position);
         holder.name.setText(asso.getName());
         holder.short_desc.setText(asso.getShortDesc());
         initIcon(asso.getIconUri(), holder.icon);
@@ -75,7 +81,8 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
         asso_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.d("FRAG_CHANGE","Switching to " + asso.getName() + "detailed view");
+                mListener.onFragmentInteraction(AssociationDetailFragment.TAG, asso);
             }
         });
 

@@ -74,7 +74,7 @@ public class AssociationFragment extends Fragment{
         }
 
         assos_all = new ArrayList<>();
-        assos_adapter = new AssociationAdapter(getContext(), assos_all);
+        assos_adapter = new AssociationAdapter(getContext(), assos_all, mListener);
 
         FirebaseFirestore.getInstance().collection("assos_info")
                 .orderBy("name")
