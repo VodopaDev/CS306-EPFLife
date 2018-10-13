@@ -4,6 +4,10 @@ import android.location.Location;
 import android.media.Image;
 import android.net.Uri;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +18,7 @@ public class Event {
     private String short_desc;
     private String long_desc;
 
-    private static final String IMAGE_PATH = "events/ev";
+    private static final String IMAGE_PATH = "events/event";
     private static final String ICON_EXT = "_icon.png";
     private Uri icon;
 
@@ -27,8 +31,39 @@ public class Event {
     private Date end_date;
 
     // TODO: Get data from cloud service using the id
-    public Event(int id) {
-        this.id = id;
+    public Event(DocumentSnapshot snap) {
+        this(snap, null);
+    }
+
+    /**
+     * Create an event using a DocumentSnapshot
+     * @param snap the document snapshot
+     * @throws IllegalArgumentException if the snapshot isn't an Event's snapshot
+     */
+    public Event(DocumentSnapshot snap, Uri iconUri) {
+        if(!snapshotIsValid(snap))
+            throw new NullPointerException();
+
+        id = ((Long) snap.get("id")).intValue();
+        name = snap.getString("name");
+        short_desc = snap.getString("short_desc");
+        long_desc = snap.getString("long_desc");
+
+        if(iconUri == null) {
+            FirebaseStorage.getInstance()
+                    .getReference()
+                    .child(IMAGE_PATH + id + ICON_EXT)
+                    .getDownloadUrl()
+                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            icon = uri;
+                        }
+                    });
+        }
+        else{
+            icon = iconUri;
+        }
     }
 
     // TODO: Add a method to add/remove one User to admins (instead of getting/setting the admins list)
