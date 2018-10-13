@@ -7,8 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.io.Serializable;
+import android.widget.TextView;
 
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -63,8 +62,15 @@ public class ProfileFragment extends Fragment implements OnFragmentInteractionLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        TextView textView = view.findViewById(R.id.profile_gaspar);
+        textView.setText(user.getGaspar());
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
