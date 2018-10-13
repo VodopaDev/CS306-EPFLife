@@ -89,7 +89,6 @@ public class ChannelFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Todo Change the way the id is selected
                 mListener.onFragmentInteraction(TAG, position + 1);
             }
         });
