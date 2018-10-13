@@ -1,7 +1,10 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -87,8 +90,6 @@ public class AssociationFragment extends Fragment{
                             assos_all.add(new Association(snap_list.get(i)));
                             assos_adapter.notifyDataSetChanged();
                         }
-
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -101,12 +102,29 @@ public class AssociationFragment extends Fragment{
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_association, container, false);
+        View view = inflater.inflate(R.layout.fragment_association, container, false);
 
-        listview_assos = view.findViewById(R.id.listview_assos);
-        button_assos_all = view.findViewById(R.id.button_assos_all);
-        button_assos_fav = view.findViewById(R.id.button_assos_fav);
+        listview_assos = view.findViewById(R.id.association_fragment_list);
         listview_assos.setAdapter(assos_adapter);
+
+        button_assos_fav = view.findViewById(R.id.association_fragment_fav_button);
+        button_assos_all = view.findViewById(R.id.association_fragment_all_button);
+
+        button_assos_fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                button_assos_fav.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                button_assos_all.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
+            }
+        });
+
+        button_assos_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                button_assos_all.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                button_assos_fav.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
+            }
+        });
 
 
 

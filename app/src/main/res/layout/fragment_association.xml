@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/button_assos_all"
+            android:id="@+id/association_fragment_all_button"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -28,16 +28,17 @@
             android:text="@string/fragment_assos_button_all" />
 
         <Button
-            android:id="@+id/button_assos_fav"
+            android:id="@+id/association_fragment_fav_button"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@color/colorGrayDarkTransparent"
             android:text="@string/fragment_assos_button_fav" />
     </LinearLayout>
 
     <ListView
-        android:id="@+id/listview_assos"
+        android:id="@+id/association_fragment_list"
         android:layout_width="368dp"
         android:layout_height="493dp"
         app:layout_constraintBottom_toBottomOf="parent"
