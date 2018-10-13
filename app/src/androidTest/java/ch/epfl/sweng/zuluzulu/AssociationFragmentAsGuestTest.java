@@ -1,13 +1,12 @@
 package ch.epfl.sweng.zuluzulu;
 
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.Gravity;
 
 import org.junit.Before;
@@ -21,39 +20,43 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.startsWith;
 
 @RunWith(AndroidJUnit4.class)
-public class AssociationFragmentAsAuthenticatedTest {
+public class AssociationFragmentAsGuestTest {
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    private void openDrawer(){
-        onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-                .perform(DrawerActions.open());
+    private void openDrawer() {
+
     }
 
     @Before
-    public void goToAssociationList(){
-        // Authenticate
-        openDrawer();
-        onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_login));
-
-        onView(withId(R.id.username)).perform(typeText("nicolas")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
-        onView(withId(R.id.sign_in_button)).perform(click());
-
-        // Go to association view
+    public void goToAssociationList() {
+        onView(withId(R.id.drawer_layout))
+                .check(matches(isClosed(Gravity.LEFT)))
+                .perform(DrawerActions.open());
         openDrawer();
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_associations));
+    }
+
+    @Test
+    public void guestFavListIsEmpty(){
+    }
+
+    @Test
+    public void clickOnFavoritesDisplayToast() {
+        onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
+        onView(withText(startsWith("Login to access"))).check(matches(isDisplayed()));
     }
 }
