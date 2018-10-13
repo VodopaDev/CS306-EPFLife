@@ -84,27 +84,7 @@ public class ChannelFragment extends Fragment {
         adapter = new ChannelAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
 
-        db = FirebaseFirestore.getInstance();
-        db.collection(CHANNELS_COLLECTION_NAME)
-                .orderBy("id", Query.Direction.ASCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                String name = document.getString("name");
-                                String description = document.getString("description");
-                                Channel channel = new Channel(name, description);
-                                listOfChannels.add(channel);
-                            }
-                            adapter.notifyDataSetChanged();
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
+        setUpDataReading();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -132,5 +112,29 @@ public class ChannelFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void setUpDataReading() {
+        db = FirebaseFirestore.getInstance();
+        db.collection(CHANNELS_COLLECTION_NAME)
+                .orderBy("id", Query.Direction.ASCENDING)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                String name = document.getString("name");
+                                String description = document.getString("description");
+                                Channel channel = new Channel(name, description);
+                                listOfChannels.add(channel);
+                            }
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
     }
 }
