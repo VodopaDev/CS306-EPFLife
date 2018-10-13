@@ -82,7 +82,7 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
             @Override
             public void onClick(View v) {
                 Log.d("FRAG_CHANGE","Switching to " + asso.getName() + "detailed view");
-                mListener.onFragmentInteraction(AssociationDetailFragment.TAG, asso);
+                mListener.onFragmentInteraction(AssociationDetailFragment.TAG, (Object)asso);
             }
         });
 

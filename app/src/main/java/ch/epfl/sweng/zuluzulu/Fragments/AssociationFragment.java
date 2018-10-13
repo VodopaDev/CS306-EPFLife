@@ -106,14 +106,7 @@ public class AssociationFragment extends Fragment{
         listview_assos = view.findViewById(R.id.listview_assos);
         button_assos_all = view.findViewById(R.id.button_assos_all);
         button_assos_fav = view.findViewById(R.id.button_assos_fav);
-
         listview_assos.setAdapter(assos_adapter);
-        listview_assos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
 
 
 

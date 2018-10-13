@@ -184,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case AssociationDetailFragment.TAG:
                 Association asso = (Association)data;
                 openFragment(AssociationDetailFragment.newInstance(user, asso));
+                break;
             default:
                 // Should never happen
                 throw new AssertionError("Invalid message");
