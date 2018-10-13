@@ -8,8 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.Serializable;
+
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,9 +24,9 @@ import ch.epfl.sweng.zuluzulu.R;
  */
 public class ProfileFragment extends Fragment implements OnFragmentInteractionListener {
     private static final String TAG = "PROFIL_TAG";
+    private static final String USER_TAG = "PROFIL_USER_TAG";
 
-    private String mParam1;
-    private String mParam2;
+    private User user;
 
     private OnFragmentInteractionListener mListener;
 
@@ -35,14 +38,15 @@ public class ProfileFragment extends Fragment implements OnFragmentInteractionLi
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     * @param user User
      * @return A new instance of fragment ProfileFragment.
      */
-    public static ProfileFragment newInstance(String param1) {
+    public static ProfileFragment newInstance(User user) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putString(TAG, param1);
+        args.putSerializable(USER_TAG, user);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -50,7 +54,9 @@ public class ProfileFragment extends Fragment implements OnFragmentInteractionLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(TAG);
+            this.user = (User) getArguments().getSerializable(USER_TAG);
+        } else {
+            throw new AssertionError("No argument");
         }
     }
 

@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             default:
                 // Should never happen
-                throw new AssertionError("Invalid message");
+                throw new AssertionError(tag);
         }
     }
 
