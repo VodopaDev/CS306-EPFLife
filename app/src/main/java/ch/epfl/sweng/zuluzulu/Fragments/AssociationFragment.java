@@ -77,6 +77,7 @@ public class AssociationFragment extends Fragment{
         }
 
         assos_all = new ArrayList<>();
+        assos_fav = new ArrayList<>();
         assos_adapter = new AssociationAdapter(getContext(), assos_all, mListener);
 
         FirebaseFirestore.getInstance().collection("assos_info")
@@ -87,8 +88,13 @@ public class AssociationFragment extends Fragment{
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
                         for (int i = 0; i < snap_list.size(); i++){
-                            assos_all.add(new Association(snap_list.get(i)));
+                            Association asso = new Association(snap_list.get(i));
+                            assos_all.add(asso);
                             assos_adapter.notifyDataSetChanged();
+
+                            if(i%2 == 0){
+                                assos_fav.add(asso);
+                            }
                         }
                     }
                 })
@@ -113,33 +119,16 @@ public class AssociationFragment extends Fragment{
         button_assos_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                button_assos_fav.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
-                button_assos_all.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
+                updateListView(button_assos_fav, button_assos_all, assos_fav, listview_assos);
             }
         });
 
         button_assos_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                button_assos_all.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
-                button_assos_fav.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
+                updateListView(button_assos_all, button_assos_fav, assos_all, listview_assos);
             }
         });
-
-
-
-        // TODO: add a check if the User is authenticated and load favorites
-        /*
-        if()
-            FirebaseFirestore.getInstance().document("assos_info/all_assos")
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                List<DocumentReference> assos_all_fav = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
-                loadAssociationsList(assos_all_fav, vlayout_assos_fav);
-            }
-        });
-        */
 
         return view;
     }
@@ -159,6 +148,14 @@ public class AssociationFragment extends Fragment{
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void updateListView(Button new_selected, Button new_unselected, ArrayList<Association> data, ListView list){
+        new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+        new_unselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
+        assos_adapter = new AssociationAdapter(getContext(), data, mListener);
+        list.setAdapter(assos_adapter);
+        assos_adapter.notifyDataSetChanged();
     }
 
 }
