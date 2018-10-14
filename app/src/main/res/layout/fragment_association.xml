@@ -7,17 +7,15 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.AssociationFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-
     <LinearLayout
         android:id="@+id/buttons_layout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp">
 
         <Button
             android:id="@+id/association_fragment_all_button"

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,60 +105,17 @@ public class ChatFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
         sendButton = view.findViewById(R.id.chat_send_button);
-        textEdit = view.findViewById(R.id.chat_message);
+        textEdit = view.findViewById(R.id.chat_message_edit);
         listView = view.findViewById(R.id.chat_list_view);
 
         collection_path = CHANNEL_DOCUMENT_NAME + channelID + "/" + MESSAGES_COLLECTION_NAME;
 
-        // We always see the last message
-        listView.setStackFromBottom(true);
-
         adapter = new ChatMessageAdapter(view.getContext(), messages);
         listView.setAdapter(adapter);
 
-        db = FirebaseFirestore.getInstance();
-
-        db.collection(collection_path)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "Listen failed.", e);
-                            return;
-                        }
-
-                        updateChat();
-                    }
-                });
-
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String senderName = "lol";
-                String msg = textEdit.getText().toString();
-                Timestamp time = Timestamp.now();
-
-                Map<String, Object> data = new HashMap<>();
-                data.put("senderName", senderName);
-                data.put("msg", msg);
-                data.put("time", time);
-
-                db.collection(collection_path)
-                        .add(data)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference ref) {
-                                Log.d(TAG, "DocumentSnapshot written with ID: " + ref.getId());
-                                textEdit.setText("");
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
-            }
-        });
+        setUpDataOnChangeListener();
+        setUpSendButton();
+        setUpEditText();
 
         return view;
     }
@@ -178,6 +137,72 @@ public class ChatFragment extends Fragment {
         mListener = null;
     }
 
+    private void setUpDataOnChangeListener() {
+        db = FirebaseFirestore.getInstance();
+        db.collection(collection_path)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
+
+                        updateChat();
+                    }
+                });
+    }
+
+    private void setUpSendButton() {
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String senderName = "lol";
+                String msg = textEdit.getText().toString();
+                Timestamp time = Timestamp.now();
+
+                Map<String, Object> data = new HashMap<>();
+                data.put("senderName", senderName);
+                data.put("msg", msg);
+                data.put("time", time);
+
+                addDataToFirestore(data);
+            }
+        });
+    }
+
+    private void addDataToFirestore(Map data) {
+        db.collection(collection_path)
+                .add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference ref) {
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + ref.getId());
+                        textEdit.setText("");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error adding document", e);
+            }
+        });
+    }
+
+    private void setUpEditText() {
+        textEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence text, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence text, int start, int before, int count) {
+                sendButton.setEnabled(count > 0);
+            }
+
+            @Override
+            public void afterTextChanged(Editable text) {}
+        });
+    }
+
     private void updateChat() {
         db.collection(collection_path)
                 .orderBy("time", Query.Direction.ASCENDING)
@@ -195,6 +220,7 @@ public class ChatFragment extends Fragment {
                                 messages.add(message);
                             }
                             adapter.notifyDataSetChanged();
+                            listView.setSelection(adapter.getCount() - 1);
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }

@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -23,9 +24,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.Map;
+import java.io.InputStreamReader;
+
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
+import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
+import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
+import ch.epfl.sweng.zuluzulu.tequila.Profile;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -281,6 +292,11 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         mListener = null;
     }
 
+    /*private static String read(String prompt) throws IOException {
+        System.out.print(prompt + ": ");
+        return new BufferedReader(new InputStreamReader(System.in)).readLine().trim();
+    }*/
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -289,6 +305,8 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
 
         private final String mUsername;
         private final String mPassword;
+        //private Map<String, String> tokens;
+        private User user = null;
 
         UserLoginTask(String username, String password) {
             mUsername = username;
@@ -299,6 +317,44 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
+
+            /*
+            //CODE FOR TEQUILA LOGIN
+            //create the config
+            OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "id", "secret", "epflife://login"); //We will have to fill with correct values
+            String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
+
+            //start the browser with the Tequila URL (temporary solution)
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(codeRequestUrl));
+            startActivity(browserIntent);
+
+            //part to understand
+            String redirectUri;
+            try{
+            redirectUri = read("Go to the above URL, authenticate, then enter the redirect URI");
+            }catch (IOException e){
+                return false;
+            }
+            String code = AuthClient.extractCode(redirectUri);
+            //end part to understand
+
+
+            try{
+            tokens = AuthServer.fetchTokens(config, code);
+            } catch (IOException e){
+                return false;
+            }
+
+
+            try{
+             user = AuthServer.fetchUser(tokens.get("Tequila.profile"));
+            } catch( IOException e){
+                return false;
+            }*/
+
+
+            /////////////////////////////////////
+            //CODE FOR LOCAL LOGIN
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
@@ -320,12 +376,16 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             // We do not want to offer registration.(Dahn)
 
             return false;
+            ////////////////////////////////////
+
+            //return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
 
+            // CODE FOR LOCAL LOGIN
             User.UserBuilder builder = new User.UserBuilder();
             builder.setEmail("mail@epfl.ch");
             builder.setSciper("1212");
@@ -333,7 +393,8 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             builder.setFirst_names(mUsername);
             builder.setLast_names("");
 
-            User user = builder.buildAuthenticatedUser();
+            user = builder.buildAuthenticatedUser();
+
 
             if (success && user != null) {
                 //open the main activity then terminate the login activity (Ikaras998)
