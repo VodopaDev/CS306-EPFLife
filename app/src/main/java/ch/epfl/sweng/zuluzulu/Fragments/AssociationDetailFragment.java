@@ -68,14 +68,14 @@ public class AssociationDetailFragment extends Fragment{
         // Favorite button
         asso_fav = view.findViewById(R.id.association_detail_fav);
 
-        if(user.isConnected() && user.asAutenticated().isFavAssociation(asso))
+        if(user.isConnected() && ((AuthenticatedUser)user).isFavAssociation(asso))
             loadFavImage(R.drawable.fav_on);
 
         asso_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(user.isConnected()){
-                    AuthenticatedUser auth = user.asAutenticated();
+                    AuthenticatedUser auth = (AuthenticatedUser)user;
                     if(auth.isFavAssociation(asso)){
                         auth.removeFavAssociation(asso);
                         loadFavImage(R.drawable.fav_off);

@@ -64,7 +64,7 @@ public class ChatFragment extends Fragment {
     private ChatMessageAdapter adapter;
     private String collection_path;
 
-    private AuthenticatedUser user;
+    private User user;
     private int channelID;
 
     private OnFragmentInteractionListener mListener;

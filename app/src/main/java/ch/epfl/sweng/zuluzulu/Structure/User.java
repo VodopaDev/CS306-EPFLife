@@ -24,9 +24,6 @@ abstract public class User implements Serializable {
         return null;
     }
 
-    public Guest asGuest(){return (Guest)this;}
-
-    public AuthenticatedUser asAutenticated(){return (AuthenticatedUser)this;}
 
     public abstract boolean isConnected();
 
