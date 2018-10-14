@@ -1,5 +1,10 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import android.widget.ListView;
+
+import com.google.common.collect.Sets;
+
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,7 +32,7 @@ public final class AuthenticatedUser extends User {
         this.first_names = first_names;
         this.last_names = last_names;
 
-        assos_id = new HashSet<>();
+        assos_id = Sets.newHashSet(1,3,4,6);
         chats_names = new HashSet<>();
         events_id = new HashSet<>();
 

@@ -24,6 +24,7 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationAdapter;
 
@@ -85,9 +86,8 @@ public class AssociationFragment extends Fragment{
                             assos_all.add(asso);
                             assos_adapter.notifyDataSetChanged();
 
-                            if(i%2 == 0){
+                            if(user.isConnected() && ((AuthenticatedUser)user).isFavAssociation(asso))
                                 assos_fav.add(asso);
-                            }
                         }
                     }
                 })

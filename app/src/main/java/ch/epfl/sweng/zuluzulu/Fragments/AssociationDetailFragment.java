@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,12 +18,15 @@ import com.bumptech.glide.Glide;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class AssociationDetailFragment extends Fragment{
     public static final String TAG = "ASSOCIATION_DETAIL__TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_ASSO = "ARG_ASSO";
+
+    private ImageView asso_fav;
 
     private OnFragmentInteractionListener mListener;
     private Association asso;
@@ -62,15 +66,27 @@ public class AssociationDetailFragment extends Fragment{
         asso_name.setText(asso.getName());
 
         // Favorite button
-        Button asso_fav_button = view.findViewById(R.id.association_detail_fav_button);
-        asso_fav_button.setOnClickListener(new View.OnClickListener() {
+        asso_fav = view.findViewById(R.id.association_detail_fav);
+
+        if(user.isConnected() && user.asAutenticated().isFavAssociation(asso))
+            loadFavImage(R.drawable.fav_on);
+
+        asso_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(user.isConnected()){
-                    // TODO: do the favorite adding/removing
+                    AuthenticatedUser auth = user.asAutenticated();
+                    if(auth.isFavAssociation(asso)){
+                        auth.removeFavAssociation(asso);
+                        loadFavImage(R.drawable.fav_off);
+                    }
+                    else{
+                        auth.addFavAssociation(asso);
+                        loadFavImage(R.drawable.fav_on);
+                    }
                 }
                 else {
-                    // TODO: prompt error message
+                    Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
                 }
             }
         });
@@ -84,6 +100,13 @@ public class AssociationDetailFragment extends Fragment{
 
 
         return view;
+    }
+
+    private void loadFavImage(int drawable){
+        Glide.with(getContext())
+                .load(drawable)
+                .centerCrop()
+                .into(asso_fav);
     }
 
     @Override

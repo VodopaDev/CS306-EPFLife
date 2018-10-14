@@ -114,16 +114,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/association_detail_eventph" />
 
-    <Button
-        android:id="@+id/association_detail_fav_button"
-        style="@style/Widget.AppCompat.Button.Borderless"
+    <ImageView
+        android:id="@+id/association_detail_fav"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:background="@android:drawable/btn_star_big_off"
-        android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="@+id/association_detail_name"
-        app:layout_constraintStart_toEndOf="@+id/association_detail_name" />
+        app:layout_constraintStart_toEndOf="@+id/association_detail_name"
+        app:srcCompat="@drawable/fav_off" />
 
 </android.support.constraint.ConstraintLayout>

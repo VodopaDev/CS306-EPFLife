@@ -24,6 +24,10 @@ abstract public class User implements Serializable {
         return null;
     }
 
+    public Guest asGuest(){return (Guest)this;}
+
+    public AuthenticatedUser asAutenticated(){return (AuthenticatedUser)this;}
+
     public abstract boolean isConnected();
 
     /**
@@ -148,5 +152,6 @@ abstract public class User implements Serializable {
         public Guest buildGuestUser() {
             return new Guest();
         }
+
     }
 }
