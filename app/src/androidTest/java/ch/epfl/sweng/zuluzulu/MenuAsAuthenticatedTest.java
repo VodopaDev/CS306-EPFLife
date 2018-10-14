@@ -48,7 +48,7 @@ public class MenuAsAuthenticatedTest {
     }
 
     @Test
-    public void testUserCanOpenChatFragment() {
+    public void testUserCanOpenChannelFragment() {
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_chat));
     }

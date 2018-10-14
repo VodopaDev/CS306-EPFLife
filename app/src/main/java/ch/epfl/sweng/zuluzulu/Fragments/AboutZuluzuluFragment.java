@@ -37,7 +37,7 @@ public class AboutZuluzuluFragment extends Fragment {
      * @return A new instance of fragment AboutZuluzuluFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AboutZuluzuluFragment newInstance(String param1, String param2) {
+    public static AboutZuluzuluFragment newInstance() {
         return new AboutZuluzuluFragment();
     }
 
