@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.NavigationViewActions;
@@ -12,9 +13,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.concurrent.Callable;
+
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
+import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -22,6 +27,8 @@ import static org.hamcrest.CoreMatchers.startsWith;
 
 @RunWith(AndroidJUnit4.class)
 public class AssociationFragmentAsGuestTest {
+
+    private static final int NB_ALL_ASSOS = 7;
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
@@ -54,16 +61,15 @@ public class AssociationFragmentAsGuestTest {
     public void mainPageHasSomeAssociations(){
         waitFor(5000);
         onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
-        waitFor(1000);
-        onView(withText("Agepoly")).check(matches(isDisplayed()));
-        onView(withText("ForumEPFL")).check(matches(isDisplayed()));
+        waitFor(2000);
+        onView(withId(R.id.association_fragment_list)).check(matches(hasChildCount(NB_ALL_ASSOS)));
     }
 
     @Test
-    public void clickOnFavoritesDisplayToast() {
+    public void clickOnFavoritesStaysOnAll() {
         waitFor(1000);
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
         waitFor(1000);
-        onView(withText(startsWith("Login to access"))).check(matches(isDisplayed()));
+        onView(withId(R.id.association_fragment_list)).check(matches(hasChildCount(NB_ALL_ASSOS)));
     }
 }
