@@ -12,7 +12,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.doesNotExis
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.core.IsNot.not;
 
 public class MainActivityIntentTest {
     @Rule
@@ -20,14 +19,19 @@ public class MainActivityIntentTest {
             new ActivityTestRule<>(MainActivity.class, false, false);
 
 
-
+    /**
+     * Test if the app start on the login with an ACTION_VIEW intent
+     */
     @Test
     public void onCreateGoesToLogin() {
         Intent i = new Intent(Intent.ACTION_VIEW);
         mActivityRule.launchActivity(i);
 
-        onView(withId(R.id.login_form)).check(matches(isDisplayed()));
+        onView(withId(R.id.login_fragment)).check(matches(isDisplayed()));
     }
+    /**
+     * Check if it goes to the main
+     */
     @Test
     public void onCreateGoesToMain() {
         Intent i = new Intent();
