@@ -41,8 +41,7 @@ public class MenuAsGuestTest {
                 .perform(NavigationViewActions.navigateTo(R.id.nav_main));
 
 
-        // Check if it's open
-        onView(withId(R.id.main_fragment)).check(matches(isDisplayed()));
+        Utility.checkFragmentIsOpen(R.id.main_fragment);
     }
 
     @Test
@@ -56,8 +55,7 @@ public class MenuAsGuestTest {
                 .perform(NavigationViewActions.navigateTo(R.id.nav_settings));
 
 
-        // Check if it's open
-        onView(withId(R.id.settings_fragment)).check(matches(isDisplayed()));
+        Utility.checkFragmentIsOpen(R.id.settings_fragment);
     }
 
     @Test
@@ -66,8 +64,7 @@ public class MenuAsGuestTest {
                 .perform(NavigationViewActions.navigateTo(R.id.nav_login));
 
 
-        // Check if it's open
-        onView(withId(R.id.login_fragment)).check(matches(isDisplayed()));
+        Utility.checkFragmentIsOpen(R.id.login_fragment);
     }
 
     @Test
@@ -75,8 +72,6 @@ public class MenuAsGuestTest {
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_about));
 
-
-        // Check if it's open
-        onView(withId(R.id.about_fragment)).check(matches(isDisplayed()));
+        Utility.checkFragmentIsOpen(R.id.about_fragment);
     }
 }

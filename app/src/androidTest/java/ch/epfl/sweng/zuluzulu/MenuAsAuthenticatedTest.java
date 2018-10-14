@@ -45,7 +45,7 @@ public class MenuAsAuthenticatedTest {
 
 
         // Check if it's open
-        onView(withId(R.id.channel_fragment)).check(matches(isDisplayed()));
+        Utility.checkFragmentIsOpen(R.id.channel_fragment);
     }
 
     @Test
