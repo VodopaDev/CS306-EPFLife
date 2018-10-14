@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu;
 
-
 import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -35,7 +34,7 @@ public class LogoutTest {
 
 
     /**
-     * Open the login gragment in the drawer
+     * Open the login fragment in the drawer
      */
     private void openLoginFragment() {
         Utility.openMenu();

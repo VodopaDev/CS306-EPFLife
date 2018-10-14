@@ -68,7 +68,7 @@ public class LoginTest {
      */
     @Test
     public void testCanLogIn() {
-        //You have to test if it works for wrong credentials, if it logins properly and if you have any
+        //You have to test if it works for wrong credentials, if it login properly and if you have any
         //other idea you are welcome to test them
         Utility.login();
 
@@ -81,7 +81,7 @@ public class LoginTest {
      */
     @Test
     public void testWrongLogIn() {
-        //You have to test if it works for wrong credentials, if it logins properly and if you have any
+        //You have to test if it works for wrong credentials, if it login properly and if you have any
         //other idea you are welcome to test them
 
         onView(withId(R.id.username)).perform(typeText("not_user")).perform(closeSoftKeyboard());

@@ -42,7 +42,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.8"
             android:ems="10"
-            android:hint="Message"
+            android:hint="@string/chat_message"
             android:inputType="text" />
 
         <Button
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:text="Send"
+            android:text="@string/chat_send"
             android:textAllCaps="false"
             android:textAppearance="@style/TextAppearance.AppCompat"
             android:textStyle="bold" />

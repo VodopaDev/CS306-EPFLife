@@ -1,38 +1,25 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.common.collect.Sets;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public final class AuthenticatedUser extends User {
-    /**
-     * This is the user ID, it is guaranteed to be unique.
-     */
+
+    // Use sciper to check User (and not mail or gaspar)
     private final String sciper;
-
-    /**
-     * Gaspar account - it's the username
-     */
     private final String gaspar;
-
-    /**
-     * User email
-     */
     private final String email;
 
-    /**
-     * User first names (he can have few first names)
-     */
+    // WARNING: can user can have multiples names
     private final String first_names;
-
-    /**
-     * User last names, same remark as first_names
-     */
     private final String last_names;
 
-    // TODO ??? A commenter
-    private List<Integer> assos_id;
-    private List<Integer> chats_id;
-    private List<Integer> events_id;
+    // All followed ids of Associations, Chats and Events
+    private Set<Integer> assos_id;
+    private Set<String> chats_names;
+    private Set<Integer> events_id;
 
     // TODO: Get data from cloud service using the id
     protected AuthenticatedUser(String sciper, String gaspar, String email, String first_names, String last_names) {
@@ -42,54 +29,73 @@ public final class AuthenticatedUser extends User {
         this.first_names = first_names;
         this.last_names = last_names;
 
-        assos_id = new ArrayList<>();
-        chats_id = new ArrayList<>();
-        events_id = new ArrayList<>();
+        assos_id = Sets.newHashSet(1,3,4,6);
+        chats_names = new HashSet<>();
+        events_id = new HashSet<>();
+
     }
 
     // TODO: Add a method to add/remove one Association to assos_id, same for chats and events
     // TODO: Check inputs before changing fields
 
-    public String getFirst_names() {
+    public boolean isFavAssociation(Association asso){
+        return assos_id.contains(asso.getId());
+    }
+
+    public boolean addFavAssociation(Association asso){
+        return assos_id.add(asso.getId());
+    }
+
+    public boolean removeFavAssociation(Association asso){
+        return assos_id.remove(asso.getId());
+    }
+
+    public boolean isFollowedEvent(Event event){
+        return events_id.contains(event.getId());
+    }
+
+    public boolean addFollowedEvent(Event event){
+        return events_id.add(event.getId());
+    }
+
+    public boolean removeFollowedEvent(Event event){
+        return events_id.remove(event.getId());
+    }
+
+    public boolean isFollowedChat(Channel channel){
+        return chats_names.contains(channel.getName());
+    }
+
+    public boolean addFollowedChat(Channel channel){
+        return chats_names.add(channel.getName());
+    }
+
+    public boolean removeFollowedChat(Channel channel){
+        return chats_names.remove(channel.getName());
+    }
+
+
+    @Override
+    public String getFirstNames() {
         return first_names;
     }
 
-    public String getLast_names() {
+    @Override
+    public String getLastNames() {
         return last_names;
     }
 
-    public List<Integer> getAssos_id() {
-        return assos_id;
-    }
-
-    public void setAssos_id(List<Integer> assos_id) {
-        this.assos_id = assos_id;
-    }
-
-    public List<Integer> getChats_id() {
-        return chats_id;
-    }
-
-    public void setChats_id(List<Integer> chats_id) {
-        this.chats_id = chats_id;
-    }
-
-    public List<Integer> getEvents_id() {
-        return events_id;
-    }
-
-    public void setEvents_id(List<Integer> events_id) {
-        this.events_id = events_id;
-    }
-
+    @Override
     public String getEmail() {
         return email;
     }
 
+    @Override
     public String getGaspar() {
         return gaspar;
     }
 
+    @Override
     public String getSciper() {
         return sciper;
     }
@@ -97,5 +103,13 @@ public final class AuthenticatedUser extends User {
     @Override
     public boolean isConnected() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return first_names + " " + last_names
+                + "\nsciper: " + sciper
+                + "\ngaspar: " + gaspar
+                + "\nemail: " + email;
     }
 }

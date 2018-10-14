@@ -24,7 +24,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="11dp"
             android:gravity="center_vertical|center_horizontal"
-            android:text="Main !"
+            android:text="Main Placeholder!"
             android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -4,10 +4,9 @@ import android.location.Location;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.storage.FirebaseStorage;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
  * A simple class describing an Association
  * Has diverse getters and some functions to create views
  */
-public class Association {
+public class Association implements Serializable {
     private static final String IMAGE_PATH = "assos/asso";
     private static final String ICON_EXT = "_icon.png";
 
@@ -24,7 +23,7 @@ public class Association {
     private String short_desc;
     private String long_desc;
 
-    private Uri icon;
+    private Uri icon_uri;
     private Location pos;
     private List<Integer> admins;
 
@@ -32,16 +31,12 @@ public class Association {
     private List<Integer> chats;
     private List<Integer> events;
 
-    public Association(DocumentSnapshot snap){
-        this(snap, null);
-    }
-
     /**
      * Create an association using a DocumentSnapshot
      * @param snap the document snapshot
      * @throws IllegalArgumentException if the snapshot isn't an Association's snapshot
      */
-    public Association(DocumentSnapshot snap, Uri iconUri) {
+    public Association(DocumentSnapshot snap) {
         if(!snapshotIsValid(snap))
             throw new NullPointerException();
 
@@ -49,22 +44,7 @@ public class Association {
         name = snap.getString("name");
         short_desc = snap.getString("short_desc");
         long_desc = snap.getString("long_desc");
-
-        if(iconUri == null) {
-            FirebaseStorage.getInstance()
-                    .getReference()
-                    .child(IMAGE_PATH + id + ICON_EXT)
-                    .getDownloadUrl()
-                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            icon = uri;
-                        }
-                    });
-        }
-        else{
-            icon = iconUri;
-        }
+        icon_uri = Uri.parse(snap.getString("icon_uri"));
     }
 
     /**
@@ -104,8 +84,8 @@ public class Association {
      * @return the icon Uri
      */
     @Nullable
-    public Uri getIcon(){
-        return icon;
+    public Uri getIconUri(){
+        return icon_uri;
     }
 
     /**
@@ -119,6 +99,7 @@ public class Association {
                 || snap.getString("short_desc") == null
                 || snap.getString("long_desc") == null
                 || snap.getString("name") == null
+                || snap.getString("icon_uri") == null
                 );
     }
 
