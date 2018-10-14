@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
-    private boolean openFragment(Fragment fragment) {
+    public boolean openFragment(Fragment fragment) {
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
