@@ -191,7 +191,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         reset_errors();
 
         // Store values at the time of the login attempt.
-        String username = mUsernameView.getText().toString();
+        /*String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -214,13 +214,12 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             // Focus the first form field with an error.
             focusView.requestFocus();
         } else {
-            // perform the user login attempt.
-            showProgress(true);
+            // perform the user login attempt.*/
             String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(codeRequestUrl));
             startActivity(browserIntent);
 
-        }
+        //}
     }
 
     /**
