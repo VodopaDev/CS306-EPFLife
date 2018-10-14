@@ -86,19 +86,23 @@ public class ChatFragmentTest {
         };
     }
 
-    private static boolean timeout_loup(final UiController uiController, final Matcher<View> matcher, final View view, final long endTime) {
-        for (View child : TreeIterables.breadthFirstViewTraversal(view)) {
-            // found view with required ID
-            if (matcher.matches(child)) {
-                return true;
+    private static boolean timeout_loup(final UiController uiController, final Matcher<View> matcher, final View view, final long endTime){
+            for (View child : TreeIterables.breadthFirstViewTraversal(view)) {
+                // found view with required ID
+                if (matcher.matches(child)) {
+                    return true;
+                }
             }
+
+            uiController.loopMainThreadForAtLeast(50);
+
+        if((System.currentTimeMillis() > endTime)){
+            return false;
         }
 
-        uiController.loopMainThreadForAtLeast(50);
-
-        return (System.currentTimeMillis() <= endTime) && timeout_loup(uiController, matcher, view, endTime);
+        return timeout_loup(uiController, matcher, view, endTime);
     }
-    
+
     @Before
     public void setUp() {
         Utility.fullLogin();
