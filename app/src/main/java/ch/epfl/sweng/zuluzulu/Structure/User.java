@@ -5,39 +5,6 @@ import java.util.List;
 
 abstract public class User implements Serializable {
 
-    /* DEFINE ALL THE USER FUNCTION*/
-
-    public String getFirst_names() {
-        return null;
-    }
-
-    public String getLast_names() {
-        return null;
-    }
-
-    public List<Integer> getAssos_id() {
-        return null;
-    }
-
-    public void setAssos_id(List<Integer> assos_id) {
-
-    }
-
-    public List<Integer> getChats_id() {
-        return null;
-    }
-
-    public void setChats_id(List<Integer> chats_id) {
-    }
-
-    public List<Integer> getEvents_id() {
-        return null;
-    }
-
-    public void setEvents_id(List<Integer> events_id) {
-
-    }
-
     public String getEmail() {
         return null;
     }
