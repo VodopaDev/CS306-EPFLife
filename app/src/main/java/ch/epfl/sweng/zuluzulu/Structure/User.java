@@ -5,6 +5,14 @@ import java.util.List;
 
 abstract public class User implements Serializable {
 
+    public String getFirstNames() {
+        return null;
+    }
+
+    public String getLastNames() {
+        return null;
+    }
+
     public String getEmail() {
         return null;
     }
@@ -17,13 +25,7 @@ abstract public class User implements Serializable {
         return null;
     }
 
-    /**
-     * Return true if the User is connected. False instead
-     *
-     * @return True if connected
-     */
-    abstract public boolean isConnected();
-
+    public abstract boolean isConnected();
 
     /**
      * This class is used to create a builder

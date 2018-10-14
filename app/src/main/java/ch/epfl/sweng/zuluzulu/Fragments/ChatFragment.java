@@ -35,6 +35,7 @@ import javax.annotation.Nullable;
 import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageAdapter;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
@@ -63,7 +64,7 @@ public class ChatFragment extends Fragment {
     private ChatMessageAdapter adapter;
     private String collection_path;
 
-    private User user;
+    private AuthenticatedUser user;
     private int channelID;
 
     private OnFragmentInteractionListener mListener;
@@ -91,7 +92,7 @@ public class ChatFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (User) getArguments().getSerializable(ARG_USER);
+            user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
             channelID = getArguments().getInt(ARG_CHANNEL_ID);
         }
     }
@@ -131,7 +132,7 @@ public class ChatFragment extends Fragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String senderName = user.getFirst_names();
+                String senderName = "lol";
                 String msg = textEdit.getText().toString();
                 Timestamp time = Timestamp.now();
 

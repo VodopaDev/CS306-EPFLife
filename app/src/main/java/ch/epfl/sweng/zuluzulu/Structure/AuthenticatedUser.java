@@ -77,22 +77,27 @@ public final class AuthenticatedUser extends User {
     }
 
 
+    @Override
     public String getFirstNames() {
         return first_names;
     }
 
+    @Override
     public String getLastNames() {
         return last_names;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }
 
+    @Override
     public String getGaspar() {
         return gaspar;
     }
 
+    @Override
     public String getSciper() {
         return sciper;
     }
