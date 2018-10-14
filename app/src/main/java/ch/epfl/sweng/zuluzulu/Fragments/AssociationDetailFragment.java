@@ -60,9 +60,6 @@ public class AssociationDetailFragment extends Fragment{
         // Association name
         TextView asso_name = view.findViewById(R.id.association_detail_name);
         asso_name.setText(asso.getName());
-        int width = asso.getName().length() * (int)asso_name.getTextSize();
-        Log.d("WIDTH", String.valueOf(width));
-        asso_name.setWidth(width);
 
         // Favorite button
         Button asso_fav_button = view.findViewById(R.id.association_detail_fav_button);
