@@ -15,10 +15,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.concurrent.Callable;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -55,5 +58,27 @@ public class AssociationFragmentAsAuthenticatedTest {
         openDrawer();
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_associations));
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
+
+    @Test
+    public void mainPageHasSomeAssociations(){
+        onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
+        onView(withText("Agepoly")).check(matches(isDisplayed()));
+        onView(withText("Clic")).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void clickOnFavoritesDisplayFewerAssociations() {
+        onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
+        onView(withText("Agepoly")).check(matches(isDisplayed()));
+        onView(withText("Clic")).check(doesNotExist());
+    }
+
+
 }

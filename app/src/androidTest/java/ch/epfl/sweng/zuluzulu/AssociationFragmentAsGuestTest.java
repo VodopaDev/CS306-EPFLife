@@ -48,10 +48,19 @@ public class AssociationFragmentAsGuestTest {
         openDrawer();
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_associations));
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    public void guestFavListIsEmpty(){
+    public void mainPageHasSomeAssociations(){
+        onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
+        onView(withText("Agepoly")).check(matches(isDisplayed()));
+        onView(withText("Clic")).check(matches(isDisplayed()));
     }
 
     @Test
