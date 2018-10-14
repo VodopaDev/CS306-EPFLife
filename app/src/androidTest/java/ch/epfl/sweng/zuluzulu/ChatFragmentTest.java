@@ -87,7 +87,6 @@ public class ChatFragmentTest {
     }
 
     private static boolean timeout_loup(final UiController uiController, final Matcher<View> matcher, final View view, final long endTime){
-        do {
             for (View child : TreeIterables.breadthFirstViewTraversal(view)) {
                 // found view with required ID
                 if (matcher.matches(child)) {
@@ -96,10 +95,12 @@ public class ChatFragmentTest {
             }
 
             uiController.loopMainThreadForAtLeast(50);
-        }
-        while (System.currentTimeMillis() < endTime);
 
-        return false;
+        if((System.currentTimeMillis() > endTime)){
+            return false;
+        }
+
+        return timeout_loup(uiController, matcher, view, endTime);
     }
 
     @Before
