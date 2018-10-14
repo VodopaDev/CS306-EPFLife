@@ -43,7 +43,7 @@ public class AssociationFragmentAsGuestTest {
                 .perform(DrawerActions.open());
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_associations));
-        TimeUnit.SECONDS.sleep(10);
+        TimeUnit.SECONDS.sleep(5);
         fragment = (AssociationFragment)mActivityRule.getActivity().getCurrentFragment();
         list_assos = fragment.getListviewAssos();
     }
