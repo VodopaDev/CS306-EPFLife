@@ -54,12 +54,14 @@ public class AssociationFragmentAsGuestTest {
     public void mainPageHasSomeAssociations(){
         waitFor(5000);
         onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
+        waitFor(1000);
         onView(withText("Agepoly")).check(matches(isDisplayed()));
         onView(withText("ForumEPFL")).check(matches(isDisplayed()));
     }
 
     @Test
     public void clickOnFavoritesDisplayToast() {
+        waitFor(1000);
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
         waitFor(1000);
         onView(withText(startsWith("Login to access"))).check(matches(isDisplayed()));

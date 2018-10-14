@@ -1,11 +1,9 @@
 package ch.epfl.sweng.zuluzulu;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentContainer;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.FrameLayout;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
@@ -21,8 +19,6 @@ public class TestingActivity  extends AppCompatActivity implements OnFragmentInt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
     }
-
-    public void setUser(User user){this.user = user;}
 
     public boolean openFragment(Fragment fragment) {
         if (fragment != null) {
