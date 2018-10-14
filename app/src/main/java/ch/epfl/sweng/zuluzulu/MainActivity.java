@@ -17,6 +17,10 @@ import android.view.MenuItem;
 
 import com.google.firebase.FirebaseApp;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
@@ -24,6 +28,8 @@ import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
+import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
@@ -31,6 +37,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private NavigationView navigationView;
 
     private User user;
+    private Map<String, String> tokens;
+
+
+    //(temporary) store the URI from the browser
+    private String redirectURIwithCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         Intent i = getIntent();
         if(Intent.ACTION_VIEW.equals(i.getAction())){
+            //get the redirectURI with the code from the intent
+            redirectURIwithCode = i.getDataString();
             selectItem(navigationView.getMenu().findItem(R.id.nav_login));
         } else {
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
@@ -134,12 +147,17 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private void selectItem(MenuItem menuItem) {
         Fragment fragment = null;
         Class fragmentClass;
+        boolean isLogin = false;
         switch (menuItem.getItemId()) {
             case R.id.nav_main:
                 fragmentClass = MainFragment.class;
                 break;
             case R.id.nav_login:
                 fragmentClass = LoginFragment.class;
+                //to set arguments for the login
+                //////////////////////////
+                isLogin = true;
+                //////////////////////////
                 break;
             case R.id.nav_about:
                 fragmentClass = AboutZuluzuluFragment.class;
@@ -152,6 +170,15 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case R.id.nav_logout:
                 this.user = new User.UserBuilder().buildGuestUser();
+
+                //create a logout URL and open it in the browser
+                String logoutURL = AuthClient.createCodeRequestUrlLogout(tokens.get("Tequila.profile"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(logoutURL));
+                startActivity(browserIntent);
+
+
+                tokens.clear();
+                redirectURIwithCode = null;
                 updateMenuItems();
                 fragmentClass = MainFragment.class;
                 menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
@@ -167,6 +194,16 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
 
         if (fragment != null) {
+            //if is a login fragment then set argument with the URI
+            ///////////////////////////////////////////////////////////
+            if(isLogin){
+                isLogin = false;
+                Bundle toSend = new Bundle(1);
+                toSend.putString("",redirectURIwithCode);
+                fragment.setArguments(toSend);
+            }
+            //////////////////////////////////////////////////////////
+
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -182,7 +219,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public void onFragmentInteraction(String tag, Object data) {
         switch(tag) {
             case LoginFragment.TAG:
-                this.user = (User) data;
+                Map<Integer, Object> received = (HashMap<Integer,Object>) data;
+                this.user = (User) received.get(0);
+                this.tokens = (Map<String, String>) received.get(1);
                 updateMenuItems();
                 selectItem(navigationView.getMenu().findItem(R.id.nav_main));
                 break;

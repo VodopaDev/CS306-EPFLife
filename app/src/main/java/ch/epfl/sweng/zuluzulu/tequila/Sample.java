@@ -27,9 +27,10 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 public final class Sample {
     public static void main(String[] args) throws IOException {
         OAuth2Config config = readConfig();
-        String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
 
-        System.out.println(codeRequestUrl);
+        String codeRequestURL = AuthClient.createCodeRequestUrl(config);
+
+        System.out.println(codeRequestURL);
         String redirectUri = read("Go to the above URL, authenticate, then enter the redirect URI");
 
         String code = AuthClient.extractCode(redirectUri);
@@ -38,8 +39,7 @@ public final class Sample {
         User profile = AuthServer.fetchUser(tokens.get("Tequila.profile"));
         System.out.println(profile);
 
-        String logout = AuthClient.createCodeRequestUrlLogout(config);
-        System.out.println(logout);
+
     }
 
     private static OAuth2Config readConfig() throws IOException {

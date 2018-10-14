@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,10 +23,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
-import java.io.InputStreamReader;
 
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -35,7 +33,6 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
 import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
 import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
-import ch.epfl.sweng.zuluzulu.tequila.Profile;
 
 
 /**
@@ -65,16 +62,18 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
     private EditText mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
     private OnFragmentInteractionListener mListener;
-
+    private String redirectURICode;
+    private OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
+    private Map<String, String> tokens;
     public LoginFragment() {
         // Required empty public constructor
     }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -95,6 +94,14 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            redirectURICode = this.getArguments().getString("");
+        }catch(NullPointerException e){
+            redirectURICode = null;
+        }
+        if(redirectURICode != null){
+            finishLogin();
+        }
     }
 
     @Override
@@ -135,12 +142,43 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      * Is executed once the session is active
      * Log in the main activity
      */
-    private void activate_session(User user) {
+    private void activate_session(User user, Map<String,String> access_tokens) {
         // Pass the user to the activity
-        mListener.onFragmentInteraction(TAG, user);
+        Map<Integer,Object> toTransfer = new HashMap<Integer, Object>();
+        toTransfer.put(0,user);
+        toTransfer.put(1,access_tokens);
+        mListener.onFragmentInteraction(TAG, toTransfer);
     }
 
+    private void finishLogin(){
+        String code = AuthClient.extractCode(redirectURICode);
 
+        try{
+            tokens = AuthServer.fetchTokens(config, code);
+        } catch (IOException e){
+            return;
+        }
+
+        User user;
+        try{
+            user = AuthServer.fetchUser(tokens.get("Tequila.profile"));
+        } catch( IOException e){
+            return;
+        }
+
+
+            // CODE FOR LOCAL LOGIN
+        /*User.UserBuilder builder = new User.UserBuilder();
+        builder.setEmail("mail@epfl.ch");
+        builder.setSciper("1212");
+        builder.setGaspar("123456");
+        builder.setFirst_names("bonjour");
+        builder.setLast_names("Aurevoir");
+
+        User user = builder.buildAuthenticatedUser();*/
+
+        activate_session(user, tokens);
+    }
     /**
      * Reset the errors
      */
@@ -155,9 +193,6 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
 
         // Reset errors.
         reset_errors();
@@ -188,8 +223,10 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         } else {
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(username, password);
-            mAuthTask.execute((Void) null);
+            String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(codeRequestUrl));
+            startActivity(browserIntent);
+
         }
     }
 
@@ -288,127 +325,6 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    /*private static String read(String prompt) throws IOException {
-        System.out.print(prompt + ": ");
-        return new BufferedReader(new InputStreamReader(System.in)).readLine().trim();
-    }*/
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mUsername;
-        private final String mPassword;
-        //private Map<String, String> tokens;
-        private User user = null;
-
-        UserLoginTask(String username, String password) {
-            mUsername = username;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-
-            /*
-            //CODE FOR TEQUILA LOGIN
-            //create the config
-            OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "id", "secret", "epflife://login"); //We will have to fill with correct values
-            String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
-
-            //start the browser with the Tequila URL (temporary solution)
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(codeRequestUrl));
-            startActivity(browserIntent);
-
-            //part to understand
-            String redirectUri;
-            try{
-            redirectUri = read("Go to the above URL, authenticate, then enter the redirect URI");
-            }catch (IOException e){
-                return false;
-            }
-            String code = AuthClient.extractCode(redirectUri);
-            //end part to understand
-
-
-            try{
-            tokens = AuthServer.fetchTokens(config, code);
-            } catch (IOException e){
-                return false;
-            }
-
-
-            try{
-             user = AuthServer.fetchUser(tokens.get("Tequila.profile"));
-            } catch( IOException e){
-                return false;
-            }*/
-
-
-            /////////////////////////////////////
-            //CODE FOR LOCAL LOGIN
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-
-            // Check credidentials
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mUsername)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // REMOVED_TODO: register the new account here.
-            // We do not want to offer registration.(Dahn)
-
-            return false;
-            ////////////////////////////////////
-
-            //return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-
-            // CODE FOR LOCAL LOGIN
-            User.UserBuilder builder = new User.UserBuilder();
-            builder.setEmail("mail@epfl.ch");
-            builder.setSciper("1212");
-            builder.setGaspar(mUsername);
-            builder.setFirst_names(mUsername);
-            builder.setLast_names("");
-
-            user = builder.buildAuthenticatedUser();
-
-
-            if (success && user != null) {
-                //open the main activity then terminate the login activity (Ikaras998)
-                activate_session(user);
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-            showProgress(false);
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
     }
 
 
