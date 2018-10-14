@@ -127,5 +127,4 @@ public class AssociationDetailFragment extends Fragment{
         super.onDetach();
         mListener = null;
     }
-
 }

@@ -18,6 +18,9 @@ import android.view.MenuItem;
 
 import com.google.firebase.FirebaseApp;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private ArrayList<Fragment> previous_fragments;
     private Fragment current_fragment;
 
     private User user;
@@ -40,8 +44,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // Needed to use Firebase storage and Firestore
         FirebaseApp.initializeApp(getApplicationContext());
+
+        previous_fragments = new ArrayList<>();
+        previous_fragments.add(null);
 
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -181,6 +189,25 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
+                previous_fragments.add(0,current_fragment);
+                current_fragment = fragment;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Load the previous fragment into the fragment container
+     * @return true if it was able to laod a fragment, false otherwise
+     */
+    public boolean openPreviousFragment() {
+        if (previous_fragments.get(0) != null) {
+            Fragment fragment = previous_fragments.remove(0);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            if (fragmentManager != null) {
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragmentContent, fragment).commit();
                 current_fragment = fragment;
                 return true;
             }
@@ -210,9 +237,25 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
+    /**
+     * When back is pressed, load the previous fragment used
+     */
+    @Override
+    public void onBackPressed() {
+        openPreviousFragment();
+    }
+
+    /**
+     * Return the current fragment
+     * @return current fragment
+     */
     public Fragment getCurrentFragment() {
         return current_fragment;
     }
 
+    /**
+     * Return the current user
+     * @return current user
+     */
     public User getUser(){return user;}
 }
