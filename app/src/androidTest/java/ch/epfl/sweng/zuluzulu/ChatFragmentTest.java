@@ -64,8 +64,9 @@ public class ChatFragmentTest {
 
             @Override
             public String getDescription() {
-                return "wait for a specific view during " + millis + " millis.";
+                return null;
             }
+
 
             @Override
             public void perform(final UiController uiController, final View view) {
@@ -87,8 +88,6 @@ public class ChatFragmentTest {
 
                 // timeout happens
                 throw new PerformException.Builder()
-                        .withActionDescription(this.getDescription())
-                        .withViewDescription(HumanReadables.describe(view))
                         .withCause(new TimeoutException())
                         .build();
             }
