@@ -74,17 +74,7 @@ public class ChatFragmentTest {
                 final long startTime = System.currentTimeMillis();
                 final long endTime = startTime + millis;
 
-                do {
-                    for (View child : TreeIterables.breadthFirstViewTraversal(view)) {
-                        // found view with required ID
-                        if (matcher.matches(child)) {
-                            return;
-                        }
-                    }
-
-                    uiController.loopMainThreadForAtLeast(50);
-                }
-                while (System.currentTimeMillis() < endTime);
+                timeout_loup(uiController, matcher, view, endTime);
 
                 // timeout happens
                 throw new PerformException.Builder()
@@ -92,6 +82,20 @@ public class ChatFragmentTest {
                         .build();
             }
         };
+    }
+
+    private static void timeout_loup(final UiController uiController, final Matcher<View> matcher, final View view, final long endTime){
+        do {
+            for (View child : TreeIterables.breadthFirstViewTraversal(view)) {
+                // found view with required ID
+                if (matcher.matches(child)) {
+                    return;
+                }
+            }
+
+            uiController.loopMainThreadForAtLeast(50);
+        }
+        while (System.currentTimeMillis() < endTime);
     }
 
     @Before
@@ -126,6 +130,5 @@ public class ChatFragmentTest {
         onView(withId(R.id.chat_message_edit)).perform(replaceText(MSG));
 
         onView(withId(R.id.chat_send_button)).perform(click());
-
     }
 }
