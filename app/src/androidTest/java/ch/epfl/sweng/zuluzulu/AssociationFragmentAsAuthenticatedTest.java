@@ -12,7 +12,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -67,7 +66,7 @@ public class AssociationFragmentAsAuthenticatedTest {
         waitFor(5000);
         onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
         onView(withText("Agepoly")).check(matches(isDisplayed()));
-        onView(withText("ForumEPFL")).check(matches(isDisplayed()));
+        onView(withText("JuniorEnterprise")).check(matches(isDisplayed()));
     }
 
     @Test
@@ -75,7 +74,7 @@ public class AssociationFragmentAsAuthenticatedTest {
         waitFor(5000);
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
         onView(withText("Agepoly")).check(matches(isDisplayed()));
-        onView(withText("ForumEPFL")).check(doesNotExist());
+        onView(withText("JuniorEnterprise")).check(doesNotExist());
     }
 
 
