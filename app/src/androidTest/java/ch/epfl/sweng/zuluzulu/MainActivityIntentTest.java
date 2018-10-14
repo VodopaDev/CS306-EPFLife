@@ -8,11 +8,14 @@ import org.junit.Test;
 
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
+/**
+ * This class is to test if the MainActivity starts the right fragment depending on the intent
+ * input
+ */
 public class MainActivityIntentTest {
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
@@ -29,6 +32,7 @@ public class MainActivityIntentTest {
 
         onView(withId(R.id.login_fragment)).check(matches(isDisplayed()));
     }
+
     /**
      * Check if it goes to the main
      */
@@ -39,5 +43,4 @@ public class MainActivityIntentTest {
 
         onView(withId(R.id.main_fragment)).check(matches(isDisplayed()));
     }
-
 }

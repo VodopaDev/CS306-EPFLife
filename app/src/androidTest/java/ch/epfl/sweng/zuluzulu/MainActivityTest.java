@@ -8,10 +8,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.zuluzulu.Structure.Guest;
-
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
@@ -30,22 +26,12 @@ public class MainActivityTest {
     }
 
     @Test
-    public void onCreateGoesToMain() {
-    }
-
-    @Test
-    public void onOptionsItemSelected() {
-    }
-
-    @Test
     public void isAuthenticated() {
-        assertEquals(mActivity.isAuthenticated(), mActivity.getUser().isConnected());
+        assertFalse(mActivity.isAuthenticated());
         // Check it means it's not an user
-        assertEquals(!mActivity.isAuthenticated(), mActivity.getUser() instanceof Guest);
-    }
 
-    @Test
-    public void onFragmentInteraction() {
+        Utility.fullLogin();
+        assertTrue(mActivity.isAuthenticated());
     }
 
     @Test

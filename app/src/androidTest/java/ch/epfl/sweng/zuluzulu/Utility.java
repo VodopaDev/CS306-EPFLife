@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu;
 
 import android.support.test.espresso.contrib.DrawerActions;
+import android.support.test.espresso.contrib.NavigationViewActions;
 import android.view.Gravity;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -24,6 +25,15 @@ public class Utility {
         onView(withId(R.id.username)).perform(typeText("user")).perform(closeSoftKeyboard());
         onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
         onView(withId(R.id.sign_in_button)).perform(click());
+    }
+
+    /**
+     * Login from anywhere in the app
+     */
+    public static void fullLogin(){
+        openMenu();
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_login));
+        login();
     }
 
     /**

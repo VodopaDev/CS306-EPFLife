@@ -31,33 +31,23 @@ public class LogoutTest {
 
     @Before
     public void logIn() {
-        openLoginFragment();
-
-        // Log on
-        Utility.login();
+        Utility.fullLogin();
     }
 
     @Test
     public void Logout() {
-        openDrawer();
+        Utility.openMenu();
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
 
         openLoginFragment();
     }
 
-    /**
-     * Open the drawer
-     */
-    private void openDrawer(){
-        // Open Drawer to click on navigation.
-        Utility.openMenu();
-    }
 
     /**
      * Open the login gragment in the drawer
      */
     private void openLoginFragment() {
-        openDrawer();
+        Utility.openMenu();
 
         // Click on the login item in the Drawer
         onView(withId(R.id.nav_view))

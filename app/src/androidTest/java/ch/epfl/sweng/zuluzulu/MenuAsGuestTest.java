@@ -15,6 +15,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -41,6 +42,10 @@ public class MenuAsGuestTest {
     public void testGuestCanOpenMainFragment() {
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_main));
+
+
+        // Check if it's open
+        onView(withId(R.id.main_fragment)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -52,17 +57,29 @@ public class MenuAsGuestTest {
     public void testGuestCanOpenSettingsFragment() {
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_settings));
+
+
+        // Check if it's open
+        onView(withId(R.id.settings_fragment)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testGuestCanOpenLoginFragment() {
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_login));
+
+
+        // Check if it's open
+        onView(withId(R.id.login_fragment)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testCanOpenAboutFragment() {
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_about));
+
+
+        // Check if it's open
+        onView(withId(R.id.about_fragment)).check(matches(isDisplayed()));
     }
 }
