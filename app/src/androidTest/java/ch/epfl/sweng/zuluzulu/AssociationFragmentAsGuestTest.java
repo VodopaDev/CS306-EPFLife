@@ -56,7 +56,7 @@ public class AssociationFragmentAsGuestTest {
         waitFor(5000);
         onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
         onView(withText("Agepoly")).check(matches(isDisplayed()));
-        onView(withText("Clic")).check(matches(isDisplayed()));
+        onView(withText("ForumEPFL")).check(matches(isDisplayed()));
     }
 
     @Test
