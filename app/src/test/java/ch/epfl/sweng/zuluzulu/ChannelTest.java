@@ -22,10 +22,10 @@ public class ChannelTest {
         assertEquals(channelName1,channel.getName());
         assertEquals(channelDescription1, channel.getDescription());
 
-        channel.setDescription(channelName2);
+        channel.setName(channelName2);
         channel.setDescription(channelDescription2);
         assertEquals(channelName2, channel.getName());
-        assertEquals(channelDescription2, channelDescription2);
+        assertEquals(channelDescription2, channel.getDescription());
     }
 
 
