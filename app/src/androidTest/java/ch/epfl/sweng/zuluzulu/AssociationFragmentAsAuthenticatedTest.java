@@ -49,8 +49,7 @@ public class AssociationFragmentAsAuthenticatedTest {
         Utility.fullLogin();
 
         // Go to association view
-        Utility.openMenu();
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_associations));
+        Utility.goToAssociation();
 
         TimeUnit.SECONDS.sleep(5);
         fragment = (AssociationFragment)mActivityRule.getActivity().getCurrentFragment();

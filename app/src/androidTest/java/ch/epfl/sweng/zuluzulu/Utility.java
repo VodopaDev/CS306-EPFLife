@@ -38,6 +38,13 @@ public class Utility {
     }
 
     /**
+     * Open the AssociationFragment
+     */
+    public static void goToAssociation(){
+        openMenu();
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_associations));
+    }
+    /**
      * Open the menu from the mainActivity
      */
     public static void openMenu() {

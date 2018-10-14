@@ -38,8 +38,7 @@ public class AssociationFragmentAsGuestTest {
 
     @Before
     public void goToAssociationList() throws InterruptedException {
-        Utility.openMenu();
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_associations));
+        Utility.goToAssociation();
         TimeUnit.SECONDS.sleep(5);
         fragment = (AssociationFragment)mActivityRule.getActivity().getCurrentFragment();
         list_assos = fragment.getListviewAssos();
