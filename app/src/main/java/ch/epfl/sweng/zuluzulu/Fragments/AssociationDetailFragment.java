@@ -67,10 +67,29 @@ public class AssociationDetailFragment extends Fragment{
 
         // Favorite button
         asso_fav = view.findViewById(R.id.association_detail_fav);
-
+        setFavButtonBehaviour();
         if(user.isConnected() && ((AuthenticatedUser)user).isFavAssociation(asso))
             loadFavImage(R.drawable.fav_on);
 
+        // Association icon
+        ImageView asso_icon = view.findViewById(R.id.association_detail_icon);
+        Glide.with(getContext())
+                .load(asso.getIconUri())
+                .centerCrop()
+                .into(asso_icon);
+
+
+        return view;
+    }
+
+    private void loadFavImage(int drawable){
+        Glide.with(getContext())
+                .load(drawable)
+                .centerCrop()
+                .into(asso_fav);
+    }
+
+    private void setFavButtonBehaviour(){
         asso_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,23 +109,6 @@ public class AssociationDetailFragment extends Fragment{
                 }
             }
         });
-
-        // Association icon
-        ImageView asso_icon = view.findViewById(R.id.association_detail_icon);
-        Glide.with(getContext())
-                .load(asso.getIconUri())
-                .centerCrop()
-                .into(asso_icon);
-
-
-        return view;
-    }
-
-    private void loadFavImage(int drawable){
-        Glide.with(getContext())
-                .load(drawable)
-                .centerCrop()
-                .into(asso_fav);
     }
 
     @Override
