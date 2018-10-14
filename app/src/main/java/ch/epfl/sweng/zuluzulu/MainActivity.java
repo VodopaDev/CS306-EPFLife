@@ -213,4 +213,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public Fragment getCurrentFragment() {
         return current_fragment;
     }
+
+    public User getUser(){return user;}
 }
