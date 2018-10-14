@@ -30,8 +30,6 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
     private Context context;
     private List<Association> data;
 
-    //Used for the OnClickListener
-    private User user;
     private OnFragmentInteractionListener mListener;
 
     /**

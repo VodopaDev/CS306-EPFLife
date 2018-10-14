@@ -123,6 +123,7 @@
         android:layout_marginLeft="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/association_detail_name"
         app:layout_constraintStart_toEndOf="@+id/association_detail_name"
-        app:srcCompat="@drawable/fav_off" />
+        app:srcCompat="@drawable/fav_off"
+        android:contentDescription="TODO" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -13,13 +12,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.firebase.FirebaseApp;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
@@ -201,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * Load the previous fragment into the fragment container
      * @return true if it was able to laod a fragment, false otherwise
      */
-    public boolean openPreviousFragment() {
+    public void openPreviousFragment() {
         if (previous_fragments.get(0) != null) {
             Fragment fragment = previous_fragments.remove(0);
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -209,10 +206,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
                 current_fragment = fragment;
-                return true;
             }
         }
-        return false;
     }
 
     @Override

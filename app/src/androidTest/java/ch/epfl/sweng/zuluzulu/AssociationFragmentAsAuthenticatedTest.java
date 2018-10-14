@@ -1,12 +1,8 @@
 package ch.epfl.sweng.zuluzulu;
 
-import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.ViewActions;
-import android.support.test.espresso.contrib.DrawerActions;
-import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.Gravity;
 import android.widget.ListView;
 
 import org.junit.Before;
@@ -18,15 +14,8 @@ import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
-import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
-import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -57,7 +46,7 @@ public class AssociationFragmentAsAuthenticatedTest {
     }
 
     @Test
-    public void mainPageHasSomeAssociations() throws InterruptedException {
+    public void mainPageHasSomeAssociations() {
         onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
         /*
         TimeUnit.SECONDS.sleep(1);
@@ -66,7 +55,7 @@ public class AssociationFragmentAsAuthenticatedTest {
     }
 
     @Test
-    public void clickOnFavoritesDisplayFewerAssociations() throws InterruptedException {
+    public void clickOnFavoritesDisplayFewerAssociations() {
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
         /*
         TimeUnit.SECONDS.sleep(1);

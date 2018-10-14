@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -24,18 +23,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.Map;
-import java.io.InputStreamReader;
-
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
-import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
-import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
-import ch.epfl.sweng.zuluzulu.tequila.Profile;
 
 
 /**

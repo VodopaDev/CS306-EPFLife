@@ -20,16 +20,14 @@ public class TestingActivity  extends AppCompatActivity implements OnFragmentInt
         setContentView(R.layout.activity_test);
     }
 
-    public boolean openFragment(Fragment fragment) {
+    public void openFragment(Fragment fragment) {
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragment_test, fragment).commit();
-                return true;
             }
         }
-        return false;
     }
 
     @Override

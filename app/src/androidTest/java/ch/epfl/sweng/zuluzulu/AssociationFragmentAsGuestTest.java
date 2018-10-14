@@ -1,11 +1,8 @@
 package ch.epfl.sweng.zuluzulu;
 
 import android.support.test.espresso.action.ViewActions;
-import android.support.test.espresso.contrib.DrawerActions;
-import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.Gravity;
 import android.widget.ListView;
 
 import org.junit.Before;
@@ -19,9 +16,6 @@ import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
-import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
-import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
@@ -52,7 +46,7 @@ public class AssociationFragmentAsGuestTest {
     }
 
     @Test
-    public void mainPageHasSomeAssociations() throws InterruptedException {
+    public void mainPageHasSomeAssociations() {
         onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
         /*
         TimeUnit.SECONDS.sleep(1);
@@ -61,7 +55,7 @@ public class AssociationFragmentAsGuestTest {
     }
 
     @Test
-    public void clickOnFavoritesStaysOnAll() throws InterruptedException {
+    public void clickOnFavoritesStaysOnAll() {
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
         /*
         TimeUnit.SECONDS.sleep(1);

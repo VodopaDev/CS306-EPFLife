@@ -1,10 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import android.widget.ListView;
-
 import com.google.common.collect.Sets;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 

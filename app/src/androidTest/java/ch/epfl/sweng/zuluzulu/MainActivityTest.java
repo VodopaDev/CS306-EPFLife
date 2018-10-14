@@ -27,7 +27,7 @@ public class MainActivityTest {
     private MainActivity mActivity;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mActivity = mActivityRule.getActivity();
     }
 
