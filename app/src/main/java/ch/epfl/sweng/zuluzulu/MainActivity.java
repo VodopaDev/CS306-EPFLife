@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private Fragment current_fragment;
 
     private User user;
 
@@ -163,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
+                current_fragment = fragment;
                 return true;
             }
         }
@@ -182,12 +185,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 openFragment(ChatFragment.newInstance(user, channelID));
                 break;
             case AssociationDetailFragment.TAG:
-                Association asso = (Association)data;
-                openFragment(AssociationDetailFragment.newInstance(user, asso));
+                Association association = (Association)data;
+                openFragment(AssociationDetailFragment.newInstance(user, association));
                 break;
             default:
                 // Should never happen
                 throw new AssertionError("Invalid message");
         }
     }
+
+    public Fragment getCurrentFragment(){return current_fragment;}
 }

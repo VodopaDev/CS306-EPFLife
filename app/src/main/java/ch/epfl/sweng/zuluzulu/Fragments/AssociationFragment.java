@@ -104,7 +104,7 @@ public class AssociationFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_association, container, false);
 
-        listview_assos = view.findViewById(R.id.association_fragment_list);
+        listview_assos = view.findViewById(R.id.association_fragment_listview);
         listview_assos.setAdapter(assos_adapter);
 
         button_assos_fav = view.findViewById(R.id.association_fragment_fav_button);
@@ -140,6 +140,8 @@ public class AssociationFragment extends Fragment{
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
+    public ListView getListviewAssos(){return listview_assos;}
 
     @Override
     public void onDetach() {
