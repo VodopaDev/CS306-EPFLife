@@ -84,11 +84,11 @@ public class AssociationFragment extends Fragment{
                         for (int i = 0; i < snap_list.size(); i++){
                             Association asso = new Association(snap_list.get(i));
                             assos_all.add(asso);
-                            assos_adapter.notifyDataSetChanged();
 
                             if(user.isConnected() && ((AuthenticatedUser)user).isFavAssociation(asso))
                                 assos_fav.add(asso);
                         }
+                        assos_adapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

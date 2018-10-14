@@ -12,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -36,6 +37,14 @@ public class AssociationFragmentAsAuthenticatedTest {
                 .perform(DrawerActions.open());
     }
 
+    private void waitFor(int millis) {
+        try{
+            Thread.sleep(millis);
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
+    }
+
     @Before
     public void goToAssociationList(){
         // Authenticate
@@ -51,16 +60,11 @@ public class AssociationFragmentAsAuthenticatedTest {
         openDrawer();
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_associations));
-
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
     public void mainPageHasSomeAssociations(){
+        waitFor(5000);
         onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
         onView(withText("Agepoly")).check(matches(isDisplayed()));
         onView(withText("Clic")).check(matches(isDisplayed()));
@@ -68,6 +72,7 @@ public class AssociationFragmentAsAuthenticatedTest {
 
     @Test
     public void clickOnFavoritesDisplayFewerAssociations() {
+        waitFor(5000);
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
         onView(withText("Agepoly")).check(matches(isDisplayed()));
         onView(withText("Clic")).check(doesNotExist());

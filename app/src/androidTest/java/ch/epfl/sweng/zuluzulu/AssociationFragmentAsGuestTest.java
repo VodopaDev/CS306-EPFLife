@@ -12,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
@@ -27,8 +28,12 @@ public class AssociationFragmentAsGuestTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    private void openDrawer() {
-
+    private void waitFor(int millis) {
+        try{
+            Thread.sleep(millis);
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
     }
 
     @Before
@@ -36,19 +41,19 @@ public class AssociationFragmentAsGuestTest {
         onView(withId(R.id.drawer_layout))
                 .check(matches(isClosed(Gravity.LEFT)))
                 .perform(DrawerActions.open());
-        openDrawer();
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_associations));
+    }
 
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    @Test
+    public void thereAreTwoButtons(){
+        onView(withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
     }
 
     @Test
     public void mainPageHasSomeAssociations(){
+        waitFor(5000);
         onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
         onView(withText("Agepoly")).check(matches(isDisplayed()));
         onView(withText("Clic")).check(matches(isDisplayed()));
