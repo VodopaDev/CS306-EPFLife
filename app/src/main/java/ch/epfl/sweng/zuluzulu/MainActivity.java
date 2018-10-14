@@ -1,5 +1,7 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -34,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FirebaseApp.initializeApp(getApplicationContext());
 
         // Needed to use Firebase storage and Firestore
         FirebaseApp.initializeApp(getApplicationContext());
@@ -48,8 +49,13 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         navigationView = initNavigationView();
         initDrawerContent();
 
-        // The first seen fragment is the main fragment
-        selectItem(navigationView.getMenu().findItem(R.id.nav_main));
+
+        Intent i = getIntent();
+        if(Intent.ACTION_VIEW.equals(i.getAction())){
+            selectItem(navigationView.getMenu().findItem(R.id.nav_login));
+        } else {
+            selectItem(navigationView.getMenu().findItem(R.id.nav_main));
+        }
     }
 
     @Override
@@ -115,6 +121,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
+    /**
+     * Return true if the user is connected
+     * @return boolean
+     */
     public boolean isAuthenticated() {
         return user.isConnected();
     }
@@ -191,6 +201,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
+    /**
+     * Return the user
+     * @return user
+     */
     public User getUser() {
         return user;
     }
