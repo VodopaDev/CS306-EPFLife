@@ -8,4 +8,9 @@ public final class Guest extends User {
     public boolean isConnected() {
         return false;
     }
+
+    @Override
+    public String toString(){
+        return "Guest user";
+    }
 }

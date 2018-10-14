@@ -141,4 +141,23 @@ public class UserTest {
         assertFalse(user.isFollowedChat(channel));
     }
 
+    @Test
+    public void toStringIsCorrect() {
+        User.UserBuilder builder = new User.UserBuilder();
+        builder.setEmail("mail@epfl.ch");
+        builder.setSciper("1212");
+        builder.setGaspar("test");
+        builder.setFirst_names("first_name");
+        builder.setLast_names("last_name");
+        AuthenticatedUser user = (AuthenticatedUser) builder.build();
+
+        String expected = "first_name last_name"
+                + "\nsciper: 1212"
+                + "\ngaspar: test"
+                + "\nemail: mail@epfl.ch";
+
+        assertEquals(expected, user.toString());
+        assertEquals("Guest user", new User.UserBuilder().buildGuestUser().toString());
+    }
+
 }

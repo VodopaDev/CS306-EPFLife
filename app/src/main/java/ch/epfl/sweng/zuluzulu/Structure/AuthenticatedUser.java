@@ -107,4 +107,12 @@ public final class AuthenticatedUser extends User {
     public boolean isConnected() {
         return true;
     }
+
+    @Override
+    public String toString() {
+        return first_names + " " + last_names
+                + "\nsciper: " + sciper
+                + "\ngaspar: " + gaspar
+                + "\nemail: " + email;
+    }
 }

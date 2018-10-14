@@ -150,12 +150,5 @@ abstract public class User implements Serializable {
             return new Guest();
         }
 
-        @Override
-        public String toString() {
-            return first_names + " " + last_names
-                    + "\nsciper: " + sciper
-                    + "\ngaspar: " + gaspar
-                    + "\nemail: " + email;
-        }
     }
 }
