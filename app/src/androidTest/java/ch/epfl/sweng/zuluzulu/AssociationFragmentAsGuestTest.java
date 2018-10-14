@@ -61,6 +61,7 @@ public class AssociationFragmentAsGuestTest {
     @Test
     public void clickOnFavoritesDisplayToast() {
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
+        waitFor(1000);
         onView(withText(startsWith("Login to access"))).check(matches(isDisplayed()));
     }
 }

@@ -65,6 +65,7 @@ public class AssociationFragmentAsAuthenticatedTest {
     public void mainPageHasSomeAssociations(){
         waitFor(5000);
         onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
+        waitFor(1000);
         onView(withText("Agepoly")).check(matches(isDisplayed()));
         onView(withText("JuniorEnterprise")).check(matches(isDisplayed()));
     }
@@ -73,6 +74,7 @@ public class AssociationFragmentAsAuthenticatedTest {
     public void clickOnFavoritesDisplayFewerAssociations() {
         waitFor(5000);
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
+        waitFor(1000);
         onView(withText("Agepoly")).check(matches(isDisplayed()));
         onView(withText("JuniorEnterprise")).check(doesNotExist());
     }
