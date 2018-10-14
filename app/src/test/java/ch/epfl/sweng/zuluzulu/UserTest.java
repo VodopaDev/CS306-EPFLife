@@ -28,7 +28,7 @@ public class UserTest {
 
     @Before
     public void mockStructures(){
-        when(asso.getId()).thenReturn(1);
+        when(asso.getId()).thenReturn(0);
         when(channel.getName()).thenReturn("channel");
         when(event.getId()).thenReturn(2);
     }
