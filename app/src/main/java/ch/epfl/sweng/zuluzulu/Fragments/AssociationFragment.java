@@ -74,30 +74,7 @@ public class AssociationFragment extends Fragment{
         assos_fav = new ArrayList<>();
         assos_adapter = new AssociationAdapter(getContext(), assos_all, mListener);
 
-        FirebaseFirestore.getInstance().collection("assos_info")
-                .orderBy("name")
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        for (int i = 0; i < snap_list.size(); i++){
-                            Association asso = new Association(snap_list.get(i));
-                            assos_all.add(asso);
-
-                            if(user.isConnected() && ((AuthenticatedUser)user).isFavAssociation(asso))
-                                assos_fav.add(asso);
-                        }
-                        assos_adapter.notifyDataSetChanged();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
-                        Log.e("ASSO_LIST","Error fetching association date\n" + e.getMessage());
-                    }
-                });
+        fillAssociationLists();
     }
 
     @Override
@@ -147,6 +124,33 @@ public class AssociationFragment extends Fragment{
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void fillAssociationLists(){
+        FirebaseFirestore.getInstance().collection("assos_info")
+                .orderBy("name")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
+                        for (int i = 0; i < snap_list.size(); i++){
+                            Association asso = new Association(snap_list.get(i));
+                            assos_all.add(asso);
+
+                            if(user.isConnected() && ((AuthenticatedUser)user).isFavAssociation(asso))
+                                assos_fav.add(asso);
+                        }
+                        assos_adapter.notifyDataSetChanged();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
+                        Log.e("ASSO_LIST","Error fetching association date\n" + e.getMessage());
+                    }
+                });
     }
 
     private void updateListView(Button new_selected, Button new_unselected, ArrayList<Association> data, ListView list){
