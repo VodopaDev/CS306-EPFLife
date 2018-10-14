@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">EPFLife</string>
     <string name="title_activity_login_tequila">Tequila Sign in</string>
+    <string name="menu">Menu</string>
 
     <!-- Strings related to login -->
     <string name="prompt_username">Username</string>
@@ -28,7 +29,7 @@
     <string name="contact">Contact:</string>
     <string name="support">Support:</string>
     <string name="Group">ZuluZulu</string>
-    <string name="numVersion">1.0</string>
+    <string name="numVersion">0.3</string>
     <string name="contactEmail">zuluzulu@epfl.ch</string>
     <string name="supportEmail">EPFLife@epfl.ch</string>
     <string name="applicationName">EPFLife</string>
@@ -36,9 +37,17 @@
     <!-- AssociationFragment related -->
     <string name="fragment_assos_button_all">All</string>
     <string name="fragment_assos_button_fav">Favorites</string>
-
-    <!-- Card layout of Association related -->
     <string name="card_association_image_description">Association\'s icon</string>
+
+    <!-- Chat related -->
+    <string name="chat_send">Send</string>
+    <string name="chat_message">Message</string>
+
+    <!-- Settings related -->
+    <string name="settings_dark_mode">Dark Theme</string>
+    <string name="settings_notifications">Receive notifications</string>
+    <string name="settings_clear_cache">Clear cache</string>
+    <string name="settings_clear_cache_button">Clear</string>
 
 
 </resources>

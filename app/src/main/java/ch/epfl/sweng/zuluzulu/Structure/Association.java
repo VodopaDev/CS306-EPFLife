@@ -4,9 +4,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.Serializable;
 import java.util.Comparator;

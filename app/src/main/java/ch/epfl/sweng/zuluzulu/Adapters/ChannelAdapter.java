@@ -13,7 +13,6 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
-import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class ChannelAdapter extends ArrayAdapter<Channel> {
 

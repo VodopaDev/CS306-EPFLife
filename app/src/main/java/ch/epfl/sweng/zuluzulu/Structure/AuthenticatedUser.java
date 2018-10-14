@@ -1,10 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public final class AuthenticatedUser extends User {

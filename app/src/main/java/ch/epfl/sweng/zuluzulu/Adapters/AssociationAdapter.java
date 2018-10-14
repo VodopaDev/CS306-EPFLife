@@ -3,7 +3,6 @@ package ch.epfl.sweng.zuluzulu.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
+
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
-import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -82,7 +79,7 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
             @Override
             public void onClick(View v) {
                 Log.d("FRAG_CHANGE","Switching to " + asso.getName() + "detailed view");
-                mListener.onFragmentInteraction(AssociationDetailFragment.TAG, (Object)asso);
+                mListener.onFragmentInteraction(AssociationDetailFragment.TAG, asso);
             }
         });
 

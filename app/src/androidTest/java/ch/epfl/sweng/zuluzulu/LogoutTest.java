@@ -1,10 +1,8 @@
 package ch.epfl.sweng.zuluzulu;
 
 
-import android.support.design.widget.NavigationView;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.NavigationViewActions;
-import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.Gravity;
@@ -59,7 +57,7 @@ public class LogoutTest {
     }
 
     /**
-     * Open the login gragment in the drawer
+     * Open the login fragment in the drawer
      */
     private void openLoginFragment() {
         openDrawer();

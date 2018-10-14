@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import java.io.Serializable;
-import java.util.List;
 
 abstract public class User implements Serializable {
 
@@ -111,7 +110,7 @@ abstract public class User implements Serializable {
         }
 
         /**
-         * This function create a User and return the builded child
+         * This function create a User and return the built child
          *
          * @return User Return a child of User
          */

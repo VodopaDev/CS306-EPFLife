@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.Mockito;
 
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
@@ -15,7 +14,6 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -63,12 +61,6 @@ public class UserTest {
     }
 
     @Test
-    public void userIsNotConnected(){
-        Guest guest = new User.UserBuilder().buildGuestUser();
-        assertFalse(((User)guest).isConnected());
-    }
-
-    @Test
     public void guestUserHasNullProperties(){
         Guest guest = new User.UserBuilder().buildGuestUser();
         assertNull(guest.getEmail());
@@ -82,7 +74,7 @@ public class UserTest {
     @Test
     public void refuseFakeMail() {
         User.UserBuilder builder = new User.UserBuilder();
-        builder.setEmail("fakemail");
+        builder.setEmail("fake_mail");
         builder.setSciper("1212");
         builder.setGaspar("test");
         builder.setFirst_names("first_name");

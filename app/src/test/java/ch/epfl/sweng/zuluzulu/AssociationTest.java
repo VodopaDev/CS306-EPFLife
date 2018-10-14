@@ -2,11 +2,9 @@ package ch.epfl.sweng.zuluzulu;
 
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Test;
