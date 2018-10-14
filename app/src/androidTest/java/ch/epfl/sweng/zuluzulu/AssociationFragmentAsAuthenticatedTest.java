@@ -43,27 +43,15 @@ public class AssociationFragmentAsAuthenticatedTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    private void openDrawer(){
-        onView(withId(R.id.drawer_layout))
-                .check(matches(isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-                .perform(DrawerActions.open());
-    }
-
     @Before
     public void goToAssociationList() throws InterruptedException {
         // Authenticate
-        openDrawer();
-        onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_login));
-
-        onView(withId(R.id.username)).perform(typeText("nicolas")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
-        onView(withId(R.id.sign_in_button)).perform(click());
+        Utility.fullLogin();
 
         // Go to association view
-        openDrawer();
-        onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_associations));
+        Utility.openMenu();
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_associations));
+
         TimeUnit.SECONDS.sleep(5);
         fragment = (AssociationFragment)mActivityRule.getActivity().getCurrentFragment();
         list_assos = fragment.getListviewAssos();
