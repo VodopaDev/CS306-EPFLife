@@ -61,15 +61,13 @@ public class AssociationFragmentAsGuestTest {
     public void mainPageHasSomeAssociations(){
         waitFor(5000);
         onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
-        waitFor(2000);
         onView(withId(R.id.association_fragment_list)).check(matches(hasChildCount(NB_ALL_ASSOS)));
     }
 
     @Test
     public void clickOnFavoritesStaysOnAll() {
-        waitFor(1000);
+        waitFor(5000);
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
-        waitFor(1000);
         onView(withId(R.id.association_fragment_list)).check(matches(hasChildCount(NB_ALL_ASSOS)));
     }
 }

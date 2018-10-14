@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.NavigationViewActions;
@@ -12,6 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -19,6 +21,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -65,18 +68,23 @@ public class AssociationFragmentAsAuthenticatedTest {
 
     @Test
     public void mainPageHasSomeAssociations(){
-        waitFor(5000);
+        waitFor(10000);
         onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
-        waitFor(2000);
         onView(withId(R.id.association_fragment_list)).check(matches(hasChildCount(NB_ALL_ASSOS)));
     }
 
     @Test
     public void clickOnFavoritesDisplayFewerAssociations() {
-        waitFor(5000);
+        waitFor(10000);
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
-        waitFor(2000);
         onView(withId(R.id.association_fragment_list)).check(matches(hasChildCount(NB_FAV_ASSOS)));
+    }
+
+    @Test
+    public void clickingAnAssociationGoesToDetail() {
+        waitFor(10000);
+        onView(withText("Agepoly")).perform(ViewActions.click());
+        onView(withId(R.id.association_detail_name)).check(matches(isDisplayed()));
     }
 
 
