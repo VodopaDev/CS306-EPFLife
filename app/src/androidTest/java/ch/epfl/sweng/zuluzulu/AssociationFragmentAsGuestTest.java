@@ -14,6 +14,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.concurrent.TimeUnit;
+
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -35,42 +37,36 @@ public class AssociationFragmentAsGuestTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    private void waitFor(int millis) {
-        try{
-            Thread.sleep(millis);
-        }catch(InterruptedException e){
-            e.printStackTrace();
-        }
-    }
-
     @Before
-    public void goToAssociationList() {
+    public void goToAssociationList() throws InterruptedException {
         onView(withId(R.id.drawer_layout))
                 .check(matches(isClosed(Gravity.LEFT)))
                 .perform(DrawerActions.open());
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_associations));
-        waitFor(5000);
+        TimeUnit.SECONDS.sleep(10);
         fragment = (AssociationFragment)mActivityRule.getActivity().getCurrentFragment();
         list_assos = fragment.getListviewAssos();
-
     }
 
     @Test
-    public void thereAreTwoButtons(){
+    public void thereAreTwoButtons() throws InterruptedException {
         onView(withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
+        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void mainPageHasSomeAssociations(){
+    public void mainPageHasSomeAssociations() throws InterruptedException {
         onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(1);
         assertThat(list_assos, hasChildCount(NB_ALL_ASSOS));
     }
 
     @Test
-    public void clickOnFavoritesStaysOnAll() {
+    public void clickOnFavoritesStaysOnAll() throws InterruptedException {
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(1);
         assertThat(list_assos, hasChildCount(NB_ALL_ASSOS));
     }
 }
