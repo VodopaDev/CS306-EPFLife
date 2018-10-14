@@ -74,28 +74,32 @@ public class ChatFragmentTest {
                 final long startTime = System.currentTimeMillis();
                 final long endTime = startTime + millis;
 
-                timeout_loup(uiController, matcher, view, endTime);
+                if(!timeout_loup(uiController, matcher, view, endTime))
+                {
+                    // timeout happens
+                    throw new PerformException.Builder()
+                            .withCause(new TimeoutException())
+                            .build();
+                }
 
-                // timeout happens
-                throw new PerformException.Builder()
-                        .withCause(new TimeoutException())
-                        .build();
             }
         };
     }
 
-    private static void timeout_loup(final UiController uiController, final Matcher<View> matcher, final View view, final long endTime){
+    private static boolean timeout_loup(final UiController uiController, final Matcher<View> matcher, final View view, final long endTime){
         do {
             for (View child : TreeIterables.breadthFirstViewTraversal(view)) {
                 // found view with required ID
                 if (matcher.matches(child)) {
-                    return;
+                    return true;
                 }
             }
 
             uiController.loopMainThreadForAtLeast(50);
         }
         while (System.currentTimeMillis() < endTime);
+
+        return false;
     }
 
     @Before
