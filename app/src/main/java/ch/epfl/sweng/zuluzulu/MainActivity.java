@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     private User user;
     private Map<String, String> tokens;
+    private OAuth2Config config;
 
 
     //(temporary) store the URI from the browser
@@ -172,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 this.user = new User.UserBuilder().buildGuestUser();
 
                 //create a logout URL and open it in the browser
-                String logoutURL = AuthClient.createCodeRequestUrlLogout(tokens.get("Tequila.profile"));
+                String logoutURL = AuthClient.createCodeRequestUrlLogout(config, tokens.get("Tequila.profile"));
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(logoutURL));
                 startActivity(browserIntent);
 
@@ -222,6 +223,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 Map<Integer, Object> received = (HashMap<Integer,Object>) data;
                 this.user = (User) received.get(0);
                 this.tokens = (Map<String, String>) received.get(1);
+                this.config = (OAuth2Config) received.get(2);
                 updateMenuItems();
                 selectItem(navigationView.getMenu().findItem(R.id.nav_main));
                 break;

@@ -18,9 +18,10 @@ public final class AuthClient {
     }
 
 
-    public static String createCodeRequestUrlLogout(String token) {
+    public static String createCodeRequestUrlLogout(OAuth2Config config, String token) {
         return "https://tequila.epfl.ch/cgi-bin/OAuth2IdP/logout" +
-                "?access_token=" + HttpUtils.urlEncode(token);
+                "?client_id=" + HttpUtils.urlEncode(config.clientId) +
+                "&access_token=" + HttpUtils.urlEncode(token);
     }
 
     public static String extractCode(String redirectUri) {

@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -94,6 +95,8 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         try {
             redirectURICode = this.getArguments().getString("");
         }catch(NullPointerException e){
@@ -147,6 +150,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         Map<Integer,Object> toTransfer = new HashMap<Integer, Object>();
         toTransfer.put(0,user);
         toTransfer.put(1,access_tokens);
+        toTransfer.put(2,config);
         mListener.onFragmentInteraction(TAG, toTransfer);
     }
 
@@ -165,17 +169,6 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         } catch( IOException e){
             return;
         }
-
-
-            // CODE FOR LOCAL LOGIN
-        /*User.UserBuilder builder = new User.UserBuilder();
-        builder.setEmail("mail@epfl.ch");
-        builder.setSciper("1212");
-        builder.setGaspar("123456");
-        builder.setFirst_names("bonjour");
-        builder.setLast_names("Aurevoir");
-
-        User user = builder.buildAuthenticatedUser();*/
 
         activate_session(user, tokens);
     }
