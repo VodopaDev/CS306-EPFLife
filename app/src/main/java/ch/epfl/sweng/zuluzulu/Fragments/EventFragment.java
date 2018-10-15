@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -22,7 +21,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Adapters.AssociationAdapter;
 import ch.epfl.sweng.zuluzulu.Adapters.EventAdapter;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -48,7 +46,7 @@ public class EventFragment extends Fragment {
 
     private ArrayList<Event> event_all;
     private ArrayList<Event> event_fav;
-    private AssociationAdapter event_adapter;
+    private EventAdapter event_adapter;
 
     private ListView listview_event;
     private Button button_event_all;
@@ -84,19 +82,19 @@ public class EventFragment extends Fragment {
         event_fav = new ArrayList<>();
         event_adapter = new EventAdapter(getContext(), event_all, mListener);
 
-        fillAssociationLists();
+        fillEventLists();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_association, container, false);
+        View view = inflater.inflate(R.layout.fragment_event, container, false);
 
-        listview_event = view.findViewById(R.id.association_fragment_listview);
+        listview_event = view.findViewById(R.id.event_fragment_listview);
         listview_event.setAdapter(event_adapter);
 
-        button_event_fav = view.findViewById(R.id.association_fragment_fav_button);
-        button_event_all = view.findViewById(R.id.association_fragment_all_button);
+        button_event_fav = view.findViewById(R.id.event_fragment_fav_button);
+        button_event_all = view.findViewById(R.id.event_fragment_all_button);
 
         button_event_fav.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,7 +102,7 @@ public class EventFragment extends Fragment {
                 if(user.isConnected())
                     updateListView(button_event_fav, button_event_all, event_fav, listview_event);
                 else
-                    Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
+                    Snackbar.make(getView(), "Login to access your favorite event", 5000).show();
             }
         });
 
@@ -135,8 +133,8 @@ public class EventFragment extends Fragment {
         mListener = null;
     }
 
-    private void fillAssociationLists(){
-        FirebaseFirestore.getInstance().collection("assos_info")
+    private void fillEventLists(){
+        FirebaseFirestore.getInstance().collection("event_info")
                 .orderBy("name")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -144,11 +142,11 @@ public class EventFragment extends Fragment {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
                         for (int i = 0; i < snap_list.size(); i++){
-                            Event asso = new Event(snap_list.get(i));
-                            event_all.add(asso);
+                            Event event = new Event(snap_list.get(i));
+                            event_all.add(event);
 
-                            if(user.isConnected() && ((AuthenticatedUser)user).isFavAssociation(asso))
-                                event_fav.add(asso);
+                            if(user.isConnected() && ((AuthenticatedUser)user).isFavEvent(event))
+                                event_fav.add(event);
                         }
                         event_adapter.notifyDataSetChanged();
                     }
@@ -157,7 +155,7 @@ public class EventFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
-                        Log.e("ASSO_LIST","Error fetching association date\n" + e.getMessage());
+                        Log.e("EVENT_LIST","Error fetching event date\n" + e.getMessage());
                     }
                 });
     }
@@ -165,7 +163,7 @@ public class EventFragment extends Fragment {
     private void updateListView(Button new_selected, Button new_unselected, ArrayList<Event> data, ListView list){
         new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         new_unselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
-        event_adapter = new AssociationAdapter(getContext(), data, mListener);
+        event_adapter = new EventAdapter(getContext(), data, mListener);
         list.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
     }

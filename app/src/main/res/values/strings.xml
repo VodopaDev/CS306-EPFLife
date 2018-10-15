@@ -38,7 +38,11 @@
     <string name="fragment_assos_button_all">All</string>
     <string name="fragment_assos_button_fav">Favorites</string>
     <string name="card_association_image_description">Association\'s icon</string>
-    <string name="card_event_image_description">Association\'s icon</string>
+
+    <!-- Event related -->
+    <string name="fragment_event_button_all">All</string>
+    <string name="fragment_event_button_fav">Favorites</string>
+    <string name="card_event_image_description">Event\'s icon</string>
 
     <!-- Chat related -->
     <string name="chat_send">Send</string>

@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -33,9 +33,9 @@ public class EventAdapter extends ArrayAdapter<Event> {
     private final OnFragmentInteractionListener mListener;
 
     /**
-     * Basic constructor of an AssociationAdapter
+     * Basic constructor of an EventAdapter
      * @param context Context of the Fragment
-     * @param data List of Associations to view
+     * @param data List of events to view
      */
     public EventAdapter(Context context, List<Event> data, OnFragmentInteractionListener mListener){
         super(context, layout_resource_id, data);
@@ -45,70 +45,54 @@ public class EventAdapter extends ArrayAdapter<Event> {
     }
 
     /**
-     * Return a View of an Association in a GroupView in a form of a card with the
-     * Association's name, short description and icon image
+     * Return a View of an event in a GroupView in a form of a card with the
+     * Event's name, short description and icon image
      * @param position position in the GroupView
-     * @param convertView View where to put the Association's view
+     * @param convertView View where to put the Event's view
      * @param parent the ListView to put the view
-     * @return the Association card view
+     * @return the Event card view
      */
     @Override
 
     //TODO
 
     public View getView(int position, View convertView, ViewGroup parent){
-        View asso_view = convertView;
-        final AssociationHolder holder = asso_view == null ? new AssociationHolder(): (AssociationHolder)asso_view.getTag();
+        View event_view = convertView;
+        final EventHolder holder = event_view == null ? new EventHolder(): (EventHolder)event_view.getTag();
 
-        if(asso_view == null){
+        if(event_view == null){
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-            asso_view = inflater.inflate(layout_resource_id, parent, false);
+            event_view = inflater.inflate(layout_resource_id, parent, false);
 
-            holder.name = asso_view.findViewById(R.id.card_asso_name);
-            holder.short_desc = asso_view.findViewById(R.id.card_asso_short_desc);
-            holder.icon = asso_view.findViewById(R.id.card_asso_image);
+            holder.name = event_view.findViewById(R.id.card_event_name);
+            holder.short_desc = event_view.findViewById(R.id.card_event_short_desc);
+            holder.icon = event_view.findViewById(R.id.card_event_image);
 
-            asso_view.setTag(holder);
+            event_view.setTag(holder);
         }
 
         final Event event = data.get(position);
         holder.name.setText(event.getName());
-        holder.short_desc.setText(event.getShortDesc());
-        initIcon(event.getIconUri(), holder.icon);
+        holder.short_desc.setText(event.getDescription());
 
-        asso_view.setOnClickListener(new View.OnClickListener() {
+        event_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("FRAG_CHANGE","Switching to " + asso.getName() + "detailed view");
-                mListener.onFragmentInteraction(AssociationDetailFragment.TAG, asso);
+                Log.d("FRAG_CHANGE","Switching to " + event.getName() + "detailed view");
+                mListener.onFragmentInteraction(EventDetailFragment.TAG, event);
             }
         });
 
-        return asso_view;
+        return event_view;
     }
 
     /**
-     * Fetch an Image from the Internet and put it in an ImageView
-     * @param uri Uri of the image to fetch
-     * @param icon ImageView to put the image
-     */
-
-    //TODO
-
-    private void initIcon(Uri uri, ImageView icon){
-        Glide.with(context)
-                .load(uri)
-                .centerCrop()
-                .into(icon);
-    }
-
-    /**
-     * Static class to easily create an Association's specific View
+     * Static class to easily create an Event's specific View
      */
 
     // TODO
 
-    static class AssociationHolder{
+    static class EventHolder{
         ImageView icon;
         TextView name;
         TextView short_desc;
