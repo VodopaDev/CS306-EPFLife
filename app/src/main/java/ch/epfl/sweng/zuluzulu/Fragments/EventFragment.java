@@ -3,22 +3,37 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ListView;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationAdapter;
+import ch.epfl.sweng.zuluzulu.Adapters.EventAdapter;
+import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link EventFragment.OnFragmentInteractionListener} interface
+ * {@link OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link EventFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -33,11 +48,11 @@ public class EventFragment extends Fragment {
 
     private ArrayList<Event> event_all;
     private ArrayList<Event> event_fav;
-    private AssociationAdapter assos_adapter;
+    private AssociationAdapter event_adapter;
 
-    private ListView listview_assos;
-    private Button button_assos_all;
-    private Button button_assos_fav;
+    private ListView listview_event;
+    private Button button_event_all;
+    private Button button_event_fav;
 
     public EventFragment() {
         // Required empty public constructor
@@ -47,16 +62,13 @@ public class EventFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param user user.
      * @return A new instance of fragment EventFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static EventFragment newInstance(String param1, String param2) {
+    public static EventFragment newInstance(User user) {
         EventFragment fragment = new EventFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(ARG_USER, user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,23 +77,45 @@ public class EventFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            user = (User) getArguments().getSerializable(ARG_USER);
         }
+
+        event_all = new ArrayList<>();
+        event_fav = new ArrayList<>();
+        event_adapter = new EventAdapter(getContext(), event_all, mListener);
+
+        fillAssociationLists();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_association, container, false);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        listview_event = view.findViewById(R.id.association_fragment_listview);
+        listview_event.setAdapter(event_adapter);
+
+        button_event_fav = view.findViewById(R.id.association_fragment_fav_button);
+        button_event_all = view.findViewById(R.id.association_fragment_all_button);
+
+        button_event_fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(user.isConnected())
+                    updateListView(button_event_fav, button_event_all, event_fav, listview_event);
+                else
+                    Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
+            }
+        });
+
+        button_event_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateListView(button_event_all, button_event_fav, event_all, listview_event);
+            }
+        });
+
+        return view;
     }
 
     @Override
@@ -101,18 +135,38 @@ public class EventFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    private void fillAssociationLists(){
+        FirebaseFirestore.getInstance().collection("assos_info")
+                .orderBy("name")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
+                        for (int i = 0; i < snap_list.size(); i++){
+                            Event asso = new Event(snap_list.get(i));
+                            event_all.add(asso);
+
+                            if(user.isConnected() && ((AuthenticatedUser)user).isFavAssociation(asso))
+                                event_fav.add(asso);
+                        }
+                        event_adapter.notifyDataSetChanged();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
+                        Log.e("ASSO_LIST","Error fetching association date\n" + e.getMessage());
+                    }
+                });
+    }
+
+    private void updateListView(Button new_selected, Button new_unselected, ArrayList<Event> data, ListView list){
+        new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+        new_unselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
+        event_adapter = new AssociationAdapter(getContext(), data, mListener);
+        list.setAdapter(event_adapter);
+        event_adapter.notifyDataSetChanged();
     }
 }

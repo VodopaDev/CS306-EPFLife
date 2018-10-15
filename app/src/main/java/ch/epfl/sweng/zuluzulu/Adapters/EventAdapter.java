@@ -18,16 +18,17 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
+
 
 /**
  * An ArrayAdapter for Associations
  */
-public class EventAdapter extends ArrayAdapter<Association> {
+public class EventAdapter extends ArrayAdapter<Event> {
     private static final int layout_resource_id = R.layout.card_association;
 
     private final Context context;
-    private final List<Association> data;
+    private final List<Event> data;
 
     private final OnFragmentInteractionListener mListener;
 
@@ -36,7 +37,7 @@ public class EventAdapter extends ArrayAdapter<Association> {
      * @param context Context of the Fragment
      * @param data List of Associations to view
      */
-    public EventAdapter(Context context, List<Association> data, OnFragmentInteractionListener mListener){
+    public EventAdapter(Context context, List<Event> data, OnFragmentInteractionListener mListener){
         super(context, layout_resource_id, data);
         this.mListener = mListener;
         this.context = context;
@@ -52,6 +53,9 @@ public class EventAdapter extends ArrayAdapter<Association> {
      * @return the Association card view
      */
     @Override
+
+    //TODO
+
     public View getView(int position, View convertView, ViewGroup parent){
         View asso_view = convertView;
         final AssociationHolder holder = asso_view == null ? new AssociationHolder(): (AssociationHolder)asso_view.getTag();
@@ -67,10 +71,10 @@ public class EventAdapter extends ArrayAdapter<Association> {
             asso_view.setTag(holder);
         }
 
-        final Association asso = data.get(position);
-        holder.name.setText(asso.getName());
-        holder.short_desc.setText(asso.getShortDesc());
-        initIcon(asso.getIconUri(), holder.icon);
+        final Event event = data.get(position);
+        holder.name.setText(event.getName());
+        holder.short_desc.setText(event.getShortDesc());
+        initIcon(event.getIconUri(), holder.icon);
 
         asso_view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +92,9 @@ public class EventAdapter extends ArrayAdapter<Association> {
      * @param uri Uri of the image to fetch
      * @param icon ImageView to put the image
      */
+
+    //TODO
+
     private void initIcon(Uri uri, ImageView icon){
         Glide.with(context)
                 .load(uri)
@@ -98,13 +105,12 @@ public class EventAdapter extends ArrayAdapter<Association> {
     /**
      * Static class to easily create an Association's specific View
      */
+
+    // TODO
+
     static class AssociationHolder{
         ImageView icon;
         TextView name;
         TextView short_desc;
     }
-
-
-
-
 }
