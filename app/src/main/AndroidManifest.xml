@@ -17,8 +17,20 @@
             android:name=".MainActivity"
             android:label="EPFLife">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+
+
+            <intent-filter android:label="login_view">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="login"
+                    android:scheme="epflife" />
             </intent-filter>
         </activity>
     </application>

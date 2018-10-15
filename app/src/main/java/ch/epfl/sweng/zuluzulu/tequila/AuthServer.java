@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.Structure.User;
+
 /**
  * Interface for authentication on a server.
  *
@@ -34,7 +36,7 @@ public final class AuthServer {
         return result;
     }
 
-    public static Profile fetchProfile(String token) throws IOException {
+    public static User fetchUser(String token) throws IOException {
         String url = "https://tequila.epfl.ch/cgi-bin/OAuth2IdP/userinfo" +
                 "?access_token=" + HttpUtils.urlEncode(token);
         JsonProfile profile = HttpUtils.fetch(url, JsonProfile.class);
@@ -43,7 +45,14 @@ public final class AuthServer {
             throw new IOException("Error from Tequila:" + profile.error);
         }
 
-        return new Profile(profile.sciper, profile.gaspar, profile.email, profile.firstNames, profile.lastNames);
+        User.UserBuilder builder = new User.UserBuilder();
+        builder.setEmail(profile.email);
+        builder.setSciper(profile.sciper);
+        builder.setGaspar(profile.gaspar);
+        builder.setFirst_names(profile.firstNames);
+        builder.setLast_names(profile.lastNames);
+
+        return builder.buildAuthenticatedUser();
     }
 
 

@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -15,29 +16,37 @@ import android.view.MenuItem;
 
 import com.google.firebase.FirebaseApp;
 
+import java.util.ArrayList;
+
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
+import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private ArrayList<Fragment> previous_fragments;
+    private Fragment current_fragment;
 
     private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FirebaseApp.initializeApp(getApplicationContext());
 
         // Needed to use Firebase storage and Firestore
         FirebaseApp.initializeApp(getApplicationContext());
+
+        previous_fragments = new ArrayList<>();
+        previous_fragments.add(null);
 
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -48,8 +57,13 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         navigationView = initNavigationView();
         initDrawerContent();
 
-        // The first seen fragment is the main fragment
-        selectItem(navigationView.getMenu().findItem(R.id.nav_main));
+
+        Intent i = getIntent();
+        if (Intent.ACTION_VIEW.equals(i.getAction())) {
+            selectItem(navigationView.getMenu().findItem(R.id.nav_login));
+        } else {
+            selectItem(navigationView.getMenu().findItem(R.id.nav_main));
+        }
     }
 
     @Override
@@ -115,6 +129,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
+    /**
+     * Return true if the user is connected
+     *
+     * @return boolean
+     */
     public boolean isAuthenticated() {
         return user.isConnected();
     }
@@ -137,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 fragment = AboutZuluzuluFragment.newInstance();
                 break;
             case R.id.nav_associations:
-                fragment = AssociationFragment.newInstance();
+                fragment = AssociationFragment.newInstance(user);
                 break;
             case R.id.nav_settings:
                 fragment = SettingsFragment.newInstance();
@@ -161,21 +180,38 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
-    private boolean openFragment(Fragment fragment) {
+    public boolean openFragment(Fragment fragment) {
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
+                previous_fragments.add(0,current_fragment);
+                current_fragment = fragment;
                 return true;
             }
         }
         return false;
     }
 
+    /**
+     * Load the previous fragment (if there is one) into the fragment container
+     */
+    public void openPreviousFragment() {
+        if (previous_fragments.get(0) != null) {
+            Fragment fragment = previous_fragments.remove(0);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            if (fragmentManager != null) {
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragmentContent, fragment).commit();
+                current_fragment = fragment;
+            }
+        }
+    }
+
     @Override
     public void onFragmentInteraction(String tag, Object data) {
-        switch(tag) {
+        switch (tag) {
             case LoginFragment.TAG:
                 this.user = (User) data;
                 updateMenuItems();
@@ -185,13 +221,35 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 int channelID = (Integer) data;
                 openFragment(ChatFragment.newInstance(user, channelID));
                 break;
+            case AssociationDetailFragment.TAG:
+                Association association = (Association) data;
+                openFragment(AssociationDetailFragment.newInstance(user, association));
+                break;
             default:
                 // Should never happen
                 throw new AssertionError(tag);
         }
     }
 
-    public User getUser() {
-        return user;
+    /**
+     * When back is pressed, load the previous fragment used
+     */
+    @Override
+    public void onBackPressed() {
+        openPreviousFragment();
     }
+
+    /**
+     * Return the current fragment
+     * @return current fragment
+     */
+    public Fragment getCurrentFragment() {
+        return current_fragment;
+    }
+
+    /**
+     * Return the current user
+     * @return current user
+     */
+    public User getUser(){return user;}
 }
