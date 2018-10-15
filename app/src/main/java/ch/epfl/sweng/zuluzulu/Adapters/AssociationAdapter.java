@@ -19,7 +19,6 @@ import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
-import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
  * An ArrayAdapter for Associations
@@ -27,10 +26,10 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 public class AssociationAdapter extends ArrayAdapter<Association> {
     private static final int layout_resource_id = R.layout.card_association;
 
-    private Context context;
-    private List<Association> data;
+    private final Context context;
+    private final List<Association> data;
 
-    private OnFragmentInteractionListener mListener;
+    private final OnFragmentInteractionListener mListener;
 
     /**
      * Basic constructor of an AssociationAdapter

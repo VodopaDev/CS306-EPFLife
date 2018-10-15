@@ -23,6 +23,8 @@ public class AssociationDetailFragment extends Fragment{
     public static final String TAG = "ASSOCIATION_DETAIL__TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_ASSO = "ARG_ASSO";
+    private static final String FAV_CONTENT = "This association is in your favorites";
+    private static final String NOT_FAV_CONTENT = "This association isn't in your favorites";
 
     private ImageView asso_fav;
 
@@ -66,8 +68,11 @@ public class AssociationDetailFragment extends Fragment{
         // Favorite button
         asso_fav = view.findViewById(R.id.association_detail_fav);
         setFavButtonBehaviour();
-        if(user.isConnected() && ((AuthenticatedUser)user).isFavAssociation(asso))
+        asso_fav.setContentDescription(NOT_FAV_CONTENT);
+        if(user.isConnected() && ((AuthenticatedUser)user).isFavAssociation(asso)) {
             loadFavImage(R.drawable.fav_on);
+            asso_fav.setContentDescription(FAV_CONTENT);
+        }
 
         // Association icon
         ImageView asso_icon = view.findViewById(R.id.association_detail_icon);
@@ -96,10 +101,12 @@ public class AssociationDetailFragment extends Fragment{
                     if(auth.isFavAssociation(asso)){
                         auth.removeFavAssociation(asso);
                         loadFavImage(R.drawable.fav_off);
+                        asso_fav.setContentDescription(NOT_FAV_CONTENT);
                     }
                     else{
                         auth.addFavAssociation(asso);
                         loadFavImage(R.drawable.fav_on);
+                        asso_fav.setContentDescription(FAV_CONTENT);
                     }
                 }
                 else {
