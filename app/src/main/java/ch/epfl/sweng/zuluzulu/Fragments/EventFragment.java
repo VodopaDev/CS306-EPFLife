@@ -142,11 +142,12 @@ public class EventFragment extends Fragment {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
                         for (int i = 0; i < snap_list.size(); i++){
-                            Event event = new Event(snap_list.get(i));
+//                            Event event = new Event(snap_list.get(i)); TODO
+                            Event event = new Event(0);
                             event_all.add(event);
 
-                            if(user.isConnected() && ((AuthenticatedUser)user).isFavEvent(event))
-                                event_fav.add(event);
+//                            if(user.isConnected() && ((AuthenticatedUser)user).isFavEvent(event)) TODO
+//                                event_fav.add(event);
                         }
                         event_adapter.notifyDataSetChanged();
                     }
