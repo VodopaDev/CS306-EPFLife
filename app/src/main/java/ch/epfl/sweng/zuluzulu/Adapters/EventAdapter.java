@@ -22,10 +22,10 @@ import ch.epfl.sweng.zuluzulu.Structure.Event;
 
 
 /**
- * An ArrayAdapter for Associations
+ * An ArrayAdapter for Event
  */
 public class EventAdapter extends ArrayAdapter<Event> {
-    private static final int layout_resource_id = R.layout.card_association;
+    private static final int layout_resource_id = R.layout.card_event;
 
     private final Context context;
     private final List<Event> data;
