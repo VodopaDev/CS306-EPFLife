@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +37,7 @@ import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
 import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
 
 
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -46,6 +48,7 @@ import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
  */
 public class LoginFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String TAG = "LOGIN_TAG";
+
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
@@ -60,6 +63,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             "yann:password",
             "bar:world"
     };
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -127,8 +131,8 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
 
         mUsernameView = view.findViewById(R.id.username);
 
-        Button mSignInButon = view.findViewById(R.id.sign_in_button);
-        mSignInButon.setOnClickListener(new View.OnClickListener() {
+        Button mSignInButton = view.findViewById(R.id.sign_in_button);
+        mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -239,7 +243,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      * @return boolean
      */
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with our futur logic
+        //TODO: Replace this with our future logic
         return password.length() > 4;
     }
 
@@ -318,6 +322,5 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         super.onDetach();
         mListener = null;
     }
-
 
 }

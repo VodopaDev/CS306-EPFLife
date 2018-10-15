@@ -1,40 +1,15 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import java.util.List;
+import java.io.Serializable;
 
-abstract public class User {
+abstract public class User implements Serializable {
 
-    /* DEFINE ALL THE USER FUNCTION*/
-
-    public String getFirst_names() {
+    public String getFirstNames() {
         return null;
     }
 
-    public String getLast_names() {
+    public String getLastNames() {
         return null;
-    }
-
-    public List<Integer> getAssos_id() {
-        return null;
-    }
-
-    public void setAssos_id(List<Integer> assos_id) {
-
-    }
-
-    public List<Integer> getChats_id() {
-        return null;
-    }
-
-    public void setChats_id(List<Integer> chats_id) {
-    }
-
-    public List<Integer> getEvents_id() {
-        return null;
-    }
-
-    public void setEvents_id(List<Integer> events_id) {
-
     }
 
     public String getEmail() {
@@ -49,13 +24,8 @@ abstract public class User {
         return null;
     }
 
-    /**
-     * Return true if the User is connected. False instead
-     *
-     * @return True if connected
-     */
-    abstract public boolean isConnected();
 
+    public abstract boolean isConnected();
 
     /**
      * This class is used to create a builder
@@ -141,7 +111,7 @@ abstract public class User {
         }
 
         /**
-         * This function create a User and return the builded child
+         * This function create a User and return the built child
          *
          * @return User Return a child of User
          */
@@ -180,12 +150,5 @@ abstract public class User {
             return new Guest();
         }
 
-        @Override
-        public String toString() {
-            return first_names + " " + last_names
-                    + "\nsciper: " + sciper
-                    + "\ngaspar: " + gaspar
-                    + "\nemail: " + email;
-        }
     }
 }

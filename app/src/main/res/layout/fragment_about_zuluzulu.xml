@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/about_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:background="#e2e5e6"
@@ -16,58 +17,63 @@
         android:text="@string/applicationName"
         android:textColor="@android:color/black"
         android:textSize="30sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:paddingStart="130dp" />
 
     <TextView
         android:id="@+id/version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/applicationName"
-        android:layout_marginStart="0dp"
         android:layout_marginLeft="0dp"
+        android:layout_marginStart="0dp"
         android:paddingLeft="5dp"
         android:text="@string/version"
         android:textColor="@android:color/black"
         android:textSize="14sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:paddingStart="5dp" />
 
     <TextView
-        android:id="@+id/autors"
+        android:id="@+id/authors"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/version"
         android:paddingLeft="5dp"
         android:text="@string/author"
         android:textColor="@android:color/black"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:paddingStart="5dp" />
 
     <TextView
         android:id="@+id/tvContact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/autors"
+        android:layout_below="@+id/authors"
+        android:layout_alignParentStart="true"
         android:paddingLeft="5dp"
         android:text="@string/contact"
         android:textColor="@android:color/black"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:paddingStart="5dp" />
 
     <TextView
         android:id="@+id/tvSupport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/tvContact"
         android:paddingLeft="5dp"
         android:text="@string/support"
         android:textColor="@android:color/black"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:paddingStart="5dp" />
 
     <TextView
         android:id="@+id/tvNumVersion"
@@ -78,29 +84,32 @@
         android:layout_toRightOf="@+id/version"
         android:paddingLeft="5dp"
         android:text="@string/numVersion"
-        android:textColor="@android:color/holo_red_dark" />
+        android:textColor="@android:color/holo_red_dark"
+        android:paddingStart="5dp" />
 
     <TextView
         android:id="@+id/tvNameGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/version"
-        android:layout_toEndOf="@+id/autors"
+        android:layout_toEndOf="@+id/authors"
         android:layout_toRightOf="@+id/version"
         android:paddingLeft="5dp"
         android:text="@string/Group"
-        android:textColor="@android:color/holo_red_dark" />
+        android:textColor="@android:color/holo_red_dark"
+        android:paddingStart="5dp" />
 
     <TextView
         android:id="@+id/tvContactZuluZulu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/autors"
+        android:layout_below="@+id/authors"
         android:layout_toEndOf="@+id/tvContact"
         android:layout_toRightOf="@+id/version"
         android:paddingLeft="5dp"
         android:text="@string/contactEmail"
-        android:textColor="@android:color/holo_red_dark" />
+        android:textColor="@android:color/holo_red_dark"
+        android:paddingStart="5dp" />
 
     <TextView
         android:id="@+id/tvSupportEPFLife"
@@ -111,5 +120,6 @@
         android:layout_toRightOf="@+id/version"
         android:paddingLeft="5dp"
         android:text="@string/supportEmail"
-        android:textColor="@android:color/holo_red_dark" />
+        android:textColor="@android:color/holo_red_dark"
+        android:paddingStart="5dp" />
 </RelativeLayout>

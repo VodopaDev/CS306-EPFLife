@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,7 +36,7 @@ public class AboutZuluzuluFragment extends Fragment {
      * @return A new instance of fragment AboutZuluzuluFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AboutZuluzuluFragment newInstance(String param1, String param2) {
+    public static AboutZuluzuluFragment newInstance() {
         return new AboutZuluzuluFragment();
     }
 

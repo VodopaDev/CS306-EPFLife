@@ -3,19 +3,20 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,9 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.View.AssociationAdapter;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Adapters.AssociationAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,9 +36,11 @@ import ch.epfl.sweng.zuluzulu.View.AssociationAdapter;
  * Use the {@link AssociationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AssociationFragment extends Fragment {
-    private static final String TAG = "ASSOCIATION_TAG";
+public class AssociationFragment extends Fragment{
+    private static final String TAG = "ASSOCIATIONS_TAG";
+    private static final String ARG_USER = "ARG_USER";
 
+    private User user;
     private OnFragmentInteractionListener mListener;
 
     private ArrayList<Association> assos_all;
@@ -50,10 +55,10 @@ public class AssociationFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static AssociationFragment newInstance(String param1, String param2) {
+    public static AssociationFragment newInstance(User user) {
         AssociationFragment fragment = new AssociationFragment();
         Bundle args = new Bundle();
+        args.putSerializable(ARG_USER, user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,55 +66,43 @@ public class AssociationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            user = (User) getArguments().getSerializable(ARG_USER);
+        }
+
         assos_all = new ArrayList<>();
-        assos_adapter = new AssociationAdapter(getContext(), assos_all);
+        assos_fav = new ArrayList<>();
+        assos_adapter = new AssociationAdapter(getContext(), assos_all, mListener);
 
-        FirebaseFirestore.getInstance().document("assos_info/all_assos")
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                List<DocumentReference> assos_all_ref = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
-                if(assos_all_ref != null) {
-                    for (int i = 0; i < assos_all_ref.size(); i++) {
-                        assos_all_ref.get(i).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                Association asso = new Association(documentSnapshot);
-                                assos_all.add(asso);
-                                assos_adapter.sort(Association.getComparator());
-                            }
-                        });
-                    }
-                }
-
-            }
-        });
+        fillAssociationLists();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_association, container, false);
+        View view = inflater.inflate(R.layout.fragment_association, container, false);
 
-        listview_assos = view.findViewById(R.id.listview_assos);
-        button_assos_all = view.findViewById(R.id.button_assos_all);
-        button_assos_fav = view.findViewById(R.id.button_assos_fav);
-
+        listview_assos = view.findViewById(R.id.association_fragment_listview);
         listview_assos.setAdapter(assos_adapter);
 
+        button_assos_fav = view.findViewById(R.id.association_fragment_fav_button);
+        button_assos_all = view.findViewById(R.id.association_fragment_all_button);
 
-
-        // TODO: add a check if the User is authenticated and load favorites
-        /*
-        if()
-            FirebaseFirestore.getInstance().document("assos_info/all_assos")
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        button_assos_fav.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                List<DocumentReference> assos_all_fav = (ArrayList<DocumentReference>)task.getResult().get("all_ids");
-                loadAssociationsList(assos_all_fav, vlayout_assos_fav);
+            public void onClick(View v) {
+                if(user.isConnected())
+                    updateListView(button_assos_fav, button_assos_all, assos_fav, listview_assos);
+                else
+                    Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
             }
         });
-        */
+
+        button_assos_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateListView(button_assos_all, button_assos_fav, assos_all, listview_assos);
+            }
+        });
 
         return view;
     }
@@ -125,10 +118,47 @@ public class AssociationFragment extends Fragment {
         }
     }
 
+    public ListView getListviewAssos(){return listview_assos;}
+
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void fillAssociationLists(){
+        FirebaseFirestore.getInstance().collection("assos_info")
+                .orderBy("name")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
+                        for (int i = 0; i < snap_list.size(); i++){
+                            Association asso = new Association(snap_list.get(i));
+                            assos_all.add(asso);
+
+                            if(user.isConnected() && ((AuthenticatedUser)user).isFavAssociation(asso))
+                                assos_fav.add(asso);
+                        }
+                        assos_adapter.notifyDataSetChanged();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
+                        Log.e("ASSO_LIST","Error fetching association date\n" + e.getMessage());
+                    }
+                });
+    }
+
+    private void updateListView(Button new_selected, Button new_unselected, ArrayList<Association> data, ListView list){
+        new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+        new_unselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
+        assos_adapter = new AssociationAdapter(getContext(), data, mListener);
+        list.setAdapter(assos_adapter);
+        assos_adapter.notifyDataSetChanged();
     }
 
 }

@@ -1,8 +1,9 @@
-package ch.epfl.sweng.zuluzulu.View;
+package ch.epfl.sweng.zuluzulu.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
+
 import java.util.List;
+
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
+import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 
@@ -23,16 +26,19 @@ import ch.epfl.sweng.zuluzulu.Structure.Association;
 public class AssociationAdapter extends ArrayAdapter<Association> {
     private static final int layout_resource_id = R.layout.card_association;
 
-    private Context context;
-    private List<Association> data;
+    private final Context context;
+    private final List<Association> data;
+
+    private final OnFragmentInteractionListener mListener;
 
     /**
      * Basic constructor of an AssociationAdapter
      * @param context Context of the Fragment
      * @param data List of Associations to view
      */
-    public AssociationAdapter(Context context, List<Association> data){
+    public AssociationAdapter(Context context, List<Association> data, OnFragmentInteractionListener mListener){
         super(context, layout_resource_id, data);
+        this.mListener = mListener;
         this.context = context;
         this.data = data;
     }
@@ -47,38 +53,34 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        View row = convertView;
-        final AssociationHolder holder = row == null ? new AssociationHolder(): (AssociationHolder)row.getTag();
+        View asso_view = convertView;
+        final AssociationHolder holder = asso_view == null ? new AssociationHolder(): (AssociationHolder)asso_view.getTag();
 
-        if(row == null){
+        if(asso_view == null){
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-            row = inflater.inflate(layout_resource_id, parent, false);
+            asso_view = inflater.inflate(layout_resource_id, parent, false);
 
-            holder.name = row.findViewById(R.id.card_asso_name);
-            holder.short_desc = row.findViewById(R.id.card_asso_short_desc);
-            holder.icon = row.findViewById(R.id.card_asso_image);
+            holder.name = asso_view.findViewById(R.id.card_asso_name);
+            holder.short_desc = asso_view.findViewById(R.id.card_asso_short_desc);
+            holder.icon = asso_view.findViewById(R.id.card_asso_image);
 
-            row.setTag(holder);
+            asso_view.setTag(holder);
         }
 
-        Association asso = data.get(position);
+        final Association asso = data.get(position);
         holder.name.setText(asso.getName());
         holder.short_desc.setText(asso.getShortDesc());
+        initIcon(asso.getIconUri(), holder.icon);
 
-        if(asso.getIcon() == null) {
-            FirebaseStorage.getInstance().getReference("assos/asso" + asso.getId() + "_icon.png")
-                    .getDownloadUrl()
-                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            initIcon(uri, holder.icon);
-                        }
-                    });
-        } else {
-            initIcon(asso.getIcon(), holder.icon);
-        }
+        asso_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("FRAG_CHANGE","Switching to " + asso.getName() + "detailed view");
+                mListener.onFragmentInteraction(AssociationDetailFragment.TAG, asso);
+            }
+        });
 
-        return row;
+        return asso_view;
     }
 
     /**
@@ -101,6 +103,8 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
         TextView name;
         TextView short_desc;
     }
+
+
 
 
 }

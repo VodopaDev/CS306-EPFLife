@@ -18,15 +18,19 @@ import android.view.MenuItem;
 import com.google.firebase.FirebaseApp;
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
 import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
@@ -35,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private ArrayList<Fragment> previous_fragments;
+    private Fragment current_fragment;
 
     private User user;
     private Map<String, String> tokens;
@@ -47,10 +53,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FirebaseApp.initializeApp(getApplicationContext());
 
         // Needed to use Firebase storage and Firestore
         FirebaseApp.initializeApp(getApplicationContext());
+
+        previous_fragments = new ArrayList<>();
+        previous_fragments.add(null);
 
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -61,9 +69,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         navigationView = initNavigationView();
         initDrawerContent();
 
-        // The first seen fragment is the main fragment
 
         Intent i = getIntent();
+
         if(Intent.ACTION_VIEW.equals(i.getAction())){
             //get the redirectURI with the code from the intent
             redirectURIwithCode = i.getDataString();
@@ -136,6 +144,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
+    /**
+     * Return true if the user is connected
+     *
+     * @return boolean
+     */
     public boolean isAuthenticated() {
         return user.isConnected();
     }
@@ -145,29 +158,33 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      *
      * @param menuItem The item that corresponds to a fragment on the menu
      */
+
+    private boolean isLogin = false;
     private void selectItem(MenuItem menuItem) {
         Fragment fragment = null;
-        Class fragmentClass;
-        boolean isLogin = false;
+
+
         switch (menuItem.getItemId()) {
             case R.id.nav_main:
-                fragmentClass = MainFragment.class;
+                fragment = MainFragment.newInstance();
                 break;
             case R.id.nav_login:
-                fragmentClass = LoginFragment.class;
                 //to set arguments for the login
                 //////////////////////////
                 isLogin = true;
                 //////////////////////////
+
+                fragment = LoginFragment.newInstance();
+
                 break;
             case R.id.nav_about:
-                fragmentClass = AboutZuluzuluFragment.class;
+                fragment = AboutZuluzuluFragment.newInstance();
                 break;
             case R.id.nav_associations:
-                fragmentClass = AssociationFragment.class;
+                fragment = AssociationFragment.newInstance(user);
                 break;
             case R.id.nav_settings:
-                fragmentClass = SettingsFragment.class;
+                fragment = SettingsFragment.newInstance();
                 break;
             case R.id.nav_logout:
                 this.user = new User.UserBuilder().buildGuestUser();
@@ -181,19 +198,23 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 tokens.clear();
                 redirectURIwithCode = null;
                 updateMenuItems();
-                fragmentClass = MainFragment.class;
                 menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
                 break;
+            case R.id.nav_chat:
+                fragment = ChannelFragment.newInstance(user);
+                break;
             default:
-                fragmentClass = MainFragment.class;
+                fragment = MainFragment.newInstance();
         }
 
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (openFragment(fragment)) {
+            // Opening the fragment worked
+            menuItem.setChecked(true);
+            setTitle(menuItem.getTitle());
         }
+    }
 
+    public boolean openFragment(Fragment fragment) {
         if (fragment != null) {
             //if is a login fragment then set argument with the URI
             ///////////////////////////////////////////////////////////
@@ -209,16 +230,32 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
-                menuItem.setChecked(true);
-                setTitle(menuItem.getTitle());
+                previous_fragments.add(0,current_fragment);
+                current_fragment = fragment;
+                return true;
             }
         }
+        return false;
+    }
 
+    /**
+     * Load the previous fragment (if there is one) into the fragment container
+     */
+    public void openPreviousFragment() {
+        if (previous_fragments.get(0) != null) {
+            Fragment fragment = previous_fragments.remove(0);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            if (fragmentManager != null) {
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.fragmentContent, fragment).commit();
+                current_fragment = fragment;
+            }
+        }
     }
 
     @Override
     public void onFragmentInteraction(String tag, Object data) {
-        switch(tag) {
+        switch (tag) {
             case LoginFragment.TAG:
                 Map<Integer, Object> received = (HashMap<Integer,Object>) data;
                 this.user = (User) received.get(0);
@@ -227,13 +264,39 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 updateMenuItems();
                 selectItem(navigationView.getMenu().findItem(R.id.nav_main));
                 break;
+            case ChannelFragment.TAG:
+                int channelID = (Integer) data;
+                openFragment(ChatFragment.newInstance(user, channelID));
+                break;
+            case AssociationDetailFragment.TAG:
+                Association association = (Association) data;
+                openFragment(AssociationDetailFragment.newInstance(user, association));
+                break;
             default:
                 // Should never happen
                 throw new AssertionError("Invalid message");
         }
     }
 
-    public User getUser() {
-        return user;
+    /**
+     * When back is pressed, load the previous fragment used
+     */
+    @Override
+    public void onBackPressed() {
+        openPreviousFragment();
     }
+
+    /**
+     * Return the current fragment
+     * @return current fragment
+     */
+    public Fragment getCurrentFragment() {
+        return current_fragment;
+    }
+
+    /**
+     * Return the current user
+     * @return current user
+     */
+    public User getUser(){return user;}
 }
