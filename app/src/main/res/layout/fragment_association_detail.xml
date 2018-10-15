@@ -124,6 +124,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/association_detail_name"
         app:layout_constraintStart_toEndOf="@+id/association_detail_name"
         app:srcCompat="@drawable/fav_off"
-        android:contentDescription="TODO" />
+        android:contentDescription="@string/card_association_image_description" />
 
 </android.support.constraint.ConstraintLayout>

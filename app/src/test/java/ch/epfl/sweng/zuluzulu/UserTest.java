@@ -22,9 +22,9 @@ import static org.mockito.Mockito.when;
 @RunWith(JUnit4.class)
 public class UserTest {
 
-    private Association asso = mock(Association.class);
-    private Channel channel = mock(Channel.class);
-    private Event event = mock(Event.class);
+    private final Association asso = mock(Association.class);
+    private final Channel channel = mock(Channel.class);
+    private final Event event = mock(Event.class);
 
     @Before
     public void mockStructures(){

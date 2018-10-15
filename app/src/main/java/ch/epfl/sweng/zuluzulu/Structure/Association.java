@@ -15,8 +15,6 @@ import java.util.List;
  * Has diverse getters and some functions to create views
  */
 public class Association implements Serializable {
-    private static final String IMAGE_PATH = "assos/asso";
-    private static final String ICON_EXT = "_icon.png";
 
     private int id;
     private String name;
@@ -24,12 +22,6 @@ public class Association implements Serializable {
     private String long_desc;
 
     private Uri icon_uri;
-    private Location pos;
-    private List<Integer> admins;
-
-    private int main_chat_id;
-    private List<Integer> chats;
-    private List<Integer> events;
 
     /**
      * Create an association using a DocumentSnapshot

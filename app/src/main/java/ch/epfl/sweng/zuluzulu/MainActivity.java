@@ -195,8 +195,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
 
     /**
-     * Load the previous fragment into the fragment container
-     * @return true if it was able to laod a fragment, false otherwise
+     * Load the previous fragment (if there is one) into the fragment container
      */
     public void openPreviousFragment() {
         if (previous_fragments.get(0) != null) {
