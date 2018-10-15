@@ -2,6 +2,9 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.location.Location;
 import android.media.Image;
+import android.net.Uri;
+
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Date;
 import java.util.List;
@@ -10,8 +13,10 @@ public class Event {
 
     private int id;
     private String name;
-    private String description;
-    private Image icon;
+    private String short_desc;
+    private String long_desc;
+
+    private Uri icon_uri;
 
     private int chat_id;
     private int asso_id;
@@ -22,7 +27,10 @@ public class Event {
     private Date end_date;
 
     // TODO: Get data from cloud service using the id
-    public Event(int id) {
+    public Event(DocumentSnapshot snap) {
+        if(!snapshotIsValid(snap))
+            throw new NullPointerException();
+
         this.id = id;
     }
 
@@ -44,8 +52,10 @@ public class Event {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getShortDesc(){ return short_desc; }
+
+    public String getLongDesc(){
+        return long_desc;
     }
 
     public void setDescription(String description) {
@@ -106,6 +116,17 @@ public class Event {
 
     public void setEnd_date(Date end_date) {
         this.end_date = end_date;
+    }
+
+    // TODO
+    private boolean snapshotIsValid(DocumentSnapshot snap){
+        return !(snap == null
+                || snap.get("id") == null
+                || snap.getString("short_desc") == null
+                || snap.getString("long_desc") == null
+                || snap.getString("name") == null
+                || snap.getString("icon_uri") == null
+        );
     }
 
 }

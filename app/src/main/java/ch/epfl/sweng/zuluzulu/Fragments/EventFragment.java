@@ -28,6 +28,24 @@ import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
+
+
+
+
+
+
+
+/* TODO
+1) ic_event.xml check if the path is correct
+2)
+ */
+
+
+
+
+
+
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -142,12 +160,11 @@ public class EventFragment extends Fragment {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
                         for (int i = 0; i < snap_list.size(); i++){
-//                            Event event = new Event(snap_list.get(i)); TODO
-                            Event event = new Event(0);
+                            Event event = new Event(snap_list.get(i));
                             event_all.add(event);
 
-//                            if(user.isConnected() && ((AuthenticatedUser)user).isFavEvent(event)) TODO
-//                                event_fav.add(event);
+                            if(user.isConnected() && ((AuthenticatedUser)user).isFavEvent(event))
+                                event_fav.add(event);
                         }
                         event_adapter.notifyDataSetChanged();
                     }
