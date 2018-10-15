@@ -52,9 +52,7 @@ public final class AuthServer {
         builder.setFirst_names(profile.firstNames);
         builder.setLast_names(profile.lastNames);
 
-        User user = builder.buildAuthenticatedUser();
-
-        return user;
+        return builder.buildAuthenticatedUser();
     }
 
 
