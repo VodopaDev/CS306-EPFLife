@@ -10,6 +10,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -44,7 +45,7 @@ public class Event implements Serializable {
         if(!snapshotIsValid(snap))
             throw new NullPointerException();
 
-        id = snap.getLong("id").intValue();
+        id = ((Long) snap.get("id")).intValue();
         name = snap.getString("name");
         short_desc = snap.getString("short_desc");
         long_desc = snap.getString("long_desc");
@@ -153,7 +154,18 @@ public class Event implements Serializable {
                 || snap.getString("short_desc") == null
                 || snap.getString("long_desc") == null
                 || snap.getString("name") == null
+                || snap.getString("icon_uri") == null
+                || snap.getDate("start_date") == null
         );
+    }
+
+    public static Comparator<Event> getComparator(){
+        return new Comparator<Event>() {
+            @Override
+            public int compare(Event o1, Event o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        };
     }
 
 }
