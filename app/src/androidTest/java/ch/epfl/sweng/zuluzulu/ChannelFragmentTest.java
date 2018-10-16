@@ -28,13 +28,7 @@ public class ChannelFragmentTest {
 
     @Before
     public void init() {
-        User.UserBuilder builder = new User.UserBuilder();
-        builder.setSciper("123456");
-        builder.setGaspar("gaspar");
-        builder.setEmail("test@epfl.ch");
-        builder.setFirst_names("james");
-        builder.setLast_names("bond");
-        user = builder.buildAuthenticatedUser();
+        user = Utility.createTestUser();
 
         fragment = ChannelFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
