@@ -9,13 +9,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
-public class Event {
+public class Event implements Serializable {
 
     private int id;
     private String name;
