@@ -9,6 +9,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.concurrent.TimeUnit;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
@@ -25,9 +27,11 @@ public class LogoutTest {
     }
 
     @Test
-    public void Logout() {
+    public void Logout() throws InterruptedException {
         Utility.openMenu();
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
+
+        TimeUnit.SECONDS.sleep(5);
 
         openLoginFragment();
     }
