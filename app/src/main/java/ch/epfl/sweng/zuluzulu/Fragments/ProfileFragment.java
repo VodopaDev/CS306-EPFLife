@@ -74,6 +74,7 @@ public class ProfileFragment extends Fragment implements OnFragmentInteractionLi
             builder.append(user.getFirstNames().substring(1));
         }
         if(user.getLastNames() != null && user.getLastNames().length() > 1) {
+            builder.append(" ");
             builder.append(user.getLastNames().substring(0, 1).toUpperCase());
             builder.append(user.getLastNames().substring(1));
         }

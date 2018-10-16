@@ -50,7 +50,7 @@ public class ChatFragmentTest {
 
 
     @Test
-    public void testUserCanSendAMessageAndReadIt() throws InterruptedException {
+    public void testUserCanSendAMessageAndReadIt() {
         /* Todo
         I don't understand how to test this without the dependence of firestore
         I don't want to write a message in the database during the test
