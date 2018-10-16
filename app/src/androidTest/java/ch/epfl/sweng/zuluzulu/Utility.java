@@ -44,6 +44,14 @@ public class Utility {
         openMenu();
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_associations));
     }
+
+    /**
+     * Open the EventFragment
+     */
+    public static void goToEvent(){
+        openMenu();
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_events));
+    }
     /**
      * Open the menu from the mainActivity
      */

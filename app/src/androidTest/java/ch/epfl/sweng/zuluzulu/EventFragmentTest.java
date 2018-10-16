@@ -19,66 +19,66 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class EventFragmentTest {
 
-    private static final int NB_ALL_ASSOS = 7;
-    private static final int NB_FAV_ASSOS = 4;
+    private static final int NB_ALL_EVENTS = 7;
+    private static final int NB_FAV_EVENTS = 4;
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    private void guestGoesToAssociation() throws InterruptedException {
-        Utility.goToAssociation();
+    private void guestGoesToEvent() throws InterruptedException {
+        Utility.goToEvent();
         TimeUnit.SECONDS.sleep(5);
     }
 
-    private void authenticatedGoesToAssociation() throws InterruptedException {
+    private void authenticatedGoesToEvent() throws InterruptedException {
         Utility.fullLogin();
-        Utility.goToAssociation();
+        Utility.goToEvent();
         TimeUnit.SECONDS.sleep(5);
     }
 
     @Test
     public void thereAreTwoButtons() throws InterruptedException {
-        guestGoesToAssociation();
-        onView(withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
+        guestGoesToEvent();
+        onView(withId(R.id.event_fragment_all_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.event_fragment_all_button)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void guestMainPageHasSomeAssociations() throws InterruptedException {
-        guestGoesToAssociation();
-        onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
+    public void guestMainPageHasSomeEvent() throws InterruptedException {
+        guestGoesToEvent();
+        onView(withId(R.id.event_fragment_all_button)).perform(ViewActions.click());
         /*
         TimeUnit.SECONDS.sleep(1);
-        assertThat(list_assos, hasChildCount(NB_ALL_ASSOS));
+        assertThat(list_events, hasChildCount(NB_ALL_EVENTS));
         */
     }
 
     @Test
     public void guestClickOnFavoritesStaysOnAll() throws InterruptedException {
-        guestGoesToAssociation();
-        onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
+        guestGoesToEvent();
+        onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
         /*
         TimeUnit.SECONDS.sleep(1);
-        assertThat(list_assos, hasChildCount(NB_ALL_ASSOS));
+        assertThat(list_events, hasChildCount(NB_ALL_EVENTS));
         */
     }
 
     @Test
-    public void authenticatedClickOnFavoritesDisplayFewerAssociations() throws InterruptedException {
-        authenticatedGoesToAssociation();
-        onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
+    public void authenticatedClickOnFavoritesDisplayFewerEvents() throws InterruptedException {
+        authenticatedGoesToEvent();
+        onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
         /*
         TimeUnit.SECONDS.sleep(1);
-        assertThat(list_assos, hasChildCount(NB_FAV_ASSOS));
+        assertThat(list_events, hasChildCount(NB_FAV_EVENTS));
         */
     }
 
     @Test
-    public void AuthenticatedClickingAnAssociationGoesToDetail() throws InterruptedException {
-        authenticatedGoesToAssociation();
-        onView(withText("Agepoly")).perform(ViewActions.click());
+    public void AuthenticatedClickingAnEventGoesToDetail() throws InterruptedException {
+        authenticatedGoesToEvent();
+        onView(withText("forumEpfl")).perform(ViewActions.click());
         TimeUnit.SECONDS.sleep(1);
-        onView(withId(R.id.association_detail_name)).check(matches(isDisplayed()));
+        onView(withId(R.id.event_detail_name)).check(matches(isDisplayed()));
     }
 }
