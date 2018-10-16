@@ -52,6 +52,8 @@ public class Utility {
      * @waring NEED TO BE CALLED TO CREATE THE ACTIVITY
      * USE IN RULE : new ActivityTestRule<>(MainActivity.class, false, false);
      *
+     * It's allow us to not start the Activity before !
+     *
      * !!! TO READ !!!
      *
      * @param mActivityRule Activity rule
