@@ -44,9 +44,4 @@ public class ChannelFragmentTest {
         Utility.checkFragmentIsOpen(R.id.chat_fragment);
     }
 
-    @Test
-    public void testUserCanClickOnTheTestChannel() {
-        onView(withText("Test")).perform(click());
-        Utility.checkFragmentIsOpen(R.id.chat_fragment);
-    }
 }
