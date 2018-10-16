@@ -49,7 +49,7 @@ public final class AuthenticatedUser extends User {
     }
 
     public boolean addFavEvent(Event event){
-        return assos_id.add(event.getId());
+        return events_id.add(event.getId());
     }
 
     public boolean removeFavAssociation(Association asso){
@@ -57,7 +57,7 @@ public final class AuthenticatedUser extends User {
     }
 
     public boolean removeFavEvent(Event event){
-        return assos_id.remove(event.getId());
+        return events_id.remove(event.getId());
     }
 
     public boolean isFollowedEvent(Event event){
