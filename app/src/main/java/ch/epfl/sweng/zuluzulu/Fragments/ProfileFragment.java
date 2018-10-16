@@ -66,8 +66,20 @@ public class ProfileFragment extends Fragment implements OnFragmentInteractionLi
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        TextView textView = view.findViewById(R.id.profile_name);
-        textView.setText(user.getFirstNames() + user.getLastNames());
+        TextView user_view = view.findViewById(R.id.profile_name_text);
+        user_view.setText(new StringBuilder().append(user.getFirstNames()).append(user.getLastNames()).toString());
+
+
+        TextView gaspar = view.findViewById(R.id.profile_gaspar_text);
+        gaspar.setText(user.getGaspar());
+
+
+        TextView email = view.findViewById(R.id.profile_email_edit);
+        email.setText(user.getEmail());
+
+
+        TextView sciper = view.findViewById(R.id.profile_sciper_edit);
+        sciper.setText(user.getSciper());
 
         return view;
     }
