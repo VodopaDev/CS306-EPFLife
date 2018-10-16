@@ -12,34 +12,28 @@
         android:id="@+id/imageView6"
         android:layout_width="44dp"
         android:layout_height="41dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/ic_about"
-        tools:layout_editor_absoluteX="308dp"
-        tools:layout_editor_absoluteY="38dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.058" />
 
     <TextView
         android:id="@+id/TV_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="8dp"
         android:text="@string/app_name"
         android:textSize="30sp"
-        tools:layout_editor_absoluteX="141dp"
-        tools:layout_editor_absoluteY="38dp" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="44dp"
-        android:layout_height="41dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="84dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="84dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/ic_about"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintEnd_toStartOf="@+id/imageView8"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.058" />
 
@@ -47,127 +41,228 @@
         android:id="@+id/TV_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginTop="8dp"
         android:text="@string/version"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="44dp"
-        tools:layout_editor_absoluteY="111dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/TV_vesion_name"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.195" />
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="34dp"
         android:layout_height="25dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="108dp"
         android:src="@mipmap/ic_launcher_round"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="111dp" />
+        app:layout_constraintEnd_toStartOf="@+id/TV_version"
+        app:layout_constraintHorizontal_bias="0.625"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/TV_devel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginRight="36dp"
+        android:layout_marginTop="8dp"
         android:text="@string/author"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="45dp"
-        tools:layout_editor_absoluteY="168dp" />
+        app:layout_constraintBottom_toTopOf="@+id/TV_contact"
+        app:layout_constraintEnd_toStartOf="@+id/TV_groupName"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.865" />
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="31dp"
         android:layout_height="25dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="36dp"
         android:src="@android:drawable/ic_menu_myplaces"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="168dp" />
+        app:layout_constraintBottom_toTopOf="@+id/imageView4"
+        app:layout_constraintEnd_toStartOf="@+id/TV_devel"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/TV_groupName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="128dp"
+        android:layout_marginRight="128dp"
+        android:layout_marginTop="8dp"
         android:text="@string/Group"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="188dp"
-        tools:layout_editor_absoluteY="167dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.307" />
 
     <TextView
         android:id="@+id/TV_vesion_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="152dp"
+        android:layout_marginRight="152dp"
+        android:layout_marginTop="8dp"
         android:text="@string/numVersion"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="188dp"
-        tools:layout_editor_absoluteY="111dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.195" />
 
     <TextView
         android:id="@+id/TV_contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="76dp"
+        android:layout_marginRight="76dp"
+        android:layout_marginTop="8dp"
         android:text="@string/contact"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="46dp"
-        tools:layout_editor_absoluteY="227dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/TV_name_email"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.406" />
 
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:src="@android:drawable/sym_action_email"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="227dp" />
+        app:layout_constraintBottom_toTopOf="@+id/imageView5"
+        app:layout_constraintEnd_toStartOf="@+id/TV_contact"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/TV_support"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="76dp"
+        android:layout_marginRight="76dp"
+        android:layout_marginTop="8dp"
         android:text="@string/support"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="46dp"
-        tools:layout_editor_absoluteY="288dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textView10"
+        app:layout_constraintTop_toBottomOf="@+id/TV_contact"
+        app:layout_constraintVertical_bias="0.093" />
 
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="260dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:src="@drawable/ic_login_logout"
-        tools:layout_editor_absoluteX="14dp"
-        tools:layout_editor_absoluteY="288dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/TV_support"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageView7"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/ic_about"
-        tools:layout_editor_absoluteX="93dp"
-        tools:layout_editor_absoluteY="38dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/TV_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.058" />
 
     <ImageView
         android:id="@+id/imageView8"
-        android:layout_width="44dp"
+        android:layout_width="41dp"
         android:layout_height="41dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/ic_about"
-        tools:layout_editor_absoluteX="256dp"
-        tools:layout_editor_absoluteY="38dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView6"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.058" />
 
     <ImageView
         android:id="@+id/imageView9"
         android:layout_width="38dp"
         android:layout_height="39dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/ic_about"
-        tools:layout_editor_absoluteX="46dp"
-        tools:layout_editor_absoluteY="38dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView7"
+        app:layout_constraintHorizontal_bias="0.923"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.062" />
 
     <TextView
         android:id="@+id/TV_name_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="8dp"
         android:text="@string/contactEmail"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="188dp"
-        tools:layout_editor_absoluteY="227dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.406" />
 
     <TextView
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginRight="64dp"
+        android:layout_marginTop="8dp"
         android:text="@string/supportEmail"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="188dp"
-        tools:layout_editor_absoluteY="288dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TV_name_email"
+        app:layout_constraintVertical_bias="0.093" />
 </android.support.constraint.ConstraintLayout>
