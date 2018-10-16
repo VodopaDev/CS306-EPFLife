@@ -174,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 this.user = new User.UserBuilder().buildGuestUser();
                 updateMenuItems();
                 menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
+                fragment = MainFragment.newInstance();
                 break;
             case R.id.nav_chat:
                 fragment = ChannelFragment.newInstance(user);
