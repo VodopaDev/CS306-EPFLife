@@ -31,7 +31,7 @@ public class ProfileFragmentTest {
 
     @Before
     public void setUp() throws Exception {
-        user = Utility.createTestUser();
+        user = Utility.createTestUser(mActivityRule);
 
         fragment = ProfileFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);

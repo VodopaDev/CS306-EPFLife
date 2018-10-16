@@ -1,7 +1,9 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.content.Intent;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.NavigationViewActions;
+import android.support.test.rule.ActivityTestRule;
 import android.view.Gravity;
 
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
@@ -13,6 +15,7 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
+import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
@@ -25,7 +28,7 @@ public class Utility {
      * Create a user for the tests
      * @return Return a user
      */
-    public static User createTestUser(){
+    public static User createTestUser(ActivityTestRule<MainActivity> mActivityRule){
         User.UserBuilder builder = new User.UserBuilder();
         builder.setSciper("123456");
         builder.setGaspar("gaspar");
@@ -36,6 +39,12 @@ public class Utility {
         User user = builder.buildAuthenticatedUser();
 
         assert(user != null);
+
+        // Put the user into the main
+        Intent i = new Intent();
+        i.putExtra("user", user);
+        mActivityRule.launchActivity(i);
+
 
         return user;
     }
@@ -73,6 +82,15 @@ public class Utility {
         onView(withId(R.id.drawer_layout))
                 .check(matches(isClosed(Gravity.LEFT)))
                 .perform(DrawerActions.open());
+    }
+
+    /**
+     * Open the menu from the mainActivity
+     */
+    public static void closeMenu() {
+        onView(withId(R.id.drawer_layout))
+                .check(matches(isOpen(Gravity.LEFT)))
+                .perform(DrawerActions.close());
     }
 
     /**

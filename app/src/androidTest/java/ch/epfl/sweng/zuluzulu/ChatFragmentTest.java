@@ -42,7 +42,7 @@ public class ChatFragmentTest {
 
     @Before
     public void init() {
-        user = Utility.createTestUser();
+        user = Utility.createTestUser(mActivityRule);
 
         fragment = ChatFragment.newInstance(user, 1);
         mActivityRule.getActivity().openFragment(fragment);
