@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -22,7 +21,7 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment implements OnFragmentInteractionListener {
-    private static final String TAG = "PROFIL_TAG";
+    private static final String PROFILE_TAG = "PROFIL_TAG";
 
     private User user;
 
@@ -40,19 +39,19 @@ public class ProfileFragment extends Fragment implements OnFragmentInteractionLi
      * @return A new instance of fragment ProfileFragment.
      */
     public static ProfileFragment newInstance(User user) {
-        ProfileFragment fragment = new ProfileFragment();
+        ProfileFragment profileFragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putSerializable(TAG, user);
-        fragment.setArguments(args);
+        args.putSerializable(PROFILE_TAG, user);
+        profileFragment.setArguments(args);
 
-        return fragment;
+        return profileFragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.user = (User) getArguments().getSerializable(TAG);
+            this.user = (User) getArguments().getSerializable(PROFILE_TAG);
         } else {
             throw new AssertionError("No argument");
         }
