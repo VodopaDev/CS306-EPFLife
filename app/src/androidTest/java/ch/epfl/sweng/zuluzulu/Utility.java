@@ -28,7 +28,7 @@ public class Utility {
      * Create a user for the tests
      * @return Return a user
      */
-    public static User createTestUser(ActivityTestRule<MainActivity> mActivityRule){
+    public static User createTestUser(){
         User.UserBuilder builder = new User.UserBuilder();
         builder.setSciper("123456");
         builder.setGaspar("gaspar");
@@ -40,13 +40,28 @@ public class Utility {
 
         assert(user != null);
 
+
+        return user;
+    }
+
+    /**
+     * Add user to main
+     *
+     * !!! TO READ !!!
+     *
+     * @waring NEED TO BE CALLED TO CREATE THE ACTIVITY
+     * USE IN RULE : new ActivityTestRule<>(MainActivity.class, false, false);
+     *
+     * !!! TO READ !!!
+     *
+     * @param mActivityRule Activity rule
+     * @param user User
+     */
+    public static void addUserToMainIntent(ActivityTestRule<MainActivity> mActivityRule, User user){
         // Put the user into the main
         Intent i = new Intent();
         i.putExtra("user", user);
         mActivityRule.launchActivity(i);
-
-
-        return user;
     }
 
     /**

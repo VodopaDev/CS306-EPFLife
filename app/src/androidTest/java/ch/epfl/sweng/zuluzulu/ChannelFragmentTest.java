@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu;
 
-import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
@@ -24,13 +23,15 @@ public class ChannelFragmentTest {
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+            new ActivityTestRule<>(MainActivity.class, false, false);
     private User user;
     private Fragment fragment;
 
     @Before
     public void init() throws InterruptedException {
-        user = Utility.createTestUser(mActivityRule);
+        user = Utility.createTestUser();
+
+        Utility.addUserToMainIntent(mActivityRule, user);
 
         fragment = ChannelFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
@@ -44,4 +45,9 @@ public class ChannelFragmentTest {
         Utility.checkFragmentIsOpen(R.id.chat_fragment);
     }
 
+    @Test
+    public void testUserCanClickOnTheTestChannel() {
+        onView(withText("Test")).perform(click());
+        Utility.checkFragmentIsOpen(R.id.chat_fragment);
+    }
 }
