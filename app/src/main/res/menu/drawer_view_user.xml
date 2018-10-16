@@ -10,9 +10,9 @@
             android:icon="@drawable/ic_assoc"
             android:title="@string/drawer_associations" />
         <item
-            android:id="@+id/nav_events"
+            android:id="@+id/nav_friends"
             android:icon="@drawable/ic_friends"
-            android:title="@string/drawer_events" />
+            android:title="@string/drawer_friends" />
         <item
             android:id="@+id/nav_chat"
             android:icon="@drawable/ic_chat"
