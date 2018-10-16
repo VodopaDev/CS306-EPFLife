@@ -153,7 +153,7 @@ public class EventFragment extends Fragment {
 
     private void fillEventLists(){
         FirebaseFirestore.getInstance().collection("event_info")
-                .orderBy("name")
+                .orderBy("start_date")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override

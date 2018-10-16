@@ -73,7 +73,7 @@ public class EventAdapter extends ArrayAdapter<Event> {
 
         final Event event = data.get(position);
         holder.name.setText(event.getName());
-        holder.short_desc.setText(event.getDescription());
+        holder.short_desc.setText(event.getShortDesc());
 
         event_view.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -58,17 +58,17 @@ public class Event {
         return long_desc;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Image getIcon() {
-        return icon;
-    }
-
-    public void setIcon(Image icon) {
-        this.icon = icon;
-    }
+//    public void setDescription(String description) {
+//        this.description = description;
+//    }
+//
+//    public Image getIcon() {
+//        return icon;
+//    }
+//
+//    public void setIcon(Image icon) {
+//        this.icon = icon;
+//    }
 
     public int getChat_id() {
         return chat_id;
