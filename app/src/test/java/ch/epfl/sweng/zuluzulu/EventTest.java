@@ -23,7 +23,7 @@ public class EventTest {
     private static final String SHORT_DESC = "Beuverie à Zelig";
     private static final String LONG_DESC = "This is only random bla bla bla";
     private static final String ICON_URI_STRING = "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso4_icon.png?alt=media&token=e2c5206d-32a6-43e1-a9a8-da941f553e64";
-    private static final Date START_DATE = new Date(2042, 12, 13);
+    private static final Date START_DATE = new Date(System.currentTimeMillis());
 
     private Event event0;
     private Event event1;
