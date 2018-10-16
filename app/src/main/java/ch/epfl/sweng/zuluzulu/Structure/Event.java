@@ -3,11 +3,17 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import android.location.Location;
 import android.media.Image;
 import android.net.Uri;
+import android.util.Log;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
 
 public class Event {
 
@@ -16,6 +22,8 @@ public class Event {
     private String short_desc;
     private String long_desc;
 
+    private static final String IMAGE_PATH = "events/event";
+    private static final String ICON_EXT = "_icon.png";
     private Uri icon_uri;
 
     private int chat_id;
@@ -26,12 +34,21 @@ public class Event {
     private Date start_date;
     private Date end_date;
 
-    // TODO: Get data from cloud service using the id
+    /**
+     * Create an event using a DocumentSnapshot
+     * @param snap the document snapshot
+     * @throws IllegalArgumentException if the snapshot isn't an Event's snapshot
+     */
     public Event(DocumentSnapshot snap) {
         if(!snapshotIsValid(snap))
             throw new NullPointerException();
 
-        this.id = id;
+        id = snap.getLong("id").intValue();
+        name = snap.getString("name");
+        short_desc = snap.getString("short_desc");
+        long_desc = snap.getString("long_desc");
+        icon_uri = Uri.parse(snap.getString("icon_uri"));
+        start_date = snap.getDate("start_date");
     }
 
     // TODO: Add a method to add/remove one User to admins (instead of getting/setting the admins list)
@@ -52,23 +69,29 @@ public class Event {
         this.name = name;
     }
 
-    public String getShortDesc(){ return short_desc; }
+    public String getShort_desc() {
+        return short_desc;
+    }
 
-    public String getLongDesc(){
+    public void setShort_desc(String description) {
+        this.short_desc = description;
+    }
+
+    public String getLong_desc() {
         return long_desc;
     }
 
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
-//
-//    public Image getIcon() {
-//        return icon;
-//    }
-//
-//    public void setIcon(Image icon) {
-//        this.icon = icon;
-//    }
+    public void setLong_desc(String description) {
+        this.long_desc = description;
+    }
+
+    public Uri getIconUri() {
+        return icon_uri;
+    }
+
+    public void setIconUri(Uri icon) {
+        this.icon_uri = icon;
+    }
 
     public int getChat_id() {
         return chat_id;
@@ -118,14 +141,17 @@ public class Event {
         this.end_date = end_date;
     }
 
-    // TODO
+    /**
+     * Check if a DocumentSnapshot correspond to an Event's one
+     * @param snap the DocumentSnapshot
+     * @return true if it is a valid snapshot, false otherwise
+     */
     private boolean snapshotIsValid(DocumentSnapshot snap){
         return !(snap == null
                 || snap.get("id") == null
                 || snap.getString("short_desc") == null
                 || snap.getString("long_desc") == null
                 || snap.getString("name") == null
-                || snap.getString("icon_uri") == null
         );
     }
 

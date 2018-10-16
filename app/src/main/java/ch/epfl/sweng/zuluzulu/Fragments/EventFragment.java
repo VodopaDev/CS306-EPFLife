@@ -2,10 +2,12 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.LogPrinter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +16,12 @@ import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,18 +156,18 @@ public class EventFragment extends Fragment {
     }
 
     private void fillEventLists(){
-        FirebaseFirestore.getInstance().collection("event_info")
+        Task<QuerySnapshot> querySnapshotTask = FirebaseFirestore.getInstance().collection("events_info")
                 .orderBy("start_date")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        for (int i = 0; i < snap_list.size(); i++){
+                        for (int i = 0; i < snap_list.size(); i++) {
                             Event event = new Event(snap_list.get(i));
                             event_all.add(event);
 
-                            if(user.isConnected() && ((AuthenticatedUser)user).isFavEvent(event))
+                            if (user.isConnected() && ((AuthenticatedUser) user).isFavEvent(event))
                                 event_fav.add(event);
                         }
                         event_adapter.notifyDataSetChanged();
@@ -173,7 +177,7 @@ public class EventFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
-                        Log.e("EVENT_LIST","Error fetching event date\n" + e.getMessage());
+                        Log.e("EVENT_LIST", "Error fetching event date\n" + e.getMessage());
                     }
                 });
     }
