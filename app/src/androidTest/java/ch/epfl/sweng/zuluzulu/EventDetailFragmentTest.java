@@ -9,8 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
-
-import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.*;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -28,13 +27,13 @@ public class EventDetailFragmentTest {
 
     private void guestGoesToEventDetail() throws InterruptedException {
         Utility.goToEvent();
-        TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(1);
     }
 
     private void authenticatedGoesToEvent() throws InterruptedException {
         Utility.fullLogin();
         Utility.goToEvent();
-        TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(1);
     }
 
     @Test

@@ -28,13 +28,13 @@ public class EventFragmentTest {
 
     private void guestGoesToEvent() throws InterruptedException {
         Utility.goToEvent();
-        TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(1);
     }
 
     private void authenticatedGoesToEvent() throws InterruptedException {
         Utility.fullLogin();
         Utility.goToEvent();
-        TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(1);
     }
 
     @Test

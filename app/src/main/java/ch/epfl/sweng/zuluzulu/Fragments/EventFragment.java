@@ -2,12 +2,10 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.util.LogPrinter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,39 +14,19 @@ import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Adapters.EventAdapter;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-
-
-
-
-
-
-
-
-/* TODO
-1) ic_event.xml check if the path is correct
-2)
- */
-
-
-
-
-
-
+import ch.epfl.sweng.zuluzulu.Adapters.EventAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,9 +40,8 @@ public class EventFragment extends Fragment {
     private static final String TAG = "EVENT_TAG";
     private static final String ARG_USER = "ARG_USER";
 
-    private OnFragmentInteractionListener mListener;
-
     private User user;
+    private OnFragmentInteractionListener mListener;
 
     private ArrayList<Event> event_all;
     private ArrayList<Event> event_fav;
@@ -108,8 +85,7 @@ public class EventFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event, container, false);
 
         listview_event = view.findViewById(R.id.event_fragment_listview);
@@ -156,8 +132,8 @@ public class EventFragment extends Fragment {
     }
 
     private void fillEventLists(){
-        Task<QuerySnapshot> querySnapshotTask = FirebaseFirestore.getInstance().collection("events_info")
-                .orderBy("start_date")
+       FirebaseFirestore.getInstance().collection("events_info")
+                .orderBy("name")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
