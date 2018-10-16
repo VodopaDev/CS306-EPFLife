@@ -1,5 +1,7 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
@@ -67,53 +69,11 @@ public class LoginTest {
      * Test connection is accepted with correct credentials
      */
     @Test
-    public void testCanLogIn() {
+    public void testLoginDoesNotDoAnythingIfClickButNotConnectedToTequila() {
         //You have to test if it works for wrong credentials, if it login properly and if you have any
         //other idea you are welcome to test them
-        Utility.login();
-
-        openDrawer();
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
+        onView(withId(R.id.sign_in_button)).perform(ViewActions.click());
+        onView(withId(R.id.login_fragment)).check(matches(isDisplayed()));
     }
 
-    /**
-     * Test connection is refused with bad credentials
-     */
-    @Test
-    public void testWrongLogIn() {
-        //You have to test if it works for wrong credentials, if it login properly and if you have any
-        //other idea you are welcome to test them
-
-        onView(withId(R.id.username)).perform(typeText("not_user")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
-        onView(withId(R.id.sign_in_button)).perform(click()).check(matches(isDisplayed()));
-
-        onView(withId(R.id.username)).perform(replaceText("user")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(replaceText("wrong_password1")).perform(closeSoftKeyboard());
-        onView(withId(R.id.sign_in_button)).perform(click()).check(matches(isDisplayed()));
-    }
-
-    /**
-     * Check if the username is correct (refuse too short)
-     */
-    @Test
-    public void checkUserName() {
-        // too short
-        onView(withId(R.id.username)).perform(replaceText("")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(replaceText("wrong_password2")).perform(closeSoftKeyboard());
-        onView(withId(R.id.sign_in_button)).perform(click());
-        onView(withId(R.id.username)).check(matches(not(hasNoErrorText())));
-    }
-
-    /**
-     * Check if a wrong password return an error message
-     */
-    @Test
-    public void checkPasswords() {
-        // Test with a too small password
-        onView(withId(R.id.username)).perform(typeText("username")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("wra")).perform(closeSoftKeyboard());
-        onView(withId(R.id.sign_in_button)).perform(click());
-        onView(withId(R.id.password)).check(matches(not(hasNoErrorText())));
-    }
 }
