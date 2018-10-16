@@ -69,6 +69,7 @@ public class Utility {
     /**
      * Enter the username and password for login
      * To use on the LoginFragment only !
+     * @deprecated instead : Create the user with createTestUser() and pass it when creating fragment instance @see ProfileFragmentTest or ChatFragmentTest
      */
     public static void login() {
         onView(withId(R.id.username)).perform(typeText("user")).perform(closeSoftKeyboard());
@@ -78,6 +79,7 @@ public class Utility {
 
     /**
      * Login from anywhere in the app
+     * @deprecated instead : Create the user with createTestUser() and pass it when creating fragment instance @see ProfileFragmentTest or ChatFragmentTest
      */
     public static void fullLogin() {
         openMenu();
@@ -102,7 +104,7 @@ public class Utility {
     }
 
     /**
-     * Open the menu from the mainActivity
+     * Close the menu from the mainActivity
      */
     public static void closeMenu() {
         onView(withId(R.id.drawer_layout))
