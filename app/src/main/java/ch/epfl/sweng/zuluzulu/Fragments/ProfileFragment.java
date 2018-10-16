@@ -40,9 +40,9 @@ public class ProfileFragment extends Fragment implements OnFragmentInteractionLi
      */
     public static ProfileFragment newInstance(User user) {
         ProfileFragment profileFragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(PROFILE_TAG, user);
-        profileFragment.setArguments(args);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(PROFILE_TAG, user);
+        profileFragment.setArguments(bundle);
 
         return profileFragment;
     }
