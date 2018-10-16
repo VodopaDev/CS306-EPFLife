@@ -4,6 +4,9 @@ import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.NavigationViewActions;
 import android.view.Gravity;
 
+import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
+import ch.epfl.sweng.zuluzulu.Structure.User;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -17,6 +20,25 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
  * Use this class for functions that are used in multiple tests
  */
 public class Utility {
+
+    /**
+     * Create a user for the tests
+     * @return Return a user
+     */
+    public static User createTestUser(){
+        User.UserBuilder builder = new User.UserBuilder();
+        builder.setSciper("123456");
+        builder.setGaspar("gaspar");
+        builder.setEmail("test@epfl.ch");
+        builder.setFirst_names("james");
+        builder.setLast_names("bond");
+
+        User user = builder.buildAuthenticatedUser();
+
+        assert(user != null);
+
+        return user;
+    }
 
     /**
      * Enter the username and password for login
@@ -53,6 +75,10 @@ public class Utility {
                 .perform(DrawerActions.open());
     }
 
+    /**
+     * Check if the fragment is open
+     * @param id fragment id
+     */
     public static void checkFragmentIsOpen(int id){
         onView(withId(id)).check(matches(isDisplayed()));
     }

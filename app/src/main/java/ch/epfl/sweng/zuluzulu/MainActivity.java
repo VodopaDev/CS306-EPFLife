@@ -25,6 +25,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.User;
@@ -161,6 +162,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case R.id.nav_settings:
                 fragment = SettingsFragment.newInstance();
                 break;
+            case R.id.nav_profile:
+                fragment = ProfileFragment.newInstance(user);
+                break;
             case R.id.nav_logout:
                 this.user = new User.UserBuilder().buildGuestUser();
                 updateMenuItems();
@@ -227,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             default:
                 // Should never happen
-                throw new AssertionError("Invalid message");
+                throw new AssertionError(tag);
         }
     }
 
