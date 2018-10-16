@@ -14,6 +14,8 @@ import ch.epfl.sweng.zuluzulu.Utility;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -33,6 +35,11 @@ public class ProfileFragmentTest {
 
         fragment = ProfileFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
+    }
+
+    @Test
+    public void checkName() {
+        onView(withId(R.id.profile_gaspar_text)).check(matches(isCompletelyDisplayed()));
     }
 
     @Test
