@@ -3,6 +3,11 @@
   <component name="WizardSettings">
     <option name="children">
       <map>
+        <entry key="imageWizard">
+          <value>
+            <PersistentState />
+          </value>
+        </entry>
         <entry key="vectorWizard">
           <value>
             <PersistentState>
@@ -28,8 +33,11 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_profile" />
+                            <entry key="height" value="240" />
+                            <entry key="outputName" value="ic_profile_240dp" />
+                            <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="$USER_HOME$" />
+                            <entry key="width" value="240" />
                           </map>
                         </option>
                       </PersistentState>

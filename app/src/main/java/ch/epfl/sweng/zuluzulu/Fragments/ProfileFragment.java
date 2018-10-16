@@ -23,7 +23,6 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  */
 public class ProfileFragment extends Fragment implements OnFragmentInteractionListener {
     private static final String TAG = "PROFIL_TAG";
-    private static final String USER_TAG = "PROFIL_USER_TAG";
 
     private User user;
 
@@ -43,7 +42,7 @@ public class ProfileFragment extends Fragment implements OnFragmentInteractionLi
     public static ProfileFragment newInstance(User user) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putSerializable(USER_TAG, user);
+        args.putSerializable(TAG, user);
         fragment.setArguments(args);
 
         return fragment;
@@ -53,7 +52,7 @@ public class ProfileFragment extends Fragment implements OnFragmentInteractionLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.user = (User) getArguments().getSerializable(USER_TAG);
+            this.user = (User) getArguments().getSerializable(TAG);
         } else {
             throw new AssertionError("No argument");
         }
@@ -67,14 +66,10 @@ public class ProfileFragment extends Fragment implements OnFragmentInteractionLi
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        TextView textView = view.findViewById(R.id.profile_gaspar);
-        textView.setText(user.getGaspar());
+        TextView textView = view.findViewById(R.id.profile_name);
+        textView.setText(user.getFirstNames() + user.getLastNames());
 
         return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
     }
 
     @Override

@@ -50,5 +50,10 @@
     <string name="settings_clear_cache">Clear cache</string>
     <string name="settings_clear_cache_button">Clear</string>
 
+    <!-- Profile related -->
+    <string name="profile_gaspar">Gaspar</string>
+    <string name="profile_email">Email</string>
+    <string name="profile_sciper">Sciper</string>
+
 
 </resources>

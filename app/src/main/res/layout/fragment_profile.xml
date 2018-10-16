@@ -9,23 +9,148 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_profile_240dp"
+        android:tint="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toTopOf="@+id/profile_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/profile_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:inputType="textPersonName"
+        android:text="User"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="368dp"
+        android:layout_height="9dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="250dp" />
+
     <TextView
         android:id="@+id/profile_gaspar"
-        android:layout_width="188dp"
-        android:layout_height="148dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="0dp"
+        android:layout_height="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="68dp"
+        android:text="@string/profile_gaspar"
+        app:layout_constraintEnd_toStartOf="@+id/divider3"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <TextView
+        android:id="@+id/profile_gaspar_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="80dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:inputType="textPersonName"
+        android:text="Gaspar"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_gaspar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/divider3"
+        app:layout_constraintTop_toTopOf="@+id/profile_gaspar"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="21dp"
+        android:layout_height="549dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.276"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <TextView
+        android:id="@+id/profile_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="60dp"
+        android:text="@string/profile_email"
+        app:layout_constraintEnd_toEndOf="@+id/profile_gaspar"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/profile_gaspar"
+        app:layout_constraintTop_toBottomOf="@+id/profile_gaspar" />
+
+    <TextView
+        android:id="@+id/profile_email_edit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
-        android:textSize="24sp"
+        android:inputType="textEmailAddress"
+        android:text="mail@epfl.ch"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_email"
+        app:layout_constraintEnd_toEndOf="@+id/profile_gaspar_text"
+        app:layout_constraintStart_toStartOf="@+id/profile_gaspar_text"
+        app:layout_constraintTop_toTopOf="@+id/profile_email" />
+
+    <TextView
+        android:id="@+id/profile_sciper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/profile_sciper"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.044"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.019" />
+        app:layout_constraintEnd_toEndOf="@+id/profile_email"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/profile_email"
+        app:layout_constraintTop_toBottomOf="@+id/profile_email"
+        app:layout_constraintVertical_bias="0.47" />
+
+    <TextView
+        android:id="@+id/profile_sciper_edit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:inputType="number"
+        android:text="424242"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_sciper"
+        app:layout_constraintEnd_toEndOf="@+id/profile_email_edit"
+        app:layout_constraintStart_toStartOf="@+id/profile_email_edit"
+        app:layout_constraintTop_toTopOf="@+id/profile_sciper" />
 
 </android.support.constraint.ConstraintLayout>
