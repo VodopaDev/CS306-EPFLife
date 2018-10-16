@@ -13,37 +13,39 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.Serializable;
+
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class EventDetailFragment extends Fragment{
-    public static final String TAG = "ASSOCIATION_DETAIL__TAG";
+    public static final String TAG = "EVENT_DETAIL__TAG";
     private static final String ARG_USER = "ARG_USER";
-    private static final String ARG_ASSO = "ARG_ASSO";
-    private static final String FAV_CONTENT = "This association is in your favorites";
-    private static final String NOT_FAV_CONTENT = "This association isn't in your favorites";
+    private static final String ARG_EVENT = "ARG_EVENT";
+    private static final String FAV_CONTENT = "This event is in your favorites";
+    private static final String NOT_FAV_CONTENT = "This event isn't in your favorites";
 
-    private ImageView asso_fav;
+    private ImageView event_fav;
 
     private OnFragmentInteractionListener mListener;
-    private Association asso;
+    private Event event;
     private User user;
 
-    public static EventDetailFragment newInstance(User user, Association asso) {
-        if(asso == null)
-            throw new NullPointerException("Error creating an AssociationDetailFragment:\n" +
-                    "Association is null");
+    public static EventDetailFragment newInstance(User user, Event event) {
+        if(event == null)
+            throw new NullPointerException("Error creating an EventDetailFragment:\n" +
+                    "Event is null");
         if(user == null)
-            throw new NullPointerException("Error creating an AssociationDetailFragment:\n" +
+            throw new NullPointerException("Error creating an EventDetailFragment:\n" +
                     "User is null");
 
         EventDetailFragment fragment = new EventDetailFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);
-        args.putSerializable(ARG_ASSO, asso);
+        args.putSerializable(ARG_EVENT, event);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,33 +55,33 @@ public class EventDetailFragment extends Fragment{
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
-            asso = (Association) getArguments().getSerializable(ARG_ASSO);
+            event = (Event) getArguments().getSerializable(ARG_EVENT);
         }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_association_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_event_detail, container, false);
 
-        // Association name
-        TextView asso_name = view.findViewById(R.id.association_detail_name);
-        asso_name.setText(asso.getName());
+        // Event name
+        TextView event_name = view.findViewById(R.id.event_detail_name);
+        event_name.setText(event.getName());
 
         // Favorite button
-        asso_fav = view.findViewById(R.id.association_detail_fav);
+        event_fav = view.findViewById(R.id.event_detail_fav);
         setFavButtonBehaviour();
-        asso_fav.setContentDescription(NOT_FAV_CONTENT);
-        if(user.isConnected() && ((AuthenticatedUser)user).isFavAssociation(asso)) {
+        event_fav.setContentDescription(NOT_FAV_CONTENT);
+        if(user.isConnected() && ((AuthenticatedUser)user).isFavEvent(event)) {
             loadFavImage(R.drawable.fav_on);
-            asso_fav.setContentDescription(FAV_CONTENT);
+            event_fav.setContentDescription(FAV_CONTENT);
         }
 
-        // Association icon
-        ImageView asso_icon = view.findViewById(R.id.association_detail_icon);
+        // Event icon
+        ImageView event_icon = view.findViewById(R.id.event_detail_icon);
         Glide.with(getContext())
-                .load(asso.getIconUri())
+                .load(event.getIconUri())
                 .centerCrop()
-                .into(asso_icon);
+                .into(event_icon);
 
 
         return view;
@@ -89,28 +91,28 @@ public class EventDetailFragment extends Fragment{
         Glide.with(getContext())
                 .load(drawable)
                 .centerCrop()
-                .into(asso_fav);
+                .into(event_fav);
     }
 
     private void setFavButtonBehaviour(){
-        asso_fav.setOnClickListener(new View.OnClickListener() {
+        event_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(user.isConnected()){
                     AuthenticatedUser auth = (AuthenticatedUser)user;
-                    if(auth.isFavAssociation(asso)){
-                        auth.removeFavAssociation(asso);
+                    if(auth.isFavEvent(event)){
+                        auth.removeFavEvent(event);
                         loadFavImage(R.drawable.fav_off);
-                        asso_fav.setContentDescription(NOT_FAV_CONTENT);
+                        event_fav.setContentDescription(NOT_FAV_CONTENT);
                     }
                     else{
-                        auth.addFavAssociation(asso);
+                        auth.addFavEvent(event);
                         loadFavImage(R.drawable.fav_on);
-                        asso_fav.setContentDescription(FAV_CONTENT);
+                        event_fav.setContentDescription(FAV_CONTENT);
                     }
                 }
                 else {
-                    Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
+                    Snackbar.make(getView(), "Login to access your favorite events", 5000).show();
                 }
             }
         });

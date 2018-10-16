@@ -48,8 +48,16 @@ public final class AuthenticatedUser extends User {
         return assos_id.add(asso.getId());
     }
 
+    public boolean addFavEvent(Event event){
+        return assos_id.add(event.getId());
+    }
+
     public boolean removeFavAssociation(Association asso){
         return assos_id.remove(asso.getId());
+    }
+
+    public boolean removeFavEvent(Event event){
+        return assos_id.remove(event.getId());
     }
 
     public boolean isFollowedEvent(Event event){
