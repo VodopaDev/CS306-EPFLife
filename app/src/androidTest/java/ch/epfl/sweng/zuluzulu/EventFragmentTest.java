@@ -41,7 +41,7 @@ public class EventFragmentTest {
     public void thereAreTwoButtons() throws InterruptedException {
         guestGoesToEvent();
         onView(withId(R.id.event_fragment_all_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.event_fragment_all_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.event_fragment_fav_button)).check(matches(isDisplayed()));
     }
 
     @Test
