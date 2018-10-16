@@ -19,35 +19,35 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class EventDetailFragmentTest {
 
-    private static final String FAV_CONTENT = "This association is in your favorites";
-    private static final String NOT_FAV_CONTENT = "This association isn't in your favorites";
+    private static final String FAV_CONTENT = "This event is in your favorites";
+    private static final String NOT_FAV_CONTENT = "This event isn't in your favorites";
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    private void guestGoesToAssociationDetail() throws InterruptedException {
-        Utility.goToAssociation();
+    private void guestGoesToEventDetail() throws InterruptedException {
+        Utility.goToEvent();
         TimeUnit.SECONDS.sleep(5);
     }
 
-    private void authenticatedGoesToAssociation() throws InterruptedException {
+    private void authenticatedGoesToEvent() throws InterruptedException {
         Utility.fullLogin();
-        Utility.goToAssociation();
+        Utility.goToEvent();
         TimeUnit.SECONDS.sleep(5);
     }
 
     @Test
     public void authenticatedAlreadyHasAgepolyInFavorite() throws InterruptedException {
-        authenticatedGoesToAssociation();
-        onView(withText("Agepoly")).perform(ViewActions.click());
+        authenticatedGoesToEvent();
+        onView(withText("forumEpfl")).perform(ViewActions.click());
         onView(withContentDescription(FAV_CONTENT)).check(matches(isDisplayed()));
     }
 
     @Test
     public void authenticatedCanRemoveAndAddFavorite() throws InterruptedException {
-        authenticatedGoesToAssociation();
-        onView(withText("Agepoly")).perform(ViewActions.click());
+        authenticatedGoesToEvent();
+        onView(withText("forumEpfl")).perform(ViewActions.click());
         onView(withContentDescription(FAV_CONTENT))
                 .check(matches(isDisplayed()))
                 .perform(ViewActions.click());
@@ -60,8 +60,8 @@ public class EventDetailFragmentTest {
 
     @Test
     public void guestCanClickOnFavorite() throws InterruptedException {
-        guestGoesToAssociationDetail();
-        onView(withText("Agepoly")).perform(ViewActions.click());
+        guestGoesToEventDetail();
+        onView(withText("forumEpfl")).perform(ViewActions.click());
         onView(withContentDescription(NOT_FAV_CONTENT))
                 .check(matches(isDisplayed()))
                 .perform(ViewActions.click());
