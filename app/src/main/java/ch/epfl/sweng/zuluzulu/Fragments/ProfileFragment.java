@@ -67,7 +67,15 @@ public class ProfileFragment extends Fragment implements OnFragmentInteractionLi
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         TextView user_view = view.findViewById(R.id.profile_name_text);
-        user_view.setText(new StringBuilder().append(user.getFirstNames()).append(user.getLastNames()).toString());
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(user.getFirstNames().substring(0, 1).toUpperCase());
+        builder.append(user.getFirstNames().substring(1));
+        builder.append(user.getLastNames().substring(0, 1).toUpperCase());
+        builder.append(user.getLastNames().substring(1));
+        String username = builder.toString();
+
+        user_view.setText(username);
 
 
         TextView gaspar = view.findViewById(R.id.profile_gaspar_text);
