@@ -157,7 +157,7 @@ public class ChatFragment extends Fragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String senderName = "lol";
+                String senderName = user.isConnected() ? user.getFirstNames() : "Guest";
                 String msg = textEdit.getText().toString();
                 Timestamp time = Timestamp.now();
 
