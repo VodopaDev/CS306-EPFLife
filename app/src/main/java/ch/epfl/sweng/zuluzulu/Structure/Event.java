@@ -73,73 +73,73 @@ public class Event implements Serializable {
         return short_desc;
     }
 
-    public void setShort_desc(String description) {
-        this.short_desc = description;
-    }
+//    public void setShort_desc(String description) {
+//        this.short_desc = description;
+//    }
 
     public String getLong_desc() {
         return long_desc;
     }
 
-    public void setLong_desc(String description) {
-        this.long_desc = description;
-    }
+//    public void setLong_desc(String description) {
+//        this.long_desc = description;
+//    }
 
     public Uri getIconUri() {
         return icon_uri;
     }
 
-    public void setIconUri(Uri icon) {
-        this.icon_uri = icon;
-    }
-
-    public int getChat_id() {
-        return chat_id;
-    }
-
-    public void setChat_id(int chat_id) {
-        this.chat_id = chat_id;
-    }
-
-    public int getAsso_id() {
-        return asso_id;
-    }
-
-    public void setAsso_id(int asso_id) {
-        this.asso_id = asso_id;
-    }
-
-    public List<Integer> getAdmins() {
-        return admins;
-    }
-
-    public void setAdmins(List<Integer> admins) {
-        this.admins = admins;
-    }
-
-    public Location getPos() {
-        return pos;
-    }
-
-    public void setPos(Location pos) {
-        this.pos = pos;
-    }
-
+//    public void setIconUri(Uri icon) {
+//        this.icon_uri = icon;
+//    }
+//
+//    public int getChat_id() {
+//        return chat_id;
+//    }
+//
+//    public void setChat_id(int chat_id) {
+//        this.chat_id = chat_id;
+//    }
+//
+//    public int getAsso_id() {
+//        return asso_id;
+//    }
+//
+//    public void setAsso_id(int asso_id) {
+//        this.asso_id = asso_id;
+//    }
+//
+//    public List<Integer> getAdmins() {
+//        return admins;
+//    }
+//
+//    public void setAdmins(List<Integer> admins) {
+//        this.admins = admins;
+//    }
+//
+//    public Location getPos() {
+//        return pos;
+//    }
+//
+//    public void setPos(Location pos) {
+//        this.pos = pos;
+//    }
+//
     public Date getStart_date() {
         return start_date;
     }
-
-    public void setStart_date(Date start_date) {
-        this.start_date = start_date;
-    }
-
-    public Date getEnd_date() {
-        return end_date;
-    }
-
-    public void setEnd_date(Date end_date) {
-        this.end_date = end_date;
-    }
+//
+//    public void setStart_date(Date start_date) {
+//        this.start_date = start_date;
+//    }
+//
+//    public Date getEnd_date() {
+//        return end_date;
+//    }
+//
+//    public void setEnd_date(Date end_date) {
+//        this.end_date = end_date;
+//    }
 
     /**
      * Check if a DocumentSnapshot correspond to an Event's one

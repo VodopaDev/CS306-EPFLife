@@ -16,54 +16,64 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class AssociationDetailFragmentTest {
+public class EventDetailFragmentTest {
 
-    private static final String FAV_CONTENT = "This association is in your favorites";
-    private static final String NOT_FAV_CONTENT = "This association isn't in your favorites";
+    private static final String FAV_CONTENT = "This event is in your favorites";
+    private static final String NOT_FAV_CONTENT = "This event isn't in your favorites";
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    private void guestGoesToAssociationDetail() throws InterruptedException {
-        Utility.goToAssociation();
-        TimeUnit.SECONDS.sleep(5);
+    private void guestGoesToEventDetail() {
+        Utility.goToEvent();
+//        TimeUnit.SECONDS.sleep(1);
     }
 
-    private void authenticatedGoesToAssociation() throws InterruptedException {
+    private void authenticatedGoesToEvent() throws InterruptedException {
         Utility.fullLogin();
-        Utility.goToAssociation();
-        TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(3);
+        Utility.goToEvent();
+//        TimeUnit.SECONDS.sleep(1);
     }
 
     @Test
-    public void authenticatedAlreadyHasAgepolyInFavorite() throws InterruptedException {
-        authenticatedGoesToAssociation();
-        onView(withText("Agepoly")).perform(ViewActions.click());
+    public void authenticatedAlreadyHasForumEpflInFavorite() throws InterruptedException {
+        authenticatedGoesToEvent();
+        TimeUnit.SECONDS.sleep(3);
+        onView(withText("forumEpfl")).perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(3);
         onView(withContentDescription(FAV_CONTENT)).check(matches(isDisplayed()));
     }
 
     @Test
     public void authenticatedCanRemoveAndAddFavorite() throws InterruptedException {
-        authenticatedGoesToAssociation();
-        onView(withText("Agepoly")).perform(ViewActions.click());
+        authenticatedGoesToEvent();
+        TimeUnit.SECONDS.sleep(3);
+        onView(withText("forumEpfl")).perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(3);
         onView(withContentDescription(FAV_CONTENT))
                 .check(matches(isDisplayed()))
                 .perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(3);
         onView(withContentDescription(NOT_FAV_CONTENT))
                 .check(matches(isDisplayed()))
                 .perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(3);
         onView(withContentDescription(FAV_CONTENT))
                 .check(matches(isDisplayed()));
     }
 
     @Test
     public void guestCanClickOnFavorite() throws InterruptedException {
-        guestGoesToAssociationDetail();
-        onView(withText("Agepoly")).perform(ViewActions.click());
+        guestGoesToEventDetail();
+        TimeUnit.SECONDS.sleep(3);
+        onView(withText("forumEpfl")).perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(3);
         onView(withContentDescription(NOT_FAV_CONTENT))
                 .check(matches(isDisplayed()))
                 .perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(3);
         onView(withContentDescription(NOT_FAV_CONTENT))
                 .check(matches(isDisplayed()));
     }
