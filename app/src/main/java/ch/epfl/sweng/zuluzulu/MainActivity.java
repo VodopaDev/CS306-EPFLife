@@ -68,9 +68,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         } else {
             // Look if there is a user object set
             User user = (User) i.getSerializableExtra("user");
-            if(user != null){
+            if (user != null) {
                 this.user = user;
             }
+            
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
         }
     }
@@ -202,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
-                previous_fragments.add(0,current_fragment);
+                previous_fragments.add(0, current_fragment);
                 current_fragment = fragment;
                 return true;
             }
@@ -261,6 +262,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     /**
      * Return the current fragment
+     *
      * @return current fragment
      */
     public Fragment getCurrentFragment() {
@@ -269,7 +271,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     /**
      * Return the current user
+     *
      * @return current user
      */
-    public User getUser(){return user;}
+    public User getUser() {
+        return user;
+    }
 }
