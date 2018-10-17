@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -44,10 +43,11 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
         
         if (isOwnMessage) {
             senderName.setText("You");
-            senderName.setBackgroundColor(Color.GREEN);
+            linearLayout.setBackgroundResource(R.drawable.chat_message_background_ownmessage);
         }
         else {
             senderName.setText(currentChatMessage.getSenderName());
+            linearLayout.setBackgroundResource(R.drawable.chat_message_background);
         }
 
         message.setText(currentChatMessage.getMessage());
