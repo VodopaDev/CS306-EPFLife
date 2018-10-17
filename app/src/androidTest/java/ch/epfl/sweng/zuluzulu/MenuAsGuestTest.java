@@ -31,6 +31,7 @@ public class MenuAsGuestTest {
         onView(withText("Friends")).check(doesNotExist());
         onView(withText("Chat")).check(doesNotExist());
         onView(withText("Logout")).check(doesNotExist());
+        onView(withText("Profile")).check(doesNotExist());
     }
 
     @Test

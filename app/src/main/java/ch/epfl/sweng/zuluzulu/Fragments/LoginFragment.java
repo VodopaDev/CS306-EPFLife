@@ -322,5 +322,5 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         super.onDetach();
         mListener = null;
     }
-
+    
 }

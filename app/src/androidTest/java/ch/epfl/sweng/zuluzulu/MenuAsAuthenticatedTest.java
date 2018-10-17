@@ -47,6 +47,16 @@ public class MenuAsAuthenticatedTest {
     }
 
     @Test
+    public void testUserCanOpenProfileFragment() {
+        onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.nav_profile));
+
+
+        // Check if it's open
+        Utility.checkFragmentIsOpen(R.id.profile_fragment);
+    }
+
+    @Test
     public void testUserCanOpenLogoutFragment() {
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_logout));
