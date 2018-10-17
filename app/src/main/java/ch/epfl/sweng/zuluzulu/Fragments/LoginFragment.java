@@ -194,57 +194,9 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         // Reset errors.
         reset_errors();
 
-        // Store values at the time of the login attempt.
-        /*String username = mUsernameView.getText().toString();
-        String password = mPasswordView.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password
-        if (!isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-        // Check for a valid username address.
-        if (TextUtils.isEmpty(username)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
-            focusView = mUsernameView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // Focus the first form field with an error.
-            focusView.requestFocus();
-        } else {
-            // perform the user login attempt.*/
-            String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(codeRequestUrl));
-            startActivity(browserIntent);
-
-        //}
-    }
-
-    /**
-     * Check if the username is valid
-     *
-     * @param username username
-     * @return boolean
-     */
-    private boolean isUsernameValid(String username) {
-        return username.length() > 3;
-    }
-
-    /**
-     * Check if the password is valid
-     *
-     * @param password password
-     * @return boolean
-     */
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with our future logic
-        return password.length() > 4;
+        String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(codeRequestUrl));
+        startActivity(browserIntent);
     }
 
     /**
@@ -299,13 +251,6 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(TAG, uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -322,5 +267,5 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         super.onDetach();
         mListener = null;
     }
-    
+
 }
