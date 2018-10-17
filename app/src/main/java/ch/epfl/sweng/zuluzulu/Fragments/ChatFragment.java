@@ -215,8 +215,9 @@ public class ChatFragment extends Fragment {
                             for (DocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 String senderName = document.getString("senderName");
+                                int sciper = (Integer) document.get("sciper");
                                 String msg = document.getString("msg");
-                                ChatMessage message = new ChatMessage(senderName, msg);
+                                ChatMessage message = new ChatMessage(senderName, sciper, msg);
                                 messages.add(message);
                             }
                             adapter.notifyDataSetChanged();
