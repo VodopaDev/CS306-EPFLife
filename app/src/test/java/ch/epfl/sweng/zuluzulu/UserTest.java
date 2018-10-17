@@ -27,7 +27,7 @@ public class UserTest {
     private final Event event = mock(Event.class);
 
     @Before
-    public void mockStructures(){
+    public void mockStructures() {
         when(asso.getId()).thenReturn(0);
         when(channel.getName()).thenReturn("channel");
         when(event.getId()).thenReturn(2);
@@ -42,7 +42,7 @@ public class UserTest {
         builder.setFirst_names("first_name");
         builder.setLast_names("last_name");
 
-        AuthenticatedUser user = (AuthenticatedUser)builder.build();
+        AuthenticatedUser user = (AuthenticatedUser) builder.build();
         assertTrue(user.isConnected());
 
         assertEquals(user.getEmail(), "mail@epfl.ch");
@@ -61,7 +61,7 @@ public class UserTest {
     }
 
     @Test
-    public void guestUserHasNullProperties(){
+    public void guestUserHasNullProperties() {
         Guest guest = new User.UserBuilder().buildGuestUser();
         assertNull(guest.getEmail());
         assertNull(guest.getFirstNames());

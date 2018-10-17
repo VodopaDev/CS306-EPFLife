@@ -33,10 +33,11 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
 
     /**
      * Basic constructor of an AssociationAdapter
+     *
      * @param context Context of the Fragment
-     * @param data List of Associations to view
+     * @param data    List of Associations to view
      */
-    public AssociationAdapter(Context context, List<Association> data, OnFragmentInteractionListener mListener){
+    public AssociationAdapter(Context context, List<Association> data, OnFragmentInteractionListener mListener) {
         super(context, layout_resource_id, data);
         this.mListener = mListener;
         this.context = context;
@@ -46,18 +47,19 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
     /**
      * Return a View of an Association in a GroupView in a form of a card with the
      * Association's name, short description and icon image
-     * @param position position in the GroupView
+     *
+     * @param position    position in the GroupView
      * @param convertView View where to put the Association's view
-     * @param parent the ListView to put the view
+     * @param parent      the ListView to put the view
      * @return the Association card view
      */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
         View asso_view = convertView;
-        final AssociationHolder holder = asso_view == null ? new AssociationHolder(): (AssociationHolder)asso_view.getTag();
+        final AssociationHolder holder = asso_view == null ? new AssociationHolder() : (AssociationHolder) asso_view.getTag();
 
-        if(asso_view == null){
-            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+        if (asso_view == null) {
+            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             asso_view = inflater.inflate(layout_resource_id, parent, false);
 
             holder.name = asso_view.findViewById(R.id.card_asso_name);
@@ -75,7 +77,7 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
         asso_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("FRAG_CHANGE","Switching to " + asso.getName() + "detailed view");
+                Log.d("FRAG_CHANGE", "Switching to " + asso.getName() + "detailed view");
                 mListener.onFragmentInteraction(AssociationDetailFragment.TAG, asso);
             }
         });
@@ -85,10 +87,11 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
 
     /**
      * Fetch an Image from the Internet and put it in an ImageView
-     * @param uri Uri of the image to fetch
+     *
+     * @param uri  Uri of the image to fetch
      * @param icon ImageView to put the image
      */
-    private void initIcon(Uri uri, ImageView icon){
+    private void initIcon(Uri uri, ImageView icon) {
         Glide.with(context)
                 .load(uri)
                 .centerCrop()
@@ -98,13 +101,11 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
     /**
      * Static class to easily create an Association's specific View
      */
-    static class AssociationHolder{
+    static class AssociationHolder {
         ImageView icon;
         TextView name;
         TextView short_desc;
     }
-
-
 
 
 }

@@ -14,11 +14,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="130dp"
+        android:paddingStart="130dp"
         android:text="@string/applicationName"
         android:textColor="@android:color/black"
         android:textSize="30sp"
-        android:textStyle="bold"
-        android:paddingStart="130dp" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/version"
@@ -30,11 +30,11 @@
         android:layout_marginLeft="0dp"
         android:layout_marginStart="0dp"
         android:paddingLeft="5dp"
+        android:paddingStart="5dp"
         android:text="@string/version"
         android:textColor="@android:color/black"
         android:textSize="14sp"
-        android:textStyle="bold"
-        android:paddingStart="5dp" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/authors"
@@ -44,23 +44,23 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/version"
         android:paddingLeft="5dp"
+        android:paddingStart="5dp"
         android:text="@string/author"
         android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:paddingStart="5dp" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvContact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/authors"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/authors"
         android:paddingLeft="5dp"
+        android:paddingStart="5dp"
         android:text="@string/contact"
         android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:paddingStart="5dp" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvSupport"
@@ -70,10 +70,10 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tvContact"
         android:paddingLeft="5dp"
+        android:paddingStart="5dp"
         android:text="@string/support"
         android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:paddingStart="5dp" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvNumVersion"
@@ -83,9 +83,9 @@
         android:layout_toEndOf="@+id/version"
         android:layout_toRightOf="@+id/version"
         android:paddingLeft="5dp"
+        android:paddingStart="5dp"
         android:text="@string/numVersion"
-        android:textColor="@android:color/holo_red_dark"
-        android:paddingStart="5dp" />
+        android:textColor="@android:color/holo_red_dark" />
 
     <TextView
         android:id="@+id/tvNameGroup"
@@ -95,9 +95,9 @@
         android:layout_toEndOf="@+id/authors"
         android:layout_toRightOf="@+id/version"
         android:paddingLeft="5dp"
+        android:paddingStart="5dp"
         android:text="@string/Group"
-        android:textColor="@android:color/holo_red_dark"
-        android:paddingStart="5dp" />
+        android:textColor="@android:color/holo_red_dark" />
 
     <TextView
         android:id="@+id/tvContactZuluZulu"
@@ -107,9 +107,9 @@
         android:layout_toEndOf="@+id/tvContact"
         android:layout_toRightOf="@+id/version"
         android:paddingLeft="5dp"
+        android:paddingStart="5dp"
         android:text="@string/contactEmail"
-        android:textColor="@android:color/holo_red_dark"
-        android:paddingStart="5dp" />
+        android:textColor="@android:color/holo_red_dark" />
 
     <TextView
         android:id="@+id/tvSupportEPFLife"
@@ -119,7 +119,7 @@
         android:layout_toEndOf="@+id/tvContact"
         android:layout_toRightOf="@+id/version"
         android:paddingLeft="5dp"
+        android:paddingStart="5dp"
         android:text="@string/supportEmail"
-        android:textColor="@android:color/holo_red_dark"
-        android:paddingStart="5dp" />
+        android:textColor="@android:color/holo_red_dark" />
 </RelativeLayout>
