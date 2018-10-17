@@ -21,12 +21,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Adapters.AssociationAdapter;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.Adapters.AssociationAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +36,7 @@ import ch.epfl.sweng.zuluzulu.Adapters.AssociationAdapter;
  * Use the {@link AssociationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AssociationFragment extends Fragment{
+public class AssociationFragment extends Fragment {
     private static final String TAG = "ASSOCIATIONS_TAG";
     private static final String ARG_USER = "ARG_USER";
 
@@ -90,7 +90,7 @@ public class AssociationFragment extends Fragment{
         button_assos_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(user.isConnected())
+                if (user.isConnected())
                     updateListView(button_assos_fav, button_assos_all, assos_fav, listview_assos);
                 else
                     Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
@@ -118,7 +118,9 @@ public class AssociationFragment extends Fragment{
         }
     }
 
-    public ListView getListviewAssos(){return listview_assos;}
+    public ListView getListviewAssos() {
+        return listview_assos;
+    }
 
     @Override
     public void onDetach() {
@@ -126,7 +128,7 @@ public class AssociationFragment extends Fragment{
         mListener = null;
     }
 
-    private void fillAssociationLists(){
+    private void fillAssociationLists() {
         FirebaseFirestore.getInstance().collection("assos_info")
                 .orderBy("name")
                 .get()
@@ -134,11 +136,11 @@ public class AssociationFragment extends Fragment{
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        for (int i = 0; i < snap_list.size(); i++){
+                        for (int i = 0; i < snap_list.size(); i++) {
                             Association asso = new Association(snap_list.get(i));
                             assos_all.add(asso);
 
-                            if(user.isConnected() && ((AuthenticatedUser)user).isFavAssociation(asso))
+                            if (user.isConnected() && ((AuthenticatedUser) user).isFavAssociation(asso))
                                 assos_fav.add(asso);
                         }
                         assos_adapter.notifyDataSetChanged();
@@ -148,12 +150,12 @@ public class AssociationFragment extends Fragment{
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
-                        Log.e("ASSO_LIST","Error fetching association date\n" + e.getMessage());
+                        Log.e("ASSO_LIST", "Error fetching association date\n" + e.getMessage());
                     }
                 });
     }
 
-    private void updateListView(Button new_selected, Button new_unselected, ArrayList<Association> data, ListView list){
+    private void updateListView(Button new_selected, Button new_unselected, ArrayList<Association> data, ListView list) {
         new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         new_unselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
         assos_adapter = new AssociationAdapter(getContext(), data, mListener);
