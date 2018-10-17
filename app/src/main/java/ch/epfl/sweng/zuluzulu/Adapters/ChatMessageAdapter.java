@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -37,9 +38,10 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
         ChatMessage currentChatMessage = messages.get(position);
         boolean isOwnMessage = currentChatMessage.isOwnMessage();
 
+        LinearLayout linearLayout = messageView.findViewById(R.id.chat_message_linearLayout);
         TextView message = messageView.findViewById(R.id.chat_message_msg);
         TextView senderName = messageView.findViewById(R.id.chat_message_senderName);
-
+        
         if (isOwnMessage) {
             senderName.setText("You");
             senderName.setBackgroundColor(Color.GREEN);
