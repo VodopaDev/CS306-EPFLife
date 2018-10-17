@@ -27,6 +27,7 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -37,6 +38,7 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  */
 public class LoginFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String TAG = "LOGIN_TAG";
+
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
@@ -51,6 +53,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             "yann:password",
             "bar:world"
     };
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -106,8 +109,8 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
 
         mUsernameView = view.findViewById(R.id.username);
 
-        Button mSignInButon = view.findViewById(R.id.sign_in_button);
-        mSignInButon.setOnClickListener(new View.OnClickListener() {
+        Button mSignInButton = view.findViewById(R.id.sign_in_button);
+        mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -199,7 +202,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      * @return boolean
      */
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with our futur logic
+        //TODO: Replace this with our future logic
         return password.length() > 4;
     }
 
@@ -279,6 +282,11 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         mListener = null;
     }
 
+    /*private static String read(String prompt) throws IOException {
+        System.out.print(prompt + ": ");
+        return new BufferedReader(new InputStreamReader(System.in)).readLine().trim();
+    }*/
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -287,6 +295,8 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
 
         private final String mUsername;
         private final String mPassword;
+        //private Map<String, String> tokens;
+        private User user = null;
 
         UserLoginTask(String username, String password) {
             mUsername = username;
@@ -297,6 +307,44 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
+
+            /*
+            //CODE FOR TEQUILA LOGIN
+            //create the config
+            OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "id", "secret", "epflife://login"); //We will have to fill with correct values
+            String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
+
+            //start the browser with the Tequila URL (temporary solution)
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(codeRequestUrl));
+            startActivity(browserIntent);
+
+            //part to understand
+            String redirectUri;
+            try{
+            redirectUri = read("Go to the above URL, authenticate, then enter the redirect URI");
+            }catch (IOException e){
+                return false;
+            }
+            String code = AuthClient.extractCode(redirectUri);
+            //end part to understand
+
+
+            try{
+            tokens = AuthServer.fetchTokens(config, code);
+            } catch (IOException e){
+                return false;
+            }
+
+
+            try{
+             user = AuthServer.fetchUser(tokens.get("Tequila.profile"));
+            } catch( IOException e){
+                return false;
+            }*/
+
+
+            /////////////////////////////////////
+            //CODE FOR LOCAL LOGIN
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
@@ -305,7 +353,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             }
 
 
-            // Check credidentials
+            // Check credentials
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mUsername)) {
@@ -318,20 +366,25 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             // We do not want to offer registration.(Dahn)
 
             return false;
+            ////////////////////////////////////
+
+            //return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
 
+            // CODE FOR LOCAL LOGIN
             User.UserBuilder builder = new User.UserBuilder();
-            builder.setEmail("mail@epfl.ch");
-            builder.setSciper("1212");
+            builder.setEmail("nicolas.jomeau@epfl.ch");
+            builder.setSciper("270103");
             builder.setGaspar(mUsername);
-            builder.setFirst_names(mUsername);
-            builder.setLast_names("");
+            builder.setFirst_names("nicolas");
+            builder.setLast_names("jomeau");
 
-            User user = builder.buildAuthenticatedUser();
+            user = builder.buildAuthenticatedUser();
+
 
             if (success && user != null) {
                 //open the main activity then terminate the login activity (Ikaras998)

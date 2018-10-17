@@ -1,0 +1,87 @@
+package ch.epfl.sweng.zuluzulu;
+
+import android.support.test.espresso.contrib.DrawerActions;
+import android.support.test.espresso.contrib.NavigationViewActions;
+import android.view.Gravity;
+
+import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
+import ch.epfl.sweng.zuluzulu.Structure.User;
+
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+
+/**
+ * Use this class for functions that are used in multiple tests
+ */
+public class Utility {
+
+    /**
+     * Create a user for the tests
+     * @return Return a user
+     */
+    public static User createTestUser(){
+        User.UserBuilder builder = new User.UserBuilder();
+        builder.setSciper("123456");
+        builder.setGaspar("gaspar");
+        builder.setEmail("test@epfl.ch");
+        builder.setFirst_names("james");
+        builder.setLast_names("bond");
+
+        User user = builder.buildAuthenticatedUser();
+
+        assert(user != null);
+
+        return user;
+    }
+
+    /**
+     * Enter the username and password for login
+     * To use on the LoginFragment only !
+     */
+    public static void login() {
+        onView(withId(R.id.username)).perform(typeText("user")).perform(closeSoftKeyboard());
+        onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
+        onView(withId(R.id.sign_in_button)).perform(click());
+    }
+
+    /**
+     * Login from anywhere in the app
+     */
+    public static void fullLogin() {
+        openMenu();
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_login));
+        login();
+    }
+
+    /**
+     * Open the AssociationFragment
+     */
+    public static void goToAssociation(){
+        openMenu();
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_associations));
+    }
+    /**
+     * Open the menu from the mainActivity
+     */
+    public static void openMenu() {
+        onView(withId(R.id.drawer_layout))
+                .check(matches(isClosed(Gravity.LEFT)))
+                .perform(DrawerActions.open());
+    }
+
+    /**
+     * Check if the fragment is open
+     * @param id fragment id
+     */
+    public static void checkFragmentIsOpen(int id){
+        onView(withId(id)).check(matches(isDisplayed()));
+    }
+
+
+}
