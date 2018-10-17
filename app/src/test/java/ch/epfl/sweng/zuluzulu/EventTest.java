@@ -14,6 +14,8 @@ import org.mockito.Mockito;
 
 //import java.util.Date;
 
+import java.util.Date;
+
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 
 @RunWith(JUnit4.class)
@@ -24,7 +26,7 @@ public class EventTest {
     private static final String SHORT_DESC = "Beuverie à Zelig";
     private static final String LONG_DESC = "This is only random bla bla bla";
     private static final String ICON_URI_STRING = "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso4_icon.png?alt=media&token=e2c5206d-32a6-43e1-a9a8-da941f553e64";
-//    private static final Date START_DATE = new Date(System.currentTimeMillis());
+    private static final Date START_DATE = new Date(System.currentTimeMillis());
 
     private Event event0;
     private Event event1;
@@ -41,7 +43,7 @@ public class EventTest {
         Mockito.when(mocked_valid_datasnap1.getString("long_desc")).thenReturn(LONG_DESC);
         Mockito.when(mocked_valid_datasnap1.getString("short_desc")).thenReturn(SHORT_DESC);
         Mockito.when(mocked_valid_datasnap1.getString("icon_uri")).thenReturn(ICON_URI_STRING);
-//        Mockito.when(mocked_valid_datasnap1.getDate("start_date")).thenReturn(START_DATE);
+        Mockito.when(mocked_valid_datasnap1.getDate("start_date")).thenReturn(START_DATE);
         Mockito.when(mocked_valid_datasnap1.get("id")).thenReturn(1L);
 
         Mockito.when(mocked_valid_datasnap2.getString("name")).thenReturn(NAME2);
@@ -49,14 +51,14 @@ public class EventTest {
         Mockito.when(mocked_valid_datasnap2.getString("short_desc")).thenReturn(SHORT_DESC);
         Mockito.when(mocked_valid_datasnap2.getString("icon_uri")).thenReturn(ICON_URI_STRING);
         Mockito.when(mocked_valid_datasnap2.get("id")).thenReturn(1L);
-//        Mockito.when(mocked_valid_datasnap2.getDate("start_date")).thenReturn(START_DATE);
+        Mockito.when(mocked_valid_datasnap2.getDate("start_date")).thenReturn(START_DATE);
 
         Mockito.when(mocked_invalid_datasnap.getString("name")).thenReturn(NAME1);
         Mockito.when(mocked_invalid_datasnap.getString("long_desc")).thenReturn(null);
         Mockito.when(mocked_invalid_datasnap.getString("short_desc")).thenReturn(SHORT_DESC);
         Mockito.when(mocked_invalid_datasnap.getString("icon_uri")).thenReturn(null);
         Mockito.when(mocked_invalid_datasnap.get("id")).thenReturn(1L);
-//        Mockito.when(mocked_invalid_datasnap.getDate("start_date")).thenReturn(START_DATE);
+        Mockito.when(mocked_invalid_datasnap.getDate("start_date")).thenReturn(START_DATE);
 
         event0 = new Event(mocked_valid_datasnap1);
         event1 = new Event(mocked_valid_datasnap2);
@@ -95,9 +97,9 @@ public class EventTest {
         assertEquals(Uri.parse(ICON_URI_STRING), event0.getIconUri());
     }
 
-//    @Test
-//    public void dateIsCorrect() {
-//        assert START_DATE.equals(event0.getStart_date()); }
+    @Test
+    public void dateIsCorrect() {
+        assert START_DATE.equals(event0.getStart_date()); }
 
     @Test
     public void comparableToIsCorrect(){

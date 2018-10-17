@@ -64,7 +64,7 @@ public class EventAdapter extends ArrayAdapter<Event> {
             holder.name = event_view.findViewById(R.id.card_event_name);
             holder.short_desc = event_view.findViewById(R.id.card_event_short_desc);
             holder.icon = event_view.findViewById(R.id.card_event_image);
-//            holder.start_date = event_view.findViewById(R.id.card_event_date);
+            holder.start_date = event_view.findViewById(R.id.card_event_date);
 
             event_view.setTag(holder);
         }
@@ -73,7 +73,7 @@ public class EventAdapter extends ArrayAdapter<Event> {
         holder.name.setText(event.getName());
         holder.short_desc.setText(event.getShort_desc());
         initIcon(event.getIconUri(), holder.icon);
-//        holder.start_date.setText(event.getStart_date().toString());
+        holder.start_date.setText(event.getStart_date().toString());
 
         event_view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,6 +105,6 @@ public class EventAdapter extends ArrayAdapter<Event> {
         ImageView icon;
         TextView name;
         TextView short_desc;
-//        TextView start_date;
+        TextView start_date;
     }
 }

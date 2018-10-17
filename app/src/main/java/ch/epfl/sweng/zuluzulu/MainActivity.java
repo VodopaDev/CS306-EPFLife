@@ -27,6 +27,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -65,6 +66,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (Intent.ACTION_VIEW.equals(i.getAction())) {
             selectItem(navigationView.getMenu().findItem(R.id.nav_login));
         } else {
+            // Look if there is a user object set
+            User user = (User) i.getSerializableExtra("user");
+            if(user != null){
+                this.user = user;
+            }
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
         }
     }
@@ -167,10 +173,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case R.id.nav_settings:
                 fragment = SettingsFragment.newInstance();
                 break;
+            case R.id.nav_profile:
+                fragment = ProfileFragment.newInstance(user);
+                break;
             case R.id.nav_logout:
                 this.user = new User.UserBuilder().buildGuestUser();
                 updateMenuItems();
                 menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
+                fragment = MainFragment.newInstance();
                 break;
             case R.id.nav_chat:
                 fragment = ChannelFragment.newInstance(user);
@@ -237,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             default:
                 // Should never happen
-                throw new AssertionError("Invalid message");
+                throw new AssertionError(tag);
         }
     }
 
