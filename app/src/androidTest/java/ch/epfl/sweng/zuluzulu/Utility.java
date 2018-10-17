@@ -6,7 +6,6 @@ import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.view.Gravity;
 
-import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -26,9 +25,10 @@ public class Utility {
 
     /**
      * Create a user for the tests
+     *
      * @return Return a user
      */
-    public static User createTestUser(){
+    public static User createTestUser() {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setSciper("123456");
         builder.setGaspar("gaspar");
@@ -38,7 +38,7 @@ public class Utility {
 
         User user = builder.buildAuthenticatedUser();
 
-        assert(user != null);
+        assert (user != null);
 
 
         return user;
@@ -46,20 +46,19 @@ public class Utility {
 
     /**
      * Add user to main
-     *
-     * !!! TO READ !!!
-     *
-     * @waring NEED TO BE CALLED TO CREATE THE ACTIVITY
-     * USE IN RULE : new ActivityTestRule<>(MainActivity.class, false, false);
-     *
-     * It's allow us to not start the Activity before !
-     *
+     * <p>
      * !!! TO READ !!!
      *
      * @param mActivityRule Activity rule
-     * @param user User
+     * @param user          User
+     * @waring NEED TO BE CALLED TO CREATE THE ACTIVITY
+     * USE IN RULE : new ActivityTestRule<>(MainActivity.class, false, false);
+     * <p>
+     * It's allow us to not start the Activity before !
+     * <p>
+     * !!! TO READ !!!
      */
-    public static void addUserToMainIntent(ActivityTestRule<MainActivity> mActivityRule, User user){
+    public static void addUserToMainIntent(ActivityTestRule<MainActivity> mActivityRule, User user) {
         // Put the user into the main
         Intent i = new Intent();
         i.putExtra("user", user);
@@ -69,6 +68,7 @@ public class Utility {
     /**
      * Enter the username and password for login
      * To use on the LoginFragment only !
+     *
      * @deprecated instead : Create the user with createTestUser() and pass it when creating fragment instance @see ProfileFragmentTest or ChatFragmentTest
      */
     public static void login() {
@@ -79,6 +79,7 @@ public class Utility {
 
     /**
      * Login from anywhere in the app
+     *
      * @deprecated instead : Create the user with createTestUser() and pass it when creating fragment instance @see ProfileFragmentTest or ChatFragmentTest
      */
     public static void fullLogin() {
@@ -90,10 +91,11 @@ public class Utility {
     /**
      * Open the AssociationFragment
      */
-    public static void goToAssociation(){
+    public static void goToAssociation() {
         openMenu();
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_associations));
     }
+
     /**
      * Open the menu from the mainActivity
      */
@@ -114,9 +116,10 @@ public class Utility {
 
     /**
      * Check if the fragment is open
+     *
      * @param id fragment id
      */
-    public static void checkFragmentIsOpen(int id){
+    public static void checkFragmentIsOpen(int id) {
         onView(withId(id)).check(matches(isDisplayed()));
     }
 

@@ -29,7 +29,7 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View messageView = convertView;
-        if(messageView == null) {
+        if (messageView == null) {
             messageView = LayoutInflater.from(mContext).inflate(R.layout.chat_message, parent, false);
         }
 

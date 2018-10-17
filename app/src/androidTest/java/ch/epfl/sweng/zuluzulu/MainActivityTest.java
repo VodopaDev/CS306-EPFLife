@@ -32,7 +32,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void currentFragmentIsCorrect(){
+    public void currentFragmentIsCorrect() {
         assertTrue(mActivity.getCurrentFragment() instanceof MainFragment);
         Utility.openMenu();
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_associations));

@@ -19,7 +19,7 @@ public class ChannelTest {
     @Test
     public void testGuettersAndSetters() {
         Channel channel = new Channel(channelName1, channelDescription1);
-        assertEquals(channelName1,channel.getName());
+        assertEquals(channelName1, channel.getName());
         assertEquals(channelDescription1, channel.getDescription());
 
         channel.setName(channelName2);
