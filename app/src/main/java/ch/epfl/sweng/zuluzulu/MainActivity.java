@@ -65,6 +65,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (Intent.ACTION_VIEW.equals(i.getAction())) {
             selectItem(navigationView.getMenu().findItem(R.id.nav_login));
         } else {
+            // Look if there is a user object set
+            User user = (User) i.getSerializableExtra("user");
+            if(user != null){
+                this.user = user;
+            }
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
         }
     }
@@ -171,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 this.user = new User.UserBuilder().buildGuestUser();
                 updateMenuItems();
                 menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
+                fragment = MainFragment.newInstance();
                 break;
             case R.id.nav_chat:
                 fragment = ChannelFragment.newInstance(user);

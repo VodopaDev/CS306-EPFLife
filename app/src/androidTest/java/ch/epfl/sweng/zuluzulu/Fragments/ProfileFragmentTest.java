@@ -15,11 +15,9 @@ import ch.epfl.sweng.zuluzulu.Utility;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.*;
 
 public class ProfileFragmentTest {
     private User user;
@@ -27,11 +25,12 @@ public class ProfileFragmentTest {
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+            new ActivityTestRule<>(MainActivity.class, false, false);
 
     @Before
     public void setUp() throws Exception {
         user = Utility.createTestUser();
+        Utility.addUserToMainIntent(mActivityRule, user);
 
         fragment = ProfileFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
