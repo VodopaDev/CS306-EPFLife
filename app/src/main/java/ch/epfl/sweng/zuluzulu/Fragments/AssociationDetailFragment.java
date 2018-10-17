@@ -19,7 +19,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
-public class AssociationDetailFragment extends Fragment{
+public class AssociationDetailFragment extends Fragment {
     public static final String TAG = "ASSOCIATION_DETAIL__TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_ASSO = "ARG_ASSO";
@@ -33,10 +33,10 @@ public class AssociationDetailFragment extends Fragment{
     private User user;
 
     public static AssociationDetailFragment newInstance(User user, Association asso) {
-        if(asso == null)
+        if (asso == null)
             throw new NullPointerException("Error creating an AssociationDetailFragment:\n" +
                     "Association is null");
-        if(user == null)
+        if (user == null)
             throw new NullPointerException("Error creating an AssociationDetailFragment:\n" +
                     "User is null");
 
@@ -69,7 +69,7 @@ public class AssociationDetailFragment extends Fragment{
         asso_fav = view.findViewById(R.id.association_detail_fav);
         setFavButtonBehaviour();
         asso_fav.setContentDescription(NOT_FAV_CONTENT);
-        if(user.isConnected() && ((AuthenticatedUser)user).isFavAssociation(asso)) {
+        if (user.isConnected() && ((AuthenticatedUser) user).isFavAssociation(asso)) {
             loadFavImage(R.drawable.fav_on);
             asso_fav.setContentDescription(FAV_CONTENT);
         }
@@ -85,31 +85,29 @@ public class AssociationDetailFragment extends Fragment{
         return view;
     }
 
-    private void loadFavImage(int drawable){
+    private void loadFavImage(int drawable) {
         Glide.with(getContext())
                 .load(drawable)
                 .centerCrop()
                 .into(asso_fav);
     }
 
-    private void setFavButtonBehaviour(){
+    private void setFavButtonBehaviour() {
         asso_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(user.isConnected()){
-                    AuthenticatedUser auth = (AuthenticatedUser)user;
-                    if(auth.isFavAssociation(asso)){
+                if (user.isConnected()) {
+                    AuthenticatedUser auth = (AuthenticatedUser) user;
+                    if (auth.isFavAssociation(asso)) {
                         auth.removeFavAssociation(asso);
                         loadFavImage(R.drawable.fav_off);
                         asso_fav.setContentDescription(NOT_FAV_CONTENT);
-                    }
-                    else{
+                    } else {
                         auth.addFavAssociation(asso);
                         loadFavImage(R.drawable.fav_on);
                         asso_fav.setContentDescription(FAV_CONTENT);
                     }
-                }
-                else {
+                } else {
                     Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
                 }
             }
