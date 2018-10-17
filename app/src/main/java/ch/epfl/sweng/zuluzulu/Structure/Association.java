@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -20,6 +21,7 @@ public class Association implements Serializable {
     private String long_desc;
 
     private Uri icon_uri;
+    private Uri banner_uri;
 
     /**
      * Create an association using a DocumentSnapshot
@@ -35,7 +37,20 @@ public class Association implements Serializable {
         name = snap.getString("name");
         short_desc = snap.getString("short_desc");
         long_desc = snap.getString("long_desc");
-        icon_uri = Uri.parse(snap.getString("icon_uri"));
+
+        // Init the Icon URI
+        String icon_str = snap.getString("icon_uri");
+        if(icon_str == null)
+            Uri.fromFile(new File("./res/drawable/association_cache/default_icon.png"));
+        else
+            Uri.parse(icon_str);
+
+        // Init the Banner URI
+        String banner_str = snap.getString("banner_uri");
+        if(banner_str == null)
+            Uri.fromFile(new File("./res/drawable/association_cache/default_banner.png"));
+        else
+            Uri.parse(banner_str);
     }
 
     /**
@@ -99,6 +114,16 @@ public class Association implements Serializable {
     }
 
     /**
+     * Return the Association's banner Uri
+     *
+     * @return the banner Uri
+     */
+    @Nullable
+    public Uri getBannerUri() {
+        return banner_uri;
+    }
+
+    /**
      * Check if a DocumentSnapshot correspond to an Association's one
      *
      * @param snap the DocumentSnapshot
@@ -110,7 +135,6 @@ public class Association implements Serializable {
                 || snap.getString("short_desc") == null
                 || snap.getString("long_desc") == null
                 || snap.getString("name") == null
-                || snap.getString("icon_uri") == null
         );
     }
 }

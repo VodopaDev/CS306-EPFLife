@@ -81,6 +81,12 @@ public class AssociationDetailFragment extends Fragment {
                 .centerCrop()
                 .into(asso_icon);
 
+        // Association banner
+        ImageView asso_banner = view.findViewById(R.id.association_detail_banner);
+        Glide.with(getContext())
+                .load(asso.getBannerUri())
+                .centerCrop()
+                .into(asso_banner);
 
         return view;
     }
