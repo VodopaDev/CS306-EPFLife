@@ -3,10 +3,11 @@ package ch.epfl.sweng.zuluzulu.Structure;
 public class ChatMessage {
 
     private String senderName;
-    private int sciper;
+    private String sciper;
     private String message;
+    private boolean ownMessage;
 
-    public ChatMessage(String senderName, int sciper, String message) {
+    public ChatMessage(String senderName, String sciper, String message, boolean ownMessage) {
         this.senderName = senderName;
         this.sciper = sciper;
         this.message = message;
@@ -20,9 +21,9 @@ public class ChatMessage {
         this.senderName = senderName;
     }
 
-    public int getSciper() { return sciper; }
+    public String getSciper() { return sciper; }
 
-    public void setSciper(int sciper) { this.sciper = sciper; }
+    public void setSciper(String sciper) { this.sciper = sciper; }
 
     public String getMessage() {
         return message;
@@ -31,4 +32,8 @@ public class ChatMessage {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    public boolean isOwnMessage() { return ownMessage; }
+
+    public void setOwnMessage(boolean ownMessage) { this.ownMessage = ownMessage; }
 }
