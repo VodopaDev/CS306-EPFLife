@@ -55,5 +55,8 @@
     <string name="profile_email">Email</string>
     <string name="profile_sciper">Sciper</string>
 
+    <!-- Main fragment related -->
+    <string name="logo_description">Application\'s logo</string>
+
 
 </resources>
