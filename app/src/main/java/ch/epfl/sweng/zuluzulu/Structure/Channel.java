@@ -2,13 +2,19 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 public class Channel {
 
+    private int id;
     private String name;
     private String description;
 
-    public Channel(String name, String description) {
+    public Channel(int id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
     }
+
+    public int getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
 
     public String getName() {
         return name;

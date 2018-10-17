@@ -125,9 +125,10 @@ public class ChannelFragment extends Fragment {
                             listOfChannels.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
+                                int id = document.getLong("id").intValue();
                                 String name = document.getString("name");
                                 String description = document.getString("description");
-                                Channel channel = new Channel(name, description);
+                                Channel channel = new Channel(id, name, description);
                                 listOfChannels.add(channel);
                             }
                             adapter.notifyDataSetChanged();

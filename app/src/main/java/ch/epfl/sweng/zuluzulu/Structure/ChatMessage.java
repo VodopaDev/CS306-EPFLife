@@ -11,6 +11,7 @@ public class ChatMessage {
         this.senderName = senderName;
         this.sciper = sciper;
         this.message = message;
+        this.ownMessage = ownMessage;
     }
 
     public String getSenderName() {
