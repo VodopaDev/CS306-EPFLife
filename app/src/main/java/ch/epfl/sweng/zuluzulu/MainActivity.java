@@ -23,7 +23,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
+//import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
@@ -242,10 +242,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 Association association = (Association) data;
                 openFragment(AssociationDetailFragment.newInstance(user, association));
                 break;
-            case EventDetailFragment.TAG:
-                Event event = (Event) data;
-                openFragment(EventDetailFragment.newInstance(user, event));
-                break;
+//            case EventDetailFragment.TAG:
+//                Event event = (Event) data;
+//                openFragment(EventDetailFragment.newInstance(user, event));
+//                break;
             default:
                 // Should never happen
                 throw new AssertionError(tag);

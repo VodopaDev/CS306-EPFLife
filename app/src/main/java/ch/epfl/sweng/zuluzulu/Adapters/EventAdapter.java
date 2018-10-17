@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
+//import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -75,13 +75,13 @@ public class EventAdapter extends ArrayAdapter<Event> {
         initIcon(event.getIconUri(), holder.icon);
         holder.start_date.setText(event.getStart_date().toString());
 
-        event_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("FRAG_CHANGE","Switching to " + event.getName() + "detailed view");
-                mListener.onFragmentInteraction(EventDetailFragment.TAG, event);
-            }
-        });
+//        event_view.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d("FRAG_CHANGE","Switching to " + event.getName() + "detailed view");
+//                mListener.onFragmentInteraction(EventDetailFragment.TAG, event);
+//            }
+//        });
 
         return event_view;
     }
