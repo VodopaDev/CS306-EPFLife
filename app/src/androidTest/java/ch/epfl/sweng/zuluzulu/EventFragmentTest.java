@@ -28,13 +28,13 @@ public class EventFragmentTest {
 
     private void guestGoesToEvent() throws InterruptedException {
         Utility.goToEvent();
-        TimeUnit.SECONDS.sleep(1);
+//        TimeUnit.MILLISECONDS.sleep(1);
     }
 
     private void authenticatedGoesToEvent() throws InterruptedException {
         Utility.fullLogin();
         Utility.goToEvent();
-        TimeUnit.SECONDS.sleep(1);
+//        TimeUnit.MILLISECONDS.sleep(1);
     }
 
     @Test
@@ -77,8 +77,8 @@ public class EventFragmentTest {
     @Test
     public void AuthenticatedClickingAnEventGoesToDetail() throws InterruptedException {
         authenticatedGoesToEvent();
-        onView(withText("forumEpfl")).perform(ViewActions.click());
         TimeUnit.SECONDS.sleep(1);
+        onView(withText("forumEpfl")).perform(ViewActions.click());
         onView(withId(R.id.event_detail_name)).check(matches(isDisplayed()));
     }
 }

@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 
 //import java.util.Date;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -26,7 +27,7 @@ public class EventTest {
     private static final String SHORT_DESC = "Beuverie à Zelig";
     private static final String LONG_DESC = "This is only random bla bla bla";
     private static final String ICON_URI_STRING = "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso4_icon.png?alt=media&token=e2c5206d-32a6-43e1-a9a8-da941f553e64";
-    private static final Date START_DATE = new Date(System.currentTimeMillis());
+    private static final Date START_DATE = new Date();
 
     private Event event0;
     private Event event1;
@@ -98,8 +99,7 @@ public class EventTest {
     }
 
     @Test
-    public void dateIsCorrect() {
-        assert START_DATE.equals(event0.getStart_date()); }
+    public void dateIsCorrect() { assertEquals(START_DATE, event0.getStart_date()); }
 
     @Test
     public void comparableToIsCorrect(){
