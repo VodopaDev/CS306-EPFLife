@@ -6,6 +6,7 @@ import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.view.Gravity;
 
+import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -94,6 +95,14 @@ public class Utility {
     public static void goToAssociation() {
         openMenu();
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_associations));
+    }
+
+    /**
+     * Open the EventFragment
+     */
+    public static void goToEvent(){
+        openMenu();
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_events));
     }
 
     /**
