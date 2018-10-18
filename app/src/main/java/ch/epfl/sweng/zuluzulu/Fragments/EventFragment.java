@@ -21,42 +21,49 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Adapters.AssociationAdapter;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Adapters.EventAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AssociationFragment#newInstance} factory method to
+ * Use the {@link EventFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AssociationFragment extends Fragment {
-    private static final String TAG = "ASSOCIATIONS_TAG";
+public class EventFragment extends Fragment {
+    private static final String TAG = "EVENT_TAG";
     private static final String ARG_USER = "ARG_USER";
 
     private User user;
     private OnFragmentInteractionListener mListener;
 
-    private ArrayList<Association> assos_all;
-    private ArrayList<Association> assos_fav;
-    private AssociationAdapter assos_adapter;
+    private ArrayList<Event> event_all;
+    private ArrayList<Event> event_fav;
+    private EventAdapter event_adapter;
 
-    private ListView listview_assos;
-    private Button button_assos_all;
-    private Button button_assos_fav;
+    private ListView listview_event;
+    private Button button_event_all;
+    private Button button_event_fav;
 
-    public AssociationFragment() {
+    public EventFragment() {
         // Required empty public constructor
     }
 
-    public static AssociationFragment newInstance(User user) {
-        AssociationFragment fragment = new AssociationFragment();
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param user user.
+     * @return A new instance of fragment EventFragment.
+     */
+    public static EventFragment newInstance(User user) {
+        EventFragment fragment = new EventFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);
         fragment.setArguments(args);
@@ -70,37 +77,37 @@ public class AssociationFragment extends Fragment {
             user = (User) getArguments().getSerializable(ARG_USER);
         }
 
-        assos_all = new ArrayList<>();
-        assos_fav = new ArrayList<>();
-        assos_adapter = new AssociationAdapter(getContext(), assos_all, mListener);
+        event_all = new ArrayList<>();
+        event_fav = new ArrayList<>();
+        event_adapter = new EventAdapter(getContext(), event_all, mListener);
 
-        fillAssociationLists();
+        fillEventLists();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_association, container, false);
+        View view = inflater.inflate(R.layout.fragment_event, container, false);
 
-        listview_assos = view.findViewById(R.id.association_fragment_listview);
-        listview_assos.setAdapter(assos_adapter);
+        listview_event = view.findViewById(R.id.event_fragment_listview);
+        listview_event.setAdapter(event_adapter);
 
-        button_assos_fav = view.findViewById(R.id.association_fragment_fav_button);
-        button_assos_all = view.findViewById(R.id.association_fragment_all_button);
+        button_event_fav = view.findViewById(R.id.event_fragment_fav_button);
+        button_event_all = view.findViewById(R.id.event_fragment_all_button);
 
-        button_assos_fav.setOnClickListener(new View.OnClickListener() {
+        button_event_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (user.isConnected())
-                    updateListView(button_assos_fav, button_assos_all, assos_fav, listview_assos);
+                if(user.isConnected())
+                    updateListView(button_event_fav, button_event_all, event_fav, listview_event);
                 else
-                    Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
+                    Snackbar.make(getView(), "Login to access your favorite event", 5000).show();
             }
         });
 
-        button_assos_all.setOnClickListener(new View.OnClickListener() {
+        button_event_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateListView(button_assos_all, button_assos_fav, assos_all, listview_assos);
+                updateListView(button_event_all, button_event_fav, event_all, listview_event);
             }
         });
 
@@ -118,18 +125,14 @@ public class AssociationFragment extends Fragment {
         }
     }
 
-    public ListView getListviewAssos() {
-        return listview_assos;
-    }
-
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
-    private void fillAssociationLists() {
-        FirebaseFirestore.getInstance().collection("assos_info")
+    private void fillEventLists(){
+       FirebaseFirestore.getInstance().collection("events_info")
                 .orderBy("name")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -137,30 +140,29 @@ public class AssociationFragment extends Fragment {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
                         for (int i = 0; i < snap_list.size(); i++) {
-                            Association asso = new Association(snap_list.get(i));
-                            assos_all.add(asso);
+                            Event event = new Event(snap_list.get(i));
+                            event_all.add(event);
 
-                            if (user.isConnected() && ((AuthenticatedUser) user).isFavAssociation(asso))
-                                assos_fav.add(asso);
+                            if (user.isConnected() && ((AuthenticatedUser) user).isFavEvent(event))
+                                event_fav.add(event);
                         }
-                        assos_adapter.notifyDataSetChanged();
+                        event_adapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
-                        Log.e("ASSO_LIST", "Error fetching association date\n" + e.getMessage());
+                        Log.e("EVENT_LIST", "Error fetching event date\n" + e.getMessage());
                     }
                 });
     }
 
-    private void updateListView(Button new_selected, Button new_unselected, ArrayList<Association> data, ListView list) {
+    private void updateListView(Button new_selected, Button new_unselected, ArrayList<Event> data, ListView list){
         new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         new_unselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
-        assos_adapter = new AssociationAdapter(getContext(), data, mListener);
-        list.setAdapter(assos_adapter);
-        assos_adapter.notifyDataSetChanged();
+        event_adapter = new EventAdapter(getContext(), data, mListener);
+        list.setAdapter(event_adapter);
+        event_adapter.notifyDataSetChanged();
     }
-
 }

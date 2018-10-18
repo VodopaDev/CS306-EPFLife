@@ -23,11 +23,14 @@ import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
+//import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
@@ -65,9 +68,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         } else {
             // Look if there is a user object set
             User user = (User) i.getSerializableExtra("user");
-            if(user != null){
+            if (user != null) {
                 this.user = user;
             }
+            
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
         }
     }
@@ -164,6 +168,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case R.id.nav_associations:
                 fragment = AssociationFragment.newInstance(user);
                 break;
+            case R.id.nav_events:
+                fragment = EventFragment.newInstance(user);
+                break;
             case R.id.nav_settings:
                 fragment = SettingsFragment.newInstance();
                 break;
@@ -196,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
-                previous_fragments.add(0,current_fragment);
+                previous_fragments.add(0, current_fragment);
                 current_fragment = fragment;
                 return true;
             }
@@ -235,6 +242,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 Association association = (Association) data;
                 openFragment(AssociationDetailFragment.newInstance(user, association));
                 break;
+//            case EventDetailFragment.TAG:
+//                Event event = (Event) data;
+//                openFragment(EventDetailFragment.newInstance(user, event));
+//                break;
             default:
                 // Should never happen
                 throw new AssertionError(tag);
@@ -251,6 +262,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     /**
      * Return the current fragment
+     *
      * @return current fragment
      */
     public Fragment getCurrentFragment() {
@@ -259,7 +271,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     /**
      * Return the current user
+     *
      * @return current user
      */
-    public User getUser(){return user;}
+    public User getUser() {
+        return user;
+    }
 }

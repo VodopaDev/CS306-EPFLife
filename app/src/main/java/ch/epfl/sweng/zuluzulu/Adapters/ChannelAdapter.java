@@ -29,7 +29,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View channelView = convertView;
-        if(channelView == null) {
+        if (channelView == null) {
             channelView = LayoutInflater.from(mContext).inflate(R.layout.channel, parent, false);
         }
 
