@@ -100,7 +100,7 @@ public class ChatFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
@@ -158,13 +158,15 @@ public class ChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String senderName = user.isConnected() ? user.getFirstNames() : "Guest";
-                String msg = textEdit.getText().toString();
+                String message = textEdit.getText().toString();
                 Timestamp time = Timestamp.now();
+                String sciper = user.isConnected() ? user.getSciper() : "000000";
 
                 Map<String, Object> data = new HashMap<>();
                 data.put("senderName", senderName);
-                data.put("msg", msg);
+                data.put("message", message);
                 data.put("time", time);
+                data.put("sciper", sciper);
 
                 addDataToFirestore(data);
             }
@@ -216,9 +218,7 @@ public class ChatFragment extends Fragment {
                             messages.clear();
                             for (DocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                String senderName = document.getString("senderName");
-                                String msg = document.getString("msg");
-                                ChatMessage message = new ChatMessage(senderName, msg);
+                                ChatMessage message = new ChatMessage(document, user.getSciper());
                                 messages.add(message);
                             }
                             adapter.notifyDataSetChanged();

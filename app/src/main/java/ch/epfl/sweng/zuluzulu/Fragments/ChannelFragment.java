@@ -89,7 +89,8 @@ public class ChannelFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mListener.onFragmentInteraction(TAG, position + 1);
+                Channel selectedChannel = listOfChannels.get(position);
+                mListener.onFragmentInteraction(TAG, selectedChannel.getId());
             }
         });
 
@@ -125,9 +126,7 @@ public class ChannelFragment extends Fragment {
                             listOfChannels.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                String name = document.getString("name");
-                                String description = document.getString("description");
-                                Channel channel = new Channel(name, description);
+                                Channel channel = new Channel(document);
                                 listOfChannels.add(channel);
                             }
                             adapter.notifyDataSetChanged();
