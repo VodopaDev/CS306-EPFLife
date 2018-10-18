@@ -4,7 +4,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
 
-public class ToolBox {
+public class Utils {
 
     public static boolean isValidSnapshot(DocumentSnapshot snap, List<String> fields) {
         if (snap == null) {

@@ -13,7 +13,7 @@ public class Channel {
     private String description;
 
     public Channel(DocumentSnapshot snap) {
-        if (!ToolBox.isValidSnapshot(snap, fields)) {
+        if (!Utils.isValidSnapshot(snap, fields)) {
             throw new IllegalArgumentException("This is not a channel snapshot");
         }
         this.id = snap.getLong("id").intValue();

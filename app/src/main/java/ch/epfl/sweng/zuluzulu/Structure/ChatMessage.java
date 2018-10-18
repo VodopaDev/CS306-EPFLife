@@ -16,7 +16,7 @@ public class ChatMessage {
     private boolean ownMessage;
 
     public ChatMessage(DocumentSnapshot snap, String userSciper) {
-        if (!ToolBox.isValidSnapshot(snap, fields)) {
+        if (!Utils.isValidSnapshot(snap, fields)) {
             throw new IllegalArgumentException("This is not a chat message snapshot");
         }
         senderName = snap.getString("senderName");
