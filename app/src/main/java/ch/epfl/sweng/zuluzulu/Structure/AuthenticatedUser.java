@@ -1,6 +1,15 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.collect.Sets;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,7 +30,6 @@ public final class AuthenticatedUser extends User {
     private Set<String> chats_names;
     private Set<Integer> events_id;
 
-    // TODO: Get data from cloud service using the id
     protected AuthenticatedUser(String sciper, String gaspar, String email, String first_names, String last_names) {
         this.sciper = sciper;
         this.gaspar = gaspar;
@@ -29,9 +37,29 @@ public final class AuthenticatedUser extends User {
         this.first_names = first_names;
         this.last_names = last_names;
 
-        assos_id = Sets.newHashSet(1, 3, 4, 6);
-        chats_names = new HashSet<>();
-        events_id = Sets.newHashSet(1);
+        int id = Integer.valueOf(sciper);
+        CollectionReference ref =  FirebaseFirestore
+                .getInstance()
+                .collection("users_info");
+
+
+        ref.document(sciper).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        assos_id = new HashSet<>();
+                        chats_names = new HashSet<>();
+                        events_id = new HashSet<>();
+                    }
+                });
+
+
 
     }
 

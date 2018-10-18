@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.net.Uri;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -10,6 +11,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+
+import javax.security.auth.callback.Callback;
 
 import ch.epfl.sweng.zuluzulu.R;
 
