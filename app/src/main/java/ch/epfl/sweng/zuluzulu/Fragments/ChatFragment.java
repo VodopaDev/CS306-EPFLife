@@ -164,7 +164,7 @@ public class ChatFragment extends Fragment {
 
                 Map<String, Object> data = new HashMap<>();
                 data.put("senderName", senderName);
-                data.put("msg", msg);
+                data.put("message", msg);
                 data.put("time", time);
                 data.put("sciper", sciper);
 
@@ -218,11 +218,7 @@ public class ChatFragment extends Fragment {
                             messages.clear();
                             for (DocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                String senderName = document.getString("senderName");
-                                String sciper = document.getString("sciper");
-                                String msg = document.getString("msg");
-                                boolean ownMessage = sciper.equals(user.getSciper());
-                                ChatMessage message = new ChatMessage(senderName, sciper, msg, ownMessage);
+                                ChatMessage message = new ChatMessage(document, user.getSciper());
                                 messages.add(message);
                             }
                             adapter.notifyDataSetChanged();
