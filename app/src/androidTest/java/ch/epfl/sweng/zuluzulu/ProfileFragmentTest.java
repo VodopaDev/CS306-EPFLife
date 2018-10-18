@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu.Fragments;
+package ch.epfl.sweng.zuluzulu;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.v4.app.Fragment;
@@ -7,10 +7,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import ch.epfl.sweng.zuluzulu.MainActivity;
-import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.Utility;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -27,7 +25,7 @@ public class ProfileFragmentTest {
     private Fragment fragment;
 
     @Before
-    public void setUp() {
+    public void init() {
         user = Utility.createTestUser();
         Utility.addUserToMainIntent(mActivityRule, user);
 

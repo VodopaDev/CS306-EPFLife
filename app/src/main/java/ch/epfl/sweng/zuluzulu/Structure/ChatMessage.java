@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Class that represents a chat message in a view
  */
-public final class ChatMessage {
+public class ChatMessage {
 
     private static final List<String> fields = Arrays.asList("senderName", "sciper", "message", "time");
     private String senderName;

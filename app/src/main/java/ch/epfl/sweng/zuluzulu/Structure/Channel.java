@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Class that represents a channel in a view
  */
-public final class Channel {
+public class Channel {
 
     private static final List<String> fields = Arrays.asList("id", "name", "description");
     private int id;
