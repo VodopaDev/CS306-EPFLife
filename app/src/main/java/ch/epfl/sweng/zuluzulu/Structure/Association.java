@@ -7,7 +7,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.R;
 
@@ -16,6 +18,7 @@ import ch.epfl.sweng.zuluzulu.R;
  * Has diverse getters and some functions to create views
  */
 public class Association implements Serializable {
+    private List<String> firebase_fields = Arrays.asList("id","name","short_desc","long_desc");
 
     private int id;
     private String name;
@@ -32,8 +35,8 @@ public class Association implements Serializable {
      * @throws IllegalArgumentException if the snapshot isn't an Association's snapshot
      */
     public Association(DocumentSnapshot snap) {
-        if (!snapshotIsValid(snap))
-            throw new NullPointerException();
+        if (!Utils.isValidSnapshot(snap, firebase_fields))
+            throw new IllegalArgumentException();
 
         id = ((Long) snap.get("id")).intValue();
         name = snap.getString("name");
@@ -121,20 +124,5 @@ public class Association implements Serializable {
     @Nullable
     public Uri getBannerUri() {
         return banner_uri;
-    }
-
-    /**
-     * Check if a DocumentSnapshot correspond to an Association's one
-     *
-     * @param snap the DocumentSnapshot
-     * @return true if it is a valid snapshot, false otherwise
-     */
-    private boolean snapshotIsValid(DocumentSnapshot snap) {
-        return !(snap == null
-                || snap.get("id") == null
-                || snap.getString("short_desc") == null
-                || snap.getString("long_desc") == null
-                || snap.getString("name") == null
-        );
     }
 }
