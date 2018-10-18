@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import ch.epfl.sweng.zuluzulu.R;
+
 /**
  * A simple class describing an Association
  * Has diverse getters and some functions to create views
@@ -40,17 +42,15 @@ public class Association implements Serializable {
 
         // Init the Icon URI
         String icon_str = snap.getString("icon_uri");
-        if(icon_str == null)
-            Uri.fromFile(new File("./res/drawable/association_cache/default_icon.png"));
-        else
-            Uri.parse(icon_str);
+        icon_uri = icon_str == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon):
+                Uri.parse(icon_str);
 
         // Init the Banner URI
         String banner_str = snap.getString("banner_uri");
-        if(banner_str == null)
-            Uri.fromFile(new File("./res/drawable/association_cache/default_banner.png"));
-        else
-            Uri.parse(banner_str);
+        banner_uri = banner_str == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner):
+                Uri.parse(banner_str);
     }
 
     /**
