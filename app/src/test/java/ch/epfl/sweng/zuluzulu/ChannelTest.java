@@ -29,6 +29,14 @@ public class ChannelTest {
 
     @Before
     public void init() {
+        Mockito.when(mocked_valid_datasnap1.get("id")).thenReturn(id1);
+        Mockito.when(mocked_valid_datasnap1.get("name")).thenReturn(channelName1);
+        Mockito.when(mocked_valid_datasnap1.get("description")).thenReturn(channelDescription1);
+
+        Mockito.when(mocked_invalid_datasnap.get("id")).thenReturn(id1);
+        Mockito.when(mocked_invalid_datasnap.get("name")).thenReturn(null);
+        Mockito.when(mocked_invalid_datasnap.get("description")).thenReturn(channelDescription1);
+
         Mockito.when(mocked_valid_datasnap1.getLong("id")).thenReturn(id1);
         Mockito.when(mocked_valid_datasnap1.getString("name")).thenReturn(channelName1);
         Mockito.when(mocked_valid_datasnap1.getString("description")).thenReturn(channelDescription1);

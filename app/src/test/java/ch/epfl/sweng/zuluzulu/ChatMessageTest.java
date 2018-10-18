@@ -33,6 +33,18 @@ public class ChatMessageTest {
 
     @Before
     public void init() {
+        Mockito.when(mocked_valid_datasnap1.get("senderName")).thenReturn(senderName1);
+        Mockito.when(mocked_valid_datasnap1.get("sciper")).thenReturn(sciper1);
+        Mockito.when(mocked_valid_datasnap1.get("message")).thenReturn(message1);
+
+        Mockito.when(mocked_valid_datasnap2.get("senderName")).thenReturn(senderName2);
+        Mockito.when(mocked_valid_datasnap2.get("sciper")).thenReturn(sciper2);
+        Mockito.when(mocked_valid_datasnap2.get("message")).thenReturn(message2);
+
+        Mockito.when(mocked_invalid_datasnap.get("senderName")).thenReturn(senderName1);
+        Mockito.when(mocked_invalid_datasnap.get("sciper")).thenReturn(null);
+        Mockito.when(mocked_invalid_datasnap.get("message")).thenReturn(message1);
+
         Mockito.when(mocked_valid_datasnap1.getString("senderName")).thenReturn(senderName1);
         Mockito.when(mocked_valid_datasnap1.getString("sciper")).thenReturn(sciper1);
         Mockito.when(mocked_valid_datasnap1.getString("message")).thenReturn(message1);

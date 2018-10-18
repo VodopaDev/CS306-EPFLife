@@ -2,14 +2,18 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Channel {
 
+    private static final List<String> fields = Arrays.asList("id", "name", "description");
     private int id;
     private String name;
     private String description;
 
     public Channel(DocumentSnapshot snap) {
-        if (!snapshotIsValid(snap)) {
+        if (!ToolBox.isValidSnapshot(snap, fields)) {
             throw new IllegalArgumentException("This is not a channel snapshot");
         }
         this.id = snap.getLong("id").intValue();
@@ -35,18 +39,5 @@ public class Channel {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    /**
-     * Check if a DocumentSnapshot corresponds to a channel
-     * @param snap the DocumentSnapshot
-     * @return true if it is a valid snapshot, false otherwise
-     */
-    private boolean snapshotIsValid(DocumentSnapshot snap){
-        return !(snap == null
-                || snap.getLong("id") == null
-                || snap.getString("name") == null
-                || snap.getString("description") == null
-        );
     }
 }

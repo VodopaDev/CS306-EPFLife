@@ -2,15 +2,19 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ChatMessage {
 
+    private static final List<String> fields = Arrays.asList("senderName", "sciper", "message");
     private String senderName;
     private String sciper;
     private String message;
     private boolean ownMessage;
 
     public ChatMessage(DocumentSnapshot snap, String userSciper) {
-        if (!snapshotIsValid(snap)) {
+        if (!ToolBox.isValidSnapshot(snap, fields)) {
             throw new IllegalArgumentException("This is not a chat message snapshot");
         }
         senderName = snap.getString("senderName");
@@ -42,17 +46,4 @@ public class ChatMessage {
     public boolean isOwnMessage() { return ownMessage; }
 
     public void setOwnMessage(boolean ownMessage) { this.ownMessage = ownMessage; }
-
-    /**
-     * Check if a DocumentSnapshot corresponds to a chat message
-     * @param snap the DocumentSnapshot
-     * @return true if it is a valid snapshot, false otherwise
-     */
-    private boolean snapshotIsValid(DocumentSnapshot snap){
-        return !(snap == null
-                || snap.getString("senderName") == null
-                || snap.getString("sciper") == null
-                || snap.getString("message") == null
-        );
-    }
 }
