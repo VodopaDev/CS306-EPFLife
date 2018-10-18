@@ -9,14 +9,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
+import java.util.concurrent.TimeUnit;
+
+import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 @RunWith(AndroidJUnit4.class)
-public class ChatFragmentTest {
+public class ChannelFragmentTest {
 
-    private static final String MSG = "HELLO FROM ZULUZULU";
-    private static final String CHANNEL = "Test";
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class, false, false);
@@ -24,26 +24,26 @@ public class ChatFragmentTest {
     private Fragment fragment;
 
     @Before
-    public void init() {
+    public void init() throws InterruptedException {
         user = Utility.createTestUser();
+
         Utility.addUserToMainIntent(mActivityRule, user);
 
-        fragment = ChatFragment.newInstance(user, 1);
+        fragment = ChannelFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
+
+        TimeUnit.SECONDS.sleep(5);
     }
 
+    @Test
+    public void testUserCanClickOnTheFirstChannel() {
+        //onView(withText("Global")).perform(click());
+        //Utility.checkFragmentIsOpen(R.id.chat_fragment);
+    }
 
     @Test
-    public void testUserCanSendAMessageAndReadIt() {
-        /* Todo
-        I don't understand how to test this without the dependence of firestore
-        I don't want to write a message in the database during the test
-        How can I mock the behavior of firestore..?
-         */
-
-        // Type message
-        //onView(withId(R.id.chat_message_edit)).perform(replaceText(MSG));
-
-        //onView(withId(R.id.chat_send_button)).perform(click());
+    public void testUserCanClickOnTheTestChannel() {
+        //onView(withText("Test")).perform(click());
+        //Utility.checkFragmentIsOpen(R.id.chat_fragment);
     }
 }
