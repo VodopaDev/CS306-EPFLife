@@ -9,8 +9,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.TimeUnit;
-
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
@@ -31,19 +29,9 @@ public class ChannelFragmentTest {
 
         fragment = ChannelFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
-
-        TimeUnit.SECONDS.sleep(5);
     }
 
     @Test
     public void testUserCanClickOnTheFirstChannel() {
-        //onView(withText("Global")).perform(click());
-        //Utility.checkFragmentIsOpen(R.id.chat_fragment);
-    }
-
-    @Test
-    public void testUserCanClickOnTheTestChannel() {
-        //onView(withText("Test")).perform(click());
-        //Utility.checkFragmentIsOpen(R.id.chat_fragment);
     }
 }

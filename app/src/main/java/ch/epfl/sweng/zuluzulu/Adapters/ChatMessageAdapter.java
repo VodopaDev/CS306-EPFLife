@@ -19,6 +19,7 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
 
     private Context mContext;
     private List<ChatMessage> messages;
+    private static final String ownMessageSenderName = "You";
 
     public ChatMessageAdapter(@NonNull Context context, List<ChatMessage> list) {
         super(context, 0, list);
@@ -40,12 +41,11 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
         LinearLayout linearLayout = messageView.findViewById(R.id.chat_message_linearLayout);
         TextView message = messageView.findViewById(R.id.chat_message_msg);
         TextView senderName = messageView.findViewById(R.id.chat_message_senderName);
-        
+
         if (isOwnMessage) {
-            senderName.setText("You");
+            senderName.setText(ownMessageSenderName);
             linearLayout.setBackgroundResource(R.drawable.chat_message_background_ownmessage);
-        }
-        else {
+        } else {
             senderName.setText(currentChatMessage.getSenderName());
             linearLayout.setBackgroundResource(R.drawable.chat_message_background);
         }

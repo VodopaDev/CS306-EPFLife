@@ -5,7 +5,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.Arrays;
 import java.util.List;
 
-public class Channel {
+/**
+ * Class that represents a channel in a view
+ */
+public final class Channel {
 
     private static final List<String> fields = Arrays.asList("id", "name", "description");
     private int id;
@@ -21,22 +24,50 @@ public class Channel {
         this.description = snap.getString("description");
     }
 
-    public int getId() { return id; }
+    /**
+     * Getter for the id
+     *
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
 
-    public void setId(int id) { this.id = id; }
+    /**
+     * Setter for the id
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
 
+    /**
+     * Getter for the name
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Setter for the name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Getter for the description
+     *
+     * @return the description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Setter for the description
+     */
     public void setDescription(String description) {
         this.description = description;
     }

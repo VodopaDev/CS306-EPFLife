@@ -84,7 +84,7 @@ public class ChannelFragment extends Fragment {
         adapter = new ChannelAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
 
-        setUpDataReading();
+        getChannelsFromDatabase();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -114,7 +114,10 @@ public class ChannelFragment extends Fragment {
         mListener = null;
     }
 
-    private void setUpDataReading() {
+    /**
+     * Read data from the database and get the list of the channels
+     */
+    private void getChannelsFromDatabase() {
         db = FirebaseFirestore.getInstance();
         db.collection(CHANNELS_COLLECTION_NAME)
                 .orderBy("id", Query.Direction.ASCENDING)

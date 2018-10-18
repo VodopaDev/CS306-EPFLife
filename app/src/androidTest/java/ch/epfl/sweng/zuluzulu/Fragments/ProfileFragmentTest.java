@@ -27,7 +27,7 @@ public class ProfileFragmentTest {
     private Fragment fragment;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         user = Utility.createTestUser();
         Utility.addUserToMainIntent(mActivityRule, user);
 
