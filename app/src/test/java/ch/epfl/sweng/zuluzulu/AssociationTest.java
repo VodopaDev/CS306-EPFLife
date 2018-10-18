@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
 
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 
@@ -22,38 +22,40 @@ public class AssociationTest {
 
     private static final String SHORT_DESC = "Representing all students at EPFL";
     private static final String LONG_DESC = "Blah blah blah blah blah";
-    private static final String ICON_URI_STRING = "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso1_icon.png?alt=media&token=391a7bfc-1597-4935-9afe-e08ecd734e03";
-    private final Uri mocked_icon_uri = Mockito.mock(Uri.class);
-    private final DocumentSnapshot mocked_valid_datasnap1 = Mockito.mock(DocumentSnapshot.class);
-    private final DocumentSnapshot mocked_valid_datasnap2 = Mockito.mock(DocumentSnapshot.class);
-    private final DocumentSnapshot mocked_invalid_datasnap = Mockito.mock(DocumentSnapshot.class);
+
+    private static final String TEST_URI_STRING = "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso1_icon.png?alt=media&token=391a7bfc-1597-4935-9afe-e08ecd734e03";
+    private static final Uri DEFAULT_BANNER_URI = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner);
+    private static final Uri DEFAULT_ICON_URI = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon);
+
+    private final DocumentSnapshot mocked_valid_datasnap = mock(DocumentSnapshot.class);
+    private final DocumentSnapshot mocked_default_datasnap = mock(DocumentSnapshot.class);
+    private final DocumentSnapshot mocked_invalid_datasnap = mock(DocumentSnapshot.class);
     private Association asso1;
     private Association asso2;
 
     @Before
     public void init() {
-        Mockito.when(mocked_icon_uri.getPath()).thenReturn(ICON_URI_STRING);
+        when(mocked_valid_datasnap.getString("name")).thenReturn(NAME1);
+        when(mocked_valid_datasnap.getString("long_desc")).thenReturn(LONG_DESC);
+        when(mocked_valid_datasnap.getString("short_desc")).thenReturn(SHORT_DESC);
+        when(mocked_valid_datasnap.getString("icon_uri")).thenReturn(TEST_URI_STRING);
+        when(mocked_valid_datasnap.getString("banner_uri")).thenReturn(TEST_URI_STRING);
+        when(mocked_valid_datasnap.get("id")).thenReturn(1L);
 
-        Mockito.when(mocked_valid_datasnap1.getString("name")).thenReturn(NAME1);
-        Mockito.when(mocked_valid_datasnap1.getString("long_desc")).thenReturn(LONG_DESC);
-        Mockito.when(mocked_valid_datasnap1.getString("short_desc")).thenReturn(SHORT_DESC);
-        Mockito.when(mocked_valid_datasnap1.getString("icon_uri")).thenReturn(ICON_URI_STRING);
-        Mockito.when(mocked_valid_datasnap1.get("id")).thenReturn(1L);
+        when(mocked_default_datasnap.getString("name")).thenReturn(NAME2);
+        when(mocked_default_datasnap.getString("long_desc")).thenReturn(LONG_DESC);
+        when(mocked_default_datasnap.getString("short_desc")).thenReturn(SHORT_DESC);
+        when(mocked_default_datasnap.getString("icon_uri")).thenReturn(null);
+        when(mocked_default_datasnap.getString("banner_uri")).thenReturn(null);
+        when(mocked_default_datasnap.get("id")).thenReturn(1L);
 
-        Mockito.when(mocked_valid_datasnap2.getString("name")).thenReturn(NAME2);
-        Mockito.when(mocked_valid_datasnap2.getString("long_desc")).thenReturn(LONG_DESC);
-        Mockito.when(mocked_valid_datasnap2.getString("short_desc")).thenReturn(SHORT_DESC);
-        Mockito.when(mocked_valid_datasnap2.getString("icon_uri")).thenReturn(ICON_URI_STRING);
-        Mockito.when(mocked_valid_datasnap2.get("id")).thenReturn(1L);
+        when(mocked_invalid_datasnap.getString("name")).thenReturn(NAME1);
+        when(mocked_invalid_datasnap.getString("long_desc")).thenReturn(null);
+        when(mocked_invalid_datasnap.getString("short_desc")).thenReturn(SHORT_DESC);
+        when(mocked_invalid_datasnap.get("id")).thenReturn(1L);
 
-        Mockito.when(mocked_invalid_datasnap.getString("name")).thenReturn(NAME1);
-        Mockito.when(mocked_invalid_datasnap.getString("long_desc")).thenReturn(null);
-        Mockito.when(mocked_invalid_datasnap.getString("short_desc")).thenReturn(SHORT_DESC);
-        Mockito.when(mocked_invalid_datasnap.getString("icon_uri")).thenReturn(null);
-        Mockito.when(mocked_invalid_datasnap.get("id")).thenReturn(1L);
-
-        asso1 = new Association(mocked_valid_datasnap1);
-        asso2 = new Association(mocked_valid_datasnap2);
+        asso1 = new Association(mocked_valid_datasnap);
+        asso2 = new Association(mocked_default_datasnap);
     }
 
     @Test(expected = NullPointerException.class)
@@ -63,7 +65,7 @@ public class AssociationTest {
 
     @Test
     public void validSnapNoThrowException() {
-        new Association(mocked_valid_datasnap1);
+        new Association(mocked_valid_datasnap);
     }
 
     @Test
@@ -86,9 +88,17 @@ public class AssociationTest {
         assertEquals(SHORT_DESC, asso1.getShortDesc());
     }
 
+
     @Test
-    public void uriIsCorrect() {
-        assertEquals(Uri.parse(ICON_URI_STRING), asso1.getIconUri());
+    public void iconUriIsCorrect() {
+        assertEquals(Uri.parse(TEST_URI_STRING), asso1.getIconUri());
+        assertEquals(DEFAULT_ICON_URI, asso2.getIconUri());
+    }
+
+    @Test
+    public void bannerUriIsCorrect() {
+        assertEquals(Uri.parse(TEST_URI_STRING), asso1.getBannerUri());
+        assertEquals(DEFAULT_BANNER_URI, asso2.getBannerUri());
     }
 
     @Test
