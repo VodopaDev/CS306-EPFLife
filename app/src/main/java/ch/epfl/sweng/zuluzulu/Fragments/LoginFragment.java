@@ -74,7 +74,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     private OnFragmentInteractionListener mListener;
     private String redirectURICode;
     private OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
-    private Map<String, String> tokens;
+    private String code;
     public LoginFragment() {
         // Required empty public constructor
     }
@@ -149,18 +149,19 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      * Is executed once the session is active
      * Log in the main activity
      */
-    private void activate_session(User user, Map<String,String> access_tokens) {
+    private void activate_session(User user) {
         // Pass the user to the activity
         Map<Integer,Object> toTransfer = new HashMap<Integer, Object>();
         toTransfer.put(0,user);
-        toTransfer.put(1,access_tokens);
+        toTransfer.put(1,code);
         toTransfer.put(2,config);
         mListener.onFragmentInteraction(TAG, toTransfer);
     }
 
     private void finishLogin(){
-        String code = AuthClient.extractCode(redirectURICode);
+        code = AuthClient.extractCode(redirectURICode);
 
+        Map<String, String> tokens;
         try{
             tokens = AuthServer.fetchTokens(config, code);
         } catch (IOException e){
@@ -174,7 +175,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             return;
         }
 
-        activate_session(user, tokens);
+        activate_session(user);
     }
     /**
      * Reset the errors
