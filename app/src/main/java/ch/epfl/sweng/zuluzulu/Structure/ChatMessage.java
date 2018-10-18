@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Arrays;
@@ -7,10 +8,11 @@ import java.util.List;
 
 public class ChatMessage {
 
-    private static final List<String> fields = Arrays.asList("senderName", "sciper", "message");
+    private static final List<String> fields = Arrays.asList("senderName", "sciper", "message", "time");
     private String senderName;
     private String sciper;
     private String message;
+    private Timestamp time;
     private boolean ownMessage;
 
     public ChatMessage(DocumentSnapshot snap, String userSciper) {
@@ -20,6 +22,7 @@ public class ChatMessage {
         senderName = snap.getString("senderName");
         sciper = snap.getString("sciper");
         message = snap.getString("message");
+        time = snap.getTimestamp("time");
         ownMessage = sciper.equals(userSciper);
     }
 
@@ -46,4 +49,8 @@ public class ChatMessage {
     public boolean isOwnMessage() { return ownMessage; }
 
     public void setOwnMessage(boolean ownMessage) { this.ownMessage = ownMessage; }
+
+    public Timestamp getTime() { return time; }
+
+    public void setTime(Timestamp time) { this.time = time; }
 }

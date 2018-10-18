@@ -158,13 +158,13 @@ public class ChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String senderName = user.isConnected() ? user.getFirstNames() : "Guest";
-                String msg = textEdit.getText().toString();
+                String message = textEdit.getText().toString();
                 Timestamp time = Timestamp.now();
                 String sciper = user.isConnected() ? user.getSciper() : "000000";
 
                 Map<String, Object> data = new HashMap<>();
                 data.put("senderName", senderName);
-                data.put("message", msg);
+                data.put("message", message);
                 data.put("time", time);
                 data.put("sciper", sciper);
 
