@@ -41,7 +41,7 @@ public class Association implements Serializable {
         if (!Utils.isValidSnapshot(snap, firebase_fields))
             throw new IllegalArgumentException();
 
-        id = ((Long) snap.get("id")).intValue();
+        id = snap.getLong("id").intValue();
         name = snap.getString("name");
         short_desc = snap.getString("short_desc");
         long_desc = snap.getString("long_desc");

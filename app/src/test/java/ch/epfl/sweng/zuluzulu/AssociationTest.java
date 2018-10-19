@@ -40,6 +40,10 @@ public class AssociationTest {
         when(mocked_valid_datasnap.getString("short_desc")).thenReturn(SHORT_DESC);
         when(mocked_valid_datasnap.getString("icon_uri")).thenReturn(TEST_URI_STRING);
         when(mocked_valid_datasnap.getString("banner_uri")).thenReturn(TEST_URI_STRING);
+        when(mocked_valid_datasnap.getLong("id")).thenReturn(1L);
+        when(mocked_valid_datasnap.get("name")).thenReturn(NAME1);
+        when(mocked_valid_datasnap.get("long_desc")).thenReturn(LONG_DESC);
+        when(mocked_valid_datasnap.get("short_desc")).thenReturn(SHORT_DESC);
         when(mocked_valid_datasnap.get("id")).thenReturn(1L);
 
         when(mocked_default_datasnap.getString("name")).thenReturn(NAME2);
@@ -47,18 +51,22 @@ public class AssociationTest {
         when(mocked_default_datasnap.getString("short_desc")).thenReturn(SHORT_DESC);
         when(mocked_default_datasnap.getString("icon_uri")).thenReturn(null);
         when(mocked_default_datasnap.getString("banner_uri")).thenReturn(null);
+        when(mocked_default_datasnap.getLong("id")).thenReturn(1L);
+        when(mocked_default_datasnap.get("name")).thenReturn(NAME2);
+        when(mocked_default_datasnap.get("long_desc")).thenReturn(LONG_DESC);
+        when(mocked_default_datasnap.get("short_desc")).thenReturn(SHORT_DESC);
         when(mocked_default_datasnap.get("id")).thenReturn(1L);
 
-        when(mocked_invalid_datasnap.getString("name")).thenReturn(NAME1);
-        when(mocked_invalid_datasnap.getString("long_desc")).thenReturn(null);
-        when(mocked_invalid_datasnap.getString("short_desc")).thenReturn(SHORT_DESC);
-        when(mocked_invalid_datasnap.get("id")).thenReturn(1L);
+        when(mocked_invalid_datasnap.get("name")).thenReturn(null);
+        when(mocked_invalid_datasnap.get("long_desc")).thenReturn(null);
+        when(mocked_invalid_datasnap.get("short_desc")).thenReturn(null);
+        when(mocked_invalid_datasnap.get("id")).thenReturn(null);
 
         asso1 = new Association(mocked_valid_datasnap);
         asso2 = new Association(mocked_default_datasnap);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException .class)
     public void invalidSnapThrowIllegalArgumentException() {
         new Association(mocked_invalid_datasnap);
     }

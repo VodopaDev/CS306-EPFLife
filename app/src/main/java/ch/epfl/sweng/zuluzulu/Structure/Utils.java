@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class Utils {
 
@@ -16,5 +17,12 @@ public class Utils {
             }
         }
         return true;
+    }
+
+    public static void longListToIntList(List<Long> src, List<Integer> dst){
+        assert(src != null && dst != null);
+        for(Long item: src){
+            dst.add(item.intValue());
+        }
     }
 }
