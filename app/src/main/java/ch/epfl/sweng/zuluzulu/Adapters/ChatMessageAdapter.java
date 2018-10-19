@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -29,16 +30,26 @@ public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View messageView = convertView;
-        if(messageView == null) {
+        if (messageView == null) {
             messageView = LayoutInflater.from(mContext).inflate(R.layout.chat_message, parent, false);
         }
 
         ChatMessage currentChatMessage = messages.get(position);
+        boolean isOwnMessage = currentChatMessage.isOwnMessage();
 
-        TextView senderName = messageView.findViewById(R.id.chat_message_senderName);
-        senderName.setText(currentChatMessage.getSenderName());
-
+        LinearLayout linearLayout = messageView.findViewById(R.id.chat_message_linearLayout);
         TextView message = messageView.findViewById(R.id.chat_message_msg);
+        TextView senderName = messageView.findViewById(R.id.chat_message_senderName);
+        
+        if (isOwnMessage) {
+            senderName.setText("You");
+            linearLayout.setBackgroundResource(R.drawable.chat_message_background_ownmessage);
+        }
+        else {
+            senderName.setText(currentChatMessage.getSenderName());
+            linearLayout.setBackgroundResource(R.drawable.chat_message_background);
+        }
+
         message.setText(currentChatMessage.getMessage());
 
         return messageView;

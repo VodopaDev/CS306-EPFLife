@@ -20,12 +20,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
 
 public class ProfileFragmentTest {
-    private User user;
-    private Fragment fragment;
-
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class, false, false);
+
+    private User user;
+    private Fragment fragment;
+
 
     @Before
     public void setUp() throws Exception {

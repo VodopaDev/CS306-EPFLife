@@ -1,4 +1,5 @@
 package ch.epfl.sweng.zuluzulu;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,7 +12,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
-public class TestingActivity  extends AppCompatActivity implements OnFragmentInteractionListener {
+public class TestingActivity extends AppCompatActivity implements OnFragmentInteractionListener {
     private User user;
 
     @Override
@@ -38,7 +39,7 @@ public class TestingActivity  extends AppCompatActivity implements OnFragmentInt
                 openFragment(ChatFragment.newInstance(user, channelID));
                 break;
             case AssociationDetailFragment.TAG:
-                Association asso = (Association)data;
+                Association asso = (Association) data;
                 openFragment(AssociationDetailFragment.newInstance(user, asso));
                 break;
             default:

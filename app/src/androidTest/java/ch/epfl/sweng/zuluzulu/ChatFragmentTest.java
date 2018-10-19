@@ -48,8 +48,8 @@ public class ChatFragmentTest {
          */
 
         // Type message
-        onView(withId(R.id.chat_message_edit)).perform(replaceText(MSG));
+        //onView(withId(R.id.chat_message_edit)).perform(replaceText(MSG));
 
-        onView(withId(R.id.chat_send_button)).perform(click());
+        //onView(withId(R.id.chat_send_button)).perform(click());
     }
 }
