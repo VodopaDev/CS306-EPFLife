@@ -240,18 +240,4 @@ public class Event implements Serializable {
         };
     }
 
-    /**
-     * Check if a DocumentSnapshot correspond to an Event's one
-     * @param snap the DocumentSnapshot
-     * @return true if it is a valid snapshot, false otherwise
-     */
-    private boolean snapshotIsValid(DocumentSnapshot snap){
-        return !(snap == null
-                || snap.get("id") == null
-                || snap.getString("short_desc") == null
-                || snap.getString("long_desc") == null
-                || snap.getString("name") == null
-        );
-    }
-
 }
