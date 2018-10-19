@@ -26,12 +26,12 @@ public class EventFragmentTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    private void guestGoesToEvent() throws InterruptedException {
+    private void guestGoesToEvent() {
         Utility.goToEvent();
 //        TimeUnit.MILLISECONDS.sleep(1);
     }
 
-    private void authenticatedGoesToEvent() throws InterruptedException {
+    private void authenticatedGoesToEvent() {
         Utility.fullLogin();
         Utility.goToEvent();
 //        TimeUnit.MILLISECONDS.sleep(1);

@@ -137,6 +137,9 @@ public class ChatFragment extends Fragment {
         mListener = null;
     }
 
+    /**
+     * Add a onEventChange listener on the message list in the database
+     */
     private void setUpDataOnChangeListener() {
         db = FirebaseFirestore.getInstance();
         db.collection(collection_path)
@@ -153,6 +156,9 @@ public class ChatFragment extends Fragment {
                 });
     }
 
+    /**
+     * Add an onClick listener on the button to send the message to the database
+     */
     private void setUpSendButton() {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,6 +179,11 @@ public class ChatFragment extends Fragment {
         });
     }
 
+    /**
+     * Send the data to the database
+     *
+     * @param data the data to send to the database
+     */
     private void addDataToFirestore(Map data) {
         db.collection(collection_path)
                 .add(data)
@@ -190,6 +201,9 @@ public class ChatFragment extends Fragment {
         });
     }
 
+    /**
+     * Add a listener on the edit text view to check that the message is not empty
+     */
     private void setUpEditText() {
         textEdit.addTextChangedListener(new TextWatcher() {
             @Override
@@ -207,6 +221,9 @@ public class ChatFragment extends Fragment {
         });
     }
 
+    /**
+     * Refresh the chat by reading all the messages in the database
+     */
     private void updateChat() {
         db.collection(collection_path)
                 .orderBy("time", Query.Direction.ASCENDING)
