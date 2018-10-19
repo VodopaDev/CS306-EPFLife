@@ -29,48 +29,58 @@ public final class AuthenticatedUser extends User {
         this.first_names = first_names;
         this.last_names = last_names;
 
-        assos_id = Sets.newHashSet(1,3,4,6);
+        assos_id = Sets.newHashSet(1, 3, 4, 6);
         chats_names = new HashSet<>();
-        events_id = new HashSet<>();
+        events_id = Sets.newHashSet(1);
 
     }
 
     // TODO: Add a method to add/remove one Association to assos_id, same for chats and events
     // TODO: Check inputs before changing fields
 
-    public boolean isFavAssociation(Association asso){
+    public boolean isFavAssociation(Association asso) {
         return assos_id.contains(asso.getId());
     }
 
-    public boolean addFavAssociation(Association asso){
+    public boolean isFavEvent(Event event){ return events_id.contains(event.getId()); }
+
+    public boolean addFavAssociation(Association asso) {
         return assos_id.add(asso.getId());
+    }
+
+    public boolean addFavEvent(Event event){
+        return events_id.add(event.getId());
     }
 
     public boolean removeFavAssociation(Association asso){
         return assos_id.remove(asso.getId());
     }
 
+    public boolean removeFavEvent(Event event){
+        return events_id.remove(event.getId());
+    }
+
     public boolean isFollowedEvent(Event event){
         return events_id.contains(event.getId());
     }
 
-    public boolean addFollowedEvent(Event event){
+    public boolean addFollowedEvent(Event event) {
         return events_id.add(event.getId());
     }
 
-    public boolean removeFollowedEvent(Event event){
+    public boolean removeFollowedEvent(Event event) {
         return events_id.remove(event.getId());
     }
 
-    public boolean isFollowedChat(Channel channel){
+    public boolean isFollowedChat(Channel channel) {
         return chats_names.contains(channel.getName());
     }
 
-    public boolean addFollowedChat(Channel channel){
+    public boolean addFollowedChat(Channel channel) {
         return chats_names.add(channel.getName());
     }
 
-    public boolean removeFollowedChat(Channel channel){
+    public boolean removeFollowedChat(Channel channel) {
         return chats_names.remove(channel.getName());
     }
 
