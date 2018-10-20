@@ -19,38 +19,14 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * All authenticated user test have been moved t
+ */
+
+
+
 @RunWith(JUnit4.class)
 public class UserTest {
-
-    private final Association asso = mock(Association.class);
-    private final Channel channel = mock(Channel.class);
-    private final Event event = mock(Event.class);
-
-    @Before
-    public void mockStructures() {
-        when(asso.getId()).thenReturn(0);
-        when(channel.getName()).thenReturn("channel");
-        when(event.getId()).thenReturn(2);
-    }
-
-    @Test
-    public void canCreateAuthenticatedUser() {
-        User.UserBuilder builder = new User.UserBuilder();
-        builder.setEmail("mail@epfl.ch");
-        builder.setSciper("1212");
-        builder.setGaspar("test");
-        builder.setFirst_names("first_name");
-        builder.setLast_names("last_name");
-
-        AuthenticatedUser user = (AuthenticatedUser) builder.build();
-        assertTrue(user.isConnected());
-
-        assertEquals(user.getEmail(), "mail@epfl.ch");
-        assertEquals(user.getSciper(), "1212");
-        assertEquals(user.getGaspar(), "test");
-        assertEquals(user.getFirstNames(), "first_name");
-        assertEquals(user.getLastNames(), "last_name");
-    }
 
     @Test
     public void canCreateGuestUser() {
@@ -82,82 +58,6 @@ public class UserTest {
 
         User user = builder.build();
         assertFalse(user.isConnected());
-    }
-
-    @Test
-    public void authenticatedUserCanChangeFavAssos() {
-        User.UserBuilder builder = new User.UserBuilder();
-        builder.setEmail("mail@epfl.ch");
-        builder.setSciper("1212");
-        builder.setGaspar("test");
-        builder.setFirst_names("first_name");
-        builder.setLast_names("last_name");
-        AuthenticatedUser user = (AuthenticatedUser) builder.build();
-
-        assertFalse(user.isFavAssociation(asso));
-        assertTrue(user.addFavAssociation(asso));
-        assertFalse(user.addFavAssociation(asso));
-        assertTrue(user.isFavAssociation(asso));
-        assertTrue(user.removeFavAssociation(asso));
-        assertFalse(user.removeFavAssociation(asso));
-        assertFalse(user.isFavAssociation(asso));
-    }
-
-//    @Test
-//    public void authenticatedUserCanChangeFollowedEvents() {
-//        User.UserBuilder builder = new User.UserBuilder();
-//        builder.setEmail("mail@epfl.ch");
-//        builder.setSciper("1212");
-//        builder.setGaspar("test");
-//        builder.setFirst_names("first_name");
-//        builder.setLast_names("last_name");
-//        AuthenticatedUser user = (AuthenticatedUser) builder.build();
-//
-//      //  assertFalse(user.isFollowedEvent(event));
-//        assertTrue(user.addFollowedEvent(event));
-//        assertFalse(user.addFollowedEvent(event));
-//        assertTrue(user.isFollowedEvent(event));
-//        assertTrue(user.removeFollowedEvent(event));
-//        assertFalse(user.removeFollowedEvent(event));
-//        assertFalse(user.isFollowedEvent(event));
-//    }
-
-    @Test
-    public void authenticatedUserCanChangeFollowedChannels() {
-        User.UserBuilder builder = new User.UserBuilder();
-        builder.setEmail("mail@epfl.ch");
-        builder.setSciper("1212");
-        builder.setGaspar("test");
-        builder.setFirst_names("first_name");
-        builder.setLast_names("last_name");
-        AuthenticatedUser user = (AuthenticatedUser) builder.build();
-
-        assertFalse(user.isFollowedChat(channel));
-        assertTrue(user.addFollowedChat(channel));
-        assertFalse(user.addFollowedChat(channel));
-        assertTrue(user.isFollowedChat(channel));
-        assertTrue(user.removeFollowedChat(channel));
-        assertFalse(user.removeFollowedChat(channel));
-        assertFalse(user.isFollowedChat(channel));
-    }
-
-    @Test
-    public void toStringIsCorrect() {
-        User.UserBuilder builder = new User.UserBuilder();
-        builder.setEmail("mail@epfl.ch");
-        builder.setSciper("1212");
-        builder.setGaspar("test");
-        builder.setFirst_names("first_name");
-        builder.setLast_names("last_name");
-        AuthenticatedUser user = (AuthenticatedUser) builder.build();
-
-        String expected = "first_name last_name"
-                + "\nsciper: 1212"
-                + "\ngaspar: test"
-                + "\nemail: mail@epfl.ch";
-
-        assertEquals(expected, user.toString());
-        assertEquals("Guest user", new User.UserBuilder().buildGuestUser().toString());
     }
 
 }

@@ -1,10 +1,9 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import android.support.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -14,10 +13,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
+
 
 public final class AuthenticatedUser extends User {
     private static final List<String> fields = Arrays.asList("fav_assos", "followed_events", "followed_chats");
-    private static final CollectionReference ref = FirebaseFirestore.getInstance().collection("users_info");
+    private final DocumentReference ref;
+    private boolean loaded = false;
 
     // Use sciper to check User (and not mail or gaspar)
     private final String sciper;
@@ -40,40 +42,50 @@ public final class AuthenticatedUser extends User {
         this.first_names = first_names;
         this.last_names = last_names;
 
+        ref = FirebaseFirestore.getInstance().collection("users_info").document(sciper);
+
         fav_assos = new ArrayList<>();
         followed_chats = new ArrayList<>();
         followed_events = new ArrayList<>();
 
-        ref.document(sciper).get()
+        ref.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        // If it is the first time connecting
+                        // If it is the first time connecting, we create the base user in the Firestore
                         if(!documentSnapshot.exists()){
                             Map<String, Object> data = new HashMap<>();
                             data.put("fav_assos", Arrays.asList());
                             data.put("followed_chats", Arrays.asList());
                             data.put("followed_events", Arrays.asList());
-                            ref.document(sciper).set(data);
+                            ref.set(data);
+                            loaded = true;
                         }
                         // Regular user
                         else if(Utils.isValidSnapshot(documentSnapshot, fields)){
                             Utils.longListToIntList((List<Long>)documentSnapshot.get("fav_assos"), fav_assos);
                             Utils.longListToIntList((List<Long>)documentSnapshot.get("followed_chats"), followed_chats);
                             Utils.longListToIntList((List<Long>)documentSnapshot.get("followed_events"), followed_events);
+                            loaded = true;
                         }
                         else
                             throw new IllegalArgumentException("Snapshot isn't valid");
 
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
                 });
 
+        int count = 0;
+        while(!loaded){
+            try {
+                if(count++ > 30)
+                    throw new TimeoutException("Time-out while loading user n°" + sciper);
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                e.printStackTrace();
+            }
+        }
 
 
     }
@@ -96,42 +108,42 @@ public final class AuthenticatedUser extends User {
     public boolean addFavAssociation(Association asso) {
         boolean needUpdate = fav_assos.add(asso.getId());
         if(needUpdate)
-            ref.document(sciper).update("fav_assos", FieldValue.arrayUnion(asso.getId()));
+            ref.update("fav_assos", FieldValue.arrayUnion(asso.getId()));
         return needUpdate;
     }
 
     public boolean removeFavAssociation(Association asso){
         boolean needUpdate = fav_assos.remove((Integer)asso.getId());
         if(needUpdate)
-            ref.document(sciper).update("fav_assos", FieldValue.arrayRemove(asso.getId()));
+            ref.update("fav_assos", FieldValue.arrayRemove(asso.getId()));
         return needUpdate;
     }
 
     public boolean addFollowedEvent(Event event) {
         boolean needUpdate = followed_events.add(event.getId());
         if(needUpdate)
-            ref.document(sciper).update("followed_events", FieldValue.arrayUnion(event.getId()));
+            ref.update("followed_events", FieldValue.arrayUnion(event.getId()));
         return needUpdate;
     }
 
     public boolean removeFollowedEvent(Event event){
         boolean needUpdate = followed_events.remove((Integer)event.getId());
         if(needUpdate)
-            ref.document(sciper).update("followed_events", FieldValue.arrayRemove(event.getId()));
+            ref.update("followed_events", FieldValue.arrayRemove(event.getId()));
         return needUpdate;
     }
 
     public boolean addFollowedChat(Channel channel) {
         boolean needUpdate = followed_chats.add(channel.getId());
         if(needUpdate)
-            ref.document(sciper).update("followed_chats", FieldValue.arrayUnion(channel.getId()));
+            ref.update("followed_chats", FieldValue.arrayUnion(channel.getId()));
         return needUpdate;
     }
 
     public boolean removeFollowedChat(Channel channel) {
         boolean needUpdate = followed_chats.remove((Integer)channel.getId());
         if(needUpdate)
-            ref.document(sciper).update("followed_chats", FieldValue.arrayRemove(channel.getId()));
+            ref.update("followed_chats", FieldValue.arrayRemove(channel.getId()));
         return needUpdate;
     }
 

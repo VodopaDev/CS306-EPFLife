@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 @RunWith(AndroidJUnit4.class)
 public class ChannelFragmentTest {
@@ -26,7 +27,6 @@ public class ChannelFragmentTest {
     @Before
     public void init() throws InterruptedException {
         user = Utility.createTestUser();
-
         Utility.addUserToMainIntent(mActivityRule, user);
 
         fragment = ChannelFragment.newInstance(user);

@@ -345,12 +345,14 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
 
             /////////////////////////////////////
             //CODE FOR LOCAL LOGIN
+            /*
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
             }
+            */
 
 
             // Check credentials
