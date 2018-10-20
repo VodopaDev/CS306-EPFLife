@@ -364,13 +364,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
                 }
             }
 
-            // REMOVED_TODO: register the new account here.
-            // We do not want to offer registration.(Dahn)
-
             return false;
-            ////////////////////////////////////
-
-            //return true;
         }
 
         @Override

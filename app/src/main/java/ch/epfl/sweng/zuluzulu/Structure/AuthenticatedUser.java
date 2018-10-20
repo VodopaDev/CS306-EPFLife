@@ -19,7 +19,6 @@ import java.util.concurrent.TimeoutException;
 public final class AuthenticatedUser extends User {
     private static final List<String> fields = Arrays.asList("fav_assos", "followed_events", "followed_chats");
     private final DocumentReference ref;
-    private boolean loaded = false;
 
     // Use sciper to check User (and not mail or gaspar)
     private final String sciper;
@@ -59,32 +58,22 @@ public final class AuthenticatedUser extends User {
                             data.put("followed_chats", Arrays.asList());
                             data.put("followed_events", Arrays.asList());
                             ref.set(data);
-                            loaded = true;
                         }
                         // Regular user
                         else if(Utils.isValidSnapshot(documentSnapshot, fields)){
                             Utils.longListToIntList((List<Long>)documentSnapshot.get("fav_assos"), fav_assos);
                             Utils.longListToIntList((List<Long>)documentSnapshot.get("followed_chats"), followed_chats);
                             Utils.longListToIntList((List<Long>)documentSnapshot.get("followed_events"), followed_events);
-                            loaded = true;
                         }
                         else
                             throw new IllegalArgumentException("Snapshot isn't valid");
 
                     }
                 });
-
-        int count = 0;
-        while(!loaded){
-            try {
-                if(count++ > 30)
-                    throw new TimeoutException("Time-out while loading user n°" + sciper);
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (TimeoutException e) {
-                e.printStackTrace();
-            }
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
 
