@@ -32,6 +32,7 @@ public class LogoutTest {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
 
         TimeUnit.SECONDS.sleep(1);
+
         openLoginFragment();
     }
 
