@@ -9,8 +9,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.TimeUnit;
-
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
@@ -25,14 +23,12 @@ public class ChannelFragmentTest {
     private Fragment fragment;
 
     @Before
-    public void init() throws InterruptedException {
+    public void init() {
         user = Utility.createTestUser();
         Utility.addUserToMainIntent(mActivityRule, user);
 
         fragment = ChannelFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
-
-        TimeUnit.SECONDS.sleep(5);
     }
 
     @Test

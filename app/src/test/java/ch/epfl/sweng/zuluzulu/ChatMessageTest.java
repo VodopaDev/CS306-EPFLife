@@ -70,7 +70,7 @@ public class ChatMessageTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void invalidSnapThrowIllegalArgumentException(){
+    public void invalidSnapThrowIllegalArgumentException() {
         new ChatMessage(mocked_invalid_datasnap, userSciper);
     }
 
