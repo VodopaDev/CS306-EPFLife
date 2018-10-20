@@ -376,9 +376,10 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             mAuthTask = null;
 
             // CODE FOR LOCAL LOGIN
+            // Nicolas: I have set the sciper to 000000 for testing :)
             User.UserBuilder builder = new User.UserBuilder();
             builder.setEmail("nicolas.jomeau@epfl.ch");
-            builder.setSciper("270103");
+            builder.setSciper("000000");
             builder.setGaspar(mUsername);
             builder.setFirst_names("nicolas");
             builder.setLast_names("jomeau");
