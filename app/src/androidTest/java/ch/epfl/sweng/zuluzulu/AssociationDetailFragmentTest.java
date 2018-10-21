@@ -53,6 +53,7 @@ public class AssociationDetailFragmentTest {
         onView(withContentDescription(FAV_CONTENT)).check(matches(isDisplayed()));
     }
 
+    /*
     @Test
     public void authenticatedCanRemoveAndAddFavorite() {
         onView(withText("Agepoly")).perform(ViewActions.click());
@@ -67,6 +68,7 @@ public class AssociationDetailFragmentTest {
         onView(withContentDescription(FAV_CONTENT))
                 .check(matches(isDisplayed()));
     }
+    */
 
     /*
     @Test
