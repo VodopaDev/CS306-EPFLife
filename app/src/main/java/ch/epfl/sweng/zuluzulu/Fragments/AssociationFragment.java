@@ -118,10 +118,6 @@ public class AssociationFragment extends Fragment {
         }
     }
 
-    public ListView getListviewAssos() {
-        return listview_assos;
-    }
-
     @Override
     public void onDetach() {
         super.onDetach();

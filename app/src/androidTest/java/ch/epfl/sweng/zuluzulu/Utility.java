@@ -8,7 +8,6 @@ import android.view.Gravity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Structure.User;
 

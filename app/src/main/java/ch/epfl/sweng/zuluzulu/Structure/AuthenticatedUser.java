@@ -1,19 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import android.media.SoundPool;
-import android.net.wifi.p2p.WifiP2pManager;
-import android.support.annotation.NonNull;
-
-import com.google.android.gms.common.data.DataBufferObserver;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 public final class AuthenticatedUser extends User {
     public static final List<String> fields = Arrays.asList("fav_assos", "followed_events", "followed_chats");

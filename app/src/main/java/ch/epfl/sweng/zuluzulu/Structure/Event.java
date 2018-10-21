@@ -1,21 +1,14 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.location.Location;
-import android.media.Image;
 import android.net.Uri;
-import android.util.Log;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-
-import static java.util.Objects.requireNonNull;
 
 public class Event implements Serializable {
 

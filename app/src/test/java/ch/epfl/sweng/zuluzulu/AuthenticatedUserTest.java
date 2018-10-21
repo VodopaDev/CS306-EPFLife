@@ -7,6 +7,7 @@ import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -79,7 +80,7 @@ public class AuthenticatedUserTest {
 
     @Test
     public void setList(){
-        user.setFollowedChats(Arrays.asList(1));
+        user.setFollowedChats(Collections.singletonList(1));
         user.setFavAssos(Arrays.asList(1));
         user.setFollowedEvents(Arrays.asList(1));
         assertThat(true, equalTo(user.isFavAssociation(mocked_asso)));

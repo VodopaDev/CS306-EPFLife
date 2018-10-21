@@ -11,7 +11,6 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 @RunWith(AndroidJUnit4.class)
 public class ChannelFragmentTest {

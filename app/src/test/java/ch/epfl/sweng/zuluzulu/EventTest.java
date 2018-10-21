@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu;
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import static org.junit.Assert.assertEquals;
@@ -14,7 +13,6 @@ import org.mockito.Mockito;
 
 //import java.util.Date;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ch.epfl.sweng.zuluzulu.Structure.Event;

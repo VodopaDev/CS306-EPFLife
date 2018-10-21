@@ -30,7 +30,6 @@ import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
-import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
@@ -154,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * @param menuItem The item that corresponds to a fragment on the menu
      */
     private void selectItem(MenuItem menuItem) {
-        Fragment fragment = null;
+        Fragment fragment;
         switch (menuItem.getItemId()) {
             case R.id.nav_main:
                 fragment = MainFragment.newInstance();

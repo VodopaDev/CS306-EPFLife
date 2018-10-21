@@ -3,9 +3,6 @@ package ch.epfl.sweng.zuluzulu;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
-
-import com.bumptech.glide.util.Util;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -15,8 +12,6 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
-import ch.epfl.sweng.zuluzulu.Structure.Association;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Guest;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
