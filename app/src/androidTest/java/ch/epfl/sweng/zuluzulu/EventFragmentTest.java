@@ -38,14 +38,14 @@ public class EventFragmentTest {
     }
 
     @Test
-    public void thereAreTwoButtons() throws InterruptedException {
+    public void thereAreTwoButtons() {
         guestGoesToEvent();
         onView(withId(R.id.event_fragment_all_button)).check(matches(isDisplayed()));
         onView(withId(R.id.event_fragment_fav_button)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void guestMainPageHasSomeEvent() throws InterruptedException {
+    public void guestMainPageHasSomeEvent() {
         guestGoesToEvent();
         onView(withId(R.id.event_fragment_all_button)).perform(ViewActions.click());
         /*
@@ -55,7 +55,7 @@ public class EventFragmentTest {
     }
 
     @Test
-    public void guestClickOnFavoritesStaysOnAll() throws InterruptedException {
+    public void guestClickOnFavoritesStaysOnAll() {
         guestGoesToEvent();
         onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
         /*
@@ -65,7 +65,7 @@ public class EventFragmentTest {
     }
 
     @Test
-    public void authenticatedClickOnFavoritesDisplayFewerEvents() throws InterruptedException {
+    public void authenticatedClickOnFavoritesDisplayFewerEvents() {
         authenticatedGoesToEvent();
         onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
         /*
