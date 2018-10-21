@@ -6,6 +6,8 @@ import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.view.Gravity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Structure.User;
@@ -37,15 +39,13 @@ public class Utility {
         builder.setEmail("test@epfl.ch");
         builder.setFirst_names("james");
         builder.setLast_names("bond");
+        builder.setFavAssos(Arrays.asList(1,2));
+        builder.setFollowedEvents(new ArrayList<Integer>());
+        builder.setFollowedChats(new ArrayList<Integer>());
 
         User user = builder.buildAuthenticatedUser();
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         assert (user != null);
+        assert (user.isConnected());
 
         return user;
     }

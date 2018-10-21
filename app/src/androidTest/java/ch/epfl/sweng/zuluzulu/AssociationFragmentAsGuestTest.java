@@ -31,11 +31,12 @@ public class AssociationFragmentAsGuestTest {
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+            new ActivityTestRule<>(MainActivity.class, false, false);
 
     @Before
     public void initGuestTest(){
         Guest guest = new User.UserBuilder().buildGuestUser();
+        Utility.addUserToMainIntent(mActivityRule, guest);
         AssociationFragment fragment = AssociationFragment.newInstance(guest);
         mActivityRule.getActivity().openFragment(fragment);
 
@@ -49,27 +50,23 @@ public class AssociationFragmentAsGuestTest {
 
     @Test
     public void thereAreTwoButtons() {
-        initGuestTest();
         onView(withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
         onView(withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
     }
 
     @Test
     public void guestMainPageHasSomeAssociations() {
-        initGuestTest();
         onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
     }
 
     @Test
     public void guestClickOnFavoritesStaysOnAll() {
-        initGuestTest();
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
     }
 
 
     @Test
     public void clickingAnAssociationGoesToDetail() {
-        initGuestTest();
         onView(withText("Agepoly")).perform(ViewActions.click());
         onView(withId(R.id.association_detail_name)).check(matches(isDisplayed()));
     }

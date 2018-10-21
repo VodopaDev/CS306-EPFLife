@@ -31,41 +31,17 @@ public final class AuthenticatedUser extends User {
     private List<Integer> followed_chats;
     private List<Integer> followed_events;
 
-    protected AuthenticatedUser(final String sciper, String gaspar, String email, String first_names, String last_names) {
+    protected AuthenticatedUser(final String sciper, String gaspar, String email, String first_names, String last_names, List<Integer> fav_assos, List<Integer> followed_events, List<Integer> followed_chats) {
 
         this.sciper = sciper;
         this.gaspar = gaspar;
         this.email = email;
         this.first_names = first_names;
         this.last_names = last_names;
-
+        this.fav_assos = fav_assos;
+        this.followed_chats = followed_chats;
+        this.followed_events = followed_events;
         ref = FirebaseFirestore.getInstance().collection("users_info").document(sciper);
-
-        fav_assos = new ArrayList<>();
-        followed_chats = new ArrayList<>();
-        followed_events = new ArrayList<>();
-
-        ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            // If it is the first time connecting, we create the base user in the Firestore
-                            if (!documentSnapshot.exists()) {
-                                Map<String, Object> data = new HashMap<>();
-                                data.put("fav_assos", fav_assos);
-                                data.put("followed_chats", followed_chats);
-                                data.put("followed_events", followed_events);
-                                ref.set(data);
-                            }
-                            // Already registered user
-                            else if (Utils.isValidSnapshot(documentSnapshot, fields)) {
-                                Utils.longListToIntList((List<Long>) documentSnapshot.get("fav_assos"), fav_assos);
-                                Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_chats"), followed_chats);
-                                Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_events"), followed_events);
-                            } else
-                                throw new IllegalArgumentException("Snapshot isn't valid");
-
-                        }
-                    });
 
     }
 

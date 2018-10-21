@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -23,11 +22,12 @@ public class AssociationFragmentAsAuthenticatedTest {
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+            new ActivityTestRule<>(MainActivity.class, false, false);
 
     @Before
     public void initAuthenticatedTest(){
         User user = Utility.createTestUser();
+        Utility.addUserToMainIntent(mActivityRule, user);
         AssociationFragment fragment = AssociationFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
 
@@ -40,7 +40,6 @@ public class AssociationFragmentAsAuthenticatedTest {
 
     @Test
     public void authenticatedClickOnFavorites() {
-        initAuthenticatedTest();
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
     }
 
