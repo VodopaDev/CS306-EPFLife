@@ -48,9 +48,8 @@ public class AssociationFragmentTest {
     }
 
     private void initAuthenticatedTest(){
-        Utility.addUserToMainIntent(mActivityRule, new User.UserBuilder().buildGuestUser());
         User user = Utility.createTestUser();
-
+        Utility.addUserToMainIntent(mActivityRule, user);
         AssociationFragment fragment = AssociationFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
 

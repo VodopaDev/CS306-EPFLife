@@ -1,29 +1,21 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import android.util.Log;
-
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TooManyListenersException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 
 public final class AuthenticatedUser extends User {
     private static final List<String> fields = Arrays.asList("fav_assos", "followed_events", "followed_chats");
     private final DocumentReference ref;
+
 
     // Use sciper to check User (and not mail or gaspar)
     private final String sciper;
@@ -40,6 +32,7 @@ public final class AuthenticatedUser extends User {
     private List<Integer> followed_events;
 
     protected AuthenticatedUser(final String sciper, String gaspar, String email, String first_names, String last_names) {
+
         this.sciper = sciper;
         this.gaspar = gaspar;
         this.email = email;
@@ -52,46 +45,27 @@ public final class AuthenticatedUser extends User {
         followed_chats = new ArrayList<>();
         followed_events = new ArrayList<>();
 
-            ref.get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+        ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
                             // If it is the first time connecting, we create the base user in the Firestore
                             if (!documentSnapshot.exists()) {
                                 Map<String, Object> data = new HashMap<>();
-                                data.put("fav_assos", Arrays.asList());
-                                data.put("followed_chats", Arrays.asList());
-                                data.put("followed_events", Arrays.asList());
+                                data.put("fav_assos", fav_assos);
+                                data.put("followed_chats", followed_chats);
+                                data.put("followed_events", followed_events);
                                 ref.set(data);
-                                synchronized (this) {
-                                    notify();
-                                }
                             }
-                            // Regular user
+                            // Already registered user
                             else if (Utils.isValidSnapshot(documentSnapshot, fields)) {
                                 Utils.longListToIntList((List<Long>) documentSnapshot.get("fav_assos"), fav_assos);
                                 Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_chats"), followed_chats);
                                 Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_events"), followed_events);
-                                synchronized (this) {
-                                    notify();
-                                }
                             } else
                                 throw new IllegalArgumentException("Snapshot isn't valid");
 
                         }
                     });
-
-        synchronized (this) {
-            Log.d("USER", "waiting for Firestore data");
-            try {
-                TimeUnit.SECONDS.timedWait(this, 5);
-            } catch (InterruptedException e) {
-                Log.d("USER", "TimeOut while loading Firestore data");
-                e.printStackTrace();
-            }
-            Log.d("USER", "Finished loading Firestore data");
-        }
-
 
     }
 

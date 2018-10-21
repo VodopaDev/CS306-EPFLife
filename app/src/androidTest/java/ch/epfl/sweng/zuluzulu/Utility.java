@@ -40,7 +40,6 @@ public class Utility {
 
         assert (user != null);
 
-
         return user;
     }
 
@@ -86,14 +85,6 @@ public class Utility {
         openMenu();
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_login));
         login();
-    }
-
-    /**
-     * Open the AssociationFragment
-     */
-    public static void goToAssociation() {
-        openMenu();
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_associations));
     }
 
     /**
