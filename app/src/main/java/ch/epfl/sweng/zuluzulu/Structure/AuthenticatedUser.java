@@ -1,5 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import android.util.Log;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -8,11 +10,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TooManyListenersException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 
@@ -47,33 +52,44 @@ public final class AuthenticatedUser extends User {
         followed_chats = new ArrayList<>();
         followed_events = new ArrayList<>();
 
-        ref.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        // If it is the first time connecting, we create the base user in the Firestore
-                        if(!documentSnapshot.exists()){
-                            Map<String, Object> data = new HashMap<>();
-                            data.put("fav_assos", Arrays.asList());
-                            data.put("followed_chats", Arrays.asList());
-                            data.put("followed_events", Arrays.asList());
-                            ref.set(data);
-                        }
-                        // Regular user
-                        else if(Utils.isValidSnapshot(documentSnapshot, fields)){
-                            Utils.longListToIntList((List<Long>)documentSnapshot.get("fav_assos"), fav_assos);
-                            Utils.longListToIntList((List<Long>)documentSnapshot.get("followed_chats"), followed_chats);
-                            Utils.longListToIntList((List<Long>)documentSnapshot.get("followed_events"), followed_events);
-                        }
-                        else
-                            throw new IllegalArgumentException("Snapshot isn't valid");
+            ref.get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            // If it is the first time connecting, we create the base user in the Firestore
+                            if (!documentSnapshot.exists()) {
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("fav_assos", Arrays.asList());
+                                data.put("followed_chats", Arrays.asList());
+                                data.put("followed_events", Arrays.asList());
+                                ref.set(data);
+                                synchronized (this) {
+                                    notify();
+                                }
+                            }
+                            // Regular user
+                            else if (Utils.isValidSnapshot(documentSnapshot, fields)) {
+                                Utils.longListToIntList((List<Long>) documentSnapshot.get("fav_assos"), fav_assos);
+                                Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_chats"), followed_chats);
+                                Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_events"), followed_events);
+                                synchronized (this) {
+                                    notify();
+                                }
+                            } else
+                                throw new IllegalArgumentException("Snapshot isn't valid");
 
-                    }
-                });
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+                        }
+                    });
+
+        synchronized (this) {
+            Log.d("USER", "waiting for Firestore data");
+            try {
+                TimeUnit.SECONDS.timedWait(this, 5);
+            } catch (InterruptedException e) {
+                Log.d("USER", "TimeOut while loading Firestore data");
+                e.printStackTrace();
+            }
+            Log.d("USER", "Finished loading Firestore data");
         }
 
 

@@ -9,6 +9,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
+
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
+import ch.epfl.sweng.zuluzulu.Structure.Guest;
+import ch.epfl.sweng.zuluzulu.Structure.User;
+
 import static android.support.test.espresso.Espresso.*;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -25,27 +30,49 @@ public class AssociationDetailFragmentTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    private void guestGoesToAssociationDetail() throws InterruptedException {
-        Utility.goToAssociation();
-        TimeUnit.SECONDS.sleep(5);
+    private void initGuestTest(){
+        Guest guest = new User.UserBuilder().buildGuestUser();
+        Utility.addUserToMainIntent(mActivityRule, guest);
+        AssociationFragment fragment = AssociationFragment.newInstance(guest);
+        mActivityRule.getActivity().openFragment(fragment);
+
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void authenticatedGoesToAssociation() throws InterruptedException {
-        Utility.fullLogin();
-        Utility.goToAssociation();
-        TimeUnit.SECONDS.sleep(5);
+    private void initAuthenticatedTest(){
+        Utility.addUserToMainIntent(mActivityRule, new User.UserBuilder().buildGuestUser());
+
+        User user = Utility.createTestUser();
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        AssociationFragment fragment = AssociationFragment.newInstance(user);
+        mActivityRule.getActivity().openFragment(fragment);
+
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    public void authenticatedAlreadyHasAgepolyInFavorite() throws InterruptedException {
-        authenticatedGoesToAssociation();
+    public void authenticatedAlreadyHasAgepolyInFavorite() {
+        initAuthenticatedTest();
         onView(withText("Agepoly")).perform(ViewActions.click());
         onView(withContentDescription(FAV_CONTENT)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void authenticatedCanRemoveAndAddFavorite() throws InterruptedException {
-        authenticatedGoesToAssociation();
+    public void authenticatedCanRemoveAndAddFavorite() {
+        initAuthenticatedTest();
         onView(withText("Agepoly")).perform(ViewActions.click());
         onView(withContentDescription(FAV_CONTENT))
                 .check(matches(isDisplayed()))
@@ -58,8 +85,8 @@ public class AssociationDetailFragmentTest {
     }
 
     @Test
-    public void guestCanClickOnFavorite() throws InterruptedException {
-        guestGoesToAssociationDetail();
+    public void guestCanClickOnFavorite() {
+        initGuestTest();
         onView(withText("Agepoly")).perform(ViewActions.click());
         onView(withContentDescription(NOT_FAV_CONTENT))
                 .check(matches(isDisplayed()))

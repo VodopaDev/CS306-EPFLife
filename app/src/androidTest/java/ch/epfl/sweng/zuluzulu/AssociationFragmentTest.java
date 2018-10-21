@@ -41,7 +41,7 @@ public class AssociationFragmentTest {
         mActivityRule.getActivity().openFragment(fragment);
 
         try {
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(4);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -49,19 +49,13 @@ public class AssociationFragmentTest {
 
     private void initAuthenticatedTest(){
         Utility.addUserToMainIntent(mActivityRule, new User.UserBuilder().buildGuestUser());
-
         User user = Utility.createTestUser();
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         AssociationFragment fragment = AssociationFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
 
         try {
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(4);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
