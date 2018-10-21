@@ -27,38 +27,25 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class AssociationFragmentTest {
+public class AssociationFragmentAsGuestTest {
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class, false, false);
+            new ActivityTestRule<>(MainActivity.class);
 
-
-    private void initGuestTest(){
+    @Before
+    public void initGuestTest(){
         Guest guest = new User.UserBuilder().buildGuestUser();
-        Utility.addUserToMainIntent(mActivityRule, guest);
         AssociationFragment fragment = AssociationFragment.newInstance(guest);
         mActivityRule.getActivity().openFragment(fragment);
 
         try {
-            TimeUnit.SECONDS.sleep(4);
+            TimeUnit.SECONDS.sleep(2);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    private void initAuthenticatedTest(){
-        User user = Utility.createTestUser();
-        Utility.addUserToMainIntent(mActivityRule, user);
-        AssociationFragment fragment = AssociationFragment.newInstance(user);
-        mActivityRule.getActivity().openFragment(fragment);
-
-        try {
-            TimeUnit.SECONDS.sleep(4);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Test
     public void thereAreTwoButtons() {
@@ -79,11 +66,6 @@ public class AssociationFragmentTest {
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
     }
 
-    @Test
-    public void authenticatedClickOnFavorites() {
-        initAuthenticatedTest();
-        onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
-    }
 
     @Test
     public void clickingAnAssociationGoesToDetail() {

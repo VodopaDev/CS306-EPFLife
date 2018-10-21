@@ -6,6 +6,8 @@ import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.view.Gravity;
 
+import java.util.concurrent.TimeUnit;
+
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -37,6 +39,11 @@ public class Utility {
         builder.setLast_names("bond");
 
         User user = builder.buildAuthenticatedUser();
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         assert (user != null);
 
@@ -50,7 +57,7 @@ public class Utility {
      *
      * @param mActivityRule Activity rule
      * @param user          User
-     * @waring NEED TO BE CALLED TO CREATE THE ACTIVITY
+     * @warning NEED TO BE CALLED TO CREATE THE ACTIVITY
      * USE IN RULE : new ActivityTestRule<>(MainActivity.class, false, false);
      * <p>
      * It's allow us to not start the Activity before !
