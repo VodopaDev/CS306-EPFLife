@@ -1,20 +1,24 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
+import android.media.SoundPool;
+import android.net.wifi.p2p.WifiP2pManager;
+import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
+import com.google.android.gms.common.data.DataBufferObserver;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public final class AuthenticatedUser extends User {
-    private static final List<String> fields = Arrays.asList("fav_assos", "followed_events", "followed_chats");
-    private final DocumentReference ref;
+    public static final List<String> fields = Arrays.asList("fav_assos", "followed_events", "followed_chats");
+    private Object listener;
+    private final String firestore_path;
 
 
     // Use sciper to check User (and not mail or gaspar)
@@ -32,7 +36,7 @@ public final class AuthenticatedUser extends User {
     private List<Integer> followed_events;
 
     protected AuthenticatedUser(final String sciper, String gaspar, String email, String first_names, String last_names, List<Integer> fav_assos, List<Integer> followed_events, List<Integer> followed_chats) {
-
+        firestore_path = "users_info/" + sciper;
         this.sciper = sciper;
         this.gaspar = gaspar;
         this.email = email;
@@ -41,8 +45,6 @@ public final class AuthenticatedUser extends User {
         this.fav_assos = fav_assos;
         this.followed_chats = followed_chats;
         this.followed_events = followed_events;
-        ref = FirebaseFirestore.getInstance().collection("users_info").document(sciper);
-
     }
 
     // TODO: Add a method to add/remove one Association to fav_assos, same for chats and events
@@ -60,46 +62,46 @@ public final class AuthenticatedUser extends User {
         return followed_chats.contains(channel.getId());
     }
 
-    public boolean addFavAssociation(Association asso) {
-        boolean needUpdate = fav_assos.add(asso.getId());
-        if(needUpdate)
-            ref.update("fav_assos", FieldValue.arrayUnion(asso.getId()));
-        return needUpdate;
+    public void addFavAssociation(Association asso) {
+        fav_assos.add(asso.getId());
+        Utils.addIdToList(firestore_path, "fav_assos", asso.getId());
     }
 
-    public boolean removeFavAssociation(Association asso){
-        boolean needUpdate = fav_assos.remove((Integer)asso.getId());
-        if(needUpdate)
-            ref.update("fav_assos", FieldValue.arrayRemove(asso.getId()));
-        return needUpdate;
+    public void removeFavAssociation(Association asso){
+        fav_assos.remove((Integer)asso.getId());
+        Utils.removeIdFromList(firestore_path, "fav_assos", asso.getId());
     }
 
-    public boolean addFollowedEvent(Event event) {
-        boolean needUpdate = followed_events.add(event.getId());
-        if(needUpdate)
-            ref.update("followed_events", FieldValue.arrayUnion(event.getId()));
-        return needUpdate;
+    public void addFollowedEvent(Event event) {
+        followed_events.add(event.getId());
+        Utils.addIdToList(firestore_path, "followed_events", event.getId());
     }
 
-    public boolean removeFollowedEvent(Event event){
-        boolean needUpdate = followed_events.remove((Integer)event.getId());
-        if(needUpdate)
-            ref.update("followed_events", FieldValue.arrayRemove(event.getId()));
-        return needUpdate;
+    public void removeFollowedEvent(Event event){
+        followed_events.remove((Integer)event.getId());
+        Utils.removeIdFromList(firestore_path, "followed_events", event.getId());
     }
 
-    public boolean addFollowedChat(Channel channel) {
-        boolean needUpdate = followed_chats.add(channel.getId());
-        if(needUpdate)
-            ref.update("followed_chats", FieldValue.arrayUnion(channel.getId()));
-        return needUpdate;
+    public void addFollowedChat(Channel channel) {
+        followed_chats.add(channel.getId());
+        Utils.addIdToList(firestore_path, "followed_chats", channel.getId());
     }
 
-    public boolean removeFollowedChat(Channel channel) {
-        boolean needUpdate = followed_chats.remove((Integer)channel.getId());
-        if(needUpdate)
-            ref.update("followed_chats", FieldValue.arrayRemove(channel.getId()));
-        return needUpdate;
+    public void removeFollowedChat(Channel channel) {
+        followed_chats.remove((Integer)channel.getId());
+        Utils.removeIdFromList(firestore_path, "followed_chats", channel.getId());
+    }
+
+    public void setFollowedChats(List<Integer> followed_chats){
+        this.followed_chats = followed_chats;
+    }
+
+    public void setFavAssos(List<Integer> fav_assos){
+        this.fav_assos = fav_assos;
+    }
+
+    public void setFollowedEvents(List<Integer> followed_events){
+        this.followed_events = followed_events;
     }
 
 

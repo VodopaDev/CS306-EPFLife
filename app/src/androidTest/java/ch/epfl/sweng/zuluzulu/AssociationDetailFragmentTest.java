@@ -17,8 +17,10 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static android.support.test.espresso.Espresso.*;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
@@ -55,11 +57,13 @@ public class AssociationDetailFragmentTest {
     public void authenticatedCanRemoveAndAddFavorite() {
         onView(withText("Agepoly")).perform(ViewActions.click());
         onView(withContentDescription(FAV_CONTENT))
-                .check(matches(isDisplayed()))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.association_detail_fav))
+                .check(matches(isClickable()))
                 .perform(ViewActions.click());
         onView(withContentDescription(NOT_FAV_CONTENT))
-                .check(matches(isDisplayed()))
-                .perform(ViewActions.click());
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.association_detail_fav)).perform(ViewActions.click());
         onView(withContentDescription(FAV_CONTENT))
                 .check(matches(isDisplayed()));
     }

@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +24,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 
 /**
@@ -373,19 +387,49 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
 
             // CODE FOR LOCAL LOGIN
             // Nicolas: I have set the sciper to 000000 for testing :)
-            User.UserBuilder builder = new User.UserBuilder();
+            final User.UserBuilder builder = new User.UserBuilder();
             builder.setEmail("nicolas.jomeau@epfl.ch");
-            builder.setSciper("000000");
+            builder.setSciper("000001");
             builder.setGaspar(mUsername);
             builder.setFirst_names("nicolas");
             builder.setLast_names("jomeau");
-
+            builder.setFollowedChats(new ArrayList<Integer>());
+            builder.setFavAssos(new ArrayList<Integer>());
+            builder.setFollowedEvents(new ArrayList<Integer>());
             user = builder.buildAuthenticatedUser();
 
 
             if (success && user != null) {
                 //open the main activity then terminate the login activity (Ikaras998)
-                activate_session(user);
+                final DocumentReference ref = FirebaseFirestore.getInstance()
+                        .collection("users_info")
+                        .document(user.getSciper());
+
+                ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if(!documentSnapshot.exists()){
+                                    Map<String, Object> map = new HashMap<>();
+                                    map.put("fav_assos", new ArrayList<Integer>());
+                                    map.put("followed_events", new ArrayList<Integer>());
+                                    map.put("followed_chats", new ArrayList<Integer>());
+                                    ref.set(map);
+                                    activate_session(user);
+                                }
+                                else if (Utils.isValidSnapshot(documentSnapshot, AuthenticatedUser.fields)){
+                                    List<Integer> received_assos = Utils.longListToIntList((List<Long>)documentSnapshot.get("fav_assos"));
+                                    List<Integer> received_events = Utils.longListToIntList((List<Long>)documentSnapshot.get("followed_events"));
+                                    List<Integer> received_chats = Utils.longListToIntList((List<Long>)documentSnapshot.get("followed_chats"));
+                                    
+                                    ((AuthenticatedUser)user).setFavAssos(received_assos);
+                                    ((AuthenticatedUser)user).setFollowedEvents(received_events);
+                                    ((AuthenticatedUser)user).setFollowedChats(received_chats);
+                                    activate_session(user);
+                                }
+                             }
+                        });
+
+
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
