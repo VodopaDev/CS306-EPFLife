@@ -420,7 +420,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
                                     List<Integer> received_assos = Utils.longListToIntList((List<Long>)documentSnapshot.get("fav_assos"));
                                     List<Integer> received_events = Utils.longListToIntList((List<Long>)documentSnapshot.get("followed_events"));
                                     List<Integer> received_chats = Utils.longListToIntList((List<Long>)documentSnapshot.get("followed_chats"));
-                                    
+
                                     ((AuthenticatedUser)user).setFavAssos(received_assos);
                                     ((AuthenticatedUser)user).setFollowedEvents(received_events);
                                     ((AuthenticatedUser)user).setFollowedChats(received_chats);
