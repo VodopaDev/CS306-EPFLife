@@ -3,12 +3,22 @@ package ch.epfl.sweng.zuluzulu;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
+import com.bumptech.glide.util.Util;
+
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
+
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
+import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Structure.Guest;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -19,66 +29,73 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class AssociationFragmentTest {
 
-    private static final int NB_ALL_ASSOS = 7;
-    private static final int NB_FAV_ASSOS = 4;
-
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+            new ActivityTestRule<>(MainActivity.class, false, false);
 
-    private void guestGoesToAssociation() throws InterruptedException {
-        Utility.goToAssociation();
-        TimeUnit.SECONDS.sleep(5);
+
+    private void initGuestTest(){
+        Guest guest = new User.UserBuilder().buildGuestUser();
+        Utility.addUserToMainIntent(mActivityRule, guest);
+        AssociationFragment fragment = AssociationFragment.newInstance(guest);
+        mActivityRule.getActivity().openFragment(fragment);
+
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void authenticatedGoesToAssociation() throws InterruptedException {
-        Utility.fullLogin();
-        Utility.goToAssociation();
-        TimeUnit.SECONDS.sleep(5);
+    private void initAuthenticatedTest(){
+        Utility.addUserToMainIntent(mActivityRule, new User.UserBuilder().buildGuestUser());
+
+        User user = Utility.createTestUser();
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        AssociationFragment fragment = AssociationFragment.newInstance(user);
+        mActivityRule.getActivity().openFragment(fragment);
+
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    public void thereAreTwoButtons() throws InterruptedException {
-        guestGoesToAssociation();
+    public void thereAreTwoButtons() {
+        initGuestTest();
         onView(withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
         onView(withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void guestMainPageHasSomeAssociations() throws InterruptedException {
-        guestGoesToAssociation();
+    public void guestMainPageHasSomeAssociations() {
+        initGuestTest();
         onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
-        /*
-        TimeUnit.SECONDS.sleep(1);
-        assertThat(list_assos, hasChildCount(NB_ALL_ASSOS));
-        */
     }
 
     @Test
-    public void guestClickOnFavoritesStaysOnAll() throws InterruptedException {
-        guestGoesToAssociation();
+    public void guestClickOnFavoritesStaysOnAll() {
+        initGuestTest();
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
-        /*
-        TimeUnit.SECONDS.sleep(1);
-        assertThat(list_assos, hasChildCount(NB_ALL_ASSOS));
-        */
     }
 
     @Test
-    public void authenticatedClickOnFavoritesDisplayFewerAssociations() throws InterruptedException {
-        authenticatedGoesToAssociation();
+    public void authenticatedClickOnFavorites() {
+        initAuthenticatedTest();
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
-        /*
-        TimeUnit.SECONDS.sleep(1);
-        assertThat(list_assos, hasChildCount(NB_FAV_ASSOS));
-        */
     }
 
     @Test
-    public void AuthenticatedClickingAnAssociationGoesToDetail() throws InterruptedException {
-        authenticatedGoesToAssociation();
+    public void clickingAnAssociationGoesToDetail() {
+        initGuestTest();
         onView(withText("Agepoly")).perform(ViewActions.click());
-        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.association_detail_name)).check(matches(isDisplayed()));
     }
 }
