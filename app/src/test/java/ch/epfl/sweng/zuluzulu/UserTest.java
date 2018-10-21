@@ -12,9 +12,11 @@ import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Guest;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -58,6 +60,11 @@ public class UserTest {
 
         User user = builder.build();
         assertFalse(user.isConnected());
+    }
+
+    @Test
+    public void correctString(){
+        assertThat("Guest user", equalTo(new User.UserBuilder().buildGuestUser().toString()));
     }
 
 }
