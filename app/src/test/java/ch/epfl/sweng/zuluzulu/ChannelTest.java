@@ -49,7 +49,7 @@ public class ChannelTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void invalidSnapThrowIllegalArgumentException(){
+    public void invalidSnapThrowIllegalArgumentException() {
         new Channel(mocked_invalid_datasnap);
     }
 
@@ -67,6 +67,4 @@ public class ChannelTest {
         assertEquals(channelName2, channel.getName());
         assertEquals(channelDescription2, channel.getDescription());
     }
-
-
 }

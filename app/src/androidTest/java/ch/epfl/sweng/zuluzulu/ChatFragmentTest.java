@@ -26,15 +26,17 @@ public class ChatFragmentTest {
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class, false, false);
+
     private User user;
     private Fragment fragment;
+    private static final int channelID = 1;
 
     @Before
     public void init() {
         user = Utility.createTestUser();
         Utility.addUserToMainIntent(mActivityRule, user);
 
-        fragment = ChatFragment.newInstance(user, 1);
+        fragment = ChatFragment.newInstance(user, channelID);
         mActivityRule.getActivity().openFragment(fragment);
     }
 
