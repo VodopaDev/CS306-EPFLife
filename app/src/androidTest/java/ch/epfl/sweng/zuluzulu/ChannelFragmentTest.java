@@ -13,20 +13,13 @@ import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 @RunWith(AndroidJUnit4.class)
-public class ChannelFragmentTest {
+public class ChannelFragmentTest extends TestWithLogin {
 
-    @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class, false, false);
-    private User user;
     private Fragment fragment;
 
     @Before
     public void init() {
-        user = Utility.createTestUser();
-        Utility.addUserToMainIntent(mActivityRule, user);
-
-        fragment = ChannelFragment.newInstance(user);
+        fragment = ChannelFragment.newInstance(getUser());
         mActivityRule.getActivity().openFragment(fragment);
     }
 
