@@ -31,7 +31,7 @@ public final class AuthenticatedUser extends User {
 
         assos_id = Sets.newHashSet(1, 3, 4, 6);
         chats_names = new HashSet<>();
-        events_id = Sets.newHashSet(1);
+        events_id = Sets.newHashSet(1, 3);
 
     }
 

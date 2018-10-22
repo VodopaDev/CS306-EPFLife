@@ -129,10 +129,20 @@ public class EventFragment extends Fragment {
                     Snackbar.make(getView(), "Please select only one sort option.", 5000).show();
                     checkbox_event_sort_date.setChecked(false);
                 }
-
+                if (!checkbox_event_sort_date.isChecked()){
+                    emptyEventList();
+                    fillEventLists(default_sort_option);
+                }
                 else {
+                    emptyEventList();
+//                    if (button_event_all.getBackground().equals(getResources().getColor(R.color.colorGrayDarkTransparent))){
+//                        event_adapter = new EventAdapter(getContext(), event_fav, mListener);
+//                    }
+//                    else {
+//                        event_adapter = new EventAdapter(getContext(), event_all, mListener);
+//                    }
+//                    event_adapter.notifyDataSetChanged();
                     fillEventLists("start_date");
-                    event_adapter.notifyDataSetChanged();
                 }
             }
         });
@@ -155,6 +165,12 @@ public class EventFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private void emptyEventList(){
+        event_all.clear();
+        event_fav.clear();
+        event_adapter.notifyDataSetChanged();
     }
 
     private void fillEventLists(String sortOption){
