@@ -17,13 +17,12 @@ public class ChatFragmentTest {
 
     private static final String MSG = "HELLO FROM ZULUZULU";
     private static final String CHANNEL = "Test";
+    private static final int channelID = 1;
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class, false, false);
-
     private User user;
     private Fragment fragment;
-    private static final int channelID = 1;
 
     @Before
     public void init() {

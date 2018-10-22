@@ -1,14 +1,11 @@
 package ch.epfl.sweng.zuluzulu;
 
-import android.support.test.rule.ActivityTestRule;
 import android.support.v4.app.Fragment;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
-import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
