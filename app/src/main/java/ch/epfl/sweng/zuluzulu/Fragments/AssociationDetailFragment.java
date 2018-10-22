@@ -20,6 +20,7 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class AssociationDetailFragment extends Fragment {
@@ -30,7 +31,11 @@ public class AssociationDetailFragment extends Fragment {
     private static final String NOT_FAV_CONTENT = "This association isn't in your favorites";
 
     private ImageView asso_fav;
+
+    private ImageView upcoming_event_icon;
     private TextView upcoming_event_name;
+    private TextView upcoming_event_date;
+    private Event upcoming_event;
 
     private OnFragmentInteractionListener mListener;
     private Association asso;
@@ -94,13 +99,21 @@ public class AssociationDetailFragment extends Fragment {
 
         // Upcoming event name
         upcoming_event_name = view.findViewById(R.id.association_detail_upcoming_event_name);
+        upcoming_event_icon = view.findViewById(R.id.association_detail_upcoming_event_icon);
+        upcoming_event_date = view.findViewById(R.id.association_detail_upcoming_event_date);
         if(asso.getClosestEventId() != 0){
             FirebaseFirestore.getInstance()
                     .document("events_info/event"+asso.getClosestEventId())
                     .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    upcoming_event_name.setText(documentSnapshot.getString("name"));
+                    upcoming_event = new Event(documentSnapshot);
+                    upcoming_event_name.setText(upcoming_event.getName());
+                    upcoming_event_date.setText(upcoming_event.getStart_date().toString());
+                    Glide.with(getContext())
+                            .load(upcoming_event.getIconUri())
+                            .centerCrop()
+                            .into(upcoming_event_icon);
                 }
             });
         }

@@ -49,12 +49,12 @@ public class AssociationTest {
         Map<String, Object> map1 = new HashMap<>();
         Date close_date = new Date(2020,10,2);
         map1.put("id", 1L);
-        map1.put("start", new Timestamp(close_date));
+        map1.put("start", close_date);
 
         Map<String, Object> map2 = new HashMap<>();
         Date far_date = new Date(2056,10,2);
         map2.put("id", 2L);
-        map2.put("start", new Timestamp(far_date));
+        map2.put("start", far_date);
 
         when(mocked_valid_datasnap.getString("name")).thenReturn(NAME1);
         when(mocked_valid_datasnap.getString("long_desc")).thenReturn(LONG_DESC);
