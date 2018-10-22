@@ -9,7 +9,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -136,11 +135,10 @@ public class Association implements Serializable {
             return 0;
         else{
             int closest = ((Long)events.get(0).get("id")).intValue();
-            Date closest_time = (Date) events.get(0).get("start");
+            Timestamp closest_time = (Timestamp)events.get(0).get("start");
             for(int i = 1; i < events.size(); i++){
-                Date current = (Date)events.get(i).get("start");
-                if(current.before(closest_time)){
-                    closest_time = current;
+                Timestamp current = (Timestamp)events.get(i).get("start");
+                if(current.toDate().before(closest_time.toDate())){
                     closest = ((Long)events.get(i).get("id")).intValue();
                 }
             }
