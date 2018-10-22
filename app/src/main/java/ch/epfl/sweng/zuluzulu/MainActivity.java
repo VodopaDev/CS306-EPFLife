@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             User user = (User) i.getSerializableExtra("user");
             if (user != null) {
                 this.user = user;
+                updateMenuItems();
             }
 
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
