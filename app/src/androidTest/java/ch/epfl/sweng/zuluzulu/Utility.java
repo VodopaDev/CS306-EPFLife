@@ -33,8 +33,8 @@ public class Utility {
         builder.setSciper("123456");
         builder.setGaspar("gaspar");
         builder.setEmail("test@epfl.ch");
-        builder.setFirst_names("james");
-        builder.setLast_names("bond");
+        builder.setFirst_names("James");
+        builder.setLast_names("Bond");
 
         User user = builder.buildAuthenticatedUser();
 
