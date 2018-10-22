@@ -87,7 +87,7 @@ public class EventFragment extends Fragment {
         event_fav = new ArrayList<>();
         event_adapter = new EventAdapter(getContext(), event_all, mListener);
 
-        default_sort_option = "name";
+        default_sort_option = "id";
 
         fillEventLists(default_sort_option);
     }
@@ -125,24 +125,29 @@ public class EventFragment extends Fragment {
         checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkbox_event_sort_name.isChecked()) {
-                    Snackbar.make(getView(), "Please select only one sort option.", 5000).show();
-                    checkbox_event_sort_date.setChecked(false);
-                }
-                if (!checkbox_event_sort_date.isChecked()){
+                if (checkbox_event_sort_date.isChecked()){
+                    checkbox_event_sort_name.setChecked(false);
                     emptyEventList();
-                    fillEventLists(default_sort_option);
+                    fillEventLists("start_date");
                 }
                 else {
                     emptyEventList();
-//                    if (button_event_all.getBackground().equals(getResources().getColor(R.color.colorGrayDarkTransparent))){
-//                        event_adapter = new EventAdapter(getContext(), event_fav, mListener);
-//                    }
-//                    else {
-//                        event_adapter = new EventAdapter(getContext(), event_all, mListener);
-//                    }
-//                    event_adapter.notifyDataSetChanged();
-                    fillEventLists("start_date");
+                    fillEventLists(default_sort_option);
+                }
+            }
+        });
+
+        checkbox_event_sort_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkbox_event_sort_name.isChecked()){
+                    checkbox_event_sort_date.setChecked(false);
+                    emptyEventList();
+                    fillEventLists("name");
+                }
+                else {
+                    emptyEventList();
+                    fillEventLists(default_sort_option);
                 }
             }
         });
