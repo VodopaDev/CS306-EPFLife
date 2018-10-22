@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Checkable;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -50,6 +52,9 @@ public class EventFragment extends Fragment {
     private ListView listview_event;
     private Button button_event_all;
     private Button button_event_fav;
+
+    private CheckBox checkbox_event_sort_name;
+    private CheckBox checkbox_event_sort_date;
 
     public EventFragment() {
         // Required empty public constructor
@@ -110,6 +115,8 @@ public class EventFragment extends Fragment {
                 updateListView(button_event_all, button_event_fav, event_all, listview_event);
             }
         });
+
+        checkbox_event_sort_name = view
 
         return view;
     }
