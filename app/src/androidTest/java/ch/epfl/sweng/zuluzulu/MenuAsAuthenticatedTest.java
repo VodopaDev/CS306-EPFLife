@@ -13,16 +13,10 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
-public class MenuAsAuthenticatedTest {
-    @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+public class MenuAsAuthenticatedTest extends TestWithLogin{
 
     @Before
     public void openDrawer() {
-        // Go and login
-        Utility.fullLogin();
-
         // Open the menu again
         Utility.openMenu();
     }
