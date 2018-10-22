@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -27,6 +30,7 @@ public class AssociationDetailFragment extends Fragment {
     private static final String NOT_FAV_CONTENT = "This association isn't in your favorites";
 
     private ImageView asso_fav;
+    private TextView upcoming_event_name;
 
     private OnFragmentInteractionListener mListener;
     private Association asso;
@@ -88,7 +92,21 @@ public class AssociationDetailFragment extends Fragment {
                 .centerCrop()
                 .into(asso_banner);
 
-        View upcoming_event_view = inflater.inflate(R.layout.card_event, container);
+        // Upcoming event name
+        upcoming_event_name = view.findViewById(R.id.association_detail_upcoming_event_name);
+        if(asso.getClosestEventId() != 0){
+            FirebaseFirestore.getInstance()
+                    .document("events_info/event"+asso.getClosestEventId())
+                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    upcoming_event_name.setText(documentSnapshot.getString("name"));
+                }
+            });
+        }
+        else {
+            upcoming_event_name.setText("Pas d'event :(");
+        }
 
 
         return view;
