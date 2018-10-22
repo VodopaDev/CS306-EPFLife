@@ -122,13 +122,18 @@ public class EventFragment extends Fragment {
         checkbox_event_sort_name = view.findViewById(R.id.event_fragment_checkBox_sort_name);
         checkbox_event_sort_date = view.findViewById(R.id.event_fragment_checkBox_sort_date);
 
-        button_event_fav.setOnClickListener(new View.OnClickListener() {
+        checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkbox_event_sort_name.isChecked())
+                if(checkbox_event_sort_name.isChecked()) {
                     Snackbar.make(getView(), "Please select only one sort option.", 5000).show();
-                else
+                    checkbox_event_sort_date.setChecked(false);
+                }
+
+                else {
                     fillEventLists("start_date");
+                    event_adapter.notifyDataSetChanged();
+                }
             }
         });
 
