@@ -39,6 +39,8 @@ public class ChannelFragment extends Fragment {
     private static final String ARG_USER = "ARG_USER";
     private static final String CHANNELS_COLLECTION_NAME = "channels";
 
+    private static final String USER_SECTION = "IN";
+
     private FirebaseFirestore db;
 
     private ListView listView;
@@ -130,7 +132,14 @@ public class ChannelFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 Channel channel = new Channel(document);
-                                listOfChannels.add(channel);
+                                String channelName = channel.getName();
+                                Boolean asAccess = true;
+                                if (channelName.contains("Section")) {
+                                    asAccess = channelName.contains(USER_SECTION);
+                                }
+                                if (asAccess) {
+                                    listOfChannels.add(channel);
+                                }
                             }
                             adapter.notifyDataSetChanged();
                         } else {
