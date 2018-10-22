@@ -43,11 +43,8 @@ public class MainActivityTest {
 
     @Test
     public void isAuthenticated() {
+        // check not authenticated
         assertFalse(mActivity.isAuthenticated());
-        // Check it means it's not an user
-
-        Utility.fullLogin();
-        assertTrue(mActivity.isAuthenticated());
     }
 
     @Test
