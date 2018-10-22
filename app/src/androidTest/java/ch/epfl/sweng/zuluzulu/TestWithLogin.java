@@ -17,11 +17,11 @@ public abstract class TestWithLogin {
 
     @Before
     public void setUp() {
-        user = Utility.createTestUser();
-        Utility.addUserToMainIntent(mActivityRule, user);
+        this.user = Utility.createTestUser();
+        Utility.addUserToMainIntent(mActivityRule, this.user);
     }
 
-    public User getUser(){
+    protected User getUser(){
         return this.user;
     }
 }
