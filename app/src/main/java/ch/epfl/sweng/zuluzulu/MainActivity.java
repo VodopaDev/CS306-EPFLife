@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         Fragment fragment;
         switch (menuItem.getItemId()) {
             case R.id.nav_main:
-                fragment = MainFragment.newInstance();
+                fragment = MainFragment.newInstance(user);
                 break;
             case R.id.nav_login:
                 fragment = LoginFragment.newInstance();
@@ -180,13 +180,13 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 this.user = new User.UserBuilder().buildGuestUser();
                 updateMenuItems();
                 menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
-                fragment = MainFragment.newInstance();
+                fragment = MainFragment.newInstance(user);
                 break;
             case R.id.nav_chat:
                 fragment = ChannelFragment.newInstance(user);
                 break;
             default:
-                fragment = MainFragment.newInstance();
+                fragment = MainFragment.newInstance(user);
         }
 
         if (openFragment(fragment)) {
@@ -275,9 +275,5 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      */
     public User getUser() {
         return user;
-    }
-
-    public void setUser(User user){
-        this.user = user;
     }
 }
