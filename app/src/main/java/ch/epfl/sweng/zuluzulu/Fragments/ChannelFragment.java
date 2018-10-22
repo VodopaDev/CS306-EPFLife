@@ -38,6 +38,7 @@ public class ChannelFragment extends Fragment {
     public static final String TAG = "CHANNEL_TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String CHANNELS_COLLECTION_NAME = "channels";
+    private static final String SECTION_CHANNEL_PREFIX = "Section";
 
     private static final String USER_SECTION = "IN";
 
@@ -133,11 +134,11 @@ public class ChannelFragment extends Fragment {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 Channel channel = new Channel(document);
                                 String channelName = channel.getName();
-                                Boolean asAccess = true;
-                                if (channelName.contains("Section")) {
-                                    asAccess = channelName.contains(USER_SECTION);
+                                Boolean hasAccess = true;
+                                if (channelName.contains(SECTION_CHANNEL_PREFIX)) {
+                                    hasAccess = channelName.contains(USER_SECTION);
                                 }
-                                if (asAccess) {
+                                if (hasAccess) {
                                     listOfChannels.add(channel);
                                 }
                             }
