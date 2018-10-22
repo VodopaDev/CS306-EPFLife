@@ -21,4 +21,7 @@ public abstract class TestWithLogin {
         Utility.addUserToMainIntent(mActivityRule, user);
     }
 
+    public User getUser(){
+        return this.user;
+    }
 }

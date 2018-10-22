@@ -22,7 +22,7 @@ public class ProfileFragmentTest extends TestWithLogin {
 
     @Before
     public void init() {
-        fragment = ProfileFragment.newInstance(user);
+        fragment = ProfileFragment.newInstance(getUser());
         mActivityRule.getActivity().openFragment(fragment);
     }
 
@@ -33,16 +33,16 @@ public class ProfileFragmentTest extends TestWithLogin {
 
     @Test
     public void checkGaspar() {
-        onView(withId(R.id.profile_gaspar_text)).check(matches(withText(containsString(user.getGaspar()))));
+        onView(withId(R.id.profile_gaspar_text)).check(matches(withText(containsString(getUser().getGaspar()))));
     }
 
     @Test
     public void checkEmail() {
-        onView(withId(R.id.profile_email_edit)).check(matches(withText(containsString(user.getEmail()))));
+        onView(withId(R.id.profile_email_edit)).check(matches(withText(containsString(getUser().getEmail()))));
     }
 
     @Test
     public void checkSciper() {
-        onView(withId(R.id.profile_sciper_edit)).check(matches(withText(containsString(user.getSciper()))));
+        onView(withId(R.id.profile_sciper_edit)).check(matches(withText(containsString(getUser().getSciper()))));
     }
 }
