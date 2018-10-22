@@ -22,7 +22,7 @@ public class SettingsTest {
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
-    public static void goToEvent(){
+    public static void goToEvent() {
         openMenu();
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_settings));
     }

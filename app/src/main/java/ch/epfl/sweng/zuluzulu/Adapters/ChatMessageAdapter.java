@@ -17,9 +17,9 @@ import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 
 public class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
 
+    private static final String ownMessageSenderName = "You";
     private Context mContext;
     private List<ChatMessage> messages;
-    private static final String ownMessageSenderName = "You";
 
     public ChatMessageAdapter(@NonNull Context context, List<ChatMessage> list) {
         super(context, 0, list);

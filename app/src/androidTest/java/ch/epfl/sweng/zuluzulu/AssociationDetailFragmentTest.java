@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-
 import static android.support.test.espresso.Espresso.*;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;

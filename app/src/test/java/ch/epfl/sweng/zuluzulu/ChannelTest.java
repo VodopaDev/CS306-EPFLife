@@ -21,11 +21,9 @@ public class ChannelTest {
     private static final Long id2 = 2l;
     private static final String channelName2 = "Test";
     private static final String channelDescription2 = "A chat just to test stuff";
-
-    private Channel channel;
-
     private final DocumentSnapshot mocked_valid_datasnap1 = Mockito.mock(DocumentSnapshot.class);
     private final DocumentSnapshot mocked_invalid_datasnap = Mockito.mock(DocumentSnapshot.class);
+    private Channel channel;
 
     @Before
     public void init() {
