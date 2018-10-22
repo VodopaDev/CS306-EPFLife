@@ -17,18 +17,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class ProfileFragmentTest {
-    @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class, false, false);
-    private User user;
+public class ProfileFragmentTest extends TestWithLogin {
     private Fragment fragment;
 
     @Before
     public void init() {
-        user = Utility.createTestUser();
-        Utility.addUserToMainIntent(mActivityRule, user);
-
         fragment = ProfileFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
     }
