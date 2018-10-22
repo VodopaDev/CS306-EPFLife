@@ -13,23 +13,15 @@ import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 @RunWith(AndroidJUnit4.class)
-public class ChatFragmentTest {
+public class ChatFragmentTest extends TestWithLogin {
 
-    private static final String MSG = "HELLO FROM ZULUZULU";
-    private static final String CHANNEL = "Test";
     private static final int channelID = 1;
-    @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class, false, false);
-    private User user;
+
     private Fragment fragment;
 
     @Before
     public void init() {
-        user = Utility.createTestUser();
-        Utility.addUserToMainIntent(mActivityRule, user);
-
-        fragment = ChatFragment.newInstance(user, channelID);
+        fragment = ChatFragment.newInstance(getUser(), channelID);
         mActivityRule.getActivity().openFragment(fragment);
     }
 
