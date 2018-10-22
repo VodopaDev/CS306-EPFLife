@@ -89,7 +89,7 @@ public class AssociationDetailFragment extends Fragment {
                 .into(asso_banner);
 
         View upcoming_event_view = inflater.inflate(R.layout.card_event, container);
-        
+
 
         return view;
     }
