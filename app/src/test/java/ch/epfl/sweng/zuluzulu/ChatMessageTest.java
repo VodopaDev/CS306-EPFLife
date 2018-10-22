@@ -25,13 +25,11 @@ public class ChatMessageTest {
     private static final String message2 = "Bond's message";
 
     private static final String userSciper = sciper1;
-
-    private ChatMessage chatMessage1;
-    private ChatMessage chatMessage2;
-
     private final DocumentSnapshot mocked_valid_datasnap1 = Mockito.mock(DocumentSnapshot.class);
     private final DocumentSnapshot mocked_valid_datasnap2 = Mockito.mock(DocumentSnapshot.class);
     private final DocumentSnapshot mocked_invalid_datasnap = Mockito.mock(DocumentSnapshot.class);
+    private ChatMessage chatMessage1;
+    private ChatMessage chatMessage2;
 
     @Before
     public void init() {

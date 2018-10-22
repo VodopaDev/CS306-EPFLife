@@ -9,10 +9,12 @@ import java.util.List;
  */
 public final class Utils {
 
-    private Utils() {}
+    private Utils() {
+    }
 
     /**
      * Check if a snapshot is valid given a list of fields
+     *
      * @return whether the snapshot is valid or not
      */
     public static boolean isValidSnapshot(DocumentSnapshot snap, List<String> fields) {

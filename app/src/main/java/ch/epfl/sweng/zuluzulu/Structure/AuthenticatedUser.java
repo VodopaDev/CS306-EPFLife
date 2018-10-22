@@ -42,25 +42,27 @@ public final class AuthenticatedUser extends User {
         return assos_id.contains(asso.getId());
     }
 
-    public boolean isFavEvent(Event event){ return events_id.contains(event.getId()); }
+    public boolean isFavEvent(Event event) {
+        return events_id.contains(event.getId());
+    }
 
     public boolean addFavAssociation(Association asso) {
         return assos_id.add(asso.getId());
     }
 
-    public boolean addFavEvent(Event event){
+    public boolean addFavEvent(Event event) {
         return events_id.add(event.getId());
     }
 
-    public boolean removeFavAssociation(Association asso){
+    public boolean removeFavAssociation(Association asso) {
         return assos_id.remove(asso.getId());
     }
 
-    public boolean removeFavEvent(Event event){
+    public boolean removeFavEvent(Event event) {
         return events_id.remove(event.getId());
     }
 
-    public boolean isFollowedEvent(Event event){
+    public boolean isFollowedEvent(Event event) {
         return events_id.contains(event.getId());
     }
 
