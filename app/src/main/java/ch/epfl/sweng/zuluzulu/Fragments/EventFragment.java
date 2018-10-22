@@ -128,7 +128,7 @@ public class EventFragment extends Fragment {
                 if(checkbox_event_sort_name.isChecked())
                     Snackbar.make(getView(), "Please select only one sort option.", 5000).show();
                 else
-                    return;
+                    fillEventLists("start_date");
             }
         });
 
