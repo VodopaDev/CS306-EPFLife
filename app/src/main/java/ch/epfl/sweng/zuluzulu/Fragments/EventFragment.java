@@ -55,6 +55,7 @@ public class EventFragment extends Fragment {
 
     private CheckBox checkbox_event_sort_name;
     private CheckBox checkbox_event_sort_date;
+    private String default_sort_option;
 
     public EventFragment() {
         // Required empty public constructor
@@ -86,7 +87,9 @@ public class EventFragment extends Fragment {
         event_fav = new ArrayList<>();
         event_adapter = new EventAdapter(getContext(), event_all, mListener);
 
-        fillEventLists();
+        default_sort_option = "name";
+
+        fillEventLists(default_sort_option);
     }
 
     @Override
@@ -116,7 +119,18 @@ public class EventFragment extends Fragment {
             }
         });
 
-        checkbox_event_sort_name = view
+        checkbox_event_sort_name = view.findViewById(R.id.event_fragment_checkBox_sort_name);
+        checkbox_event_sort_date = view.findViewById(R.id.event_fragment_checkBox_sort_date);
+
+        button_event_fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(checkbox_event_sort_name.isChecked())
+                    Snackbar.make(getView(), "Please select only one sort option.", 5000).show();
+                else
+                    return;
+            }
+        });
 
         return view;
     }
@@ -138,9 +152,9 @@ public class EventFragment extends Fragment {
         mListener = null;
     }
 
-    private void fillEventLists(){
+    private void fillEventLists(String sortOption){
        FirebaseFirestore.getInstance().collection("events_info")
-                .orderBy("name")
+                .orderBy(sortOption)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
