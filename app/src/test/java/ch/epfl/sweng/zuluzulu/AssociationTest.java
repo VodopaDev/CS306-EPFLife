@@ -46,9 +46,15 @@ public class AssociationTest {
 
     @Before
     public void init() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", 1L);
-        map.put("start", Timestamp.now());
+        Map<String, Object> map1 = new HashMap<>();
+        Date close_date = new Date(2020,10,2);
+        map1.put("id", 1L);
+        map1.put("start", new Timestamp(close_date));
+
+        Map<String, Object> map2 = new HashMap<>();
+        Date far_date = new Date(2056,10,2);
+        map2.put("id", 2L);
+        map2.put("start", new Timestamp(far_date));
 
         when(mocked_valid_datasnap.getString("name")).thenReturn(NAME1);
         when(mocked_valid_datasnap.getString("long_desc")).thenReturn(LONG_DESC);
@@ -60,7 +66,7 @@ public class AssociationTest {
         when(mocked_valid_datasnap.get("long_desc")).thenReturn(LONG_DESC);
         when(mocked_valid_datasnap.get("short_desc")).thenReturn(SHORT_DESC);
         when(mocked_valid_datasnap.get("id")).thenReturn(1L);
-        when(mocked_valid_datasnap.get("events")).thenReturn(Collections.singletonList(map));
+        when(mocked_valid_datasnap.get("events")).thenReturn(Arrays.asList(map2, map1));
 
         when(mocked_default_datasnap.getString("name")).thenReturn(NAME2);
         when(mocked_default_datasnap.getString("long_desc")).thenReturn(LONG_DESC);
