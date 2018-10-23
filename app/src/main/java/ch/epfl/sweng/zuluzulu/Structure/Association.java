@@ -3,7 +3,6 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;

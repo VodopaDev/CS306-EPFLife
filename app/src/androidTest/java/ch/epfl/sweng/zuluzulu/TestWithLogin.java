@@ -7,8 +7,6 @@ import org.junit.Rule;
 
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
-import static org.junit.Assert.assertTrue;
-
 /**
  * This class allow us to create the main activity as if we were connected.
  * It creates an user and allow child to use this User.

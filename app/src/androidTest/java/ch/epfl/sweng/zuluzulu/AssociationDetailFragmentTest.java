@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu;
 
-import android.support.test.espresso.action.CloseKeyboardAction;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -12,27 +11,14 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
-import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
-import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Structure.User;
+
 import static android.support.test.espresso.Espresso.*;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
-import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.equalTo;
 
 @RunWith(AndroidJUnit4.class)
 public class AssociationDetailFragmentTest {
-
-    private static final String FAV_CONTENT = "This association is in your favorites";
-    private static final String NOT_FAV_CONTENT = "This association isn't in your favorites";
-    private AssociationDetailFragment frag;
     private AuthenticatedUser user;
 
     @Rule
@@ -47,14 +33,30 @@ public class AssociationDetailFragmentTest {
         mActivityRule.getActivity().openFragment(fragment);
 
         try {
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
 
+    @Test
+    public void thereIsSomething(){
         onView(withText("Agepoly")).perform(ViewActions.click());
-        assert(mActivityRule.getActivity().getCurrentFragment() instanceof AssociationDetailFragment);
-        frag = (AssociationDetailFragment)mActivityRule.getActivity().getCurrentFragment();
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void thereIsNothing(){
+        onView(withText("ForumEPFL")).perform(ViewActions.click());
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /*
