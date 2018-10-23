@@ -131,11 +131,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * Attach the drawer_view to the navigation view
      */
     private void updateMenuItems() {
+        navigationView.getMenu().clear();
         if (isAuthenticated()) {
-            navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_user);
         } else {
-            navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_guest);
         }
     }

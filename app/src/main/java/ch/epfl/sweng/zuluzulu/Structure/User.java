@@ -1,12 +1,22 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * This parent class represent an user
  */
 abstract public class User implements Serializable {
+
+    /**
+     * This list will contain the roles of the User
+     */
+    final protected ArrayList<UserRole> roles;
+
+    protected User() {
+        this.roles = new ArrayList<UserRole>();
+    }
+
 
     public String getFirstNames() {
         return null;
@@ -28,6 +38,22 @@ abstract public class User implements Serializable {
         return null;
     }
 
+    /**
+     * Check if the user has the role
+     * @param role UserRole
+     * @return boolean
+     */
+    public boolean hasRole(UserRole role){
+        return roles.contains(role);
+    }
+
+    /**
+     * Add the role to the user roles list
+     * @param role UserRole
+     */
+    protected void addRole(UserRole role){
+        this.roles.add(role);
+    }
 
     public abstract boolean isConnected();
 
@@ -151,15 +177,19 @@ abstract public class User implements Serializable {
          * @return AuthenticatedUser or null
          */
         public AuthenticatedUser buildAuthenticatedUser() {
-            if (this.sciper != null
-                    && this.email != null
-                    && this.gaspar != null
-                    && this.first_names != null
-                    && this.last_names != null
-                    && this.fav_assos != null
-                    && this.followed_chats != null
-                    && this.followed_events != null) {
+            if (hasRequirementsForAuthentication())
                 return new AuthenticatedUser(this.sciper, this.gaspar, this.email, this.first_names, this.last_names, this.fav_assos, this.followed_events, this.followed_chats);
+            return null;
+        }
+
+        /**
+         * Build an Admin
+         *
+         * @return Admin or null
+         */
+        public Admin buildAdmin() {
+            if (hasRequirementsForAuthentication()) {
+                return new Admin(this.sciper, this.gaspar, this.email, this.first_names, this.last_names);
             }
 
             return null;
@@ -172,6 +202,21 @@ abstract public class User implements Serializable {
          */
         public Guest buildGuestUser() {
             return new Guest();
+        }
+
+        /**
+         * Check the requirements for authentication
+         * @return boolean
+         */
+        private boolean hasRequirementsForAuthentication(){
+            return  this.sciper != null
+                    && this.email != null
+                    && this.gaspar != null
+                    && this.first_names != null
+                    && this.last_names != null
+                    && this.fav_assos != null
+                    && this.followed_chats != null
+                    && this.followed_events != null)
         }
 
     }

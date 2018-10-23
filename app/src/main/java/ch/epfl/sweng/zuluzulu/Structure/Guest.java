@@ -1,8 +1,15 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 public final class Guest extends User {
+    protected Guest() {
+        super();
+    }
 
-    protected Guest() {}
+    @Override
+    public boolean hasRole(UserRole role){
+        // Should never have role
+        return false;
+    }
 
     @Override
     public boolean isConnected() {

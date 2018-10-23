@@ -9,7 +9,6 @@ public final class AuthenticatedUser extends User {
     private Object listener;
     private final String firestore_path;
 
-
     // Use sciper to check User (and not mail or gaspar)
     private final String sciper;
     private final String gaspar;
@@ -34,10 +33,15 @@ public final class AuthenticatedUser extends User {
         this.fav_assos = fav_assos;
         this.followed_chats = followed_chats;
         this.followed_events = followed_events;
-}
 
-    // TODO: Add a method to add/remove one Association to fav_assos, same for chats and events
-    // TODO: Check inputs before changing fields
+        // Add role
+        this.addRole(UserRole.USER);
+
+        // TO REMOVE
+        if(gaspar.equals("dahn")){
+            this.addRole(UserRole.ADMIN);
+        }
+    }
 
     public boolean isFavAssociation(Association asso) {
         return fav_assos.contains(asso.getId());
