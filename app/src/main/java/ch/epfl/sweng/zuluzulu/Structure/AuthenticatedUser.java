@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class AuthenticatedUser extends User {
+public class AuthenticatedUser extends User {
 
     // Use sciper to check User (and not mail or gaspar)
     private final String sciper;
@@ -38,7 +38,6 @@ public final class AuthenticatedUser extends User {
 
         // Add role
         this.addRole(UserRole.USER);
-        this.addRole(UserRole.MODERATOR);
     }
 
     // TODO: Add a method to add/remove one Association to assos_id, same for chats and events
