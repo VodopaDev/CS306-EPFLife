@@ -1,4 +1,4 @@
-/*package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu;
 
 import android.net.Uri;
 import android.util.Log;
@@ -93,23 +93,15 @@ public class EventTest {
         assertEquals(SHORT_DESC, event0.getShort_desc());
     }
 
-    /*@Test
-    public void uriIsCorrect(){
-        assertEquals(Uri.parse(ICON_URI_STRING), event0.getIconUri());
-    }*/
-
-    /*@Test
-    public void dateIsCorrect() {
-        assert START_DATE.equals(event0.getStart_date()); }
-
     @Test
-
     public void uriIsCorrect(){
         assertEquals(Uri.parse(ICON_URI_STRING), event0.getIconUri());
     }
 
     @Test
-    public void dateIsCorrect() { assertEquals(START_DATE, event0.getStart_date()); }
+    public void dateIsCorrect() {
+        assert START_DATE.equals(event0.getStart_date());
+    }
 
     @Test
     public void comparableToIsCorrect(){
@@ -118,4 +110,3 @@ public class EventTest {
     }
 
 }
-*/
