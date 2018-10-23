@@ -49,7 +49,7 @@ public final class AuthenticatedUser extends User {
     public boolean isFollowedChat(Channel channel) {
         return followed_chats.contains(channel.getId());
     }
-  
+
     public void addFavAssociation(Association asso) {
         fav_assos.add(asso.getId());
         Utils.addIdToList(firestore_path, "fav_assos", asso.getId());
@@ -60,6 +60,7 @@ public final class AuthenticatedUser extends User {
         Utils.removeIdFromList(firestore_path, "fav_assos", asso.getId());
     }
 
+    /**
     public void addFollowedEvent(Event event) {
         followed_events.add(event.getId());
         Utils.addIdToList(firestore_path, "followed_events", event.getId());
@@ -91,6 +92,7 @@ public final class AuthenticatedUser extends User {
     public void setFollowedEvents(List<Integer> followed_events){
         this.followed_events = followed_events;
     }
+     */
 
 
     @Override
