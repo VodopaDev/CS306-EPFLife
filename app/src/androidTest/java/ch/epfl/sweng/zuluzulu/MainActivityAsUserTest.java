@@ -17,6 +17,7 @@ public class MainActivityAsUserTest extends TestWithLogin {
     @Test
     public void isAuthenticated() {
         // check not authenticated
+        assertTrue(mActivityRule.getActivity().isAuthenticated());
         onView(withId(R.id.main_user_fragment)).check(matches(isDisplayed()));
     }
 }
