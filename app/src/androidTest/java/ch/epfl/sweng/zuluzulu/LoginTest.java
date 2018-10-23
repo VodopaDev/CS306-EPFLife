@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBackUnconditionally;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
@@ -32,24 +33,6 @@ public class LoginTest {
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
-
-    /**
-     * Class test if there is an error message in a EditText
-     */
-    private static Matcher<View> hasNoErrorText() {
-        return new BoundedMatcher<View, EditText>(EditText.class) {
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("has no error text: ");
-            }
-
-            @Override
-            protected boolean matchesSafely(EditText view) {
-                return view.getError() == null;
-            }
-        };
-    }
 
     private void openDrawer() {
         // Open Drawer to click on navigation.
@@ -69,10 +52,9 @@ public class LoginTest {
      * Test connection is accepted with correct credentials
      */
     @Test
-    public void testLoginDoesNotDoAnythingIfClickButNotConnectedToTequila() {
+    public void isOnTheLogin() {
         //You have to test if it works for wrong credentials, if it login properly and if you have any
         //other idea you are welcome to test them
-        onView(withId(R.id.sign_in_button)).perform(ViewActions.click());
         onView(withId(R.id.login_fragment)).check(matches(isDisplayed()));
     }
 

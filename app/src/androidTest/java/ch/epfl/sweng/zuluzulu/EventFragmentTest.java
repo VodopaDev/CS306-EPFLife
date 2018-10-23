@@ -8,6 +8,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.zuluzulu.Structure.User;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -18,6 +20,7 @@ public class EventFragmentTest {
 
     private static final int NB_ALL_EVENTS = 7;
     private static final int NB_FAV_EVENTS = 4;
+    private User user;
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
@@ -29,7 +32,8 @@ public class EventFragmentTest {
     }
 
     private void authenticatedGoesToEvent() {
-        Utility.fullLogin();
+        this.user = Utility.createTestUser();
+        Utility.addUserToMainIntent(mActivityRule, this.user);
         Utility.goToEvent();
 //        TimeUnit.MILLISECONDS.sleep(1);
     }

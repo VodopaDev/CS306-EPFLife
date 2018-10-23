@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
+import ch.epfl.sweng.zuluzulu.Structure.User;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -21,6 +23,7 @@ public class AssociationDetailFragmentTest {
 
     private static final String FAV_CONTENT = "This association is in your favorites";
     private static final String NOT_FAV_CONTENT = "This association isn't in your favorites";
+    private User user;
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
@@ -32,7 +35,8 @@ public class AssociationDetailFragmentTest {
     }
 
     private void authenticatedGoesToAssociation() throws InterruptedException {
-        Utility.fullLogin();
+        this.user = Utility.createTestUser();
+        Utility.addUserToMainIntent(mActivityRule, this.user);
         Utility.goToAssociation();
         TimeUnit.SECONDS.sleep(5);
     }

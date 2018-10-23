@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
+import ch.epfl.sweng.zuluzulu.Structure.User;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -17,10 +19,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class AssociationFragmentTest {
+public class AssociationFragmentTest extends TestWithLogin{
 
     private static final int NB_ALL_ASSOS = 7;
     private static final int NB_FAV_ASSOS = 4;
+    private User user;
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
@@ -32,7 +35,8 @@ public class AssociationFragmentTest {
     }
 
     private void authenticatedGoesToAssociation() throws InterruptedException {
-        Utility.fullLogin();
+        this.user = Utility.createTestUser();
+        Utility.addUserToMainIntent(mActivityRule, this.user);
         Utility.goToAssociation();
         TimeUnit.SECONDS.sleep(5);
     }
