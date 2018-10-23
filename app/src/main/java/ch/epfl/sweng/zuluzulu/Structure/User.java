@@ -3,6 +3,9 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * This parent class represent an user
+ */
 abstract public class User implements Serializable {
 
     public String getFirstNames() {
