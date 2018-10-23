@@ -16,6 +16,8 @@ abstract public class User implements Serializable {
         return null;
     }
 
+    public String getSection() { return null; }
+
     public String getGaspar() {
         return null;
     }
@@ -45,6 +47,11 @@ abstract public class User implements Serializable {
          * User email
          */
         private String email;
+
+        /**
+         * User's section
+         */
+        private String section;
 
 
         /**
@@ -93,6 +100,13 @@ abstract public class User implements Serializable {
         }
 
         /**
+         * User's section
+         *
+         * @param section section
+         */
+        public void setSection(String section) { this.section = section; }
+
+        /**
          * User last names
          *
          * @param last_names last names
@@ -132,10 +146,11 @@ abstract public class User implements Serializable {
         public AuthenticatedUser buildAuthenticatedUser() {
             if (this.sciper != null
                     && this.email != null
+                    && this.section != null
                     && this.gaspar != null
                     && this.first_names != null
                     && this.last_names != null) {
-                return new AuthenticatedUser(this.sciper, this.gaspar, this.email, this.first_names, this.last_names);
+                return new AuthenticatedUser(this.sciper, this.gaspar, this.email, this.section, this.first_names, this.last_names);
             }
 
             return null;

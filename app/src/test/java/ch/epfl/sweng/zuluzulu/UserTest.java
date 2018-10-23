@@ -37,6 +37,7 @@ public class UserTest {
     public void canCreateAuthenticatedUser() {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("mail@epfl.ch");
+        builder.setSection("section");
         builder.setSciper("1212");
         builder.setGaspar("test");
         builder.setFirst_names("first_name");
@@ -46,6 +47,7 @@ public class UserTest {
         assertTrue(user.isConnected());
 
         assertEquals(user.getEmail(), "mail@epfl.ch");
+        assertEquals(user.getSection(), "section");
         assertEquals(user.getSciper(), "1212");
         assertEquals(user.getGaspar(), "test");
         assertEquals(user.getFirstNames(), "first_name");
@@ -64,6 +66,7 @@ public class UserTest {
     public void guestUserHasNullProperties() {
         Guest guest = new User.UserBuilder().buildGuestUser();
         assertNull(guest.getEmail());
+        assertNull(guest.getSection());
         assertNull(guest.getFirstNames());
         assertNull(guest.getGaspar());
         assertNull(guest.getLastNames());
@@ -75,6 +78,7 @@ public class UserTest {
     public void refuseFakeMail() {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("fake_mail");
+        builder.setSection("section");
         builder.setSciper("1212");
         builder.setGaspar("test");
         builder.setFirst_names("first_name");
@@ -88,6 +92,7 @@ public class UserTest {
     public void authenticatedUserCanChangeFavAssos() {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("mail@epfl.ch");
+        builder.setSection("section");
         builder.setSciper("1212");
         builder.setGaspar("test");
         builder.setFirst_names("first_name");
@@ -107,6 +112,7 @@ public class UserTest {
 //    public void authenticatedUserCanChangeFollowedEvents() {
 //        User.UserBuilder builder = new User.UserBuilder();
 //        builder.setEmail("mail@epfl.ch");
+//        builder.setSection("section");
 //        builder.setSciper("1212");
 //        builder.setGaspar("test");
 //        builder.setFirst_names("first_name");
@@ -126,6 +132,7 @@ public class UserTest {
     public void authenticatedUserCanChangeFollowedChannels() {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("mail@epfl.ch");
+        builder.setSection("section");
         builder.setSciper("1212");
         builder.setGaspar("test");
         builder.setFirst_names("first_name");
@@ -145,6 +152,7 @@ public class UserTest {
     public void toStringIsCorrect() {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("mail@epfl.ch");
+        builder.setSection("section");
         builder.setSciper("1212");
         builder.setGaspar("test");
         builder.setFirst_names("first_name");
@@ -154,7 +162,8 @@ public class UserTest {
         String expected = "first_name last_name"
                 + "\nsciper: 1212"
                 + "\ngaspar: test"
-                + "\nemail: mail@epfl.ch";
+                + "\nemail: mail@epfl.ch"
+                + "\nsection: section";
 
         assertEquals(expected, user.toString());
         assertEquals("Guest user", new User.UserBuilder().buildGuestUser().toString());
