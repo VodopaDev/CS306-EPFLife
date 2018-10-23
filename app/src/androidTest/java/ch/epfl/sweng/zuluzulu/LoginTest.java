@@ -71,7 +71,6 @@ public class LoginTest {
         //You have to test if it works for wrong credentials, if it login properly and if you have any
         //other idea you are welcome to test them
         Utility.login();
-
         openDrawer();
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));
     }

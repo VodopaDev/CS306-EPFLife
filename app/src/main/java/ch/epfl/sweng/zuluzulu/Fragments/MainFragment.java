@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,9 +26,7 @@ public class MainFragment extends Fragment {
     private User user;
     private OnFragmentInteractionListener mListener;
 
-    public MainFragment() {
-        // Required empty public constructor
-    }
+    public MainFragment() {}
 
     /**
      * Use this factory method to create a new instance of
@@ -37,14 +34,13 @@ public class MainFragment extends Fragment {
      *
      * @return A new instance of fragment MainFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static MainFragment newInstance(User u) {
             MainFragment fragment = new MainFragment();
             Bundle args = new Bundle();
             args.putSerializable(ARG_USER, u);
             fragment.setArguments(args);
             return fragment;
-
     }
 
     @Override
@@ -58,7 +54,6 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         if(user.isConnected()){
             return inflater.inflate(R.layout.fragment_main_user, container, false);
         }
@@ -66,13 +61,6 @@ public class MainFragment extends Fragment {
             return inflater.inflate(R.layout.fragment_main, container, false);
         }
 
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(TAG, uri);
-        }
     }
 
     @Override

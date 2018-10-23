@@ -23,9 +23,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 
 /**
@@ -345,12 +357,14 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
 
             /////////////////////////////////////
             //CODE FOR LOCAL LOGIN
+            /*
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
             }
+            */
 
 
             // Check credentials
@@ -362,13 +376,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
                 }
             }
 
-            // REMOVED_TODO: register the new account here.
-            // We do not want to offer registration.(Dahn)
-
             return false;
-            ////////////////////////////////////
-
-            //return true;
         }
 
         @Override
@@ -376,25 +384,58 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             mAuthTask = null;
 
             // CODE FOR LOCAL LOGIN
-            User.UserBuilder builder = new User.UserBuilder();
+            // Nicolas: I have set the sciper to 000000 for testing :)
+            final User.UserBuilder builder = new User.UserBuilder();
             builder.setEmail("nicolas.jomeau@epfl.ch");
             builder.setSection("IN");
-            builder.setSciper("270103");
+            builder.setSciper("000001");
             builder.setGaspar(mUsername);
             builder.setFirst_names("nicolas");
             builder.setLast_names("jomeau");
-
+            builder.setFollowedChats(new ArrayList<Integer>());
+            builder.setFavAssos(new ArrayList<Integer>());
+            builder.setFollowedEvents(new ArrayList<Integer>());
             user = builder.buildAuthenticatedUser();
 
 
             if (success && user != null) {
                 //open the main activity then terminate the login activity (Ikaras998)
-                activate_session(user);
+                updateUserAndFinishLogin();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
             showProgress(false);
+        }
+
+        private void updateUserAndFinishLogin(){
+            final DocumentReference ref = FirebaseFirestore.getInstance()
+                    .collection("users_info")
+                    .document(user.getSciper());
+
+            ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if(!documentSnapshot.exists()){
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("fav_assos", new ArrayList<Integer>());
+                        map.put("followed_events", new ArrayList<Integer>());
+                        map.put("followed_chats", new ArrayList<Integer>());
+                        ref.set(map);
+                        activate_session(user);
+                    }
+                    else if (Utils.isValidSnapshot(documentSnapshot, AuthenticatedUser.fields)){
+                        List<Integer> received_assos = Utils.longListToIntList((List<Long>)documentSnapshot.get("fav_assos"));
+                        List<Integer> received_events = Utils.longListToIntList((List<Long>)documentSnapshot.get("followed_events"));
+                        List<Integer> received_chats = Utils.longListToIntList((List<Long>)documentSnapshot.get("followed_chats"));
+
+                        ((AuthenticatedUser)user).setFavAssos(received_assos);
+                        ((AuthenticatedUser)user).setFollowedEvents(received_events);
+                        ((AuthenticatedUser)user).setFollowedChats(received_chats);
+                        activate_session(user);
+                    }
+                }
+            });
         }
 
         @Override
