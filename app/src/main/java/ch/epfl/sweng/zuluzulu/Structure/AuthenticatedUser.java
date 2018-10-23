@@ -2,7 +2,6 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import com.google.common.collect.Sets;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +24,7 @@ public class AuthenticatedUser extends User {
 
     // TODO: Get data from cloud service using the id
 
-    protected AuthenticatedUser(String sciper, String gaspar, String email, String first_names, String last_names) {
+    protected AuthenticatedUser(String sciper, String gaspar, String email, String section, String first_names, String last_names) {
         super();
 
         this.sciper = sciper;

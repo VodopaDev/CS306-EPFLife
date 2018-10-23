@@ -172,7 +172,7 @@ abstract public class User implements Serializable {
          */
         public AuthenticatedUser buildAuthenticatedUser() {
             if (hasRequirementsForAuthentication()) {
-                return new AuthenticatedUser(this.sciper, this.gaspar, this.email, this.first_names, this.last_names);
+                return new AuthenticatedUser(this.sciper, this.gaspar, this.email, this.section, this.first_names, this.last_names);
             }
 
             return null;
@@ -185,7 +185,7 @@ abstract public class User implements Serializable {
          */
         public Admin buildAdmin() {
             if (hasRequirementsForAuthentication()) {
-                return new Admin(this.sciper, this.gaspar, this.email, this.first_names, this.last_names);
+                return new Admin(this.sciper, this.gaspar, this.email, this.section, this.first_names, this.last_names);
             }
 
             return null;
@@ -207,6 +207,7 @@ abstract public class User implements Serializable {
         private boolean hasRequirementsForAuthentication(){
             return  this.sciper != null
                     && this.email != null
+                    && this.section != null
                     && this.gaspar != null
                     && this.first_names != null
                     && this.last_names != null;
