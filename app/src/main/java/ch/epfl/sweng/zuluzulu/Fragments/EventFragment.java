@@ -21,12 +21,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Adapters.EventAdapter;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.Adapters.EventAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -97,7 +97,7 @@ public class EventFragment extends Fragment {
         button_event_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(user.isConnected())
+                if (user.isConnected())
                     updateListView(button_event_fav, button_event_all, event_fav, listview_event);
                 else
                     Snackbar.make(getView(), "Login to access your favorite event", 5000).show();
@@ -131,8 +131,8 @@ public class EventFragment extends Fragment {
         mListener = null;
     }
 
-    private void fillEventLists(){
-       FirebaseFirestore.getInstance().collection("events_info")
+    private void fillEventLists() {
+        FirebaseFirestore.getInstance().collection("events_info")
                 .orderBy("name")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -158,7 +158,7 @@ public class EventFragment extends Fragment {
                 });
     }
 
-    private void updateListView(Button new_selected, Button new_unselected, ArrayList<Event> data, ListView list){
+    private void updateListView(Button new_selected, Button new_unselected, ArrayList<Event> data, ListView list) {
         new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         new_unselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
         event_adapter = new EventAdapter(getContext(), data, mListener);
