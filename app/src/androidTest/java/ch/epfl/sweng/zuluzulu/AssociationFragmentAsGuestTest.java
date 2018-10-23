@@ -36,7 +36,7 @@ public class AssociationFragmentAsGuestTest {
         AssociationFragment fragment = AssociationFragment.newInstance(guest);
         mActivityRule.getActivity().openFragment(fragment);
         try {
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

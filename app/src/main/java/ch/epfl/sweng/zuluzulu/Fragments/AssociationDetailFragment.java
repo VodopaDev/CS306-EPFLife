@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,7 +31,7 @@ public class AssociationDetailFragment extends Fragment {
     private static final String FAV_CONTENT = "This association is in your favorites";
     private static final String NOT_FAV_CONTENT = "This association isn't in your favorites";
 
-    private ImageView asso_fav;
+    private ImageButton asso_fav;
 
     private ImageView upcoming_event_icon;
     private TextView upcoming_event_name;
@@ -77,11 +78,6 @@ public class AssociationDetailFragment extends Fragment {
         // Favorite button
         asso_fav = view.findViewById(R.id.association_detail_fav);
         setFavButtonBehaviour();
-        asso_fav.setContentDescription(NOT_FAV_CONTENT);
-        if (user.isConnected() && ((AuthenticatedUser) user).isFavAssociation(asso)) {
-            loadFavImage(R.drawable.fav_on);
-            asso_fav.setContentDescription(FAV_CONTENT);
-        }
 
         // Association icon
         ImageView asso_icon = view.findViewById(R.id.association_detail_icon);
@@ -133,6 +129,11 @@ public class AssociationDetailFragment extends Fragment {
     }
 
     private void setFavButtonBehaviour() {
+        if (user.isConnected() && ((AuthenticatedUser) user).isFavAssociation(asso))
+            loadFavImage(R.drawable.fav_on);
+        else
+            loadFavImage(R.drawable.fav_off);
+
         asso_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,6 +153,10 @@ public class AssociationDetailFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public Association getAsso(){
+        return asso;
     }
 
     @Override

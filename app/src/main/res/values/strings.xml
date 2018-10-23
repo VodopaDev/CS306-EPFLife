@@ -59,5 +59,6 @@
     <string name="profile_gaspar">Gaspar</string>
     <string name="profile_email">Email</string>
     <string name="profile_sciper">Sciper</string>
+    <string name="association_detail_fav_button">Click to set association in favorites (or not)</string>
 
 </resources>
