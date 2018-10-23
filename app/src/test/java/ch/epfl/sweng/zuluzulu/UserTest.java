@@ -61,6 +61,7 @@ public class UserTest {
     public void canCreateAdmin(){
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("admin@epfl.ch");
+        builder.setSection("IN");
         builder.setSciper("121212");
         builder.setGaspar("admin");
         builder.setFirst_names("admin_first_name");
