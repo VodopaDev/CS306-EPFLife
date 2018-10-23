@@ -20,7 +20,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+/**
+ * This class test the MainActivity as a Guest User
+ */
+public class MainActivityAsGuestTest {
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
@@ -43,11 +46,8 @@ public class MainActivityTest {
 
     @Test
     public void isAuthenticated() {
+        // check not authenticated
         assertFalse(mActivity.isAuthenticated());
-        // Check it means it's not an user
-
-        Utility.fullLogin();
-        assertTrue(mActivity.isAuthenticated());
     }
 
     @Test

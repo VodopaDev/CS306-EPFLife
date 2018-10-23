@@ -35,10 +35,11 @@ public class ChannelTest {
     private Channel channelIN;
     private AuthenticatedUser userIN;
     private AuthenticatedUser userSC;
-
+  
     private final DocumentSnapshot mocked_valid_datasnap1 = Mockito.mock(DocumentSnapshot.class);
     private final DocumentSnapshot mocked_valid_datasnap2 = Mockito.mock(DocumentSnapshot.class);
     private final DocumentSnapshot mocked_invalid_datasnap = Mockito.mock(DocumentSnapshot.class);
+    private Channel channel;
 
     @Before
     public void init() {

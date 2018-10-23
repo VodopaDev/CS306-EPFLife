@@ -34,8 +34,8 @@ public class Utility {
         builder.setGaspar("gaspar");
         builder.setEmail("test@epfl.ch");
         builder.setSection("IN");
-        builder.setFirst_names("james");
-        builder.setLast_names("bond");
+        builder.setFirst_names("James");
+        builder.setLast_names("Bond");
 
         User user = builder.buildAuthenticatedUser();
 
@@ -100,7 +100,7 @@ public class Utility {
     /**
      * Open the EventFragment
      */
-    public static void goToEvent(){
+    public static void goToEvent() {
         openMenu();
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_events));
     }

@@ -70,8 +70,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             User user = (User) i.getSerializableExtra("user");
             if (user != null) {
                 this.user = user;
+                updateMenuItems();
             }
-            
+
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
         }
     }
@@ -130,11 +131,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * Attach the drawer_view to the navigation view
      */
     private void updateMenuItems() {
+        navigationView.getMenu().clear();
         if (isAuthenticated()) {
-            navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_user);
         } else {
-            navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_guest);
         }
     }

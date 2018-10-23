@@ -1,11 +1,9 @@
 package ch.epfl.sweng.zuluzulu;
 
 import android.support.test.espresso.contrib.NavigationViewActions;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -13,16 +11,10 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
-public class MenuAsAuthenticatedTest {
-    @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+public class MenuAsAuthenticatedTest extends TestWithLogin {
 
     @Before
     public void openDrawer() {
-        // Go and login
-        Utility.fullLogin();
-
         // Open the menu again
         Utility.openMenu();
     }
