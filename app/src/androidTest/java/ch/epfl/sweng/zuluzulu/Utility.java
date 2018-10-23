@@ -6,7 +6,6 @@ import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.view.Gravity;
 
-import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -34,8 +33,8 @@ public class Utility {
         builder.setSciper("123456");
         builder.setGaspar("gaspar");
         builder.setEmail("test@epfl.ch");
-        builder.setFirst_names("james");
-        builder.setLast_names("bond");
+        builder.setFirst_names("James");
+        builder.setLast_names("Bond");
 
         User user = builder.buildAuthenticatedUser();
 
@@ -100,7 +99,7 @@ public class Utility {
     /**
      * Open the EventFragment
      */
-    public static void goToEvent(){
+    public static void goToEvent() {
         openMenu();
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_events));
     }

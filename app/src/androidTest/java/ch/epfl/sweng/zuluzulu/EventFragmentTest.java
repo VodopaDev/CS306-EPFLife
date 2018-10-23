@@ -8,13 +8,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.TimeUnit;
-
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public class EventFragmentTest {
@@ -26,12 +23,12 @@ public class EventFragmentTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    private void guestGoesToEvent() throws InterruptedException {
+    private void guestGoesToEvent() {
         Utility.goToEvent();
 //        TimeUnit.MILLISECONDS.sleep(1);
     }
 
-    private void authenticatedGoesToEvent() throws InterruptedException {
+    private void authenticatedGoesToEvent() {
         Utility.fullLogin();
         Utility.goToEvent();
 //        TimeUnit.MILLISECONDS.sleep(1);

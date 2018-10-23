@@ -27,17 +27,17 @@ import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
-//import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
-import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
 import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
+
+//import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
@@ -85,8 +85,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             User user = (User) i.getSerializableExtra("user");
             if (user != null) {
                 this.user = user;
+                updateMenuItems();
             }
-            
+
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
         }
     }
@@ -145,11 +146,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * Attach the drawer_view to the navigation view
      */
     private void updateMenuItems() {
+        navigationView.getMenu().clear();
         if (isAuthenticated()) {
-            navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_user);
         } else {
-            navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_guest);
         }
     }

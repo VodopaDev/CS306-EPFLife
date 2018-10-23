@@ -1,10 +1,8 @@
 package ch.epfl.sweng.zuluzulu;
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.firebase.firestore.DocumentSnapshot;
-import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,12 +10,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mockito;
 
-//import java.util.Date;
-
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+
+import static org.junit.Assert.assertEquals;
+
+//import java.util.Date;
 
 @RunWith(JUnit4.class)
 public class EventTest {
@@ -28,16 +27,15 @@ public class EventTest {
     private static final String LONG_DESC = "This is only random bla bla bla";
     private static final String ICON_URI_STRING = "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso4_icon.png?alt=media&token=e2c5206d-32a6-43e1-a9a8-da941f553e64";
     private static final Date START_DATE = new Date();
-
-    private Event event0;
-    private Event event1;
     private final Uri mocked_icon_uri = Mockito.mock(Uri.class);
     private final DocumentSnapshot mocked_valid_datasnap1 = Mockito.mock(DocumentSnapshot.class);
     private final DocumentSnapshot mocked_valid_datasnap2 = Mockito.mock(DocumentSnapshot.class);
     private final DocumentSnapshot mocked_invalid_datasnap = Mockito.mock(DocumentSnapshot.class);
+    private Event event0;
+    private Event event1;
 
     @Before
-    public void init(){
+    public void init() {
         Mockito.when(mocked_icon_uri.getPath()).thenReturn(ICON_URI_STRING);
 
         Mockito.when(mocked_valid_datasnap1.getString("name")).thenReturn(NAME1);
@@ -66,45 +64,49 @@ public class EventTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void invalidSnapThrowIllegalArgumentException(){
+    public void invalidSnapThrowIllegalArgumentException() {
         new Event(mocked_invalid_datasnap);
     }
 
     @Test
-    public void validSnapNoThrowException(){ new Event(mocked_valid_datasnap1); }
+    public void validSnapNoThrowException() {
+        new Event(mocked_valid_datasnap1);
+    }
 
     @Test
-    public void idIsCorrect(){
+    public void idIsCorrect() {
         assertEquals(1, event0.getId());
     }
 
     @Test
-    public void nameIsCorrect(){
+    public void nameIsCorrect() {
         assertEquals(NAME1, event0.getName());
     }
 
     @Test
-    public void longDescIsCorrect(){
+    public void longDescIsCorrect() {
         assertEquals(LONG_DESC, event0.getLong_desc());
     }
 
     @Test
-    public void shortDescIsCorrect(){
+    public void shortDescIsCorrect() {
         assertEquals(SHORT_DESC, event0.getShort_desc());
     }
 
     @Test
-    public void uriIsCorrect(){
+    public void uriIsCorrect() {
         assertEquals(Uri.parse(ICON_URI_STRING), event0.getIconUri());
     }
 
     @Test
-    public void dateIsCorrect() { assertEquals(START_DATE, event0.getStart_date()); }
+    public void dateIsCorrect() {
+        assertEquals(START_DATE, event0.getStart_date());
+    }
 
     @Test
-    public void comparableToIsCorrect(){
+    public void comparableToIsCorrect() {
         assertEquals(NAME1.compareTo(NAME2),
-                Event.getComparator().compare(event0,event1));
+                Event.getComparator().compare(event0, event1));
     }
 
 }

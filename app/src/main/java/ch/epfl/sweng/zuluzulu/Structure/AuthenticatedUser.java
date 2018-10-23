@@ -2,10 +2,11 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import com.google.common.collect.Sets;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class AuthenticatedUser extends User {
+public class AuthenticatedUser extends User {
 
     // Use sciper to check User (and not mail or gaspar)
     private final String sciper;
@@ -23,6 +24,8 @@ public final class AuthenticatedUser extends User {
 
     // TODO: Get data from cloud service using the id
     protected AuthenticatedUser(String sciper, String gaspar, String email, String first_names, String last_names) {
+        super();
+
         this.sciper = sciper;
         this.gaspar = gaspar;
         this.email = email;
@@ -33,6 +36,13 @@ public final class AuthenticatedUser extends User {
         chats_names = new HashSet<>();
         events_id = Sets.newHashSet(1);
 
+        // Add role
+        this.addRole(UserRole.USER);
+
+        // TO REMOVE
+        if(gaspar.equals("dahn")){
+            this.addRole(UserRole.ADMIN);
+        }
     }
 
     // TODO: Add a method to add/remove one Association to assos_id, same for chats and events
@@ -42,25 +52,27 @@ public final class AuthenticatedUser extends User {
         return assos_id.contains(asso.getId());
     }
 
-    public boolean isFavEvent(Event event){ return events_id.contains(event.getId()); }
+    public boolean isFavEvent(Event event) {
+        return events_id.contains(event.getId());
+    }
 
     public boolean addFavAssociation(Association asso) {
         return assos_id.add(asso.getId());
     }
 
-    public boolean addFavEvent(Event event){
+    public boolean addFavEvent(Event event) {
         return events_id.add(event.getId());
     }
 
-    public boolean removeFavAssociation(Association asso){
+    public boolean removeFavAssociation(Association asso) {
         return assos_id.remove(asso.getId());
     }
 
-    public boolean removeFavEvent(Event event){
+    public boolean removeFavEvent(Event event) {
         return events_id.remove(event.getId());
     }
 
-    public boolean isFollowedEvent(Event event){
+    public boolean isFollowedEvent(Event event) {
         return events_id.contains(event.getId());
     }
 
