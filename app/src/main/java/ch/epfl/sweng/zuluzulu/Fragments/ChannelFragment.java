@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import ch.epfl.sweng.zuluzulu.Adapters.ChannelAdapter;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
@@ -38,6 +39,9 @@ public class ChannelFragment extends Fragment {
     public static final String TAG = "CHANNEL_TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String CHANNELS_COLLECTION_NAME = "channels";
+    private static final String SECTION_CHANNEL_PREFIX = "Section";
+
+    private static final String USER_SECTION = "IN";
 
     private FirebaseFirestore db;
 
@@ -130,7 +134,9 @@ public class ChannelFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 Channel channel = new Channel(document);
-                                listOfChannels.add(channel);
+                                if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user)) {
+                                    listOfChannels.add(channel);
+                                }
                             }
                             adapter.notifyDataSetChanged();
                         } else {

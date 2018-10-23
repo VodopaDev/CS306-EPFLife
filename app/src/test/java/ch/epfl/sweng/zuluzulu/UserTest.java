@@ -24,7 +24,7 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(JUnit4.class)
 public class UserTest {
-
+  
     @Test
     public void checkUserRole(){
         User user = Utility.createTestUser();
@@ -35,6 +35,7 @@ public class UserTest {
     public void canCreateAdmin(){
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("admin@epfl.ch");
+        builder.setSection("IN");
         builder.setSciper("121212");
         builder.setGaspar("admin");
         builder.setFirst_names("admin_first_name");
@@ -62,8 +63,8 @@ public class UserTest {
     public void canCreateAuthenticatedUser() {
         User user = Utility.createTestUser();
         assertTrue(user.isConnected());
-
         assertEquals(user.getEmail(), "test@epfl.ch");
+        assertEquals(user.getSection(), "IN");
         assertEquals(user.getSciper(), "123456");
         assertEquals(user.getGaspar(), "gaspar");
         assertEquals(user.getFirstNames(), "James");
@@ -82,6 +83,7 @@ public class UserTest {
     public void guestUserHasNullProperties() {
         Guest guest = new User.UserBuilder().buildGuestUser();
         assertNull(guest.getEmail());
+        assertNull(guest.getSection());
         assertNull(guest.getFirstNames());
         assertNull(guest.getGaspar());
         assertNull(guest.getLastNames());
@@ -92,6 +94,7 @@ public class UserTest {
     public void refuseFakeMail() {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("fake_mail");
+        builder.setSection("section");
         builder.setSciper("1212");
         builder.setGaspar("test");
         builder.setFirst_names("first_name");
@@ -116,7 +119,8 @@ public class UserTest {
         String expected = "James Bond"
                 + "\nsciper: 123456"
                 + "\ngaspar: gaspar"
-                + "\nemail: test@epfl.ch";
+                + "\nemail: test@epfl.ch"
+                + "\nsection: IN";
 
         assertEquals(expected, user.toString());
         assertEquals("Guest user", new User.UserBuilder().buildGuestUser().toString());

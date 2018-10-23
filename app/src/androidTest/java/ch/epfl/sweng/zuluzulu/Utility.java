@@ -37,6 +37,7 @@ public class Utility {
         builder.setSciper("123456");
         builder.setGaspar("gaspar");
         builder.setEmail("test@epfl.ch");
+        builder.setSection("IN");
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
         builder.setFavAssos(Arrays.asList(1,2));

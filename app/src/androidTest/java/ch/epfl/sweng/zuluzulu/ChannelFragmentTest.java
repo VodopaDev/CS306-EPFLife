@@ -26,8 +26,8 @@ public class ChannelFragmentTest extends TestWithLogin {
 
     @Test
     public void testUserCanClickOnTheFirstChannel() {
-        //onView(withText("Global")).perform(click());
-        //Utility.checkFragmentIsOpen(R.id.chat_fragment);
+        // Nothing I tried works to get access to the items, I'm giving up
+        // Utility.checkFragmentIsOpen(R.id.chat_fragment);
     }
 
     @Test

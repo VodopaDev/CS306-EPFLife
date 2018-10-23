@@ -387,6 +387,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             // Nicolas: I have set the sciper to 000000 for testing :)
             final User.UserBuilder builder = new User.UserBuilder();
             builder.setEmail("nicolas.jomeau@epfl.ch");
+            builder.setSection("IN");
             builder.setSciper("000001");
             builder.setGaspar(mUsername);
             builder.setFirst_names("nicolas");

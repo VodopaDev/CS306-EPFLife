@@ -31,6 +31,7 @@ public class AuthenticatedUserTest {
 
     private static final String sciper = "000001";
     private static final String email = "nico@epfl.ch";
+    private static final String section = "IN";
     private static final String gaspar = "jomeau@epfl.ch";
     private static final String first_name = "nicolas";
     private final String last_name = "jomeau";
@@ -51,6 +52,7 @@ public class AuthenticatedUserTest {
 
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail(email);
+        builder.setSection(section);
         builder.setSciper(sciper);
         builder.setGaspar(gaspar);
         builder.setFirst_names(first_name);
@@ -59,7 +61,6 @@ public class AuthenticatedUserTest {
         builder.setFavAssos(fav_assos);
         builder.setFollowedEvents(fol_events);
         user = builder.buildAuthenticatedUser();
-
     }
 
     @Test
@@ -68,6 +69,7 @@ public class AuthenticatedUserTest {
         assertThat(last_name, equalTo(user.getLastNames()));
         assertThat(sciper, equalTo(user.getSciper()));
         assertThat(email, equalTo(user.getEmail()));
+        assertThat(section, equalTo(user.getSection()));
         assertThat(gaspar, equalTo(user.getGaspar()));
     }
 
@@ -99,6 +101,7 @@ public class AuthenticatedUserTest {
                 + "\nsciper: " + sciper
                 + "\ngaspar: " + gaspar
                 + "\nemail: " + email
+                + "\nsection: " + section
         , equalTo(user.toString()));
     }
 }
