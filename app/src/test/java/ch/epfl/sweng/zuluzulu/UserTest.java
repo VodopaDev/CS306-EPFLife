@@ -64,7 +64,7 @@ public class UserTest {
         User user = Utility.createTestUser();
         assertTrue(user.isConnected());
         assertEquals(user.getEmail(), "test@epfl.ch");
-        assertEquals(user.getSection(), "section");
+        assertEquals(user.getSection(), "IN");
         assertEquals(user.getSciper(), "123456");
         assertEquals(user.getGaspar(), "gaspar");
         assertEquals(user.getFirstNames(), "James");

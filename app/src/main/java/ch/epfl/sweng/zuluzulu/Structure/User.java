@@ -192,6 +192,8 @@ abstract public class User implements Serializable {
          * @return AuthenticatedUser or null
          */
         public AuthenticatedUser buildAuthenticatedUser() {
+            if (hasRequirementsForAuthentication())
+                return new AuthenticatedUser(this.sciper, this.gaspar, this.email, this.section, this.first_names, this.last_names, this.fav_assos, this.followed_events, this.followed_chats);
             return null;
         }
 

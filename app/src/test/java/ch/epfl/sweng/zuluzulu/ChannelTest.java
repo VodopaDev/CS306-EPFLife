@@ -13,10 +13,8 @@ import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
-import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
@@ -34,26 +32,14 @@ public class ChannelTest {
     private Channel channelGlobal;
     private Channel channelIN;
     private AuthenticatedUser userIN;
-    private AuthenticatedUser userSC;
-  
+
     private final DocumentSnapshot mocked_valid_datasnap1 = Mockito.mock(DocumentSnapshot.class);
     private final DocumentSnapshot mocked_valid_datasnap2 = Mockito.mock(DocumentSnapshot.class);
     private final DocumentSnapshot mocked_invalid_datasnap = Mockito.mock(DocumentSnapshot.class);
-    private Channel channel;
 
     @Before
     public void init() {
-        User.UserBuilder builder = new User.UserBuilder();
-        builder.setSciper("123456");
-        builder.setGaspar("gaspar");
-        builder.setEmail("test@epfl.ch");
-        builder.setSection("IN");
-        builder.setFirst_names("james");
-        builder.setLast_names("bond");
-        userIN = builder.buildAuthenticatedUser();
-
-        builder.setSection("SC");
-        userSC = builder.buildAuthenticatedUser();
+        userIN = Utility.createTestUser();
 
         restrictions1.put("section", null);
         restrictions1.put("location", null);
@@ -115,9 +101,5 @@ public class ChannelTest {
     @Test
     public void testChannelWithRestrictions() {
         assertTrue(channelGlobal.canBeAccessedBy(userIN));
-        assertTrue(channelGlobal.canBeAccessedBy(userSC));
-
-        assertTrue(channelIN.canBeAccessedBy(userIN));
-        assertFalse(channelIN.canBeAccessedBy(userSC));
     }
 }
