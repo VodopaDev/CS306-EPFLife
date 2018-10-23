@@ -1,8 +1,16 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 abstract public class User implements Serializable {
+
+    final protected ArrayList<UserRole> roles;
+
+    protected User() {
+        this.roles = new ArrayList<UserRole>();
+    }
+
 
     public String getFirstNames() {
         return null;
@@ -24,6 +32,13 @@ abstract public class User implements Serializable {
         return null;
     }
 
+    public boolean hasRole(UserRole role){
+        return roles.contains(role);
+    }
+
+    protected void addRole(UserRole role){
+        this.roles.add(role);
+    }
 
     public abstract boolean isConnected();
 
