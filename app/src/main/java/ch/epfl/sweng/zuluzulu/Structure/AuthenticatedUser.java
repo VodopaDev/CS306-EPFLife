@@ -126,6 +126,6 @@ public final class AuthenticatedUser extends User {
                 + "\nsciper: " + sciper
                 + "\ngaspar: " + gaspar
                 + "\nemail: " + email
-                + "\nsection : " + section;
+                + "\nsection: " + section;
     }
 }
