@@ -78,14 +78,14 @@ public class ChannelTest {
         Mockito.when(mocked_invalid_datasnap.getString("name")).thenReturn(null);
         Mockito.when(mocked_invalid_datasnap.getString("description")).thenReturn(channelDescription1);
 
-        Mockito.when(mocked_valid_datasnap1.get("id")).thenReturn(id2);
-        Mockito.when(mocked_valid_datasnap1.get("name")).thenReturn(channelName2);
-        Mockito.when(mocked_valid_datasnap1.get("description")).thenReturn(channelDescription2);
-        Mockito.when(mocked_valid_datasnap1.get("restrictions")).thenReturn(restrictions2);
+        Mockito.when(mocked_valid_datasnap2.get("id")).thenReturn(id2);
+        Mockito.when(mocked_valid_datasnap2.get("name")).thenReturn(channelName2);
+        Mockito.when(mocked_valid_datasnap2.get("description")).thenReturn(channelDescription2);
+        Mockito.when(mocked_valid_datasnap2.get("restrictions")).thenReturn(restrictions2);
 
-        Mockito.when(mocked_valid_datasnap1.getLong("id")).thenReturn(id2);
-        Mockito.when(mocked_valid_datasnap1.getString("name")).thenReturn(channelName2);
-        Mockito.when(mocked_valid_datasnap1.getString("description")).thenReturn(channelDescription2);
+        Mockito.when(mocked_valid_datasnap2.getLong("id")).thenReturn(id2);
+        Mockito.when(mocked_valid_datasnap2.getString("name")).thenReturn(channelName2);
+        Mockito.when(mocked_valid_datasnap2.getString("description")).thenReturn(channelDescription2);
 
         channelGlobal = new Channel(mocked_valid_datasnap1);
         channelIN = new Channel(mocked_valid_datasnap2);
