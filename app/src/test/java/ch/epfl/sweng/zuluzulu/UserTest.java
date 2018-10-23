@@ -45,7 +45,7 @@ public class UserTest {
 
         AuthenticatedUser user = (AuthenticatedUser) builder.build();
 
-        assert(user != null);
+        assertNotNull(user);
 
         return user;
     }
@@ -59,15 +59,17 @@ public class UserTest {
     @Test
     public void canCreateAdmin(){
         User.UserBuilder builder = new User.UserBuilder();
-        builder.setEmail("mail@epfl.ch");
-        builder.setSciper("1212");
-        builder.setGaspar("test");
-        builder.setFirst_names("first_name");
-        builder.setLast_names("last_name");
+        builder.setEmail("admin@epfl.ch");
+        builder.setSciper("121212");
+        builder.setGaspar("admin");
+        builder.setFirst_names("admin_first_name");
+        builder.setLast_names("admin_last_name");
 
         AuthenticatedUser user = (AuthenticatedUser) builder.buildAdmin();
 
+
         assertNotNull(user);
+        assertTrue(user.isConnected());
         assertTrue(user.hasRole(UserRole.ADMIN));
     }
 
