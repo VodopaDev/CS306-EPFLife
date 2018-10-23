@@ -378,6 +378,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             // CODE FOR LOCAL LOGIN
             User.UserBuilder builder = new User.UserBuilder();
             builder.setEmail("nicolas.jomeau@epfl.ch");
+            builder.setSection("IN");
             builder.setSciper("270103");
             builder.setGaspar(mUsername);
             builder.setFirst_names("nicolas");
