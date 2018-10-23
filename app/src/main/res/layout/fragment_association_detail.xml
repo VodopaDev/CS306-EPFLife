@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.AssociationDetailFragment">
 
     <FrameLayout
@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_margin="0dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,7 +21,7 @@
             android:id="@+id/association_detail_banner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
+            android:background="@android:color/holo_red_dark"
             android:contentDescription="@string/card_association_image_description"
             android:scaleType="center"
             app:layout_constraintEnd_toEndOf="parent"
@@ -33,13 +33,13 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="bottom|start"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
             android:adjustViewBounds="false"
-            android:background="@android:color/white"
+            android:background="@color/colorWhiteTransparent"
             android:contentDescription="@string/card_association_image_description"
             app:layout_constraintBottom_toBottomOf="@+id/association_detail_banner"
             app:layout_constraintEnd_toEndOf="@+id/association_detail_banner"
@@ -48,13 +48,28 @@
 
     </FrameLayout>
 
+    <ImageButton
+        android:id="@+id/association_detail_fav"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorTransparent"
+        android:clickable="true"
+        android:contentDescription="@string/association_detail_fav_button"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/association_detail_framelayout"
+        app:layout_constraintStart_toEndOf="@+id/association_detail_name" />
+
     <TextView
         android:id="@+id/association_detail_name"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="78dp"
         android:layout_marginStart="78dp"
+        android:layout_marginLeft="78dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorWhiteTransparent"
         android:gravity="center_horizontal|start"
         android:maxLines="1"
         android:minLines="1"
@@ -65,65 +80,78 @@
         app:layout_constraintBottom_toBottomOf="@+id/association_detail_framelayout"
         app:layout_constraintStart_toStartOf="@+id/association_detail_framelayout" />
 
-    <TextView
-        android:id="@+id/association_detail_eventph"
-        android:layout_width="0dp"
-        android:layout_height="75dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="368dp"
+        android:layout_height="184dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="EVENT PLACEHOLDER"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/association_detail_framelayout" />
-
-    <TextView
-        android:id="@+id/association_detail_chatph"
-        android:layout_width="0dp"
-        android:layout_height="75dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="NEWS PLACEHOLDER"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/association_detail_newsph" />
-
-    <TextView
-        android:id="@+id/association_detail_newsph"
-        android:layout_width="0dp"
-        android:layout_height="75dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="CHAT PLACEHOLDER"
-        android:textSize="24sp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/association_detail_eventph" />
+        app:layout_constraintTop_toBottomOf="@+id/association_detail_framelayout">
 
-    <ImageView
-        android:id="@+id/association_detail_fav"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:contentDescription="@string/card_association_image_description"
-        app:layout_constraintBottom_toBottomOf="@+id/association_detail_name"
-        app:layout_constraintStart_toEndOf="@+id/association_detail_name"
-        app:srcCompat="@drawable/fav_off" />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/colorGrayDarkTransparent">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="2dp"
+                android:src="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/association_detail_upcoming_event_icon"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/common_google_signin_btn_icon_light"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@android:drawable/ic_delete" />
+
+            <TextView
+                android:id="@+id/association_detail_upcoming_event_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:text="No upcoming event :("
+                android:textColor="@color/colorGrayDark"
+                android:textSize="20sp"
+                app:layout_constraintStart_toEndOf="@+id/association_detail_upcoming_event_icon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/association_detail_upcoming_event_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="8dp"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/association_detail_upcoming_event_icon" />
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
