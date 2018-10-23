@@ -236,7 +236,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case ChannelFragment.TAG:
                 int channelID = (Integer) data;
-                navigationView.getCheckedItem().setChecked(false);
                 openFragment(ChatFragment.newInstance(user, channelID));
                 break;
             case AssociationDetailFragment.TAG:
