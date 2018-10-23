@@ -11,6 +11,7 @@ import android.widget.TextView;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,6 +80,10 @@ public class ProfileFragment extends Fragment implements OnFragmentInteractionLi
             builder.append(user.getLastNames().substring(0, 1).toUpperCase());
             builder.append(user.getLastNames().substring(1));
         }
+        if(user.hasRole(UserRole.ADMIN)){
+            builder.append(" ADMIN");
+        }
+
         String username = builder.toString();
 
         user_view.setText(username);
