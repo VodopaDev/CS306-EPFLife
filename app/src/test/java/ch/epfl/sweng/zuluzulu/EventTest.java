@@ -1,4 +1,4 @@
-/*package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu;
 
 import android.net.Uri;
 import android.util.Log;
@@ -110,4 +110,3 @@ public class EventTest {
     }
 
 }
-*/

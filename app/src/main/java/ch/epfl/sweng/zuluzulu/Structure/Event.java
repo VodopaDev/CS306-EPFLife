@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import ch.epfl.sweng.zuluzulu.R;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
@@ -61,24 +62,13 @@ public class Event implements Serializable {
         short_desc = snap.getString("short_desc");
         long_desc = snap.getString("long_desc");
 
-        if(iconUri == null) {
-            FirebaseStorage.getInstance()
-                    .getReference()
-                    .child(IMAGE_PATH + id + ICON_EXT)
-                    .getDownloadUrl()
-                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            icon = uri;
-                        }
-                    });
-        }
-        else{
-            icon = iconUri;
-        }
-      
-        icon_uri = Uri.parse(snap.getString("icon_uri"));
+        String icon_str = snap.getString("icon_uri");
+        icon_uri = icon_str == null ?
+                Uri.parse("android.ressource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon):
+                Uri.parse(icon_str);
+
         start_date = snap.getDate("start_date");
+        //end_date = snap.getDate("end_date");
     }
 
     // TODO: Add a method to add/remove one User to admins (instead of getting/setting the admins list)
@@ -163,9 +153,9 @@ public class Event implements Serializable {
         return icon_uri;
     }
 
-//    public void setIconUri(Uri icon) {
-//        this.icon_uri = icon;
-//    }
+    public void setIconUri(Uri icon) {
+      this.icon_uri = icon;
+    }
 //
 //    public int getChat_id() {
 //        return chat_id;
