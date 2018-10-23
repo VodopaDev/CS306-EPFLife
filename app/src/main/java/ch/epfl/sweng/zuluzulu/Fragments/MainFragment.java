@@ -36,28 +36,34 @@ public class MainFragment extends Fragment {
      *
      * @return A new instance of fragment MainFragment.
      */
-    public static MainFragment newInstance(User user) {
-        if (user == null)
-            throw new NullPointerException("Error creating an AssociationDetailFragment:\n" +
-                    "User is null");
-        MainFragment fragment = new MainFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(ARG_USER, user);
-        fragment.setArguments(args);
-        return fragment;
+
+    public static MainFragment newInstance(User u) {
+            MainFragment fragment = new MainFragment();
+            Bundle args = new Bundle();
+            args.putSerializable(ARG_USER, u);
+            fragment.setArguments(args);
+            return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null)
+        if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        if(user.isConnected()){
+            return inflater.inflate(R.layout.fragment_main_user, container, false);
+        }
+        else{
+            return inflater.inflate(R.layout.fragment_main, container, false);
+        }
+
+    }
 
 
         return view;
