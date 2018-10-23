@@ -7,10 +7,13 @@ import org.junit.runners.JUnit4;
 import java.util.Arrays;
 import java.util.Collections;
 
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Guest;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -25,7 +28,7 @@ public class UserTest {
 
     @Test
     public void checkUserRole(){
-        User user = createAuthenticatedUser();
+        User user = Utility.createTestUser();
         assertTrue(user.hasRole(UserRole.USER));
     }
 
@@ -37,8 +40,11 @@ public class UserTest {
         builder.setGaspar("admin");
         builder.setFirst_names("admin_first_name");
         builder.setLast_names("admin_last_name");
+        builder.setFollowedChats(Collections.EMPTY_LIST);
+        builder.setFavAssos(Collections.EMPTY_LIST);
+        builder.setFollowedEvents(Collections.EMPTY_LIST);
 
-        AuthenticatedUser user = (AuthenticatedUser) builder.buildAdmin();
+        AuthenticatedUser user = builder.buildAdmin();
 
 
         assertNotNull(user);
@@ -47,15 +53,22 @@ public class UserTest {
     }
 
     @Test
+    public void guestHasNoRole(){
+        assertThat(false, equalTo(new User.UserBuilder().buildGuestUser().hasRole(UserRole.ADMIN)));
+        assertThat(false, equalTo(new User.UserBuilder().buildGuestUser().hasRole(UserRole.USER)));
+        assertThat(false, equalTo(new User.UserBuilder().buildGuestUser().hasRole(UserRole.MODERATOR)));
+    }
+
+    @Test
     public void canCreateAuthenticatedUser() {
-        User user = createAuthenticatedUser();
+        User user = Utility.createTestUser();
         assertTrue(user.isConnected());
 
-        assertEquals(user.getEmail(), "mail@epfl.ch");
-        assertEquals(user.getSciper(), "1212");
-        assertEquals(user.getGaspar(), "test");
-        assertEquals(user.getFirstNames(), "first_name");
-        assertEquals(user.getLastNames(), "last_name");
+        assertEquals(user.getEmail(), "test@epfl.ch");
+        assertEquals(user.getSciper(), "123456");
+        assertEquals(user.getGaspar(), "gaspar");
+        assertEquals(user.getFirstNames(), "James");
+        assertEquals(user.getLastNames(), "Bond");
     }
 
     @Test
@@ -84,6 +97,9 @@ public class UserTest {
         builder.setGaspar("test");
         builder.setFirst_names("first_name");
         builder.setLast_names("last_name");
+        builder.setFollowedChats(Collections.EMPTY_LIST);
+        builder.setFavAssos(Collections.EMPTY_LIST);
+        builder.setFollowedEvents(Collections.EMPTY_LIST);
 
         User user = builder.build();
         assertFalse(user.isConnected());
@@ -93,39 +109,15 @@ public class UserTest {
     public void correctString(){
         assertThat("Guest user", equalTo(new User.UserBuilder().buildGuestUser().toString())); 
     }
-  
-    public void authenticatedUserCanChangeFavAssos() {
-        AuthenticatedUser user = createAuthenticatedUser();
-        assertFalse(user.isFavAssociation(asso));
-        assertTrue(user.addFavAssociation(asso));
-        assertFalse(user.addFavAssociation(asso));
-        assertTrue(user.isFavAssociation(asso));
-        assertTrue(user.removeFavAssociation(asso));
-        assertFalse(user.removeFavAssociation(asso));
-        assertFalse(user.isFavAssociation(asso));
-    }
-
-    @Test
-    public void authenticatedUserCanChangeFollowedChannels() {
-        AuthenticatedUser user = createAuthenticatedUser();
-
-        assertFalse(user.isFollowedChat(channel));
-        assertTrue(user.addFollowedChat(channel));
-        assertFalse(user.addFollowedChat(channel));
-        assertTrue(user.isFollowedChat(channel));
-        assertTrue(user.removeFollowedChat(channel));
-        assertFalse(user.removeFollowedChat(channel));
-        assertFalse(user.isFollowedChat(channel));
-    }
 
     @Test
     public void toStringIsCorrect() {
-        User user = createAuthenticatedUser();
+        User user = Utility.createTestUser();
 
-        String expected = "first_name last_name"
-                + "\nsciper: 1212"
-                + "\ngaspar: test"
-                + "\nemail: mail@epfl.ch";
+        String expected = "James Bond"
+                + "\nsciper: 123456"
+                + "\ngaspar: gaspar"
+                + "\nemail: test@epfl.ch";
 
         assertEquals(expected, user.toString());
         assertEquals("Guest user", new User.UserBuilder().buildGuestUser().toString());

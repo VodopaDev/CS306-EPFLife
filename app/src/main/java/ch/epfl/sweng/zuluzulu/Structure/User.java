@@ -2,6 +2,7 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This parent class represent an user
@@ -189,7 +190,7 @@ abstract public class User implements Serializable {
          */
         public Admin buildAdmin() {
             if (hasRequirementsForAuthentication()) {
-                return new Admin(this.sciper, this.gaspar, this.email, this.first_names, this.last_names);
+                return new Admin(this.sciper, this.gaspar, this.email, this.first_names, this.last_names, this.fav_assos, this.followed_events, this.followed_chats);
             }
 
             return null;
@@ -216,7 +217,7 @@ abstract public class User implements Serializable {
                     && this.last_names != null
                     && this.fav_assos != null
                     && this.followed_chats != null
-                    && this.followed_events != null)
+                    && this.followed_events != null;
         }
 
     }

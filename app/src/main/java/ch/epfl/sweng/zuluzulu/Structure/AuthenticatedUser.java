@@ -1,10 +1,9 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-public final class AuthenticatedUser extends User {
+public class AuthenticatedUser extends User {
     public static final List<String> fields = Arrays.asList("fav_assos", "followed_events", "followed_chats");
     private Object listener;
     private final String firestore_path;
@@ -23,7 +22,7 @@ public final class AuthenticatedUser extends User {
     private List<Integer> followed_chats;
     private List<Integer> followed_events;
 
-    protected AuthenticatedUser(final String sciper, String gaspar, String email, String first_names, String last_names, List<Integer> fav_assos, List<Integer> followed_events, List<Integer> followed_chats) {
+    protected AuthenticatedUser(String sciper, String gaspar, String email, String first_names, String last_names, List<Integer> fav_assos, List<Integer> followed_events, List<Integer> followed_chats) {
         firestore_path = "users_info/" + sciper;
         this.sciper = sciper;
         this.gaspar = gaspar;
