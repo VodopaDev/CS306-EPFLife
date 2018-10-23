@@ -81,7 +81,7 @@ public class ProfileFragment extends Fragment implements OnFragmentInteractionLi
             builder.append(user.getLastNames().substring(1));
         }
         if(user.hasRole(UserRole.ADMIN)){
-            builder.append(" ADMIN");
+            builder.append(" - ADMIN");
         }
 
         String username = builder.toString();
