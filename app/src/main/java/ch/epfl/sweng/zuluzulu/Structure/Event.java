@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.location.Location;
-import android.media.Image;
 import android.net.Uri;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -12,12 +11,12 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+
 import ch.epfl.sweng.zuluzulu.R;
 import java.util.Objects;
 
@@ -50,6 +49,7 @@ public class Event implements Serializable {
 
     /**
      * Create an event using a DocumentSnapshot
+     *
      * @param snap the document snapshot
      * @throws IllegalArgumentException if the snapshot isn't an Event's snapshot
      */
@@ -69,6 +69,15 @@ public class Event implements Serializable {
 
         start_date = snap.getDate("start_date");
         //end_date = snap.getDate("end_date");
+    }
+
+    public static Comparator<Event> getComparator() {
+        return new Comparator<Event>() {
+            @Override
+            public int compare(Event o1, Event o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        };
     }
 
     // TODO: Add a method to add/remove one User to admins (instead of getting/setting the admins list)
@@ -97,8 +106,8 @@ public class Event implements Serializable {
         this.short_desc = description;
     }
 
-    public String getLong_desc() {
-        return long_desc;
+    public String getShort_desc() {
+        return short_desc;
     }
 
     public void setLong_desc(String description) {
@@ -149,9 +158,25 @@ public class Event implements Serializable {
 //        this.long_desc = description;
 //    }
 
+    public String getLong_desc() {
+        return long_desc;
+    }
+
     public Uri getIconUri() {
         return icon_uri;
     }
+//
+//    public void setStart_date(Date start_date) {
+//        this.start_date = start_date;
+//    }
+//
+//    public Date getEnd_date() {
+//        return end_date;
+//    }
+//
+//    public void setEnd_date(Date end_date) {
+//        this.end_date = end_date;
+//    }
 
     public void setIconUri(Uri icon) {
       this.icon_uri = icon;
@@ -192,25 +217,14 @@ public class Event implements Serializable {
     public Date getStart_date() {
         return start_date;
     }
-//
-//    public void setStart_date(Date start_date) {
-//        this.start_date = start_date;
-//    }
-//
-//    public Date getEnd_date() {
-//        return end_date;
-//    }
-//
-//    public void setEnd_date(Date end_date) {
-//        this.end_date = end_date;
-//    }
 
     /**
      * Check if a DocumentSnapshot correspond to an Event's one
+     *
      * @param snap the DocumentSnapshot
      * @return true if it is a valid snapshot, false otherwise
      */
-    private boolean snapshotIsValid(DocumentSnapshot snap){
+    private boolean snapshotIsValid(DocumentSnapshot snap) {
         return !(snap == null
                 || snap.get("id") == null
                 || snap.getString("short_desc") == null
@@ -219,15 +233,6 @@ public class Event implements Serializable {
                 || snap.getString("icon_uri") == null
                 || snap.getDate("start_date") == null
         );
-    }
-
-    public static Comparator<Event> getComparator(){
-        return new Comparator<Event>() {
-            @Override
-            public int compare(Event o1, Event o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        };
     }
 
 }
