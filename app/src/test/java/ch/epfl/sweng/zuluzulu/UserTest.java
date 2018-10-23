@@ -4,6 +4,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import ch.epfl.sweng.zuluzulu.Structure.Guest;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
@@ -38,7 +41,6 @@ public class UserTest {
         assertNull(guest.getLastNames());
         assertNull(guest.getSciper());
     }
-
 
     @Test
     public void refuseFakeMail() {

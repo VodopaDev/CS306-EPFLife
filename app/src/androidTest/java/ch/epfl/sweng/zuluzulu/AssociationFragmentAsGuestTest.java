@@ -17,6 +17,7 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -34,14 +35,12 @@ public class AssociationFragmentAsGuestTest {
         Utility.addUserToMainIntent(mActivityRule, guest);
         AssociationFragment fragment = AssociationFragment.newInstance(guest);
         mActivityRule.getActivity().openFragment(fragment);
-
         try {
             TimeUnit.SECONDS.sleep(2);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
-
 
     @Test
     public void thereAreTwoButtons() {
@@ -52,11 +51,13 @@ public class AssociationFragmentAsGuestTest {
     @Test
     public void guestMainPageHasSomeAssociations() {
         onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
+        onView(withId(R.id.association_fragment_listview)).check(matches(hasChildCount(Utility.NUMBER_OF_ASSOCIATIONS)));
     }
 
     @Test
     public void guestClickOnFavoritesStaysOnAll() {
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
+        onView(withId(R.id.association_fragment_listview)).check(matches(hasChildCount(Utility.NUMBER_OF_ASSOCIATIONS)));
     }
 
 

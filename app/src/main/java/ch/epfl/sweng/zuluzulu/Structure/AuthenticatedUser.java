@@ -33,7 +33,7 @@ public final class AuthenticatedUser extends User {
         this.fav_assos = fav_assos;
         this.followed_chats = followed_chats;
         this.followed_events = followed_events;
-    }
+}
 
     // TODO: Add a method to add/remove one Association to fav_assos, same for chats and events
     // TODO: Check inputs before changing fields
@@ -80,6 +80,7 @@ public final class AuthenticatedUser extends User {
         followed_chats.remove((Integer)channel.getId());
         Utils.removeIdFromList(firestore_path, "followed_chats", channel.getId());
     }
+    */
 
     public void setFollowedChats(List<Integer> followed_chats){
         this.followed_chats = followed_chats;
@@ -92,8 +93,6 @@ public final class AuthenticatedUser extends User {
     public void setFollowedEvents(List<Integer> followed_events){
         this.followed_events = followed_events;
     }
-     */
-
 
     @Override
     public String getFirstNames() {
