@@ -48,6 +48,7 @@ public class Utility {
         assert (user != null);
         assert (user.isConnected());
 
+
         return user;
     }
 
@@ -75,7 +76,6 @@ public class Utility {
     /**
      * Enter the username and password for login
      * To use on the LoginFragment only !
-     *
      * @deprecated instead : Create the user with createTestUser() and pass it when creating fragment instance @see ProfileFragmentTest or ChatFragmentTest
      */
     public static void login() {
@@ -86,7 +86,6 @@ public class Utility {
 
     /**
      * Login from anywhere in the app
-     *
      * @deprecated instead : Create the user with createTestUser() and pass it when creating fragment instance @see ProfileFragmentTest or ChatFragmentTest
      */
     public static void fullLogin() {

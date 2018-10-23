@@ -9,6 +9,10 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+
 @RunWith(AndroidJUnit4.class)
 public class ChannelFragmentTest extends TestWithLogin {
 
