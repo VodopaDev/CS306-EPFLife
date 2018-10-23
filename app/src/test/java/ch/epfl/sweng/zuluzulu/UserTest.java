@@ -11,6 +11,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Guest;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -33,8 +34,7 @@ public class UserTest {
         when(event.getId()).thenReturn(2);
     }
 
-    @Test
-    public void canCreateAuthenticatedUser() {
+    private User createAuthenticatedUser(){
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("mail@epfl.ch");
         builder.setSciper("1212");
@@ -43,6 +43,20 @@ public class UserTest {
         builder.setLast_names("last_name");
 
         AuthenticatedUser user = (AuthenticatedUser) builder.build();
+
+        assert(user != null);
+
+        return user;
+    }
+
+    public void checkUserRole(){
+        User user = createAuthenticatedUser();
+        assertTrue(user.hasRole(UserRole.USER));
+    }
+
+    @Test
+    public void canCreateAuthenticatedUser() {
+        User user = createAuthenticatedUser();
         assertTrue(user.isConnected());
 
         assertEquals(user.getEmail(), "mail@epfl.ch");
