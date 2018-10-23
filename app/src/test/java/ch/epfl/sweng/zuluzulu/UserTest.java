@@ -120,7 +120,7 @@ public class UserTest {
                 + "\nsciper: 123456"
                 + "\ngaspar: gaspar"
                 + "\nemail: test@epfl.ch"
-                + "\section: IN;
+                + "\nsection: IN";
 
         assertEquals(expected, user.toString());
         assertEquals("Guest user", new User.UserBuilder().buildGuestUser().toString());
