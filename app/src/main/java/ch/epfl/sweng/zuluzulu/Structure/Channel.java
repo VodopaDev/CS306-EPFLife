@@ -79,7 +79,7 @@ public class Channel {
     /**
      * Check whether a user can access to this channel or not
      *
-     * @param user The user that wants to enter the channel
+     * @param user The user who wants to enter the channel
      * @return whether the user can access it or not
      */
     public boolean canBeAccessedBy(AuthenticatedUser user) {
