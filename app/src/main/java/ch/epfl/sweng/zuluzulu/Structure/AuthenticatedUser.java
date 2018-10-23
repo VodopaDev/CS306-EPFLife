@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public final class AuthenticatedUser extends User {
