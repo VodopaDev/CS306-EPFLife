@@ -106,10 +106,6 @@ public class Event implements Serializable {
         this.short_desc = description;
     }
 
-    public String getShort_desc() {
-        return short_desc;
-    }
-
     public void setLong_desc(String description) {
         this.long_desc = description;
     }
