@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 abstract public class User implements Serializable {
 
+    /**
+     * This list will contain the roles of the User
+     */
     final protected ArrayList<UserRole> roles;
 
     protected User() {
@@ -32,10 +35,19 @@ abstract public class User implements Serializable {
         return null;
     }
 
+    /**
+     * Check if the user has the role
+     * @param role UserRole
+     * @return boolean
+     */
     public boolean hasRole(UserRole role){
         return roles.contains(role);
     }
 
+    /**
+     * Add the role to the user roles list
+     * @param role UserRole
+     */
     protected void addRole(UserRole role){
         this.roles.add(role);
     }
