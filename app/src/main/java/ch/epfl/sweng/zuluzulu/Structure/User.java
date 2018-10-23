@@ -157,11 +157,7 @@ abstract public class User implements Serializable {
          * @return AuthenticatedUser or null
          */
         public AuthenticatedUser buildAuthenticatedUser() {
-            if (this.sciper != null
-                    && this.email != null
-                    && this.gaspar != null
-                    && this.first_names != null
-                    && this.last_names != null) {
+            if (hasRequirementsForAuthentication()) {
                 return new AuthenticatedUser(this.sciper, this.gaspar, this.email, this.first_names, this.last_names);
             }
 
@@ -174,11 +170,7 @@ abstract public class User implements Serializable {
          * @return Admin or null
          */
         public Admin buildAdmin() {
-            if (this.sciper != null
-                    && this.email != null
-                    && this.gaspar != null
-                    && this.first_names != null
-                    && this.last_names != null) {
+            if (hasRequirementsForAuthentication()) {
                 return new Admin(this.sciper, this.gaspar, this.email, this.first_names, this.last_names);
             }
 
@@ -192,6 +184,18 @@ abstract public class User implements Serializable {
          */
         public Guest buildGuestUser() {
             return new Guest();
+        }
+
+        /**
+         * Check the requirements for authentication
+         * @return boolean
+         */
+        private boolean hasRequirementsForAuthentication(){
+            return  this.sciper != null
+                    && this.email != null
+                    && this.gaspar != null
+                    && this.first_names != null
+                    && this.last_names != null;
         }
 
     }
