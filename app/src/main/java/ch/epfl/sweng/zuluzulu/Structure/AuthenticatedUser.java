@@ -65,9 +65,10 @@ public final class AuthenticatedUser extends User {
         Utils.addIdToList(firestore_path, "followed_events", event.getId());
     }
 
-    public void removeFollowedEvent(Event event){
-        followed_events.remove((Integer)event.getId());
+    public void removeFollowedEvent(Event event) {
+        followed_events.remove((Integer) event.getId());
         Utils.removeIdFromList(firestore_path, "followed_events", event.getId());
+    }
 
     public void addFollowedChat(Channel channel) {
         followed_chats.add(channel.getId());
