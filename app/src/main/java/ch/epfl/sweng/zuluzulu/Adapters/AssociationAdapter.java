@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.File;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
@@ -72,7 +73,9 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
         final Association asso = data.get(position);
         holder.name.setText(asso.getName());
         holder.short_desc.setText(asso.getShortDesc());
-        initIcon(asso.getIconUri(), holder.icon);
+
+        defaultIcon(holder.icon);
+        initImageView(asso.getIconUri(), holder.icon);
 
         asso_view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,11 +92,18 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
      * Fetch an Image from the Internet and put it in an ImageView
      *
      * @param uri  Uri of the image to fetch
-     * @param icon ImageView to put the image
+     * @param image ImageView to put the image
      */
-    private void initIcon(Uri uri, ImageView icon) {
+    private void initImageView(Uri uri, ImageView image) {
         Glide.with(context)
                 .load(uri)
+                .centerCrop()
+                .into(image);
+    }
+
+    private void defaultIcon(ImageView icon){
+        Glide.with(context)
+                .load(new File("res/asso_cache/default_icon.png"))
                 .centerCrop()
                 .into(icon);
     }

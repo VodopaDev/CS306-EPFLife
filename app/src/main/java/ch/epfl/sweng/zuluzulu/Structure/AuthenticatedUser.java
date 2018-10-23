@@ -1,12 +1,12 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import com.google.common.collect.Sets;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
 
 public class AuthenticatedUser extends User {
+    public static final List<String> fields = Arrays.asList("fav_assos", "followed_events", "followed_chats");
+    private Object listener;
+    private final String firestore_path;
 
     // Use sciper to check User (and not mail or gaspar)
     private final String sciper;
@@ -18,23 +18,20 @@ public class AuthenticatedUser extends User {
     private final String last_names;
 
     // All followed ids of Associations, Chats and Events
-    private Set<Integer> assos_id;
-    private Set<String> chats_names;
-    private Set<Integer> events_id;
+    private List<Integer> fav_assos;
+    private List<Integer> followed_chats;
+    private List<Integer> followed_events;
 
-    // TODO: Get data from cloud service using the id
-    protected AuthenticatedUser(String sciper, String gaspar, String email, String first_names, String last_names) {
-        super();
-
+    protected AuthenticatedUser(String sciper, String gaspar, String email, String first_names, String last_names, List<Integer> fav_assos, List<Integer> followed_events, List<Integer> followed_chats) {
+        firestore_path = "users_info/" + sciper;
         this.sciper = sciper;
         this.gaspar = gaspar;
         this.email = email;
         this.first_names = first_names;
         this.last_names = last_names;
-
-        assos_id = Sets.newHashSet(1, 3, 4, 6);
-        chats_names = new HashSet<>();
-        events_id = Sets.newHashSet(1);
+        this.fav_assos = fav_assos;
+        this.followed_chats = followed_chats;
+        this.followed_events = followed_events;
 
         // Add role
         this.addRole(UserRole.USER);
@@ -45,57 +42,61 @@ public class AuthenticatedUser extends User {
         }
     }
 
-    // TODO: Add a method to add/remove one Association to assos_id, same for chats and events
-    // TODO: Check inputs before changing fields
-
     public boolean isFavAssociation(Association asso) {
-        return assos_id.contains(asso.getId());
+        return fav_assos.contains(asso.getId());
     }
 
-    public boolean isFavEvent(Event event) {
-        return events_id.contains(event.getId());
-    }
-
-    public boolean addFavAssociation(Association asso) {
-        return assos_id.add(asso.getId());
-    }
-
-    public boolean addFavEvent(Event event) {
-        return events_id.add(event.getId());
-    }
-
-    public boolean removeFavAssociation(Association asso) {
-        return assos_id.remove(asso.getId());
-    }
-
-    public boolean removeFavEvent(Event event) {
-        return events_id.remove(event.getId());
-    }
-
-    public boolean isFollowedEvent(Event event) {
-        return events_id.contains(event.getId());
-    }
-
-    public boolean addFollowedEvent(Event event) {
-        return events_id.add(event.getId());
-    }
-
-    public boolean removeFollowedEvent(Event event) {
-        return events_id.remove(event.getId());
+    public boolean isFollowedEvent(Event event){
+        return followed_events.contains(event.getId());
     }
 
     public boolean isFollowedChat(Channel channel) {
-        return chats_names.contains(channel.getName());
+        return followed_chats.contains(channel.getId());
     }
 
-    public boolean addFollowedChat(Channel channel) {
-        return chats_names.add(channel.getName());
+    public void addFavAssociation(Association asso) {
+        fav_assos.add(asso.getId());
+        Utils.addIdToList(firestore_path, "fav_assos", asso.getId());
     }
 
-    public boolean removeFollowedChat(Channel channel) {
-        return chats_names.remove(channel.getName());
+    public void removeFavAssociation(Association asso){
+        fav_assos.remove((Integer)asso.getId());
+        Utils.removeIdFromList(firestore_path, "fav_assos", asso.getId());
     }
 
+    /**
+    public void addFollowedEvent(Event event) {
+        followed_events.add(event.getId());
+        Utils.addIdToList(firestore_path, "followed_events", event.getId());
+    }
+
+    public void removeFollowedEvent(Event event) {
+        followed_events.remove((Integer) event.getId());
+        Utils.removeIdFromList(firestore_path, "followed_events", event.getId());
+    }
+
+    public void addFollowedChat(Channel channel) {
+        followed_chats.add(channel.getId());
+        Utils.addIdToList(firestore_path, "followed_chats", channel.getId());
+    }
+
+    public void removeFollowedChat(Channel channel) {
+        followed_chats.remove((Integer)channel.getId());
+        Utils.removeIdFromList(firestore_path, "followed_chats", channel.getId());
+    }
+    */
+
+    public void setFollowedChats(List<Integer> followed_chats){
+        this.followed_chats = followed_chats;
+    }
+
+    public void setFavAssos(List<Integer> fav_assos){
+        this.fav_assos = fav_assos;
+    }
+
+    public void setFollowedEvents(List<Integer> followed_events){
+        this.followed_events = followed_events;
+    }
 
     @Override
     public String getFirstNames() {
