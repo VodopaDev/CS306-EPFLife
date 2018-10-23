@@ -3,12 +3,24 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import android.location.Location;
 import android.net.Uri;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import android.util.Log;
+
+
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+
+import ch.epfl.sweng.zuluzulu.R;
+import java.util.Objects;
+
+import static java.util.Objects.requireNonNull;
 
 public class Event implements Serializable {
 
@@ -17,6 +29,9 @@ public class Event implements Serializable {
     private String short_desc;
     private String long_desc;
 
+    private static final String IMAGE_PATH = "events/event";
+    private static final String ICON_EXT = "_icon.png";
+    private Uri icon;
     private Uri icon_uri;
 
     private int chat_id;
@@ -27,22 +42,33 @@ public class Event implements Serializable {
     private Date start_date;
     private Date end_date;
 
+    // TODO: Get data from cloud service using the id
+    public Event(DocumentSnapshot snap) {
+        this(snap, null);
+    }
+
     /**
      * Create an event using a DocumentSnapshot
      *
      * @param snap the document snapshot
      * @throws IllegalArgumentException if the snapshot isn't an Event's snapshot
      */
-    public Event(DocumentSnapshot snap) {
-        if (!snapshotIsValid(snap))
+    public Event(DocumentSnapshot snap, Uri iconUri) {
+        if(!snapshotIsValid(snap))
             throw new NullPointerException();
 
         id = ((Long) snap.get("id")).intValue();
         name = snap.getString("name");
         short_desc = snap.getString("short_desc");
         long_desc = snap.getString("long_desc");
-        icon_uri = Uri.parse(snap.getString("icon_uri"));
+
+        String icon_str = snap.getString("icon_uri");
+        icon_uri = icon_str == null ?
+                Uri.parse("android.ressource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon):
+                Uri.parse(icon_str);
+
         start_date = snap.getDate("start_date");
+        //end_date = snap.getDate("end_date");
     }
 
     public static Comparator<Event> getComparator() {
@@ -72,12 +98,56 @@ public class Event implements Serializable {
         this.name = name;
     }
 
-//    public void setShort_desc(String description) {
-//        this.short_desc = description;
-//    }
-
     public String getShort_desc() {
         return short_desc;
+    }
+
+    public void setShort_desc(String description) {
+        this.short_desc = description;
+    }
+
+    public void setLong_desc(String description) {
+        this.long_desc = description;
+    }
+
+    public Uri getIcon() {
+        return icon;
+    }
+
+    public void setIcon(Uri icon) {
+        this.icon = icon;
+    }
+
+    public int getChat_id() {
+        return chat_id;
+    }
+
+    public void setChat_id(int chat_id) {
+        this.chat_id = chat_id;
+    }
+
+    public int getAsso_id() {
+        return asso_id;
+    }
+
+    public void setAsso_id(int asso_id) {
+        this.asso_id = asso_id;
+    }
+
+    public List<Integer> getAdmins() {
+        return admins;
+    }
+
+    public void setAdmins(List<Integer> admins) {
+        this.admins = admins;
+    }
+
+    public Location getPos() {
+        return pos;
+    }
+
+    public void setPos(Location pos) {
+        this.pos = pos;
     }
 
 //    public void setLong_desc(String description) {
@@ -104,9 +174,9 @@ public class Event implements Serializable {
 //        this.end_date = end_date;
 //    }
 
-    //    public void setIconUri(Uri icon) {
-//        this.icon_uri = icon;
-//    }
+    public void setIconUri(Uri icon) {
+      this.icon_uri = icon;
+    }
 //
 //    public int getChat_id() {
 //        return chat_id;
