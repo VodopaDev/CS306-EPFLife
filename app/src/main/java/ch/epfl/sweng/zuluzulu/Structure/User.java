@@ -169,6 +169,23 @@ abstract public class User implements Serializable {
         }
 
         /**
+         * Build an Admin
+         *
+         * @return Admin or null
+         */
+        public Admin buildAdmin() {
+            if (this.sciper != null
+                    && this.email != null
+                    && this.gaspar != null
+                    && this.first_names != null
+                    && this.last_names != null) {
+                return new Admin(this.sciper, this.gaspar, this.email, this.first_names, this.last_names);
+            }
+
+            return null;
+        }
+
+        /**
          * Build guest user
          *
          * @return Guest
