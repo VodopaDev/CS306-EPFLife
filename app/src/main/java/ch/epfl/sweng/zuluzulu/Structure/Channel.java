@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class Channel {
 
-    private static final List<String> fields = Arrays.asList("id", "name", "description");
+    private static final List<String> fields = Arrays.asList("id", "name", "description", "restrictions");
     private int id;
     private String name;
     private String description;
