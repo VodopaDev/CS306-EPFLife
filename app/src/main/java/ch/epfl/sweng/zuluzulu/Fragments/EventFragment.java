@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Checkable;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -87,8 +88,9 @@ public class EventFragment extends Fragment {
         event_fav = new ArrayList<>();
         event_adapter = new EventAdapter(getContext(), event_all, mListener);
 
-        default_sort_option = "id";
+        default_sort_option = "name";
 
+        // TODO test
         fillEventLists(default_sort_option);
     }
 
@@ -119,36 +121,35 @@ public class EventFragment extends Fragment {
             }
         });
 
+        // TODO test
         checkbox_event_sort_name = view.findViewById(R.id.event_fragment_checkBox_sort_name);
         checkbox_event_sort_date = view.findViewById(R.id.event_fragment_checkBox_sort_date);
 
+        // TODO test
+        checkbox_event_sort_name.setChecked(true);
+        checkbox_event_sort_name.setEnabled(false);
+
+        // TODO test
         checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkbox_event_sort_date.isChecked()){
-                    checkbox_event_sort_name.setChecked(false);
-                    emptyEventList();
-                    fillEventLists("start_date");
-                }
-                else {
-                    emptyEventList();
-                    fillEventLists(default_sort_option);
-                }
+                checkbox_event_sort_date.setEnabled(false);
+                emptyEventList();
+                fillEventLists("start_date");
+                checkbox_event_sort_name.setChecked(false);
+                checkbox_event_sort_name.setEnabled(true);
             }
         });
 
+        // TODO test
         checkbox_event_sort_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkbox_event_sort_name.isChecked()){
-                    checkbox_event_sort_date.setChecked(false);
-                    emptyEventList();
-                    fillEventLists("name");
-                }
-                else {
-                    emptyEventList();
-                    fillEventLists(default_sort_option);
-                }
+                checkbox_event_sort_name.setEnabled(false);
+                emptyEventList();
+                fillEventLists("name");
+                checkbox_event_sort_date.setChecked(false);
+                checkbox_event_sort_date.setEnabled(true);
             }
         });
 
@@ -172,10 +173,10 @@ public class EventFragment extends Fragment {
         mListener = null;
     }
 
+    // TODO test
     private void emptyEventList(){
         event_all.clear();
         event_fav.clear();
-        event_adapter.notifyDataSetChanged();
     }
 
     private void fillEventLists(String sortOption){
