@@ -31,6 +31,7 @@ public class ChatMessage {
 
     /**
      * Getter for the sender name
+     *
      * @return the sender name
      */
     public String getSenderName() {
@@ -46,17 +47,23 @@ public class ChatMessage {
 
     /**
      * Getter for the sciper
+     *
      * @return the sciper
      */
-    public String getSciper() { return sciper; }
+    public String getSciper() {
+        return sciper;
+    }
 
     /**
      * Setter for the sciper
      */
-    public void setSciper(String sciper) { this.sciper = sciper; }
+    public void setSciper(String sciper) {
+        this.sciper = sciper;
+    }
 
     /**
      * Getter for the message
+     *
      * @return the message
      */
     public String getMessage() {
@@ -72,23 +79,33 @@ public class ChatMessage {
 
     /**
      * Getter for the fact the message is viewed by his owner
+     *
      * @return whether the message is viewed by his owner or not
      */
-    public boolean isOwnMessage() { return ownMessage; }
+    public boolean isOwnMessage() {
+        return ownMessage;
+    }
 
     /**
      * Setter for the fact that the message is viewed by his owner
      */
-    public void setOwnMessage(boolean ownMessage) { this.ownMessage = ownMessage; }
+    public void setOwnMessage(boolean ownMessage) {
+        this.ownMessage = ownMessage;
+    }
 
     /**
      * Getter for message creation time
+     *
      * @return the creation time
      */
-    public Timestamp getTime() { return time; }
+    public Timestamp getTime() {
+        return time;
+    }
 
     /**
      * Setter for the creation time
      */
-    public void setTime(Timestamp time) { this.time = time; }
+    public void setTime(Timestamp time) {
+        this.time = time;
+    }
 }
