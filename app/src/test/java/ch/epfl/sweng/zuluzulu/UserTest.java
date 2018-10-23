@@ -15,6 +15,7 @@ import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -34,7 +35,7 @@ public class UserTest {
         when(event.getId()).thenReturn(2);
     }
 
-    private User createAuthenticatedUser(){
+    private AuthenticatedUser createAuthenticatedUser(){
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("mail@epfl.ch");
         builder.setSciper("1212");
@@ -49,9 +50,25 @@ public class UserTest {
         return user;
     }
 
+    @Test
     public void checkUserRole(){
         User user = createAuthenticatedUser();
         assertTrue(user.hasRole(UserRole.USER));
+    }
+
+    @Test
+    public void canCreateAdmin(){
+        User.UserBuilder builder = new User.UserBuilder();
+        builder.setEmail("mail@epfl.ch");
+        builder.setSciper("1212");
+        builder.setGaspar("test");
+        builder.setFirst_names("first_name");
+        builder.setLast_names("last_name");
+
+        AuthenticatedUser user = (AuthenticatedUser) builder.buildAdmin();
+
+        assertNotNull(user);
+        assertTrue(user.hasRole(UserRole.ADMIN));
     }
 
     @Test
@@ -100,14 +117,7 @@ public class UserTest {
 
     @Test
     public void authenticatedUserCanChangeFavAssos() {
-        User.UserBuilder builder = new User.UserBuilder();
-        builder.setEmail("mail@epfl.ch");
-        builder.setSciper("1212");
-        builder.setGaspar("test");
-        builder.setFirst_names("first_name");
-        builder.setLast_names("last_name");
-        AuthenticatedUser user = (AuthenticatedUser) builder.build();
-
+        AuthenticatedUser user = createAuthenticatedUser();
         assertFalse(user.isFavAssociation(asso));
         assertTrue(user.addFavAssociation(asso));
         assertFalse(user.addFavAssociation(asso));
@@ -138,13 +148,7 @@ public class UserTest {
 
     @Test
     public void authenticatedUserCanChangeFollowedChannels() {
-        User.UserBuilder builder = new User.UserBuilder();
-        builder.setEmail("mail@epfl.ch");
-        builder.setSciper("1212");
-        builder.setGaspar("test");
-        builder.setFirst_names("first_name");
-        builder.setLast_names("last_name");
-        AuthenticatedUser user = (AuthenticatedUser) builder.build();
+        AuthenticatedUser user = createAuthenticatedUser();
 
         assertFalse(user.isFollowedChat(channel));
         assertTrue(user.addFollowedChat(channel));
@@ -157,13 +161,7 @@ public class UserTest {
 
     @Test
     public void toStringIsCorrect() {
-        User.UserBuilder builder = new User.UserBuilder();
-        builder.setEmail("mail@epfl.ch");
-        builder.setSciper("1212");
-        builder.setGaspar("test");
-        builder.setFirst_names("first_name");
-        builder.setLast_names("last_name");
-        AuthenticatedUser user = (AuthenticatedUser) builder.build();
+        User user = createAuthenticatedUser();
 
         String expected = "first_name last_name"
                 + "\nsciper: 1212"
