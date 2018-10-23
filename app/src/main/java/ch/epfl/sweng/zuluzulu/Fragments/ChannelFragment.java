@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import ch.epfl.sweng.zuluzulu.Adapters.ChannelAdapter;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
@@ -48,7 +49,7 @@ public class ChannelFragment extends Fragment {
     private ArrayList<Channel> listOfChannels = new ArrayList<>();
     private ChannelAdapter adapter;
 
-    private User user;
+    private AuthenticatedUser user;
 
     private OnFragmentInteractionListener mListener;
 
@@ -74,7 +75,7 @@ public class ChannelFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (User) getArguments().getSerializable(ARG_USER);
+            user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
         }
     }
 
@@ -133,12 +134,7 @@ public class ChannelFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 Channel channel = new Channel(document);
-                                String channelName = channel.getName();
-                                Boolean hasAccess = true;
-                                if (channelName.contains(SECTION_CHANNEL_PREFIX)) {
-                                    hasAccess = channelName.contains(USER_SECTION);
-                                }
-                                if (hasAccess) {
+                                if (channel.canBeAccessedBy(user)) {
                                     listOfChannels.add(channel);
                                 }
                             }
