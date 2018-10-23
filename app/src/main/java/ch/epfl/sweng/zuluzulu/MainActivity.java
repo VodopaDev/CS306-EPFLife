@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * @param menuItem The item that corresponds to a fragment on the menu
      */
     private void selectItem(MenuItem menuItem) {
-        Fragment fragment = null;
+        Fragment fragment;
         switch (menuItem.getItemId()) {
             case R.id.nav_main:
                 fragment = MainFragment.newInstance(user);

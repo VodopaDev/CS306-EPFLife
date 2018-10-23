@@ -6,6 +6,8 @@ import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.view.Gravity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -22,6 +24,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
  * Use this class for functions that are used in multiple tests
  */
 public class Utility {
+    public static final int TEST_FAV_ASSOCIATIONS = 2; // ID= 1,2
+    public static final int NUMBER_OF_ASSOCIATIONS = 7; // ID = 1,2,3,4,5,6,7
 
     /**
      * Create a user for the tests
@@ -35,11 +39,13 @@ public class Utility {
         builder.setEmail("test@epfl.ch");
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
+        builder.setFavAssos(Arrays.asList(1,2));
+        builder.setFollowedEvents(new ArrayList<Integer>());
+        builder.setFollowedChats(new ArrayList<Integer>());
 
         User user = builder.buildAuthenticatedUser();
-
         assert (user != null);
-
+        assert (user.isConnected());
 
         return user;
     }
@@ -51,7 +57,7 @@ public class Utility {
      *
      * @param mActivityRule Activity rule
      * @param user          User
-     * @waring NEED TO BE CALLED TO CREATE THE ACTIVITY
+     * @warning NEED TO BE CALLED TO CREATE THE ACTIVITY
      * USE IN RULE : new ActivityTestRule<>(MainActivity.class, false, false);
      * <p>
      * It's allow us to not start the Activity before !
@@ -86,14 +92,6 @@ public class Utility {
         openMenu();
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_login));
         login();
-    }
-
-    /**
-     * Open the AssociationFragment
-     */
-    public static void goToAssociation() {
-        openMenu();
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_associations));
     }
 
     /**
