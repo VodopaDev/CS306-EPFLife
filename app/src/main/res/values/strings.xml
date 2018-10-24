@@ -69,5 +69,6 @@
 
     <!-- Main fragment related -->
     <string name="logo_description">Application\'s logo</string>
+    <string name="send_mail_button">SEND US AN EMAIL !</string>
 
 </resources>
