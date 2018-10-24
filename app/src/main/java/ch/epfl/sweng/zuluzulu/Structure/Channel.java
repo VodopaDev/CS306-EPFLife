@@ -18,7 +18,7 @@ public class Channel {
     private Map<String, Object> restrictions;
 
     public Channel(Map data) {
-        this.id = (Integer) data.get("id");
+        this.id = ((Integer) data.get("id")).intValue();
         this.name = (String) data.get("name");
         this.description = (String) data.get("description");
         this.restrictions = (Map) data.get("restrictions");
