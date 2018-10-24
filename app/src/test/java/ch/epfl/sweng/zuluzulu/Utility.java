@@ -2,36 +2,49 @@ package ch.epfl.sweng.zuluzulu;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class Utility {
 
+    private static final String sciper = "123456";
+    private static final String gaspar = "gaspar";
+    private static final String email = "test@epfl.ch";
+    private static final String section = "IN";
+    private static final String firstName = "James";
+    private static final String lastName = "Bond";
+    private static final List<Integer> favAssos = Arrays.asList(1, 2);
+    private static final List<Integer> followedEvents = new ArrayList<>();
+    private static final List<Integer> followedChats = new ArrayList<>();
+
+    private Utility() {}
+
     /**
-     * Create a user builder for the tests
+     * Create a default user builder for the tests
      *
-     * @return Return a user builder
+     * @return Return a default user builder
      */
     public static User.UserBuilder createTestUserBuilder() {
         User.UserBuilder builder = new User.UserBuilder();
-        builder.setSciper("123456");
-        builder.setGaspar("gaspar");
-        builder.setEmail("test@epfl.ch");
-        builder.setSection("IN");
-        builder.setFirst_names("James");
-        builder.setLast_names("Bond");
-        builder.setFavAssos(Arrays.asList(1,2));
-        builder.setFollowedEvents(new ArrayList<Integer>());
-        builder.setFollowedChats(new ArrayList<Integer>());
+        builder.setSciper(sciper);
+        builder.setGaspar(gaspar);
+        builder.setEmail(email);
+        builder.setSection(section);
+        builder.setFirst_names(firstName);
+        builder.setLast_names(lastName);
+        builder.setFavAssos(favAssos);
+        builder.setFollowedEvents(followedEvents);
+        builder.setFollowedChats(followedChats);
 
         return builder;
     }
 
     /**
-     * Create a user for the tests
+     * Create a default user for the tests
      *
-     * @return Return a user
+     * @return Return a default user
      */
     public static AuthenticatedUser createTestUser() {
         AuthenticatedUser user = createTestUserBuilder().buildAuthenticatedUser();
