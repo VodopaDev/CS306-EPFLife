@@ -10,8 +10,10 @@ import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
@@ -33,10 +35,16 @@ public class ChannelTest {
     private Channel channelGlobal;
     private Channel channelIN;
     private AuthenticatedUser userIN;
+    private AuthenticatedUser userSC;
 
     @Before
     public void init() {
-        userIN = Utility.createTestUser();
+        User.UserBuilder builder = Utility.createTestUserBuilder();
+        builder.setSection("IN");
+        userIN = Utility.createTestCustomUser(builder);
+
+        builder.setSection("SC");
+        userSC = Utility.createTestCustomUser(builder);
 
         restrictions1.put("section", null);
         restrictions1.put("location", null);
@@ -76,6 +84,9 @@ public class ChannelTest {
     @Test
     public void testChannelWithRestrictions() {
         assertTrue(channelGlobal.canBeAccessedBy(userIN));
+        assertTrue(channelGlobal.canBeAccessedBy(userSC));
+
         assertTrue(channelIN.canBeAccessedBy(userIN));
+        assertFalse(channelIN.canBeAccessedBy(userSC));
     }
 }

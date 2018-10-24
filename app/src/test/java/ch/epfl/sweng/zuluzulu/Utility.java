@@ -9,11 +9,11 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 public class Utility {
 
     /**
-     * Create a user for the tests
+     * Create a user builder for the tests
      *
-     * @return Return a user
+     * @return Return a user builder
      */
-    public static AuthenticatedUser createTestUser() {
+    public static User.UserBuilder createTestUserBuilder() {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setSciper("123456");
         builder.setGaspar("gaspar");
@@ -25,11 +25,32 @@ public class Utility {
         builder.setFollowedEvents(new ArrayList<Integer>());
         builder.setFollowedChats(new ArrayList<Integer>());
 
-        AuthenticatedUser user = builder.buildAuthenticatedUser();
+        return builder;
+    }
+
+    /**
+     * Create a user for the tests
+     *
+     * @return Return a user
+     */
+    public static AuthenticatedUser createTestUser() {
+        AuthenticatedUser user = createTestUserBuilder().buildAuthenticatedUser();
         assert (user != null);
         assert (user.isConnected());
 
         return user;
     }
 
+    /**
+     * Create a custom user for the tests
+     *
+     * @return Return a custom user
+     */
+    public static AuthenticatedUser createTestCustomUser(User.UserBuilder builder) {
+        AuthenticatedUser user = builder.buildAuthenticatedUser();
+        assert (user != null);
+        assert (user.isConnected());
+
+        return user;
+    }
 }
