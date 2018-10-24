@@ -19,8 +19,8 @@ import static org.junit.Assert.assertTrue;
 @RunWith(JUnit4.class)
 public class ChannelTest {
 
-    private static Map map1 = new HashMap();
-    private static Map map2 = new HashMap();
+    private static Map data1 = new HashMap();
+    private static Map data2 = new HashMap();
 
     private static final int id1 = 1;
     private static final String name1 = "Global";
@@ -52,18 +52,18 @@ public class ChannelTest {
         restrictions2.put("section", "IN");
         restrictions2.put("location", null);
 
-        map1.put("id", id1);
-        map1.put("name", name1);
-        map1.put("description", description1);
-        map1.put("restrictions", restrictions1);
+        data1.put("id", id1);
+        data1.put("name", name1);
+        data1.put("description", description1);
+        data1.put("restrictions", restrictions1);
 
-        map2.put("id", id2);
-        map2.put("name", name2);
-        map2.put("description", description2);
-        map2.put("restrictions", restrictions2);
+        data2.put("id", id2);
+        data2.put("name", name2);
+        data2.put("description", description2);
+        data2.put("restrictions", restrictions2);
 
-        channelGlobal = new Channel(map1);
-        channelIN = new Channel(map2);
+        channelGlobal = new Channel(data1);
+        channelIN = new Channel(data2);
     }
 
     @Test
