@@ -90,20 +90,26 @@ public class EventFragmentTest {
     }
 
 //    @Test
-//    public void listSortByName() {
+//    public void listSortByName() throws InterruptedException {
+//        TimeUnit.SECONDS.sleep(2);
 //        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
+//        TimeUnit.SECONDS.sleep(2);
 //    }
-//
-//    @Test
-//    public void listSortByDate() {
-//        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
-//    }
-//
-//    @Test
-//    public void listAlternateSortOption() {
-//        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
-//        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
-//    }
+
+    @Test
+    public void listSortByDate() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(2);
+        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(2);
+    }
+
+    @Test
+    public void listAlternateSortOption() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(2);
+        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
+        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(2);
+    }
 
 //    @Test
 //    public void AuthenticatedClickingAnEventGoesToDetail() throws InterruptedException {
