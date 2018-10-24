@@ -23,15 +23,15 @@ import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
-//import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
-import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+
+//import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
@@ -70,8 +70,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             User user = (User) i.getSerializableExtra("user");
             if (user != null) {
                 this.user = user;
+                updateMenuItems();
             }
-            
+
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
         }
     }
@@ -130,11 +131,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * Attach the drawer_view to the navigation view
      */
     private void updateMenuItems() {
+        navigationView.getMenu().clear();
         if (isAuthenticated()) {
-            navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_user);
         } else {
-            navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_view_guest);
         }
     }
@@ -154,10 +154,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * @param menuItem The item that corresponds to a fragment on the menu
      */
     private void selectItem(MenuItem menuItem) {
-        Fragment fragment = null;
+        Fragment fragment;
         switch (menuItem.getItemId()) {
             case R.id.nav_main:
-                fragment = MainFragment.newInstance();
+                fragment = MainFragment.newInstance(user);
                 break;
             case R.id.nav_login:
                 fragment = LoginFragment.newInstance();
@@ -181,13 +181,13 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 this.user = new User.UserBuilder().buildGuestUser();
                 updateMenuItems();
                 menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
-                fragment = MainFragment.newInstance();
+                fragment = MainFragment.newInstance(user);
                 break;
             case R.id.nav_chat:
                 fragment = ChannelFragment.newInstance(user);
                 break;
             default:
-                fragment = MainFragment.newInstance();
+                fragment = MainFragment.newInstance(user);
         }
 
         if (openFragment(fragment)) {

@@ -6,7 +6,8 @@ import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.view.Gravity;
 
-import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
+import java.util.ArrayList;
+import java.util.Arrays;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -23,6 +24,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
  * Use this class for functions that are used in multiple tests
  */
 public class Utility {
+    public static final int TEST_FAV_ASSOCIATIONS = 2; // ID= 1,2
+    public static final int NUMBER_OF_ASSOCIATIONS = 7; // ID = 1,2,3,4,5,6,7
 
     /**
      * Create a user for the tests
@@ -34,12 +37,16 @@ public class Utility {
         builder.setSciper("123456");
         builder.setGaspar("gaspar");
         builder.setEmail("test@epfl.ch");
-        builder.setFirst_names("james");
-        builder.setLast_names("bond");
+        builder.setSection("IN");
+        builder.setFirst_names("James");
+        builder.setLast_names("Bond");
+        builder.setFavAssos(Arrays.asList(1,2));
+        builder.setFollowedEvents(new ArrayList<Integer>());
+        builder.setFollowedChats(new ArrayList<Integer>());
 
         User user = builder.buildAuthenticatedUser();
-
         assert (user != null);
+        assert (user.isConnected());
 
 
         return user;
@@ -52,7 +59,7 @@ public class Utility {
      *
      * @param mActivityRule Activity rule
      * @param user          User
-     * @waring NEED TO BE CALLED TO CREATE THE ACTIVITY
+     * @warning NEED TO BE CALLED TO CREATE THE ACTIVITY
      * USE IN RULE : new ActivityTestRule<>(MainActivity.class, false, false);
      * <p>
      * It's allow us to not start the Activity before !
@@ -69,7 +76,6 @@ public class Utility {
     /**
      * Enter the username and password for login
      * To use on the LoginFragment only !
-     *
      * @deprecated instead : Create the user with createTestUser() and pass it when creating fragment instance @see ProfileFragmentTest or ChatFragmentTest
      */
     public static void login() {
@@ -80,7 +86,6 @@ public class Utility {
 
     /**
      * Login from anywhere in the app
-     *
      * @deprecated instead : Create the user with createTestUser() and pass it when creating fragment instance @see ProfileFragmentTest or ChatFragmentTest
      */
     public static void fullLogin() {
@@ -90,17 +95,9 @@ public class Utility {
     }
 
     /**
-     * Open the AssociationFragment
-     */
-    public static void goToAssociation() {
-        openMenu();
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_associations));
-    }
-
-    /**
      * Open the EventFragment
      */
-    public static void goToEvent(){
+    public static void goToEvent() {
         openMenu();
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_events));
     }

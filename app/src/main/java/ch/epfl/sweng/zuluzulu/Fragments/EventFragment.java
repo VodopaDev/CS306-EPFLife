@@ -191,7 +191,7 @@ public class EventFragment extends Fragment {
                             Event event = new Event(snap_list.get(i));
                             event_all.add(event);
 
-                            if (user.isConnected() && ((AuthenticatedUser) user).isFavEvent(event))
+                            if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))
                                 event_fav.add(event);
                         }
                         event_adapter.notifyDataSetChanged();

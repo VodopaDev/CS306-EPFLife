@@ -1,10 +1,15 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewAssertion;
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.widget.ListView;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -15,12 +20,14 @@ import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -36,7 +43,7 @@ public class EventFragmentTest {
             new ActivityTestRule<>(MainActivity.class);
     private User user;
     private Fragment fragment;
-    private int fragment_listview;
+//    private int fragment_listview;
 
     @Before
     public void init() {
@@ -56,8 +63,10 @@ public class EventFragmentTest {
     @Test
     public void guestMainPageHasSomeEvent() throws InterruptedException {
         onView(withId(R.id.event_fragment_all_button)).perform(ViewActions.click());
-        fragment_listview = R.id.event_fragment_listview;
-        onView(withId(R.id.event_fragment_listview)).check(matches)
+        /*
+        TimeUnit.SECONDS.sleep(1);
+        assertThat(list_events, hasChildCount(NB_ALL_EVENTS));
+        */
     }
 
     @Test
@@ -78,6 +87,16 @@ public class EventFragmentTest {
         TimeUnit.SECONDS.sleep(1);
         assertThat(list_events, hasChildCount(NB_FAV_EVENTS));
         */
+    }
+
+    @Test
+    public void listSortByName() {
+        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
+    }
+
+    @Test
+    public void listSortByDate() {
+        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
     }
 
 //    @Test
