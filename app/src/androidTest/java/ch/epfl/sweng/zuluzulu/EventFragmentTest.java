@@ -43,7 +43,6 @@ public class EventFragmentTest {
             new ActivityTestRule<>(MainActivity.class);
     private User user;
     private Fragment fragment;
-//    private int fragment_listview;
 
     @Before
     public void init() {
@@ -56,38 +55,73 @@ public class EventFragmentTest {
 
     @Test
     public void thereAreTwoButtons() throws InterruptedException {
-        onView(withId(R.id.event_fragment_all_button)).check(matches(isDisplayed()));
+        TimeUnit.SECONDS.sleep(2);
         onView(withId(R.id.event_fragment_fav_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.event_fragment_all_button)).check(matches(isDisplayed()));
+        TimeUnit.SECONDS.sleep(2);
     }
 
     @Test
-    public void guestMainPageHasSomeEvent() throws InterruptedException {
+    public void clickOnFavThenOnAll() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(2);
+        onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(2);
         onView(withId(R.id.event_fragment_all_button)).perform(ViewActions.click());
-        /*
-        TimeUnit.SECONDS.sleep(1);
-        assertThat(list_events, hasChildCount(NB_ALL_EVENTS));
-        */
+        TimeUnit.SECONDS.sleep(2);
     }
 
     @Test
-    public void guestClickOnFavoritesStaysOnAll() throws InterruptedException {
-//        guestGoesToEvent();
-        onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
-        /*
-        TimeUnit.SECONDS.sleep(1);
-        assertThat(list_events, hasChildCount(NB_ALL_EVENTS));
-        */
+    public void thereAreTwoSortCheckbox() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(2);
+        onView(withId(R.id.event_fragment_checkBox_sort_name)).check(matches(isDisplayed()));
+        onView(withId(R.id.event_fragment_checkBox_sort_date)).check(matches(isDisplayed()));
+        TimeUnit.SECONDS.sleep(2);
     }
 
     @Test
-    public void authenticatedClickOnFavoritesDisplayFewerEvents() throws InterruptedException {
-//        authenticatedGoesToEvent();
-        onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
-        /*
-        TimeUnit.SECONDS.sleep(1);
-        assertThat(list_events, hasChildCount(NB_FAV_EVENTS));
-        */
+    public void listAlternateSortOption() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(2);
+        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(2);
+        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(2);
     }
+
+    //
+    // Not used anymore test
+    //
+//    @Test
+//    public void guestMainPageHasSomeEvent() throws InterruptedException {
+//        TimeUnit.SECONDS.sleep(2);
+//        onView(withId(R.id.event_fragment_all_button)).perform(ViewActions.click());
+//        TimeUnit.SECONDS.sleep(2);
+//        /*
+//        TimeUnit.SECONDS.sleep(1);
+//        assertThat(list_events, hasChildCount(NB_ALL_EVENTS));
+//        */
+//    }
+
+//    @Test
+//    public void guestClickOnFavoritesStaysOnAll() throws InterruptedException {
+//        TimeUnit.SECONDS.sleep(2);
+//        onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
+//        TimeUnit.SECONDS.sleep(2);
+//        /*
+//        TimeUnit.SECONDS.sleep(1);
+//        assertThat(list_events, hasChildCount(NB_ALL_EVENTS));
+//        */
+//    }
+
+//    @Test
+//    public void authenticatedClickOnFavoritesDisplayFewerEvents() throws InterruptedException {
+//        TimeUnit.SECONDS.sleep(2);
+//        onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
+//        TimeUnit.SECONDS.sleep(2);
+//        /*
+//        TimeUnit.SECONDS.sleep(1);
+//        assertThat(list_events, hasChildCount(NB_FAV_EVENTS));
+//        */
+//    }
 
 //    @Test
 //    public void listSortByName() throws InterruptedException {
@@ -96,20 +130,13 @@ public class EventFragmentTest {
 //        TimeUnit.SECONDS.sleep(2);
 //    }
 
-    @Test
-    public void listSortByDate() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(2);
-        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
-        TimeUnit.SECONDS.sleep(2);
-    }
+//    @Test
+//    public void listSortByDate() throws InterruptedException {
+//        TimeUnit.SECONDS.sleep(2);
+//        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
+//        TimeUnit.SECONDS.sleep(2);
+//    }
 
-    @Test
-    public void listAlternateSortOption() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(2);
-        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
-        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
-        TimeUnit.SECONDS.sleep(2);
-    }
 
 //    @Test
 //    public void AuthenticatedClickingAnEventGoesToDetail() throws InterruptedException {
