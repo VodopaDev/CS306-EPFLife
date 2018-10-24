@@ -89,15 +89,21 @@ public class EventFragmentTest {
         */
     }
 
-    @Test
-    public void listSortByName() {
-        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
-    }
-
-    @Test
-    public void listSortByDate() {
-        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
-    }
+//    @Test
+//    public void listSortByName() {
+//        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
+//    }
+//
+//    @Test
+//    public void listSortByDate() {
+//        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
+//    }
+//
+//    @Test
+//    public void listAlternateSortOption() {
+//        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
+//        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
+//    }
 
 //    @Test
 //    public void AuthenticatedClickingAnEventGoesToDetail() throws InterruptedException {
