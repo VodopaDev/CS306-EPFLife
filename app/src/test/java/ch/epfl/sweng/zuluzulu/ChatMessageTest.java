@@ -1,13 +1,14 @@
 package ch.epfl.sweng.zuluzulu;
 
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.Mockito;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 
@@ -15,6 +16,9 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
 public class ChatMessageTest {
+
+    private static Map data1 = new HashMap();
+    private static Map data2 = new HashMap();
 
     private static final String senderName1 = "James";
     private static final String sciper1 = "111111";
@@ -25,51 +29,24 @@ public class ChatMessageTest {
     private static final String message2 = "Bond's message";
 
     private static final String userSciper = sciper1;
-    private final DocumentSnapshot mocked_valid_datasnap1 = Mockito.mock(DocumentSnapshot.class);
-    private final DocumentSnapshot mocked_valid_datasnap2 = Mockito.mock(DocumentSnapshot.class);
-    private final DocumentSnapshot mocked_invalid_datasnap = Mockito.mock(DocumentSnapshot.class);
+
     private ChatMessage chatMessage1;
     private ChatMessage chatMessage2;
 
     @Before
     public void init() {
-        Mockito.when(mocked_valid_datasnap1.get("senderName")).thenReturn(senderName1);
-        Mockito.when(mocked_valid_datasnap1.get("sciper")).thenReturn(sciper1);
-        Mockito.when(mocked_valid_datasnap1.get("message")).thenReturn(message1);
-        Mockito.when(mocked_valid_datasnap1.get("time")).thenReturn(time);
+        data1.put("senderName", senderName1);
+        data1.put("sciper", sciper1);
+        data1.put("message", message1);
+        data1.put("time", time);
 
-        Mockito.when(mocked_valid_datasnap2.get("senderName")).thenReturn(senderName2);
-        Mockito.when(mocked_valid_datasnap2.get("sciper")).thenReturn(sciper2);
-        Mockito.when(mocked_valid_datasnap2.get("message")).thenReturn(message2);
-        Mockito.when(mocked_valid_datasnap2.get("time")).thenReturn(time);
+        data2.put("senderName", senderName2);
+        data2.put("sciper", sciper2);
+        data2.put("message", message2);
+        data2.put("time", time);
 
-        Mockito.when(mocked_invalid_datasnap.get("senderName")).thenReturn(senderName1);
-        Mockito.when(mocked_invalid_datasnap.get("sciper")).thenReturn(null);
-        Mockito.when(mocked_invalid_datasnap.get("message")).thenReturn(message1);
-        Mockito.when(mocked_invalid_datasnap.get("time")).thenReturn(time);
-
-        Mockito.when(mocked_valid_datasnap1.getString("senderName")).thenReturn(senderName1);
-        Mockito.when(mocked_valid_datasnap1.getString("sciper")).thenReturn(sciper1);
-        Mockito.when(mocked_valid_datasnap1.getString("message")).thenReturn(message1);
-        Mockito.when(mocked_valid_datasnap1.getTimestamp("time")).thenReturn(time);
-
-        Mockito.when(mocked_valid_datasnap2.getString("senderName")).thenReturn(senderName2);
-        Mockito.when(mocked_valid_datasnap2.getString("sciper")).thenReturn(sciper2);
-        Mockito.when(mocked_valid_datasnap2.getString("message")).thenReturn(message2);
-        Mockito.when(mocked_valid_datasnap2.getTimestamp("time")).thenReturn(time);
-
-        Mockito.when(mocked_invalid_datasnap.getString("senderName")).thenReturn(senderName1);
-        Mockito.when(mocked_invalid_datasnap.getString("sciper")).thenReturn(null);
-        Mockito.when(mocked_invalid_datasnap.getString("message")).thenReturn(message1);
-        Mockito.when(mocked_valid_datasnap1.getTimestamp("time")).thenReturn(time);
-
-        chatMessage1 = new ChatMessage(mocked_valid_datasnap1, userSciper);
-        chatMessage2 = new ChatMessage(mocked_valid_datasnap2, userSciper);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void invalidSnapThrowIllegalArgumentException() {
-        new ChatMessage(mocked_invalid_datasnap, userSciper);
+        chatMessage1 = new ChatMessage(data1, userSciper);
+        chatMessage2 = new ChatMessage(data2, userSciper);
     }
 
     @Test
