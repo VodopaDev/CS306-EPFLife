@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -35,6 +36,7 @@ public class EventFragmentTest {
             new ActivityTestRule<>(MainActivity.class);
     private User user;
     private Fragment fragment;
+    private int fragment_listview;
 
     @Before
     public void init() {
@@ -54,8 +56,8 @@ public class EventFragmentTest {
     @Test
     public void guestMainPageHasSomeEvent() throws InterruptedException {
         onView(withId(R.id.event_fragment_all_button)).perform(ViewActions.click());
-        assertThat(fragment., hasChildCount(NB_ALL_EVENTS));
-
+        fragment_listview = R.id.event_fragment_listview;
+        onView(withId(R.id.event_fragment_listview)).check(matches)
     }
 
     @Test
