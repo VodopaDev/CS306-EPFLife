@@ -91,7 +91,7 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
     /**
      * Fetch an Image from the Internet and put it in an ImageView
      *
-     * @param uri  Uri of the image to fetch
+     * @param uri   Uri of the image to fetch
      * @param image ImageView to put the image
      */
     private void initImageView(Uri uri, ImageView image) {
@@ -101,7 +101,7 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
                 .into(image);
     }
 
-    private void defaultIcon(ImageView icon){
+    private void defaultIcon(ImageView icon) {
         Glide.with(context)
                 .load(new File("res/asso_cache/default_icon.png"))
                 .centerCrop()

@@ -32,20 +32,20 @@ public final class Utils {
         return true;
     }
 
-    public static List<Integer> longListToIntList(List<Long> src){
+    public static List<Integer> longListToIntList(List<Long> src) {
         List<Integer> res = new ArrayList<>();
-        assert(src != null);
-        for(Long item: src){
+        assert (src != null);
+        for (Long item : src) {
             res.add(item.intValue());
         }
         return res;
     }
 
-    public static void addIdToList(String path, String field, Integer id){
+    public static void addIdToList(String path, String field, Integer id) {
         FirebaseFirestore.getInstance().document(path).update(field, FieldValue.arrayUnion(id));
     }
 
-    public static void removeIdFromList(String path, String field, Integer id){
+    public static void removeIdFromList(String path, String field, Integer id) {
         FirebaseFirestore.getInstance().document(path).update(field, FieldValue.arrayRemove(id));
     }
 }

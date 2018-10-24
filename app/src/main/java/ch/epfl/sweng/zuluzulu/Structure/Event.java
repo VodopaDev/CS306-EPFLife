@@ -3,13 +3,6 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import android.location.Location;
 import android.net.Uri;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import android.util.Log;
-
-
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
@@ -18,19 +11,15 @@ import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.R;
-import java.util.Objects;
-
-import static java.util.Objects.requireNonNull;
 
 public class Event implements Serializable {
 
+    private static final String IMAGE_PATH = "events/event";
+    private static final String ICON_EXT = "_icon.png";
     private int id;
     private String name;
     private String short_desc;
     private String long_desc;
-
-    private static final String IMAGE_PATH = "events/event";
-    private static final String ICON_EXT = "_icon.png";
     private Uri icon;
     private Uri icon_uri;
 
@@ -54,7 +43,7 @@ public class Event implements Serializable {
      * @throws IllegalArgumentException if the snapshot isn't an Event's snapshot
      */
     public Event(DocumentSnapshot snap, Uri iconUri) {
-        if(!snapshotIsValid(snap))
+        if (!snapshotIsValid(snap))
             throw new NullPointerException();
 
         id = ((Long) snap.get("id")).intValue();
@@ -64,7 +53,7 @@ public class Event implements Serializable {
 
         String icon_str = snap.getString("icon_uri");
         icon_uri = icon_str == null ?
-                Uri.parse("android.ressource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon):
+                Uri.parse("android.ressource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(icon_str);
 
         start_date = snap.getDate("start_date");
@@ -104,10 +93,6 @@ public class Event implements Serializable {
 
     public void setShort_desc(String description) {
         this.short_desc = description;
-    }
-
-    public void setLong_desc(String description) {
-        this.long_desc = description;
     }
 
     public Uri getIcon() {
@@ -150,12 +135,16 @@ public class Event implements Serializable {
         this.pos = pos;
     }
 
+    public String getLong_desc() {
+        return long_desc;
+    }
+
 //    public void setLong_desc(String description) {
 //        this.long_desc = description;
 //    }
 
-    public String getLong_desc() {
-        return long_desc;
+    public void setLong_desc(String description) {
+        this.long_desc = description;
     }
 
     public Uri getIconUri() {
@@ -175,9 +164,10 @@ public class Event implements Serializable {
 //    }
 
     public void setIconUri(Uri icon) {
-      this.icon_uri = icon;
+        this.icon_uri = icon;
     }
-//
+
+    //
 //    public int getChat_id() {
 //        return chat_id;
 //    }

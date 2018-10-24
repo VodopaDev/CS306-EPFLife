@@ -22,7 +22,7 @@ public class AboutZuluzuluFragmentTest {
 
     @Before
     public void init() {
-        Fragment fragment = AboutZuluzuluFragment.newInstance(());
+        Fragment fragment = AboutZuluzuluFragment.newInstance();
         mActivityRule.getActivity().openFragment(fragment);
     }
 

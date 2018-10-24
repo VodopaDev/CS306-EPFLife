@@ -2,7 +2,6 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -32,12 +31,10 @@ public class AboutZuluzuluFragment extends Fragment {
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Create a new instance
      *
      * @return A new instance of fragment AboutZuluzuluFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static AboutZuluzuluFragment newInstance() {
         return new AboutZuluzuluFragment();
     }
@@ -63,6 +60,9 @@ public class AboutZuluzuluFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Open an external app to send an email to the user
+     */
     private void onSendEmail() {
         Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 
@@ -71,7 +71,7 @@ public class AboutZuluzuluFragment extends Fragment {
         emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"epflife@epfl.com"});
         emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "About your wonderful app !");
 
-        /* Send it off to the Activity-Chooser */
+        // Start the activity and ask for a mail
         startActivity(Intent.createChooser(emailIntent, "Send mail..."));
     }
 
