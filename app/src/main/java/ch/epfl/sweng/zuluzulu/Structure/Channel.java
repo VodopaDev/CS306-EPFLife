@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Arrays;
@@ -12,20 +11,17 @@ import java.util.Map;
  */
 public class Channel {
 
-    private static final List<String> fields = Arrays.asList("id", "name", "description", "restrictions");
+    public static final List<String> FIELDS = Arrays.asList("id", "name", "description", "restrictions");
     private int id;
     private String name;
     private String description;
     private Map<String, Object> restrictions;
 
-    public Channel(DocumentSnapshot snap) {
-        if (!Utils.isValidSnapshot(snap, fields)) {
-            throw new IllegalArgumentException("This is not a channel snapshot");
-        }
-        this.id = snap.getLong("id").intValue();
-        this.name = snap.getString("name");
-        this.description = snap.getString("description");
-        this.restrictions = (Map) snap.get("restrictions");
+    public Channel(Map data) {
+        this.id = (Integer) data.get("id");
+        this.name = (String) data.get("name");
+        this.description = (String) data.get("description");
+        this.restrictions = (Map) data.get("restrictions");
     }
 
     /**

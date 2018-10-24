@@ -26,6 +26,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -133,9 +134,11 @@ public class ChannelFragment extends Fragment {
                             listOfChannels.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                Channel channel = new Channel(document);
-                                if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user)) {
-                                    listOfChannels.add(channel);
+                                if (Utils.isValidSnapshot(document, Channel.FIELDS)) {
+                                    Channel channel = new Channel(document.getData());
+                                    if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user)) {
+                                        listOfChannels.add(channel);
+                                    }
                                 }
                             }
                             adapter.notifyDataSetChanged();
