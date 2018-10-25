@@ -6,7 +6,7 @@ public final class Guest extends User {
     }
 
     @Override
-    public boolean hasRole(UserRole role){
+    public boolean hasRole(UserRole role) {
         // Should never have role
         return false;
     }

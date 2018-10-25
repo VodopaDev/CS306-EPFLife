@@ -97,9 +97,9 @@ public class AssociationDetailFragment extends Fragment {
         upcoming_event_name = view.findViewById(R.id.association_detail_upcoming_event_name);
         upcoming_event_icon = view.findViewById(R.id.association_detail_upcoming_event_icon);
         upcoming_event_date = view.findViewById(R.id.association_detail_upcoming_event_date);
-        if(asso.getClosestEventId() != 0){
+        if (asso.getClosestEventId() != 0) {
             FirebaseFirestore.getInstance()
-                    .document("events_info/event"+asso.getClosestEventId())
+                    .document("events_info/event" + asso.getClosestEventId())
                     .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -112,8 +112,7 @@ public class AssociationDetailFragment extends Fragment {
                             .into(upcoming_event_icon);
                 }
             });
-        }
-        else {
+        } else {
             upcoming_event_name.setText("Pas d'event :(");
         }
 
@@ -155,7 +154,7 @@ public class AssociationDetailFragment extends Fragment {
         });
     }
 
-    public Association getAsso(){
+    public Association getAsso() {
         return asso;
     }
 

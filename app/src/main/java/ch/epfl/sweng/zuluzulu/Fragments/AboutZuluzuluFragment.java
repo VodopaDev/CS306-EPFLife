@@ -1,12 +1,13 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -30,12 +31,10 @@ public class AboutZuluzuluFragment extends Fragment {
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Create a new instance
      *
      * @return A new instance of fragment AboutZuluzuluFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static AboutZuluzuluFragment newInstance() {
         return new AboutZuluzuluFragment();
     }
@@ -48,15 +47,32 @@ public class AboutZuluzuluFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_about_zuluzulu, container, false);
+
+        Button button = view.findViewById(R.id.send_mail);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                onSendEmail();
+            }
+        });
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_about_zuluzulu, container, false);
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(TAG, uri);
-        }
+    /**
+     * Open an external app to send an email to the user
+     */
+    private void onSendEmail() {
+        Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+
+        // Add object and subject
+        emailIntent.setType("plain/text");
+        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"epflife@epfl.com"});
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "About your wonderful app !");
+
+        // Start the activity and ask for a mail
+        startActivity(Intent.createChooser(emailIntent, "Send mail..."));
     }
 
     @Override

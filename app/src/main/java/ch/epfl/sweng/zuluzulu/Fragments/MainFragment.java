@@ -26,7 +26,8 @@ public class MainFragment extends Fragment {
     private User user;
     private OnFragmentInteractionListener mListener;
 
-    public MainFragment() {}
+    public MainFragment() {
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -36,11 +37,11 @@ public class MainFragment extends Fragment {
      */
 
     public static MainFragment newInstance(User u) {
-            MainFragment fragment = new MainFragment();
-            Bundle args = new Bundle();
-            args.putSerializable(ARG_USER, u);
-            fragment.setArguments(args);
-            return fragment;
+        MainFragment fragment = new MainFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_USER, u);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -54,10 +55,9 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if(user.isConnected()){
+        if (user.isConnected()) {
             return inflater.inflate(R.layout.fragment_main_user, container, false);
-        }
-        else{
+        } else {
             return inflater.inflate(R.layout.fragment_main, container, false);
         }
 

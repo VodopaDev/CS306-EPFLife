@@ -80,7 +80,7 @@ public class ProfileFragment extends Fragment implements OnFragmentInteractionLi
             builder.append(user.getLastNames().substring(0, 1).toUpperCase());
             builder.append(user.getLastNames().substring(1));
         }
-        if(user.hasRole(UserRole.ADMIN)){
+        if (user.hasRole(UserRole.ADMIN)) {
             builder.append(" - ADMIN");
         }
 
