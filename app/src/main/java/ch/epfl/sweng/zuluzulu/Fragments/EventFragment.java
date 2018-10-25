@@ -189,6 +189,7 @@ public class EventFragment extends Fragment {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
                         for (int i = 0; i < snap_list.size(); i++) {
                             Event event = new Event(snap_list.get(i));
+                            Log.d("! TEST ID EVENT !", event.getId());
                             event_all.add(event);
 
                             if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))

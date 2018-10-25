@@ -16,11 +16,11 @@ public class Event implements Serializable {
 
     private static final String IMAGE_PATH = "events/event";
     private static final String ICON_EXT = "_icon.png";
-    private int id;
-    private String name;
+    private String id;
+    private String assos_name;
     private String short_desc;
     private String long_desc;
-    private Uri icon;
+    private Uri banner_uri;
     private Uri icon_uri;
 
     private int chat_id;
@@ -31,10 +31,6 @@ public class Event implements Serializable {
     private Date start_date;
     private Date end_date;
 
-    // TODO: Get data from cloud service using the id
-    public Event(DocumentSnapshot snap) {
-        this(snap, null);
-    }
 
     /**
      * Create an event using a DocumentSnapshot
@@ -42,12 +38,12 @@ public class Event implements Serializable {
      * @param snap the document snapshot
      * @throws IllegalArgumentException if the snapshot isn't an Event's snapshot
      */
-    public Event(DocumentSnapshot snap, Uri iconUri) {
+    public Event(DocumentSnapshot snap) {
         if (!snapshotIsValid(snap))
             throw new NullPointerException();
 
-        id = ((Long) snap.get("id")).intValue();
-        name = snap.getString("name");
+        id = snap.getId();
+        assos_name = snap.getString("name");
         short_desc = snap.getString("short_desc");
         long_desc = snap.getString("long_desc");
 
@@ -60,6 +56,7 @@ public class Event implements Serializable {
         //end_date = snap.getDate("end_date");
     }
 
+    // maybe use id instead of name
     public static Comparator<Event> getComparator() {
         return new Comparator<Event>() {
             @Override
@@ -71,20 +68,20 @@ public class Event implements Serializable {
 
     // TODO: Add a method to add/remove one User to admins (instead of getting/setting the admins list)
     // TODO: Check inputs before changing fields
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     public String getName() {
-        return name;
+        return assos_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String assos_name) {
+        this.assos_name = assos_name;
     }
 
     public String getShort_desc() {
@@ -96,11 +93,11 @@ public class Event implements Serializable {
     }
 
     public Uri getIcon() {
-        return icon;
+        return banner_uri;
     }
 
-    public void setIcon(Uri icon) {
-        this.icon = icon;
+    public void setIcon(Uri banner_uri) {
+        this.banner_uri = banner_uri;
     }
 
     public int getChat_id() {
