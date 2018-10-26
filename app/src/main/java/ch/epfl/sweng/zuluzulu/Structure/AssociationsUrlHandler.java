@@ -2,6 +2,8 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.os.AsyncTask;
 
+import com.google.common.html.HtmlEscapers;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -97,7 +99,7 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, ArrayList<St
 
     private ArrayList<String> parseData(InputStream inputStream) throws IOException {
         BufferedReader in = new BufferedReader(
-                new InputStreamReader(inputStream));
+                new InputStreamReader(inputStream, "UTF-8"));
 
         // regex
         Pattern p = Pattern.compile("&#\\d+.* <a href=\"(.*?)\".*>(.*)</a>.*\\((.+)\\)<.*br />.*");
@@ -110,7 +112,7 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, ArrayList<St
             Matcher m = p.matcher(inputLine);
             if (m.find()) {
                 // remove the span tag
-                String description = m.group(3).replaceAll("<.*>", "");
+                String description = m.group(3).replaceAll("<.*?>", "");
 
                 StringBuilder sb = new StringBuilder();
                 sb.append(m.group(1));
@@ -119,8 +121,13 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, ArrayList<St
                 sb.append(',');
                 sb.append(description);
 
-                // Add datas separated by a ","
-                results.add(sb.toString());
+                // remplace html unicode to char
+                String result = sb.toString()
+                        .replaceAll("&#8217;", "'")
+                        .replaceAll("&#8211;", "-")
+                        .replaceAll("&amp;", "&");
+
+                results.add(result);
             }
         }
         in.close();

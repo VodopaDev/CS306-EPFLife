@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -53,10 +54,16 @@ public class AssociationsGeneratorFragment extends Fragment {
     private Void handleData(ArrayList<String> datas) {
         for (String data : datas) {
             String[] values = data.split(",");
+
+            StringBuilder sb = new StringBuilder();
             for (String value : values) {
-                System.out.println(value);
+                sb.append(value);
+                sb.append("\n");
             }
-            System.out.println("--------");
+            sb.append("--------\n");
+
+            TextView view = getView().findViewById(R.id.associations_generator_list_values);
+            view.append(sb.toString());
         }
 
         return null;
