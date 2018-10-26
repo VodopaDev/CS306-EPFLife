@@ -31,7 +31,9 @@ abstract public class User implements Serializable {
         return null;
     }
 
-    public String getSection() { return null; }
+    public String getSection() {
+        return null;
+    }
 
     public String getGaspar() {
         return null;
@@ -43,18 +45,20 @@ abstract public class User implements Serializable {
 
     /**
      * Check if the user has the role
+     *
      * @param role UserRole
      * @return boolean
      */
-    public boolean hasRole(UserRole role){
+    public boolean hasRole(UserRole role) {
         return roles.contains(role);
     }
 
     /**
      * Add the role to the user roles list
+     *
      * @param role UserRole
      */
-    protected void addRole(UserRole role){
+    protected void addRole(UserRole role) {
         this.roles.add(role);
     }
 
@@ -140,7 +144,9 @@ abstract public class User implements Serializable {
          *
          * @param section section
          */
-        public void setSection(String section) { this.section = section; }
+        public void setSection(String section) {
+            this.section = section;
+        }
 
         /**
          * User last names
@@ -197,7 +203,7 @@ abstract public class User implements Serializable {
             return null;
         }
 
-        /**     
+        /**
          * Build an Admin
          *
          * @return Admin or null
@@ -221,10 +227,11 @@ abstract public class User implements Serializable {
 
         /**
          * Check the requirements for authentication
+         *
          * @return boolean
          */
-        private boolean hasRequirementsForAuthentication(){
-            return  this.sciper != null
+        private boolean hasRequirementsForAuthentication() {
+            return this.sciper != null
                     && this.email != null
                     && this.section != null
                     && this.gaspar != null

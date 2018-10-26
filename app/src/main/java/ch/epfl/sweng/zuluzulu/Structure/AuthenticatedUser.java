@@ -1,27 +1,20 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import com.google.common.collect.Sets;
-
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Arrays;
 import java.util.List;
 
 public class AuthenticatedUser extends User {
     public static final List<String> fields = Arrays.asList("fav_assos", "followed_events", "followed_chats");
-    private Object listener;
     private final String firestore_path;
-
     // Use sciper to check User (and not mail or gaspar)
     private final String sciper;
     private final String gaspar;
     private final String email;
     private final String section;
-
     // WARNING: can user can have multiples names
     private final String first_names;
     private final String last_names;
-
+    private Object listener;
     // All followed ids of Associations, Chats and Events
     private List<Integer> fav_assos;
     private List<Integer> followed_chats;
@@ -43,7 +36,7 @@ public class AuthenticatedUser extends User {
         this.addRole(UserRole.USER);
 
         // TO REMOVE
-        if(gaspar.equals("dahn")){
+        if (gaspar.equals("dahn")) {
             this.addRole(UserRole.ADMIN);
         }
     }
@@ -52,7 +45,7 @@ public class AuthenticatedUser extends User {
         return fav_assos.contains(asso.getId());
     }
 
-    public boolean isFollowedEvent(Event event){
+    public boolean isFollowedEvent(Event event) {
         return followed_events.contains(event.getId());
     }
 
@@ -65,42 +58,42 @@ public class AuthenticatedUser extends User {
         Utils.addIdToList(firestore_path, "fav_assos", asso.getId());
     }
 
-    public void removeFavAssociation(Association asso){
-        fav_assos.remove((Integer)asso.getId());
+    public void removeFavAssociation(Association asso) {
+        fav_assos.remove((Integer) asso.getId());
         Utils.removeIdFromList(firestore_path, "fav_assos", asso.getId());
     }
 
     /**
-    public void addFollowedEvent(Event event) {
-        followed_events.add(event.getId());
-        Utils.addIdToList(firestore_path, "followed_events", event.getId());
-    }
+     * public void addFollowedEvent(Event event) {
+     * followed_events.add(event.getId());
+     * Utils.addIdToList(firestore_path, "followed_events", event.getId());
+     * }
+     * <p>
+     * public void removeFollowedEvent(Event event) {
+     * followed_events.remove((Integer) event.getId());
+     * Utils.removeIdFromList(firestore_path, "followed_events", event.getId());
+     * }
+     * <p>
+     * public void addFollowedChat(Channel channel) {
+     * followed_chats.add(channel.getId());
+     * Utils.addIdToList(firestore_path, "followed_chats", channel.getId());
+     * }
+     * <p>
+     * public void removeFollowedChat(Channel channel) {
+     * followed_chats.remove((Integer)channel.getId());
+     * Utils.removeIdFromList(firestore_path, "followed_chats", channel.getId());
+     * }
+     */
 
-    public void removeFollowedEvent(Event event) {
-        followed_events.remove((Integer) event.getId());
-        Utils.removeIdFromList(firestore_path, "followed_events", event.getId());
-    }
-
-    public void addFollowedChat(Channel channel) {
-        followed_chats.add(channel.getId());
-        Utils.addIdToList(firestore_path, "followed_chats", channel.getId());
-    }
-
-    public void removeFollowedChat(Channel channel) {
-        followed_chats.remove((Integer)channel.getId());
-        Utils.removeIdFromList(firestore_path, "followed_chats", channel.getId());
-    }
-    */
-
-    public void setFollowedChats(List<Integer> followed_chats){
+    public void setFollowedChats(List<Integer> followed_chats) {
         this.followed_chats = followed_chats;
     }
 
-    public void setFavAssos(List<Integer> fav_assos){
+    public void setFavAssos(List<Integer> fav_assos) {
         this.fav_assos = fav_assos;
     }
 
-    public void setFollowedEvents(List<Integer> followed_events){
+    public void setFollowedEvents(List<Integer> followed_events) {
         this.followed_events = followed_events;
     }
 
@@ -121,7 +114,7 @@ public class AuthenticatedUser extends User {
 
     @Override
     public String getSection() {
-      return section;
+        return section;
     }
 
     @Override

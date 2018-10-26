@@ -46,6 +46,8 @@
     <string name="fragment_event_button_all">All</string>
     <string name="fragment_event_button_fav">Favorites</string>
     <string name="card_event_image_description">Event\'s icon</string>
+    <string name="fragment_event_checkbox_sort_name">Name</string>
+    <string name="fragment_event_checkbox_sort_date">Date</string>
 
     <!-- Chat related -->
     <string name="chat_send">Send</string>
@@ -69,5 +71,8 @@
 
     <!-- Main fragment related -->
     <string name="logo_description">Application\'s logo</string>
+
+    <!-- ABOUT ZUZULULU fragment -->
+    <string name="send_mail_button">SEND US AN EMAIL !</string>
 
 </resources>
