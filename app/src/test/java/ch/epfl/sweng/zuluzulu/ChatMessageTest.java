@@ -1,12 +1,11 @@
 package ch.epfl.sweng.zuluzulu;
 
-import com.google.firebase.Timestamp;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +22,7 @@ public class ChatMessageTest {
     private static final String senderName1 = "James";
     private static final String sciper1 = "111111";
     private static final String message1 = "James message";
-    private static final Timestamp time = Timestamp.now();
+    private static final Timestamp time = new Timestamp(0);
     private static final String senderName2 = "Bond";
     private static final String sciper2 = "222222";
     private static final String message2 = "Bond's message";
