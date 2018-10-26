@@ -19,7 +19,7 @@ import ch.epfl.sweng.zuluzulu.R;
  * Has diverse getters and some functions to create views
  */
 public class Association implements Serializable {
-    private List<String> firebase_fields = Arrays.asList("id","name","short_desc","long_desc");
+    private List<String> firebase_fields = Arrays.asList("id", "name", "short_desc", "long_desc");
 
     private int id;
     private String name;
@@ -48,20 +48,20 @@ public class Association implements Serializable {
         long_desc = snap.getString("long_desc");
         events = snap.get("events") == null ?
                 new ArrayList<Map<String, Object>>() :
-                (List<Map<String, Object>>)snap.get("events");
+                (List<Map<String, Object>>) snap.get("events");
 
         closest_event_id = computeClosestEvent();
 
         // Init the Icon URI
         String icon_str = snap.getString("icon_uri");
         icon_uri = icon_str == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon):
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(icon_str);
 
         // Init the Banner URI
         String banner_str = snap.getString("banner_uri");
         banner_uri = banner_str == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner):
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
                 Uri.parse(banner_str);
     }
 
@@ -125,20 +125,20 @@ public class Association implements Serializable {
         return icon_uri;
     }
 
-    public int getClosestEventId(){
+    public int getClosestEventId() {
         return closest_event_id;
     }
 
-    private int computeClosestEvent(){
-        if(events.isEmpty())
+    private int computeClosestEvent() {
+        if (events.isEmpty())
             return 0;
-        else{
-            int closest = ((Long)events.get(0).get("id")).intValue();
-            java.util.Date closest_time = (java.util.Date)events.get(0).get("start");
-            for(int i = 1; i < events.size(); i++){
-                java.util.Date current = (java.util.Date)events.get(i).get("start");
-                if(current.before(closest_time)){
-                    closest = ((Long)events.get(i).get("id")).intValue();
+        else {
+            int closest = ((Long) events.get(0).get("id")).intValue();
+            java.util.Date closest_time = (java.util.Date) events.get(0).get("start");
+            for (int i = 1; i < events.size(); i++) {
+                java.util.Date current = (java.util.Date) events.get(i).get("start");
+                if (current.before(closest_time)) {
+                    closest = ((Long) events.get(i).get("id")).intValue();
                 }
             }
             return closest;

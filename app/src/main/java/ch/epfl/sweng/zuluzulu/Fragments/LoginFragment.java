@@ -408,7 +408,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             showProgress(false);
         }
 
-        private void updateUserAndFinishLogin(){
+        private void updateUserAndFinishLogin() {
             final DocumentReference ref = FirebaseFirestore.getInstance()
                     .collection("users_info")
                     .document(user.getSciper());
@@ -416,22 +416,21 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if(!documentSnapshot.exists()){
+                    if (!documentSnapshot.exists()) {
                         Map<String, Object> map = new HashMap<>();
                         map.put("fav_assos", new ArrayList<Integer>());
                         map.put("followed_events", new ArrayList<Integer>());
                         map.put("followed_chats", new ArrayList<Integer>());
                         ref.set(map);
                         activate_session(user);
-                    }
-                    else if (Utils.isValidSnapshot(documentSnapshot, AuthenticatedUser.fields)){
-                        List<Integer> received_assos = Utils.longListToIntList((List<Long>)documentSnapshot.get("fav_assos"));
-                        List<Integer> received_events = Utils.longListToIntList((List<Long>)documentSnapshot.get("followed_events"));
-                        List<Integer> received_chats = Utils.longListToIntList((List<Long>)documentSnapshot.get("followed_chats"));
+                    } else if (Utils.isValidSnapshot(documentSnapshot, AuthenticatedUser.fields)) {
+                        List<Integer> received_assos = Utils.longListToIntList((List<Long>) documentSnapshot.get("fav_assos"));
+                        List<Integer> received_events = Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_events"));
+                        List<Integer> received_chats = Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_chats"));
 
-                        ((AuthenticatedUser)user).setFavAssos(received_assos);
-                        ((AuthenticatedUser)user).setFollowedEvents(received_events);
-                        ((AuthenticatedUser)user).setFollowedChats(received_chats);
+                        ((AuthenticatedUser) user).setFavAssos(received_assos);
+                        ((AuthenticatedUser) user).setFollowedEvents(received_events);
+                        ((AuthenticatedUser) user).setFollowedChats(received_chats);
                         activate_session(user);
                     }
                 }
