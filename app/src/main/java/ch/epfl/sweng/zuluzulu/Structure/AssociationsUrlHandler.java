@@ -7,23 +7,23 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class AssociationsUrlHandler extends AsyncTask<URL, Void, Long> {
+public class AssociationsUrlHandler extends AsyncTask<String, Void, Long> {
 
     public AssociationsUrlHandler() {
         System.out.println("hello world");
 
-
+        this.execute("https://associations.epfl.ch/page-16300-fr-html/");
     }
 
+
+
     @Override
-    protected Long doInBackground(URL... urls) {
+    protected Long doInBackground(String... urls) {
+        System.out.println("TEST");
+        connect(urls[0]);
         return null;
     }
 
-    @Override
-    protected void onPostExecute(Long aLong) {
-        super.onPostExecute(aLong);
-    }
 
     public boolean connect(String url) {
         URL aURL = null;

@@ -51,7 +51,6 @@ public class AssociationsGeneratorFragment extends Fragment {
         }
 
         AssociationsUrlHandler urlHandler = new AssociationsUrlHandler();
-        urlHandler.connect(EPFL_URL);
     }
 
     @Override
