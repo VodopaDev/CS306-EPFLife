@@ -1,7 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -14,14 +14,14 @@ public class ChatMessage {
     private String senderName;
     private String sciper;
     private String message;
-    private Timestamp time;
+    private Date time;
     private boolean ownMessage;
 
     public ChatMessage(Map data, String userSciper) {
         senderName = (String) data.get("senderName");
         sciper = (String) data.get("sciper");
         message = (String) data.get("message");
-        time = (Timestamp) data.get("time");
+        time = (Date) data.get("time");
         ownMessage = sciper.equals(userSciper);
     }
 
@@ -94,14 +94,14 @@ public class ChatMessage {
      *
      * @return the creation time
      */
-    public Timestamp getTime() {
+    public Date getTime() {
         return time;
     }
 
     /**
      * Setter for the creation time
      */
-    public void setTime(Timestamp time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 }
