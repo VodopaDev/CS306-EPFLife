@@ -117,9 +117,9 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, ArrayList<St
 
                 sb.append(m.group(1));
                 sb.append(',');
-                sb.append(description);
+                sb.append(m.group(2));
                 sb.append(',');
-                sb.append(m.group(3));
+                sb.append(description);
 
                 results.add(sb.toString());
             }

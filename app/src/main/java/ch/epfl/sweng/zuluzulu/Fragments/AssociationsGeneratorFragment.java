@@ -47,7 +47,11 @@ public class AssociationsGeneratorFragment extends Fragment {
 
     private Void handleData(ArrayList<String> datas){
         for (String data : datas) {
-            System.out.println(data.split(",").toString());
+            String[] values = data.split(",");
+            for (String value : values) {
+                System.out.println(value);
+            }
+            System.out.println("--------");
         }
 
         return null;
