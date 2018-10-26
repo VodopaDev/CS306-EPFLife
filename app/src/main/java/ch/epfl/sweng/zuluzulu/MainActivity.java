@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
@@ -185,6 +186,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case R.id.nav_chat:
                 fragment = ChannelFragment.newInstance(user);
+                break;
+            case R.id.nav_associations_generator:
+                fragment = AssociationsGeneratorFragment.newInstance();
                 break;
             default:
                 fragment = MainFragment.newInstance(user);

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.AssociationsUrlHandler;
 
 
 /**
@@ -45,6 +46,8 @@ public class AssociationsGeneratorFragment extends Fragment {
         if (getArguments() != null) {
             // handle hargs
         }
+
+        AssociationsUrlHandler urlHandler = new AssociationsUrlHandler();
     }
 
     @Override

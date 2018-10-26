@@ -25,5 +25,9 @@
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_about"
             android:title="@string/drawer_about_us" />
+        <item
+            android:id="@+id/nav_associations_generator"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/drawer_associations_generator" />
     </group>
 </menu>
