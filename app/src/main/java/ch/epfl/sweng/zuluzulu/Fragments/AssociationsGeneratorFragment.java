@@ -24,6 +24,9 @@ import ch.epfl.sweng.zuluzulu.Structure.AssociationsUrlHandler;
 public class AssociationsGeneratorFragment extends Fragment {
     private static final String ASSOCIATIONS_GENERATOR_TAG = "ASSOCIATIONS_GENERATOR_TAG";
 
+    // The URL we will connect to
+    final static private String EPFL_URL = "https://associations.epfl.ch/page-16300-fr-html/";
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -48,6 +51,7 @@ public class AssociationsGeneratorFragment extends Fragment {
         }
 
         AssociationsUrlHandler urlHandler = new AssociationsUrlHandler();
+        urlHandler.connect(EPFL_URL);
     }
 
     @Override
