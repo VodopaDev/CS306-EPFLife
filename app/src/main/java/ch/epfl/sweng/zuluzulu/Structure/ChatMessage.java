@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import com.google.firebase.Timestamp;
-
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +21,7 @@ public class ChatMessage {
         senderName = (String) data.get("senderName");
         sciper = (String) data.get("sciper");
         message = (String) data.get("message");
-        time = (Timestamp) data.get("time") ;
+        time = (Timestamp) data.get("time");
         ownMessage = sciper.equals(userSciper);
     }
 
