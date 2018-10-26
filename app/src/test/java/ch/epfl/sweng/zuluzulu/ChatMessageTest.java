@@ -49,7 +49,7 @@ public class ChatMessageTest {
     }
 
     @Test
-    public void testGuettersAndSetters() {
+    public void testGettersAndSetters() {
         assertEquals(senderName1, chatMessage1.getSenderName());
         assertEquals(sciper1, chatMessage1.getSciper());
         assertEquals(message1, chatMessage1.getMessage());
