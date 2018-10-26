@@ -105,7 +105,7 @@ public class EventTest {
     @Test
     public void comparableToIsCorrect() {
         assertEquals(NAME1.compareTo(NAME2),
-                Event.getComparator().compare(event0, event1));
+                Event.assoNameComparator().compare(event0, event1));
     }
 
 }

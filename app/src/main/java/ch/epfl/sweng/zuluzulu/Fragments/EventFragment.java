@@ -1,8 +1,10 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -90,7 +92,6 @@ public class EventFragment extends Fragment {
 
         default_sort_option = "name";
 
-        // TODO test
         fillEventLists(default_sort_option);
     }
 
@@ -121,35 +122,44 @@ public class EventFragment extends Fragment {
             }
         });
 
-        // TODO test
         checkbox_event_sort_name = view.findViewById(R.id.event_fragment_checkBox_sort_name);
         checkbox_event_sort_date = view.findViewById(R.id.event_fragment_checkBox_sort_date);
 
-        // TODO test
         checkbox_event_sort_name.setChecked(true);
         checkbox_event_sort_name.setEnabled(false);
 
-        // TODO test
-        checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkbox_event_sort_date.setEnabled(false);
-                emptyEventList();
-                fillEventLists("start_date");
-                checkbox_event_sort_name.setChecked(false);
-                checkbox_event_sort_name.setEnabled(true);
-            }
-        });
+//        checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                checkbox_event_sort_date.setEnabled(false);
+//                emptyEventList();
+//                fillEventLists("start_date");
+//                checkbox_event_sort_name.setChecked(false);
+//                checkbox_event_sort_name.setEnabled(true);
+//            }
+//        });
 
-        // TODO test
         checkbox_event_sort_name.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
                 checkbox_event_sort_name.setEnabled(false);
-                emptyEventList();
-                fillEventLists("name");
+                event_all.sort(Event.assoNameComparator());
+                event_adapter.notifyDataSetChanged();
                 checkbox_event_sort_date.setChecked(false);
                 checkbox_event_sort_date.setEnabled(true);
+            }
+        });
+
+        checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View v) {
+                checkbox_event_sort_date.setEnabled(false);
+                event_all.sort(Event.dateComparator());
+                event_adapter.notifyDataSetChanged();
+                checkbox_event_sort_name.setChecked(false);
+                checkbox_event_sort_name.setEnabled(true);
             }
         });
 
@@ -173,7 +183,6 @@ public class EventFragment extends Fragment {
         mListener = null;
     }
 
-    // TODO test
     private void emptyEventList(){
         event_all.clear();
         event_fav.clear();
@@ -189,7 +198,7 @@ public class EventFragment extends Fragment {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
                         for (int i = 0; i < snap_list.size(); i++) {
                             Event event = new Event(snap_list.get(i));
-                            Log.d("! TEST ID EVENT !", event.getId());
+                            Log.d("! TEST DATE EVENT !", event.getStart_date().toString());
                             event_all.add(event);
 
                             if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))

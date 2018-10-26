@@ -4,6 +4,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,4 +49,6 @@ public final class Utils {
     public static void removeIdFromList(String path, String field, Integer id) {
         FirebaseFirestore.getInstance().document(path).update(field, FieldValue.arrayRemove(id));
     }
+
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
 }

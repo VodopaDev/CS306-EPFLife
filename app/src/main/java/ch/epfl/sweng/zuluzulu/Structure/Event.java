@@ -3,11 +3,12 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import android.location.Location;
 import android.net.Uri;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.R;
@@ -28,8 +29,9 @@ public class Event implements Serializable {
     private List<Integer> admins;
 
     private Location pos;
-    private Date start_date;
-    private Date end_date;
+
+    private Timestamp start_date_timestamp;
+    private String start_date;
 
 
     /**
@@ -52,16 +54,25 @@ public class Event implements Serializable {
                 Uri.parse("android.ressource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(icon_str);
 
-        start_date = snap.getDate("start_date");
-        //end_date = snap.getDate("end_date");
+        start_date_timestamp = snap.getTimestamp("start_date");
+        start_date = Utils.dateFormat.format(snap.getTimestamp("start_date").toDate());
     }
 
     // maybe use id instead of name
-    public static Comparator<Event> getComparator() {
+    public static Comparator<Event> assoNameComparator() {
         return new Comparator<Event>() {
             @Override
             public int compare(Event o1, Event o2) {
                 return o1.getName().compareTo(o2.getName());
+            }
+        };
+    }
+
+    public static Comparator<Event> dateComparator() {
+        return new Comparator<Event>() {
+            @Override
+            public int compare(Event o1, Event o2) {
+                return o1.getStartDateTimestamp().compareTo(o2.getStartDateTimestamp());
             }
         };
     }
@@ -72,65 +83,65 @@ public class Event implements Serializable {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+//    public void setId(String id) {
+//        this.id = id;
+//    }
 
     public String getName() {
         return assos_name;
     }
 
-    public void setName(String assos_name) {
-        this.assos_name = assos_name;
-    }
+//    public void setName(String assos_name) {
+//        this.assos_name = assos_name;
+//    }
 
     public String getShort_desc() {
         return short_desc;
     }
 
-    public void setShort_desc(String description) {
-        this.short_desc = description;
-    }
+//    public void setShort_desc(String description) {
+//        this.short_desc = description;
+//    }
 
     public Uri getIcon() {
         return banner_uri;
     }
 
-    public void setIcon(Uri banner_uri) {
-        this.banner_uri = banner_uri;
-    }
-
-    public int getChat_id() {
-        return chat_id;
-    }
-
-    public void setChat_id(int chat_id) {
-        this.chat_id = chat_id;
-    }
-
-    public int getAsso_id() {
-        return asso_id;
-    }
-
-    public void setAsso_id(int asso_id) {
-        this.asso_id = asso_id;
-    }
-
-    public List<Integer> getAdmins() {
-        return admins;
-    }
-
-    public void setAdmins(List<Integer> admins) {
-        this.admins = admins;
-    }
-
-    public Location getPos() {
-        return pos;
-    }
-
-    public void setPos(Location pos) {
-        this.pos = pos;
-    }
+//    public void setIcon(Uri banner_uri) {
+//        this.banner_uri = banner_uri;
+//    }
+//
+//    public int getChat_id() {
+//        return chat_id;
+//    }
+//
+//    public void setChat_id(int chat_id) {
+//        this.chat_id = chat_id;
+//    }
+//
+//    public int getAsso_id() {
+//        return asso_id;
+//    }
+//
+//    public void setAsso_id(int asso_id) {
+//        this.asso_id = asso_id;
+//    }
+//
+//    public List<Integer> getAdmins() {
+//        return admins;
+//    }
+//
+//    public void setAdmins(List<Integer> admins) {
+//        this.admins = admins;
+//    }
+//
+//    public Location getPos() {
+//        return pos;
+//    }
+//
+//    public void setPos(Location pos) {
+//        this.pos = pos;
+//    }
 
     public String getLong_desc() {
         return long_desc;
@@ -139,13 +150,21 @@ public class Event implements Serializable {
 //    public void setLong_desc(String description) {
 //        this.long_desc = description;
 //    }
-
-    public void setLong_desc(String description) {
-        this.long_desc = description;
-    }
+//
+//    public void setLong_desc(String description) {
+//        this.long_desc = description;
+//    }
 
     public Uri getIconUri() {
         return icon_uri;
+    }
+
+    public String getStart_date() {
+        return start_date;
+    }
+
+    public Timestamp getStartDateTimestamp() {
+        return start_date_timestamp;
     }
 //
 //    public void setStart_date(Date start_date) {
@@ -159,12 +178,11 @@ public class Event implements Serializable {
 //    public void setEnd_date(Date end_date) {
 //        this.end_date = end_date;
 //    }
-
-    public void setIconUri(Uri icon) {
-        this.icon_uri = icon;
-    }
-
-    //
+//
+//    public void setIconUri(Uri icon) {
+//        this.icon_uri = icon;
+//    }
+//
 //    public int getChat_id() {
 //        return chat_id;
 //    }
@@ -197,9 +215,7 @@ public class Event implements Serializable {
 //        this.pos = pos;
 //    }
 //
-    public Date getStart_date() {
-        return start_date;
-    }
+
 
     /**
      * Check if a DocumentSnapshot correspond to an Event's one
