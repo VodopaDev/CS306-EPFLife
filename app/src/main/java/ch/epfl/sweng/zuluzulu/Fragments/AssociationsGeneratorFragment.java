@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AssociationsUrlHandler;
@@ -43,6 +45,14 @@ public class AssociationsGeneratorFragment extends Fragment {
         return fragment;
     }
 
+    private Void handleData(ArrayList<String> datas){
+        for (String data : datas) {
+            System.out.println(data.split(",").toString());
+        }
+
+        return null;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +60,7 @@ public class AssociationsGeneratorFragment extends Fragment {
             // handle hargs
         }
 
-        AssociationsUrlHandler urlHandler = new AssociationsUrlHandler();
+        AssociationsUrlHandler urlHandler = new AssociationsUrlHandler(this::handleData);
     }
 
     @Override
