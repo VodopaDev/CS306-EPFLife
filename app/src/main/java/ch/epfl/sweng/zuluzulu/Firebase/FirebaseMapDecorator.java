@@ -96,6 +96,15 @@ public class FirebaseMapDecorator {
     }
 
     /**
+     * Get the default type of a value
+     * @param field key to use on the map
+     * @return value
+     */
+    public Object get(String field){
+        return map.get(field);
+    }
+
+    /**
      * Check if the map has required fields
      * @param fields fields to be checked in the map
      * @return true if the map has all required fields (ie: not null), false otherwise
