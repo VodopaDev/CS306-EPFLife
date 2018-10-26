@@ -22,12 +22,12 @@ public class ChannelTest {
     private static Map data1 = new HashMap();
     private static Map data2 = new HashMap();
 
-    private static final int id1 = 1;
+    private static final Long id1 = 1l;
     private static final String name1 = "Global";
     private static final String description1 = "Global chat for everyone";
     private static final Map<String, Object> restrictions1 = new HashMap<>();
 
-    private static final int id2 = 2;
+    private static final Long id2 = 2l;
     private static final String name2 = "IN channel";
     private static final String description2 = "Channel just for the IN";
     private static final Map<String, Object> restrictions2 = new HashMap<>();
@@ -68,15 +68,15 @@ public class ChannelTest {
 
     @Test
     public void testGuettersAndSetters() {
-        assertEquals(id1, channelGlobal.getId());
+        assertEquals(id1.intValue(), channelGlobal.getId());
         assertEquals(name1, channelGlobal.getName());
         assertEquals(description1, channelGlobal.getDescription());
 
-        channelGlobal.setId(id2);
+        channelGlobal.setId(id2.intValue());
         channelGlobal.setName(name2);
         channelGlobal.setDescription(description2);
 
-        assertEquals(id2, channelGlobal.getId());
+        assertEquals(id2.intValue(), channelGlobal.getId());
         assertEquals(name2, channelGlobal.getName());
         assertEquals(description2, channelGlobal.getDescription());
     }
