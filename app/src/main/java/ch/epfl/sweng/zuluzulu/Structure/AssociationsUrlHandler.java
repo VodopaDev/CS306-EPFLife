@@ -5,5 +5,7 @@ public class AssociationsUrlHandler {
     public AssociationsUrlHandler()
     {
         System.out.println("hello world");
+
+
     }
 }
