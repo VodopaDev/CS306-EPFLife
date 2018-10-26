@@ -5,6 +5,7 @@ import android.text.Html;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -32,39 +33,20 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, Long> {
 
     public boolean connect(String url) {
         URL aURL = null;
-        HttpURLConnection myURLConnection;
+        HttpURLConnection UrlConnection;
         int code = 0;
         try {
             // Open url
             aURL = openUrl(url);
 
             // Open connection
-            myURLConnection = (HttpURLConnection) aURL.openConnection();
-            myURLConnection.connect();
+            UrlConnection = (HttpURLConnection) aURL.openConnection();
+            UrlConnection.connect();
 
-            System.out.println("length : " + myURLConnection.getContent());
-            System.out.println("length : " + myURLConnection.getContent().toString());
-
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(myURLConnection.getInputStream()));
-
-            Pattern p = Pattern.compile(".* <a href=\"(.*)\".*>(.*)</a>.*\\((.*>)?(.+).*\\)<.*br />.*");
-
-
-
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                Matcher m = p.matcher(inputLine);
-                if (m.find()) {
-                    System.out.println("Name : " + m.group(2));
-                    System.out.println("Description : " + m.group(4));
-                    System.out.println("-----------");
-                }
-            }
-            in.close();
+            parseData(UrlConnection.getInputStream());
 
             // Get HTTP response code
-            code = myURLConnection.getResponseCode();
+            code = UrlConnection.getResponseCode();
         } catch (MalformedURLException e) {
             System.out.println("ERROR ");
 
@@ -84,12 +66,32 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, Long> {
             return false;
         }
 
+        UrlConnection.disconnect();
 
 
         System.out.println("CONNECTED !");
 
 
         return true;
+    }
+
+    private void parseData(InputStream inputStream) throws IOException {
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(inputStream));
+
+
+        Pattern p = Pattern.compile("&#\\d+.* <a href=\"(.*)\".*>(.*)</a>.*\\((.+)\\)<.*br />.*");
+
+        String inputLine;
+        while ((inputLine = in.readLine()) != null) {
+            Matcher m = p.matcher(inputLine);
+            if (m.find()) {
+                System.out.println("Name : " + m.group(2));
+                System.out.println("Description : " + m.group(3));
+                System.out.println("-----------");
+            }
+        }
+        in.close();
     }
 
     private URL openUrl(String url) throws MalformedURLException {
