@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -45,7 +44,13 @@ public class AssociationsGeneratorFragment extends Fragment {
         return fragment;
     }
 
-    private Void handleData(ArrayList<String> datas){
+    /**
+     * This function will handle the generated datas
+     * We expect a arraylist of strings. Each information is separated by a coma in the string
+     * @param datas Received datas
+     * @return void
+     */
+    private Void handleData(ArrayList<String> datas) {
         for (String data : datas) {
             String[] values = data.split(",");
             for (String value : values) {

@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -38,27 +37,32 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, ArrayList<St
 
     @Override
     protected void onPostExecute(ArrayList<String> strings) {
-        if(strings != null) {
+        if (strings != null) {
             listener.apply(strings);
         }
     }
 
     private ArrayList<String> parseUrl(String url) {
 
-        HttpURLConnection urlConnection = null;
+        HttpURLConnection urlConnection;
+
         try {
+            // Connect to the url
             urlConnection = connect(url);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
 
-        if(urlConnection == null){
+
+        if (urlConnection == null) {
             return null;
         }
 
+
         ArrayList<String> datas = null;
         try {
+            // Parse the datas
             datas = parseData(urlConnection.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
@@ -95,7 +99,7 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, ArrayList<St
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(inputStream));
 
-
+        // regex
         Pattern p = Pattern.compile("&#\\d+.* <a href=\"(.*?)\".*>(.*)</a>.*\\((.+)\\)<.*br />.*");
 
         ArrayList<String> results = new ArrayList<>();
@@ -108,19 +112,14 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, ArrayList<St
                 // remove the span tag
                 String description = m.group(3).replaceAll("<.*>", "");
 
-
-                System.out.println("Name : " + m.group(2));
-                System.out.println("D3 : " + description);
-                System.out.println("-----------");
-
                 StringBuilder sb = new StringBuilder();
-
                 sb.append(m.group(1));
                 sb.append(',');
                 sb.append(m.group(2));
                 sb.append(',');
                 sb.append(description);
 
+                // Add datas separated by a ","
                 results.add(sb.toString());
             }
         }
