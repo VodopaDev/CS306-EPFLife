@@ -40,9 +40,6 @@ public class ChannelFragment extends Fragment {
     public static final String TAG = "CHANNEL_TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String CHANNELS_COLLECTION_NAME = "channels";
-    private static final String SECTION_CHANNEL_PREFIX = "Section";
-
-    private static final String USER_SECTION = "IN";
 
     private FirebaseFirestore db;
 
