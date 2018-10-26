@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AssociationsUrlHandler extends AsyncTask<String, Void, Long> {
 
@@ -46,9 +48,19 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, Long> {
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(myURLConnection.getInputStream()));
 
+            Pattern p = Pattern.compile(".*&#8211.* <a href=\"(.*)\".*>(.*)</a>.*\\((.*)\\)<.*br />.*");
+
+
+
             String inputLine;
-            while ((inputLine = in.readLine()) != null)
-                System.out.println(inputLine);
+            while ((inputLine = in.readLine()) != null) {
+                Matcher m = p.matcher(inputLine);
+                if (m.find()) {
+                    System.out.println("Name : " + m.group(2));
+                    System.out.println("Description : " + m.group(3));
+                    System.out.println("-----------");
+                }
+            }
             in.close();
 
             // Get HTTP response code
