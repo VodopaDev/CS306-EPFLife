@@ -48,7 +48,7 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, Long> {
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(myURLConnection.getInputStream()));
 
-            Pattern p = Pattern.compile(".*&#8211.* <a href=\"(.*)\".*>(.*)</a>.*\\((.*)\\)<.*br />.*");
+            Pattern p = Pattern.compile(".* <a href=\"(.*)\".*>(.*)</a>.*\\((.*>)?(.+).*\\)<.*br />.*");
 
 
 
@@ -57,7 +57,7 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, Long> {
                 Matcher m = p.matcher(inputLine);
                 if (m.find()) {
                     System.out.println("Name : " + m.group(2));
-                    System.out.println("Description : " + m.group(3));
+                    System.out.println("Description : " + m.group(4));
                     System.out.println("-----------");
                 }
             }
