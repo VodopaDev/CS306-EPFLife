@@ -1,31 +1,27 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentSnapshot;
-
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class that represents a chat message in a view
  */
 public class ChatMessage {
 
-    private static final List<String> fields = Arrays.asList("senderName", "sciper", "message", "time");
+    public static final List<String> FIELDS = Arrays.asList("senderName", "sciper", "message", "time");
     private String senderName;
     private String sciper;
     private String message;
-    private Timestamp time;
+    private Date time;
     private boolean ownMessage;
 
-    public ChatMessage(DocumentSnapshot snap, String userSciper) {
-        if (!Utils.isValidSnapshot(snap, fields)) {
-            throw new IllegalArgumentException("This is not a chat message snapshot");
-        }
-        senderName = snap.getString("senderName");
-        sciper = snap.getString("sciper");
-        message = snap.getString("message");
-        time = snap.getTimestamp("time");
+    public ChatMessage(Map data, String userSciper) {
+        senderName = (String) data.get("senderName");
+        sciper = (String) data.get("sciper");
+        message = (String) data.get("message");
+        time = (Date) data.get("time");
         ownMessage = sciper.equals(userSciper);
     }
 
@@ -98,14 +94,14 @@ public class ChatMessage {
      *
      * @return the creation time
      */
-    public Timestamp getTime() {
+    public Date getTime() {
         return time;
     }
 
     /**
      * Setter for the creation time
      */
-    public void setTime(Timestamp time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 }
