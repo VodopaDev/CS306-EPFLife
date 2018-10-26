@@ -30,6 +30,7 @@ public class Association implements Serializable {
     private Uri banner_uri;
 
     private List<Map<String, Object>> events;
+    private int channel_id;
     private int closest_event_id;
 
     /**
@@ -38,28 +39,38 @@ public class Association implements Serializable {
      * @param snap the document snapshot
      * @throws IllegalArgumentException if the snapshot isn't an Association's snapshot
      */
-    public Association(DocumentSnapshot snap) {
-        if (!Utils.isValidSnapshot(snap, firebase_fields))
+    public Association(DocumentSnapshot snap){
+        this(snap.getData());
+    }
+
+    /**
+     * Create an association using a Map
+     *
+     * @param map the map containing the association data
+     * @throws IllegalArgumentException if the snapshot isn't an Association's snapshot
+     */
+    public Association(FirebaseMap map) {
+        if (!)
             throw new IllegalArgumentException();
 
-        id = snap.getLong("id").intValue();
-        name = snap.getString("name");
-        short_desc = snap.getString("short_desc");
-        long_desc = snap.getString("long_desc");
-        events = snap.get("events") == null ?
+        id = ((Long)map.get("id")).intValue();
+        name = map.get("name").toString();
+        short_desc = map.get("short_desc").toString();
+        long_desc = map.get("long_desc").toString();
+        events = map.get("events") == null ?
                 new ArrayList<Map<String, Object>>() :
-                (List<Map<String, Object>>) snap.get("events");
-
+                (List<Map<String, Object>>) map.get("events");
         closest_event_id = computeClosestEvent();
+        channel_id = ((Long)map.get("channel_id")).intValue();
 
         // Init the Icon URI
-        String icon_str = snap.getString("icon_uri");
+        String icon_str = map.get("icon_uri").toString();
         icon_uri = icon_str == null ?
                 Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(icon_str);
 
         // Init the Banner URI
-        String banner_str = snap.getString("banner_uri");
+        String banner_str = map.get("banner_uri").toString();
         banner_uri = banner_str == null ?
                 Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
                 Uri.parse(banner_str);
