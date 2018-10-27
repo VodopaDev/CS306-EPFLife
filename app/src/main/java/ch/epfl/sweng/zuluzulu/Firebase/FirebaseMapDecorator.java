@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu.Structure;
+package ch.epfl.sweng.zuluzulu.Firebase;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;

@@ -1,4 +1,66 @@
 package ch.epfl.sweng.zuluzulu.Firebase;
 
+import com.google.common.collect.Maps;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.GeoPoint;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class FirebaseMapDecoratorTest {
+    Map<String,Object> map;
+
+    @Before
+    public void initMap(){
+        map = new HashMap<>();
+        map.put("int", 1L);
+        map.put("long", 1L);
+        map.put("string", "test");
+        map.put("map", Collections.EMPTY_MAP);
+        map.put("geopoint", new GeoPoint(1,1));
+        map.put("date", new Date(1L));
+        map.put("list", Collections.EMPTY_LIST);
+    }
+
+    @Test
+    public void hasFieldsTest(){
+        FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
+        assertThat(true, equalTo(fmap.hasFields(Arrays.asList("int", "geopoint"))));
+        assertThat(false, equalTo(fmap.hasFields(Arrays.asList("int", "carotte"))));
+    }
+
+    @Test
+    public void gettersTest(){
+        FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
+        assertThat(1, equalTo(fmap.getInteger("int")));
+        assertThat(1L, equalTo(fmap.getLong("long")));
+        assertThat("test", equalTo(fmap.getString("string")));
+        assertThat(true, equalTo(fmap.getList("list").isEmpty()));
+        assertThat(true, equalTo(fmap.getMap("map").isEmpty()));
+        assertThat(1L, equalTo(fmap.getDate("date").getTime()));
+        assertThat(1d, equalTo(fmap.getGeoPoint("geopoint").getLatitude()));
+        assertThat(true, equalTo(fmap.get("date") instanceof Date));
+    }
+
+    @Test
+    public void snapshotConstructor(){
+        DocumentSnapshot snap = mock(DocumentSnapshot.class);
+        when(snap.getData()).thenReturn(Collections.singletonMap("string", (Object)"test"));
+        FirebaseMapDecorator fmap2 = new FirebaseMapDecorator(snap);
+
+        assertThat("test", equalTo(fmap2.getString("string")));;
+    }
+
 }

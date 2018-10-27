@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
 
 /**
@@ -19,7 +20,7 @@ import ch.epfl.sweng.zuluzulu.R;
  * Has diverse getters and some functions to create views
  */
 public class Association implements Serializable {
-    private List<String> firebase_fields = Arrays.asList("id", "name", "short_desc", "long_desc");
+    private List<String> fields = Arrays.asList("id", "name", "short_desc", "long_desc", "channel_id");
 
     private int id;
     private String name;
@@ -40,37 +41,50 @@ public class Association implements Serializable {
      * @throws IllegalArgumentException if the snapshot isn't an Association's snapshot
      */
     public Association(DocumentSnapshot snap){
-        this(snap.getData());
+        this(new FirebaseMapDecorator(snap));
     }
 
     /**
-     * Create an association using a Map
+     * Create an association using a map
      *
-     * @param map the map containing the association data
-     * @throws IllegalArgumentException if the snapshot isn't an Association's snapshot
+     * @param map the document snapshot
+     * @throws IllegalArgumentException if the map isn't an Association's map
      */
-    public Association(FirebaseMap map) {
-        if (!)
-            throw new IllegalArgumentException();
+    public Association(Map<String,Object> map){
+        this(new FirebaseMapDecorator(map));
+    }
 
-        id = ((Long)map.get("id")).intValue();
-        name = map.get("name").toString();
-        short_desc = map.get("short_desc").toString();
-        long_desc = map.get("long_desc").toString();
-        events = map.get("events") == null ?
+    /**
+     * Create an association using a Firebase adapted map
+     *
+     * @param map the adapted map containing the association data
+     * @throws IllegalArgumentException if the map isn't an Association's map
+     */
+    public Association(FirebaseMapDecorator map) {
+        if (!map.hasFields(fields)) {
+            throw new IllegalArgumentException();
+        }
+
+        id = map.getInteger("id");
+        name = map.getString("name");
+        short_desc = map.getString("short_desc");
+        long_desc = map.getString("long_desc");
+        channel_id = map.getInteger("channel_id");
+
+        // Init the upcoming event
+        events = map.getMap("events") == null ?
                 new ArrayList<Map<String, Object>>() :
                 (List<Map<String, Object>>) map.get("events");
         closest_event_id = computeClosestEvent();
-        channel_id = ((Long)map.get("channel_id")).intValue();
 
         // Init the Icon URI
-        String icon_str = map.get("icon_uri").toString();
+        String icon_str = map.getString("icon_uri");
         icon_uri = icon_str == null ?
                 Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(icon_str);
 
         // Init the Banner URI
-        String banner_str = map.get("banner_uri").toString();
+        String banner_str = map.getString("banner_uri");
         banner_uri = banner_str == null ?
                 Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
                 Uri.parse(banner_str);
