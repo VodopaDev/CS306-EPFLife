@@ -15,11 +15,13 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.CoreMatchers.not;
 
 /**
  * Use this class for functions that are used in multiple tests
@@ -134,6 +136,15 @@ public class Utility {
      */
     public static void checkFragmentIsOpen(int id) {
         onView(withId(id)).check(matches(isDisplayed()));
+    }
+
+    /**
+     * Check if the fragment is not open
+     *
+     * @param id fragment id
+     */
+    public static void checkFragmentIsClosed(int id) {
+        onView(withId(id)).check(doesNotExist());
     }
 
     /**

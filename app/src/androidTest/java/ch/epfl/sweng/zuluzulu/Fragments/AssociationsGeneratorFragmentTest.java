@@ -17,6 +17,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.junit.Assert.assertFalse;
 
 public class AssociationsGeneratorFragmentTest extends TestWithAdminLogin {
 
@@ -34,7 +35,8 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminLogin {
 
     @Test
     public void refuseNonAdmin() {
-        
+        nonAdminUser();
+        Utility.checkFragmentIsClosed(R.id.associations_generator_fragment);
     }
 
     /**
