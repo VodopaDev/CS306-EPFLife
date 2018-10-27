@@ -14,6 +14,8 @@ import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AssociationsUrlHandler;
+import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
 
 /**
@@ -28,6 +30,7 @@ public class AssociationsGeneratorFragment extends Fragment {
     // The URL we will connect to
     final static public String EPFL_URL = "https://associations.epfl.ch/page-16300-fr-html/";
     private static final String ASSOCIATIONS_GENERATOR_TAG = "ASSOCIATIONS_GENERATOR_TAG";
+    private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
     private OnFragmentInteractionListener mListener;
 
     public AssociationsGeneratorFragment() {
@@ -38,7 +41,11 @@ public class AssociationsGeneratorFragment extends Fragment {
      * @return A new instance of fragment AssociationsGeneratorFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AssociationsGeneratorFragment newInstance() {
+    public static AssociationsGeneratorFragment newInstance(User user) {
+        if(!user.hasRole(ROLE_REQUIRED)){
+            return null;
+        }
+
         AssociationsGeneratorFragment fragment = new AssociationsGeneratorFragment();
         return fragment;
     }
@@ -74,10 +81,7 @@ public class AssociationsGeneratorFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            // handle hargs
-        }
-
+     
         AssociationsUrlHandler urlHandler = new AssociationsUrlHandler(this::handleData);
         urlHandler.execute(EPFL_URL);
 

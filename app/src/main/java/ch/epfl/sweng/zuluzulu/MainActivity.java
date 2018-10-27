@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 fragment = ChannelFragment.newInstance(user);
                 break;
             case R.id.nav_associations_generator:
-                fragment = AssociationsGeneratorFragment.newInstance();
+                fragment = AssociationsGeneratorFragment.newInstance(user);
                 break;
             default:
                 fragment = MainFragment.newInstance(user);
