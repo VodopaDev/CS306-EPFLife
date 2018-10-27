@@ -85,6 +85,9 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     private OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
     private String code;
     private User user;
+    private String codeRequestUrl;
+
+
     public LoginFragment() {
         // Required empty public constructor
     }
@@ -159,12 +162,22 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      * Is executed once the session is active
      * Log in the main activity
      */
-    private void activate_session() {
+    private void transfer_main(boolean isWebView) {
         // Pass the user to the activity
+
         Map<Integer,Object> toTransfer = new HashMap<Integer, Object>();
-        toTransfer.put(0,user);
-        toTransfer.put(1,code);
-        toTransfer.put(2,config);
+        toTransfer.put(0,isWebView);
+
+        if(isWebView){
+            toTransfer.put(1,codeRequestUrl);
+        }
+        else{
+
+            toTransfer.put(1,user);
+            toTransfer.put(2,code);
+            toTransfer.put(3,config);
+        }
+
         mListener.onFragmentInteraction(TAG, toTransfer);
     }
 
@@ -201,7 +214,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
                     map.put("followed_events", new ArrayList<Integer>());
                     map.put("followed_chats", new ArrayList<Integer>());
                     ref.set(map);
-                    activate_session();
+                    transfer_main(false);
                 } else if (Utils.isValidSnapshot(documentSnapshot, AuthenticatedUser.fields)) {
                     List<Integer> received_assos = Utils.longListToIntList((List<Long>) documentSnapshot.get("fav_assos"));
                     List<Integer> received_events = Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_events"));
@@ -210,7 +223,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
                     ((AuthenticatedUser) user).setFavAssos(received_assos);
                     ((AuthenticatedUser) user).setFollowedEvents(received_events);
                     ((AuthenticatedUser) user).setFollowedChats(received_chats);
-                    activate_session();
+                    transfer_main(false);
                 }
             }
         });
@@ -234,10 +247,11 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         // Reset errors.
         reset_errors();
 
-        String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
-        System.out.print(codeRequestUrl);
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(codeRequestUrl));
-        startActivity(browserIntent);
+        codeRequestUrl = AuthClient.createCodeRequestUrl(config);
+        transfer_main(true);
+
+       /* Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(codeRequestUrl));
+        startActivity(browserIntent);*/
     }
 
     /**

@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.Espresso.pressBackUnconditionally;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -57,6 +58,14 @@ public class LoginTest {
         //You have to test if it works for wrong credentials, if it login properly and if you have any
         //other idea you are welcome to test them
         onView(withId(R.id.login_fragment)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void comeBackOnTheLoginAndIsStillNotConnected(){
+        onView(withId(R.id.sign_in_button)).perform(click());
+        pressBack();
+        onView(withId(R.id.login_fragment)).check(matches(isDisplayed()));
+
     }
 
 }

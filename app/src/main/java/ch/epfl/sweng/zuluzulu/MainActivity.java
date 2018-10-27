@@ -32,6 +32,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
@@ -49,6 +50,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private User user;
     private String code;
     private OAuth2Config config;
+
+    private boolean isLogin = false;
+    private boolean openingWebView = false;
+
+    private String urlCode;
 
 
     //(temporary) store the URI from the browser
@@ -169,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * @param menuItem The item that corresponds to a fragment on the menu
      */
 
-    private boolean isLogin = false;
     private void selectItem(MenuItem menuItem) {
 
         Fragment fragment;
@@ -231,6 +236,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
+
     public boolean openFragment(Fragment fragment) {
         if (fragment != null) {
             //if is a login fragment then set argument with the URI
@@ -242,6 +248,13 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 fragment.setArguments(toSend);
             }
             //////////////////////////////////////////////////////////
+
+            if(openingWebView){
+                openingWebView = false;
+                Bundle toSend = new Bundle(1);
+                toSend.putString("",urlCode);
+                fragment.setArguments(toSend);
+            }
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
@@ -275,11 +288,19 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         switch (tag) {
             case LoginFragment.TAG:
                 Map<Integer, Object> received = (HashMap<Integer,Object>) data;
-                this.user = (User) received.get(0);
-                this.code = (String) received.get(1);
-                this.config = (OAuth2Config) received.get(2);
-                updateMenuItems();
-                selectItem(navigationView.getMenu().findItem(R.id.nav_main));
+                openingWebView = (boolean) received.get(0);
+                if(openingWebView){
+                    this.urlCode = (String) received.get(1);
+                    Fragment web = WebViewFragment.newInstance();
+                    openFragment(web);
+                }
+                else{
+                    this.user = (User) received.get(1);
+                    this.code = (String) received.get(2);
+                    this.config = (OAuth2Config) received.get(3);
+                    updateMenuItems();
+                    selectItem(navigationView.getMenu().findItem(R.id.nav_main));
+                }
                 break;
             case ChannelFragment.TAG:
                 int channelID = (Integer) data;
