@@ -21,6 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChannelAdapter;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
@@ -131,8 +132,9 @@ public class ChannelFragment extends Fragment {
                             listOfChannels.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                if (Utils.isValidSnapshot(document, Channel.FIELDS)) {
-                                    Channel channel = new Channel(document.getData());
+                                FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
+                                if (fmap.hasFields(Channel.FIELDS)) {
+                                    Channel channel = new Channel(fmap);
                                     if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user)) {
                                         listOfChannels.add(channel);
                                     }

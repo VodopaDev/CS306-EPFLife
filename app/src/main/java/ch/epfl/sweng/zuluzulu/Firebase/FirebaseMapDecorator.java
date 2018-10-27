@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.Firebase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -93,6 +94,32 @@ public class FirebaseMapDecorator {
      */
     public List<Object> getList(String field){
         return (List<Object>) map.get(field);
+    }
+
+    /**
+     * Get a LongList-casted value from the adapted map
+     * @param field key to use on the map
+     * @return LongList-casted value
+     */
+    public List<Long> getLongList(String field){
+        return (List<Long>) map.get(field);
+    }
+
+    /**
+     * Get a IntegerList-casted value from the adapted map
+     * @param field key to use on the map
+     * @return IntegerList-casted value
+     */
+    public List<Integer> getIntegerList(String field){
+        List<Long> intermediate = getLongList(field);
+        List<Integer> result = new ArrayList<>();
+        if(intermediate == null)
+            return result;
+
+        for(Long item: intermediate)
+            result.add(item.intValue());
+
+        return result;
     }
 
     /**

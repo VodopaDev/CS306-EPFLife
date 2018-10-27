@@ -13,9 +13,6 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.R;
 
 public class Event implements Serializable {
-
-    private static final String IMAGE_PATH = "events/event";
-    private static final String ICON_EXT = "_icon.png";
     private int id;
     private String name;
     private String short_desc;
@@ -29,9 +26,7 @@ public class Event implements Serializable {
 
     private Location pos;
     private Date start_date;
-    private Date end_date;
 
-    // TODO: Get data from cloud service using the id
     public Event(DocumentSnapshot snap) {
         this(snap, null);
     }

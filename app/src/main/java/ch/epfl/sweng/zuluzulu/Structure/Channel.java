@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+
 /**
  * Class that represents a channel in a view
  */
@@ -17,11 +19,11 @@ public class Channel {
     private String description;
     private Map<String, Object> restrictions;
 
-    public Channel(Map data) {
-        this.id = ((Long) data.get("id")).intValue();
-        this.name = (String) data.get("name");
-        this.description = (String) data.get("description");
-        this.restrictions = (Map) data.get("restrictions");
+    public Channel(FirebaseMapDecorator data) {
+        this.id = data.getInteger("id");
+        this.name = data.getString("name");
+        this.description = data.getString("description");
+        this.restrictions = data.getMap("restrictions");
     }
 
     /**

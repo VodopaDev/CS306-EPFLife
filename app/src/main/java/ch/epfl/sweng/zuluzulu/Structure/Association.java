@@ -57,34 +57,34 @@ public class Association implements Serializable {
     /**
      * Create an association using a Firebase adapted map
      *
-     * @param map the adapted map containing the association data
+     * @param data the adapted map containing the association data
      * @throws IllegalArgumentException if the map isn't an Association's map
      */
-    public Association(FirebaseMapDecorator map) {
-        if (!map.hasFields(fields)) {
+    public Association(FirebaseMapDecorator data) {
+        if (!data.hasFields(fields)) {
             throw new IllegalArgumentException();
         }
 
-        id = map.getInteger("id");
-        name = map.getString("name");
-        short_desc = map.getString("short_desc");
-        long_desc = map.getString("long_desc");
-        channel_id = map.getInteger("channel_id");
+        id = data.getInteger("id");
+        name = data.getString("name");
+        short_desc = data.getString("short_desc");
+        long_desc = data.getString("long_desc");
+        channel_id = data.getInteger("channel_id");
 
         // Init the upcoming event
-        events = map.get("events") == null ?
+        events = data.get("events") == null ?
                 new ArrayList<Map<String, Object>>() :
-                (List<Map<String, Object>>) map.get("events");
+                (List<Map<String, Object>>) data.get("events");
         closest_event_id = computeClosestEvent();
 
         // Init the Icon URI
-        String icon_str = map.getString("icon_uri");
+        String icon_str = data.getString("icon_uri");
         icon_uri = icon_str == null ?
                 Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(icon_str);
 
         // Init the Banner URI
-        String banner_str = map.getString("banner_uri");
+        String banner_str = data.getString("banner_uri");
         banner_uri = banner_str == null ?
                 Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
                 Uri.parse(banner_str);

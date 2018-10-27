@@ -8,6 +8,7 @@ import org.junit.runners.JUnit4;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.User;
@@ -62,8 +63,8 @@ public class ChannelTest {
         data2.put("description", description2);
         data2.put("restrictions", restrictions2);
 
-        channelGlobal = new Channel(data1);
-        channelIN = new Channel(data2);
+        channelGlobal = new Channel(new FirebaseMapDecorator(data1));
+        channelIN = new Channel(new FirebaseMapDecorator(data2));
     }
 
     @Test

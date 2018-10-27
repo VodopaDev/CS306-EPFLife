@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 
 import static org.junit.Assert.assertEquals;
@@ -44,8 +45,8 @@ public class ChatMessageTest {
         data2.put("message", message2);
         data2.put("time", time);
 
-        chatMessage1 = new ChatMessage(data1, userSciper);
-        chatMessage2 = new ChatMessage(data2, userSciper);
+        chatMessage1 = new ChatMessage(new FirebaseMapDecorator(data1), userSciper);
+        chatMessage2 = new ChatMessage(new FirebaseMapDecorator(data2), userSciper);
     }
 
     @Test
