@@ -19,10 +19,10 @@ public abstract class TestWithLogin {
             new ActivityTestRule<>(MainActivity.class, false, false);
 
 
-    protected User user;
+    private User user;
 
     @Before
-    public void setUp() {
+    public void setUpLogin() {
         this.user = Utility.createTestUser();
         Utility.addUserToMainIntent(mActivityRule, this.user);
     }

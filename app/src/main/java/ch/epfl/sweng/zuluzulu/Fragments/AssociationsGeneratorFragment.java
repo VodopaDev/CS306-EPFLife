@@ -26,12 +26,11 @@ import ch.epfl.sweng.zuluzulu.Structure.UserRole;
  * Use the {@link AssociationsGeneratorFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AssociationsGeneratorFragment extends Fragment {
+public class AssociationsGeneratorFragment extends SuperFragment {
     // The URL we will connect to
     final static public String EPFL_URL = "https://associations.epfl.ch/page-16300-fr-html/";
     private static final String ASSOCIATIONS_GENERATOR_TAG = "ASSOCIATIONS_GENERATOR_TAG";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
-    private OnFragmentInteractionListener mListener;
 
     public AssociationsGeneratorFragment() {
         // Required empty public constructor
@@ -94,22 +93,5 @@ public class AssociationsGeneratorFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_associations_generator, container, false);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 }
