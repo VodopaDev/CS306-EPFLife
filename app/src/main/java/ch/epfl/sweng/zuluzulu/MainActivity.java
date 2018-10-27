@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -43,9 +44,21 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     private User user;
 
+    // This resource is used for tests
+    // That's the recommanded way to implement it
+    // @see https://developer.android.com/training/testing/espresso/idling-resource#integrate-recommended-approach
+    private CountingIdlingResource resource;
+
+    // Const used to send a Increment or Decrement message
+    public final static String INCREMENT = "increment";
+    public final static String DECREMENT = "decrement";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Create the resource
+        resource = new CountingIdlingResource("Main Activity");
 
         // Needed to use Firebase storage and Firestore
         FirebaseApp.initializeApp(getApplicationContext());
@@ -246,6 +259,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 Association association = (Association) data;
                 openFragment(AssociationDetailFragment.newInstance(user, association));
                 break;
+            case INCREMENT:
+                this.incrementCountingIdlingResource();
+                break;
+            case DECREMENT:
+                this.decrementCountingIdlingResource();
+                break;
 //            case EventDetailFragment.TAG:
 //                Event event = (Event) data;
 //                openFragment(EventDetailFragment.newInstance(user, event));
@@ -280,5 +299,21 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      */
     public User getUser() {
         return user;
+    }
+
+    /**
+     * Increment the countingIdlingResource
+     * Do this before a async task
+     */
+    public void incrementCountingIdlingResource() {
+        resource.increment();
+    }
+
+    /**
+     * Decrement the countingIdlingResource
+     * Do this after a async task
+     */
+    public void decrementCountingIdlingResource() {
+        resource.decrement();
     }
 }

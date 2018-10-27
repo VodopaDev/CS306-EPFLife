@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.os.AsyncTask;
+import android.support.test.espresso.idling.CountingIdlingResource;
 
 import java.io.BufferedReader;
 import java.io.IOException;

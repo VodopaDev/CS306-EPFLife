@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AssociationsUrlHandler;
@@ -66,6 +67,9 @@ public class AssociationsGeneratorFragment extends Fragment {
             view.append(sb.toString());
         }
 
+        // Tell tests the async execution is finished
+        mListener.onFragmentInteraction(MainActivity.DECREMENT, true);
+
         return null;
     }
 
@@ -78,6 +82,9 @@ public class AssociationsGeneratorFragment extends Fragment {
 
         AssociationsUrlHandler urlHandler = new AssociationsUrlHandler(this::handleData);
         urlHandler.execute(EPFL_URL);
+
+        // Send increment to wait async execution in test
+        mListener.onFragmentInteraction(MainActivity.INCREMENT, true);
     }
 
     @Override
