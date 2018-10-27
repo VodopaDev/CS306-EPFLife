@@ -57,20 +57,12 @@ public class AssociationsGeneratorFragment extends Fragment {
         TextView view = getView().findViewById(R.id.associations_generator_list_values);
         if (datas != null) {
             // TEMPORARY CODE
-            // Need to be remplace by fill the database
-
+            // Need to be replace by fill the database
             view.setText(datas.size() + " ASSOCIATIONS FOUND : \n\n");
+
             for (String data : datas) {
-                String[] values = data.split(",");
-
-                StringBuilder sb = new StringBuilder();
-                for (String value : values) {
-                    sb.append(value);
-                    sb.append("\n");
-                }
-                sb.append("--------\n");
-
-                view.append(sb.toString());
+                view.append(data.replaceAll(",", "\n"));
+                view.append("\n-----------\n");
             }
         } else {
             view.setText("ERROR NETWORK");
