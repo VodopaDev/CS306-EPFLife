@@ -73,12 +73,4 @@ public class MenuAsGuestTest {
 
         Utility.checkFragmentIsOpen(R.id.about_fragment);
     }
-
-    @Test
-    public void testCanOpenAssociationsGenerator() {
-        onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_associations_generator));
-
-        Utility.checkFragmentIsOpen(R.id.associations_generator_fragment);
-    }
 }

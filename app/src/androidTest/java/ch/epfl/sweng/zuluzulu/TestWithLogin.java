@@ -19,7 +19,7 @@ public abstract class TestWithLogin {
             new ActivityTestRule<>(MainActivity.class, false, false);
 
 
-    private User user;
+    protected User user;
 
     @Before
     public void setUp() {

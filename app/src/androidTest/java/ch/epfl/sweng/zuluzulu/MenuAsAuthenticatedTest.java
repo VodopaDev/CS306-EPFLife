@@ -20,15 +20,6 @@ public class MenuAsAuthenticatedTest extends TestWithLogin {
     }
 
     @Test
-    public void testUserCanOpenFriendsFragment() {
-        onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_friends));
-
-
-        // Check if it's open TODO when created
-    }
-
-    @Test
     public void testUserCanOpenChannelFragment() {
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_chat));
