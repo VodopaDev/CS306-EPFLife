@@ -27,7 +27,7 @@ public class AssociationsGeneratorFragment extends Fragment {
     private static final String ASSOCIATIONS_GENERATOR_TAG = "ASSOCIATIONS_GENERATOR_TAG";
 
     // The URL we will connect to
-    final static private String EPFL_URL = "https://associations.epfl.ch/page-16300-fr-html/";
+    final static public String EPFL_URL = "https://associations.epfl.ch/page-16300-fr-html/";
 
 
     private OnFragmentInteractionListener mListener;
@@ -77,6 +77,7 @@ public class AssociationsGeneratorFragment extends Fragment {
         }
 
         AssociationsUrlHandler urlHandler = new AssociationsUrlHandler(this::handleData);
+        urlHandler.execute(EPFL_URL);
     }
 
     @Override

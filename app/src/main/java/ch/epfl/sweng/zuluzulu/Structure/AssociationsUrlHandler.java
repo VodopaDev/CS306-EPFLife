@@ -2,8 +2,6 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.os.AsyncTask;
 
-import com.google.common.html.HtmlEscapers;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,9 +20,9 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, ArrayList<St
     // Function that will be executed onPostExecute
     private Function<ArrayList<String>, Void> listener;
 
+
     public AssociationsUrlHandler(Function<ArrayList<String>, Void> listener) {
         this.listener = listener;
-        this.execute("https://associations.epfl.ch/page-16300-fr-html/");
     }
 
 
@@ -32,16 +30,13 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, ArrayList<St
     protected ArrayList<String> doInBackground(String... urls) {
         ArrayList<String> result = parseUrl(urls[0]);
 
-
         return result;
     }
 
 
     @Override
     protected void onPostExecute(ArrayList<String> strings) {
-        if (strings != null) {
-            listener.apply(strings);
-        }
+        listener.apply(strings);
     }
 
     private ArrayList<String> parseUrl(String url) {
@@ -96,7 +91,12 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, ArrayList<St
         return UrlConnection;
     }
 
-
+    /**
+     * This function will parse the datas and return a arraylist of strings
+     * @param inputStream Input stream
+     * @return ArrayList of strings , values separated by a comma
+     * @throws IOException On error - To be handled
+     */
     private ArrayList<String> parseData(InputStream inputStream) throws IOException {
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(inputStream, "UTF-8"));
@@ -135,6 +135,12 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, ArrayList<St
         return results;
     }
 
+    /**
+     * Open the url
+     * @param url url
+     * @return a URL object
+     * @throws MalformedURLException On bad url
+     */
     private URL openUrl(String url) throws MalformedURLException {
         return new URL(url);
     }
