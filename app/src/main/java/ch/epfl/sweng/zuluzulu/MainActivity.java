@@ -316,4 +316,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public void decrementCountingIdlingResource() {
         resource.decrement();
     }
+
+    /**
+     * Return the resource for the tests
+     * @return resource
+     */
+    public CountingIdlingResource getCountingIdlingResource() {
+        return resource;
+    }
 }
