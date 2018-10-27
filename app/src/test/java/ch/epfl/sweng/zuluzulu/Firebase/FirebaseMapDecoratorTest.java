@@ -10,14 +10,17 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mockito;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -35,6 +38,8 @@ public class FirebaseMapDecoratorTest {
         map.put("geopoint", new GeoPoint(1,1));
         map.put("date", new Date(1L));
         map.put("list", Collections.EMPTY_LIST);
+        map.put("long_list", Arrays.asList(1L,2L));
+        map.put("non_existent_list", null);
     }
 
     @Test
@@ -55,6 +60,9 @@ public class FirebaseMapDecoratorTest {
         assertThat(1L, equalTo(fmap.getDate("date").getTime()));
         assertThat(1d, equalTo(fmap.getGeoPoint("geopoint").getLatitude()));
         assertThat(true, equalTo(fmap.get("date") instanceof Date));
+        assertThat(Arrays.asList(1L, 2L), equalTo(fmap.getLongList("long_list")));
+        assertThat(Arrays.asList(1, 2), equalTo(fmap.getIntegerList("long_list")));
+        assertThat(new ArrayList<Integer>(), equalTo(fmap.getIntegerList("non_existent_list")));
     }
 
     @Test

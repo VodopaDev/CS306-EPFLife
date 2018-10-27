@@ -63,28 +63,6 @@ public class AuthenticatedUser extends User {
         Utils.removeIdFromList(firestore_path, "fav_assos", asso.getId());
     }
 
-    /**
-     * public void addFollowedEvent(Event event) {
-     * followed_events.add(event.getId());
-     * Utils.addIdToList(firestore_path, "followed_events", event.getId());
-     * }
-     * <p>
-     * public void removeFollowedEvent(Event event) {
-     * followed_events.remove((Integer) event.getId());
-     * Utils.removeIdFromList(firestore_path, "followed_events", event.getId());
-     * }
-     * <p>
-     * public void addFollowedChat(Channel channel) {
-     * followed_chats.add(channel.getId());
-     * Utils.addIdToList(firestore_path, "followed_chats", channel.getId());
-     * }
-     * <p>
-     * public void removeFollowedChat(Channel channel) {
-     * followed_chats.remove((Integer)channel.getId());
-     * Utils.removeIdFromList(firestore_path, "followed_chats", channel.getId());
-     * }
-     */
-
     public void setFollowedChats(List<Integer> followed_chats) {
         this.followed_chats = followed_chats;
     }
