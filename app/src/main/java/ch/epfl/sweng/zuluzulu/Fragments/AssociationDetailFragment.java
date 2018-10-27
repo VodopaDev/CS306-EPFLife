@@ -19,6 +19,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -180,13 +181,18 @@ public class AssociationDetailFragment extends Fragment {
                     .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    upcoming_event = new Event(documentSnapshot);
-                    upcoming_event_name.setText(upcoming_event.getName());
-                    upcoming_event_date.setText(new Timestamp(upcoming_event.getStart_date()).toString());
-                    Glide.with(getContext())
-                            .load(upcoming_event.getIconUri())
-                            .centerCrop()
-                            .into(upcoming_event_icon);
+                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                    if(fmap.hasFields(Event.FIELDS)) {
+                        upcoming_event = new Event(fmap);
+                        upcoming_event_name.setText(upcoming_event.getName());
+                        upcoming_event_date.setText(upcoming_event.getStartDate().toString());
+                        Glide.with(getContext())
+                                .load(upcoming_event.getIconUri())
+                                .centerCrop()
+                                .into(upcoming_event_icon);
+                    }
+                    else
+                        upcoming_event_name.setText("Error loading the event :(");
                 }
             });
         } else {

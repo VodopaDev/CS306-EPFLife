@@ -20,7 +20,7 @@ import ch.epfl.sweng.zuluzulu.R;
  * Has diverse getters and some functions to create views
  */
 public class Association implements Serializable {
-    private List<String> fields = Arrays.asList("id", "name", "short_desc", "long_desc", "channel_id");
+    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "channel_id");
 
     private int id;
     private String name;
@@ -61,7 +61,7 @@ public class Association implements Serializable {
      * @throws IllegalArgumentException if the map isn't an Association's map
      */
     public Association(FirebaseMapDecorator data) {
-        if (!data.hasFields(fields)) {
+        if (!data.hasFields(FIELDS)) {
             throw new IllegalArgumentException();
         }
 
