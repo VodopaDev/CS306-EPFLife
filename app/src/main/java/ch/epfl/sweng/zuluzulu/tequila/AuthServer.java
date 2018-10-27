@@ -3,6 +3,9 @@ package ch.epfl.sweng.zuluzulu.tequila;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,6 +61,12 @@ public final class AuthServer {
         builder.setFollowedEvents(new ArrayList<Integer>());
 
         return builder.buildAuthenticatedUser();
+    }
+
+    public static void logoutTequila(String url) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.connect();
+        connection.disconnect();
     }
 
 

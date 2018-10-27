@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,7 +9,9 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.tequila.HttpUtils;
 
 
 public class WebViewFragment extends Fragment {
@@ -32,7 +35,18 @@ public class WebViewFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_webview, container, false);
         webview = (WebView) view.findViewById(R.id.webview);
-        webview.setWebViewClient(new WebViewClient());
+        webview.setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView wView, String url) {
+                if(url.contains("code=")){
+                    Intent intent = new Intent(getActivity(),MainActivity.class);
+                    intent.putExtra("redirectUri",url);
+                    startActivity(intent);
+                    return true;
+                }
+                return false;
+            }
+        });
         webview.loadUrl(url);
 
         return view;

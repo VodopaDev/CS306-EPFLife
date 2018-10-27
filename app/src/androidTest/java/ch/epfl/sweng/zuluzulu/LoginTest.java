@@ -16,6 +16,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.concurrent.TimeUnit;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.Espresso.pressBackUnconditionally;
@@ -61,10 +63,9 @@ public class LoginTest {
     }
 
     @Test
-    public void comeBackOnTheLoginAndIsStillNotConnected(){
+    public void canSeetheWebView(){
         onView(withId(R.id.sign_in_button)).perform(click());
-        pressBack();
-        onView(withId(R.id.login_fragment)).check(matches(isDisplayed()));
+        onView(withId(R.id.webview)).check(matches(isDisplayed()));
 
     }
 

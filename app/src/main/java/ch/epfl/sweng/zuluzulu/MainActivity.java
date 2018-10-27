@@ -17,6 +17,7 @@ import android.view.MenuItem;
 
 import com.google.firebase.FirebaseApp;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import java.util.HashMap;
@@ -36,6 +37,8 @@ import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
+import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
+import ch.epfl.sweng.zuluzulu.tequila.HttpUtils;
 import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
 
 //import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
@@ -82,9 +85,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         Intent i = getIntent();
 
-        if(Intent.ACTION_VIEW.equals(i.getAction())){
+        if((redirectURIwithCode= i.getStringExtra("redirectUri")) != null){
             //get the redirectURI with the code from the intent
-            redirectURIwithCode = i.getDataString();
             selectItem(navigationView.getMenu().findItem(R.id.nav_login));
         } else {
             // Look if there is a user object set
@@ -212,10 +214,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
                 //create a logout URL and open it in the browser
                 String logoutURL = AuthClient.createCodeRequestUrlLogout(config, code);
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(logoutURL));
-                startActivity(browserIntent);
-
-
+                try{
+                AuthServer.logoutTequila(logoutURL);
+                }catch(IOException e){
+                    System.out.print("Error while logging out");
+                }
                 code = null;
                 redirectURIwithCode = null;
                 updateMenuItems();
