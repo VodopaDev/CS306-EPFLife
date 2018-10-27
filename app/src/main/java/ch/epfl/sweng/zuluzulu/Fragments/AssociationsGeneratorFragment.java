@@ -81,7 +81,7 @@ public class AssociationsGeneratorFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-     
+
         AssociationsUrlHandler urlHandler = new AssociationsUrlHandler(this::handleData);
         urlHandler.execute(EPFL_URL);
 

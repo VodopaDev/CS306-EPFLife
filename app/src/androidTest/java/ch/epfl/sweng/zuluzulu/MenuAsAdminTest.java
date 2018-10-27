@@ -8,13 +8,10 @@ import org.junit.Test;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-public class MenuAsAdminTest extends TestWithLogin {
+public class MenuAsAdminTest extends TestWithAdminLogin {
 
     @Before
-    public void setUp() {
-        this.user = Utility.createTestAdmin();
-        Utility.addUserToMainIntent(mActivityRule, this.user);
-
+    public void init() {
         Utility.openMenu();
     }
 
