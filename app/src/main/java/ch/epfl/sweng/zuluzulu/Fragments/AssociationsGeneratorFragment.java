@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -52,9 +53,12 @@ public class AssociationsGeneratorFragment extends Fragment {
      * @param datas Received datas
      * @return void
      */
-    private Void handleData(ArrayList<String> datas) {
+    private Void handleData(List<String> datas) {
+        TextView view = getView().findViewById(R.id.associations_generator_list_values);
         if (datas != null) {
-            TextView view = getView().findViewById(R.id.associations_generator_list_values);
+            // TEMPORARY CODE
+            // Need to be remplace by fill the database
+
             view.setText(datas.size() + " ASSOCIATIONS FOUND : \n\n");
             for (String data : datas) {
                 String[] values = data.split(",");
@@ -68,6 +72,8 @@ public class AssociationsGeneratorFragment extends Fragment {
 
                 view.append(sb.toString());
             }
+        } else {
+            view.setText("ERROR NETWORK");
         }
 
         // Tell tests the async execution is finished

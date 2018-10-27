@@ -9,6 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
@@ -71,7 +72,7 @@ public class AssociationsUrlHandlerTest {
      * @param result arrayList
      * @return Void
      */
-    private Void handler(ArrayList<String> result){
+    private Void handler(List<String> result){
         // Do any logic. Here we want result not to be null
         succes = result != null;
 

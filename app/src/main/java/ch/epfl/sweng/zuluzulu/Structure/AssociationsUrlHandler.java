@@ -11,32 +11,33 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.opencensus.common.Function;
 
-public class AssociationsUrlHandler extends AsyncTask<String, Void, ArrayList<String>> {
+public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>> {
 
     // Function that will be executed onPostExecute
-    private Function<ArrayList<String>, Void> listener;
+    private Function<List<String>, Void> listener;
 
 
-    public AssociationsUrlHandler(Function<ArrayList<String>, Void> listener) {
+    public AssociationsUrlHandler(Function<List<String>, Void> listener) {
         this.listener = listener;
     }
 
 
     @Override
-    protected ArrayList<String> doInBackground(String... urls) {
-        ArrayList<String> result = parseUrl(urls[0]);
+    protected List<String> doInBackground(String... urls) {
+        List<String> result = parseUrl(urls[0]);
 
         return result;
     }
 
 
     @Override
-    protected void onPostExecute(ArrayList<String> strings) {
+    protected void onPostExecute(List<String> strings) {
         listener.apply(strings);
     }
 
