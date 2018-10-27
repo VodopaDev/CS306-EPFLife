@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,5 +48,11 @@ public final class Utils {
 
     public static void removeIdFromList(String path, String field, Integer id) {
         FirebaseFirestore.getInstance().document(path).update(field, FieldValue.arrayRemove(id));
+    }
+
+    public static double distanceBetween(GeoPoint p1, GeoPoint p2) {
+        double x = p1.getLatitude() - p2.getLatitude();
+        double y = p1.getLongitude() - p2.getLongitude();
+        return Math.sqrt(x*x + y*y);
     }
 }

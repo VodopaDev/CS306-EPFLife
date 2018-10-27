@@ -138,7 +138,7 @@ public class ChannelFragment extends Fragment {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 if (Utils.isValidSnapshot(document, Channel.FIELDS)) {
                                     Channel channel = new Channel(document.getData());
-                                    if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user)) {
+                                    if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user, gps.getLocation())) {
                                         listOfChannels.add(channel);
                                     }
                                 }
