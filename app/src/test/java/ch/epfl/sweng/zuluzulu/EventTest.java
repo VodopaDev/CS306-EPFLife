@@ -2,6 +2,7 @@ package ch.epfl.sweng.zuluzulu;
 
 import android.net.Uri;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import org.junit.Before;
@@ -9,101 +10,114 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.Mockito;
-import java.util.Date;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 //import java.util.Date;
 
 @RunWith(JUnit4.class)
 public class EventTest {
-    private static final String NAME1 = "forumEpfl  ";
+    private static final String NAME1 = "ForumEpfl";
     private static final String NAME2 = "JuniorEnterprise";
 
     private static final String SHORT_DESC = "Beuverie à Zelig";
     private static final String LONG_DESC = "This is only random bla bla bla";
-    private static final String ICON_URI_STRING = "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso4_icon.png?alt=media&token=e2c5206d-32a6-43e1-a9a8-da941f553e64";
-    private static final Date START_DATE = new Date();
-    private final Uri mocked_icon_uri = Mockito.mock(Uri.class);
-    private final DocumentSnapshot mocked_valid_datasnap1 = Mockito.mock(DocumentSnapshot.class);
-    private final DocumentSnapshot mocked_valid_datasnap2 = Mockito.mock(DocumentSnapshot.class);
-    private final DocumentSnapshot mocked_invalid_datasnap = Mockito.mock(DocumentSnapshot.class);
+    private static final String TEST_URI_STRING = "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso1_icon.png?alt=media&token=391a7bfc-1597-4935-9afe-e08ecd734e03";
+    private static final Uri DEFAULT_BANNER_URI = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner);
+    private static final Uri DEFAULT_ICON_URI = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon);
+    private static final Date START_DATE = new Date(2L);
+
     private Event event0;
     private Event event1;
 
-    @Before
-    public void init() {
-        Mockito.when(mocked_icon_uri.getPath()).thenReturn(ICON_URI_STRING);
+    private void initWorkingAssociation() {
 
-        Mockito.when(mocked_valid_datasnap1.getString("name")).thenReturn(NAME1);
-        Mockito.when(mocked_valid_datasnap1.getString("long_desc")).thenReturn(LONG_DESC);
-        Mockito.when(mocked_valid_datasnap1.getString("short_desc")).thenReturn(SHORT_DESC);
-        Mockito.when(mocked_valid_datasnap1.getString("icon_uri")).thenReturn(ICON_URI_STRING);
-        Mockito.when(mocked_valid_datasnap1.getDate("start_date")).thenReturn(START_DATE);
-        Mockito.when(mocked_valid_datasnap1.get("id")).thenReturn(1L);
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",1L);
+        map.put("name", NAME1);
+        map.put("short_desc", SHORT_DESC);
+        map.put("long_desc", LONG_DESC);
+        map.put("icon_uri", TEST_URI_STRING);
+        map.put("banner_uri", TEST_URI_STRING);
+        map.put("start_date", START_DATE);
 
-        Mockito.when(mocked_valid_datasnap2.getString("name")).thenReturn(NAME2);
-        Mockito.when(mocked_valid_datasnap2.getString("long_desc")).thenReturn(LONG_DESC);
-        Mockito.when(mocked_valid_datasnap2.getString("short_desc")).thenReturn(SHORT_DESC);
-        Mockito.when(mocked_valid_datasnap2.getString("icon_uri")).thenReturn(ICON_URI_STRING);
-        Mockito.when(mocked_valid_datasnap2.get("id")).thenReturn(1L);
-        Mockito.when(mocked_valid_datasnap2.getDate("start_date")).thenReturn(START_DATE);
+        event0 = new Event(new FirebaseMapDecorator(map));
+    }
 
-        Mockito.when(mocked_invalid_datasnap.getString("name")).thenReturn(NAME1);
-        Mockito.when(mocked_invalid_datasnap.getString("long_desc")).thenReturn(null);
-        Mockito.when(mocked_invalid_datasnap.getString("short_desc")).thenReturn(SHORT_DESC);
-        Mockito.when(mocked_invalid_datasnap.getString("icon_uri")).thenReturn(null);
-        Mockito.when(mocked_invalid_datasnap.get("id")).thenReturn(1L);
-        Mockito.when(mocked_invalid_datasnap.getDate("start_date")).thenReturn(START_DATE);
+    private void initDefaultAssociation(){
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",1L);
+        map.put("name", NAME2);
+        map.put("short_desc", SHORT_DESC);
+        map.put("long_desc", LONG_DESC);
+        map.put("start_date", START_DATE);
 
-        event0 = new Event(mocked_valid_datasnap1);
-        event1 = new Event(mocked_valid_datasnap2);
+        event1 = new Event(new FirebaseMapDecorator(map));
     }
 
     @Test(expected = NullPointerException.class)
     public void invalidSnapThrowIllegalArgumentException() {
-        new Event(mocked_invalid_datasnap);
-    }
+        Map<String,Object> map = new HashMap<>();
+        map.put("id", 1L);
 
-    @Test
-    public void validSnapNoThrowException() {
-        new Event(mocked_valid_datasnap1);
+        FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
+        new Event(fmap);
     }
 
     @Test
     public void idIsCorrect() {
+        initWorkingAssociation();
         assertEquals(1, event0.getId());
     }
 
     @Test
     public void nameIsCorrect() {
+        initWorkingAssociation();
         assertEquals(NAME1, event0.getName());
     }
 
     @Test
     public void longDescIsCorrect() {
-        assertEquals(LONG_DESC, event0.getLong_desc());
+        initWorkingAssociation();
+        assertEquals(LONG_DESC, event0.getLongDesc());
     }
 
     @Test
     public void shortDescIsCorrect() {
-        assertEquals(SHORT_DESC, event0.getShort_desc());
+        initWorkingAssociation();
+        assertEquals(SHORT_DESC, event0.getShortDesc());
     }
 
     @Test
-    public void uriIsCorrect() {
-        assertEquals(Uri.parse(ICON_URI_STRING), event0.getIconUri());
+    public void uriAreCorrect() {
+        initWorkingAssociation();
+        initDefaultAssociation();
+        assertEquals(Uri.parse(TEST_URI_STRING), event0.getIconUri());
+        assertEquals(Uri.parse(TEST_URI_STRING), event0.getBannerUri());
+        assertEquals(DEFAULT_ICON_URI, event1.getIconUri());
+        assertEquals(DEFAULT_BANNER_URI, event1.getBannerUri());
     }
 
     @Test
-    public void dateIsCorrect() {
-        assertEquals(START_DATE, event0.getStart_date());
+    public void startDateIsCorrect() {
+        initWorkingAssociation();
+        assertEquals(START_DATE, event0.getStartDate());
     }
 
     @Test
     public void comparableToIsCorrect() {
+        initWorkingAssociation();
+        initDefaultAssociation();
         assertEquals(NAME1.compareTo(NAME2),
                 Event.getComparator().compare(event0, event1));
     }
