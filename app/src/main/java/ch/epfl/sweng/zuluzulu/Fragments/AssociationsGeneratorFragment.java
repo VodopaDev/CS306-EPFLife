@@ -53,6 +53,8 @@ public class AssociationsGeneratorFragment extends Fragment {
      * @return void
      */
     private Void handleData(ArrayList<String> datas) {
+        TextView view = getView().findViewById(R.id.associations_generator_list_values);
+        view.setText(datas.size() + " ASSOCIATIONS FOUND : \n\n");
         for (String data : datas) {
             String[] values = data.split(",");
 
@@ -63,7 +65,6 @@ public class AssociationsGeneratorFragment extends Fragment {
             }
             sb.append("--------\n");
 
-            TextView view = getView().findViewById(R.id.associations_generator_list_values);
             view.append(sb.toString());
         }
 
