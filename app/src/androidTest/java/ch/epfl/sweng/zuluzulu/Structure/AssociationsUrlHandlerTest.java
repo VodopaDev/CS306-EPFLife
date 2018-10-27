@@ -40,13 +40,6 @@ public class AssociationsUrlHandlerTest {
         resource.increment();
 
         // Create the object
-        this.object = new AssociationsUrlHandler(this::handler);
-    }
-
-    @Test
-    public void worksWithGoodURL()
-    {
-        // Execute our async task
         /*
          * In my async task, I give to it the lambda function that will be executed.
          * Here it's a test made function. In the Fragment, it's the function that will get the datas
@@ -54,6 +47,13 @@ public class AssociationsUrlHandlerTest {
          *
          * This test function handler() will be executed when the action is finished
          */
+        this.object = new AssociationsUrlHandler(this::handler);
+    }
+
+    @Test
+    public void worksWithGoodURL()
+    {
+        // Execute our async task
         object.execute(AssociationsGeneratorFragment.EPFL_URL); // Test with real URL
 
         // We need to open a View for the test to start waiting...
@@ -80,6 +80,7 @@ public class AssociationsUrlHandlerTest {
 
         return null;
     }
+
 
 
     @Test
