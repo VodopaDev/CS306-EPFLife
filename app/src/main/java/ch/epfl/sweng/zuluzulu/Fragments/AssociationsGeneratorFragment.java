@@ -53,19 +53,21 @@ public class AssociationsGeneratorFragment extends Fragment {
      * @return void
      */
     private Void handleData(ArrayList<String> datas) {
-        TextView view = getView().findViewById(R.id.associations_generator_list_values);
-        view.setText(datas.size() + " ASSOCIATIONS FOUND : \n\n");
-        for (String data : datas) {
-            String[] values = data.split(",");
+        if (datas != null) {
+            TextView view = getView().findViewById(R.id.associations_generator_list_values);
+            view.setText(datas.size() + " ASSOCIATIONS FOUND : \n\n");
+            for (String data : datas) {
+                String[] values = data.split(",");
 
-            StringBuilder sb = new StringBuilder();
-            for (String value : values) {
-                sb.append(value);
-                sb.append("\n");
+                StringBuilder sb = new StringBuilder();
+                for (String value : values) {
+                    sb.append(value);
+                    sb.append("\n");
+                }
+                sb.append("--------\n");
+
+                view.append(sb.toString());
             }
-            sb.append("--------\n");
-
-            view.append(sb.toString());
         }
 
         // Tell tests the async execution is finished
