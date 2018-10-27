@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -154,7 +153,6 @@ public class AssociationDetailFragment extends Fragment {
     }
 
     // TODO: Remove comment when EventDetailFragment is fixed
-
     /**
      * Set up the upcoming event clicking behaviour to go on the event detailed page
      */

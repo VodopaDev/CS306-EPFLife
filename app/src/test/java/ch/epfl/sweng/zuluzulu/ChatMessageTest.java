@@ -13,6 +13,8 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
 public class ChatMessageTest {
@@ -69,11 +71,11 @@ public class ChatMessageTest {
 
     @Test
     public void testIsOwnMessage() {
-        assertEquals(true, chatMessage1.isOwnMessage());
-        assertEquals(false, chatMessage2.isOwnMessage());
+        assertTrue(chatMessage1.isOwnMessage());
+        assertFalse(chatMessage2.isOwnMessage());
 
         chatMessage2.setOwnMessage(true);
-        assertEquals(true, chatMessage2.isOwnMessage());
+        assertTrue(chatMessage2.isOwnMessage());
     }
 
 }

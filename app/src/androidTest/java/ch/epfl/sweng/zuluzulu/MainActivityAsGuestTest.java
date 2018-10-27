@@ -19,10 +19,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(AndroidJUnit4.class)
+
 /**
- * This class test the MainActivity as a Guest User
+  This class test the MainActivity as a Guest User
  */
+@RunWith(AndroidJUnit4.class)
 public class MainActivityAsGuestTest {
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =

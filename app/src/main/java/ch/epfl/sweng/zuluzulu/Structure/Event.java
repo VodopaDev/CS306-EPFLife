@@ -1,9 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import android.location.Location;
 import android.net.Uri;
-
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
 import java.util.Arrays;

@@ -3,7 +3,6 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 
