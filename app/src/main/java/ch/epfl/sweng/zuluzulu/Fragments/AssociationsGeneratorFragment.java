@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.MainActivity;
@@ -26,12 +25,9 @@ import ch.epfl.sweng.zuluzulu.Structure.AssociationsUrlHandler;
  * create an instance of this fragment.
  */
 public class AssociationsGeneratorFragment extends Fragment {
-    private static final String ASSOCIATIONS_GENERATOR_TAG = "ASSOCIATIONS_GENERATOR_TAG";
-
     // The URL we will connect to
     final static public String EPFL_URL = "https://associations.epfl.ch/page-16300-fr-html/";
-
-
+    private static final String ASSOCIATIONS_GENERATOR_TAG = "ASSOCIATIONS_GENERATOR_TAG";
     private OnFragmentInteractionListener mListener;
 
     public AssociationsGeneratorFragment() {
@@ -50,6 +46,7 @@ public class AssociationsGeneratorFragment extends Fragment {
     /**
      * This function will handle the generated datas
      * We expect a arraylist of strings. Each information is separated by a coma in the string
+     *
      * @param datas Received datas
      * @return void
      */

@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.os.AsyncTask;
-import android.support.test.espresso.idling.CountingIdlingResource;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -95,6 +94,7 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
 
     /**
      * This function will parse the datas and return a arraylist of strings
+     *
      * @param inputStream Input stream
      * @return ArrayList of strings , values separated by a comma
      * @throws IOException On error - To be handled
@@ -139,6 +139,7 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
 
     /**
      * Open the url
+     *
      * @param url url
      * @return a URL object
      * @throws MalformedURLException On bad url

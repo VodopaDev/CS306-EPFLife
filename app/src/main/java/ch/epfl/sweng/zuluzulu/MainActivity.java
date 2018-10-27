@@ -37,21 +37,18 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
+    // Const used to send a Increment or Decrement message
+    public final static String INCREMENT = "increment";
+    public final static String DECREMENT = "decrement";
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ArrayList<Fragment> previous_fragments;
     private Fragment current_fragment;
-
     private User user;
-
     // This resource is used for tests
     // That's the recommanded way to implement it
     // @see https://developer.android.com/training/testing/espresso/idling-resource#integrate-recommended-approach
     private CountingIdlingResource resource;
-
-    // Const used to send a Increment or Decrement message
-    public final static String INCREMENT = "increment";
-    public final static String DECREMENT = "decrement";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -319,6 +316,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     /**
      * Return the resource for the tests
+     *
      * @return resource
      */
     public CountingIdlingResource getCountingIdlingResource() {
