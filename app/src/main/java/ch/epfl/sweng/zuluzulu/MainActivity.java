@@ -32,6 +32,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
 //import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 
@@ -145,7 +146,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         navigationView.getMenu().clear();
         if (isAuthenticated()) {
             navigationView.inflateMenu(R.menu.drawer_view_user);
-        } else {
+        } else if (getUser().hasRole(UserRole.ADMIN)){
+            navigationView.inflateMenu(R.menu.drawer_view_admin);
+        }
+        else {
             navigationView.inflateMenu(R.menu.drawer_view_guest);
         }
     }
