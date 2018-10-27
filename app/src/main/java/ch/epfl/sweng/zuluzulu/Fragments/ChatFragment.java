@@ -40,6 +40,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -235,8 +236,10 @@ public class ChatFragment extends Fragment {
                             messages.clear();
                             for (DocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                ChatMessage message = new ChatMessage(document, user.getSciper());
-                                messages.add(message);
+                                if (Utils.isValidSnapshot(document, ChatMessage.FIELDS)) {
+                                    ChatMessage message = new ChatMessage(document.getData(), user.getSciper());
+                                    messages.add(message);
+                                }
                             }
                             adapter.notifyDataSetChanged();
                             listView.setSelection(adapter.getCount() - 1);

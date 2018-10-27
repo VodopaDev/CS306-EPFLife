@@ -17,6 +17,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 public class ProfileFragmentTest extends TestWithLogin {
     private Fragment fragment;
 
+
     @Before
     public void init() {
         fragment = ProfileFragment.newInstance(getUser());

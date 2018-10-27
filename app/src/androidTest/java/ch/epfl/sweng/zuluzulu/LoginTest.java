@@ -53,6 +53,7 @@ public class LoginTest {
      */
     @Test
     public void isOnTheLogin() {
+
         //You have to test if it works for wrong credentials, if it login properly and if you have any
         //other idea you are welcome to test them
         onView(withId(R.id.login_fragment)).check(matches(isDisplayed()));

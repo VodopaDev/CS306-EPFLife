@@ -2,7 +2,11 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * This parent class represent an user
+ */
 abstract public class User implements Serializable {
 
     /**
@@ -27,6 +31,10 @@ abstract public class User implements Serializable {
         return null;
     }
 
+    public String getSection() {
+        return null;
+    }
+
     public String getGaspar() {
         return null;
     }
@@ -37,18 +45,20 @@ abstract public class User implements Serializable {
 
     /**
      * Check if the user has the role
+     *
      * @param role UserRole
      * @return boolean
      */
-    public boolean hasRole(UserRole role){
+    public boolean hasRole(UserRole role) {
         return roles.contains(role);
     }
 
     /**
      * Add the role to the user roles list
+     *
      * @param role UserRole
      */
-    protected void addRole(UserRole role){
+    protected void addRole(UserRole role) {
         this.roles.add(role);
     }
 
@@ -73,6 +83,11 @@ abstract public class User implements Serializable {
          */
         private String email;
 
+        /**
+         * User's section
+         */
+        private String section;
+
 
         /**
          * User first names (he can have few first names)
@@ -83,6 +98,11 @@ abstract public class User implements Serializable {
          * User last names, same remark as first_names
          */
         private String last_names;
+
+        // All followed ids of Associations, Chats and Events
+        private List<Integer> fav_assos;
+        private List<Integer> followed_chats;
+        private List<Integer> followed_events;
 
         /**
          * Create  an user builder
@@ -120,6 +140,15 @@ abstract public class User implements Serializable {
         }
 
         /**
+         * User's section
+         *
+         * @param section section
+         */
+        public void setSection(String section) {
+            this.section = section;
+        }
+
+        /**
          * User last names
          *
          * @param last_names last names
@@ -135,6 +164,18 @@ abstract public class User implements Serializable {
          */
         public void setFirst_names(String first_names) {
             this.first_names = first_names;
+        }
+
+        public void setFavAssos(List<Integer> fav_assos) {
+            this.fav_assos = fav_assos;
+        }
+
+        public void setFollowedChats(List<Integer> followed_chats) {
+            this.followed_chats = followed_chats;
+        }
+
+        public void setFollowedEvents(List<Integer> followed_events) {
+            this.followed_events = followed_events;
         }
 
         /**
@@ -157,10 +198,8 @@ abstract public class User implements Serializable {
          * @return AuthenticatedUser or null
          */
         public AuthenticatedUser buildAuthenticatedUser() {
-            if (hasRequirementsForAuthentication()) {
-                return new AuthenticatedUser(this.sciper, this.gaspar, this.email, this.first_names, this.last_names);
-            }
-
+            if (hasRequirementsForAuthentication())
+                return new AuthenticatedUser(this.sciper, this.gaspar, this.email, this.section, this.first_names, this.last_names, this.fav_assos, this.followed_events, this.followed_chats);
             return null;
         }
 
@@ -171,7 +210,7 @@ abstract public class User implements Serializable {
          */
         public Admin buildAdmin() {
             if (hasRequirementsForAuthentication()) {
-                return new Admin(this.sciper, this.gaspar, this.email, this.first_names, this.last_names);
+                return new Admin(this.sciper, this.gaspar, this.email, this.section, this.first_names, this.last_names, this.fav_assos, this.followed_events, this.followed_chats);
             }
 
             return null;
@@ -188,14 +227,19 @@ abstract public class User implements Serializable {
 
         /**
          * Check the requirements for authentication
+         *
          * @return boolean
          */
-        private boolean hasRequirementsForAuthentication(){
-            return  this.sciper != null
+        private boolean hasRequirementsForAuthentication() {
+            return this.sciper != null
                     && this.email != null
+                    && this.section != null
                     && this.gaspar != null
                     && this.first_names != null
-                    && this.last_names != null;
+                    && this.last_names != null
+                    && this.fav_assos != null
+                    && this.followed_chats != null
+                    && this.followed_events != null;
         }
 
     }

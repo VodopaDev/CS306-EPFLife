@@ -25,17 +25,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
+
 import java.io.IOException;
 import java.util.HashMap;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
 import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
 import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
-
+import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 
 /**
@@ -75,6 +84,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     private String redirectURICode;
     private OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
     private String code;
+    private User user;
     public LoginFragment() {
         // Required empty public constructor
     }
@@ -149,7 +159,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      * Is executed once the session is active
      * Log in the main activity
      */
-    private void activate_session(User user) {
+    private void activate_session() {
         // Pass the user to the activity
         Map<Integer,Object> toTransfer = new HashMap<Integer, Object>();
         toTransfer.put(0,user);
@@ -168,15 +178,44 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
             return;
         }
 
-        User user;
         try{
             user = AuthServer.fetchUser(tokens.get("Tequila.profile"));
         } catch( IOException e){
             return;
         }
 
-        activate_session(user);
+        updateUserForActivation();
     }
+
+    private void updateUserForActivation() {
+        final DocumentReference ref = FirebaseFirestore.getInstance()
+                .collection("users_info")
+                .document(user.getSciper());
+
+        ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (!documentSnapshot.exists()) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("fav_assos", new ArrayList<Integer>());
+                    map.put("followed_events", new ArrayList<Integer>());
+                    map.put("followed_chats", new ArrayList<Integer>());
+                    ref.set(map);
+                    activate_session();
+                } else if (Utils.isValidSnapshot(documentSnapshot, AuthenticatedUser.fields)) {
+                    List<Integer> received_assos = Utils.longListToIntList((List<Long>) documentSnapshot.get("fav_assos"));
+                    List<Integer> received_events = Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_events"));
+                    List<Integer> received_chats = Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_chats"));
+
+                    ((AuthenticatedUser) user).setFavAssos(received_assos);
+                    ((AuthenticatedUser) user).setFollowedEvents(received_events);
+                    ((AuthenticatedUser) user).setFollowedChats(received_chats);
+                    activate_session();
+                }
+            }
+        });
+    }
+
     /**
      * Reset the errors
      */
@@ -196,6 +235,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         reset_errors();
 
         String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
+        System.out.print(codeRequestUrl);
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(codeRequestUrl));
         startActivity(browserIntent);
     }
