@@ -6,6 +6,8 @@ import com.google.firebase.firestore.GeoPoint;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
@@ -19,6 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@RunWith(JUnit4.class)
 public class FirebaseMapDecoratorTest {
     Map<String,Object> map;
 
@@ -60,7 +63,7 @@ public class FirebaseMapDecoratorTest {
         when(snap.getData()).thenReturn(Collections.singletonMap("string", (Object)"test"));
         FirebaseMapDecorator fmap2 = new FirebaseMapDecorator(snap);
 
-        assertThat("test", equalTo(fmap2.getString("string")));;
+        assertThat("test", equalTo(fmap2.getString("string")));
     }
 
 }

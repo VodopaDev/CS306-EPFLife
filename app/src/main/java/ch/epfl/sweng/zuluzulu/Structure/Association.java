@@ -72,7 +72,7 @@ public class Association implements Serializable {
         channel_id = map.getInteger("channel_id");
 
         // Init the upcoming event
-        events = map.getMap("events") == null ?
+        events = map.get("events") == null ?
                 new ArrayList<Map<String, Object>>() :
                 (List<Map<String, Object>>) map.get("events");
         closest_event_id = computeClosestEvent();
