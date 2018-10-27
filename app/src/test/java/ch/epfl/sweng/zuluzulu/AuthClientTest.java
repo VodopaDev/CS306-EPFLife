@@ -9,8 +9,6 @@ import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
 import ch.epfl.sweng.zuluzulu.tequila.HttpUtils;
 import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
 
-import static org.junit.Assert.assertEquals;
-
 @RunWith(JUnit4.class)
 public class AuthClientTest {
     private OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
