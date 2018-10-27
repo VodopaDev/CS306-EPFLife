@@ -179,9 +179,7 @@ public class EventFragment extends Fragment {
     }
 
     private void fillEventLists(String sortOption){
-       FirebaseFirestore.getInstance().collection("events_info")
-                .orderBy(sortOption)
-                .get()
+       FirebaseFirestore.getInstance().collection("events_info").orderBy(sortOption).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -191,10 +189,8 @@ public class EventFragment extends Fragment {
                             if(fmap.hasFields(Event.FIELDS)) {
                                 Event event = new Event(fmap);
                                 event_all.add(event);
-
                                 if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))
                                     event_fav.add(event);
-
                                 event_adapter.notifyDataSetChanged();
                             }
                         }
