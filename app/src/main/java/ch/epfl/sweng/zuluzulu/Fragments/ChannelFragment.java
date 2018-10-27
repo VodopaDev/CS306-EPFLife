@@ -25,6 +25,7 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Structure.GPS;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
@@ -42,6 +43,7 @@ public class ChannelFragment extends Fragment {
     private static final String CHANNELS_COLLECTION_NAME = "channels";
 
     private FirebaseFirestore db;
+    private GPS gps;
 
     private ListView listView;
     private ArrayList<Channel> listOfChannels = new ArrayList<>();
@@ -86,6 +88,8 @@ public class ChannelFragment extends Fragment {
         adapter = new ChannelAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
 
+        gps = new GPS(getContext());
+
         getChannelsFromDatabase();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -95,6 +99,7 @@ public class ChannelFragment extends Fragment {
                 mListener.onFragmentInteraction(TAG, selectedChannel.getId());
             }
         });
+
 
         return view;
     }
