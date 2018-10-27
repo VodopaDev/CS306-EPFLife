@@ -21,7 +21,7 @@ import ch.epfl.sweng.zuluzulu.R;
  * Use the {@link AboutZuluzuluFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AboutZuluzuluFragment extends Fragment {
+public class AboutZuluzuluFragment extends SuperFragment {
     public static final String TAG = "ABOUT_TAG";
 
     private OnFragmentInteractionListener mListener;
@@ -75,20 +75,4 @@ public class AboutZuluzuluFragment extends Fragment {
         startActivity(Intent.createChooser(emailIntent, "Send mail..."));
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 }

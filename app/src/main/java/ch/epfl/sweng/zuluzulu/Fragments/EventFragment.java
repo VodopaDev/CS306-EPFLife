@@ -37,12 +37,11 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * Use the {@link EventFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventFragment extends Fragment {
+public class EventFragment extends SuperFragment {
     private static final String TAG = "EVENT_TAG";
     private static final String ARG_USER = "ARG_USER";
 
     private User user;
-    private OnFragmentInteractionListener mListener;
 
     private ArrayList<Event> event_all;
     private ArrayList<Event> event_fav;
@@ -154,22 +153,6 @@ public class EventFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     // TODO test
     private void emptyEventList() {

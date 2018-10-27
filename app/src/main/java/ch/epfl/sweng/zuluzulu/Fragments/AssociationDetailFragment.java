@@ -24,7 +24,7 @@ import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
-public class AssociationDetailFragment extends Fragment {
+public class AssociationDetailFragment extends SuperFragment {
     public static final String TAG = "ASSOCIATION_DETAIL__TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_ASSO = "ARG_ASSO";
@@ -38,7 +38,6 @@ public class AssociationDetailFragment extends Fragment {
     private TextView upcoming_event_date;
     private Event upcoming_event;
 
-    private OnFragmentInteractionListener mListener;
     private Association asso;
     private User user;
 
@@ -156,22 +155,5 @@ public class AssociationDetailFragment extends Fragment {
 
     public Association getAsso() {
         return asso;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 }

@@ -36,12 +36,11 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * Use the {@link AssociationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AssociationFragment extends Fragment {
+public class AssociationFragment extends SuperFragment {
     private static final String TAG = "ASSOCIATIONS_TAG";
     private static final String ARG_USER = "ARG_USER";
 
     private User user;
-    private OnFragmentInteractionListener mListener;
 
     private ArrayList<Association> assos_all;
     private ArrayList<Association> assos_fav;
@@ -105,23 +104,6 @@ public class AssociationFragment extends Fragment {
         });
 
         return view;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     private void fillAssociationLists() {

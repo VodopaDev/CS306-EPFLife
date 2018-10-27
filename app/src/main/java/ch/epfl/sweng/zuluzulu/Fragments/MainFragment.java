@@ -19,12 +19,11 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends SuperFragment {
     public static final String TAG = "MAIN_TAG";
     private static final String ARG_USER = "ARG_USER";
 
     private User user;
-    private OnFragmentInteractionListener mListener;
 
     public MainFragment() {
     }
@@ -63,20 +62,4 @@ public class MainFragment extends Fragment {
 
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 }
