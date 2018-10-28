@@ -63,6 +63,6 @@ public class AssociationFragmentAsGuestTest {
     @Test
     public void clickingAnAssociationGoesToDetail() {
         onView(withText("Agepoly")).perform(ViewActions.click());
-        onView(withId(R.id.association_detail_name)).check(matches(isDisplayed()));
+        onView(withId(R.id.association_detail_icon)).check(matches(isDisplayed()));
     }
 }
