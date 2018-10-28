@@ -20,6 +20,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChannelAdapter;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
@@ -47,7 +48,7 @@ public class ChannelFragment extends SuperFragment {
     private GPS gps;
 
     private ListView listView;
-    private ArrayList<Channel> listOfChannels = new ArrayList<>();
+    private List<Channel> listOfChannels = new ArrayList<>();
     private ChannelAdapter adapter;
 
     private User user;
