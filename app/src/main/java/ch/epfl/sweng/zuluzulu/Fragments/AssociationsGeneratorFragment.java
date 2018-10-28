@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -41,7 +40,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
      */
     // TODO: Rename and change types and number of parameters
     public static AssociationsGeneratorFragment newInstance(User user) {
-        if(!user.hasRole(ROLE_REQUIRED)){
+        if (!user.hasRole(ROLE_REQUIRED)) {
             return null;
         }
 

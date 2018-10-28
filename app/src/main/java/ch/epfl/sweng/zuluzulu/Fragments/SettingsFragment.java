@@ -1,7 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -63,4 +61,4 @@ public class SettingsFragment extends SuperFragment {
         return view;
     }
 
- }
+}

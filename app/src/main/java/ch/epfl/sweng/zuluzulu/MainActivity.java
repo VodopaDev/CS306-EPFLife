@@ -146,10 +146,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         navigationView.getMenu().clear();
         if (getUser().hasRole(UserRole.ADMIN)) {
             navigationView.inflateMenu(R.menu.drawer_view_admin);
-        } else if (isAuthenticated()){
+        } else if (isAuthenticated()) {
             navigationView.inflateMenu(R.menu.drawer_view_user);
-        }
-        else {
+        } else {
             navigationView.inflateMenu(R.menu.drawer_view_guest);
         }
     }
