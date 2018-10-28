@@ -1,11 +1,14 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
@@ -13,6 +16,7 @@ import static android.content.Context.LOCATION_SERVICE;
 
 public class GPS implements LocationListener {
 
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
     private static final long MIN_DISTANCE_TO_REQUEST_LOCATION = 1; // In meters
     private static final long MIN_TIME_FOR_UPDATES = 1000; // 1 sec
     private static final int TWO_MINUTES = 1000 * 60 * 2; // 2 min
@@ -31,6 +35,7 @@ public class GPS implements LocationListener {
     public void start() {
         if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(context, "Permission to GPS not granted", Toast.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
         }
         try {
             locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
