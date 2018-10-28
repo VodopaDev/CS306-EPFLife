@@ -52,6 +52,7 @@ public class ChannelFragment extends SuperFragment {
     private ChannelAdapter adapter;
 
     private User user;
+    private GeoPoint userLocation = null;
 
     public ChannelFragment() {
         // Required empty public constructor
@@ -74,6 +75,7 @@ public class ChannelFragment extends SuperFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        gps = new GPS(getContext());
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
         }
@@ -88,7 +90,10 @@ public class ChannelFragment extends SuperFragment {
         adapter = new ChannelAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
 
-        gps = new GPS(getContext());
+        Location gpsLocation = gps.getLocation();
+        if (gpsLocation != null) {
+            userLocation = new GeoPoint(gpsLocation.getLatitude(), gpsLocation.getLongitude());
+        }
 
         getChannelsFromDatabase();
 
@@ -117,8 +122,6 @@ public class ChannelFragment extends SuperFragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             listOfChannels.clear();
-                            Location gpsLocation = gps.getLocation();
-                            GeoPoint userLocation = new GeoPoint(gpsLocation.getLatitude(), gpsLocation.getLongitude());
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);

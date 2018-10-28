@@ -91,6 +91,9 @@ public class Channel {
             hasAccess = section.equals(user.getSection());
         }
         if (channelLocation != null) {
+            if (userLocation == null) {
+                return false;
+            }
             double distance = Utils.distanceBetween(channelLocation, userLocation);
             Log.d("Channel", getName());
             Log.d("Distance: ", "" + distance);
