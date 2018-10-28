@@ -43,7 +43,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Utils;
  * Use the {@link LoginFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class LoginFragment extends SuperFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String TAG = "LOGIN_TAG";
 
     /**
@@ -66,6 +66,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      */
     private View mProgressView;
     private View mLoginFormView;
+
     private OnFragmentInteractionListener mListener;
     private String redirectURICode;
     private OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
@@ -120,7 +121,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                finishLogin();
             }
         });
 
@@ -158,7 +159,7 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     }
 
     private void finishLogin(){
-        code = AuthClient.extractCode(redirectURICode);
+        code = "9512626fa56b29825b3deeee218a99aa";//AuthClient.extractCode(redirectURICode);
 
         Map<String, String> tokens;
         try{

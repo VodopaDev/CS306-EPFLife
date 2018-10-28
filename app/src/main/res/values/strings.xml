@@ -74,5 +74,6 @@
 
     <!-- ABOUT ZUZULULU fragment -->
     <string name="send_mail_button">SEND US AN EMAIL !</string>
+    <string name="drawer_associations_generator">Fill the associations</string>
 
 </resources>

@@ -1,10 +1,10 @@
 package ch.epfl.sweng.zuluzulu;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -26,6 +26,7 @@ import java.util.Map;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
@@ -40,17 +41,22 @@ import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
 import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
 import ch.epfl.sweng.zuluzulu.tequila.HttpUtils;
 import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
+import ch.epfl.sweng.zuluzulu.Structure.UserRole;
+
 
 //import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
+    // Const used to send a Increment or Decrement message
+    public final static String INCREMENT = "increment";
+    public final static String DECREMENT = "decrement";
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ArrayList<Fragment> previous_fragments;
     private Fragment current_fragment;
-
     private User user;
+
     private String code;
     private OAuth2Config config;
 
@@ -63,9 +69,18 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     //(temporary) store the URI from the browser
     private String redirectURIwithCode;
 
+    // This resource is used for tests
+    // That's the recommanded way to implement it
+    // @see https://developer.android.com/training/testing/espresso/idling-resource#integrate-recommended-approach
+    private CountingIdlingResource resource;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Create the resource
+        resource = new CountingIdlingResource("Main Activity");
 
         // Needed to use Firebase storage and Firestore
         FirebaseApp.initializeApp(getApplicationContext());
@@ -155,7 +170,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      */
     private void updateMenuItems() {
         navigationView.getMenu().clear();
-        if (isAuthenticated()) {
+        if (getUser().hasRole(UserRole.ADMIN)) {
+            navigationView.inflateMenu(R.menu.drawer_view_admin);
+        } else if (isAuthenticated()) {
             navigationView.inflateMenu(R.menu.drawer_view_user);
         } else {
             navigationView.inflateMenu(R.menu.drawer_view_guest);
@@ -187,10 +204,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case R.id.nav_login:
                 //to set arguments for the login
-                //////////////////////////
                 isLogin = true;
-                //////////////////////////
-
                 fragment = LoginFragment.newInstance();
 
                 break;
@@ -213,9 +227,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 this.user = new User.UserBuilder().buildGuestUser();
 
                 //create a logout URL and open it in the browser
-                String logoutURL = AuthClient.createCodeRequestUrlLogout(config, code);
+                String logoutURL = AuthClient.createUrlLogout();
                 try{
-                AuthServer.logoutTequila(logoutURL);
+                AuthServer.logoutTequila(logoutURL, config, code);
                 }catch(IOException e){
                     System.out.print("Error while logging out");
                 }
@@ -227,6 +241,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case R.id.nav_chat:
                 fragment = ChannelFragment.newInstance(user);
+                break;
+            case R.id.nav_associations_generator:
+                fragment = AssociationsGeneratorFragment.newInstance(user);
                 break;
             default:
                 fragment = MainFragment.newInstance(user);
@@ -243,19 +260,20 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public boolean openFragment(Fragment fragment) {
         if (fragment != null) {
             //if is a login fragment then set argument with the URI
-            ///////////////////////////////////////////////////////////
-            if(isLogin){
-                isLogin = false;
-                Bundle toSend = new Bundle(1);
-                toSend.putString("",redirectURIwithCode);
-                fragment.setArguments(toSend);
-            }
-            //////////////////////////////////////////////////////////
+            if(isLogin || openingWebView){
 
-            if(openingWebView){
-                openingWebView = false;
                 Bundle toSend = new Bundle(1);
-                toSend.putString("",urlCode);
+
+                if(isLogin){
+                    isLogin = false;
+                    toSend.putString("",redirectURIwithCode);
+                }
+
+                if(openingWebView){
+                    openingWebView = false;
+                    toSend.putString("",urlCode);
+                }
+
                 fragment.setArguments(toSend);
             }
 
@@ -313,6 +331,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 Association association = (Association) data;
                 openFragment(AssociationDetailFragment.newInstance(user, association));
                 break;
+            case INCREMENT:
+                this.incrementCountingIdlingResource();
+                break;
+            case DECREMENT:
+                this.decrementCountingIdlingResource();
+                break;
 //            case EventDetailFragment.TAG:
 //                Event event = (Event) data;
 //                openFragment(EventDetailFragment.newInstance(user, event));
@@ -347,5 +371,30 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      */
     public User getUser() {
         return user;
+    }
+
+    /**
+     * Increment the countingIdlingResource
+     * Do this before a async task
+     */
+    public void incrementCountingIdlingResource() {
+        resource.increment();
+    }
+
+    /**
+     * Decrement the countingIdlingResource
+     * Do this after a async task
+     */
+    public void decrementCountingIdlingResource() {
+        resource.decrement();
+    }
+
+    /**
+     * Return the resource for the tests
+     *
+     * @return resource
+     */
+    public CountingIdlingResource getCountingIdlingResource() {
+        return resource;
     }
 }
