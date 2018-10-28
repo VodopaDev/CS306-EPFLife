@@ -15,6 +15,7 @@ public class GPS implements LocationListener {
 
     private static final long MIN_DISTANCE_TO_REQUEST_LOCATION = 1; // In meters
     private static final long MIN_TIME_FOR_UPDATES = 1000; // 1 sec
+    private static final int TWO_MINUTES = 1000 * 60 * 2; // 2 min
 
     private Context context;
     Location location;
@@ -34,13 +35,30 @@ public class GPS implements LocationListener {
         try {
             locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
             boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
             if (isGPSEnabled) {
                 isWorking = true;
+                locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, this);
+                if (locationManager != null) {
+                    Location tempLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (tempLocation != null && isBetterLocation(tempLocation, location)) {
+                        location = tempLocation;
+                    }
+                }
+            } else if (isNetworkEnabled) {
+                isWorking = true;
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, this);
-                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (locationManager != null) {
+                    Location tempLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    if (tempLocation != null && isBetterLocation(tempLocation, location)) {
+                        location = tempLocation;
+                    }
+                }
             } else {
-                Toast.makeText(context, "Please enable GPS to have access to all features", Toast.LENGTH_SHORT).show();
+                isWorking = false;
+                Toast.makeText(context, "Please activate your GPS to have access to all features", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,7 +82,9 @@ public class GPS implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        this.location = location;
+        if (location != null && isBetterLocation(location, this.location)) {
+            this.location = location;
+        }
     }
 
     @Override
@@ -80,5 +100,53 @@ public class GPS implements LocationListener {
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    protected boolean isBetterLocation(Location location, Location currentBestLocation) {
+        if (currentBestLocation == null) {
+            // A new location is always better than no location
+            return true;
+        }
+
+        // Check whether the new location fix is newer or older
+        long timeDelta = location.getTime() - currentBestLocation.getTime();
+        boolean isSignificantlyNewer = timeDelta > TWO_MINUTES;
+        boolean isSignificantlyOlder = timeDelta < -TWO_MINUTES;
+        boolean isNewer = timeDelta > 0;
+
+        // If it's been more than two minutes since the current location, use the new location because the user has likely moved
+        if (isSignificantlyNewer) {
+            return true;
+            // If the new location is more than two minutes older, it must be worse
+        } else if (isSignificantlyOlder) {
+            return false;
+        }
+
+        // Check whether the new location fix is more or less accurate
+        int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation.getAccuracy());
+        boolean isLessAccurate = accuracyDelta > 0;
+        boolean isMoreAccurate = accuracyDelta < 0;
+        boolean isSignificantlyLessAccurate = accuracyDelta > 200;
+
+        // Check if the old and new location are from the same provider
+        boolean isFromSameProvider = isSameProvider(location.getProvider(), currentBestLocation.getProvider());
+
+        // Determine location quality using a combination of timeliness and accuracy
+        if (isMoreAccurate) {
+            return true;
+        } else if (isNewer && !isLessAccurate) {
+            return true;
+        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
+            return true;
+        }
+        return false;
+    }
+
+    /** Checks whether two providers are the same */
+    private boolean isSameProvider(String provider1, String provider2) {
+        if (provider1 == null) {
+            return provider2 == null;
+        }
+        return provider1.equals(provider2);
     }
 }
