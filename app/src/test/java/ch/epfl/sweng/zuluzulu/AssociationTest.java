@@ -19,6 +19,7 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
 public class AssociationTest {
@@ -66,7 +67,6 @@ public class AssociationTest {
         map.put("name", NAME2);
         map.put("short_desc", SHORT_DESC);
         map.put("long_desc", LONG_DESC);
-        map.put("channel_id", 1L);
 
         asso2 = new Association(new FirebaseMapDecorator(map));
     }
@@ -134,6 +134,14 @@ public class AssociationTest {
         initDefaultAssociation();
         assertEquals(NAME1.compareTo(NAME2),
                 Association.getComparator().compare(asso1, asso2));
+    }
+
+    @Test
+    public void channelIdIsCorrect(){
+        initWorkingAssociation();
+        initDefaultAssociation();
+        assertThat(asso1.getChannelId(), equalTo(1));
+        assertThat(asso2.getChannelId(), equalTo(0));
     }
 
 

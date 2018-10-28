@@ -22,6 +22,7 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
@@ -34,11 +35,16 @@ public class AssociationDetailFragment extends SuperFragment {
 
     private ImageButton asso_fav;
 
+    private Event upcoming_event;
+    private ConstraintLayout upcoming_event_layout;
     private ImageView upcoming_event_icon;
     private TextView upcoming_event_name;
     private TextView upcoming_event_date;
-    private ConstraintLayout upcoming_event_layout;
-    private Event upcoming_event;
+
+    private Channel main_chat;
+    private ConstraintLayout main_chat_layout;
+    private TextView main_chat_name;
+    private TextView main_chat_desc;
 
     private Association asso;
     private User user;
@@ -79,10 +85,6 @@ public class AssociationDetailFragment extends SuperFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_association_detail, container, false);
 
-        // Association name
-        TextView asso_name = view.findViewById(R.id.association_detail_name);
-        asso_name.setText(asso.getName());
-
         // Favorite button
         asso_fav = view.findViewById(R.id.association_detail_fav);
         setFavButtonBehaviour();
@@ -108,6 +110,13 @@ public class AssociationDetailFragment extends SuperFragment {
         upcoming_event_date = view.findViewById(R.id.association_detail_upcoming_event_date);
         loadUpcomingEvent();
         setUpcomingEventButtonBehaviour();
+
+        // Chat views
+        main_chat_layout = view.findViewById(R.id.association_detail_chat);
+        main_chat_name = view.findViewById(R.id.association_detail_chat_name);
+        main_chat_desc = view.findViewById(R.id.association_detail_chat_desc);
+        loadMainChat();
+        setMainChatButtonBehaviour();
 
         return view;
     }
@@ -196,4 +205,46 @@ public class AssociationDetailFragment extends SuperFragment {
             upcoming_event_name.setText("No upcoming event :(");
         }
     }
+
+    /**
+     * Use Firebase to load the main chat data in the variable main_chat
+     * If there is no main chat (ie the association has no chat), main_chat will stay null
+     */
+    private void loadMainChat(){
+        // Fetch online data of the main_chat
+        if (asso.getChannelId() != 0) {
+            FirebaseFirestore.getInstance()
+                    .document("channels/channel" + asso.getChannelId())
+                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                    if(fmap.hasFields(Channel.FIELDS)) {
+                        main_chat = new Channel(fmap);
+                        main_chat_name.setText(main_chat.getName());
+                        main_chat_desc.setText(main_chat.getDescription());
+                    }
+                    else
+                        main_chat_name.setText("Error loading the chat :(");
+                }
+            });
+        } else {
+            main_chat_name.setText("There is no chat :(");
+        }
+    }
+
+    private void setMainChatButtonBehaviour(){
+        main_chat_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(main_chat != null) {
+                    if(user.isConnected())
+                        mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, main_chat.getId());
+                    else
+                        Snackbar.make(getView(), "Login to access chat room", 5000).show();
+                }
+            }
+        });
+    }
+
 }

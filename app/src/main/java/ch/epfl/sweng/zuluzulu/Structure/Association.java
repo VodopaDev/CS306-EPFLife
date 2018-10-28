@@ -8,6 +8,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ import ch.epfl.sweng.zuluzulu.R;
  * Has diverse getters and some functions to create views
  */
 public class Association implements Serializable {
-    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "channel_id");
+    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc");
 
     private int id;
     private String name;
@@ -49,13 +50,17 @@ public class Association implements Serializable {
         name = data.getString("name");
         short_desc = data.getString("short_desc");
         long_desc = data.getString("long_desc");
-        channel_id = data.getInteger("channel_id");
+
+        // Init the main chat id
+        channel_id = data.get("channel_id") == null ?
+                        0:
+                        data.getInteger("channel_id");
 
         // Init the upcoming event
         events = data.get("events") == null ?
-                new ArrayList<Map<String, Object>>() :
+                Collections.EMPTY_LIST :
                 (List<Map<String, Object>>) data.get("events");
-        closest_event_id = computeClosestEvent();
+        computeClosestEvent();
 
         // Init the Icon URI
         String icon_str = data.getString("icon_uri");
@@ -121,6 +126,14 @@ public class Association implements Serializable {
     }
 
     /**
+     * Return the Association's main chat id
+     * @return
+     */
+    public int getChannelId(){
+        return channel_id;
+    }
+
+    /**
      * Return the Association's icon Uri
      *
      * @return the icon Uri
@@ -130,13 +143,20 @@ public class Association implements Serializable {
         return icon_uri;
     }
 
+    /**
+     * Return the Association's closest event happening id
+     * @return
+     */
     public int getClosestEventId() {
         return closest_event_id;
     }
 
-    private int computeClosestEvent() {
+    /**
+     * Compute the closest event id and store it in the class
+     */
+    private void computeClosestEvent() {
         if (events.isEmpty())
-            return 0;
+            closest_event_id = 0;
         else {
             int closest = ((Long) events.get(0).get("id")).intValue();
             java.util.Date closest_time = (java.util.Date) events.get(0).get("start");
@@ -146,7 +166,7 @@ public class Association implements Serializable {
                     closest = ((Long) events.get(i).get("id")).intValue();
                 }
             }
-            return closest;
+            closest_event_id = closest;
         }
     }
 
