@@ -2,6 +2,7 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
@@ -33,11 +36,18 @@ public class AssociationDetailFragment extends SuperFragment {
     private ImageView upcoming_event_icon;
     private TextView upcoming_event_name;
     private TextView upcoming_event_date;
+    private ConstraintLayout upcoming_event_layout;
     private Event upcoming_event;
 
     private Association asso;
     private User user;
 
+    /**
+     * Initialize a new AssociationDetailFragment
+     * @param user User of the app
+     * @param asso Association to be displayed
+     * @return A new AssociationDetailFragment displaying an association details
+     */
     public static AssociationDetailFragment newInstance(User user, Association asso) {
         if (asso == null)
             throw new NullPointerException("Error creating an AssociationDetailFragment:\n" +
@@ -89,29 +99,13 @@ public class AssociationDetailFragment extends SuperFragment {
                 .centerCrop()
                 .into(asso_banner);
 
-        // Upcoming event name
+        // Upcoming event views
+        upcoming_event_layout = view.findViewById(R.id.association_detail_upcoming_event);
         upcoming_event_name = view.findViewById(R.id.association_detail_upcoming_event_name);
         upcoming_event_icon = view.findViewById(R.id.association_detail_upcoming_event_icon);
         upcoming_event_date = view.findViewById(R.id.association_detail_upcoming_event_date);
-        if (asso.getClosestEventId() != 0) {
-            FirebaseFirestore.getInstance()
-                    .document("events_info/event" + asso.getClosestEventId())
-                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    upcoming_event = new Event(documentSnapshot);
-                    upcoming_event_name.setText(upcoming_event.getName());
-                    upcoming_event_date.setText(upcoming_event.getStart_date().toString());
-                    Glide.with(getContext())
-                            .load(upcoming_event.getIconUri())
-                            .centerCrop()
-                            .into(upcoming_event_icon);
-                }
-            });
-        } else {
-            upcoming_event_name.setText("Pas d'event :(");
-        }
-
+        loadUpcomingEvent();
+        setUpcomingEventButtonBehaviour();
 
         return view;
     }
@@ -123,6 +117,11 @@ public class AssociationDetailFragment extends SuperFragment {
                 .into(asso_fav);
     }
 
+    /**
+     * Set up the favorite button behaviour
+     * If the user isn't authenticated, stay the same
+     * Else it favorites/unfavorites the association
+     */
     private void setFavButtonBehaviour() {
         if (user.isConnected() && ((AuthenticatedUser) user).isFavAssociation(asso))
             loadFavImage(R.drawable.fav_on);
@@ -150,7 +149,49 @@ public class AssociationDetailFragment extends SuperFragment {
         });
     }
 
-    public Association getAsso() {
-        return asso;
+    // TODO: Remove comment when EventDetailFragment is fixed
+    /**
+     * Set up the upcoming event clicking behaviour to go on the event detailed page
+     */
+    private void setUpcomingEventButtonBehaviour(){
+        upcoming_event_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(upcoming_event != null) {
+                    //mListener.onFragmentInteraction(EventDetailFragment.TAG, upcoming_event);
+                }
+            }
+        });
+    }
+
+    /**
+     * Use Firebase to load the upcoming event data in the variable upcoming_event
+     * If there is no upcoming event (ie the association has no event), upcoming_event will stay null
+     */
+    private void loadUpcomingEvent(){
+        // Fetch online data of the upcoming event
+        if (asso.getClosestEventId() != 0) {
+            FirebaseFirestore.getInstance()
+                    .document("events_info/event" + asso.getClosestEventId())
+                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                    if(fmap.hasFields(Event.FIELDS)) {
+                        upcoming_event = new Event(fmap);
+                        upcoming_event_name.setText(upcoming_event.getName());
+                        upcoming_event_date.setText(upcoming_event.getStartDate().toString());
+                        Glide.with(getContext())
+                                .load(upcoming_event.getIconUri())
+                                .centerCrop()
+                                .into(upcoming_event_icon);
+                    }
+                    else
+                        upcoming_event_name.setText("Error loading the event :(");
+                }
+            });
+        } else {
+            upcoming_event_name.setText("No upcoming event :(");
+        }
     }
 }

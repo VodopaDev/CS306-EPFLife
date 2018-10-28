@@ -8,6 +8,7 @@ import org.junit.runners.JUnit4;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.User;
@@ -22,12 +23,12 @@ public class ChannelTest {
     private static Map data1 = new HashMap();
     private static Map data2 = new HashMap();
 
-    private static final Long id1 = 1l;
+    private static final Long id1 = 1L;
     private static final String name1 = "Global";
     private static final String description1 = "Global chat for everyone";
     private static final Map<String, Object> restrictions1 = new HashMap<>();
 
-    private static final Long id2 = 2l;
+    private static final Long id2 = 2L;
     private static final String name2 = "IN channel";
     private static final String description2 = "Channel just for the IN";
     private static final Map<String, Object> restrictions2 = new HashMap<>();
@@ -62,8 +63,8 @@ public class ChannelTest {
         data2.put("description", description2);
         data2.put("restrictions", restrictions2);
 
-        channelGlobal = new Channel(data1);
-        channelIN = new Channel(data2);
+        channelGlobal = new Channel(new FirebaseMapDecorator(data1));
+        channelIN = new Channel(new FirebaseMapDecorator(data2));
     }
 
     @Test

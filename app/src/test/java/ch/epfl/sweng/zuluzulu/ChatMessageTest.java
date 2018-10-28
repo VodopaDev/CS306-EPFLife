@@ -9,9 +9,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
 public class ChatMessageTest {
@@ -44,8 +47,8 @@ public class ChatMessageTest {
         data2.put("message", message2);
         data2.put("time", time);
 
-        chatMessage1 = new ChatMessage(data1, userSciper);
-        chatMessage2 = new ChatMessage(data2, userSciper);
+        chatMessage1 = new ChatMessage(new FirebaseMapDecorator(data1), userSciper);
+        chatMessage2 = new ChatMessage(new FirebaseMapDecorator(data2), userSciper);
     }
 
     @Test
@@ -68,11 +71,11 @@ public class ChatMessageTest {
 
     @Test
     public void testIsOwnMessage() {
-        assertEquals(true, chatMessage1.isOwnMessage());
-        assertEquals(false, chatMessage2.isOwnMessage());
+        assertTrue(chatMessage1.isOwnMessage());
+        assertFalse(chatMessage2.isOwnMessage());
 
         chatMessage2.setOwnMessage(true);
-        assertEquals(true, chatMessage2.isOwnMessage());
+        assertTrue(chatMessage2.isOwnMessage());
     }
 
 }

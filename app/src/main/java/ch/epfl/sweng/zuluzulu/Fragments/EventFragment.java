@@ -21,6 +21,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Adapters.EventAdapter;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -158,23 +160,24 @@ public class EventFragment extends SuperFragment {
         event_all.clear();
         event_fav.clear();
     }
-
-    private void fillEventLists(String sortOption) {
-        FirebaseFirestore.getInstance().collection("events_info")
-                .orderBy(sortOption)
-                .get()
+  
+    private void fillEventLists(String sortOption){
+       FirebaseFirestore.getInstance().collection("events_info").orderBy(sortOption).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        for (int i = 0; i < snap_list.size(); i++) {
-                            Event event = new Event(snap_list.get(i));
-                            event_all.add(event);
-
-                            if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))
-                                event_fav.add(event);
+                        for (DocumentSnapshot snap: snap_list) {
+                            FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
+                            if(fmap.hasFields(Event.FIELDS)) {
+                                Event event = new Event(fmap);
+                                event_all.add(event);
+                                if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))
+                                    event_fav.add(event);
+                                event_adapter.notifyDataSetChanged();
+                            }
                         }
-                        event_adapter.notifyDataSetChanged();
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

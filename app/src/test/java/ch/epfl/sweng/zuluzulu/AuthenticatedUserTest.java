@@ -83,8 +83,8 @@ public class AuthenticatedUserTest {
     @Test
     public void setList(){
         user.setFollowedChats(Collections.singletonList(1));
-        user.setFavAssos(Arrays.asList(1));
-        user.setFollowedEvents(Arrays.asList(1));
+        user.setFavAssos(Collections.singletonList(1));
+        user.setFollowedEvents(Collections.singletonList(1));
         assertThat(true, equalTo(user.isFavAssociation(mocked_asso)));
         assertThat(true, equalTo(user.isFollowedChat(mocked_channel)));
         assertThat(true, equalTo(user.isFollowedEvent(mocked_event)));

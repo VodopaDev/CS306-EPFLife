@@ -34,12 +34,12 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageAdapter;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -216,8 +216,9 @@ public class ChatFragment extends SuperFragment {
                             messages.clear();
                             for (DocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                if (Utils.isValidSnapshot(document, ChatMessage.FIELDS)) {
-                                    ChatMessage message = new ChatMessage(document.getData(), user.getSciper());
+                                FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
+                                if (fmap.hasFields(ChatMessage.FIELDS)) {
+                                    ChatMessage message = new ChatMessage(fmap, user.getSciper());
                                     messages.add(message);
                                 }
                             }

@@ -23,9 +23,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @RunWith(AndroidJUnit4.class)
 public class EventFragmentTest {
 
-    private static final int NB_ALL_EVENTS = 4;
-    private static final int NB_FAV_EVENTS = 3;
-
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
@@ -74,63 +71,4 @@ public class EventFragmentTest {
         onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
         TimeUnit.SECONDS.sleep(2);
     }
-
-    //
-    // Not used anymore test
-    //
-//    @Test
-//    public void guestMainPageHasSomeEvent() throws InterruptedException {
-//        TimeUnit.SECONDS.sleep(2);
-//        onView(withId(R.id.event_fragment_all_button)).perform(ViewActions.click());
-//        TimeUnit.SECONDS.sleep(2);
-//        /*
-//        TimeUnit.SECONDS.sleep(1);
-//        assertThat(list_events, hasChildCount(NB_ALL_EVENTS));
-//        */
-//    }
-
-//    @Test
-//    public void guestClickOnFavoritesStaysOnAll() throws InterruptedException {
-//        TimeUnit.SECONDS.sleep(2);
-//        onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
-//        TimeUnit.SECONDS.sleep(2);
-//        /*
-//        TimeUnit.SECONDS.sleep(1);
-//        assertThat(list_events, hasChildCount(NB_ALL_EVENTS));
-//        */
-//    }
-
-//    @Test
-//    public void authenticatedClickOnFavoritesDisplayFewerEvents() throws InterruptedException {
-//        TimeUnit.SECONDS.sleep(2);
-//        onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
-//        TimeUnit.SECONDS.sleep(2);
-//        /*
-//        TimeUnit.SECONDS.sleep(1);
-//        assertThat(list_events, hasChildCount(NB_FAV_EVENTS));
-//        */
-//    }
-
-//    @Test
-//    public void listSortByName() throws InterruptedException {
-//        TimeUnit.SECONDS.sleep(2);
-//        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
-//        TimeUnit.SECONDS.sleep(2);
-//    }
-
-//    @Test
-//    public void listSortByDate() throws InterruptedException {
-//        TimeUnit.SECONDS.sleep(2);
-//        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
-//        TimeUnit.SECONDS.sleep(2);
-//    }
-
-
-//    @Test
-//    public void AuthenticatedClickingAnEventGoesToDetail() throws InterruptedException {
-//        authenticatedGoesToEvent();
-//        TimeUnit.SECONDS.sleep(1);
-//        onView(withText("forumEpfl")).perform(ViewActions.click());
-//        onView(withId(R.id.event_detail_name)).check(matches(isDisplayed()));
-//    }
 }

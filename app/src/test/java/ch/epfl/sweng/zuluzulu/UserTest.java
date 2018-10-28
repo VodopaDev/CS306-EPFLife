@@ -32,6 +32,11 @@ public class UserTest {
     }
 
     @Test
+    public void incompleteBuilderBuildNullUser(){
+        assertNull(new User.UserBuilder().buildAdmin());
+    }
+
+    @Test
     public void canCreateAdmin(){
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("admin@epfl.ch");
@@ -50,6 +55,7 @@ public class UserTest {
         assertNotNull(user);
         assertTrue(user.isConnected());
         assertTrue(user.hasRole(UserRole.ADMIN));
+        assertTrue(builder.build().isConnected());
     }
 
     @Test
