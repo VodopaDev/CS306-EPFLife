@@ -127,6 +127,7 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
                 String result = sb.toString()
                         .replaceAll("&#8217;", "'")
                         .replaceAll("&#8211;", "-")
+                        .replaceAll("&gt;", ">")
                         .replaceAll("&amp;", "&");
 
                 results.add(result);
