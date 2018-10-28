@@ -14,7 +14,9 @@ import android.widget.Toast;
 
 import static android.content.Context.LOCATION_SERVICE;
 
-public class GPS implements LocationListener {
+public final class GPS implements LocationListener {
+
+    private static volatile GPS instance = null;
 
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
     private static final long MIN_DISTANCE_TO_REQUEST_LOCATION = 1; // In meters
@@ -27,9 +29,21 @@ public class GPS implements LocationListener {
 
     private boolean isWorking = false;
 
-    public GPS(Context context) {
+    private GPS(Context context) {
         super();
         this.context = context;
+    }
+
+    public final static GPS getInstance(Context context) {
+        if (instance == null) {
+            synchronized(GPS.class) {
+                if (instance == null) {
+                    instance = new GPS(context);
+                }
+            }
+        }
+        instance.setContext(context);
+        return instance;
     }
 
     public void start() {
@@ -153,5 +167,9 @@ public class GPS implements LocationListener {
             return provider2 == null;
         }
         return provider1.equals(provider2);
+    }
+
+    private void setContext(Context context) {
+        this.context = context;
     }
 }

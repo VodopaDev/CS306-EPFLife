@@ -23,7 +23,7 @@ public class GPSTest {
         mActivityRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                gps = new GPS(mActivityRule.getActivity());
+                gps = GPS.getInstance(mActivityRule.getActivity());
                 gps.start();
             }
         });

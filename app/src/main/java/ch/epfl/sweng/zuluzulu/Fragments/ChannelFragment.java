@@ -75,7 +75,6 @@ public class ChannelFragment extends SuperFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        gps = new GPS(getContext());
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
         }
@@ -90,6 +89,7 @@ public class ChannelFragment extends SuperFragment {
         adapter = new ChannelAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
 
+        gps = GPS.getInstance(getContext());
         gps.start();
 
         Location gpsLocation = gps.getLocation();
@@ -106,7 +106,6 @@ public class ChannelFragment extends SuperFragment {
                 mListener.onFragmentInteraction(TAG, selectedChannel.getId());
             }
         });
-
 
         return view;
     }
