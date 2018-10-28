@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,12 +20,10 @@ import ch.epfl.sweng.zuluzulu.Structure.UserRole;
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends Fragment implements OnFragmentInteractionListener {
+public class ProfileFragment extends SuperFragment implements OnFragmentInteractionListener {
     private static final String PROFILE_TAG = "PROFIL_TAG";
 
     private User user;
-
-    private OnFragmentInteractionListener mListener;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -103,22 +100,6 @@ public class ProfileFragment extends Fragment implements OnFragmentInteractionLi
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     @Override
     public void onFragmentInteraction(String tag, Object data) {

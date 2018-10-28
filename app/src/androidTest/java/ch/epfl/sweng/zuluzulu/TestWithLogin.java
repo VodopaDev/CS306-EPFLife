@@ -22,7 +22,7 @@ public abstract class TestWithLogin {
     private User user;
 
     @Before
-    public void setUp() {
+    public void setUpLogin() {
         this.user = Utility.createTestUser();
         Utility.addUserToMainIntent(mActivityRule, this.user);
     }
