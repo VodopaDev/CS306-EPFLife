@@ -53,6 +53,7 @@
 //        if (getArguments() != null) {
 //            user = (User) getArguments().getSerializable(ARG_USER);
 //            event = (Event) getArguments().getSerializable(ARG_EVENT);
+//            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, event.getName());
 //        }
 //    }
 //
@@ -115,10 +116,6 @@
 //        });
 //    }
 //
-//@Override
-//public String getTitle() {
-//        return event.getName();
-//        }
 //
 //
 //}

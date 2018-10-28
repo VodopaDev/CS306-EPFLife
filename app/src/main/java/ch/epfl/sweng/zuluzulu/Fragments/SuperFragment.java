@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 
-public abstract class SuperFragment extends Fragment {
+public abstract class SuperFragment extends Fragment{
     protected OnFragmentInteractionListener mListener;
 
 
@@ -25,6 +25,4 @@ public abstract class SuperFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
-    public abstract String getTitle();
 }

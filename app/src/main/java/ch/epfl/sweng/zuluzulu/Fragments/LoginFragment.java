@@ -98,6 +98,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Login");
     }
 
     @Override
@@ -420,11 +421,4 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
             showProgress(false);
         }
     }
-
-    @Override
-    public String getTitle() {
-        return "Login";
-    }
-
-
 }

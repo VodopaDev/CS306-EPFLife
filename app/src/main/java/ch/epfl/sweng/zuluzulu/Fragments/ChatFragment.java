@@ -34,6 +34,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageArrayAdapter;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -94,6 +95,7 @@ public class ChatFragment extends SuperFragment {
         if (getArguments() != null) {
             user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
             channelID = getArguments().getInt(ARG_CHANNEL_ID);
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Chat id:" + channelID);
         }
     }
 
@@ -229,10 +231,5 @@ public class ChatFragment extends SuperFragment {
                         }
                     }
                 });
-    }
-
-    @Override
-    public String getTitle() {
-        return "Channel";
     }
 }

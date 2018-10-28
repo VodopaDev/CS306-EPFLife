@@ -72,6 +72,7 @@ public class ChannelFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Channels");
         }
     }
 
@@ -126,10 +127,5 @@ public class ChannelFragment extends SuperFragment {
                         }
                     }
                 });
-    }
-
-    @Override
-    public String getTitle() {
-        return "Chats";
     }
 }

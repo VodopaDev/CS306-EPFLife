@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -66,6 +67,7 @@ public class AssociationFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations");
         }
 
         assos_all = new ArrayList<>();
@@ -138,10 +140,5 @@ public class AssociationFragment extends SuperFragment {
         assos_adapter = new AssociationArrayAdapter(getContext(), data, mListener);
         list.setAdapter(assos_adapter);
         assos_adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public String getTitle() {
-        return "Associations";
     }
 }

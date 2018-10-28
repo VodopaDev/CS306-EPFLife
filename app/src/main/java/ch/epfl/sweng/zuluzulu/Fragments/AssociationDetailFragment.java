@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -70,6 +71,7 @@ public class AssociationDetailFragment extends SuperFragment {
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
             asso = (Association) getArguments().getSerializable(ARG_ASSO);
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, asso.getName());
         }
     }
 
@@ -193,10 +195,5 @@ public class AssociationDetailFragment extends SuperFragment {
         } else {
             upcoming_event_name.setText("No upcoming event :(");
         }
-    }
-
-    @Override
-    public String getTitle() {
-        return asso.getName();
     }
 }

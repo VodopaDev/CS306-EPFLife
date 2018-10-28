@@ -81,6 +81,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations Generator");
         AssociationsUrlHandler urlHandler = new AssociationsUrlHandler(this::handleData);
         urlHandler.execute(EPFL_URL);
 
@@ -93,10 +94,5 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_associations_generator, container, false);
-    }
-
-    @Override
-    public String getTitle() {
-        return "Association Generator";
     }
 }

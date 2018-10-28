@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 
@@ -22,8 +23,6 @@ import ch.epfl.sweng.zuluzulu.R;
  */
 public class AboutZuluzuluFragment extends SuperFragment {
     public static final String TAG = "ABOUT_TAG";
-
-    private OnFragmentInteractionListener mListener;
 
     public AboutZuluzuluFragment() {
         // Required empty public constructor
@@ -41,6 +40,7 @@ public class AboutZuluzuluFragment extends SuperFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "About ZuluZulu");
     }
 
     @Override
@@ -72,10 +72,5 @@ public class AboutZuluzuluFragment extends SuperFragment {
 
         // Start the activity and ask for a mail
         startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-    }
-
-    @Override
-    public String getTitle() {
-        return "About us";
     }
 }

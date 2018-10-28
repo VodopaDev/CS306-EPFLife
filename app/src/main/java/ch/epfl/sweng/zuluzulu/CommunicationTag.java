@@ -7,7 +7,6 @@ public enum CommunicationTag {
     SET_USER,
     INCREMENT_IDLING_RESOURCE,
     DECREMENT_IDLING_RESOURCE,
-    UPDATE_DRAWER,
 
     // Opening fragments
     OPEN_MAIN_FRAGMENT,

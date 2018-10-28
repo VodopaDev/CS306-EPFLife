@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 
@@ -42,6 +43,7 @@ public class SettingsFragment extends SuperFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Settings");
     }
 
     @Override
@@ -60,10 +62,4 @@ public class SettingsFragment extends SuperFragment {
         });
         return view;
     }
-
-    @Override
-    public String getTitle() {
-        return "Settings";
-    }
-
 }

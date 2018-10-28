@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -79,6 +80,7 @@ public class EventFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Events");
         }
 
         event_all = new ArrayList<>();
@@ -194,10 +196,5 @@ public class EventFragment extends SuperFragment {
         event_adapter = new EventArrayAdapter(getContext(), data, mListener);
         list.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public String getTitle() {
-        return "Events";
     }
 }

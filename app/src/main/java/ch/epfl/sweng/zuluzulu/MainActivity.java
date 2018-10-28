@@ -219,7 +219,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
                 current_fragment = fragment;
-                setTitle(fragment.getTitle());
                 return true;
             }
         }
@@ -231,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         switch (tag) {
             case SET_USER:
                 this.user = (User) data;
+                updateMenuItems();
                 break;
             case INCREMENT_IDLING_RESOURCE:
                 incrementCountingIdlingResource();
@@ -240,9 +240,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case SET_TITLE:
                 setTitle((String)data);
-                break;
-            case UPDATE_DRAWER:
-                updateMenuItems();
                 break;
 
             case OPEN_CHAT_FRAGMENT:

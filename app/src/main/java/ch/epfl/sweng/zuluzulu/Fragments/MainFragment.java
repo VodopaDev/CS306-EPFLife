@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.User;
@@ -46,6 +47,7 @@ public class MainFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Home");
             user = (User) getArguments().getSerializable(ARG_USER);
         }
     }
@@ -59,10 +61,5 @@ public class MainFragment extends SuperFragment {
             return inflater.inflate(R.layout.fragment_main, container, false);
         }
 
-    }
-
-    @Override
-    public String getTitle() {
-        return "Home";
     }
 }
