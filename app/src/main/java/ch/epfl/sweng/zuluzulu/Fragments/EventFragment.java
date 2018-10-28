@@ -39,7 +39,6 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * create an instance of this fragment.
  */
 public class EventFragment extends SuperFragment {
-    private static final String TAG = "EVENT_TAG";
     private static final String ARG_USER = "ARG_USER";
 
     private User user;
