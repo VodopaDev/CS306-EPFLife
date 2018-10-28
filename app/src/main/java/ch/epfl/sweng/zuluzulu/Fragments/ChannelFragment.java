@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -134,11 +136,13 @@ public class ChannelFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             listOfChannels.clear();
+                            Location gpsLocation = gps.getLocation();
+                            GeoPoint userLocation = new GeoPoint(gpsLocation.getLatitude(), gpsLocation.getLongitude());
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 if (Utils.isValidSnapshot(document, Channel.FIELDS)) {
                                     Channel channel = new Channel(document.getData());
-                                    if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user, gps.getLocation())) {
+                                    if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user, userLocation)) {
                                         listOfChannels.add(channel);
                                     }
                                 }

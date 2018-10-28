@@ -1,6 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import android.location.Location;
+import android.util.Log;
 
 import com.google.firebase.firestore.GeoPoint;
 
@@ -81,7 +81,7 @@ public class Channel {
      * @param user The user who wants to enter the channel
      * @return whether the user can access it or not
      */
-    public boolean canBeAccessedBy(AuthenticatedUser user, Location userLocation) {
+    public boolean canBeAccessedBy(AuthenticatedUser user, GeoPoint userLocation) {
         boolean hasAccess = true;
         String section = (String) restrictions.get("section");
         GeoPoint channelLocation = (GeoPoint) restrictions.get("location");
@@ -89,15 +89,9 @@ public class Channel {
             hasAccess = section.equals(user.getSection());
         }
         if (channelLocation != null) {
-            double userLatitude = userLocation.getLatitude();
-            double userLongitude = userLocation.getLongitude();
-            GeoPoint userPoint = new GeoPoint(userLatitude, userLongitude);
-
-            double distance = Utils.distanceBetween(channelLocation, userPoint);
-            System.out.println(getName());
-            System.out.println("User: (" + userLatitude + ", " + userLongitude + ")");
-            System.out.println("Channel: (" + channelLocation.getLatitude() + ", " + channelLocation.getLongitude() + ")");
-            System.out.println("Distance: " + distance);
+            double distance = Utils.distanceBetween(channelLocation, userLocation);
+            Log.d("Channel", getName());
+            Log.d("Distance: ", "" + distance);
             hasAccess = hasAccess && distance < MAX_DISTANCE;
         }
         return hasAccess;

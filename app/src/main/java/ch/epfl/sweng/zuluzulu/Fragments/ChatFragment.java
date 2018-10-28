@@ -112,7 +112,7 @@ public class ChatFragment extends Fragment {
         collection_path = CHANNEL_DOCUMENT_NAME + channelID + "/" + MESSAGES_COLLECTION_NAME;
 
         textEdit.setEnabled(false);
-        
+
         adapter = new ChatMessageAdapter(view.getContext(), messages);
         listView.setAdapter(adapter);
 

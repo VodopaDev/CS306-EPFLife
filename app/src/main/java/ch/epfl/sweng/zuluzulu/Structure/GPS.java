@@ -54,19 +54,27 @@ public class GPS {
     }
 
     public Location getLocation() {
+
+        // Try to retrieve the last known location
         if (mlocation == null) {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mlocation = locationManager.getLastKnownLocation(provider);
             }
         }
 
+        // No last known location
         if (mlocation == null) {
-            mlocation = new Location(provider);
-            mlocation.setLatitude(0);
-            mlocation.setLongitude(0);
-            mlocation.setAltitude(0);
+            mlocation = getDefaultLocation();
         }
 
         return mlocation;
+    }
+
+    public Location getDefaultLocation() {
+        Location defaultLocation = new Location(provider);
+        defaultLocation.setLatitude(0);
+        defaultLocation.setAltitude(0);
+        defaultLocation.setAltitude(0);
+        return defaultLocation;
     }
 }
