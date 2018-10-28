@@ -3,7 +3,6 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -48,7 +47,7 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * Use the {@link LoginFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class LoginFragment extends SuperFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String TAG = "LOGIN_TAG";
 
     /**
@@ -74,7 +73,6 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private OnFragmentInteractionListener mListener;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -275,23 +273,6 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
         if (mListener != null) {
             mListener.onFragmentInteraction(TAG, uri);
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     /*private static String read(String prompt) throws IOException {

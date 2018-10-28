@@ -1,11 +1,9 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +24,7 @@ import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
-public class AssociationDetailFragment extends Fragment {
+public class AssociationDetailFragment extends SuperFragment {
     public static final String TAG = "ASSOCIATION_DETAIL__TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_ASSO = "ARG_ASSO";
@@ -41,7 +39,6 @@ public class AssociationDetailFragment extends Fragment {
     private ConstraintLayout upcoming_event_layout;
     private Event upcoming_event;
 
-    private OnFragmentInteractionListener mListener;
     private Association asso;
     private User user;
 
@@ -196,22 +193,5 @@ public class AssociationDetailFragment extends Fragment {
         } else {
             upcoming_event_name.setText("No upcoming event :(");
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 }

@@ -19,7 +19,7 @@
 //import ch.epfl.sweng.zuluzulu.Structure.Event;
 //import ch.epfl.sweng.zuluzulu.Structure.User;
 //
-//public class EventDetailFragment extends Fragment{
+//public class EventDetailFragment extends SuperFragment{
 //    public static final String TAG = "EVENT_DETAIL__TAG";
 //    private static final String ARG_USER = "ARG_USER";
 //    private static final String ARG_EVENT = "ARG_EVENT";
@@ -28,7 +28,6 @@
 //
 //    private ImageView event_fav;
 //
-//    private OnFragmentInteractionListener mListener;
 //    private Event event;
 //    private User user;
 //
@@ -116,20 +115,5 @@
 //        });
 //    }
 //
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
 //
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
 //}

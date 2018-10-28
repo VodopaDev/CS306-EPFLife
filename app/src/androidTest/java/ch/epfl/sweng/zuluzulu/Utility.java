@@ -9,16 +9,19 @@ import android.view.Gravity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.CoreMatchers.not;
 
 /**
  * Use this class for functions that are used in multiple tests
@@ -31,21 +34,27 @@ public class Utility {
      * @return Return a user
      */
     public static User createTestUser() {
-        User.UserBuilder builder = new User.UserBuilder();
-        builder.setSciper("123456");
-        builder.setGaspar("gaspar");
-        builder.setEmail("test@epfl.ch");
-        builder.setSection("IN");
-        builder.setFirst_names("James");
-        builder.setLast_names("Bond");
-        builder.setFavAssos(Arrays.asList(1,2));
-        builder.setFollowedEvents(new ArrayList<Integer>());
-        builder.setFollowedChats(new ArrayList<Integer>());
+        User.UserBuilder builder = createFilledUserBuider();
 
         User user = builder.buildAuthenticatedUser();
         assert (user != null);
-        assert (user.isConnected());
 
+
+        return user;
+    }
+
+    /**
+     * Create a admin for the tests
+     *
+     * @return Return a  admin user
+     */
+    public static User createTestAdmin() {
+        User.UserBuilder builder = createFilledUserBuider();
+
+
+        User user = builder.buildAdmin();
+        assert (user != null);
+        assert (user.hasRole(UserRole.ADMIN));
 
         return user;
     }
@@ -127,5 +136,32 @@ public class Utility {
         onView(withId(id)).check(matches(isDisplayed()));
     }
 
+    /**
+     * Check if the fragment is not open
+     *
+     * @param id fragment id
+     */
+    public static void checkFragmentIsClosed(int id) {
+        onView(withId(id)).check(doesNotExist());
+    }
+
+    /**
+     * Return a userbuilder already filled with all the user informations
+     * @return UserBuilder
+     */
+    private static User.UserBuilder createFilledUserBuider() {
+        User.UserBuilder builder = new User.UserBuilder();
+        builder.setSciper("123456");
+        builder.setGaspar("gaspar");
+        builder.setEmail("test@epfl.ch");
+        builder.setSection("IN");
+        builder.setFirst_names("James");
+        builder.setLast_names("Bond");
+        builder.setFavAssos(Arrays.asList(1,2));
+        builder.setFollowedEvents(new ArrayList<Integer>());
+        builder.setFollowedChats(new ArrayList<Integer>());
+
+        return builder;
+    }
 
 }

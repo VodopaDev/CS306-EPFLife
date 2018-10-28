@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -50,7 +49,7 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * Use the {@link ChatFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChatFragment extends Fragment {
+public class ChatFragment extends SuperFragment {
     public static final String TAG = "CHAT_TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_CHANNEL_ID = "ARG_CHANNEL_ID";
@@ -69,8 +68,6 @@ public class ChatFragment extends Fragment {
 
     private User user;
     private int channelID;
-
-    private OnFragmentInteractionListener mListener;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -119,23 +116,6 @@ public class ChatFragment extends Fragment {
         setUpEditText();
 
         return view;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     /**
