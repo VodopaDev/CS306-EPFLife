@@ -20,7 +20,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Adapters.AssociationAdapter;
+import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -43,7 +43,7 @@ public class AssociationFragment extends SuperFragment {
 
     private ArrayList<Association> assos_all;
     private ArrayList<Association> assos_fav;
-    private AssociationAdapter assos_adapter;
+    private AssociationArrayAdapter assos_adapter;
 
     private ListView listview_assos;
     private Button button_assos_all;
@@ -70,7 +70,7 @@ public class AssociationFragment extends SuperFragment {
 
         assos_all = new ArrayList<>();
         assos_fav = new ArrayList<>();
-        assos_adapter = new AssociationAdapter(getContext(), assos_all, mListener);
+        assos_adapter = new AssociationArrayAdapter(getContext(), assos_all, mListener);
 
         fillAssociationLists();
     }
@@ -135,7 +135,7 @@ public class AssociationFragment extends SuperFragment {
     private void updateListView(Button new_selected, Button new_unselected, ArrayList<Association> data, ListView list) {
         new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         new_unselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
-        assos_adapter = new AssociationAdapter(getContext(), data, mListener);
+        assos_adapter = new AssociationArrayAdapter(getContext(), data, mListener);
         list.setAdapter(assos_adapter);
         assos_adapter.notifyDataSetChanged();
     }

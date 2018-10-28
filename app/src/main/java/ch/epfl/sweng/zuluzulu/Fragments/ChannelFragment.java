@@ -19,7 +19,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import ch.epfl.sweng.zuluzulu.Adapters.ChannelAdapter;
+import ch.epfl.sweng.zuluzulu.Adapters.ChannelArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -44,7 +44,7 @@ public class ChannelFragment extends SuperFragment {
 
     private ListView listView;
     private ArrayList<Channel> listOfChannels = new ArrayList<>();
-    private ChannelAdapter adapter;
+    private ChannelArrayAdapter adapter;
 
     private User user;
 
@@ -80,7 +80,7 @@ public class ChannelFragment extends SuperFragment {
         View view = inflater.inflate(R.layout.fragment_channel, container, false);
         listView = view.findViewById(R.id.channels_list_view);
 
-        adapter = new ChannelAdapter(view.getContext(), listOfChannels);
+        adapter = new ChannelArrayAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
 
         getChannelsFromDatabase();
