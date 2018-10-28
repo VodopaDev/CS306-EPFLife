@@ -3,7 +3,8 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 
 /**
  * Class that represents a chat message in a view
@@ -17,11 +18,11 @@ public class ChatMessage {
     private Date time;
     private boolean ownMessage;
 
-    public ChatMessage(Map data, String userSciper) {
-        senderName = (String) data.get("senderName");
-        sciper = (String) data.get("sciper");
-        message = (String) data.get("message");
-        time = (Date) data.get("time");
+    public ChatMessage(FirebaseMapDecorator data, String userSciper) {
+        senderName = data.getString("senderName");
+        sciper = data.getString("sciper");
+        message = data.getString("message");
+        time = data.getDate("time");
         ownMessage = sciper.equals(userSciper);
     }
 

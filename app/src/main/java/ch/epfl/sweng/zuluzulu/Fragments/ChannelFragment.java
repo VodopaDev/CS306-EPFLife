@@ -22,13 +22,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChannelAdapter;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.GPS;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -120,8 +120,9 @@ public class ChannelFragment extends SuperFragment {
                             GeoPoint userLocation = new GeoPoint(gpsLocation.getLatitude(), gpsLocation.getLongitude());
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                if (Utils.isValidSnapshot(document, Channel.FIELDS)) {
-                                    Channel channel = new Channel(document.getData());
+                                FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
+                                if (fmap.hasFields(Channel.FIELDS)) {
+                                    Channel channel = new Channel(fmap);
                                     if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user, userLocation)) {
                                         listOfChannels.add(channel);
                                     }

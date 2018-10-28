@@ -32,11 +32,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 
 /**
@@ -404,10 +404,11 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
                         map.put("followed_chats", new ArrayList<Integer>());
                         ref.set(map);
                         activate_session(user);
-                    } else if (Utils.isValidSnapshot(documentSnapshot, AuthenticatedUser.fields)) {
-                        List<Integer> received_assos = Utils.longListToIntList((List<Long>) documentSnapshot.get("fav_assos"));
-                        List<Integer> received_events = Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_events"));
-                        List<Integer> received_chats = Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_chats"));
+                    } else{
+                        FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                        List<Integer> received_assos = fmap.getIntegerList("fav_assos");
+                        List<Integer> received_events = fmap.getIntegerList("followed_events");
+                        List<Integer> received_chats = fmap.getIntegerList("followed_chats");
 
                         ((AuthenticatedUser) user).setFavAssos(received_assos);
                         ((AuthenticatedUser) user).setFollowedEvents(received_events);

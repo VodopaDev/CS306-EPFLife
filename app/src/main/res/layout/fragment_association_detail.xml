@@ -95,11 +95,13 @@
         app:layout_constraintTop_toBottomOf="@+id/association_detail_framelayout">
 
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/association_detail_upcoming_event"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:background="@color/colorGrayDarkTransparent">
 
             <ImageView
+                android:id="@+id/background"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="2dp"

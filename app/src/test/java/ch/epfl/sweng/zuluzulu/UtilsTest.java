@@ -6,30 +6,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(JUnit4.class)
 public class UtilsTest {
-
-    @Test
-    public void nullSnapshotReturnFalse(){
-        assertThat(false, equalTo(Utils.isValidSnapshot(null, Collections.EMPTY_LIST)));
-    }
-
-    @Test
-    public void longToInt(){
-        List<Long> array1 = Arrays.asList(1L,2L);
-        List<Integer> array2 = Utils.longListToIntList(array1);
-        assertThat(Arrays.asList(1,2), equalTo(array2));
-    }
 
     @Test
     public void testDistanceBetween() {
