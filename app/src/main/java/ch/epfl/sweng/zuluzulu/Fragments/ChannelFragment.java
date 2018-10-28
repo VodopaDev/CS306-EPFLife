@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -39,7 +38,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Utils;
  * Use the {@link ChannelFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChannelFragment extends Fragment {
+public class ChannelFragment extends SuperFragment {
     public static final String TAG = "CHANNEL_TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String CHANNELS_COLLECTION_NAME = "channels";
@@ -52,8 +51,6 @@ public class ChannelFragment extends Fragment {
     private ChannelAdapter adapter;
 
     private User user;
-
-    private OnFragmentInteractionListener mListener;
 
     public ChannelFragment() {
         // Required empty public constructor
@@ -104,23 +101,6 @@ public class ChannelFragment extends Fragment {
 
 
         return view;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     /**
