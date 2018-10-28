@@ -110,9 +110,7 @@ public class AssociationFragment extends SuperFragment {
     }
 
     private void fillAssociationLists() {
-        FirebaseFirestore.getInstance().collection("assos_info")
-                .orderBy("name")
-                .get()
+        FirebaseFirestore.getInstance().collection("assos_info").orderBy("name").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -125,9 +123,10 @@ public class AssociationFragment extends SuperFragment {
 
                                 if (user.isConnected() && ((AuthenticatedUser) user).isFavAssociation(asso))
                                     assos_fav.add(asso);
+
+                                assos_adapter.notifyDataSetChanged();
                             }
                         }
-                        assos_adapter.notifyDataSetChanged();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
