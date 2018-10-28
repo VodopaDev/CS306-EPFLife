@@ -17,6 +17,12 @@ public abstract class Utils {
         FirebaseFirestore.getInstance().document(path).update(field, FieldValue.arrayRemove(id));
     }
 
+    /**
+     * Return the distance between two GeoPoints
+     * @param p1 The first GeoPoint
+     * @param p2 The second GeoPoint
+     * @return The distance between the two GeoPoints
+     */
     public static double distanceBetween(GeoPoint p1, GeoPoint p2) {
         double x = p1.getLatitude() - p2.getLatitude();
         double y = p1.getLongitude() - p2.getLongitude();
