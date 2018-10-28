@@ -90,6 +90,8 @@ public class ChannelFragment extends SuperFragment {
         adapter = new ChannelAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
 
+        gps.start();
+
         Location gpsLocation = gps.getLocation();
         if (gpsLocation != null) {
             userLocation = new GeoPoint(gpsLocation.getLatitude(), gpsLocation.getLongitude());
@@ -107,6 +109,12 @@ public class ChannelFragment extends SuperFragment {
 
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        gps.stop();
     }
 
     /**

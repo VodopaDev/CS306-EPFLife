@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.MainActivity;
 
+import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
 public class GPSTest {
@@ -23,12 +24,19 @@ public class GPSTest {
             @Override
             public void run() {
                 gps = new GPS(mActivityRule.getActivity());
+                gps.start();
             }
         });
     }
 
     @Test
-    public void testCanGetLocation() {
-        assertTrue(gps.getLocation() != null);
+    public void testIsWorkingAfterStart() {
+        assertTrue(gps.isWorking());
+    }
+
+    @Test
+    public void testIsNotWorkingAfterStop() {
+        gps.stop();
+        assertFalse(gps.isWorking());
     }
 }
