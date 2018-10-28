@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import java.io.File;
 import java.util.List;
 
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -81,7 +82,7 @@ public class AssociationArrayAdapter extends ArrayAdapter<Association> {
             @Override
             public void onClick(View v) {
                 Log.d("FRAG_CHANGE", "Switching to " + asso.getName() + "detailed view");
-                mListener.onFragmentInteraction(AssociationDetailFragment.TAG, asso);
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_ASSOCIATION_DETAIL_FRAGMENT, asso);
             }
         });
 

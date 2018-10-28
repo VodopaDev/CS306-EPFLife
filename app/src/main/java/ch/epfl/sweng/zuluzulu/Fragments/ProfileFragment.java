@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.User;
@@ -100,14 +101,13 @@ public class ProfileFragment extends SuperFragment implements OnFragmentInteract
         return view;
     }
 
-
-    @Override
-    public void onFragmentInteraction(String tag, Object data) {
-
-    }
-
     @Override
     public String getTitle() {
         return user.getFirstNames() + "'s Profile";
+    }
+
+    @Override
+    public void onFragmentInteraction(CommunicationTag tag, Object data) {
+
     }
 }

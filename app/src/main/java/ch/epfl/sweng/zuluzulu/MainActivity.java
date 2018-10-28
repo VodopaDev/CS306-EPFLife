@@ -32,8 +32,10 @@ import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
+import ch.epfl.sweng.zuluzulu.tequila.Profile;
 
 //import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 
@@ -217,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
                 current_fragment = fragment;
+                setTitle(fragment.getTitle());
                 return true;
             }
         }
@@ -224,31 +227,68 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
 
     @Override
-    public void onFragmentInteraction(String tag, Object data) {
+    public void onFragmentInteraction(CommunicationTag tag, Object data) {
         switch (tag) {
-            case LoginFragment.TAG:
+            case SET_USER:
                 this.user = (User) data;
-                updateMenuItems();
-                selectItem(navigationView.getMenu().findItem(R.id.nav_main));
                 break;
-            case ChannelFragment.TAG:
+            case INCREMENT_IDLING_RESOURCE:
+                incrementCountingIdlingResource();
+                break;
+            case DECREMENT_IDLING_RESOURCE:
+                decrementCountingIdlingResource();
+                break;
+            case SET_TITLE:
+                setTitle((String)data);
+                break;
+            case UPDATE_DRAWER:
+                updateMenuItems();
+                break;
+
+            case OPEN_CHAT_FRAGMENT:
                 int channelID = (Integer) data;
                 openFragment(ChatFragment.newInstance(user, channelID));
                 break;
-            case AssociationDetailFragment.TAG:
+            case OPEN_ASSOCIATION_FRAGMENT:
+                openFragment(AssociationFragment.newInstance(user));
+                selectItem(navigationView.getMenu().findItem(R.id.nav_associations));
+                break;
+            case OPEN_ASSOCIATION_DETAIL_FRAGMENT:
                 Association association = (Association) data;
                 openFragment(AssociationDetailFragment.newInstance(user, association));
                 break;
-            case INCREMENT:
-                this.incrementCountingIdlingResource();
+            case OPEN_ABOUT_US_FRAGMENT:
+                openFragment(AboutZuluzuluFragment.newInstance());
+                selectItem(navigationView.getMenu().findItem(R.id.nav_about));
                 break;
-            case DECREMENT:
-                this.decrementCountingIdlingResource();
+            case OPEN_MAIN_FRAGMENT:
+                openFragment(MainFragment.newInstance(user));
+                selectItem(navigationView.getMenu().findItem(R.id.nav_main));
                 break;
-//            case EventDetailFragment.TAG:
-//                Event event = (Event) data;
-//                openFragment(EventDetailFragment.newInstance(user, event));
-//                break;
+            case OPEN_EVENT_FRAGMENT:
+                openFragment(EventFragment.newInstance(user));
+                selectItem(navigationView.getMenu().findItem(R.id.nav_events));
+                break;
+            case OPEN_EVENT_DETAIL_FRAGMENT:
+                Event event = (Event) data;
+                // openFragment(EventDetailFragment.newInstance(user, event));
+                break;
+            case OPEN_CHANNEL_FRAGMENT:
+                openFragment(ChannelFragment.newInstance(user));
+                selectItem(navigationView.getMenu().findItem(R.id.nav_chat));
+                break;
+            case OPEN_LOGIN_FRAGMENT:
+                openFragment(LoginFragment.newInstance());
+                selectItem(navigationView.getMenu().findItem(R.id.nav_login));
+                break;
+            case OPEN_PROFILE_FRAGMENT:
+                openFragment(ProfileFragment.newInstance(user));
+                selectItem(navigationView.getMenu().findItem(R.id.nav_profile));
+                break;
+            case OPEN_SETTINGS_FRAGMENT:
+                openFragment(SettingsFragment.newInstance());
+                selectItem(navigationView.getMenu().findItem(R.id.nav_settings));
+                break;
             default:
                 // Should never happen
                 throw new AssertionError(tag);

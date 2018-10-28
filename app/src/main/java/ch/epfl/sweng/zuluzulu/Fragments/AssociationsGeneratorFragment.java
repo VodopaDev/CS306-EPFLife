@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -71,7 +72,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         }
 
         // Tell tests the async execution is finished
-        mListener.onFragmentInteraction(MainActivity.DECREMENT, true);
+        mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
 
         return null;
     }
@@ -84,7 +85,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         urlHandler.execute(EPFL_URL);
 
         // Send increment to wait async execution in test
-        mListener.onFragmentInteraction(MainActivity.INCREMENT, true);
+        mListener.onFragmentInteraction(CommunicationTag.INCREMENT_IDLING_RESOURCE, true);
     }
 
     @Override

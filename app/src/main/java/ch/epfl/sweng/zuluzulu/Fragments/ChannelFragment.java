@@ -20,6 +20,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChannelArrayAdapter;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -89,7 +90,7 @@ public class ChannelFragment extends SuperFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Channel selectedChannel = listOfChannels.get(position);
-                mListener.onFragmentInteraction(TAG, selectedChannel.getId());
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel.getId());
             }
         });
 
