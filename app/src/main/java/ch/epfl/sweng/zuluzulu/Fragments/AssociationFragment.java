@@ -14,6 +14,7 @@ import android.widget.ListView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -22,6 +23,7 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -115,12 +117,15 @@ public class AssociationFragment extends SuperFragment {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        for (int i = 0; i < snap_list.size(); i++) {
-                            Association asso = new Association(snap_list.get(i));
-                            assos_all.add(asso);
+                        for (DocumentSnapshot snap: snap_list) {
+                            FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+                            if(data.hasFields(Association.FIELDS)) {
+                                Association asso = new Association(data);
+                                assos_all.add(asso);
 
-                            if (user.isConnected() && ((AuthenticatedUser) user).isFavAssociation(asso))
-                                assos_fav.add(asso);
+                                if (user.isConnected() && ((AuthenticatedUser) user).isFavAssociation(asso))
+                                    assos_fav.add(asso);
+                            }
                         }
                         assos_adapter.notifyDataSetChanged();
                     }

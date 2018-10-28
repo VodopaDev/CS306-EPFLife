@@ -35,26 +35,6 @@ public class Association implements Serializable {
     private int closest_event_id;
 
     /**
-     * Create an association using a DocumentSnapshot
-     *
-     * @param snap the document snapshot
-     * @throws IllegalArgumentException if the snapshot isn't an Association's snapshot
-     */
-    public Association(DocumentSnapshot snap){
-        this(new FirebaseMapDecorator(snap));
-    }
-
-    /**
-     * Create an association using a map
-     *
-     * @param map the document snapshot
-     * @throws IllegalArgumentException if the map isn't an Association's map
-     */
-    public Association(Map<String,Object> map){
-        this(new FirebaseMapDecorator(map));
-    }
-
-    /**
      * Create an association using a Firebase adapted map
      *
      * @param data the adapted map containing the association data
