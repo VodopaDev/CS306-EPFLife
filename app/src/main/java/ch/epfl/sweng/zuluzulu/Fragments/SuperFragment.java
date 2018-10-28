@@ -25,4 +25,6 @@ public abstract class SuperFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+    public abstract String getTitle();
 }

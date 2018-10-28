@@ -61,4 +61,8 @@ public class MainFragment extends SuperFragment {
 
     }
 
+    @Override
+    public String getTitle() {
+        return "Home";
+    }
 }

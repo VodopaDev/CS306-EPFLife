@@ -140,4 +140,8 @@ public class AssociationFragment extends SuperFragment {
         assos_adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public String getTitle() {
+        return "Associations";
+    }
 }

@@ -230,4 +230,9 @@ public class ChatFragment extends SuperFragment {
                     }
                 });
     }
+
+    @Override
+    public String getTitle() {
+        return "Channel";
+    }
 }

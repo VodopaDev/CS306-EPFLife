@@ -93,4 +93,9 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_associations_generator, container, false);
     }
+
+    @Override
+    public String getTitle() {
+        return "Association Generator";
+    }
 }

@@ -115,5 +115,10 @@
 //        });
 //    }
 //
+//@Override
+//public String getTitle() {
+//        return event.getName();
+//        }
+//
 //
 //}

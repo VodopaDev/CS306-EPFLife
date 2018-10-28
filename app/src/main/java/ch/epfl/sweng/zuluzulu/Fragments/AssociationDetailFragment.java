@@ -194,4 +194,9 @@ public class AssociationDetailFragment extends SuperFragment {
             upcoming_event_name.setText("No upcoming event :(");
         }
     }
+
+    @Override
+    public String getTitle() {
+        return asso.getName();
+    }
 }

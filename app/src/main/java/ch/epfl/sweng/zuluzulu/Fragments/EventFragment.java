@@ -195,4 +195,9 @@ public class EventFragment extends SuperFragment {
         list.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
     }
+
+    @Override
+    public String getTitle() {
+        return "Events";
+    }
 }

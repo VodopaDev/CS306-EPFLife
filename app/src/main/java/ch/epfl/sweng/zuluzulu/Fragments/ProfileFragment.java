@@ -105,4 +105,9 @@ public class ProfileFragment extends SuperFragment implements OnFragmentInteract
     public void onFragmentInteraction(String tag, Object data) {
 
     }
+
+    @Override
+    public String getTitle() {
+        return user.getFirstNames() + "'s Profile";
+    }
 }

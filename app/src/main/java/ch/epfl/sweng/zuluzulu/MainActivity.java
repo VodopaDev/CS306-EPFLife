@@ -30,6 +30,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
@@ -43,11 +44,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public final static String DECREMENT = "decrement";
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private ArrayList<Fragment> previous_fragments;
-    private Fragment current_fragment;
+    private SuperFragment current_fragment;
     private User user;
+
     // This resource is used for tests
-    // That's the recommanded way to implement it
+    // That's the recommended way to implement it
     // @see https://developer.android.com/training/testing/espresso/idling-resource#integrate-recommended-approach
     private CountingIdlingResource resource;
 
@@ -61,9 +62,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         // Needed to use Firebase storage and Firestore
         FirebaseApp.initializeApp(getApplicationContext());
 
-        previous_fragments = new ArrayList<>();
-        previous_fragments.add(null);
-
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -72,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         navigationView = initNavigationView();
         initDrawerContent();
-
 
         Intent i = getIntent();
         if (Intent.ACTION_VIEW.equals(i.getAction())) {
@@ -168,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * @param menuItem The item that corresponds to a fragment on the menu
      */
     private void selectItem(MenuItem menuItem) {
-        Fragment fragment;
+        SuperFragment fragment;
         switch (menuItem.getItemId()) {
             case R.id.nav_main:
                 fragment = MainFragment.newInstance(user);
@@ -210,37 +207,20 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (openFragment(fragment)) {
             // Opening the fragment worked
             menuItem.setChecked(true);
-            setTitle(menuItem.getTitle());
         }
     }
 
-    public boolean openFragment(Fragment fragment) {
+    public boolean openFragment(SuperFragment fragment) {
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
-                previous_fragments.add(0, current_fragment);
                 current_fragment = fragment;
                 return true;
             }
         }
         return false;
-    }
-
-    /**
-     * Load the previous fragment (if there is one) into the fragment container
-     */
-    public void openPreviousFragment() {
-        if (previous_fragments.get(0) != null) {
-            Fragment fragment = previous_fragments.remove(0);
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            if (fragmentManager != null) {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.fragmentContent, fragment).commit();
-                current_fragment = fragment;
-            }
-        }
     }
 
     @Override
@@ -276,19 +256,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
 
     /**
-     * When back is pressed, load the previous fragment used
-     */
-    @Override
-    public void onBackPressed() {
-        openPreviousFragment();
-    }
-
-    /**
      * Return the current fragment
      *
      * @return current fragment
      */
-    public Fragment getCurrentFragment() {
+    public SuperFragment getCurrentFragment() {
         return current_fragment;
     }
 

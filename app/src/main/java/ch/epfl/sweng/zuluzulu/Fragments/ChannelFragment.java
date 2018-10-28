@@ -126,4 +126,9 @@ public class ChannelFragment extends SuperFragment {
                     }
                 });
     }
+
+    @Override
+    public String getTitle() {
+        return "Chats";
+    }
 }

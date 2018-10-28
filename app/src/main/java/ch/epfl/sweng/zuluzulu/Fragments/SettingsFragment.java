@@ -61,4 +61,9 @@ public class SettingsFragment extends SuperFragment {
         return view;
     }
 
+    @Override
+    public String getTitle() {
+        return "Settings";
+    }
+
 }

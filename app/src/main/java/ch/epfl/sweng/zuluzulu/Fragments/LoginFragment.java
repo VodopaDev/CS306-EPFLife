@@ -426,5 +426,10 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         }
     }
 
+    @Override
+    public String getTitle() {
+        return "Login";
+    }
+
 
 }

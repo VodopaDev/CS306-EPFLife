@@ -74,4 +74,8 @@ public class AboutZuluzuluFragment extends SuperFragment {
         startActivity(Intent.createChooser(emailIntent, "Send mail..."));
     }
 
+    @Override
+    public String getTitle() {
+        return "About us";
+    }
 }
