@@ -1,7 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import android.util.Log;
-
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Arrays;
@@ -95,8 +93,9 @@ public class Channel {
                 return false;
             }
             double distance = Utils.distanceBetween(channelLocation, userLocation);
-            Log.d("Channel", getName());
-            Log.d("Distance: ", "" + distance);
+            System.out.println(getName() + ": (" + channelLocation.getLatitude() + ", " + channelLocation.getLongitude() + ")");
+            System.out.println("User: (" + userLocation.getLatitude() + ", " + userLocation.getLongitude() + ")");
+            System.out.println("Distance: " + distance);
             hasAccess = hasAccess && distance < MAX_DISTANCE;
         }
         return hasAccess;

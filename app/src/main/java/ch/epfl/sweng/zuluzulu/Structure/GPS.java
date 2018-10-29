@@ -17,8 +17,8 @@ public final class GPS implements LocationListener {
     private static volatile GPS instance = null;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
-    private static final long MIN_DISTANCE_TO_REQUEST_LOCATION = 1; // In meters
-    private static final long MIN_TIME_FOR_UPDATES = 1000; // 1 sec
+    private static final long MIN_DISTANCE_TO_REQUEST_LOCATION = 0; // In meters
+    private static final long MIN_TIME_FOR_UPDATES = 0; // 1 sec
     private static final int TWO_MINUTES = 1000 * 60 * 2; // 2 min
 
     private Context context;
@@ -56,7 +56,6 @@ public final class GPS implements LocationListener {
             if (locationManager != null) {
                 boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                 boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-                isWorking = isGPSEnabled || isNetworkEnabled;
                 if (isGPSEnabled) {
                     locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, this);
@@ -64,13 +63,16 @@ public final class GPS implements LocationListener {
                     if (tempLocation != null && isBetterLocation(tempLocation, location)) {
                         location = tempLocation;
                     }
-                } else if (isNetworkEnabled) {
+                }
+                if (isNetworkEnabled) {
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, this);
                     Location tempLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                     if (tempLocation != null && isBetterLocation(tempLocation, location)) {
                         location = tempLocation;
                     }
-                } else {
+                }
+                isWorking = isGPSEnabled || isNetworkEnabled;
+                if (!isWorking) {
                     Toast.makeText(context, "Please activate your GPS to have access to all features", Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -100,6 +102,7 @@ public final class GPS implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        System.out.println("Location changed !!!");
         if (location != null && isBetterLocation(location, this.location)) {
             this.location = location;
         }
@@ -165,6 +168,7 @@ public final class GPS implements LocationListener {
 
     /**
      * Change the context when the GPS is called in another context
+     *
      * @param context The new context
      */
     private void setContext(Context context) {
