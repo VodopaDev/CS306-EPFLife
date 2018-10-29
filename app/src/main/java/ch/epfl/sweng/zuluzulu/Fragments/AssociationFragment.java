@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -52,6 +53,10 @@ public class AssociationFragment extends SuperFragment {
     private Button button_assos_all;
     private Button button_assos_fav;
 
+    private CheckBox checkbox_assos_sort_name;
+    private CheckBox checkbox_assos_sort_date;
+    private String default_sort_option;
+
     public AssociationFragment() {
         // Required empty public constructor
     }
@@ -76,7 +81,9 @@ public class AssociationFragment extends SuperFragment {
         assos_fav = new ArrayList<>();
         assos_adapter = new AssociationArrayAdapter(getContext(), assos_all, mListener);
 
-        fillAssociationLists();
+        default_sort_option = "name";
+
+        fillAssociationLists(default_sort_option);
     }
 
     @Override
@@ -106,11 +113,41 @@ public class AssociationFragment extends SuperFragment {
             }
         });
 
+        checkbox_assos_sort_name = view.findViewById(R.id.assos_fragment_checkbox_sort_Name);
+        checkbox_assos_sort_date = view.findViewById(R.id.event_fragment_checkBox_sort_date);
+
+        checkbox_assos_sort_name.setChecked(true);
+        checkbox_assos_sort_name.setEnabled(false);
+
+        checkbox_assos_sort_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkbox_assos_sort_date.setEnabled(false);
+                assos_all.clear();
+                assos_fav.clear();
+                fillAssociationLists("id");
+                checkbox_assos_sort_name.setChecked(false);
+                checkbox_assos_sort_name.setEnabled(true);
+            }
+        });
+
+        checkbox_assos_sort_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkbox_assos_sort_name.setEnabled(false);
+                assos_all.clear();
+                assos_fav.clear();
+                fillAssociationLists("name");
+                checkbox_assos_sort_date.setChecked(false);
+                checkbox_assos_sort_date.setEnabled(true);
+            }
+        });
+
         return view;
     }
 
-    private void fillAssociationLists() {
-        FirebaseFirestore.getInstance().collection("assos_info").orderBy("name").get()
+    private void fillAssociationLists(String sortOption) {
+        FirebaseFirestore.getInstance().collection("assos_info").orderBy(sortOption).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
