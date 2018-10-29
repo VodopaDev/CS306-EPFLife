@@ -14,7 +14,7 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 public class Channel {
 
     public static final List<String> FIELDS = Arrays.asList("id", "name", "description", "restrictions");
-    private static final double MAX_DISTANCE = 50;
+    private static final double MAX_DISTANCE = 20;
     private int id;
     private String name;
     private String description;
