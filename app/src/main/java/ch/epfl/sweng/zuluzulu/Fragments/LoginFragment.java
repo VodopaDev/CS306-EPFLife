@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -97,6 +98,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Login");
     }
 
     @Override
@@ -139,7 +141,8 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
      */
     private void activate_session(User user) {
         // Pass the user to the activity
-        mListener.onFragmentInteraction(TAG, user);
+        mListener.onFragmentInteraction(CommunicationTag.SET_USER, user);
+        mListener.onFragmentInteraction(CommunicationTag.OPEN_MAIN_FRAGMENT, null);
     }
 
 
@@ -266,13 +269,6 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     @Override
     public void onLoaderReset(@NonNull android.support.v4.content.Loader<Cursor> loader) {
 
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(TAG, uri);
-        }
     }
 
     /*private static String read(String prompt) throws IOException {
@@ -425,6 +421,4 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
             showProgress(false);
         }
     }
-
-
 }
