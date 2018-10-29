@@ -9,40 +9,43 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import io.opencensus.common.Function;
 
-public class UrlHandler<T> extends AsyncTask<String, Void, T> {
+public class UrlHandler extends AsyncTask<String, Void, List<String>> {
     private final static String TAG = "UrlHandler";
 
     // Function that will be executed onPostExecute
-    private Function<T, Void> listener;
+    private Function<List<String>, Void> listener;
 
     // The function that will parse the data
-    private Function<BufferedReader, T> parser;
+    private Function<BufferedReader, List<String>> parser;
 
     /**
      * Create a new UrlHandler
      *
      * @param listener The callback function that will be use on PostExecute
      */
-    public UrlHandler(Function<T, Void> listener, Function<BufferedReader, T> parser) {
+    public UrlHandler(Function<List<String>, Void> listener, Function<BufferedReader, List<String>> parser) {
+        Log.e(TAG, "GERE");
         this.listener = listener;
         this.parser = parser;
     }
 
 
     @Override
-    protected T doInBackground(String... urls) {
-        T result = parseUrl(urls[0]);
-
-        return result;
+    protected List<String> doInBackground(String... urls) {
+        if (urls.length > 0)
+            return parseUrl(urls[0]);
+        else
+            return null;
     }
 
 
     @Override
-    protected void onPostExecute(T strings) {
-        listener.apply(strings);
+    protected void onPostExecute(List<String> value) {
+        listener.apply(value);
     }
 
 
@@ -81,7 +84,7 @@ public class UrlHandler<T> extends AsyncTask<String, Void, T> {
      * @param url The URL
      * @return T Return object of type T with all the values founded
      */
-    private T parseUrl(String url) {
+    private List<String> parseUrl(String url) {
 
         HttpURLConnection urlConnection;
 
@@ -99,7 +102,7 @@ public class UrlHandler<T> extends AsyncTask<String, Void, T> {
             return null;
         }
 
-        T datas = null;
+        List<String> datas = null;
         try {
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));

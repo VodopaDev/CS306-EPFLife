@@ -83,7 +83,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations Generator");
-        UrlHandler urlHandler = new UrlHandler<List<String>>(this::handleData, Parsers::parseAssociationsData);
+        UrlHandler urlHandler = new UrlHandler(this::handleData, Parsers::parseAssociationsData);
         urlHandler.execute(EPFL_URL);
 
         // Send increment to wait async execution in test

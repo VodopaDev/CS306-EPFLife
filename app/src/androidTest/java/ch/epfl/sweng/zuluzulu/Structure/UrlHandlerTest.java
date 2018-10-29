@@ -12,11 +12,12 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
-import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.URLTools.Parsers;
+import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.Utility;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class UrlHandlerTest {
     @Rule
@@ -49,12 +50,11 @@ public class UrlHandlerTest {
          *
          * This test function handler() will be executed when the action is finished
          */
-        this.object = new UrlHandler<List<String>>(this::handler, Parsers::parseAssociationsData);
+        this.object = new UrlHandler(this::handler, Parsers::parseAssociationsData);
     }
 
     @Test
-    public void worksWithGoodURL()
-    {
+    public void worksWithGoodURL() {
         // Execute our async task
         object.execute(AssociationsGeneratorFragment.EPFL_URL); // Test with real URL
 
@@ -70,10 +70,11 @@ public class UrlHandlerTest {
 
     /**
      * This function will get the datas
+     *
      * @param result arrayList
      * @return Void
      */
-    private Void handler(List<String> result){
+    private Void handler(List<String> result) {
         // Do any logic. Here we want result not to be null
         succes = result != null;
 
@@ -84,10 +85,8 @@ public class UrlHandlerTest {
     }
 
 
-
     @Test
-    public void testNotValidURL()
-    {
+    public void testNotValidURL() {
         object.execute("wrong_url"); // Test with not valid URL
 
         Utility.openMenu();
@@ -96,8 +95,7 @@ public class UrlHandlerTest {
     }
 
     @Test
-    public void testWrongPage()
-    {
+    public void testWrongPage() {
         object.execute("http://epfl.ch/another_page_404"); // Test with wrong page
 
         Utility.openMenu();

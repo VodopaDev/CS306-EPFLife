@@ -5,6 +5,7 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +26,7 @@ public class Parsers {
      * @param in Input stream
      * @return ArrayList of strings , values separated by a comma
      */
-    public static ArrayList<String> parseAssociationsData(BufferedReader in) {
+    public static List<String> parseAssociationsData(BufferedReader in) {
         // regex
         Pattern p = Pattern.compile("&#\\d+.* <a href=\"(.*?)\".*>(.*)</a>.*\\((.+)\\)<.*br />.*");
 
