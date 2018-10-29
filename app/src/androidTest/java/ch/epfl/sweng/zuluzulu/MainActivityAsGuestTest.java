@@ -36,16 +36,6 @@ public class MainActivityAsGuestTest {
     }
 
     @Test
-    public void currentFragmentIsCorrect() {
-        assertTrue(mActivity.getCurrentFragment() instanceof MainFragment);
-        Utility.openMenu();
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_associations));
-        assertTrue(mActivity.getCurrentFragment() instanceof AssociationFragment);
-        Espresso.pressBack();
-        assertTrue(mActivity.getCurrentFragment() instanceof MainFragment);
-    }
-
-    @Test
     public void isAuthenticated() {
         // check not authenticated
         assertFalse(mActivity.isAuthenticated());
