@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import static android.content.Context.LOCATION_SERVICE;
@@ -36,7 +37,7 @@ public final class GPS implements LocationListener {
 
     public final static GPS getInstance(Context context) {
         if (instance == null) {
-            synchronized(GPS.class) {
+            synchronized (GPS.class) {
                 if (instance == null) {
                     instance = new GPS(context);
                 }
@@ -50,34 +51,31 @@ public final class GPS implements LocationListener {
         if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(context, "Permission to GPS not granted", Toast.LENGTH_SHORT).show();
             ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
-        }
-        try {
+        } else {
             locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
-            boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-            isWorking = isGPSEnabled || isNetworkEnabled;
-            if (isGPSEnabled) {
-                locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, this);
-                if (locationManager != null) {
+            if (locationManager != null) {
+                boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+                isWorking = isGPSEnabled || isNetworkEnabled;
+                if (isGPSEnabled) {
+                    locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, this);
                     Location tempLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     if (tempLocation != null && isBetterLocation(tempLocation, location)) {
                         location = tempLocation;
                     }
-                }
-            } else if (isNetworkEnabled) {
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, this);
-                if (locationManager != null) {
+                } else if (isNetworkEnabled) {
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, this);
                     Location tempLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                     if (tempLocation != null && isBetterLocation(tempLocation, location)) {
                         location = tempLocation;
                     }
+                } else {
+                    Toast.makeText(context, "Please activate your GPS to have access to all features", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(context, "Please activate your GPS to have access to all features", Toast.LENGTH_SHORT).show();
+                Log.e("Location manager", "Cannot get location manager");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -118,7 +116,7 @@ public final class GPS implements LocationListener {
 
     }
 
-    protected boolean isBetterLocation(Location location, Location currentBestLocation) {
+    private boolean isBetterLocation(Location location, Location currentBestLocation) {
         if (currentBestLocation == null) {
             // A new location is always better than no location
             return true;
@@ -148,17 +146,12 @@ public final class GPS implements LocationListener {
         boolean isFromSameProvider = isSameProvider(location.getProvider(), currentBestLocation.getProvider());
 
         // Determine location quality using a combination of timeliness and accuracy
-        if (isMoreAccurate) {
-            return true;
-        } else if (isNewer && !isLessAccurate) {
-            return true;
-        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
-            return true;
-        }
-        return false;
+        return isMoreAccurate || (isNewer && !isLessAccurate) || (isNewer && !isSignificantlyLessAccurate && isFromSameProvider);
     }
 
-    /** Checks whether two providers are the same */
+    /**
+     * Checks whether two providers are the same
+     */
     private boolean isSameProvider(String provider1, String provider2) {
         if (provider1 == null) {
             return provider2 == null;
