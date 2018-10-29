@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.Manifest;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -90,7 +91,10 @@ public class ChannelFragment extends SuperFragment {
         listView.setAdapter(adapter);
 
         gps = GPS.getInstance(getContext());
-        gps.start();
+        boolean hadPermissions = gps.start();
+        if (!hadPermissions) {
+            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, GPS.MY_PERMISSIONS_REQUEST_LOCATION);
+        }
 
         Location gpsLocation = gps.getLocation();
         if (gpsLocation != null) {
