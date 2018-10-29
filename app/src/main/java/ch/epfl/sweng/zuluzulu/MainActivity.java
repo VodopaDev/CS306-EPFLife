@@ -267,13 +267,18 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         fragment.setArguments(toSend);
     }
 
+    private void testThenAddArgsForLogin(SuperFragment fragment){
+        if(isLogin || openingWebView) {
+            addArgumentsForLogin(fragment);
+        }
+    }
+
     public boolean openFragment(SuperFragment fragment) {
 
         if (fragment != null) {
             //if is a login fragment then set argument with the URI
-            if(isLogin || openingWebView) {
-                addArgumentsForLogin(fragment);
-            }
+            testThenAddArgsForLogin(fragment);
+
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
