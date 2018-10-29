@@ -25,8 +25,6 @@ public final class GPS implements LocationListener {
     private Location location;
     private LocationManager locationManager;
 
-    private boolean isWorking = false;
-
     private GPS(Context context) {
         super();
         this.context = context.getApplicationContext();
@@ -72,8 +70,7 @@ public final class GPS implements LocationListener {
                         location = tempLocation;
                     }
                 }
-                isWorking = isGPSEnabled || isNetworkEnabled;
-                if (!isWorking) {
+                if (!isGPSEnabled && !isNetworkEnabled) {
                     Toast.makeText(context, "Please activate your GPS to have access to all features", Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -89,7 +86,6 @@ public final class GPS implements LocationListener {
     public void stop() {
         if (locationManager != null) {
             locationManager.removeUpdates(this);
-            isWorking = false;
         }
     }
 
@@ -100,15 +96,6 @@ public final class GPS implements LocationListener {
      */
     public Location getLocation() {
         return location;
-    }
-
-    /**
-     * Check whether the GPS is working or not
-     *
-     * @return whether the GPS is working or not
-     */
-    public boolean isWorking() {
-        return isWorking;
     }
 
     @Override

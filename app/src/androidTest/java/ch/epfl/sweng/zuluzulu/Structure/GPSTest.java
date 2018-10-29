@@ -1,15 +1,13 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import android.location.Location;
+import android.location.LocationManager;
 import android.support.test.rule.ActivityTestRule;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.MainActivity;
-
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
 
 public class GPSTest {
     @Rule
@@ -18,25 +16,16 @@ public class GPSTest {
 
     private GPS gps;
 
-    @Before
-    public void init() throws Throwable {
+    @Test
+    public void testOnLocationChanged() throws Throwable {
         mActivityRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 gps = GPS.getInstance(mActivityRule.getActivity());
                 gps.start();
+                gps.onLocationChanged(new Location(LocationManager.GPS_PROVIDER));
+                gps.stop();
             }
         });
-    }
-
-    @Test
-    public void testIsWorkingAfterStart() {
-        assertTrue(gps.isWorking());
-    }
-
-    @Test
-    public void testIsNotWorkingAfterStop() {
-        gps.stop();
-        assertFalse(gps.isWorking());
     }
 }
