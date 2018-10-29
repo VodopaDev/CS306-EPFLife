@@ -19,10 +19,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(AndroidJUnit4.class)
+
 /**
- * This class test the MainActivity as a Guest User
+  This class test the MainActivity as a Guest User
  */
+@RunWith(AndroidJUnit4.class)
 public class MainActivityAsGuestTest {
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
@@ -32,16 +33,6 @@ public class MainActivityAsGuestTest {
     @Before
     public void setUp() {
         mActivity = mActivityRule.getActivity();
-    }
-
-    @Test
-    public void currentFragmentIsCorrect() {
-        assertTrue(mActivity.getCurrentFragment() instanceof MainFragment);
-        Utility.openMenu();
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_associations));
-        assertTrue(mActivity.getCurrentFragment() instanceof AssociationFragment);
-        Espresso.pressBack();
-        assertTrue(mActivity.getCurrentFragment() instanceof MainFragment);
     }
 
     @Test

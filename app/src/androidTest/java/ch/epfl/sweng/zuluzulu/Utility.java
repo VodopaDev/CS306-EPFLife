@@ -27,8 +27,6 @@ import static org.hamcrest.CoreMatchers.not;
  * Use this class for functions that are used in multiple tests
  */
 public class Utility {
-    public static final int TEST_FAV_ASSOCIATIONS = 2; // ID= 1,2
-    public static final int NUMBER_OF_ASSOCIATIONS = 7; // ID = 1,2,3,4,5,6,7
 
     /**
      * Create a user for the tests

@@ -25,6 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
@@ -32,7 +34,6 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
 import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
 import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 
 /**
@@ -67,7 +68,6 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     private View mProgressView;
     private View mLoginFormView;
 
-    private OnFragmentInteractionListener mListener;
     private String redirectURICode;
     private OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
     private String code;
@@ -99,6 +99,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         try {
@@ -109,6 +110,8 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         if(redirectURICode != null){
             finishLogin();
         }
+
+        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Login");
     }
 
     @Override
@@ -141,20 +144,21 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     private void transfer_main(boolean isWebView) {
         // Pass the user to the activity
 
-        Map<Integer,Object> toTransfer = new HashMap<Integer, Object>();
-        toTransfer.put(0,isWebView);
+
 
         if(isWebView){
-            toTransfer.put(1,codeRequestUrl);
+            mListener.onFragmentInteraction(CommunicationTag.OPENING_WEBVIEW,codeRequestUrl);
         }
         else{
 
-            toTransfer.put(1,user);
-            toTransfer.put(2,code);
-            toTransfer.put(3,config);
+            Map<Integer,Object> toTransfer = new HashMap<Integer, Object>();
+            toTransfer.put(0,user);
+            toTransfer.put(1,code);
+            toTransfer.put(2,config);
+            mListener.onFragmentInteraction(CommunicationTag.SET_USER, toTransfer);
+            mListener.onFragmentInteraction(CommunicationTag.OPEN_MAIN_FRAGMENT, null);
         }
 
-        mListener.onFragmentInteraction(TAG, toTransfer);
         showProgress(false);
     }
 
@@ -174,10 +178,10 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
             return;
         }
 
-        updateUserForActivation();
+        updateUserAndFinishLogin();
     }
 
-    private void updateUserForActivation() {
+    private void updateUserAndFinishLogin() {
         final DocumentReference ref = FirebaseFirestore.getInstance()
                 .collection("users_info")
                 .document(user.getSciper());
@@ -192,10 +196,11 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
                     map.put("followed_chats", new ArrayList<Integer>());
                     ref.set(map);
                     transfer_main(false);
-                } else if (Utils.isValidSnapshot(documentSnapshot, AuthenticatedUser.fields)) {
-                    List<Integer> received_assos = Utils.longListToIntList((List<Long>) documentSnapshot.get("fav_assos"));
-                    List<Integer> received_events = Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_events"));
-                    List<Integer> received_chats = Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_chats"));
+                } else{
+                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                    List<Integer> received_assos = fmap.getIntegerList("fav_assos");
+                    List<Integer> received_events = fmap.getIntegerList("followed_events");
+                    List<Integer> received_chats = fmap.getIntegerList("followed_chats");
 
                     ((AuthenticatedUser) user).setFavAssos(received_assos);
                     ((AuthenticatedUser) user).setFollowedEvents(received_events);

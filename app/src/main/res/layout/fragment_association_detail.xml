@@ -6,84 +6,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.AssociationDetailFragment">
 
-    <FrameLayout
-        android:id="@+id/association_detail_framelayout"
+    <ImageView
+        android:id="@+id/association_detail_banner"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_margin="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:background="@android:color/holo_red_dark"
+        android:clickable="false"
+        android:contentDescription="@string/card_association_image_description"
+        android:scaleType="center"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/association_detail_banner"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/holo_red_dark"
-            android:contentDescription="@string/card_association_image_description"
-            android:scaleType="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/association_detail_icon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom|start"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:adjustViewBounds="false"
-            android:background="@color/colorWhiteTransparent"
-            android:contentDescription="@string/card_association_image_description"
-            app:layout_constraintBottom_toBottomOf="@+id/association_detail_banner"
-            app:layout_constraintEnd_toEndOf="@+id/association_detail_banner"
-            app:layout_constraintStart_toStartOf="@+id/association_detail_banner"
-            app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
-
-    </FrameLayout>
+    <ImageView
+        android:id="@+id/association_detail_icon"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="false"
+        android:background="@color/colorWhiteTransparent"
+        android:clickable="false"
+        android:contentDescription="@string/card_association_image_description"
+        app:layout_constraintBottom_toBottomOf="@+id/association_detail_banner"
+        app:layout_constraintStart_toStartOf="@+id/association_detail_banner" />
 
     <ImageButton
         android:id="@+id/association_detail_fav"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:background="@color/colorTransparent"
         android:clickable="true"
         android:contentDescription="@string/association_detail_fav_button"
+        android:focusable="true"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/association_detail_framelayout"
-        app:layout_constraintStart_toEndOf="@+id/association_detail_name" />
-
-    <TextView
-        android:id="@+id/association_detail_name"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginStart="78dp"
-        android:layout_marginLeft="78dp"
-        android:layout_marginBottom="8dp"
-        android:background="@color/colorWhiteTransparent"
-        android:gravity="center_horizontal|start"
-        android:maxLines="1"
-        android:minLines="1"
-        android:singleLine="true"
-        android:textColor="@color/colorGrayDark"
-        android:textSize="24sp"
-        android:typeface="sans"
-        app:layout_constraintBottom_toBottomOf="@+id/association_detail_framelayout"
-        app:layout_constraintStart_toStartOf="@+id/association_detail_framelayout" />
+        app:layout_constraintBottom_toBottomOf="@+id/association_detail_banner"
+        app:layout_constraintEnd_toEndOf="@+id/association_detail_banner" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="368dp"
-        android:layout_height="184dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
@@ -92,14 +61,16 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/association_detail_framelayout">
+        app:layout_constraintTop_toBottomOf="@+id/association_detail_banner">
 
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/association_detail_upcoming_event"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:background="@color/colorGrayDarkTransparent">
 
             <ImageView
+                android:id="@+id/background1"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="2dp"
@@ -122,11 +93,10 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:src="@drawable/common_google_signin_btn_icon_light"
+                android:src="@android:drawable/ic_delete"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@android:drawable/ic_delete" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/association_detail_upcoming_event_name"
@@ -135,9 +105,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
-                android:text="No upcoming event :("
                 android:textColor="@color/colorGrayDark"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 app:layout_constraintStart_toEndOf="@+id/association_detail_upcoming_event_icon"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -151,6 +120,73 @@
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/association_detail_upcoming_event_icon" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/padding1"
+            android:layout_width="match_parent"
+            android:layout_height="10dp">
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/association_detail_chat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorGrayDarkTransparent">
+
+            <ImageView
+                android:id="@+id/background2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="2dp"
+                android:src="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/association_detail_chat_icon"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/ic_chat"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/association_detail_chat_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/colorGrayDark"
+                android:textSize="24sp"
+                app:layout_constraintStart_toEndOf="@+id/association_detail_chat_icon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/association_detail_chat_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="8dp"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/background2"
+                app:layout_constraintStart_toEndOf="@+id/association_detail_chat_icon" />
+
         </android.support.constraint.ConstraintLayout>
     </LinearLayout>
 

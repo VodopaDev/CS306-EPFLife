@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.User;
@@ -20,8 +21,8 @@ import ch.epfl.sweng.zuluzulu.Structure.UserRole;
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends SuperFragment implements OnFragmentInteractionListener {
-    private static final String PROFILE_TAG = "PROFIL_TAG";
+public class ProfileFragment extends SuperFragment {
+    private static final String PROFILE_TAG = "PROFILE_TAG";
 
     private User user;
 
@@ -52,6 +53,7 @@ public class ProfileFragment extends SuperFragment implements OnFragmentInteract
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.user = (User) getArguments().getSerializable(PROFILE_TAG);
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, user.getFirstNames() + "'s Profile");
         } else {
             throw new AssertionError("No argument");
         }
@@ -98,11 +100,5 @@ public class ProfileFragment extends SuperFragment implements OnFragmentInteract
         sciper.setText(user.getSciper());
 
         return view;
-    }
-
-
-    @Override
-    public void onFragmentInteraction(String tag, Object data) {
-
     }
 }

@@ -15,7 +15,7 @@ abstract public class User implements Serializable {
     final protected ArrayList<UserRole> roles;
 
     protected User() {
-        this.roles = new ArrayList<UserRole>();
+        this.roles = new ArrayList<>();
     }
 
 

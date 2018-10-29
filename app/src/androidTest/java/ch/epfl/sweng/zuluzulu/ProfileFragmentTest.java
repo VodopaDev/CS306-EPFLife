@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -15,7 +16,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
 
 public class ProfileFragmentTest extends TestWithLogin {
-    private Fragment fragment;
+    private SuperFragment fragment;
 
 
     @Before

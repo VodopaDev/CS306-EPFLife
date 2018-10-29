@@ -14,12 +14,12 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 
-public class ChannelAdapter extends ArrayAdapter<Channel> {
+public class ChannelArrayAdapter extends ArrayAdapter<Channel> {
 
     private Context mContext;
     private List<Channel> channels;
 
-    public ChannelAdapter(@NonNull Context context, List<Channel> list) {
+    public ChannelArrayAdapter(@NonNull Context context, List<Channel> list) {
         super(context, 0, list);
         mContext = context;
         channels = list;

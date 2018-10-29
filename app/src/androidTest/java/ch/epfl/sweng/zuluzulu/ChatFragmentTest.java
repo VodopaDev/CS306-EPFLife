@@ -8,13 +8,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 
 @RunWith(AndroidJUnit4.class)
 public class ChatFragmentTest extends TestWithLogin {
 
     private static final int channelID = 1;
 
-    private Fragment fragment;
+    private SuperFragment fragment;
 
     @Before
     public void init() {

@@ -21,11 +21,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Adapters.EventAdapter;
+import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
@@ -37,14 +39,13 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * create an instance of this fragment.
  */
 public class EventFragment extends SuperFragment {
-    private static final String TAG = "EVENT_TAG";
     private static final String ARG_USER = "ARG_USER";
 
     private User user;
 
     private ArrayList<Event> event_all;
     private ArrayList<Event> event_fav;
-    private EventAdapter event_adapter;
+    private EventArrayAdapter event_adapter;
 
     private ListView listview_event;
     private Button button_event_all;
@@ -78,11 +79,12 @@ public class EventFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Events");
         }
 
         event_all = new ArrayList<>();
         event_fav = new ArrayList<>();
-        event_adapter = new EventAdapter(getContext(), event_all, mListener);
+        event_adapter = new EventArrayAdapter(getContext(), event_all, mListener);
 
         default_sort_option = "name";
 
@@ -158,23 +160,24 @@ public class EventFragment extends SuperFragment {
         event_all.clear();
         event_fav.clear();
     }
-
-    private void fillEventLists(String sortOption) {
-        FirebaseFirestore.getInstance().collection("events_info")
-                .orderBy(sortOption)
-                .get()
+  
+    private void fillEventLists(String sortOption){
+       FirebaseFirestore.getInstance().collection("events_info").orderBy(sortOption).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        for (int i = 0; i < snap_list.size(); i++) {
-                            Event event = new Event(snap_list.get(i));
-                            event_all.add(event);
-
-                            if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))
-                                event_fav.add(event);
+                        for (DocumentSnapshot snap: snap_list) {
+                            FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
+                            if(fmap.hasFields(Event.FIELDS)) {
+                                Event event = new Event(fmap);
+                                event_all.add(event);
+                                if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))
+                                    event_fav.add(event);
+                                event_adapter.notifyDataSetChanged();
+                            }
                         }
-                        event_adapter.notifyDataSetChanged();
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -189,7 +192,7 @@ public class EventFragment extends SuperFragment {
     private void updateListView(Button new_selected, Button new_unselected, ArrayList<Event> data, ListView list) {
         new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         new_unselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
-        event_adapter = new EventAdapter(getContext(), data, mListener);
+        event_adapter = new EventArrayAdapter(getContext(), data, mListener);
         list.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
     }

@@ -24,7 +24,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Event;
 /**
  * An ArrayAdapter for Event
  */
-public class EventAdapter extends ArrayAdapter<Event> {
+public class EventArrayAdapter extends ArrayAdapter<Event> {
     private static final int layout_resource_id = R.layout.card_event;
 
     private final Context context;
@@ -33,12 +33,12 @@ public class EventAdapter extends ArrayAdapter<Event> {
     private final OnFragmentInteractionListener mListener;
 
     /**
-     * Basic constructor of an EventAdapter
+     * Basic constructor of an EventArrayAdapter
      *
      * @param context Context of the Fragment
      * @param data    List of events to view
      */
-    public EventAdapter(Context context, List<Event> data, OnFragmentInteractionListener mListener) {
+    public EventArrayAdapter(Context context, List<Event> data, OnFragmentInteractionListener mListener) {
         super(context, layout_resource_id, data);
         this.mListener = mListener;
         this.context = context;
@@ -73,9 +73,9 @@ public class EventAdapter extends ArrayAdapter<Event> {
 
         final Event event = data.get(position);
         holder.name.setText(event.getName());
-        holder.short_desc.setText(event.getShort_desc());
+        holder.short_desc.setText(event.getShortDesc());
         initIcon(event.getIconUri(), holder.icon);
-        holder.start_date.setText(event.getStart_date().toString());
+        holder.start_date.setText(event.getStartDate().toString());
 
 //        event_view.setOnClickListener(new View.OnClickListener() {
 //            @Override
