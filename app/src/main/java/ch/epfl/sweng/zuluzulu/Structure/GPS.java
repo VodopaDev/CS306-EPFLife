@@ -17,8 +17,8 @@ public final class GPS implements LocationListener {
     private static volatile GPS instance = null;
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
-    private static final long MIN_DISTANCE_TO_REQUEST_LOCATION = 0; // In meters
-    private static final long MIN_TIME_FOR_UPDATES = 0; // 1 sec
+    private static final long MIN_DISTANCE_TO_REQUEST_LOCATION = 1; // In meters
+    private static final long MIN_TIME_FOR_UPDATES = 1000; // 1 sec
     private static final int TWO_MINUTES = 1000 * 60 * 2; // 2 min
 
     private Context context;
