@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import com.google.firebase.FirebaseApp;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
@@ -41,12 +42,12 @@ import ch.epfl.sweng.zuluzulu.tequila.Profile;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
-    // Const used to send a Increment or Decrement message
-    public final static String INCREMENT = "increment";
-    public final static String DECREMENT = "decrement";
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+
     private SuperFragment current_fragment;
+    private Stack<SuperFragment> previous_fragments;
+
     private User user;
 
     // This resource is used for tests
@@ -63,6 +64,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         // Needed to use Firebase storage and Firestore
         FirebaseApp.initializeApp(getApplicationContext());
+
+        // Initialize the fragment stack used for the back button
+        previous_fragments = new Stack<>();
 
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -206,19 +210,22 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 fragment = MainFragment.newInstance(user);
         }
 
-        if (openFragment(fragment)) {
+        if (openFragment(fragment, false)) {
             // Opening the fragment worked
             menuItem.setChecked(true);
         }
     }
 
-    public boolean openFragment(SuperFragment fragment) {
+    public boolean openFragment(SuperFragment fragment, boolean backPressed) {
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
+                if(!backPressed)
+                    previous_fragments.push(current_fragment);
                 current_fragment = fragment;
+
                 return true;
             }
         }
@@ -231,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case SET_USER:
                 this.user = (User) data;
                 updateMenuItems();
+                flushPreviousFragment();
                 break;
             case INCREMENT_IDLING_RESOURCE:
                 incrementCountingIdlingResource();
@@ -241,55 +249,60 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case SET_TITLE:
                 setTitle((String)data);
                 break;
-
             case OPEN_CHAT_FRAGMENT:
                 int channelID = (Integer) data;
-                openFragment(ChatFragment.newInstance(user, channelID));
+                openFragment(ChatFragment.newInstance(user, channelID), false);
                 break;
             case OPEN_ASSOCIATION_FRAGMENT:
-                openFragment(AssociationFragment.newInstance(user));
+                openFragment(AssociationFragment.newInstance(user), false);
                 selectItem(navigationView.getMenu().findItem(R.id.nav_associations));
                 break;
             case OPEN_ASSOCIATION_DETAIL_FRAGMENT:
                 Association association = (Association) data;
-                openFragment(AssociationDetailFragment.newInstance(user, association));
+                openFragment(AssociationDetailFragment.newInstance(user, association), false);
                 break;
             case OPEN_ABOUT_US_FRAGMENT:
-                openFragment(AboutZuluzuluFragment.newInstance());
+                openFragment(AboutZuluzuluFragment.newInstance(), false);
                 selectItem(navigationView.getMenu().findItem(R.id.nav_about));
                 break;
             case OPEN_MAIN_FRAGMENT:
-                openFragment(MainFragment.newInstance(user));
+                openFragment(MainFragment.newInstance(user), false);
                 selectItem(navigationView.getMenu().findItem(R.id.nav_main));
                 break;
             case OPEN_EVENT_FRAGMENT:
-                openFragment(EventFragment.newInstance(user));
+                openFragment(EventFragment.newInstance(user), false);
                 selectItem(navigationView.getMenu().findItem(R.id.nav_events));
                 break;
             case OPEN_EVENT_DETAIL_FRAGMENT:
                 Event event = (Event) data;
-                // openFragment(EventDetailFragment.newInstance(user, event));
+                //openFragment(EventDetailFragment.newInstance(user, event));
                 break;
             case OPEN_CHANNEL_FRAGMENT:
-                openFragment(ChannelFragment.newInstance(user));
+                openFragment(ChannelFragment.newInstance(user), false);
                 selectItem(navigationView.getMenu().findItem(R.id.nav_chat));
                 break;
             case OPEN_LOGIN_FRAGMENT:
-                openFragment(LoginFragment.newInstance());
+                openFragment(LoginFragment.newInstance(), false);
                 selectItem(navigationView.getMenu().findItem(R.id.nav_login));
                 break;
             case OPEN_PROFILE_FRAGMENT:
-                openFragment(ProfileFragment.newInstance(user));
+                openFragment(ProfileFragment.newInstance(user), false);
                 selectItem(navigationView.getMenu().findItem(R.id.nav_profile));
                 break;
             case OPEN_SETTINGS_FRAGMENT:
-                openFragment(SettingsFragment.newInstance());
+                openFragment(SettingsFragment.newInstance(), false);
                 selectItem(navigationView.getMenu().findItem(R.id.nav_settings));
                 break;
             default:
                 // Should never happen
                 throw new AssertionError(tag);
         }
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(!previous_fragments.empty())
+            openFragment(previous_fragments.pop(), true);
     }
 
     /**
@@ -333,5 +346,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      */
     public CountingIdlingResource getCountingIdlingResource() {
         return resource;
+    }
+
+    private void flushPreviousFragment(){
+        while(!previous_fragments.empty())
+            previous_fragments.pop();
     }
 }
