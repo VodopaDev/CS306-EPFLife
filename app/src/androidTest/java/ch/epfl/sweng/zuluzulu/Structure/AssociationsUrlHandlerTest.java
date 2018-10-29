@@ -8,11 +8,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
+import ch.epfl.sweng.zuluzulu.URLTools.AssociationsUrlHandler;
+import ch.epfl.sweng.zuluzulu.URLTools.Parsers;
 import ch.epfl.sweng.zuluzulu.Utility;
 
 import static org.junit.Assert.*;
@@ -48,7 +49,7 @@ public class AssociationsUrlHandlerTest {
          *
          * This test function handler() will be executed when the action is finished
          */
-        this.object = new AssociationsUrlHandler(this::handler);
+        this.object = new AssociationsUrlHandler<List<String>>(this::handler, Parsers::parseAssociationsData);
     }
 
     @Test

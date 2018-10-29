@@ -12,9 +12,10 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.AssociationsUrlHandler;
+import ch.epfl.sweng.zuluzulu.URLTools.AssociationsUrlHandler;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
+import ch.epfl.sweng.zuluzulu.URLTools.Parsers;
 
 
 /**
@@ -80,7 +81,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AssociationsUrlHandler urlHandler = new AssociationsUrlHandler<List<String>>(this::handleData, AssociationsUrlHandler::parseAssociationsData);
+        AssociationsUrlHandler urlHandler = new AssociationsUrlHandler<List<String>>(this::handleData, Parsers::parseAssociationsData);
         urlHandler.execute(EPFL_URL);
 
         // Send increment to wait async execution in test
