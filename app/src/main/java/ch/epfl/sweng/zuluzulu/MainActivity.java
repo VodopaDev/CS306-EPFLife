@@ -229,6 +229,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 }catch(IOException e){
                     System.out.print("Error while logging out");
                 }
+
+                android.webkit.CookieManager.getInstance().removeAllCookie();
+
                 code = null;
                 redirectURIwithCode = null;
                 updateMenuItems();
