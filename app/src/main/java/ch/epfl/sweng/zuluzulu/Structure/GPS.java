@@ -45,7 +45,9 @@ public final class GPS implements LocationListener {
     }
 
     /**
-     * Start asking for location updates and return true if succeed
+     * Start requesting for location updates
+     *
+     * @return Whether the user has given permission or not
      */
     public boolean start() {
         if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

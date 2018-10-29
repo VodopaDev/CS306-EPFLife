@@ -23,7 +23,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Adapters.ChannelAdapter;
+import ch.epfl.sweng.zuluzulu.Adapters.ChannelArrayAdapter;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -49,8 +50,9 @@ public class ChannelFragment extends SuperFragment {
     private GPS gps;
 
     private ListView listView;
+
     private List<Channel> listOfChannels = new ArrayList<>();
-    private ChannelAdapter adapter;
+    private ChannelArrayAdapter adapter;
 
     private User user;
     private GeoPoint userLocation;
@@ -78,6 +80,7 @@ public class ChannelFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Channels");
         }
     }
 
@@ -87,7 +90,7 @@ public class ChannelFragment extends SuperFragment {
         View view = inflater.inflate(R.layout.fragment_channel, container, false);
         listView = view.findViewById(R.id.channels_list_view);
 
-        adapter = new ChannelAdapter(view.getContext(), listOfChannels);
+        adapter = new ChannelArrayAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
 
         gps = GPS.getInstance(getContext());
@@ -107,7 +110,7 @@ public class ChannelFragment extends SuperFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Channel selectedChannel = listOfChannels.get(position);
-                mListener.onFragmentInteraction(TAG, selectedChannel.getId());
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel.getId());
             }
         });
 

@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 
-public abstract class SuperFragment extends Fragment {
+public abstract class SuperFragment extends Fragment{
     protected OnFragmentInteractionListener mListener;
 
 

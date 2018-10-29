@@ -7,10 +7,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+
 @RunWith(AndroidJUnit4.class)
 public class ChannelFragmentTest extends TestWithLogin {
 
-    private Fragment fragment;
+    private SuperFragment fragment;
 
     @Before
     public void init() {
