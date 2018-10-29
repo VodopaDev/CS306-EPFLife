@@ -3,7 +3,6 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,22 +44,6 @@ import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
  * create an instance of this fragment.
  */
 public class LoginFragment extends SuperFragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    public static final String TAG = "LOGIN_TAG";
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "user:password",
-            "vincent:password",
-            "dahn:password",
-            "nicolas:password",
-            "luca:password",
-            "gaultier:password",
-            "yann:password",
-            "bar:world"
-    };
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -273,23 +256,6 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     @Override
     public void onLoaderReset(@NonNull android.support.v4.content.Loader<Cursor> loader) {
 
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
 }
