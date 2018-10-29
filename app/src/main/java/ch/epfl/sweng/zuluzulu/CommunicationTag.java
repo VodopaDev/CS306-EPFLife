@@ -5,6 +5,7 @@ public enum CommunicationTag {
     // Utils to modify the main activity
     SET_TITLE,
     SET_USER,
+    OPENING_WEBVIEW,
     INCREMENT_IDLING_RESOURCE,
     DECREMENT_IDLING_RESOURCE,
 
