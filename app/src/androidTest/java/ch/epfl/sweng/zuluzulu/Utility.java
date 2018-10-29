@@ -80,26 +80,6 @@ public class Utility {
         mActivityRule.launchActivity(i);
     }
 
-    /**
-     * Enter the username and password for login
-     * To use on the LoginFragment only !
-     * @deprecated instead : Create the user with createTestUser() and pass it when creating fragment instance @see ProfileFragmentTest or ChatFragmentTest
-     */
-    public static void login() {
-        onView(withId(R.id.username)).perform(typeText("user")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
-        onView(withId(R.id.sign_in_button)).perform(click());
-    }
-
-    /**
-     * Login from anywhere in the app
-     * @deprecated instead : Create the user with createTestUser() and pass it when creating fragment instance @see ProfileFragmentTest or ChatFragmentTest
-     */
-    public static void fullLogin() {
-        openMenu();
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_login));
-        login();
-    }
 
     /**
      * Open the EventFragment

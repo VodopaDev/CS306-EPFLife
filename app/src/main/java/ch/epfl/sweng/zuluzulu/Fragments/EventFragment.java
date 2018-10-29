@@ -21,13 +21,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
-import ch.epfl.sweng.zuluzulu.Adapters.EventAdapter;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
@@ -39,14 +39,13 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * create an instance of this fragment.
  */
 public class EventFragment extends SuperFragment {
-    private static final String TAG = "EVENT_TAG";
     private static final String ARG_USER = "ARG_USER";
 
     private User user;
 
     private ArrayList<Event> event_all;
     private ArrayList<Event> event_fav;
-    private EventAdapter event_adapter;
+    private EventArrayAdapter event_adapter;
 
     private ListView listview_event;
     private Button button_event_all;
@@ -80,11 +79,12 @@ public class EventFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Events");
         }
 
         event_all = new ArrayList<>();
         event_fav = new ArrayList<>();
-        event_adapter = new EventAdapter(getContext(), event_all, mListener);
+        event_adapter = new EventArrayAdapter(getContext(), event_all, mListener);
 
         default_sort_option = "name";
 
@@ -192,7 +192,7 @@ public class EventFragment extends SuperFragment {
     private void updateListView(Button new_selected, Button new_unselected, ArrayList<Event> data, ListView list) {
         new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         new_unselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
-        event_adapter = new EventAdapter(getContext(), data, mListener);
+        event_adapter = new EventArrayAdapter(getContext(), data, mListener);
         list.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
     }
