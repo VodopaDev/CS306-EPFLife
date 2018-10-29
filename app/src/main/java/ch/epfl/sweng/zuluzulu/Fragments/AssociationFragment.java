@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,7 +42,7 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * Use the {@link AssociationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AssociationFragment extends SuperFragment {
+public class AssociationFragment extends SuperFragment implements TextWatcher {
     private static final String TAG = "ASSOCIATIONS_TAG";
     private static final String ARG_USER = "ARG_USER";
 
@@ -56,6 +59,8 @@ public class AssociationFragment extends SuperFragment {
     private CheckBox checkbox_assos_sort_name;
     private CheckBox checkbox_assos_sort_date;
     private String default_sort_option;
+
+    private TextView plainText_filter;
 
     public AssociationFragment() {
         // Required empty public constructor
@@ -114,7 +119,7 @@ public class AssociationFragment extends SuperFragment {
         });
 
         checkbox_assos_sort_name = view.findViewById(R.id.assos_fragment_checkbox_sort_Name);
-        checkbox_assos_sort_date = view.findViewById(R.id.event_fragment_checkBox_sort_date);
+        checkbox_assos_sort_date = view.findViewById(R.id.assos_fragment_checkbox_sort_date);
 
         checkbox_assos_sort_name.setChecked(true);
         checkbox_assos_sort_name.setEnabled(false);
@@ -143,6 +148,43 @@ public class AssociationFragment extends SuperFragment {
             }
         });
 
+        plainText_filter = view.findViewById(R.id.assos_fragment_plainText_filter);
+
+        plainText_filter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.e("ASSO_Filter", "assos_all before before: " + assos_all.size());
+                //assos_all.clear();
+                fillAssociationLists("name");
+
+                Log.e("ASSO_Filter", "assos_all before: " + assos_all.size());
+
+                String wordActual = plainText_filter.getText().toString();
+                ArrayList<Association> assos_filter;
+                assos_filter = new ArrayList<>();
+
+                for(Association assos: assos_all) {
+                    if(assos.getName().startsWith(wordActual)){
+                        assos_filter.add(new Association(assos));
+                    }
+                }
+                assos_all.clear();
+                assos_all.addAll(assos_filter);
+                assos_filter.clear();
+                Log.e("ASSO_Filter", "assos_all: " + assos_all.size());
+                assos_adapter.notifyDataSetChanged();
+            }
+        });
         return view;
     }
 
@@ -181,5 +223,20 @@ public class AssociationFragment extends SuperFragment {
         assos_adapter = new AssociationArrayAdapter(getContext(), data, mListener);
         list.setAdapter(assos_adapter);
         assos_adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
     }
 }
