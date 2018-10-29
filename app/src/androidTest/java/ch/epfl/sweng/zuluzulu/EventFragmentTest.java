@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+
 import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
@@ -34,7 +35,6 @@ public class EventFragmentTest {
     public void init() {
         user = Utility.createTestUser();
         Utility.addUserToMainIntent(mActivityRule, user);
-
         fragment = EventFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
     }

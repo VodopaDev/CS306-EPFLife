@@ -14,7 +14,13 @@ public final class AuthClient {
                 "?response_type=code" +
                 "&client_id=" + HttpUtils.urlEncode(config.clientId) +
                 "&redirect_uri=" + HttpUtils.urlEncode(config.redirectUri) +
-                "&scope=" + TextUtils.join(",", config.scopes);
+                "&scope=" + config.scopes[0];
+    }
+
+
+    public static String createUrlLogout() {
+        return "https://tequila.epfl.ch/cgi-bin/OAuth2IdP/logout";
+
     }
 
     public static String extractCode(String redirectUri) {

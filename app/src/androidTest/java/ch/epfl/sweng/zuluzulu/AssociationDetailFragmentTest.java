@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
+
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 
@@ -20,6 +21,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class AssociationDetailFragmentTest {
     private AuthenticatedUser user;
+
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
@@ -32,11 +34,13 @@ public class AssociationDetailFragmentTest {
         AssociationFragment fragment = AssociationFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
 
+
         try {
             TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
     }
 
     @Test
