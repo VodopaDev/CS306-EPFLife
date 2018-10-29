@@ -53,7 +53,7 @@ public class ChannelFragment extends SuperFragment {
     private ChannelAdapter adapter;
 
     private User user;
-    private GeoPoint userLocation = null;
+    private GeoPoint userLocation;
 
     public ChannelFragment() {
         // Required empty public constructor

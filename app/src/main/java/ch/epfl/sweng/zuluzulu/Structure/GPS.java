@@ -102,8 +102,8 @@ public final class GPS implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        System.out.println("Location changed !!!");
         if (location != null && isBetterLocation(location, this.location)) {
+            Toast.makeText(context, "Your location has changed ! Try refresh !", Toast.LENGTH_SHORT).show();
             this.location = location;
         }
     }

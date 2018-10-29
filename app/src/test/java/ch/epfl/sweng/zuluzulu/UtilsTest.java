@@ -20,5 +20,4 @@ public class UtilsTest {
         double distance = Utils.distanceBetween(p, p);
         assertEquals(0, distance, epsilon);
     }
-
 }
