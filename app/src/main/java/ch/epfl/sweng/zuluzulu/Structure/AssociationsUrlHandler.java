@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -17,72 +18,38 @@ import java.util.regex.Pattern;
 
 import io.opencensus.common.Function;
 
-public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>> {
+public class AssociationsUrlHandler<T> extends AsyncTask<String, Void, T> {
     private final static String TAG = "AssociationsUrlHandler";
 
     // Function that will be executed onPostExecute
-    private Function<List<String>, Void> listener;
+    private Function<T, Void> listener;
+
+    // The function that will parse the data
+    private Function<BufferedReader, T> parser;
 
     /**
      * Create a new AssociationUrlHandler
      * @param listener The callback function that will be use on PostExecute
      */
-    public AssociationsUrlHandler(Function<List<String>, Void> listener) {
+    public AssociationsUrlHandler(Function<T, Void> listener, Function<BufferedReader, T> parser) {
         this.listener = listener;
+        this.parser = parser;
     }
 
 
     @Override
-    protected List<String> doInBackground(String... urls) {
-        List<String> result = parseUrl(urls[0]);
+    protected T doInBackground(String... urls) {
+        T result = parseUrl(urls[0]);
 
         return result;
     }
 
 
     @Override
-    protected void onPostExecute(List<String> strings) {
+    protected void onPostExecute(T strings) {
         listener.apply(strings);
     }
 
-    /**
-     * Connect to the URL, parse it and return the values found
-     * @param url The URL
-     * @return ArrayList with all the values founded
-     */
-    private ArrayList<String> parseUrl(String url) {
-
-        HttpURLConnection urlConnection;
-
-        try {
-            // Connect to the url
-            urlConnection = connect(url);
-        } catch (IOException e) {
-            Log.d(TAG, "Cannot connect to the URL");
-            e.printStackTrace();
-            return null;
-        }
-
-
-        if (urlConnection == null) {
-            Log.d(TAG, "null UrlConnection");
-            return null;
-        }
-
-
-        ArrayList<String> datas = null;
-        try {
-            // Parse the datas
-            datas = parseData(urlConnection.getInputStream());
-        } catch (IOException e) {
-            Log.d(TAG, "Cannot parse datas");
-            e.printStackTrace();
-        } finally {
-            urlConnection.disconnect();
-        }
-
-        return datas;
-    }
 
     /**
      * Connect to the URL, check if the response code is OK (200)
@@ -113,16 +80,64 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
     }
 
     /**
+     * Connect to the URL, parse it and return the values found
+     * @param url The URL
+     * @return T Return object of type T with all the values founded
+     */
+    private T parseUrl(String url) {
+
+        HttpURLConnection urlConnection;
+
+        try {
+            // Connect to the url
+            urlConnection = connect(url);
+        } catch (IOException e) {
+            Log.d(TAG, "Cannot connect to the URL");
+            e.printStackTrace();
+            return null;
+        }
+
+
+        if (urlConnection == null) {
+            Log.d(TAG, "null UrlConnection");
+            return null;
+        }
+
+
+
+        BufferedReader in = null;
+        try {
+            in = new BufferedReader(
+                    new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+        } catch (IOException e) {
+            Log.d(TAG, "Cannot read the page");
+            e.printStackTrace();
+            urlConnection.disconnect();
+            return null;
+        }
+
+        T datas = parser.apply(in);
+
+        try {
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            urlConnection.disconnect();
+        }
+
+
+        return datas;
+    }
+
+    /**
      * This function will parse the datas and return a arraylist of strings
      *
-     * @param inputStream Input stream
+     * @param in Input stream
      * @return ArrayList of strings , values separated by a comma
-     * @throws IOException On error - To be handled
      */
-    private ArrayList<String> parseData(InputStream inputStream) throws IOException {
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(inputStream, "UTF-8"));
-
+    public static ArrayList<String> parseAssociationsData(BufferedReader in) {
         // regex
         Pattern p = Pattern.compile("&#\\d+.* <a href=\"(.*?)\".*>(.*)</a>.*\\((.+)\\)<.*br />.*");
 
@@ -130,30 +145,36 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
 
         String inputLine;
 
-        while ((inputLine = in.readLine()) != null) {
-            Matcher m = p.matcher(inputLine);
-            if (m.find()) {
-                // remove the span tag
-                String description = m.group(3).replaceAll("<.*?>", "");
+        try {
+            while ((inputLine = in.readLine()) != null) {
+                Matcher m = p.matcher(inputLine);
+                if (m.find()) {
+                    // remove the span tag
+                    String description = m.group(3).replaceAll("<.*?>", "");
 
-                StringBuilder sb = new StringBuilder();
-                sb.append(m.group(1));
-                sb.append(',');
-                sb.append(m.group(2));
-                sb.append(',');
-                sb.append(description);
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(m.group(1));
+                    sb.append(',');
+                    sb.append(m.group(2));
+                    sb.append(',');
+                    sb.append(description);
 
-                // remplace html unicode to char
-                String result = sb.toString()
-                        .replaceAll("&#8217;", "'")
-                        .replaceAll("&#8211;", "-")
-                        .replaceAll("&gt;", ">")
-                        .replaceAll("&amp;", "&");
+                    // remplace html unicode to char
+                    String result = sb.toString()
+                            .replaceAll("&#8217;", "'")
+                            .replaceAll("&#8211;", "-")
+                            .replaceAll("&gt;", ">")
+                            .replaceAll("&amp;", "&");
 
-                results.add(result);
+                    results.add(result);
+                }
             }
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d(TAG, "Could not parse datas");
+            return null;
         }
-        in.close();
 
         return results;
     }

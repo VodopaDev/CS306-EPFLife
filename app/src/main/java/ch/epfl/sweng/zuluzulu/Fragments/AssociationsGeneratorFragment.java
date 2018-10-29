@@ -80,7 +80,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AssociationsUrlHandler urlHandler = new AssociationsUrlHandler(this::handleData);
+        AssociationsUrlHandler urlHandler = new AssociationsUrlHandler<List<String>>(this::handleData, AssociationsUrlHandler::parseAssociationsData);
         urlHandler.execute(EPFL_URL);
 
         // Send increment to wait async execution in test
