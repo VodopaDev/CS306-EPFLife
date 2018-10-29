@@ -57,7 +57,6 @@ public final class GPS implements LocationListener {
                 boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                 boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
                 if (isGPSEnabled) {
-                    locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, this);
                     Location tempLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     if (tempLocation != null && isBetterLocation(tempLocation, location)) {
@@ -92,10 +91,20 @@ public final class GPS implements LocationListener {
         }
     }
 
+    /**
+     * Return the last known location
+     *
+     * @return The last known location
+     */
     public Location getLocation() {
         return location;
     }
 
+    /**
+     * Check whether the GPS is working or not
+     *
+     * @return whether the GPS is working or not
+     */
     public boolean isWorking() {
         return isWorking;
     }
@@ -123,6 +132,13 @@ public final class GPS implements LocationListener {
 
     }
 
+    /**
+     * Check whether a location is better than the current one
+     *
+     * @param location            The new location to test
+     * @param currentBestLocation The current location
+     * @return whether the new location is better or not
+     */
     private boolean isBetterLocation(Location location, Location currentBestLocation) {
         if (currentBestLocation == null) {
             // A new location is always better than no location
