@@ -23,7 +23,10 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
     // Function that will be executed onPostExecute
     private Function<List<String>, Void> listener;
 
-
+    /**
+     * Create a new AssociationUrlHandler
+     * @param listener The callback function that will be use on PostExecute
+     */
     public AssociationsUrlHandler(Function<List<String>, Void> listener) {
         this.listener = listener;
     }
@@ -42,6 +45,11 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
         listener.apply(strings);
     }
 
+    /**
+     * Connect to the URL, parse it and return the values found
+     * @param url The URL
+     * @return ArrayList with all the values founded
+     */
     private ArrayList<String> parseUrl(String url) {
 
         HttpURLConnection urlConnection;
@@ -76,7 +84,12 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
         return datas;
     }
 
-    
+    /**
+     * Connect to the URL, check if the response code is OK (200)
+     * @param url Url
+     * @return HttpURLConnection or null of response is not OK
+     * @throws IOException Throw exception if it cannot connect
+     */
     private HttpURLConnection connect(String url) throws IOException {
         // Open url
         URL aURL = openUrl(url);
