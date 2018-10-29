@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 public class Parsers {
     private final static String TAG = "PARSER";
 
-    private Parsers(){
+    private Parsers() {
 
     }
 
@@ -30,7 +30,6 @@ public class Parsers {
         Pattern p = Pattern.compile("&#\\d+.* <a href=\"(.*?)\".*>(.*)</a>.*\\((.+)\\)<.*br />.*");
 
         ArrayList<String> results = new ArrayList<>();
-
         String inputLine;
 
         try {
@@ -41,10 +40,8 @@ public class Parsers {
                     String description = m.group(3).replaceAll("<.*?>", "");
 
                     StringBuilder sb = new StringBuilder();
-                    sb.append(m.group(1));
-                    sb.append(',');
-                    sb.append(m.group(2));
-                    sb.append(',');
+                    sb.append(m.group(1)).append(',');
+                    sb.append(m.group(2)).append(',');
                     sb.append(description);
 
                     // remplace html unicode to char
@@ -63,7 +60,6 @@ public class Parsers {
             Log.d(TAG, "Could not parse datas");
             return null;
         }
-
         return results;
     }
 }

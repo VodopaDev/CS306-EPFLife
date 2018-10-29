@@ -94,35 +94,23 @@ public class UrlHandler<T> extends AsyncTask<String, Void, T> {
             return null;
         }
 
-
         if (urlConnection == null) {
             Log.d(TAG, "null UrlConnection");
             return null;
         }
 
-
-        BufferedReader in = null;
+        T datas = null;
         try {
-            in = new BufferedReader(
+            BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+            datas = parser.apply(bufferedReader);
+            bufferedReader.close();
         } catch (IOException e) {
             Log.d(TAG, "Cannot read the page");
             e.printStackTrace();
-            urlConnection.disconnect();
-            return null;
-        }
-
-        T datas = parser.apply(in);
-
-        try {
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
         } finally {
             urlConnection.disconnect();
         }
-
 
         return datas;
     }
