@@ -1,12 +1,14 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
+import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +17,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Checkable;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -26,6 +30,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.epfl.sweng.zuluzulu.Structure.DateInputMask;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -60,6 +65,14 @@ public class EventFragment extends Fragment {
     private CheckBox checkbox_event_sort_date;
     private String default_sort_option;
 
+    private EditText event_fragment_from_date;
+    private EditText event_fragment_to_date;
+    private DateInputMask event_fragment_from_date_mask;
+    private DateInputMask getEvent_fragment_to_date_mask;
+
+    private ArrayList<Event> event_all_sorted;
+    private ArrayList<Event> event_fav_sorted;
+
     public EventFragment() {
         // Required empty public constructor
     }
@@ -93,8 +106,12 @@ public class EventFragment extends Fragment {
         default_sort_option = "name";
 
         fillEventLists(default_sort_option);
+
+        event_all_sorted = new ArrayList<>();
+        event_fav_sorted = new ArrayList<>();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event, container, false);
@@ -128,6 +145,11 @@ public class EventFragment extends Fragment {
         checkbox_event_sort_name.setChecked(true);
         checkbox_event_sort_name.setEnabled(false);
 
+        event_fragment_from_date = view.findViewById(R.id.event_fragment_from_date);
+        event_fragment_from_date_mask = new DateInputMask(event_fragment_from_date);
+        event_fragment_to_date = view.findViewById(R.id.event_fragment_to_date);
+        getEvent_fragment_to_date_mask = new DateInputMask(event_fragment_to_date);
+
 //        checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -145,6 +167,7 @@ public class EventFragment extends Fragment {
             public void onClick(View v) {
                 checkbox_event_sort_name.setEnabled(false);
                 event_all.sort(Event.assoNameComparator());
+                event_fav.sort(Event.assoNameComparator());
                 event_adapter.notifyDataSetChanged();
                 checkbox_event_sort_date.setChecked(false);
                 checkbox_event_sort_date.setEnabled(true);
@@ -155,13 +178,33 @@ public class EventFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                checkbox_event_sort_date.setEnabled(false);
-                event_all.sort(Event.dateComparator());
-                event_adapter.notifyDataSetChanged();
-                checkbox_event_sort_name.setChecked(false);
-                checkbox_event_sort_name.setEnabled(true);
+                if (event_fragment_from_date.length() == 0 && event_fragment_to_date.length() == 0){
+                    checkbox_event_sort_date.setEnabled(false);
+                    event_all.sort(Event.dateComparator());
+                    event_fav.sort(Event.dateComparator());
+                    event_adapter.notifyDataSetChanged();
+                    checkbox_event_sort_name.setChecked(false);
+                    checkbox_event_sort_name.setEnabled(true);
+                }
+//                else if ( event_fragment_from_date.length() > 0 && event_fragment_to_date.length() == 0){
+//                    event_all.sort(Event.dateComparator());
+//                    event_fav.sort(Event.dateComparator());
+//
+//                    Boolean test = true;
+//                    int counter = 0;
+//                    while(test && counter != event_all.size()){
+//                        if event_all.get(counter).getStart_date() // TODO check if start_date is smaller than the user input
+//                    }
+//
+//
+//                    System.arraycopy(event_all, 0, event_all_sorted, 0, event_all.size());
+//                    System.arraycopy(event_fav, 0, event_fav_sorted, 0, event_fav.size());
+//                    event_all_sorted.sort(Event.dateComparator());
+//                    event_all_sorted.
+//                }
             }
         });
+
 
         return view;
     }
@@ -183,10 +226,10 @@ public class EventFragment extends Fragment {
         mListener = null;
     }
 
-    private void emptyEventList(){
-        event_all.clear();
-        event_fav.clear();
-    }
+//    private void emptyEventList(){
+//        event_all.clear();
+//        event_fav.clear();
+//    }
 
     private void fillEventLists(String sortOption){
        FirebaseFirestore.getInstance().collection("events_info")
