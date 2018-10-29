@@ -12,8 +12,8 @@ import java.net.URL;
 
 import io.opencensus.common.Function;
 
-public class AssociationsUrlHandler<T> extends AsyncTask<String, Void, T> {
-    private final static String TAG = "AssociationsUrlHandler";
+public class UrlHandler<T> extends AsyncTask<String, Void, T> {
+    private final static String TAG = "UrlHandler";
 
     // Function that will be executed onPostExecute
     private Function<T, Void> listener;
@@ -22,11 +22,11 @@ public class AssociationsUrlHandler<T> extends AsyncTask<String, Void, T> {
     private Function<BufferedReader, T> parser;
 
     /**
-     * Create a new AssociationUrlHandler
+     * Create a new UrlHandler
      *
      * @param listener The callback function that will be use on PostExecute
      */
-    public AssociationsUrlHandler(Function<T, Void> listener, Function<BufferedReader, T> parser) {
+    public UrlHandler(Function<T, Void> listener, Function<BufferedReader, T> parser) {
         this.listener = listener;
         this.parser = parser;
     }
