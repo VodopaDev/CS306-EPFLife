@@ -46,10 +46,8 @@ public class Parsers {
 
                     // remplace html unicode to char
                     String result = sb.toString()
-                            .replaceAll("&#8217;", "'")
-                            .replaceAll("&#8211;", "-")
-                            .replaceAll("&gt;", ">")
-                            .replaceAll("&amp;", "&");
+                            .replaceAll("&#8217;", "'").replaceAll("&#8211;", "-")
+                            .replaceAll("&gt;", ">").replaceAll("&amp;", "&");
 
                     results.add(result);
                 }
