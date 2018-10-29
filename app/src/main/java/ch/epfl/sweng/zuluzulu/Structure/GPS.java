@@ -55,9 +55,8 @@ public final class GPS implements LocationListener {
             locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
             boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
+            isWorking = isGPSEnabled || isNetworkEnabled;
             if (isGPSEnabled) {
-                isWorking = true;
                 locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null);
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, this);
                 if (locationManager != null) {
@@ -67,7 +66,6 @@ public final class GPS implements LocationListener {
                     }
                 }
             } else if (isNetworkEnabled) {
-                isWorking = true;
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, this);
                 if (locationManager != null) {
                     Location tempLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -76,7 +74,6 @@ public final class GPS implements LocationListener {
                     }
                 }
             } else {
-                isWorking = false;
                 Toast.makeText(context, "Please activate your GPS to have access to all features", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
