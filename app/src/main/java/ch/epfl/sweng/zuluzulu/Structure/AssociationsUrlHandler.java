@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.util.regex.Pattern;
 import io.opencensus.common.Function;
 
 public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>> {
+    private final static String TAG = "AssociationsUrlHandler";
 
     // Function that will be executed onPostExecute
     private Function<List<String>, Void> listener;
@@ -48,12 +50,14 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
             // Connect to the url
             urlConnection = connect(url);
         } catch (IOException e) {
+            Log.d(TAG, "Cannot connect to the URL");
             e.printStackTrace();
             return null;
         }
 
 
         if (urlConnection == null) {
+            Log.d(TAG, "null UrlConnection");
             return null;
         }
 
@@ -63,6 +67,7 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
             // Parse the datas
             datas = parseData(urlConnection.getInputStream());
         } catch (IOException e) {
+            Log.d(TAG, "Cannot parse datas");
             e.printStackTrace();
         } finally {
             urlConnection.disconnect();
@@ -71,6 +76,7 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
         return datas;
     }
 
+    
     private HttpURLConnection connect(String url) throws IOException {
         // Open url
         URL aURL = openUrl(url);
@@ -86,6 +92,7 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
         if (code != 200) {
             // Not OK response
             UrlConnection.disconnect();
+            Log.d(TAG, "No 200 response code");
             return null;
         }
 
