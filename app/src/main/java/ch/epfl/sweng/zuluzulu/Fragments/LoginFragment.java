@@ -121,7 +121,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finishLogin();
+                attemptLogin();
             }
         });
 
@@ -159,7 +159,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     }
 
     private void finishLogin(){
-        code = "9512626fa56b29825b3deeee218a99aa";//AuthClient.extractCode(redirectURICode);
+        code = AuthClient.extractCode(redirectURICode);
 
         Map<String, String> tokens;
         try{
