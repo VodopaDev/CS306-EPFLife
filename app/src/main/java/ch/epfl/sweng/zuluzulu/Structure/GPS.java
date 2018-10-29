@@ -25,17 +25,17 @@ public final class GPS implements LocationListener {
     private static final int TWO_MINUTES = 1000 * 60 * 2; // 2 min
 
     private Context context;
-    Location location;
-    LocationManager locationManager;
+    private Location location;
+    private LocationManager locationManager;
 
     private boolean isWorking = false;
 
     private GPS(Context context) {
         super();
-        this.context = context;
+        this.context = context.getApplicationContext();
     }
 
-    public final static GPS getInstance(Context context) {
+    public static GPS getInstance(Context context) {
         if (instance == null) {
             synchronized (GPS.class) {
                 if (instance == null) {
@@ -47,6 +47,9 @@ public final class GPS implements LocationListener {
         return instance;
     }
 
+    /**
+     * Start asking for location updates if possible
+     */
     public void start() {
         if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(context, "Permission to GPS not granted", Toast.LENGTH_SHORT).show();
@@ -79,6 +82,9 @@ public final class GPS implements LocationListener {
         }
     }
 
+    /**
+     * Stop asking for location updates
+     */
     public void stop() {
         if (locationManager != null) {
             locationManager.removeUpdates(this);
@@ -159,7 +165,11 @@ public final class GPS implements LocationListener {
         return provider1.equals(provider2);
     }
 
+    /**
+     * Change the context when the GPS is called in another context
+     * @param context The new context
+     */
     private void setContext(Context context) {
-        this.context = context;
+        this.context = context.getApplicationContext();
     }
 }
