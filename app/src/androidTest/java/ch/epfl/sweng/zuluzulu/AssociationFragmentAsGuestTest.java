@@ -29,7 +29,7 @@ public class AssociationFragmentAsGuestTest {
             new ActivityTestRule<>(MainActivity.class, false, false);
 
     @Before
-    public void initGuestTest(){
+    public void initGuestTest() {
         Guest guest = new User.UserBuilder().buildGuestUser();
         Utility.addUserToMainIntent(mActivityRule, guest);
         AssociationFragment fragment = AssociationFragment.newInstance(guest);

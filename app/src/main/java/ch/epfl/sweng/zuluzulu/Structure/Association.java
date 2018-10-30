@@ -3,10 +3,7 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
-import com.google.firebase.firestore.DocumentSnapshot;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -69,8 +66,8 @@ public class Association implements Serializable {
 
         // Init the main chat id
         channel_id = data.get("channel_id") == null ?
-                        0:
-                        data.getInteger("channel_id");
+                0 :
+                data.getInteger("channel_id");
 
         // Init the upcoming event
         events = data.get("events") == null ?
@@ -143,9 +140,10 @@ public class Association implements Serializable {
 
     /**
      * Return the Association's main chat id
+     *
      * @return
      */
-    public int getChannelId(){
+    public int getChannelId() {
         return channel_id;
     }
 
@@ -161,6 +159,7 @@ public class Association implements Serializable {
 
     /**
      * Return the Association's closest event happening id
+     *
      * @return
      */
     public int getClosestEventId() {

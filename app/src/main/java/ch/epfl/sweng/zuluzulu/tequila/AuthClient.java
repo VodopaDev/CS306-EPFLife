@@ -1,8 +1,6 @@
 package ch.epfl.sweng.zuluzulu.tequila;
 
 
-import android.text.TextUtils;
-
 /**
  * Client code for Tequila authentication.
  *
@@ -17,11 +15,6 @@ public final class AuthClient {
                 "&scope=" + config.scopes[0];
     }
 
-
-    public static String createUrlLogout() {
-        return "https://tequila.epfl.ch/cgi-bin/OAuth2IdP/logout";
-
-    }
 
     public static String extractCode(String redirectUri) {
         String marker = "code=";

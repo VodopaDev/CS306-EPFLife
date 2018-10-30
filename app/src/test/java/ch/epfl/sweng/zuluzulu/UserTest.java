@@ -24,23 +24,24 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(JUnit4.class)
 public class UserTest {
-  
+
     @Test
-    public void checkUserRole(){
+    public void checkUserRole() {
         User user = Utility.createTestUser();
         assertTrue(user.hasRole(UserRole.USER));
     }
 
     @Test
-    public void incompleteBuilderBuildNullUser(){
+    public void incompleteBuilderBuildNullUser() {
         assertNull(new User.UserBuilder().buildAdmin());
     }
 
     @Test
-    public void canCreateAdmin(){
+    public void canCreateAdmin() {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("admin@epfl.ch");
         builder.setSection("IN");
+        builder.setSemester("BA5");
         builder.setSciper("121212");
         builder.setGaspar("admin");
         builder.setFirst_names("admin_first_name");
@@ -59,7 +60,7 @@ public class UserTest {
     }
 
     @Test
-    public void guestHasNoRole(){
+    public void guestHasNoRole() {
         assertThat(false, equalTo(new User.UserBuilder().buildGuestUser().hasRole(UserRole.ADMIN)));
         assertThat(false, equalTo(new User.UserBuilder().buildGuestUser().hasRole(UserRole.USER)));
         assertThat(false, equalTo(new User.UserBuilder().buildGuestUser().hasRole(UserRole.MODERATOR)));
@@ -71,6 +72,7 @@ public class UserTest {
         assertTrue(user.isConnected());
         assertEquals(user.getEmail(), "test@epfl.ch");
         assertEquals(user.getSection(), "IN");
+        assertEquals(user.getSemester(), "BA5");
         assertEquals(user.getSciper(), "123456");
         assertEquals(user.getGaspar(), "gaspar");
         assertEquals(user.getFirstNames(), "James");
@@ -114,8 +116,8 @@ public class UserTest {
     }
 
     @Test
-    public void correctString(){
-        assertThat("Guest user", equalTo(new User.UserBuilder().buildGuestUser().toString())); 
+    public void correctString() {
+        assertThat("Guest user", equalTo(new User.UserBuilder().buildGuestUser().toString()));
     }
 
     @Test
@@ -126,7 +128,8 @@ public class UserTest {
                 + "\nsciper: 123456"
                 + "\ngaspar: gaspar"
                 + "\nemail: test@epfl.ch"
-                + "\nsection: IN";
+                + "\nsection: IN"
+                + "\nsemester: BA5";
 
         assertEquals(expected, user.toString());
         assertEquals("Guest user", new User.UserBuilder().buildGuestUser().toString());

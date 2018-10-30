@@ -10,7 +10,7 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 /**
  * This class allow us to create the main activity as if we were connected.
  * It creates an user and allow child to use this User.
- *
+ * <p>
  * Author @dahn
  */
 public abstract class TestWithLogin {
@@ -29,6 +29,7 @@ public abstract class TestWithLogin {
 
     /**
      * Return the user for the childs
+     *
      * @return User
      */
     protected User getUser() {
