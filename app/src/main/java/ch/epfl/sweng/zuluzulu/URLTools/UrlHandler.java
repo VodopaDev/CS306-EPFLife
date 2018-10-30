@@ -28,7 +28,6 @@ public class UrlHandler extends AsyncTask<String, Void, List<String>> {
      * @param listener The callback function that will be use on PostExecute
      */
     public UrlHandler(Function<List<String>, Void> listener, Function<BufferedReader, List<String>> parser) {
-        Log.e(TAG, "GERE");
         this.listener = listener;
         this.parser = parser;
     }
