@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
@@ -45,13 +46,13 @@ public class EventFragmentTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
     private User user;
-    private Fragment fragment;
+    private SuperFragment fragment;
 
     @Before
     public void initAuthenticatedTest() {
-        User user = Utility.createTestUser();
+        user = Utility.createTestUser();
         Utility.addUserToMainIntent(mActivityRule, user);
-        AssociationFragment fragment = AssociationFragment.newInstance(user);
+        fragment = EventFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
 
         try {
