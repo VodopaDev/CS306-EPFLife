@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.test.espresso.idling.CountingIdlingResource;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -16,9 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.google.firebase.FirebaseApp;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,40 +30,21 @@ import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
-import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
-import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
-
-
-//import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
     // Const used to send a Increment or Decrement message
-    public final static String INCREMENT = "increment";
-    public final static String DECREMENT = "decrement";
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private SuperFragment current_fragment;
     private User user;
-
-    private String code;
-    private OAuth2Config config;
-
-    private boolean isLogin = false;
-    private boolean openingWebView = false;
-
-    private String urlCode;
-
-
-    //(temporary) store the URI from the browser
-    private String redirectURIwithCode;
 
     // This resource is used for tests
     // That's the recommended way to implement it
@@ -96,9 +73,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         Intent i = getIntent();
 
-        if((redirectURIwithCode= i.getStringExtra("redirectUri")) != null){
-            //get the redirectURI with the code from the intent
-            selectItem(navigationView.getMenu().findItem(R.id.nav_login));
+        String redirectURIwithCode = i.getStringExtra("redirectUri");
+        if (redirectURIwithCode != null) {
+            openFragmentWithStringData(LoginFragment.newInstance(), LoginFragment.TAG, redirectURIwithCode);
         } else {
             // Look if there is a user object set
             User user = (User) i.getSerializableExtra("user");
@@ -110,6 +87,22 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
         }
     }
+
+
+    /**
+     * Open fragment and add tag
+     *
+     * @param fragment Any fragment
+     * @param tag      Fragment tag
+     * @param data     String data
+     */
+    private void openFragmentWithStringData(SuperFragment fragment, String tag, String data) {
+        Bundle toSend = new Bundle(1);
+        toSend.putString(tag, data);
+        fragment.setArguments(toSend);
+        openFragment(fragment);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -200,9 +193,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case R.id.nav_login:
                 //to set arguments for the login
-                isLogin = true;
                 fragment = LoginFragment.newInstance();
-
                 break;
             case R.id.nav_about:
                 fragment = AboutZuluzuluFragment.newInstance();
@@ -224,10 +215,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
                 android.webkit.CookieManager.getInstance().removeAllCookie();
 
-                code = null;
-                redirectURIwithCode = null;
                 updateMenuItems();
-                menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
                 fragment = MainFragment.newInstance(user);
                 break;
             case R.id.nav_chat:
@@ -246,34 +234,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
-    private void addArgumentsForLogin(SuperFragment fragment){
-
-
-        Bundle toSend = new Bundle(1);
-        if(isLogin){
-            isLogin = false;
-            toSend.putString("",redirectURIwithCode);
-        }
-        if(openingWebView){
-            openingWebView = false;
-            toSend.putString("",urlCode);
-        }
-
-        fragment.setArguments(toSend);
-    }
-
-    private void testThenAddArgsForLogin(SuperFragment fragment){
-        if(isLogin || openingWebView) {
-            addArgumentsForLogin(fragment);
-        }
-    }
 
     public boolean openFragment(SuperFragment fragment) {
 
         if (fragment != null) {
-            //if is a login fragment then set argument with the URI
-            testThenAddArgsForLogin(fragment);
-
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -290,17 +254,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         switch (tag) {
 
             case SET_USER:
-                Map<Integer, Object> received = (HashMap<Integer,Object>) data;
+                Map<Integer, Object> received = (HashMap<Integer, Object>) data;
                 this.user = (User) received.get(0);
-                this.code = (String) received.get(1);
-                this.config = (OAuth2Config) received.get(2);
                 updateMenuItems();
-
                 break;
             case OPENING_WEBVIEW:
-                this.urlCode = (String) data;
-                openingWebView = true;
-                openFragment(WebViewFragment.newInstance());
+                openFragmentWithStringData(WebViewFragment.newInstance(), WebViewFragment.URL, (String) data);
                 break;
             case INCREMENT_IDLING_RESOURCE:
                 incrementCountingIdlingResource();
@@ -309,12 +268,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 decrementCountingIdlingResource();
                 break;
             case SET_TITLE:
-                setTitle((String)data);
+                setTitle((String) data);
                 break;
-
             case OPEN_CHAT_FRAGMENT:
-                int channelID = (Integer) data;
-                openFragment(ChatFragment.newInstance(user, channelID));
+                Channel channel = (Channel) data;
+                openFragment(ChatFragment.newInstance(user, channel));
                 break;
             case OPEN_ASSOCIATION_FRAGMENT:
                 openFragment(AssociationFragment.newInstance(user));
@@ -361,6 +319,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 throw new AssertionError(tag);
         }
     }
+
 
     /**
      * Return the current fragment

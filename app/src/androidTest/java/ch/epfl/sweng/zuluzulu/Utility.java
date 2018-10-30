@@ -8,20 +8,17 @@ import android.view.Gravity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.CoreMatchers.not;
 
 /**
  * Use this class for functions that are used in multiple tests
@@ -127,6 +124,7 @@ public class Utility {
 
     /**
      * Return a userbuilder already filled with all the user informations
+     *
      * @return UserBuilder
      */
     private static User.UserBuilder createFilledUserBuider() {
@@ -138,7 +136,7 @@ public class Utility {
         builder.setSemester("BA5");
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
-        builder.setFavAssos(Arrays.asList(1,2));
+        builder.setFavAssos(Arrays.asList(1, 2));
         builder.setFollowedEvents(new ArrayList<Integer>());
         builder.setFollowedChats(new ArrayList<Integer>());
 
