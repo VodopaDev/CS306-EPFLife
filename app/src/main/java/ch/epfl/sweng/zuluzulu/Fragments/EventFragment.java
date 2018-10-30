@@ -30,6 +30,9 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.DECREMENT_IDLING_RESOURCE;
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.INCREMENT_IDLING_RESOURCE;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -162,7 +165,8 @@ public class EventFragment extends SuperFragment {
     }
   
     private void fillEventLists(String sortOption){
-       FirebaseFirestore.getInstance().collection("events_info").orderBy(sortOption).get()
+        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
+        FirebaseFirestore.getInstance().collection("events_info").orderBy(sortOption).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -177,7 +181,7 @@ public class EventFragment extends SuperFragment {
                                 event_adapter.notifyDataSetChanged();
                             }
                         }
-
+                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -185,6 +189,7 @@ public class EventFragment extends SuperFragment {
                     public void onFailure(@NonNull Exception e) {
                         Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
                         Log.e("EVENT_LIST", "Error fetching event date\n" + e.getMessage());
+                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                     }
                 });
     }

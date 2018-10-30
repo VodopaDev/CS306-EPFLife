@@ -1,5 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.*;
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -18,7 +20,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
@@ -182,6 +183,7 @@ public class AssociationDetailFragment extends SuperFragment {
     private void loadUpcomingEvent(){
         // Fetch online data of the upcoming event
         if (asso.getClosestEventId() != 0) {
+            mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
             FirebaseFirestore.getInstance()
                     .document("events_info/event" + asso.getClosestEventId())
                     .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -199,6 +201,8 @@ public class AssociationDetailFragment extends SuperFragment {
                     }
                     else
                         upcoming_event_name.setText("Error loading the event :(");
+
+                    mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                 }
             });
         } else {
@@ -213,6 +217,7 @@ public class AssociationDetailFragment extends SuperFragment {
     private void loadMainChat(){
         // Fetch online data of the main_chat
         if (asso.getChannelId() != 0) {
+            mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
             FirebaseFirestore.getInstance()
                     .document("channels/channel" + asso.getChannelId())
                     .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -226,6 +231,7 @@ public class AssociationDetailFragment extends SuperFragment {
                     }
                     else
                         main_chat_name.setText("Error loading the chat :(");
+                    mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                 }
             });
         } else {
@@ -239,7 +245,7 @@ public class AssociationDetailFragment extends SuperFragment {
             public void onClick(View v) {
                 if(main_chat != null) {
                     if(user.isConnected())
-                        mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, main_chat.getId());
+                        mListener.onFragmentInteraction(OPEN_CHAT_FRAGMENT, main_chat.getId());
                     else
                         Snackbar.make(getView(), "Login to access chat room", 5000).show();
                 }

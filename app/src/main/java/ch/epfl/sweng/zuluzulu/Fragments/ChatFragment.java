@@ -42,6 +42,9 @@ import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.DECREMENT_IDLING_RESOURCE;
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.INCREMENT_IDLING_RESOURCE;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -168,6 +171,7 @@ public class ChatFragment extends SuperFragment {
      * @param data the data to send to the database
      */
     private void addDataToFirestore(Map data) {
+        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
         db.collection(collection_path)
                 .add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -175,11 +179,13 @@ public class ChatFragment extends SuperFragment {
                     public void onSuccess(DocumentReference ref) {
                         Log.d(TAG, "DocumentSnapshot written with ID: " + ref.getId());
                         textEdit.setText("");
+                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.w(TAG, "Error adding document", e);
+                mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
             }
         });
     }
@@ -208,6 +214,7 @@ public class ChatFragment extends SuperFragment {
      * Refresh the chat by reading all the messages in the database
      */
     private void updateChat() {
+        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
         db.collection(collection_path)
                 .orderBy("time", Query.Direction.ASCENDING)
                 .get()
@@ -229,6 +236,7 @@ public class ChatFragment extends SuperFragment {
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
+                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                     }
                 });
     }

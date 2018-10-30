@@ -37,6 +37,9 @@ import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
 import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
 import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
 
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.DECREMENT_IDLING_RESOURCE;
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.INCREMENT_IDLING_RESOURCE;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -169,7 +172,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         final DocumentReference ref = FirebaseFirestore.getInstance()
                 .collection("users_info")
                 .document(user.getSciper());
-
+        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
         ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -191,6 +194,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
                     ((AuthenticatedUser) user).setFollowedChats(received_chats);
                     transfer_main(false);
                 }
+                mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
             }
         });
     }
