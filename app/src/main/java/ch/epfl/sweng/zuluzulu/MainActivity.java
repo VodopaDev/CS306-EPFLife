@@ -50,8 +50,6 @@ import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
     // Const used to send a Increment or Decrement message
-    public final static String INCREMENT = "increment";
-    public final static String DECREMENT = "decrement";
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private SuperFragment current_fragment;
