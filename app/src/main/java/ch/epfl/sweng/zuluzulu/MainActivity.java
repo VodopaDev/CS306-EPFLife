@@ -18,6 +18,7 @@ import com.google.firebase.FirebaseApp;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
@@ -43,7 +44,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     // Const used to send a Increment or Decrement message
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+
     private SuperFragment current_fragment;
+    private Stack<SuperFragment> previous_fragments;
     private User user;
 
     // This resource is used for tests
@@ -61,6 +64,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         // Needed to use Firebase storage and Firestore
         FirebaseApp.initializeApp(getApplicationContext());
+
+        // Initialize the fragment stack used for the back button
+        previous_fragments = new Stack<>();
 
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -234,15 +240,20 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
+    public boolean openFragment(SuperFragment fragment){
+        return openFragment(fragment, false);
+    }
 
-    public boolean openFragment(SuperFragment fragment) {
-
+    public boolean openFragment(SuperFragment fragment, boolean backPressed) {
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
+                if(!backPressed)
+                    previous_fragments.push(current_fragment);
                 current_fragment = fragment;
+
                 return true;
             }
         }
@@ -320,6 +331,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (!previous_fragments.empty())
+            openFragment(previous_fragments.pop(), true);
+    }
 
     /**
      * Return the current fragment
