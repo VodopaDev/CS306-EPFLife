@@ -18,6 +18,7 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -47,13 +48,27 @@ public class EventFragmentTest {
     private Fragment fragment;
 
     @Before
-    public void init() {
-        user = Utility.createTestUser();
+    public void initAuthenticatedTest() {
+        User user = Utility.createTestUser();
         Utility.addUserToMainIntent(mActivityRule, user);
-
-        fragment = EventFragment.newInstance(user);
+        AssociationFragment fragment = AssociationFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
+
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
+
+//    @Before
+//    public void init() {
+//        user = Utility.createTestUser();
+//        Utility.addUserToMainIntent(mActivityRule, user);
+//
+//        fragment = EventFragment.newInstance(user);
+//        mActivityRule.getActivity().openFragment(fragment);
+//    }
 
     @Test
     public void thereAreTwoButtons() throws InterruptedException {

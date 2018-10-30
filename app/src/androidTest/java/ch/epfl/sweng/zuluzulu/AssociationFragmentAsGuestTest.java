@@ -17,7 +17,6 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -30,7 +29,7 @@ public class AssociationFragmentAsGuestTest {
             new ActivityTestRule<>(MainActivity.class, false, false);
 
     @Before
-    public void initGuestTest(){
+    public void initGuestTest() {
         Guest guest = new User.UserBuilder().buildGuestUser();
         Utility.addUserToMainIntent(mActivityRule, guest);
         AssociationFragment fragment = AssociationFragment.newInstance(guest);
@@ -64,6 +63,6 @@ public class AssociationFragmentAsGuestTest {
     @Test
     public void clickingAnAssociationGoesToDetail() {
         onView(withText("Agepoly")).perform(ViewActions.click());
-        onView(withId(R.id.association_detail_name)).check(matches(isDisplayed()));
+        onView(withId(R.id.association_detail_icon)).check(matches(isDisplayed()));
     }
 }

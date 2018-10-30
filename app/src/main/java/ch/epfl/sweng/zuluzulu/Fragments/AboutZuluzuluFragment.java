@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 
@@ -21,10 +21,8 @@ import ch.epfl.sweng.zuluzulu.R;
  * Use the {@link AboutZuluzuluFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AboutZuluzuluFragment extends Fragment {
+public class AboutZuluzuluFragment extends SuperFragment {
     public static final String TAG = "ABOUT_TAG";
-
-    private OnFragmentInteractionListener mListener;
 
     public AboutZuluzuluFragment() {
         // Required empty public constructor
@@ -42,6 +40,7 @@ public class AboutZuluzuluFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "About ZuluZulu");
     }
 
     @Override
@@ -73,22 +72,5 @@ public class AboutZuluzuluFragment extends Fragment {
 
         // Start the activity and ask for a mail
         startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 }

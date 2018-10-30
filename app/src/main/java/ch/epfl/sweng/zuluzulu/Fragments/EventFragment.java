@@ -34,11 +34,14 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Structure.DateInputMask;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.Adapters.EventAdapter;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 /**
@@ -49,16 +52,14 @@ import ch.epfl.sweng.zuluzulu.Structure.Utils;
  * Use the {@link EventFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventFragment extends Fragment {
-    private static final String TAG = "EVENT_TAG";
+public class EventFragment extends SuperFragment {
     private static final String ARG_USER = "ARG_USER";
 
     private User user;
-    private OnFragmentInteractionListener mListener;
 
     private ArrayList<Event> event_all;
     private ArrayList<Event> event_fav;
-    private EventAdapter event_adapter;
+    private EventArrayAdapter event_adapter;
 
     private ListView listview_event;
     private Button button_event_all;
@@ -100,11 +101,12 @@ public class EventFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Events");
         }
 
         event_all = new ArrayList<>();
         event_fav = new ArrayList<>();
-        event_adapter = new EventAdapter(getContext(), event_all, mListener);
+        event_adapter = new EventArrayAdapter(getContext(), event_all, mListener);
 
         default_sort_option = "name";
 
@@ -128,7 +130,7 @@ public class EventFragment extends Fragment {
         button_event_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(user.isConnected())
+                if (user.isConnected())
                     updateListView(button_event_fav, button_event_all, event_fav, listview_event);
                 else
                     Snackbar.make(getView(), "Login to access your favorite event", 5000).show();
@@ -173,14 +175,13 @@ public class EventFragment extends Fragment {
 //        checkbox_event_sort_date.setEnabled(true);
 
         checkbox_event_sort_name.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
                 checkbox_event_sort_name.setEnabled(false);
                 event_all.sort(Event.assoNameComparator());
                 event_fav.sort(Event.assoNameComparator());
 
-                event_adapter = new EventAdapter(getContext(), event_all, mListener);
+                event_adapter = new EventArrayAdapter(getContext(), event_all, mListener);
 
                 listview_event.setAdapter(event_adapter);
                 event_adapter.notifyDataSetChanged();
@@ -199,7 +200,7 @@ public class EventFragment extends Fragment {
                     event_all.sort(Event.dateComparator());
                     event_fav.sort(Event.dateComparator());
 
-                    event_adapter = new EventAdapter(getContext(), event_all, mListener);
+                    event_adapter = new EventArrayAdapter(getContext(), event_all, mListener);
 
                     listview_event.setAdapter(event_adapter);
                     event_adapter.notifyDataSetChanged();
@@ -231,7 +232,7 @@ public class EventFragment extends Fragment {
                         }
                     }
 
-                    event_adapter = new EventAdapter(getContext(), event_all_sorted, mListener);
+                    event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener);
                     listview_event.setAdapter(event_adapter);
                     event_adapter.notifyDataSetChanged();
 
@@ -264,7 +265,7 @@ public class EventFragment extends Fragment {
                         }
                     }
 
-                    event_adapter = new EventAdapter(getContext(), event_all_sorted, mListener);
+                    event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener);
                     listview_event.setAdapter(event_adapter);
                     event_adapter.notifyDataSetChanged();
 
@@ -277,44 +278,29 @@ public class EventFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     private void emptySortedEventList(){
         event_all_sorted.clear();
         event_fav_sorted.clear();
     }
 
-    private void fillEventLists(String sortOption){
-       FirebaseFirestore.getInstance().collection("events_info")
-                .orderBy(sortOption)
-                .get()
+    private void fillEventLists(String sortOption) {
+        FirebaseFirestore.getInstance().collection("events_info").orderBy(sortOption).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        for (int i = 0; i < snap_list.size(); i++) {
-                            Event event = new Event(snap_list.get(i));
-                            event_all.add(event);
-
-                            if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))
-                                event_fav.add(event);
+                        for (DocumentSnapshot snap : snap_list) {
+                            FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
+                            if (fmap.hasFields(Event.FIELDS)) {
+                                Event event = new Event(fmap);
+                                event_all.add(event);
+                                if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))
+                                    event_fav.add(event);
+                                event_adapter.notifyDataSetChanged();
+                            }
                         }
-                        event_adapter.notifyDataSetChanged();
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -326,10 +312,10 @@ public class EventFragment extends Fragment {
                 });
     }
 
-    private void updateListView(Button new_selected, Button new_unselected, ArrayList<Event> data, ListView list){
+    private void updateListView(Button new_selected, Button new_unselected, ArrayList<Event> data, ListView list) {
         new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         new_unselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
-        event_adapter = new EventAdapter(getContext(), data, mListener);
+        event_adapter = new EventArrayAdapter(getContext(), data, mListener);
         list.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
     }

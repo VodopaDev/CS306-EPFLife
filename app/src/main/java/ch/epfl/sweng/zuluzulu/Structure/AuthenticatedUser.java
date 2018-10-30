@@ -12,6 +12,7 @@ public class AuthenticatedUser extends User {
     private final String gaspar;
     private final String email;
     private final String section;
+    private final String semester;
     // WARNING: can user can have multiples names
     private final String first_names;
     private final String last_names;
@@ -21,12 +22,13 @@ public class AuthenticatedUser extends User {
     private List<Integer> followed_chats;
     private List<Integer> followed_events;
 
-    protected AuthenticatedUser(String sciper, String gaspar, String email, String section, String first_names, String last_names, List<Integer> fav_assos, List<Integer> followed_events, List<Integer> followed_chats) {
+    protected AuthenticatedUser(String sciper, String gaspar, String email, String section, String semester, String first_names, String last_names, List<Integer> fav_assos, List<Integer> followed_events, List<Integer> followed_chats) {
         firestore_path = "users_info/" + sciper;
         this.sciper = sciper;
         this.gaspar = gaspar;
         this.email = email;
         this.section = section;
+        this.semester = semester;
         this.first_names = first_names;
         this.last_names = last_names;
         this.fav_assos = fav_assos;
@@ -36,8 +38,8 @@ public class AuthenticatedUser extends User {
         // Add role
         this.addRole(UserRole.USER);
 
-        // TO REMOVE
-        if (gaspar.equals("dahn")) {
+        // TO REMOVE , change with database access
+        if (gaspar.equals("dahn") || sciper.equals("268785") || sciper.equals("270103")) {
             this.addRole(UserRole.ADMIN);
         }
     }
@@ -63,28 +65,6 @@ public class AuthenticatedUser extends User {
         fav_assos.remove((Integer) asso.getId());
         Utils.removeIdFromList(firestore_path, "fav_assos", asso.getId());
     }
-
-    /**
-     * public void addFollowedEvent(Event event) {
-     * followed_events.add(event.getId());
-     * Utils.addIdToList(firestore_path, "followed_events", event.getId());
-     * }
-     * <p>
-     * public void removeFollowedEvent(Event event) {
-     * followed_events.remove((Integer) event.getId());
-     * Utils.removeIdFromList(firestore_path, "followed_events", event.getId());
-     * }
-     * <p>
-     * public void addFollowedChat(Channel channel) {
-     * followed_chats.add(channel.getId());
-     * Utils.addIdToList(firestore_path, "followed_chats", channel.getId());
-     * }
-     * <p>
-     * public void removeFollowedChat(Channel channel) {
-     * followed_chats.remove((Integer)channel.getId());
-     * Utils.removeIdFromList(firestore_path, "followed_chats", channel.getId());
-     * }
-     */
 
     public void setFollowedChats(List<Integer> followed_chats) {
         this.followed_chats = followed_chats;
@@ -119,6 +99,9 @@ public class AuthenticatedUser extends User {
     }
 
     @Override
+    public String getSemester() { return semester; }
+
+    @Override
     public String getGaspar() {
         return gaspar;
     }
@@ -139,6 +122,7 @@ public class AuthenticatedUser extends User {
                 + "\nsciper: " + sciper
                 + "\ngaspar: " + gaspar
                 + "\nemail: " + email
-                + "\nsection: " + section;
+                + "\nsection: " + section
+                + "\nsemester: " + semester;
     }
 }

@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -34,10 +33,13 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageAdapter;
+import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageArrayAdapter;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
@@ -49,10 +51,10 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * Use the {@link ChatFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChatFragment extends Fragment {
+public class ChatFragment extends SuperFragment {
     public static final String TAG = "CHAT_TAG";
     private static final String ARG_USER = "ARG_USER";
-    private static final String ARG_CHANNEL_ID = "ARG_CHANNEL_ID";
+    private static final String ARG_CHANNEL = "ARG_CHANNEL";
 
     private static final String CHANNEL_DOCUMENT_NAME = "channels/channel";
     private static final String MESSAGES_COLLECTION_NAME = "messages";
@@ -63,13 +65,11 @@ public class ChatFragment extends Fragment {
     private EditText textEdit;
     private ListView listView;
     private List<ChatMessage> messages = new ArrayList<>();
-    private ChatMessageAdapter adapter;
+    private ChatMessageArrayAdapter adapter;
     private String collection_path;
 
     private User user;
-    private int channelID;
-
-    private OnFragmentInteractionListener mListener;
+    private Channel channel;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -81,11 +81,11 @@ public class ChatFragment extends Fragment {
      *
      * @return A new instance of fragment ChatFragment.
      */
-    public static ChatFragment newInstance(User user, int channelID) {
+    public static ChatFragment newInstance(User user, Channel channel) {
         ChatFragment fragment = new ChatFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);
-        args.putInt(ARG_CHANNEL_ID, channelID);
+        args.putSerializable(ARG_CHANNEL, channel);
         fragment.setArguments(args);
         return fragment;
     }
@@ -95,7 +95,8 @@ public class ChatFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
-            channelID = getArguments().getInt(ARG_CHANNEL_ID);
+            channel = (Channel) getArguments().getSerializable(ARG_CHANNEL);
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, channel.getName());
         }
     }
 
@@ -108,9 +109,11 @@ public class ChatFragment extends Fragment {
         textEdit = view.findViewById(R.id.chat_message_edit);
         listView = view.findViewById(R.id.chat_list_view);
 
-        collection_path = CHANNEL_DOCUMENT_NAME + channelID + "/" + MESSAGES_COLLECTION_NAME;
+        collection_path = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + MESSAGES_COLLECTION_NAME;
 
-        adapter = new ChatMessageAdapter(view.getContext(), messages);
+        sendButton.setEnabled(false);
+
+        adapter = new ChatMessageArrayAdapter(view.getContext(), messages);
         listView.setAdapter(adapter);
 
         setUpDataOnChangeListener();
@@ -118,23 +121,6 @@ public class ChatFragment extends Fragment {
         setUpEditText();
 
         return view;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     /**
@@ -212,7 +198,7 @@ public class ChatFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence text, int start, int before, int count) {
-                sendButton.setEnabled(count > 0);
+                sendButton.setEnabled(text.toString().length() > 0);
             }
 
             @Override
@@ -235,8 +221,11 @@ public class ChatFragment extends Fragment {
                             messages.clear();
                             for (DocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                ChatMessage message = new ChatMessage(document, user.getSciper());
-                                messages.add(message);
+                                FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
+                                if (fmap.hasFields(ChatMessage.FIELDS)) {
+                                    ChatMessage message = new ChatMessage(fmap, user.getSciper());
+                                    messages.add(message);
+                                }
                             }
                             adapter.notifyDataSetChanged();
                             listView.setSelection(adapter.getCount() - 1);

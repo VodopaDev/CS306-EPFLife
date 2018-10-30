@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.content.Context;
+import android.Manifest;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -14,18 +15,24 @@ import android.widget.ListView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Adapters.ChannelAdapter;
+import ch.epfl.sweng.zuluzulu.Adapters.ChannelArrayAdapter;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Structure.GPS;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,23 +42,20 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * Use the {@link ChannelFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChannelFragment extends Fragment {
+public class ChannelFragment extends SuperFragment {
     public static final String TAG = "CHANNEL_TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String CHANNELS_COLLECTION_NAME = "channels";
-    private static final String SECTION_CHANNEL_PREFIX = "Section";
-
-    private static final String USER_SECTION = "IN";
 
     private FirebaseFirestore db;
 
     private ListView listView;
-    private ArrayList<Channel> listOfChannels = new ArrayList<>();
-    private ChannelAdapter adapter;
+
+    private List<Channel> listOfChannels = new ArrayList<>();
+    private ChannelArrayAdapter adapter;
 
     private User user;
-
-    private OnFragmentInteractionListener mListener;
+    private GeoPoint userLocation;
 
     public ChannelFragment() {
         // Required empty public constructor
@@ -76,6 +80,7 @@ public class ChannelFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Channels");
         }
     }
 
@@ -85,8 +90,18 @@ public class ChannelFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_channel, container, false);
         listView = view.findViewById(R.id.channels_list_view);
 
-        adapter = new ChannelAdapter(view.getContext(), listOfChannels);
+        adapter = new ChannelArrayAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
+
+        boolean hadPermissions = GPS.start(getContext());
+        if (!hadPermissions) {
+            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, GPS.MY_PERMISSIONS_REQUEST_LOCATION);
+        }
+
+        Location gpsLocation = GPS.getLocation();
+        if (gpsLocation != null) {
+            userLocation = Utils.toGeoPoint(gpsLocation);
+        }
 
         getChannelsFromDatabase();
 
@@ -94,7 +109,7 @@ public class ChannelFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Channel selectedChannel = listOfChannels.get(position);
-                mListener.onFragmentInteraction(TAG, selectedChannel.getId());
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel);
             }
         });
 
@@ -102,20 +117,9 @@ public class ChannelFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void onDestroyView() {
+        super.onDestroyView();
+        GPS.stop();
     }
 
     /**
@@ -133,9 +137,12 @@ public class ChannelFragment extends Fragment {
                             listOfChannels.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                Channel channel = new Channel(document);
-                                if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user)) {
-                                    listOfChannels.add(channel);
+                                FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
+                                if (fmap.hasFields(Channel.FIELDS)) {
+                                    Channel channel = new Channel(fmap);
+                                    if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user, userLocation)) {
+                                        listOfChannels.add(channel);
+                                    }
                                 }
                             }
                             adapter.notifyDataSetChanged();

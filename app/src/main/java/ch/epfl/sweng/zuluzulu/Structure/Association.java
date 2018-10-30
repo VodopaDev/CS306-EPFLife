@@ -3,15 +3,14 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
-import com.google.firebase.firestore.DocumentSnapshot;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
 
 /**
@@ -19,7 +18,7 @@ import ch.epfl.sweng.zuluzulu.R;
  * Has diverse getters and some functions to create views
  */
 public class Association implements Serializable {
-    private List<String> firebase_fields = Arrays.asList("id", "name", "short_desc", "long_desc");
+    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc");
 
     private int id;
     private String name;
@@ -30,36 +29,44 @@ public class Association implements Serializable {
     private Uri banner_uri;
 
     private List<Map<String, Object>> events;
+    private int channel_id;
     private int closest_event_id;
 
     /**
-     * Create an association using a DocumentSnapshot
+     * Create an association using a Firebase adapted map
      *
-     * @param snap the document snapshot
-     * @throws IllegalArgumentException if the snapshot isn't an Association's snapshot
+     * @param data the adapted map containing the association data
+     * @throws IllegalArgumentException if the map isn't an Association's map
      */
-    public Association(DocumentSnapshot snap) {
-        if (!Utils.isValidSnapshot(snap, firebase_fields))
+    public Association(FirebaseMapDecorator data) {
+        if (!data.hasFields(FIELDS)) {
             throw new IllegalArgumentException();
+        }
 
-        id = snap.getLong("id").intValue();
-        name = snap.getString("name");
-        short_desc = snap.getString("short_desc");
-        long_desc = snap.getString("long_desc");
-        events = snap.get("events") == null ?
-                new ArrayList<Map<String, Object>>() :
-                (List<Map<String, Object>>) snap.get("events");
+        id = data.getInteger("id");
+        name = data.getString("name");
+        short_desc = data.getString("short_desc");
+        long_desc = data.getString("long_desc");
 
-        closest_event_id = computeClosestEvent();
+        // Init the main chat id
+        channel_id = data.get("channel_id") == null ?
+                0 :
+                data.getInteger("channel_id");
+
+        // Init the upcoming event
+        events = data.get("events") == null ?
+                Collections.EMPTY_LIST :
+                (List<Map<String, Object>>) data.get("events");
+        computeClosestEvent();
 
         // Init the Icon URI
-        String icon_str = snap.getString("icon_uri");
+        String icon_str = data.getString("icon_uri");
         icon_uri = icon_str == null ?
                 Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(icon_str);
 
         // Init the Banner URI
-        String banner_str = snap.getString("banner_uri");
+        String banner_str = data.getString("banner_uri");
         banner_uri = banner_str == null ?
                 Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
                 Uri.parse(banner_str);
@@ -116,6 +123,15 @@ public class Association implements Serializable {
     }
 
     /**
+     * Return the Association's main chat id
+     *
+     * @return
+     */
+    public int getChannelId() {
+        return channel_id;
+    }
+
+    /**
      * Return the Association's icon Uri
      *
      * @return the icon Uri
@@ -125,13 +141,21 @@ public class Association implements Serializable {
         return icon_uri;
     }
 
+    /**
+     * Return the Association's closest event happening id
+     *
+     * @return
+     */
     public int getClosestEventId() {
         return closest_event_id;
     }
 
-    private int computeClosestEvent() {
+    /**
+     * Compute the closest event id and store it in the class
+     */
+    private void computeClosestEvent() {
         if (events.isEmpty())
-            return 0;
+            closest_event_id = 0;
         else {
             int closest = ((Long) events.get(0).get("id")).intValue();
             java.util.Date closest_time = (java.util.Date) events.get(0).get("start");
@@ -141,7 +165,7 @@ public class Association implements Serializable {
                     closest = ((Long) events.get(i).get("id")).intValue();
                 }
             }
-            return closest;
+            closest_event_id = closest;
         }
     }
 

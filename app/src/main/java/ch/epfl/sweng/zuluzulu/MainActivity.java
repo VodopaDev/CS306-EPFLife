@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -16,11 +16,13 @@ import android.view.MenuItem;
 
 import com.google.firebase.FirebaseApp;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
@@ -28,29 +30,37 @@ import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-
-//import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
+import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
+    // Const used to send a Increment or Decrement message
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private ArrayList<Fragment> previous_fragments;
-    private Fragment current_fragment;
-
+    private SuperFragment current_fragment;
     private User user;
+
+    // This resource is used for tests
+    // That's the recommended way to implement it
+    // @see https://developer.android.com/training/testing/espresso/idling-resource#integrate-recommended-approach
+    private CountingIdlingResource resource;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Create the resource
+        resource = new CountingIdlingResource("Main Activity");
+
         // Needed to use Firebase storage and Firestore
         FirebaseApp.initializeApp(getApplicationContext());
-
-        previous_fragments = new ArrayList<>();
-        previous_fragments.add(null);
 
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -61,10 +71,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         navigationView = initNavigationView();
         initDrawerContent();
 
-
         Intent i = getIntent();
-        if (Intent.ACTION_VIEW.equals(i.getAction())) {
-            selectItem(navigationView.getMenu().findItem(R.id.nav_login));
+
+        String redirectURIwithCode = i.getStringExtra("redirectUri");
+        if (redirectURIwithCode != null) {
+            openFragmentWithStringData(LoginFragment.newInstance(), LoginFragment.TAG, redirectURIwithCode);
         } else {
             // Look if there is a user object set
             User user = (User) i.getSerializableExtra("user");
@@ -76,6 +87,22 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
         }
     }
+
+
+    /**
+     * Open fragment and add tag
+     *
+     * @param fragment Any fragment
+     * @param tag      Fragment tag
+     * @param data     String data
+     */
+    private void openFragmentWithStringData(SuperFragment fragment, String tag, String data) {
+        Bundle toSend = new Bundle(1);
+        toSend.putString(tag, data);
+        fragment.setArguments(toSend);
+        openFragment(fragment);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -132,7 +159,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      */
     private void updateMenuItems() {
         navigationView.getMenu().clear();
-        if (isAuthenticated()) {
+        if (getUser().hasRole(UserRole.ADMIN)) {
+            navigationView.inflateMenu(R.menu.drawer_view_admin);
+        } else if (isAuthenticated()) {
             navigationView.inflateMenu(R.menu.drawer_view_user);
         } else {
             navigationView.inflateMenu(R.menu.drawer_view_guest);
@@ -153,13 +182,17 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      *
      * @param menuItem The item that corresponds to a fragment on the menu
      */
+
     private void selectItem(MenuItem menuItem) {
-        Fragment fragment;
+
+        SuperFragment fragment;
+
         switch (menuItem.getItemId()) {
             case R.id.nav_main:
                 fragment = MainFragment.newInstance(user);
                 break;
             case R.id.nav_login:
+                //to set arguments for the login
                 fragment = LoginFragment.newInstance();
                 break;
             case R.id.nav_about:
@@ -179,12 +212,17 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case R.id.nav_logout:
                 this.user = new User.UserBuilder().buildGuestUser();
+
+                android.webkit.CookieManager.getInstance().removeAllCookie();
+
                 updateMenuItems();
-                menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
                 fragment = MainFragment.newInstance(user);
                 break;
             case R.id.nav_chat:
                 fragment = ChannelFragment.newInstance(user);
+                break;
+            case R.id.nav_associations_generator:
+                fragment = AssociationsGeneratorFragment.newInstance(user);
                 break;
             default:
                 fragment = MainFragment.newInstance(user);
@@ -193,17 +231,17 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (openFragment(fragment)) {
             // Opening the fragment worked
             menuItem.setChecked(true);
-            setTitle(menuItem.getTitle());
         }
     }
 
-    public boolean openFragment(Fragment fragment) {
+
+    public boolean openFragment(SuperFragment fragment) {
+
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
-                previous_fragments.add(0, current_fragment);
                 current_fragment = fragment;
                 return true;
             }
@@ -211,61 +249,84 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         return false;
     }
 
-    /**
-     * Load the previous fragment (if there is one) into the fragment container
-     */
-    public void openPreviousFragment() {
-        if (previous_fragments.get(0) != null) {
-            Fragment fragment = previous_fragments.remove(0);
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            if (fragmentManager != null) {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.fragmentContent, fragment).commit();
-                current_fragment = fragment;
-            }
-        }
-    }
-
     @Override
-    public void onFragmentInteraction(String tag, Object data) {
+    public void onFragmentInteraction(CommunicationTag tag, Object data) {
         switch (tag) {
-            case LoginFragment.TAG:
-                this.user = (User) data;
+
+            case SET_USER:
+                Map<Integer, Object> received = (HashMap<Integer, Object>) data;
+                this.user = (User) received.get(0);
                 updateMenuItems();
-                selectItem(navigationView.getMenu().findItem(R.id.nav_main));
                 break;
-            case ChannelFragment.TAG:
-                int channelID = (Integer) data;
-                openFragment(ChatFragment.newInstance(user, channelID));
+            case OPENING_WEBVIEW:
+                openFragmentWithStringData(WebViewFragment.newInstance(), WebViewFragment.URL, (String) data);
                 break;
-            case AssociationDetailFragment.TAG:
+            case INCREMENT_IDLING_RESOURCE:
+                incrementCountingIdlingResource();
+                break;
+            case DECREMENT_IDLING_RESOURCE:
+                decrementCountingIdlingResource();
+                break;
+            case SET_TITLE:
+                setTitle((String) data);
+                break;
+            case OPEN_CHAT_FRAGMENT:
+                Channel channel = (Channel) data;
+                openFragment(ChatFragment.newInstance(user, channel));
+                break;
+            case OPEN_ASSOCIATION_FRAGMENT:
+                openFragment(AssociationFragment.newInstance(user));
+                selectItem(navigationView.getMenu().findItem(R.id.nav_associations));
+                break;
+            case OPEN_ASSOCIATION_DETAIL_FRAGMENT:
                 Association association = (Association) data;
                 openFragment(AssociationDetailFragment.newInstance(user, association));
                 break;
-//            case EventDetailFragment.TAG:
-//                Event event = (Event) data;
-//                openFragment(EventDetailFragment.newInstance(user, event));
-//                break;
+            case OPEN_ABOUT_US_FRAGMENT:
+                openFragment(AboutZuluzuluFragment.newInstance());
+                selectItem(navigationView.getMenu().findItem(R.id.nav_about));
+                break;
+            case OPEN_MAIN_FRAGMENT:
+                openFragment(MainFragment.newInstance(user));
+                selectItem(navigationView.getMenu().findItem(R.id.nav_main));
+                break;
+            case OPEN_EVENT_FRAGMENT:
+                openFragment(EventFragment.newInstance(user));
+                selectItem(navigationView.getMenu().findItem(R.id.nav_events));
+                break;
+            case OPEN_EVENT_DETAIL_FRAGMENT:
+                Event event = (Event) data;
+                // openFragment(EventDetailFragment.newInstance(user, event));
+                break;
+            case OPEN_CHANNEL_FRAGMENT:
+                openFragment(ChannelFragment.newInstance(user));
+                selectItem(navigationView.getMenu().findItem(R.id.nav_chat));
+                break;
+            case OPEN_LOGIN_FRAGMENT:
+                openFragment(LoginFragment.newInstance());
+                selectItem(navigationView.getMenu().findItem(R.id.nav_login));
+                break;
+            case OPEN_PROFILE_FRAGMENT:
+                openFragment(ProfileFragment.newInstance(user));
+                selectItem(navigationView.getMenu().findItem(R.id.nav_profile));
+                break;
+            case OPEN_SETTINGS_FRAGMENT:
+                openFragment(SettingsFragment.newInstance());
+                selectItem(navigationView.getMenu().findItem(R.id.nav_settings));
+                break;
             default:
                 // Should never happen
                 throw new AssertionError(tag);
         }
     }
 
-    /**
-     * When back is pressed, load the previous fragment used
-     */
-    @Override
-    public void onBackPressed() {
-        openPreviousFragment();
-    }
 
     /**
      * Return the current fragment
      *
      * @return current fragment
      */
-    public Fragment getCurrentFragment() {
+    public SuperFragment getCurrentFragment() {
         return current_fragment;
     }
 
@@ -276,5 +337,30 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      */
     public User getUser() {
         return user;
+    }
+
+    /**
+     * Increment the countingIdlingResource
+     * Do this before a async task
+     */
+    public void incrementCountingIdlingResource() {
+        resource.increment();
+    }
+
+    /**
+     * Decrement the countingIdlingResource
+     * Do this after a async task
+     */
+    public void decrementCountingIdlingResource() {
+        resource.decrement();
+    }
+
+    /**
+     * Return the resource for the tests
+     *
+     * @return resource
+     */
+    public CountingIdlingResource getCountingIdlingResource() {
+        return resource;
     }
 }

@@ -7,55 +7,58 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
 
-public class Event implements Serializable {
 
-    private static final String IMAGE_PATH = "events/event";
-    private static final String ICON_EXT = "_icon.png";
+// TODO: Add admin access, ending date, linked-chat id, linked-association id, position
+public class Event implements Serializable {
+    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "start_date");
+
     private int id;
-    private String assos_name;
+    private String name;
     private String short_desc;
     private String long_desc;
-    private Uri banner_uri;
-    private Uri icon_uri;
-
-    private int chat_id;
-    private int asso_id;
-    private List<Integer> admins;
-
-    private Location pos;
-
     private Date start_date;
     private String start_date_string;
 
+    private Uri banner_uri;
+    private Uri icon_uri;
 
     /**
-     * Create an event using a DocumentSnapshot
+     * Create an event using a FirebaseMap
      *
-     * @param snap the document snapshot
-     * @throws IllegalArgumentException if the snapshot isn't an Event's snapshot
+     * @param data the FirebaseMap
+     * @throws IllegalArgumentException if the FirebaseMap isn't an Event's FirebaseMap
      */
-    public Event(DocumentSnapshot snap) {
-        if (!snapshotIsValid(snap))
+    public Event(FirebaseMapDecorator data) {
+        if (!data.hasFields(FIELDS))
             throw new NullPointerException();
 
-        id = snap.getLong("id").intValue();
-        assos_name = snap.getString("name");
-        short_desc = snap.getString("short_desc");
-        long_desc = snap.getString("long_desc");
+        id = data.getInteger("id");
+        name = data.getString("name");
+        short_desc = data.getString("short_desc");
+        long_desc = data.getString("long_desc");
 
-        String icon_str = snap.getString("icon_uri");
+        String icon_str = data.getString("icon_uri");
         icon_uri = icon_str == null ?
                 Uri.parse("android.ressource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(icon_str);
 
-        start_date = snap.getDate("start_date");
+        String banner_str = data.getString("icon_uri");
+        banner_uri = banner_str == null ?
+                Uri.parse("android.ressource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
+                Uri.parse(banner_str);
+
+        start_date = data.getDate("start_date");
         start_date_string = Utils.dateFormat.format(start_date);
     }
 
@@ -84,155 +87,34 @@ public class Event implements Serializable {
         return id;
     }
 
-//    public void setId(String id) {
-//        this.id = id;
-//    }
-
     public String getName() {
-        return assos_name;
+        return name;
     }
 
-//    public void setName(String assos_name) {
-//        this.assos_name = assos_name;
-//    }
-
-    public String getShort_desc() {
+    public String getShortDesc() {
         return short_desc;
     }
 
-//    public void setShort_desc(String description) {
-//        this.short_desc = description;
-//    }
-
-    public Uri getIcon() {
-        return banner_uri;
-    }
-
-//    public void setIcon(Uri banner_uri) {
-//        this.banner_uri = banner_uri;
-//    }
-//
-//    public int getChat_id() {
-//        return chat_id;
-//    }
-//
-//    public void setChat_id(int chat_id) {
-//        this.chat_id = chat_id;
-//    }
-//
-//    public int getAsso_id() {
-//        return asso_id;
-//    }
-//
-//    public void setAsso_id(int asso_id) {
-//        this.asso_id = asso_id;
-//    }
-//
-//    public List<Integer> getAdmins() {
-//        return admins;
-//    }
-//
-//    public void setAdmins(List<Integer> admins) {
-//        this.admins = admins;
-//    }
-//
-//    public Location getPos() {
-//        return pos;
-//    }
-//
-//    public void setPos(Location pos) {
-//        this.pos = pos;
-//    }
-
-    public String getLong_desc() {
+    public String getLongDesc() {
         return long_desc;
     }
 
-//    public void setLong_desc(String description) {
-//        this.long_desc = description;
-//    }
-//
-//    public void setLong_desc(String description) {
-//        this.long_desc = description;
-//    }
-
-    public Uri getIconUri() {
-        return icon_uri;
+    public Date getStartDate() {
+        return start_date;
     }
 
     public String getStartDateString() {
         return start_date_string;
     }
 
-    public Date getStartDate() {
-        return start_date;
+    @Nullable
+    public Uri getBannerUri() {
+        return banner_uri;
     }
-//
-//    public void setStart_date(Date start_date) {
-//        this.start_date = start_date;
-//    }
-//
-//    public Date getEnd_date() {
-//        return end_date;
-//    }
-//
-//    public void setEnd_date(Date end_date) {
-//        this.end_date = end_date;
-//    }
-//
-//    public void setIconUri(Uri icon) {
-//        this.icon_uri = icon;
-//    }
-//
-//    public int getChat_id() {
-//        return chat_id;
-//    }
-//
-//    public void setChat_id(int chat_id) {
-//        this.chat_id = chat_id;
-//    }
-//
-//    public int getAsso_id() {
-//        return asso_id;
-//    }
-//
-//    public void setAsso_id(int asso_id) {
-//        this.asso_id = asso_id;
-//    }
-//
-//    public List<Integer> getAdmins() {
-//        return admins;
-//    }
-//
-//    public void setAdmins(List<Integer> admins) {
-//        this.admins = admins;
-//    }
-//
-//    public Location getPos() {
-//        return pos;
-//    }
-//
-//    public void setPos(Location pos) {
-//        this.pos = pos;
-//    }
-//
 
-
-    /**
-     * Check if a DocumentSnapshot correspond to an Event's one
-     *
-     * @param snap the DocumentSnapshot
-     * @return true if it is a valid snapshot, false otherwise
-     */
-    private boolean snapshotIsValid(DocumentSnapshot snap) {
-        return !(snap == null
-                || snap.get("id") == null
-                || snap.getString("short_desc") == null
-                || snap.getString("long_desc") == null
-                || snap.getString("name") == null
-                || snap.getString("icon_uri") == null
-                || snap.getDate("start_date") == null
-        );
+    @Nullable
+    public Uri getIconUri() {
+        return icon_uri;
     }
 
 }

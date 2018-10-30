@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.tequila;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,10 +48,15 @@ public final class AuthServer {
 
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail(profile.email);
+        builder.setSection(profile.section.substring(0,profile.section.indexOf("-")));
+        builder.setSemester(profile.section.substring(profile.section.indexOf("-")+1));
         builder.setSciper(profile.sciper);
         builder.setGaspar(profile.gaspar);
         builder.setFirst_names(profile.firstNames);
         builder.setLast_names(profile.lastNames);
+        builder.setFollowedChats(new ArrayList<Integer>());
+        builder.setFavAssos(new ArrayList<Integer>());
+        builder.setFollowedEvents(new ArrayList<Integer>());
 
         return builder.buildAuthenticatedUser();
     }
@@ -82,5 +88,8 @@ public final class AuthServer {
 
         @SerializedName("Username")
         public String gaspar;
+
+        @SerializedName("Unit")
+        public String section;
     }
 }

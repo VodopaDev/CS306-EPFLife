@@ -3,26 +3,21 @@ package ch.epfl.sweng.zuluzulu;
 
 import android.net.Uri;
 
-import com.google.firebase.firestore.DocumentSnapshot;
-
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
-
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 @RunWith(JUnit4.class)
 public class AssociationTest {
@@ -36,109 +31,116 @@ public class AssociationTest {
     private static final Uri DEFAULT_BANNER_URI = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner);
     private static final Uri DEFAULT_ICON_URI = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon);
 
-    private final DocumentSnapshot mocked_valid_datasnap = mock(DocumentSnapshot.class);
-    private final DocumentSnapshot mocked_default_datasnap = mock(DocumentSnapshot.class);
-    private final DocumentSnapshot mocked_invalid_datasnap = mock(DocumentSnapshot.class);
     private Association asso1;
     private Association asso2;
 
-    @Before
-    public void init() {
-        Map<String, Object> map1 = new HashMap<>();
-        Date close_date = new Date(2020,10,2);
-        map1.put("id", 1L);
-        map1.put("start", close_date);
 
-        Map<String, Object> map2 = new HashMap<>();
-        Date far_date = new Date(2056,10,2);
-        map2.put("id", 2L);
-        map2.put("start", far_date);
+    private void initWorkingAssociation() {
+        Map<String, Object> event1 = new HashMap<>();
+        Date close_date = new Date(2020, 10, 2);
+        event1.put("id", 1L);
+        event1.put("start", close_date);
 
-        when(mocked_valid_datasnap.getString("name")).thenReturn(NAME1);
-        when(mocked_valid_datasnap.getString("long_desc")).thenReturn(LONG_DESC);
-        when(mocked_valid_datasnap.getString("short_desc")).thenReturn(SHORT_DESC);
-        when(mocked_valid_datasnap.getString("icon_uri")).thenReturn(TEST_URI_STRING);
-        when(mocked_valid_datasnap.getString("banner_uri")).thenReturn(TEST_URI_STRING);
-        when(mocked_valid_datasnap.getLong("id")).thenReturn(1L);
-        when(mocked_valid_datasnap.get("name")).thenReturn(NAME1);
-        when(mocked_valid_datasnap.get("long_desc")).thenReturn(LONG_DESC);
-        when(mocked_valid_datasnap.get("short_desc")).thenReturn(SHORT_DESC);
-        when(mocked_valid_datasnap.get("id")).thenReturn(1L);
-        when(mocked_valid_datasnap.get("events")).thenReturn(Arrays.asList(map2, map1));
+        Map<String, Object> event2 = new HashMap<>();
+        Date far_date = new Date(2056, 10, 2);
+        event2.put("id", 2L);
+        event2.put("start", far_date);
 
-        when(mocked_default_datasnap.getString("name")).thenReturn(NAME2);
-        when(mocked_default_datasnap.getString("long_desc")).thenReturn(LONG_DESC);
-        when(mocked_default_datasnap.getString("short_desc")).thenReturn(SHORT_DESC);
-        when(mocked_default_datasnap.getString("icon_uri")).thenReturn(null);
-        when(mocked_default_datasnap.getString("banner_uri")).thenReturn(null);
-        when(mocked_default_datasnap.getLong("id")).thenReturn(1L);
-        when(mocked_default_datasnap.get("name")).thenReturn(NAME2);
-        when(mocked_default_datasnap.get("long_desc")).thenReturn(LONG_DESC);
-        when(mocked_default_datasnap.get("short_desc")).thenReturn(SHORT_DESC);
-        when(mocked_default_datasnap.get("id")).thenReturn(1L);
-        when(mocked_default_datasnap.get("events")).thenReturn(new ArrayList<Map<String, Object>>());
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", 1L);
+        map.put("name", NAME1);
+        map.put("short_desc", SHORT_DESC);
+        map.put("long_desc", LONG_DESC);
+        map.put("icon_uri", TEST_URI_STRING);
+        map.put("banner_uri", TEST_URI_STRING);
+        map.put("channel_id", 1L);
+        map.put("events", Arrays.asList(event2, event1));
 
-        when(mocked_invalid_datasnap.get("name")).thenReturn(null);
-        when(mocked_invalid_datasnap.get("long_desc")).thenReturn(null);
-        when(mocked_invalid_datasnap.get("short_desc")).thenReturn(null);
-        when(mocked_invalid_datasnap.get("id")).thenReturn(null);
-
-        asso1 = new Association(mocked_valid_datasnap);
-        asso2 = new Association(mocked_default_datasnap);
+        asso1 = new Association(new FirebaseMapDecorator(map));
     }
 
-    @Test(expected = IllegalArgumentException .class)
-    public void invalidSnapThrowIllegalArgumentException() {
-        new Association(mocked_invalid_datasnap);
+    private void initDefaultAssociation() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", 1L);
+        map.put("name", NAME2);
+        map.put("short_desc", SHORT_DESC);
+        map.put("long_desc", LONG_DESC);
+
+        asso2 = new Association(new FirebaseMapDecorator(map));
     }
 
-    @Test
-    public void validSnapNoThrowException() {
-        new Association(mocked_valid_datasnap);
+    @Test(expected = IllegalArgumentException.class)
+    public void invalidMapThrowIllegalArgumentException() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", 1L);
+
+        FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
+        new Association(fmap);
     }
 
     @Test
     public void idIsCorrect() {
+        initWorkingAssociation();
         assertEquals(1, asso1.getId());
     }
 
     @Test
     public void nameIsCorrect() {
+        initWorkingAssociation();
         assertEquals(NAME1, asso1.getName());
     }
 
     @Test
     public void longDescIsCorrect() {
+        initWorkingAssociation();
         assertEquals(LONG_DESC, asso1.getLongDesc());
     }
 
     @Test
     public void shortDescIsCorrect() {
+        initWorkingAssociation();
         assertEquals(SHORT_DESC, asso1.getShortDesc());
     }
 
     @Test
-    public void closestEventIsCorrect(){
+    public void closestEventIsCorrect() {
+        initWorkingAssociation();
+        initDefaultAssociation();
         assertThat(0, equalTo(asso2.getClosestEventId()));
         assertThat(1, equalTo(asso1.getClosestEventId()));
     }
 
     @Test
     public void iconUriIsCorrect() {
+        initWorkingAssociation();
+        initDefaultAssociation();
         assertEquals(Uri.parse(TEST_URI_STRING), asso1.getIconUri());
         assertEquals(DEFAULT_ICON_URI, asso2.getIconUri());
     }
 
     @Test
     public void bannerUriIsCorrect() {
+        initWorkingAssociation();
+        initDefaultAssociation();
         assertEquals(Uri.parse(TEST_URI_STRING), asso1.getBannerUri());
         assertEquals(DEFAULT_BANNER_URI, asso2.getBannerUri());
     }
 
     @Test
     public void comparableToIsCorrect() {
+        initWorkingAssociation();
+        initDefaultAssociation();
         assertEquals(NAME1.compareTo(NAME2),
                 Association.getComparator().compare(asso1, asso2));
     }
+
+    @Test
+    public void channelIdIsCorrect() {
+        initWorkingAssociation();
+        initDefaultAssociation();
+        assertThat(asso1.getChannelId(), equalTo(1));
+        assertThat(asso2.getChannelId(), equalTo(0));
+    }
+
 
 }

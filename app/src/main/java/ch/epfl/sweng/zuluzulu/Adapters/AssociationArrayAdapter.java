@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import java.io.File;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -24,7 +24,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Association;
 /**
  * An ArrayAdapter for Associations
  */
-public class AssociationAdapter extends ArrayAdapter<Association> {
+public class AssociationArrayAdapter extends ArrayAdapter<Association> {
     private static final int layout_resource_id = R.layout.card_association;
 
     private final Context context;
@@ -33,12 +33,12 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
     private final OnFragmentInteractionListener mListener;
 
     /**
-     * Basic constructor of an AssociationAdapter
+     * Basic constructor of an AssociationArrayAdapter
      *
      * @param context Context of the Fragment
      * @param data    List of Associations to view
      */
-    public AssociationAdapter(Context context, List<Association> data, OnFragmentInteractionListener mListener) {
+    public AssociationArrayAdapter(Context context, List<Association> data, OnFragmentInteractionListener mListener) {
         super(context, layout_resource_id, data);
         this.mListener = mListener;
         this.context = context;
@@ -81,7 +81,7 @@ public class AssociationAdapter extends ArrayAdapter<Association> {
             @Override
             public void onClick(View v) {
                 Log.d("FRAG_CHANGE", "Switching to " + asso.getName() + "detailed view");
-                mListener.onFragmentInteraction(AssociationDetailFragment.TAG, asso);
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_ASSOCIATION_DETAIL_FRAGMENT, asso);
             }
         });
 

@@ -10,7 +10,7 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 /**
  * This class allow us to create the main activity as if we were connected.
  * It creates an user and allow child to use this User.
- *
+ * <p>
  * Author @dahn
  */
 public abstract class TestWithLogin {
@@ -22,13 +22,14 @@ public abstract class TestWithLogin {
     private User user;
 
     @Before
-    public void setUp() {
+    public void setUpLogin() {
         this.user = Utility.createTestUser();
         Utility.addUserToMainIntent(mActivityRule, this.user);
     }
 
     /**
      * Return the user for the childs
+     *
      * @return User
      */
     protected User getUser() {

@@ -1,30 +1,36 @@
 package ch.epfl.sweng.zuluzulu;
 
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.app.Fragment;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
+import java.util.HashMap;
+import java.util.Map;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 
 @RunWith(AndroidJUnit4.class)
 public class ChatFragmentTest extends TestWithLogin {
 
-    private static final int channelID = 1;
+    private static Channel channel;
 
-    private Fragment fragment;
+    private SuperFragment fragment;
 
     @Before
     public void init() {
-        fragment = ChatFragment.newInstance(getUser(), channelID);
+        Map data = new HashMap();
+        data.put("id", 1l);
+        data.put("name", "name");
+        data.put("description", "description");
+        data.put("restrictions", new HashMap<>());
+        FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
+        channel = new Channel(fmap);
+        fragment = ChatFragment.newInstance(getUser(), channel);
         mActivityRule.getActivity().openFragment(fragment);
     }
 

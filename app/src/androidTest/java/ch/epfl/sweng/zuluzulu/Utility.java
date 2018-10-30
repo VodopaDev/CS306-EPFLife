@@ -8,12 +8,12 @@ import android.view.Gravity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
@@ -24,8 +24,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
  * Use this class for functions that are used in multiple tests
  */
 public class Utility {
-    public static final int TEST_FAV_ASSOCIATIONS = 2; // ID= 1,2
-    public static final int NUMBER_OF_ASSOCIATIONS = 7; // ID = 1,2,3,4,5,6,7
 
     /**
      * Create a user for the tests
@@ -33,21 +31,27 @@ public class Utility {
      * @return Return a user
      */
     public static User createTestUser() {
-        User.UserBuilder builder = new User.UserBuilder();
-        builder.setSciper("123456");
-        builder.setGaspar("gaspar");
-        builder.setEmail("test@epfl.ch");
-        builder.setSection("IN");
-        builder.setFirst_names("James");
-        builder.setLast_names("Bond");
-        builder.setFavAssos(Arrays.asList(1,2));
-        builder.setFollowedEvents(new ArrayList<Integer>());
-        builder.setFollowedChats(new ArrayList<Integer>());
+        User.UserBuilder builder = createFilledUserBuider();
 
         User user = builder.buildAuthenticatedUser();
         assert (user != null);
-        assert (user.isConnected());
 
+
+        return user;
+    }
+
+    /**
+     * Create a admin for the tests
+     *
+     * @return Return a  admin user
+     */
+    public static User createTestAdmin() {
+        User.UserBuilder builder = createFilledUserBuider();
+
+
+        User user = builder.buildAdmin();
+        assert (user != null);
+        assert (user.hasRole(UserRole.ADMIN));
 
         return user;
     }
@@ -73,26 +77,6 @@ public class Utility {
         mActivityRule.launchActivity(i);
     }
 
-    /**
-     * Enter the username and password for login
-     * To use on the LoginFragment only !
-     * @deprecated instead : Create the user with createTestUser() and pass it when creating fragment instance @see ProfileFragmentTest or ChatFragmentTest
-     */
-    public static void login() {
-        onView(withId(R.id.username)).perform(typeText("user")).perform(closeSoftKeyboard());
-        onView(withId(R.id.password)).perform(typeText("password")).perform(closeSoftKeyboard());
-        onView(withId(R.id.sign_in_button)).perform(click());
-    }
-
-    /**
-     * Login from anywhere in the app
-     * @deprecated instead : Create the user with createTestUser() and pass it when creating fragment instance @see ProfileFragmentTest or ChatFragmentTest
-     */
-    public static void fullLogin() {
-        openMenu();
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_login));
-        login();
-    }
 
     /**
      * Open the EventFragment
@@ -129,5 +113,34 @@ public class Utility {
         onView(withId(id)).check(matches(isDisplayed()));
     }
 
+    /**
+     * Check if the fragment is not open
+     *
+     * @param id fragment id
+     */
+    public static void checkFragmentIsClosed(int id) {
+        onView(withId(id)).check(doesNotExist());
+    }
+
+    /**
+     * Return a userbuilder already filled with all the user informations
+     *
+     * @return UserBuilder
+     */
+    private static User.UserBuilder createFilledUserBuider() {
+        User.UserBuilder builder = new User.UserBuilder();
+        builder.setSciper("123456");
+        builder.setGaspar("gaspar");
+        builder.setEmail("test@epfl.ch");
+        builder.setSection("IN");
+        builder.setSemester("BA5");
+        builder.setFirst_names("James");
+        builder.setLast_names("Bond");
+        builder.setFavAssos(Arrays.asList(1, 2));
+        builder.setFollowedEvents(new ArrayList<Integer>());
+        builder.setFollowedChats(new ArrayList<Integer>());
+
+        return builder;
+    }
 
 }

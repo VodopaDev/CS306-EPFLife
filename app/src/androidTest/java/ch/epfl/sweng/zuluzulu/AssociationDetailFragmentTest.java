@@ -14,33 +14,34 @@ import java.util.concurrent.TimeUnit;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 
-import static android.support.test.espresso.Espresso.*;
+import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public class AssociationDetailFragmentTest {
-    private AuthenticatedUser user;
-
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class, false, false);
+    private AuthenticatedUser user;
 
     @Before
-    public void initAuthenticatedTest(){
-        user = (AuthenticatedUser)Utility.createTestUser();
+    public void initAuthenticatedTest() {
+        user = (AuthenticatedUser) Utility.createTestUser();
         Utility.addUserToMainIntent(mActivityRule, user);
         AssociationFragment fragment = AssociationFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
+
 
         try {
             TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
     }
 
     @Test
-    public void thereIsSomething(){
+    public void thereIsSomething() {
         onView(withText("Agepoly")).perform(ViewActions.click());
         try {
             TimeUnit.SECONDS.sleep(1);
@@ -50,7 +51,7 @@ public class AssociationDetailFragmentTest {
     }
 
     @Test
-    public void thereIsNothing(){
+    public void thereIsNothing() {
         onView(withText("ForumEPFL")).perform(ViewActions.click());
         try {
             TimeUnit.SECONDS.sleep(1);

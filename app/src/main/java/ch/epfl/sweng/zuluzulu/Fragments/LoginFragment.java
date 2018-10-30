@@ -3,41 +3,39 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
-import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
+import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
+import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
+import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
 
 
 /**
@@ -48,37 +46,25 @@ import ch.epfl.sweng.zuluzulu.Structure.Utils;
  * Use the {@link LoginFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    public static final String TAG = "LOGIN_TAG";
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "user:password",
-            "vincent:password",
-            "dahn:password",
-            "nicolas:password",
-            "luca:password",
-            "gaultier:password",
-            "yann:password",
-            "bar:world"
-    };
-
+public class LoginFragment extends SuperFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    public final static String TAG = "Login TAG";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
-    private EditText mUsernameView;
-    private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private OnFragmentInteractionListener mListener;
+
+    private String redirectURICode;
+    private OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
+    private String code;
+    private User user;
+    private String codeRequestUrl;
+
 
     public LoginFragment() {
         // Required empty public constructor
     }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -99,6 +85,19 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        try {
+            redirectURICode = this.getArguments().getString(TAG);
+        } catch (NullPointerException e) {
+            redirectURICode = null;
+        }
+        if (redirectURICode != null) {
+            finishLogin();
+        }
+
+        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Login");
     }
 
     @Override
@@ -106,20 +105,6 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-
-        mPasswordView = view.findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        mUsernameView = view.findViewById(R.id.username);
 
         Button mSignInButton = view.findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +116,9 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
 
         mLoginFormView = view.findViewById(R.id.login_form);
         mProgressView = view.findViewById(R.id.login_progress);
+        if (redirectURICode != null) {
+            showProgress(true);
+        }
 
         return view;
     }
@@ -139,18 +127,72 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      * Is executed once the session is active
      * Log in the main activity
      */
-    private void activate_session(User user) {
+    private void transfer_main(boolean isWebView) {
         // Pass the user to the activity
-        mListener.onFragmentInteraction(TAG, user);
+
+
+        if (isWebView) {
+            mListener.onFragmentInteraction(CommunicationTag.OPENING_WEBVIEW, codeRequestUrl);
+        } else {
+
+            Map<Integer, Object> toTransfer = new HashMap<Integer, Object>();
+            toTransfer.put(0, user);
+            toTransfer.put(1, code);
+            toTransfer.put(2, config);
+            mListener.onFragmentInteraction(CommunicationTag.SET_USER, toTransfer);
+            mListener.onFragmentInteraction(CommunicationTag.OPEN_MAIN_FRAGMENT, null);
+        }
+
+        showProgress(false);
     }
 
+    private void finishLogin() {
+        code = AuthClient.extractCode(redirectURICode);
 
-    /**
-     * Reset the errors
-     */
-    private void reset_errors() {
-        mUsernameView.setError(null);
-        mPasswordView.setError(null);
+        Map<String, String> tokens;
+        try {
+            tokens = AuthServer.fetchTokens(config, code);
+        } catch (IOException e) {
+            return;
+        }
+
+        try {
+            user = AuthServer.fetchUser(tokens.get("Tequila.profile"));
+        } catch (IOException e) {
+            return;
+        }
+
+        updateUserAndFinishLogin();
+    }
+
+    private void updateUserAndFinishLogin() {
+        final DocumentReference ref = FirebaseFirestore.getInstance()
+                .collection("users_info")
+                .document(user.getSciper());
+
+        ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (!documentSnapshot.exists()) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("fav_assos", new ArrayList<Integer>());
+                    map.put("followed_events", new ArrayList<Integer>());
+                    map.put("followed_chats", new ArrayList<Integer>());
+                    ref.set(map);
+                    transfer_main(false);
+                } else {
+                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                    List<Integer> received_assos = fmap.getIntegerList("fav_assos");
+                    List<Integer> received_events = fmap.getIntegerList("followed_events");
+                    List<Integer> received_chats = fmap.getIntegerList("followed_chats");
+
+                    ((AuthenticatedUser) user).setFavAssos(received_assos);
+                    ((AuthenticatedUser) user).setFollowedEvents(received_events);
+                    ((AuthenticatedUser) user).setFollowedChats(received_chats);
+                    transfer_main(false);
+                }
+            }
+        });
     }
 
     /**
@@ -159,63 +201,10 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
+        showProgress(true);
+        codeRequestUrl = AuthClient.createCodeRequestUrl(config);
+        transfer_main(true);
 
-        // Reset errors.
-        reset_errors();
-
-        // Store values at the time of the login attempt.
-        String username = mUsernameView.getText().toString();
-        String password = mPasswordView.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password
-        if (!isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-        // Check for a valid username address.
-        if (TextUtils.isEmpty(username)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
-            focusView = mUsernameView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // Focus the first form field with an error.
-            focusView.requestFocus();
-        } else {
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(username, password);
-            mAuthTask.execute((Void) null);
-        }
-    }
-
-    /**
-     * Check if the username is valid
-     *
-     * @param username username
-     * @return boolean
-     */
-    private boolean isUsernameValid(String username) {
-        return username.length() > 3;
-    }
-
-    /**
-     * Check if the password is valid
-     *
-     * @param password password
-     * @return boolean
-     */
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with our future logic
-        return password.length() > 4;
     }
 
     /**
@@ -269,180 +258,5 @@ public class LoginFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onLoaderReset(@NonNull android.support.v4.content.Loader<Cursor> loader) {
 
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(TAG, uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /*private static String read(String prompt) throws IOException {
-        System.out.print(prompt + ": ");
-        return new BufferedReader(new InputStreamReader(System.in)).readLine().trim();
-    }*/
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mUsername;
-        private final String mPassword;
-        //private Map<String, String> tokens;
-        private User user = null;
-
-        UserLoginTask(String username, String password) {
-            mUsername = username;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-
-            /*
-            //CODE FOR TEQUILA LOGIN
-            //create the config
-            OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "id", "secret", "epflife://login"); //We will have to fill with correct values
-            String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
-
-            //start the browser with the Tequila URL (temporary solution)
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(codeRequestUrl));
-            startActivity(browserIntent);
-
-            //part to understand
-            String redirectUri;
-            try{
-            redirectUri = read("Go to the above URL, authenticate, then enter the redirect URI");
-            }catch (IOException e){
-                return false;
-            }
-            String code = AuthClient.extractCode(redirectUri);
-            //end part to understand
-
-
-            try{
-            tokens = AuthServer.fetchTokens(config, code);
-            } catch (IOException e){
-                return false;
-            }
-
-
-            try{
-             user = AuthServer.fetchUser(tokens.get("Tequila.profile"));
-            } catch( IOException e){
-                return false;
-            }*/
-
-
-            /////////////////////////////////////
-            //CODE FOR LOCAL LOGIN
-            /*
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-            */
-
-
-            // Check credentials
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mUsername)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-
-            // CODE FOR LOCAL LOGIN
-            // Nicolas: I have set the sciper to 000000 for testing :)
-            final User.UserBuilder builder = new User.UserBuilder();
-            builder.setEmail("nicolas.jomeau@epfl.ch");
-            builder.setSection("IN");
-            builder.setSciper("000001");
-            builder.setGaspar(mUsername);
-            builder.setFirst_names("nicolas");
-            builder.setLast_names("jomeau");
-            builder.setFollowedChats(new ArrayList<Integer>());
-            builder.setFavAssos(new ArrayList<Integer>());
-            builder.setFollowedEvents(new ArrayList<Integer>());
-            user = builder.buildAuthenticatedUser();
-
-
-            if (success && user != null) {
-                //open the main activity then terminate the login activity (Ikaras998)
-                updateUserAndFinishLogin();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-            showProgress(false);
-        }
-
-        private void updateUserAndFinishLogin() {
-            final DocumentReference ref = FirebaseFirestore.getInstance()
-                    .collection("users_info")
-                    .document(user.getSciper());
-
-            ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if (!documentSnapshot.exists()) {
-                        Map<String, Object> map = new HashMap<>();
-                        map.put("fav_assos", new ArrayList<Integer>());
-                        map.put("followed_events", new ArrayList<Integer>());
-                        map.put("followed_chats", new ArrayList<Integer>());
-                        ref.set(map);
-                        activate_session(user);
-                    } else if (Utils.isValidSnapshot(documentSnapshot, AuthenticatedUser.fields)) {
-                        List<Integer> received_assos = Utils.longListToIntList((List<Long>) documentSnapshot.get("fav_assos"));
-                        List<Integer> received_events = Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_events"));
-                        List<Integer> received_chats = Utils.longListToIntList((List<Long>) documentSnapshot.get("followed_chats"));
-
-                        ((AuthenticatedUser) user).setFavAssos(received_assos);
-                        ((AuthenticatedUser) user).setFollowedEvents(received_events);
-                        ((AuthenticatedUser) user).setFollowedChats(received_chats);
-                        activate_session(user);
-                    }
-                }
-            });
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
-
 
 }
