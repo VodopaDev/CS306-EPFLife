@@ -133,6 +133,7 @@ public class Utility {
         builder.setGaspar("gaspar");
         builder.setEmail("test@epfl.ch");
         builder.setSection("IN");
+        builder.setSemester("BA5");
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
         builder.setFavAssos(Arrays.asList(1, 2));

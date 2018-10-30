@@ -25,6 +25,7 @@ public class AuthenticatedUserTest {
     private static final String sciper = "000001";
     private static final String email = "nico@epfl.ch";
     private static final String section = "IN";
+    private static final String semester = "BA5";
     private static final String gaspar = "jomeau@epfl.ch";
     private static final String first_name = "nicolas";
     private final Association mocked_asso = mock(Association.class);
@@ -50,6 +51,7 @@ public class AuthenticatedUserTest {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail(email);
         builder.setSection(section);
+        builder.setSemester(semester);
         builder.setSciper(sciper);
         builder.setGaspar(gaspar);
         builder.setFirst_names(first_name);
@@ -67,6 +69,7 @@ public class AuthenticatedUserTest {
         assertThat(sciper, equalTo(user.getSciper()));
         assertThat(email, equalTo(user.getEmail()));
         assertThat(section, equalTo(user.getSection()));
+        assertThat(semester, equalTo(user.getSemester()));
         assertThat(gaspar, equalTo(user.getGaspar()));
     }
 
@@ -95,10 +98,12 @@ public class AuthenticatedUserTest {
     @Test
     public void correctString() {
         assertThat(first_name + " " + last_name
-                        + "\nsciper: " + sciper
-                        + "\ngaspar: " + gaspar
-                        + "\nemail: " + email
-                        + "\nsection: " + section
-                , equalTo(user.toString()));
+                + "\nsciper: " + sciper
+                + "\ngaspar: " + gaspar
+                + "\nemail: " + email
+                + "\nsection: " + section
+                + "\nsemester: " + semester
+        , equalTo(user.toString()));
+
     }
 }
