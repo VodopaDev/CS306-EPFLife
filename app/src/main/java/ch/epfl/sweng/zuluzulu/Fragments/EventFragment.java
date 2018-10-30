@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -167,7 +168,7 @@ public class EventFragment extends SuperFragment {
 //        checkbox_event_sort_date.setEnabled(true);
 
         checkbox_event_sort_name.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
+            @TargetApi(24)
             @Override
             public void onClick(View v) {
                 checkbox_event_sort_name.setEnabled(false);
@@ -184,7 +185,7 @@ public class EventFragment extends SuperFragment {
         });
 
         checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
+            @TargetApi(24)
             @Override
             public void onClick(View v) {
                 if (event_fragment_from_date.getText().toString().contains("D") || event_fragment_from_date.getText().toString().contains("M") ||
