@@ -264,11 +264,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 updateMenuItems();
                 break;
             case OPENING_WEBVIEW:
-                Bundle toSend = new Bundle(1);
-                toSend.putString("",(String) data);
-                WebViewFragment fragment = WebViewFragment.newInstance();
-                fragment.setArguments(toSend);
-                openFragment(fragment);
+                openWebViewFragment((String) data);
                 break;
             case INCREMENT_IDLING_RESOURCE:
                 incrementCountingIdlingResource();
@@ -279,7 +275,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case SET_TITLE:
                 setTitle((String)data);
                 break;
-
             case OPEN_CHAT_FRAGMENT:
                 int channelID = (Integer) data;
                 openFragment(ChatFragment.newInstance(user, channelID));
@@ -328,6 +323,19 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 // Should never happen
                 throw new AssertionError(tag);
         }
+    }
+
+    /**
+     * Gaultier code to open a webview fragment
+     * Refactored in a new function
+     * @param url web view url
+     */
+    private void openWebViewFragment(String url) {
+        Bundle toSend = new Bundle(1);
+        toSend.putString("",url);
+        WebViewFragment fragment = WebViewFragment.newInstance();
+        fragment.setArguments(toSend);
+        openFragment(fragment);
     }
 
     /**
