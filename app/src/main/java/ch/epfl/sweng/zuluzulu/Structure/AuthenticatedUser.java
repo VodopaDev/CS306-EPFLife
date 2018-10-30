@@ -35,8 +35,8 @@ public class AuthenticatedUser extends User {
         // Add role
         this.addRole(UserRole.USER);
 
-        // TO REMOVE
-        if (gaspar.equals("dahn")) {
+        // TO REMOVE , change with database access
+        if (gaspar.equals("dahn") || sciper.equals("268785") || sciper.equals("270103")) {
             this.addRole(UserRole.ADMIN);
         }
     }

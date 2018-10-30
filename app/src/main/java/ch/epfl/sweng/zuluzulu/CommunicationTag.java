@@ -6,6 +6,8 @@ public enum CommunicationTag {
     SET_TITLE,
     SET_USER,
     OPENING_WEBVIEW,
+
+    // Communicate to the main fragment IDLING_Ressource
     INCREMENT_IDLING_RESOURCE,
     DECREMENT_IDLING_RESOURCE,
 

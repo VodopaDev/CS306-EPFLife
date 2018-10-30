@@ -9,6 +9,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.concurrent.TimeUnit;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -48,10 +50,11 @@ public class LoginTest {
     }
 
     @Test
-    public void canSeeTheWebView(){
+    public void canSeetheWebView() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(4);
         onView(withId(R.id.sign_in_button)).perform(click());
+        TimeUnit.SECONDS.sleep(3);
         onView(withId(R.id.webview)).check(matches(isDisplayed()));
-
     }
 
 }
