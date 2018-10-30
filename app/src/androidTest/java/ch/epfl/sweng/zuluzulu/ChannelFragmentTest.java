@@ -17,18 +17,12 @@ public class ChannelFragmentTest extends TestWithAuthenticated {
     @Before
     public void init() {
         fragment = ChannelFragment.newInstance(getUser());
-        mActivityRule.getActivity().openFragment(fragment);
+        openFragment(fragment);
     }
 
     @Test
     public void testUserCanClickOnTheFirstChannel() {
         // Nothing I tried works to get access to the items, I'm giving up
         // Utility.checkFragmentIsOpen(R.id.chat_fragment);
-    }
-
-    @Test
-    public void testUserCanClickOnTheTestChannel() {
-        //onView(withText("Test")).perform(click());
-        //Utility.checkFragmentIsOpen(R.id.chat_fragment);
     }
 }

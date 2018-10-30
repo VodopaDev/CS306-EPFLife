@@ -47,6 +47,15 @@ public abstract class TestWithAuthenticated {
         return mActivityRule.getActivity();
     }
 
+    protected void openFragment(SuperFragment fragment){
+        getMainActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getMainActivity().openFragment(fragment);
+            }
+        });
+    }
+
     protected SuperFragment getCurrentFragment(){
         return mActivityRule.getActivity().getCurrentFragment();
     }

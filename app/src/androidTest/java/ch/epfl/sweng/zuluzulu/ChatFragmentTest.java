@@ -19,7 +19,7 @@ public class ChatFragmentTest extends TestWithAuthenticated {
     @Before
     public void init() {
         fragment = ChatFragment.newInstance(getUser(), channelID);
-        mActivityRule.getActivity().openFragment(fragment);
+        openFragment(fragment);
     }
 
 
