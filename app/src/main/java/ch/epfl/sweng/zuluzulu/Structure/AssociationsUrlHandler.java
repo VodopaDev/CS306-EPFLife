@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,11 +18,16 @@ import java.util.regex.Pattern;
 import io.opencensus.common.Function;
 
 public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>> {
+    private final static String TAG = "AssociationsUrlHandler";
 
     // Function that will be executed onPostExecute
     private Function<List<String>, Void> listener;
 
-
+    /**
+     * Create a new AssociationUrlHandler
+     *
+     * @param listener The callback function that will be use on PostExecute
+     */
     public AssociationsUrlHandler(Function<List<String>, Void> listener) {
         this.listener = listener;
     }
@@ -40,6 +46,12 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
         listener.apply(strings);
     }
 
+    /**
+     * Connect to the URL, parse it and return the values found
+     *
+     * @param url The URL
+     * @return ArrayList with all the values founded
+     */
     private ArrayList<String> parseUrl(String url) {
 
         HttpURLConnection urlConnection;
@@ -48,12 +60,14 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
             // Connect to the url
             urlConnection = connect(url);
         } catch (IOException e) {
+            Log.d(TAG, "Cannot connect to the URL");
             e.printStackTrace();
             return null;
         }
 
 
         if (urlConnection == null) {
+            Log.d(TAG, "null UrlConnection");
             return null;
         }
 
@@ -63,6 +77,7 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
             // Parse the datas
             datas = parseData(urlConnection.getInputStream());
         } catch (IOException e) {
+            Log.d(TAG, "Cannot parse datas");
             e.printStackTrace();
         } finally {
             urlConnection.disconnect();
@@ -71,6 +86,13 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
         return datas;
     }
 
+    /**
+     * Connect to the URL, check if the response code is OK (200)
+     *
+     * @param url Url
+     * @return HttpURLConnection or null of response is not OK
+     * @throws IOException Throw exception if it cannot connect
+     */
     private HttpURLConnection connect(String url) throws IOException {
         // Open url
         URL aURL = openUrl(url);
@@ -86,6 +108,7 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
         if (code != 200) {
             // Not OK response
             UrlConnection.disconnect();
+            Log.d(TAG, "No 200 response code");
             return null;
         }
 

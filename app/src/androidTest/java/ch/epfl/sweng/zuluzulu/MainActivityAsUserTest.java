@@ -18,6 +18,10 @@ public class MainActivityAsUserTest extends TestWithLogin {
     public void isAuthenticated() {
         // check not authenticated
         assertTrue(mActivityRule.getActivity().isAuthenticated());
+    }
+
+    @Test
+    public void userFragmentOpen() {
         onView(withId(R.id.main_user_fragment)).check(matches(isDisplayed()));
     }
 }
