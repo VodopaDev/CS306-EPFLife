@@ -222,13 +222,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case R.id.nav_logout:
                 this.user = new User.UserBuilder().buildGuestUser();
 
-                //create a logout URL and open it in the browser
-                String logoutURL = AuthClient.createUrlLogout();
-                try{
-                AuthServer.logoutTequila(logoutURL, config, code);
-                }catch(IOException e){
-                    System.out.print("Error while logging out");
-                }
+                android.webkit.CookieManager.getInstance().removeAllCookie();
+
                 code = null;
                 redirectURIwithCode = null;
                 updateMenuItems();
