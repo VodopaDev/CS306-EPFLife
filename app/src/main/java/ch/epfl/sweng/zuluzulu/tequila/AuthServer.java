@@ -55,7 +55,8 @@ public final class AuthServer {
 
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail(profile.email);
-        builder.setSection("IN");
+        builder.setSection(profile.section.substring(0,profile.section.indexOf("-")));
+        builder.setSemester(profile.section.substring(profile.section.indexOf("-")+1));
         builder.setSciper(profile.sciper);
         builder.setGaspar(profile.gaspar);
         builder.setFirst_names(profile.firstNames);
@@ -94,5 +95,8 @@ public final class AuthServer {
 
         @SerializedName("Username")
         public String gaspar;
+
+        @SerializedName("Unit")
+        public String section;
     }
 }
