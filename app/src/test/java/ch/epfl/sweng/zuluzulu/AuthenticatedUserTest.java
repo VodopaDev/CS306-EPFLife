@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,25 +22,23 @@ import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
 public class AuthenticatedUserTest {
-    private AuthenticatedUser user;
-
-    private final Association mocked_asso = mock(Association.class);
-    private final Event mocked_event = mock(Event.class);
-    private final Channel mocked_channel = mock(Channel.class);
-
     private static final String sciper = "000001";
     private static final String email = "nico@epfl.ch";
     private static final String section = "IN";
     private static final String semester = "BA5";
     private static final String gaspar = "jomeau@epfl.ch";
     private static final String first_name = "nicolas";
+    private final Association mocked_asso = mock(Association.class);
+    private final Event mocked_event = mock(Event.class);
+    private final Channel mocked_channel = mock(Channel.class);
     private final String last_name = "jomeau";
+    private AuthenticatedUser user;
     private List<Integer> fav_assos;
     private List<Integer> fol_events;
     private List<Integer> fol_chats;
 
     @Before
-    public void createUser(){
+    public void createUser() {
         fav_assos = new ArrayList<>();
         fol_events = new ArrayList<>();
         fol_chats = new ArrayList<>();
@@ -66,7 +63,7 @@ public class AuthenticatedUserTest {
     }
 
     @Test
-    public void gettersTest(){
+    public void gettersTest() {
         assertThat(first_name, equalTo(user.getFirstNames()));
         assertThat(last_name, equalTo(user.getLastNames()));
         assertThat(sciper, equalTo(user.getSciper()));
@@ -77,14 +74,14 @@ public class AuthenticatedUserTest {
     }
 
     @Test
-    public void followTest(){
+    public void followTest() {
         assertThat(false, equalTo(user.isFavAssociation(mocked_asso)));
         assertThat(false, equalTo(user.isFollowedChat(mocked_channel)));
         assertThat(false, equalTo(user.isFollowedEvent(mocked_event)));
     }
 
     @Test
-    public void setList(){
+    public void setList() {
         user.setFollowedChats(Collections.singletonList(1));
         user.setFavAssos(Collections.singletonList(1));
         user.setFollowedEvents(Collections.singletonList(1));
@@ -94,12 +91,12 @@ public class AuthenticatedUserTest {
     }
 
     @Test
-    public void connected(){
+    public void connected() {
         assertThat(true, equalTo(user.isConnected()));
     }
 
     @Test
-    public void correctString(){
+    public void correctString() {
         assertThat(first_name + " " + last_name
                 + "\nsciper: " + sciper
                 + "\ngaspar: " + gaspar
@@ -107,5 +104,6 @@ public class AuthenticatedUserTest {
                 + "\nsection: " + section
                 + "\nsemester: " + semester
         , equalTo(user.toString()));
+
     }
 }
