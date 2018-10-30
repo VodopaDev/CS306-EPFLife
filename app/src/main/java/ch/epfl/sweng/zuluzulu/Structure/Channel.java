@@ -2,6 +2,7 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import com.google.firebase.firestore.GeoPoint;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +12,10 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 /**
  * Class that represents a channel in a view
  */
-public class Channel {
+public class Channel implements Serializable {
 
     public static final List<String> FIELDS = Arrays.asList("id", "name", "description", "restrictions");
+    private static final double MAX_DISTANCE = 20;
     private int id;
     private String name;
     private String description;
@@ -83,15 +85,22 @@ public class Channel {
      * @param user The user who wants to enter the channel
      * @return whether the user can access it or not
      */
-    public boolean canBeAccessedBy(AuthenticatedUser user) {
+    public boolean canBeAccessedBy(AuthenticatedUser user, GeoPoint userLocation) {
         boolean hasAccess = true;
         String section = (String) restrictions.get("section");
-        GeoPoint location = (GeoPoint) restrictions.get("location");
+        GeoPoint channelLocation = (GeoPoint) restrictions.get("location");
         if (section != null) {
             hasAccess = section.equals(user.getSection());
         }
-        if (location != null) {
-            // Todo when we use geolocalisation
+        if (channelLocation != null) {
+            if (userLocation == null) {
+                return false;
+            }
+            double distance = Utils.distanceBetween(channelLocation, userLocation);
+            System.out.println(getName() + ": (" + channelLocation.getLatitude() + ", " + channelLocation.getLongitude() + ")");
+            System.out.println("User: (" + userLocation.getLatitude() + ", " + userLocation.getLongitude() + ")");
+            System.out.println("Distance: " + distance);
+            hasAccess = hasAccess && distance < MAX_DISTANCE;
         }
         return hasAccess;
     }
