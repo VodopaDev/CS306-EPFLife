@@ -23,11 +23,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -42,14 +44,15 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * Use the {@link AssociationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AssociationFragment extends SuperFragment implements TextWatcher {
+public class AssociationFragment extends SuperFragment {
     private static final String TAG = "ASSOCIATIONS_TAG";
     private static final String ARG_USER = "ARG_USER";
 
     private User user;
 
-    private ArrayList<Association> assos_all;
-    private ArrayList<Association> assos_fav;
+    private List<Association> assos_all;
+    private List<Association> assos_filtered;
+    private List<Association> assos_fav;
     private AssociationArrayAdapter assos_adapter;
 
     private ListView listview_assos;
@@ -83,8 +86,8 @@ public class AssociationFragment extends SuperFragment implements TextWatcher {
         }
 
         assos_all = new ArrayList<>();
+        assos_filtered = new ArrayList<>();
         assos_fav = new ArrayList<>();
-        assos_adapter = new AssociationArrayAdapter(getContext(), assos_all, mListener);
 
         default_sort_option = "name";
 
@@ -96,6 +99,8 @@ public class AssociationFragment extends SuperFragment implements TextWatcher {
         View view = inflater.inflate(R.layout.fragment_association, container, false);
 
         listview_assos = view.findViewById(R.id.association_fragment_listview);
+
+        assos_adapter = new AssociationArrayAdapter(getContext(), assos_filtered, mListener);
         listview_assos.setAdapter(assos_adapter);
 
         button_assos_fav = view.findViewById(R.id.association_fragment_fav_button);
@@ -158,13 +163,20 @@ public class AssociationFragment extends SuperFragment implements TextWatcher {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                String firstLetters = s.toString();
+                assos_filtered.clear();
+                for(Association assos : assos_all) {
+                    if (assos.getName().startsWith(firstLetters)) {
+                        assos_filtered.add(assos);
+                    }
+                }
+                assos_adapter.notifyDataSetChanged();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.e("ASSO_Filter", "assos_all before before: " + assos_all.size());
-                //assos_all.clear();
+                /*Log.e("ASSO_Filter", "assos_all before before: " + assos_all.size());
+                assos_all.clear();
                 fillAssociationLists("name");
 
                 Log.e("ASSO_Filter", "assos_all before: " + assos_all.size());
@@ -178,12 +190,15 @@ public class AssociationFragment extends SuperFragment implements TextWatcher {
                         assos_filter.add(new Association(assos));
                     }
                 }
+                Log.e("ASSO_Filter", "assos_filter before: " + assos_filter.size());
                 assos_all.clear();
                 assos_all.addAll(assos_filter);
                 assos_filter.clear();
                 Log.e("ASSO_Filter", "assos_all: " + assos_all.size());
                 assos_adapter.notifyDataSetChanged();
+                Log.e("ASSO_Filter", "assos_all after: " + assos_all.size());*/
             }
+
         });
         return view;
     }
@@ -199,6 +214,7 @@ public class AssociationFragment extends SuperFragment implements TextWatcher {
                             if(data.hasFields(Association.FIELDS)) {
                                 Association asso = new Association(data);
                                 assos_all.add(asso);
+                                assos_filtered.add(asso);
 
                                 if (user.isConnected() && ((AuthenticatedUser) user).isFavAssociation(asso))
                                     assos_fav.add(asso);
@@ -217,26 +233,11 @@ public class AssociationFragment extends SuperFragment implements TextWatcher {
                 });
     }
 
-    private void updateListView(Button new_selected, Button new_unselected, ArrayList<Association> data, ListView list) {
+    private void updateListView(Button new_selected, Button new_unselected, List<Association> data, ListView list) {
         new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         new_unselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
         assos_adapter = new AssociationArrayAdapter(getContext(), data, mListener);
         list.setAdapter(assos_adapter);
         assos_adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
     }
 }
