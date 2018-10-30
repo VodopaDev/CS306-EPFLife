@@ -14,66 +14,82 @@ import com.google.firebase.firestore.GeoPoint;
 
 import static android.content.Context.LOCATION_SERVICE;
 
-public class GPS implements LocationListener {
-
-    private static volatile GPS instance = null;
+public final class GPS {
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
     private static final long MIN_DISTANCE_TO_REQUEST_LOCATION = 1; // In meters
     private static final long MIN_TIME_FOR_UPDATES = 1000; // 1 sec
     private static final int TWO_MINUTES = 1000 * 60 * 2; // 2 min
 
-    private Context context;
-    private Location location;
-    private LocationManager locationManager;
+    private static LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location newLocation) {
+            if (newLocation != null && isBetterLocation(newLocation, location)) {
+                // Just for testing
+                GeoPoint user = Utils.toGeoPoint(newLocation);
+                GeoPoint sat = new GeoPoint(46.52056, 6.567835);
+                double distance = Utils.distanceBetween(user, sat);
+                Toast.makeText(mcontext, "Your are at " + distance + " from the target !", Toast.LENGTH_SHORT).show();
 
-    private GPS(Context context) {
-        super();
-        this.context = context.getApplicationContext();
-    }
-
-    public static GPS getInstance(Context context) {
-        if (instance == null) {
-            synchronized (GPS.class) {
-                if (instance == null) {
-                    instance = new GPS(context);
-                }
+                location = newLocation;
             }
         }
-        instance.setContext(context);
-        return instance;
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
+    private static Context mcontext;
+    private static Location location;
+    private static LocationManager locationManager;
+
+    private GPS() {
     }
+
 
     /**
      * Start requesting for location updates
      *
      * @return Whether the user has given permission or not
      */
-    public boolean start() {
-        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(context, "Permission to GPS not granted", Toast.LENGTH_SHORT).show();
+    public static boolean start(Context context) {
+        mcontext = context;
+        if (ContextCompat.checkSelfPermission(mcontext, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(mcontext, "Permission to GPS not granted", Toast.LENGTH_SHORT).show();
             return false;
         } else {
-            locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+            locationManager = (LocationManager) mcontext.getSystemService(LOCATION_SERVICE);
             if (locationManager != null) {
                 boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                 boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
                 if (isGPSEnabled) {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, this);
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, locationListener);
                     Location tempLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     if (tempLocation != null && isBetterLocation(tempLocation, location)) {
                         location = tempLocation;
                     }
                 }
                 if (isNetworkEnabled) {
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, this);
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, locationListener);
                     Location tempLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                     if (tempLocation != null && isBetterLocation(tempLocation, location)) {
                         location = tempLocation;
                     }
                 }
                 if (!isGPSEnabled && !isNetworkEnabled) {
-                    Toast.makeText(context, "Please activate your GPS to have access to all features", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mcontext, "Please activate your GPS to have access to all features", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Log.e("Location manager", "Cannot get location manager");
@@ -85,9 +101,9 @@ public class GPS implements LocationListener {
     /**
      * Stop asking for location updates
      */
-    public void stop() {
+    public static void stop() {
         if (locationManager != null) {
-            locationManager.removeUpdates(this);
+            locationManager.removeUpdates(locationListener);
         }
     }
 
@@ -96,36 +112,8 @@ public class GPS implements LocationListener {
      *
      * @return The last known location
      */
-    public Location getLocation() {
+    public static Location getLocation() {
         return location;
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        if (location != null && isBetterLocation(location, this.location)) {
-            // Just for testing
-            GeoPoint user = Utils.toGeoPoint(location);
-            GeoPoint sat = new GeoPoint(46.52056, 6.567835);
-            double distance = Utils.distanceBetween(user, sat);
-            Toast.makeText(context, "Your are at " + distance + " from the target !", Toast.LENGTH_SHORT).show();
-
-            this.location = location;
-        }
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
     }
 
     /**
@@ -135,7 +123,7 @@ public class GPS implements LocationListener {
      * @param currentBestLocation The current location
      * @return whether the new location is better or not
      */
-    private boolean isBetterLocation(Location location, Location currentBestLocation) {
+    private static boolean isBetterLocation(Location location, Location currentBestLocation) {
         if (currentBestLocation == null) {
             // A new location is always better than no location
             return true;
@@ -171,7 +159,7 @@ public class GPS implements LocationListener {
     /**
      * Checks whether two providers are the same
      */
-    private boolean isSameProvider(String provider1, String provider2) {
+    private static boolean isSameProvider(String provider1, String provider2) {
         if (provider1 == null) {
             return provider2 == null;
         }
@@ -179,11 +167,11 @@ public class GPS implements LocationListener {
     }
 
     /**
-     * Change the context when the GPS is called in another context
+     * Return the location listener
      *
-     * @param context The new context
+     * @return The location listener
      */
-    private void setContext(Context context) {
-        this.context = context.getApplicationContext();
+    public static LocationListener getListener() {
+        return locationListener;
     }
 }

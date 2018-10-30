@@ -48,7 +48,6 @@ public class ChannelFragment extends SuperFragment {
     private static final String CHANNELS_COLLECTION_NAME = "channels";
 
     private FirebaseFirestore db;
-    private GPS gps;
 
     private ListView listView;
 
@@ -94,13 +93,12 @@ public class ChannelFragment extends SuperFragment {
         adapter = new ChannelArrayAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
 
-        gps = GPS.getInstance(getContext());
-        boolean hadPermissions = gps.start();
+        boolean hadPermissions = GPS.start(getContext());
         if (!hadPermissions) {
             requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, GPS.MY_PERMISSIONS_REQUEST_LOCATION);
         }
 
-        Location gpsLocation = gps.getLocation();
+        Location gpsLocation = GPS.getLocation();
         if (gpsLocation != null) {
             userLocation = Utils.toGeoPoint(gpsLocation);
         }
@@ -121,7 +119,7 @@ public class ChannelFragment extends SuperFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        gps.stop();
+        GPS.stop();
     }
 
     /**

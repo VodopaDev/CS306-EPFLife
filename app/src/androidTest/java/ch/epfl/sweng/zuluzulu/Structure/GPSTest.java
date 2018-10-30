@@ -14,18 +14,15 @@ public class GPSTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    private GPS gps;
-
     @Test
     public void testOnLocationChanged() throws Throwable {
         mActivityRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                gps = GPS.getInstance(mActivityRule.getActivity());
-                gps.start();
-                gps.onLocationChanged(new Location(LocationManager.GPS_PROVIDER));
-                gps.onLocationChanged(new Location(LocationManager.NETWORK_PROVIDER));
-                gps.stop();
+                GPS.start(mActivityRule.getActivity());
+                GPS.getListener().onLocationChanged(new Location(LocationManager.GPS_PROVIDER));
+                GPS.getListener().onLocationChanged(new Location(LocationManager.NETWORK_PROVIDER));
+                GPS.stop();
             }
         });
     }
