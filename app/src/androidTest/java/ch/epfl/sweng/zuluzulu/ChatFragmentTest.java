@@ -6,19 +6,31 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 
 @RunWith(AndroidJUnit4.class)
 public class ChatFragmentTest extends TestWithAuthenticated {
 
-    private static final int channelID = 1;
+    private static Channel channel;
 
     private SuperFragment fragment;
 
     @Before
     public void init() {
-        fragment = ChatFragment.newInstance(getUser(), channelID);
+        Map data = new HashMap();
+        data.put("id", 1l);
+        data.put("name", "name");
+        data.put("description", "description");
+        data.put("restrictions", new HashMap<>());
+        FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
+        channel = new Channel(fmap);
+        fragment = ChatFragment.newInstance(getUser(), channel);
         openFragment(fragment);
     }
 

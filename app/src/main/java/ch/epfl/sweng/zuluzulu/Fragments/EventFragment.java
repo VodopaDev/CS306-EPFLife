@@ -24,10 +24,10 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.DECREMENT_IDLING_RESOURCE;
@@ -163,7 +163,7 @@ public class EventFragment extends SuperFragment {
         event_all.clear();
         event_fav.clear();
     }
-  
+
     private void fillEventLists(String sortOption){
         mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
         FirebaseFirestore.getInstance().collection("events_info").orderBy(sortOption).get()
@@ -171,9 +171,9 @@ public class EventFragment extends SuperFragment {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        for (DocumentSnapshot snap: snap_list) {
+                        for (DocumentSnapshot snap : snap_list) {
                             FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
-                            if(fmap.hasFields(Event.FIELDS)) {
+                            if (fmap.hasFields(Event.FIELDS)) {
                                 Event event = new Event(fmap);
                                 event_all.add(event);
                                 if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))

@@ -22,31 +22,31 @@ import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
 public class FirebaseMapDecoratorTest {
-    Map<String,Object> map;
+    Map<String, Object> map;
 
     @Before
-    public void initMap(){
+    public void initMap() {
         map = new HashMap<>();
         map.put("int", 1L);
         map.put("long", 1L);
         map.put("string", "test");
         map.put("map", Collections.EMPTY_MAP);
-        map.put("geopoint", new GeoPoint(1,1));
+        map.put("geopoint", new GeoPoint(1, 1));
         map.put("date", new Date(1L));
         map.put("list", Collections.EMPTY_LIST);
-        map.put("long_list", Arrays.asList(1L,2L));
+        map.put("long_list", Arrays.asList(1L, 2L));
         map.put("non_existent_list", null);
     }
 
     @Test
-    public void hasFieldsTest(){
+    public void hasFieldsTest() {
         FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
         assertThat(true, equalTo(fmap.hasFields(Arrays.asList("int", "geopoint"))));
         assertThat(false, equalTo(fmap.hasFields(Arrays.asList("int", "carotte"))));
     }
 
     @Test
-    public void gettersTest(){
+    public void gettersTest() {
         FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
         assertThat(1, equalTo(fmap.getInteger("int")));
         assertThat(1L, equalTo(fmap.getLong("long")));
@@ -62,9 +62,9 @@ public class FirebaseMapDecoratorTest {
     }
 
     @Test
-    public void snapshotConstructor(){
+    public void snapshotConstructor() {
         DocumentSnapshot snap = mock(DocumentSnapshot.class);
-        when(snap.getData()).thenReturn(Collections.singletonMap("string", (Object)"test"));
+        when(snap.getData()).thenReturn(Collections.singletonMap("string", (Object) "test"));
         FirebaseMapDecorator fmap2 = new FirebaseMapDecorator(snap);
 
         assertThat("test", equalTo(fmap2.getString("string")));

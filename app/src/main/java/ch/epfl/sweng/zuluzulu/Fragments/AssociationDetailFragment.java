@@ -52,6 +52,7 @@ public class AssociationDetailFragment extends SuperFragment {
 
     /**
      * Initialize a new AssociationDetailFragment
+     *
      * @param user User of the app
      * @param asso Association to be displayed
      * @return A new AssociationDetailFragment displaying an association details
@@ -162,14 +163,15 @@ public class AssociationDetailFragment extends SuperFragment {
     }
 
     // TODO: Remove comment when EventDetailFragment is fixed
+
     /**
      * Set up the upcoming event clicking behaviour to go on the event detailed page
      */
-    private void setUpcomingEventButtonBehaviour(){
+    private void setUpcomingEventButtonBehaviour() {
         upcoming_event_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(upcoming_event != null) {
+                if (upcoming_event != null) {
                     //mListener.onFragmentInteraction(EventDetailFragment.TAG, upcoming_event);
                 }
             }
@@ -180,7 +182,7 @@ public class AssociationDetailFragment extends SuperFragment {
      * Use Firebase to load the upcoming event data in the variable upcoming_event
      * If there is no upcoming event (ie the association has no event), upcoming_event will stay null
      */
-    private void loadUpcomingEvent(){
+    private void loadUpcomingEvent() {
         // Fetch online data of the upcoming event
         if (asso.getClosestEventId() != 0) {
             mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
@@ -190,7 +192,7 @@ public class AssociationDetailFragment extends SuperFragment {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                    if(fmap.hasFields(Event.FIELDS)) {
+                    if (fmap.hasFields(Event.FIELDS)) {
                         upcoming_event = new Event(fmap);
                         upcoming_event_name.setText(upcoming_event.getName());
                         upcoming_event_date.setText(upcoming_event.getStartDate().toString());
@@ -198,8 +200,7 @@ public class AssociationDetailFragment extends SuperFragment {
                                 .load(upcoming_event.getIconUri())
                                 .centerCrop()
                                 .into(upcoming_event_icon);
-                    }
-                    else
+                    } else
                         upcoming_event_name.setText("Error loading the event :(");
 
                     mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
@@ -214,7 +215,7 @@ public class AssociationDetailFragment extends SuperFragment {
      * Use Firebase to load the main chat data in the variable main_chat
      * If there is no main chat (ie the association has no chat), main_chat will stay null
      */
-    private void loadMainChat(){
+    private void loadMainChat() {
         // Fetch online data of the main_chat
         if (asso.getChannelId() != 0) {
             mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
@@ -224,12 +225,11 @@ public class AssociationDetailFragment extends SuperFragment {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                    if(fmap.hasFields(Channel.FIELDS)) {
+                    if (fmap.hasFields(Channel.FIELDS)) {
                         main_chat = new Channel(fmap);
                         main_chat_name.setText(main_chat.getName());
                         main_chat_desc.setText(main_chat.getDescription());
-                    }
-                    else
+                    } else
                         main_chat_name.setText("Error loading the chat :(");
                     mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                 }
@@ -239,13 +239,13 @@ public class AssociationDetailFragment extends SuperFragment {
         }
     }
 
-    private void setMainChatButtonBehaviour(){
+    private void setMainChatButtonBehaviour() {
         main_chat_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(main_chat != null) {
                     if(user.isConnected())
-                        mListener.onFragmentInteraction(OPEN_CHAT_FRAGMENT, main_chat.getId());
+                        mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, main_chat);
                     else
                         Snackbar.make(getView(), "Login to access chat room", 5000).show();
                 }

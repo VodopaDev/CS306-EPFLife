@@ -14,7 +14,6 @@ import android.widget.ListView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -118,9 +117,9 @@ public class AssociationFragment extends SuperFragment {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        for (DocumentSnapshot snap: snap_list) {
+                        for (DocumentSnapshot snap : snap_list) {
                             FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
-                            if(data.hasFields(Association.FIELDS)) {
+                            if (data.hasFields(Association.FIELDS)) {
                                 Association asso = new Association(data);
                                 assos_all.add(asso);
 
