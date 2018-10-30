@@ -39,6 +39,7 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
@@ -53,7 +54,7 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
 public class ChatFragment extends SuperFragment {
     public static final String TAG = "CHAT_TAG";
     private static final String ARG_USER = "ARG_USER";
-    private static final String ARG_CHANNEL_ID = "ARG_CHANNEL_ID";
+    private static final String ARG_CHANNEL = "ARG_CHANNEL";
 
     private static final String CHANNEL_DOCUMENT_NAME = "channels/channel";
     private static final String MESSAGES_COLLECTION_NAME = "messages";
@@ -68,7 +69,7 @@ public class ChatFragment extends SuperFragment {
     private String collection_path;
 
     private User user;
-    private int channelID;
+    private Channel channel;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -80,11 +81,11 @@ public class ChatFragment extends SuperFragment {
      *
      * @return A new instance of fragment ChatFragment.
      */
-    public static ChatFragment newInstance(User user, int channelID) {
+    public static ChatFragment newInstance(User user, Channel channel) {
         ChatFragment fragment = new ChatFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);
-        args.putInt(ARG_CHANNEL_ID, channelID);
+        args.putSerializable(ARG_CHANNEL, channel);
         fragment.setArguments(args);
         return fragment;
     }
@@ -94,8 +95,8 @@ public class ChatFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
-            channelID = getArguments().getInt(ARG_CHANNEL_ID);
-            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Chat id:" + channelID);
+            channel = (Channel) getArguments().getSerializable(ARG_CHANNEL);
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, channel.getName());
         }
     }
 
@@ -108,7 +109,7 @@ public class ChatFragment extends SuperFragment {
         textEdit = view.findViewById(R.id.chat_message_edit);
         listView = view.findViewById(R.id.chat_list_view);
 
-        collection_path = CHANNEL_DOCUMENT_NAME + channelID + "/" + MESSAGES_COLLECTION_NAME;
+        collection_path = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + MESSAGES_COLLECTION_NAME;
 
         sendButton.setEnabled(false);
 

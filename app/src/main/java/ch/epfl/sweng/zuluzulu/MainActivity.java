@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.test.espresso.idling.CountingIdlingResource;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -18,8 +17,6 @@ import android.view.MenuItem;
 import com.google.firebase.FirebaseApp;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,15 +31,16 @@ import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
 import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
 import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
-import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
 
 //import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
@@ -318,8 +316,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
 
             case OPEN_CHAT_FRAGMENT:
-                int channelID = (Integer) data;
-                openFragment(ChatFragment.newInstance(user, channelID));
+                Channel channel = (Channel) data;
+                openFragment(ChatFragment.newInstance(user, channel));
                 break;
             case OPEN_ASSOCIATION_FRAGMENT:
                 openFragment(AssociationFragment.newInstance(user));

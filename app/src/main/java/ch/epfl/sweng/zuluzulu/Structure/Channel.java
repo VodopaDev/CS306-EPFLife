@@ -2,6 +2,7 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import com.google.firebase.firestore.GeoPoint;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,7 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 /**
  * Class that represents a channel in a view
  */
-public class Channel {
+public class Channel implements Serializable {
 
     public static final List<String> FIELDS = Arrays.asList("id", "name", "description", "restrictions");
     private static final double MAX_DISTANCE = 20;
