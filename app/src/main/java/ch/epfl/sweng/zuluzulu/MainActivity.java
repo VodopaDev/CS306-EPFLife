@@ -82,8 +82,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         Intent i = getIntent();
 
-        if(Intent.ACTION_VIEW.equals(i.getAction())) {
-            openLogin(i);
+        String redirectURIwithCode = i.getStringExtra("redirectUri");
+        if (redirectURIwithCode != null) {
+            openLogin(redirectURIwithCode);
         } else {
             // Look if there is a user object set
             User user = (User) i.getSerializableExtra("user");
@@ -97,18 +98,15 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
 
     /**
-     * Open the login fragment if requested by the intent
-     * @param intent
+     * Open the login fragment when requested by redirect uri
+     * @param redirectURIwithCode redirect url
      */
-    private void openLogin(Intent intent) {
-        String redirectURIwithCode = intent.getStringExtra("redirectUri");
-        if (redirectURIwithCode != null) {
-            Bundle toSend = new Bundle(1);
-            toSend.putString("", redirectURIwithCode);
-            LoginFragment fragment = LoginFragment.newInstance();
-            fragment.setArguments(toSend);
-            openFragment(fragment);
-        }
+    private void openLogin(String redirectURIwithCode) {
+        Bundle toSend = new Bundle(1);
+        toSend.putString("", redirectURIwithCode);
+        LoginFragment fragment = LoginFragment.newInstance();
+        fragment.setArguments(toSend);
+        openFragment(fragment);
     }
 
     @Override
@@ -201,7 +199,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case R.id.nav_login:
                 //to set arguments for the login
                 fragment = LoginFragment.newInstance();
-
                 break;
             case R.id.nav_about:
                 fragment = AboutZuluzuluFragment.newInstance();
