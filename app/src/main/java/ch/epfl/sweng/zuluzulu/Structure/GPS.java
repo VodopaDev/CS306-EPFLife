@@ -14,7 +14,7 @@ import com.google.firebase.firestore.GeoPoint;
 
 import static android.content.Context.LOCATION_SERVICE;
 
-public final class GPS implements LocationListener {
+public class GPS implements LocationListener {
 
     private static volatile GPS instance = null;
 

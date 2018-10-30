@@ -9,7 +9,9 @@ import com.google.firebase.firestore.GeoPoint;
 /**
  * Class that contains general useful functions
  */
-public abstract class Utils {
+public final class Utils {
+
+    private Utils() {}
 
     public static void addIdToList(String path, String field, Integer id) {
         FirebaseFirestore.getInstance().document(path).update(field, FieldValue.arrayUnion(id));
