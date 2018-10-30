@@ -41,6 +41,7 @@ public class UserTest {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("admin@epfl.ch");
         builder.setSection("IN");
+        builder.setSemester("BA5");
         builder.setSciper("121212");
         builder.setGaspar("admin");
         builder.setFirst_names("admin_first_name");
@@ -71,6 +72,7 @@ public class UserTest {
         assertTrue(user.isConnected());
         assertEquals(user.getEmail(), "test@epfl.ch");
         assertEquals(user.getSection(), "IN");
+        assertEquals(user.getSemester(), "BA5");
         assertEquals(user.getSciper(), "123456");
         assertEquals(user.getGaspar(), "gaspar");
         assertEquals(user.getFirstNames(), "James");
@@ -126,7 +128,8 @@ public class UserTest {
                 + "\nsciper: 123456"
                 + "\ngaspar: gaspar"
                 + "\nemail: test@epfl.ch"
-                + "\nsection: IN";
+                + "\nsection: IN"
+                + "\nsemester: BA5";
 
         assertEquals(expected, user.toString());
         assertEquals("Guest user", new User.UserBuilder().buildGuestUser().toString());
