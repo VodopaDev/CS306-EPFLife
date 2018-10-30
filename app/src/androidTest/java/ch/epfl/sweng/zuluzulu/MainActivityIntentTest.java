@@ -6,6 +6,8 @@ import android.support.test.rule.ActivityTestRule;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -25,11 +27,12 @@ public class MainActivityIntentTest {
      * Test if the app start on the login with an redirectUri intent
      */
     @Test
-    public void intentRedirectLogin() {
+    public void intentRedirectLogin() throws InterruptedException {
         Intent intent = new Intent();
         intent.putExtra("redirectUri", "blablablaIHavecode=1234");
         mActivityRule.launchActivity(intent);
 
+        TimeUnit.SECONDS.sleep(1);
         Utility.checkFragmentIsOpen(R.id.login_fragment);
     }
 

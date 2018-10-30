@@ -17,7 +17,6 @@ public class GPSTest {
 
     @Rule public GrantPermissionRule permissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
-
     @Test
     public void testOnLocationChanged() throws Throwable {
         mActivityRule.runOnUiThread(new Runnable() {
