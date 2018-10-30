@@ -4,7 +4,7 @@ import org.junit.Before;
 
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
-public class TestWithAdminLogin extends TestWithLogin {
+public class TestWithAdmin extends TestWithAuthenticated {
 
     private User admin;
 

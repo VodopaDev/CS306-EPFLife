@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu;
 
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.app.Fragment;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +10,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 
 @RunWith(AndroidJUnit4.class)
-public class ChatFragmentTest extends TestWithLogin {
+public class ChatFragmentTest extends TestWithAuthenticated {
 
     private static final int channelID = 1;
 

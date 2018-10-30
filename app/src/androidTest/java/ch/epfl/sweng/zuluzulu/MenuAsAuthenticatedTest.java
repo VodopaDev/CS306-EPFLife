@@ -11,7 +11,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
-public class MenuAsAuthenticatedTest extends TestWithLogin {
+public class MenuAsAuthenticatedTest extends TestWithAuthenticated {
 
     @Before
     public void openDrawer() {

@@ -1,10 +1,12 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.Before;
 import org.junit.Rule;
 
+import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
@@ -13,7 +15,7 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  *
  * Author @dahn
  */
-public abstract class TestWithLogin {
+public abstract class TestWithAuthenticated {
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class, false, false);
@@ -33,5 +35,13 @@ public abstract class TestWithLogin {
      */
     protected User getUser() {
         return this.user;
+    }
+
+    protected CountingIdlingResource getCountingIdlingRessource(){
+        return mActivityRule.getActivity().getCountingIdlingResource();
+    }
+
+    protected SuperFragment getCurrentFragment(){
+        return mActivityRule.getActivity().getCurrentFragment();
     }
 }
