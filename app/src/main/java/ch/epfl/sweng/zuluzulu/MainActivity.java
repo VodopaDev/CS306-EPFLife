@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.firebase.FirebaseApp;
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         String redirectURIwithCode = i.getStringExtra("redirectUri");
         if (redirectURIwithCode != null) {
-            openLogin(redirectURIwithCode);
+            openFragmentWithStringData(LoginFragment.newInstance(), LoginFragment.TAG, redirectURIwithCode);
         } else {
             // Look if there is a user object set
             User user = (User) i.getSerializableExtra("user");
@@ -90,18 +91,21 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
+
     /**
-     * Open the login fragment when requested by redirect uri
-     *
-     * @param redirectURIwithCode redirect url
+     * Open fragment and add tag
+     * @param fragment Any fragment
+     * @param tag Fragment tag
+     * @param data String data
      */
-    private void openLogin(String redirectURIwithCode) {
+    private void 
+      ragmentWithStringData(SuperFragment fragment, String tag, String data) {
         Bundle toSend = new Bundle(1);
-        toSend.putString("", redirectURIwithCode);
-        LoginFragment fragment = LoginFragment.newInstance();
+        toSend.putString(tag, data);
         fragment.setArguments(toSend);
         openFragment(fragment);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -258,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 updateMenuItems();
                 break;
             case OPENING_WEBVIEW:
-                openWebViewFragment((String) data);
+                openFragmentWithStringData(WebViewFragment.newInstance(), WebViewFragment.URL, (String) data);
                 break;
             case INCREMENT_IDLING_RESOURCE:
                 incrementCountingIdlingResource();
@@ -317,20 +321,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 // Should never happen
                 throw new AssertionError(tag);
         }
-    }
-
-    /**
-     * Gaultier code to open a webview fragment
-     * Refactored in a new function
-     *
-     * @param url web view url
-     */
-    private void openWebViewFragment(String url) {
-        Bundle toSend = new Bundle(1);
-        toSend.putString("", url);
-        WebViewFragment fragment = WebViewFragment.newInstance();
-        fragment.setArguments(toSend);
-        openFragment(fragment);
     }
 
     /**

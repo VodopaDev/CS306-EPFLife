@@ -13,6 +13,7 @@ import ch.epfl.sweng.zuluzulu.R;
 
 
 public class WebViewFragment extends SuperFragment {
+    public static final String URL = "url";
     private WebView webview;
     private String url;
 
@@ -24,7 +25,7 @@ public class WebViewFragment extends SuperFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        url = this.getArguments().getString("");
+        url = this.getArguments().getString(URL);
     }
 
     @Override

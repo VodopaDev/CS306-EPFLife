@@ -47,7 +47,7 @@ import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
  * create an instance of this fragment.
  */
 public class LoginFragment extends SuperFragment implements LoaderManager.LoaderCallbacks<Cursor> {
-
+    public final static String TAG = "Login TAG";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -89,7 +89,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         try {
-            redirectURICode = this.getArguments().getString("");
+            redirectURICode = this.getArguments().getString(TAG);
         } catch (NullPointerException e) {
             redirectURICode = null;
         }
