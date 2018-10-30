@@ -1,25 +1,19 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.content.Context;
-import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Checkable;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,7 +34,6 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
@@ -72,7 +65,7 @@ public class EventFragment extends SuperFragment {
     private EditText event_fragment_from_date;
     private EditText event_fragment_to_date;
     private DateInputMask event_fragment_from_date_mask;
-    private DateInputMask getEvent_fragment_to_date_mask;
+    private DateInputMask event_fragment_to_date_mask;
 
     private ArrayList<Event> event_all_sorted;
     private ArrayList<Event> event_fav_sorted;
@@ -116,7 +109,6 @@ public class EventFragment extends SuperFragment {
         event_fav_sorted = new ArrayList<>();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event, container, false);
@@ -153,7 +145,7 @@ public class EventFragment extends SuperFragment {
         event_fragment_from_date = view.findViewById(R.id.event_fragment_from_date);
         event_fragment_from_date_mask = new DateInputMask(event_fragment_from_date);
         event_fragment_to_date = view.findViewById(R.id.event_fragment_to_date);
-        getEvent_fragment_to_date_mask = new DateInputMask(event_fragment_to_date);
+        event_fragment_to_date_mask = new DateInputMask(event_fragment_to_date);
 
 //        checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -175,6 +167,7 @@ public class EventFragment extends SuperFragment {
 //        checkbox_event_sort_date.setEnabled(true);
 
         checkbox_event_sort_name.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
                 checkbox_event_sort_name.setEnabled(false);
@@ -191,6 +184,7 @@ public class EventFragment extends SuperFragment {
         });
 
         checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
                 if (event_fragment_from_date.getText().toString().contains("D") || event_fragment_from_date.getText().toString().contains("M") ||

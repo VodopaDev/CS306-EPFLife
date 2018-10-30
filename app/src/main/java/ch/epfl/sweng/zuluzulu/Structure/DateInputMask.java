@@ -1,13 +1,10 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import android.icu.util.Calendar;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
+import java.util.Calendar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
-@RequiresApi(api = Build.VERSION_CODES.N)
 public class DateInputMask implements TextWatcher {
 
     private String current = "";
