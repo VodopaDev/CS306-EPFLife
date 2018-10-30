@@ -29,10 +29,10 @@ public class MainActivityIntentTest {
     @Test
     public void intentRedirectLogin() throws InterruptedException {
         Intent intent = new Intent();
-        intent.putExtra("redirectUri", "blablablaIHavecode=1234");
+        intent.putExtra("redirectUri", "blablablaIHaveco");
         mActivityRule.launchActivity(intent);
 
-        TimeUnit.SECONDS.sleep(1);
+        TimeUnit.SECONDS.sleep(2);
         Utility.checkFragmentIsOpen(R.id.login_fragment);
     }
 
