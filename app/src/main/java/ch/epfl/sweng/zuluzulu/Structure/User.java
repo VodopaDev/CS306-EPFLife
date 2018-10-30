@@ -224,7 +224,7 @@ abstract public class User implements Serializable {
          */
         public Admin buildAdmin() {
             if (hasRequirementsForAuthentication()) {
-                return new Admin(this.sciper, this.gaspar, this.email, this.section, this.semester, this.first_names, this.last_names, this.fav_assos, this.followed_events, this.followed_chats);
+                return new Admin(sciper, gaspar, email, section, semester, first_names, last_names, fav_assos, followed_events, followed_chats);
             }
 
             return null;
