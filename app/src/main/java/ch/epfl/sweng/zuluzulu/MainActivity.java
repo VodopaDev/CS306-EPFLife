@@ -242,6 +242,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
+    public boolean openFragment(SuperFragment fragment){
+        return openFragment(fragment, false);
+    }
+
     public boolean openFragment(SuperFragment fragment, boolean backPressed) {
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -282,26 +286,26 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case OPEN_CHAT_FRAGMENT:
                 int channelID = (Integer) data;
-                openFragment(ChatFragment.newInstance(user, channelID), false);
+                openFragment(ChatFragment.newInstance(user, channelID));
                 break;
             case OPEN_ASSOCIATION_FRAGMENT:
-                openFragment(AssociationFragment.newInstance(user), false);
+                openFragment(AssociationFragment.newInstance(user));
                 selectItem(navigationView.getMenu().findItem(R.id.nav_associations));
                 break;
             case OPEN_ASSOCIATION_DETAIL_FRAGMENT:
                 Association association = (Association) data;
-                openFragment(AssociationDetailFragment.newInstance(user, association), false);
+                openFragment(AssociationDetailFragment.newInstance(user, association));
                 break;
             case OPEN_ABOUT_US_FRAGMENT:
-                openFragment(AboutZuluzuluFragment.newInstance(), false);
+                openFragment(AboutZuluzuluFragment.newInstance());
                 selectItem(navigationView.getMenu().findItem(R.id.nav_about));
                 break;
             case OPEN_MAIN_FRAGMENT:
-                openFragment(MainFragment.newInstance(user), false);
+                openFragment(MainFragment.newInstance(user));
                 selectItem(navigationView.getMenu().findItem(R.id.nav_main));
                 break;
             case OPEN_EVENT_FRAGMENT:
-                openFragment(EventFragment.newInstance(user), false);
+                openFragment(EventFragment.newInstance(user));
                 selectItem(navigationView.getMenu().findItem(R.id.nav_events));
                 break;
             case OPEN_EVENT_DETAIL_FRAGMENT:
@@ -309,19 +313,19 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 //openFragment(EventDetailFragment.newInstance(user, event));
                 break;
             case OPEN_CHANNEL_FRAGMENT:
-                openFragment(ChannelFragment.newInstance(user), false);
+                openFragment(ChannelFragment.newInstance(user));
                 selectItem(navigationView.getMenu().findItem(R.id.nav_chat));
                 break;
             case OPEN_LOGIN_FRAGMENT:
-                openFragment(LoginFragment.newInstance(), false);
+                openFragment(LoginFragment.newInstance());
                 selectItem(navigationView.getMenu().findItem(R.id.nav_login));
                 break;
             case OPEN_PROFILE_FRAGMENT:
-                openFragment(ProfileFragment.newInstance(user), false);
+                openFragment(ProfileFragment.newInstance(user));
                 selectItem(navigationView.getMenu().findItem(R.id.nav_profile));
                 break;
             case OPEN_SETTINGS_FRAGMENT:
-                openFragment(SettingsFragment.newInstance(), false);
+                openFragment(SettingsFragment.newInstance());
                 selectItem(navigationView.getMenu().findItem(R.id.nav_settings));
                 break;
             default:
@@ -331,9 +335,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
 
     @Override
-    public void onBackPressed(){
-        if(!previous_fragments.empty())
+    public void onBackPressed() {
+        if (!previous_fragments.empty())
             openFragment(previous_fragments.pop(), true);
+    }
     
 
     /**
