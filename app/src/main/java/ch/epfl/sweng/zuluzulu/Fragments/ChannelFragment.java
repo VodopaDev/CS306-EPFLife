@@ -32,6 +32,7 @@ import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.GPS;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -101,7 +102,7 @@ public class ChannelFragment extends SuperFragment {
 
         Location gpsLocation = gps.getLocation();
         if (gpsLocation != null) {
-            userLocation = new GeoPoint(gpsLocation.getLatitude(), gpsLocation.getLongitude());
+            userLocation = Utils.toGeoPoint(gpsLocation);
         }
 
         getChannelsFromDatabase();
