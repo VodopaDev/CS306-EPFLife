@@ -27,7 +27,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Structure.DateInputMask;
@@ -37,6 +39,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Adapters.EventAdapter;
+import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -161,13 +164,33 @@ public class EventFragment extends Fragment {
 //            }
 //        });
 
+
+//        checkbox_event_sort_name.setEnabled(false);
+//        event_all.sort(Event.assoNameComparator());
+//        event_fav.sort(Event.assoNameComparator());
+//        event_adapter.notifyDataSetChanged();
+//        checkbox_event_sort_date.setChecked(false);
+//        checkbox_event_sort_date.setEnabled(true);
+
         checkbox_event_sort_name.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
+//                checkbox_event_sort_name.setEnabled(false);
+//                event_all.sort(Event.assoNameComparator());
+//                event_fav.sort(Event.assoNameComparator());
+//                event_adapter.notifyDataSetChanged();
+//                checkbox_event_sort_date.setChecked(false);
+//                checkbox_event_sort_date.setEnabled(true);
+
                 checkbox_event_sort_name.setEnabled(false);
                 event_all.sort(Event.assoNameComparator());
                 event_fav.sort(Event.assoNameComparator());
+
+                // TODO check fav or not
+                event_adapter = new EventAdapter(getContext(), event_all, mListener);
+
+                listview_event.setAdapter(event_adapter);
                 event_adapter.notifyDataSetChanged();
                 checkbox_event_sort_date.setChecked(false);
                 checkbox_event_sort_date.setEnabled(true);
@@ -175,33 +198,56 @@ public class EventFragment extends Fragment {
         });
 
         checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                if (event_fragment_from_date.length() == 0 && event_fragment_to_date.length() == 0){
+                if (event_fragment_from_date.getText().toString().contains("D") || event_fragment_from_date.getText().toString().contains("M") ||
+                        event_fragment_from_date.getText().toString().contains("Y")) {
+//                    checkbox_event_sort_date.setEnabled(false);
+//                    event_all.sort(Event.dateComparator());
+//                    event_fav.sort(Event.dateComparator());
+//                    event_adapter.notifyDataSetChanged();
+//                    checkbox_event_sort_name.setChecked(false);
+//                    checkbox_event_sort_name.setEnabled(true);
+
                     checkbox_event_sort_date.setEnabled(false);
                     event_all.sort(Event.dateComparator());
                     event_fav.sort(Event.dateComparator());
+
+                    // TODO check fav or not
+                    event_adapter = new EventAdapter(getContext(), event_all, mListener);
+
+                    listview_event.setAdapter(event_adapter);
                     event_adapter.notifyDataSetChanged();
                     checkbox_event_sort_name.setChecked(false);
                     checkbox_event_sort_name.setEnabled(true);
                 }
-//                else if ( event_fragment_from_date.length() > 0 && event_fragment_to_date.length() == 0){
-//                    event_all.sort(Event.dateComparator());
-//                    event_fav.sort(Event.dateComparator());
-//
-//                    Boolean test = true;
-//                    int counter = 0;
-//                    while(test && counter != event_all.size()){
-//                        if event_all.get(counter).getStart_date() // TODO check if start_date is smaller than the user input
-//                    }
-//
-//
-//                    System.arraycopy(event_all, 0, event_all_sorted, 0, event_all.size());
-//                    System.arraycopy(event_fav, 0, event_fav_sorted, 0, event_fav.size());
-//                    event_all_sorted.sort(Event.dateComparator());
-//                    event_all_sorted.
-//                }
+                else {
+                    checkbox_event_sort_date.setEnabled(false);
+                    event_all.sort(Event.dateComparator());
+                    event_fav.sort(Event.dateComparator());
+
+                    emptySortedEventList();
+
+                    Date tempDate = null;
+                    try {
+                        tempDate = Utils.stringToDateFormat.parse(event_fragment_from_date.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    for (int i = 0; i < event_all.size(); i++) {
+                        if (event_all.get(i).getStartDate().compareTo(tempDate) >= 0) {
+                            //TODO
+                            event_all_sorted.add(event_all.get(i));
+                        }
+                    }
+
+                    event_adapter = new EventAdapter(getContext(), event_all_sorted, mListener);
+                    listview_event.setAdapter(event_adapter);
+                    event_adapter.notifyDataSetChanged();
+
+                    checkbox_event_sort_name.setChecked(false);
+                    checkbox_event_sort_name.setEnabled(true);
+                }
             }
         });
 
@@ -226,10 +272,10 @@ public class EventFragment extends Fragment {
         mListener = null;
     }
 
-//    private void emptyEventList(){
-//        event_all.clear();
-//        event_fav.clear();
-//    }
+    private void emptySortedEventList(){
+        event_all_sorted.clear();
+        event_fav_sorted.clear();
+    }
 
     private void fillEventLists(String sortOption){
        FirebaseFirestore.getInstance().collection("events_info")
@@ -241,7 +287,6 @@ public class EventFragment extends Fragment {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
                         for (int i = 0; i < snap_list.size(); i++) {
                             Event event = new Event(snap_list.get(i));
-                            Log.d("! TEST DATE EVENT !", event.getStart_date().toString());
                             event_all.add(event);
 
                             if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))

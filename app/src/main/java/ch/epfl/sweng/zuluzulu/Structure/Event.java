@@ -9,6 +9,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.R;
@@ -30,8 +31,8 @@ public class Event implements Serializable {
 
     private Location pos;
 
-    private Timestamp start_date_timestamp;
-    private String start_date;
+    private Date start_date;
+    private String start_date_string;
 
 
     /**
@@ -54,8 +55,8 @@ public class Event implements Serializable {
                 Uri.parse("android.ressource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(icon_str);
 
-        start_date_timestamp = snap.getTimestamp("start_date");
-        start_date = Utils.dateFormat.format(snap.getTimestamp("start_date").toDate());
+        start_date = snap.getDate("start_date");
+        start_date_string = Utils.dateFormat.format(start_date);
     }
 
     // maybe use id instead of name
@@ -72,7 +73,7 @@ public class Event implements Serializable {
         return new Comparator<Event>() {
             @Override
             public int compare(Event o1, Event o2) {
-                return o1.getStartDateTimestamp().compareTo(o2.getStartDateTimestamp());
+                return o1.getStartDate().compareTo(o2.getStartDate());
             }
         };
     }
@@ -159,12 +160,12 @@ public class Event implements Serializable {
         return icon_uri;
     }
 
-    public String getStart_date() {
-        return start_date;
+    public String getStartDateString() {
+        return start_date_string;
     }
 
-    public Timestamp getStartDateTimestamp() {
-        return start_date_timestamp;
+    public Date getStartDate() {
+        return start_date;
     }
 //
 //    public void setStart_date(Date start_date) {

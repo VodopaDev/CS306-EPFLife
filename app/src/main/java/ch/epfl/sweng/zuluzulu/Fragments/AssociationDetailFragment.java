@@ -105,7 +105,7 @@ public class AssociationDetailFragment extends Fragment {
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     upcoming_event = new Event(documentSnapshot);
                     upcoming_event_name.setText(upcoming_event.getName());
-                    upcoming_event_date.setText(upcoming_event.getStart_date().toString());
+                    upcoming_event_date.setText(upcoming_event.getStartDateString());
                     Glide.with(getContext())
                             .load(upcoming_event.getIconUri())
                             .centerCrop()

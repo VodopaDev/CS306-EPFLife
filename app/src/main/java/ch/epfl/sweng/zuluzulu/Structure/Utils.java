@@ -6,7 +6,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class that contains general usefull functions
@@ -51,4 +53,5 @@ public final class Utils {
     }
 
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+    public static SimpleDateFormat stringToDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 }
