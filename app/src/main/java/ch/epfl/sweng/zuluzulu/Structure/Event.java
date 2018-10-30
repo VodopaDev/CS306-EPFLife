@@ -18,7 +18,7 @@ public class Event implements Serializable {
 
     private static final String IMAGE_PATH = "events/event";
     private static final String ICON_EXT = "_icon.png";
-    private String id;
+    private int id;
     private String assos_name;
     private String short_desc;
     private String long_desc;
@@ -45,7 +45,7 @@ public class Event implements Serializable {
         if (!snapshotIsValid(snap))
             throw new NullPointerException();
 
-        id = snap.getId();
+        id = snap.getLong("id").intValue();
         assos_name = snap.getString("name");
         short_desc = snap.getString("short_desc");
         long_desc = snap.getString("long_desc");
@@ -80,7 +80,7 @@ public class Event implements Serializable {
 
     // TODO: Add a method to add/remove one User to admins (instead of getting/setting the admins list)
     // TODO: Check inputs before changing fields
-    public String getId() {
+    public int getId() {
         return id;
     }
 

@@ -176,13 +176,6 @@ public class EventFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-//                checkbox_event_sort_name.setEnabled(false);
-//                event_all.sort(Event.assoNameComparator());
-//                event_fav.sort(Event.assoNameComparator());
-//                event_adapter.notifyDataSetChanged();
-//                checkbox_event_sort_date.setChecked(false);
-//                checkbox_event_sort_date.setEnabled(true);
-
                 checkbox_event_sort_name.setEnabled(false);
                 event_all.sort(Event.assoNameComparator());
                 event_fav.sort(Event.assoNameComparator());
@@ -202,12 +195,6 @@ public class EventFragment extends Fragment {
             public void onClick(View v) {
                 if (event_fragment_from_date.getText().toString().contains("D") || event_fragment_from_date.getText().toString().contains("M") ||
                         event_fragment_from_date.getText().toString().contains("Y")) {
-//                    checkbox_event_sort_date.setEnabled(false);
-//                    event_all.sort(Event.dateComparator());
-//                    event_fav.sort(Event.dateComparator());
-//                    event_adapter.notifyDataSetChanged();
-//                    checkbox_event_sort_name.setChecked(false);
-//                    checkbox_event_sort_name.setEnabled(true);
 
                     checkbox_event_sort_date.setEnabled(false);
                     event_all.sort(Event.dateComparator());
@@ -221,7 +208,8 @@ public class EventFragment extends Fragment {
                     checkbox_event_sort_name.setChecked(false);
                     checkbox_event_sort_name.setEnabled(true);
                 }
-                else {
+                else if (event_fragment_to_date.getText().toString().contains("D") || event_fragment_to_date.getText().toString().contains("M") ||
+                        event_fragment_to_date.getText().toString().contains("Y")) {
                     checkbox_event_sort_date.setEnabled(false);
                     event_all.sort(Event.dateComparator());
                     event_fav.sort(Event.dateComparator());
@@ -236,8 +224,45 @@ public class EventFragment extends Fragment {
                     }
                     for (int i = 0; i < event_all.size(); i++) {
                         if (event_all.get(i).getStartDate().compareTo(tempDate) >= 0) {
-                            //TODO
                             event_all_sorted.add(event_all.get(i));
+                        }
+                    }
+                    for (int i = 0; i < event_fav.size(); i++) {
+                        if (event_fav.get(i).getStartDate().compareTo(tempDate) >= 0) {
+                            event_fav_sorted.add(event_fav.get(i));
+                        }
+                    }
+
+                    event_adapter = new EventAdapter(getContext(), event_all_sorted, mListener);
+                    listview_event.setAdapter(event_adapter);
+                    event_adapter.notifyDataSetChanged();
+
+                    checkbox_event_sort_name.setChecked(false);
+                    checkbox_event_sort_name.setEnabled(true);
+                }
+                else {
+                    checkbox_event_sort_date.setEnabled(false);
+                    event_all.sort(Event.dateComparator());
+                    event_fav.sort(Event.dateComparator());
+
+                    emptySortedEventList();
+
+                    Date tempDateFrom = null;
+                    Date tempDateTo = null;
+                    try {
+                        tempDateFrom = Utils.stringToDateFormat.parse(event_fragment_from_date.getText().toString());
+                        tempDateTo = Utils.stringToDateFormat.parse(event_fragment_to_date.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    for (int i = 0; i < event_all.size(); i++) {
+                        if (event_all.get(i).getStartDate().compareTo(tempDateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(tempDateTo) <= 0) {
+                            event_all_sorted.add(event_all.get(i));
+                        }
+                    }
+                    for (int i = 0; i < event_fav.size(); i++) {
+                        if (event_fav.get(i).getStartDate().compareTo(tempDateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(tempDateTo) <= 0) {
+                            event_fav_sorted.add(event_fav.get(i));
                         }
                     }
 
@@ -250,7 +275,6 @@ public class EventFragment extends Fragment {
                 }
             }
         });
-
 
         return view;
     }
