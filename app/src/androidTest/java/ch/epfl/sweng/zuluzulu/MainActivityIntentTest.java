@@ -24,13 +24,6 @@ public class MainActivityIntentTest {
     /**
      * Test if the app start on the login with an ACTION_VIEW intent
      */
-    @Test
-    public void onCreateGoesToLogin() {
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        mActivityRule.launchActivity(i);
-
-        onView(withId(R.id.login_fragment)).check(matches(isDisplayed()));
-    }
 
     /**
      * Check if it goes to the main

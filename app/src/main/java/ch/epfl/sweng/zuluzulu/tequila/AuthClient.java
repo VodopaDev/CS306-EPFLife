@@ -14,8 +14,9 @@ public final class AuthClient {
                 "?response_type=code" +
                 "&client_id=" + HttpUtils.urlEncode(config.clientId) +
                 "&redirect_uri=" + HttpUtils.urlEncode(config.redirectUri) +
-                "&scope=" + TextUtils.join(",", config.scopes);
+                "&scope=" + config.scopes[0];
     }
+
 
     public static String extractCode(String redirectUri) {
         String marker = "code=";

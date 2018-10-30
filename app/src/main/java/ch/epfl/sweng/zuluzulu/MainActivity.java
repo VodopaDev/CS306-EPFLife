@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.test.espresso.idling.CountingIdlingResource;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -13,12 +12,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.firebase.FirebaseApp;
-
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
@@ -32,16 +33,17 @@ import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
-import ch.epfl.sweng.zuluzulu.tequila.Profile;
+
 
 //import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
-
+  
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     // That's the recommended way to implement it
     // @see https://developer.android.com/training/testing/espresso/idling-resource#integrate-recommended-approach
     private CountingIdlingResource resource;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +81,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         initDrawerContent();
 
         Intent i = getIntent();
-        if (Intent.ACTION_VIEW.equals(i.getAction())) {
-            selectItem(navigationView.getMenu().findItem(R.id.nav_login));
+
+        String redirectURIwithCode = i.getStringExtra("redirectUri");
+        if (redirectURIwithCode != null) {
+            openFragmentWithStringData(LoginFragment.newInstance(), LoginFragment.TAG, redirectURIwithCode);
         } else {
             // Look if there is a user object set
             User user = (User) i.getSerializableExtra("user");
@@ -91,6 +96,21 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
         }
     }
+
+
+    /**
+     * Open fragment and add tag
+     * @param fragment Any fragment
+     * @param tag Fragment tag
+     * @param data String data
+     */
+    private void openFragmentWithStringData(SuperFragment fragment, String tag, String data) {
+        Bundle toSend = new Bundle(1);
+        toSend.putString(tag, data);
+        fragment.setArguments(toSend);
+        openFragment(fragment);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -170,13 +190,17 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      *
      * @param menuItem The item that corresponds to a fragment on the menu
      */
+
     private void selectItem(MenuItem menuItem) {
+
         SuperFragment fragment;
+
         switch (menuItem.getItemId()) {
             case R.id.nav_main:
                 fragment = MainFragment.newInstance(user);
                 break;
             case R.id.nav_login:
+                //to set arguments for the login
                 fragment = LoginFragment.newInstance();
                 break;
             case R.id.nav_about:
@@ -196,8 +220,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case R.id.nav_logout:
                 this.user = new User.UserBuilder().buildGuestUser();
+
+                android.webkit.CookieManager.getInstance().removeAllCookie();
+
                 updateMenuItems();
-                menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
                 fragment = MainFragment.newInstance(user);
                 break;
             case R.id.nav_chat:
@@ -235,10 +261,15 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     @Override
     public void onFragmentInteraction(CommunicationTag tag, Object data) {
         switch (tag) {
+
             case SET_USER:
-                this.user = (User) data;
+                Map<Integer, Object> received = (HashMap<Integer, Object>) data;
+                this.user = (User) received.get(0);
                 updateMenuItems();
                 flushPreviousFragment();
+                break;
+            case OPENING_WEBVIEW:
+                openFragmentWithStringData(WebViewFragment.newInstance(), WebViewFragment.URL, (String) data);
                 break;
             case INCREMENT_IDLING_RESOURCE:
                 incrementCountingIdlingResource();
@@ -247,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 decrementCountingIdlingResource();
                 break;
             case SET_TITLE:
-                setTitle((String)data);
+                setTitle((String) data);
                 break;
             case OPEN_CHAT_FRAGMENT:
                 int channelID = (Integer) data;
@@ -303,7 +334,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public void onBackPressed(){
         if(!previous_fragments.empty())
             openFragment(previous_fragments.pop(), true);
-    }
+    
 
     /**
      * Return the current fragment
