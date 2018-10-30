@@ -1,5 +1,7 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.NavigationViewActions;
 
@@ -53,13 +55,11 @@ public class MainActivityAsAuthenticatedTest extends TestWithAuthenticated {
     @Test
     public void selectItemTest(){
         Utility.openMenu();
-        onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_associations));
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_associations));
         onView(withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
 
         Utility.openMenu();
-        onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_events));
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_events));
         onView(withId(R.id.event_fragment_all_button)).check(matches(isDisplayed()));
     }
 

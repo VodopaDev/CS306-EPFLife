@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.test.rule.ActivityTestRule;
 
@@ -27,6 +28,7 @@ public abstract class TestWithAuthenticated {
     public void setUpLogin() {
         this.user = Utility.createTestUser();
         Utility.addUserToMainIntent(mActivityRule, this.user);
+        IdlingRegistry.getInstance().register(getMainActivity().getCountingIdlingResource());
     }
 
     /**

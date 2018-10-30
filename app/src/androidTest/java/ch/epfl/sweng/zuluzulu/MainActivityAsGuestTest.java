@@ -91,18 +91,4 @@ public class MainActivityAsGuestTest {
             }
         });
     }
-
-    @Test
-    public void pressBackTest(){
-        // Needed to avoid original thread error
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mActivity.onFragmentInteraction(OPEN_SETTINGS_FRAGMENT, null);
-                mActivity.onFragmentInteraction(OPEN_ABOUT_US_FRAGMENT, null);
-                onView(withId(R.layout.activity_main)).perform(ViewActions.pressBack());
-                assertThat(mActivity.getCurrentFragment() instanceof SettingsFragment, equalTo(true));
-            }
-        });
-    }
 }
