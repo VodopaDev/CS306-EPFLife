@@ -175,28 +175,7 @@ public class AssociationFragment extends SuperFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                /*Log.e("ASSO_Filter", "assos_all before before: " + assos_all.size());
-                assos_all.clear();
-                fillAssociationLists("name");
 
-                Log.e("ASSO_Filter", "assos_all before: " + assos_all.size());
-
-                String wordActual = plainText_filter.getText().toString();
-                ArrayList<Association> assos_filter;
-                assos_filter = new ArrayList<>();
-
-                for(Association assos: assos_all) {
-                    if(assos.getName().startsWith(wordActual)){
-                        assos_filter.add(new Association(assos));
-                    }
-                }
-                Log.e("ASSO_Filter", "assos_filter before: " + assos_filter.size());
-                assos_all.clear();
-                assos_all.addAll(assos_filter);
-                assos_filter.clear();
-                Log.e("ASSO_Filter", "assos_all: " + assos_all.size());
-                assos_adapter.notifyDataSetChanged();
-                Log.e("ASSO_Filter", "assos_all after: " + assos_all.size());*/
             }
 
         });
