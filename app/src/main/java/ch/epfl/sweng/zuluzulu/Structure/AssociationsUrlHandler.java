@@ -25,6 +25,7 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
 
     /**
      * Create a new AssociationUrlHandler
+     *
      * @param listener The callback function that will be use on PostExecute
      */
     public AssociationsUrlHandler(Function<List<String>, Void> listener) {
@@ -47,6 +48,7 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
 
     /**
      * Connect to the URL, parse it and return the values found
+     *
      * @param url The URL
      * @return ArrayList with all the values founded
      */
@@ -86,6 +88,7 @@ public class AssociationsUrlHandler extends AsyncTask<String, Void, List<String>
 
     /**
      * Connect to the URL, check if the response code is OK (200)
+     *
      * @param url Url
      * @return HttpURLConnection or null of response is not OK
      * @throws IOException Throw exception if it cannot connect

@@ -12,14 +12,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 
 @RunWith(JUnit4.class)
 public class AssociationTest {
@@ -39,31 +37,31 @@ public class AssociationTest {
 
     private void initWorkingAssociation() {
         Map<String, Object> event1 = new HashMap<>();
-        Date close_date = new Date(2020,10,2);
+        Date close_date = new Date(2020, 10, 2);
         event1.put("id", 1L);
         event1.put("start", close_date);
 
         Map<String, Object> event2 = new HashMap<>();
-        Date far_date = new Date(2056,10,2);
+        Date far_date = new Date(2056, 10, 2);
         event2.put("id", 2L);
         event2.put("start", far_date);
 
-        Map<String,Object> map = new HashMap<>();
-        map.put("id",1L);
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", 1L);
         map.put("name", NAME1);
         map.put("short_desc", SHORT_DESC);
         map.put("long_desc", LONG_DESC);
         map.put("icon_uri", TEST_URI_STRING);
         map.put("banner_uri", TEST_URI_STRING);
         map.put("channel_id", 1L);
-        map.put("events", Arrays.asList(event2,event1));
+        map.put("events", Arrays.asList(event2, event1));
 
         asso1 = new Association(new FirebaseMapDecorator(map));
     }
 
-    private void initDefaultAssociation(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("id",1L);
+    private void initDefaultAssociation() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", 1L);
         map.put("name", NAME2);
         map.put("short_desc", SHORT_DESC);
         map.put("long_desc", LONG_DESC);
@@ -71,9 +69,9 @@ public class AssociationTest {
         asso2 = new Association(new FirebaseMapDecorator(map));
     }
 
-    @Test(expected = IllegalArgumentException .class)
+    @Test(expected = IllegalArgumentException.class)
     public void invalidMapThrowIllegalArgumentException() {
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("id", 1L);
 
         FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
@@ -105,7 +103,7 @@ public class AssociationTest {
     }
 
     @Test
-    public void closestEventIsCorrect(){
+    public void closestEventIsCorrect() {
         initWorkingAssociation();
         initDefaultAssociation();
         assertThat(0, equalTo(asso2.getClosestEventId()));
@@ -137,7 +135,7 @@ public class AssociationTest {
     }
 
     @Test
-    public void channelIdIsCorrect(){
+    public void channelIdIsCorrect() {
         initWorkingAssociation();
         initDefaultAssociation();
         assertThat(asso1.getChannelId(), equalTo(1));

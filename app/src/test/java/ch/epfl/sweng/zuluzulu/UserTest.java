@@ -24,20 +24,20 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(JUnit4.class)
 public class UserTest {
-  
+
     @Test
-    public void checkUserRole(){
+    public void checkUserRole() {
         User user = Utility.createTestUser();
         assertTrue(user.hasRole(UserRole.USER));
     }
 
     @Test
-    public void incompleteBuilderBuildNullUser(){
+    public void incompleteBuilderBuildNullUser() {
         assertNull(new User.UserBuilder().buildAdmin());
     }
 
     @Test
-    public void canCreateAdmin(){
+    public void canCreateAdmin() {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("admin@epfl.ch");
         builder.setSection("IN");
@@ -59,7 +59,7 @@ public class UserTest {
     }
 
     @Test
-    public void guestHasNoRole(){
+    public void guestHasNoRole() {
         assertThat(false, equalTo(new User.UserBuilder().buildGuestUser().hasRole(UserRole.ADMIN)));
         assertThat(false, equalTo(new User.UserBuilder().buildGuestUser().hasRole(UserRole.USER)));
         assertThat(false, equalTo(new User.UserBuilder().buildGuestUser().hasRole(UserRole.MODERATOR)));
@@ -114,8 +114,8 @@ public class UserTest {
     }
 
     @Test
-    public void correctString(){
-        assertThat("Guest user", equalTo(new User.UserBuilder().buildGuestUser().toString())); 
+    public void correctString() {
+        assertThat("Guest user", equalTo(new User.UserBuilder().buildGuestUser().toString()));
     }
 
     @Test
