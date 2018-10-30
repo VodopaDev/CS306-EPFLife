@@ -65,4 +65,21 @@ public class AssociationFragmentAsGuestTest {
         onView(withText("Agepoly")).perform(ViewActions.click());
         onView(withId(R.id.association_detail_icon)).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void thereAreTwoSortCheckbox() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(2);
+        onView(withId(R.id.assos_fragment_checkbox_sort_Name)).check(matches(isDisplayed()));
+        onView(withId(R.id.assos_fragment_checkbox_sort_date)).check(matches(isDisplayed()));
+        TimeUnit.SECONDS.sleep(2);
+    }
+
+    @Test
+    public void listAlternateSortOption() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(2);
+        onView(withId(R.id.assos_fragment_checkbox_sort_date)).perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(2);
+        onView(withId(R.id.assos_fragment_checkbox_sort_Name)).perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(2);
+    }
 }

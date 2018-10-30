@@ -35,22 +35,6 @@ public class Association implements Serializable {
     private int channel_id;
     private int closest_event_id;
 
-
-    public Association(Association assos) {
-        id = assos.id;
-        name = assos.name;
-        short_desc = assos.short_desc;
-        long_desc = assos.long_desc;
-        icon_uri = assos.icon_uri;
-        banner_uri = assos.banner_uri;
-        channel_id = assos.channel_id;
-        closest_event_id = assos.closest_event_id;
-
-        /*events = new ArrayList<Map<String, Object>>();
-        for(Map<String, Object> event: assos.events) {
-            events = new Map<String, Object>()
-        }*/
-    }
     /**
      * Create an association using a Firebase adapted map
      *

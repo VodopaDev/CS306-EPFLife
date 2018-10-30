@@ -133,6 +133,7 @@ public class AssociationFragment extends SuperFragment {
             @Override
             public void onClick(View v) {
                 checkbox_assos_sort_date.setEnabled(false);
+                assos_filtered.clear();
                 assos_all.clear();
                 assos_fav.clear();
                 fillAssociationLists("id");
@@ -145,6 +146,7 @@ public class AssociationFragment extends SuperFragment {
             @Override
             public void onClick(View v) {
                 checkbox_assos_sort_name.setEnabled(false);
+                assos_filtered.clear();
                 assos_all.clear();
                 assos_fav.clear();
                 fillAssociationLists("name");
