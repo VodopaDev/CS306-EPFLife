@@ -83,14 +83,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         Intent i = getIntent();
 
         if(Intent.ACTION_VIEW.equals(i.getAction())) {
-            String redirectURIwithCode = i.getStringExtra("redirectUri");
-            if (redirectURIwithCode != null) {
-                Bundle toSend = new Bundle(1);
-                toSend.putString("", redirectURIwithCode);
-                LoginFragment fragment = new LoginFragment();
-                fragment.setArguments(toSend);
-                openFragment(fragment);
-            }
+            openLogin(i);
         } else {
             // Look if there is a user object set
             User user = (User) i.getSerializableExtra("user");
@@ -100,6 +93,21 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             }
 
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
+        }
+    }
+
+    /**
+     * Open the login fragment if requested by the intent
+     * @param intent
+     */
+    private void openLogin(Intent intent) {
+        String redirectURIwithCode = intent.getStringExtra("redirectUri");
+        if (redirectURIwithCode != null) {
+            Bundle toSend = new Bundle(1);
+            toSend.putString("", redirectURIwithCode);
+            LoginFragment fragment = LoginFragment.newInstance();
+            fragment.setArguments(toSend);
+            openFragment(fragment);
         }
     }
 
@@ -192,7 +200,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case R.id.nav_login:
                 //to set arguments for the login
-                isLogin = true;
                 fragment = LoginFragment.newInstance();
 
                 break;
@@ -216,10 +223,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
                 android.webkit.CookieManager.getInstance().removeAllCookie();
 
-                code = null;
-                redirectURIwithCode = null;
                 updateMenuItems();
-                menuItem.setTitle(navigationView.getMenu().findItem(R.id.nav_main).getTitle());
                 fragment = MainFragment.newInstance(user);
                 break;
             case R.id.nav_chat:
@@ -260,15 +264,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case SET_USER:
                 Map<Integer, Object> received = (HashMap<Integer,Object>) data;
                 this.user = (User) received.get(0);
-                this.code = (String) received.get(1);
-                this.config = (OAuth2Config) received.get(2);
                 updateMenuItems();
-
                 break;
             case OPENING_WEBVIEW:
                 Bundle toSend = new Bundle(1);
                 toSend.putString("",(String) data);
-                WebViewFragment fragment = new WebViewFragment();
+                WebViewFragment fragment = WebViewFragment.newInstance();
                 fragment.setArguments(toSend);
                 openFragment(fragment);
                 break;
