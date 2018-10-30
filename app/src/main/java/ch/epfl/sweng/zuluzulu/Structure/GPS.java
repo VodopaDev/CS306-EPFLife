@@ -29,7 +29,7 @@ public final class GPS {
                 GeoPoint user = Utils.toGeoPoint(newLocation);
                 GeoPoint sat = new GeoPoint(46.52056, 6.567835);
                 double distance = Utils.distanceBetween(user, sat);
-                Toast.makeText(mcontext, "Your are at " + distance + " from the target !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mcontext, "Your are at " + Math.round(distance) + "m from SAT !", Toast.LENGTH_SHORT).show();
 
                 location = newLocation;
             }
