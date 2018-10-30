@@ -24,6 +24,8 @@ import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
@@ -86,9 +88,28 @@ public class EventFragmentTest {
         onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
         TimeUnit.SECONDS.sleep(2);
     }
+    @Test
+    public void sortListDateFrom() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(2);
+        onView(withId(R.id.event_fragment_from_date)).perform(typeText("01012040")).perform(closeSoftKeyboard());
+        TimeUnit.SECONDS.sleep(2);
+        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(2);
+    }
+
+    @Test
+    public void sortListDateFromAndTo() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(2);
+        onView(withId(R.id.event_fragment_from_date)).perform(typeText("01012040")).perform(closeSoftKeyboard());
+        TimeUnit.SECONDS.sleep(2);
+        onView(withId(R.id.event_fragment_to_date)).perform(typeText("01012041")).perform(closeSoftKeyboard());
+        TimeUnit.SECONDS.sleep(2);
+        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
+        TimeUnit.SECONDS.sleep(2);
+    }
 
     //
-    // Not used anymore test
+    // Not used test
     //
 //    @Test
 //    public void guestMainPageHasSomeEvent() throws InterruptedException {

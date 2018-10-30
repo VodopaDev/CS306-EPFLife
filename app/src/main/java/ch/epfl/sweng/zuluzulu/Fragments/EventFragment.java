@@ -180,7 +180,6 @@ public class EventFragment extends Fragment {
                 event_all.sort(Event.assoNameComparator());
                 event_fav.sort(Event.assoNameComparator());
 
-                // TODO check fav or not
                 event_adapter = new EventAdapter(getContext(), event_all, mListener);
 
                 listview_event.setAdapter(event_adapter);
@@ -200,7 +199,6 @@ public class EventFragment extends Fragment {
                     event_all.sort(Event.dateComparator());
                     event_fav.sort(Event.dateComparator());
 
-                    // TODO check fav or not
                     event_adapter = new EventAdapter(getContext(), event_all, mListener);
 
                     listview_event.setAdapter(event_adapter);
