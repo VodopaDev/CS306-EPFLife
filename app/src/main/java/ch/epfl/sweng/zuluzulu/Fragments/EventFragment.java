@@ -165,7 +165,6 @@ public class EventFragment extends SuperFragment {
     }
 
     private void fillEventLists(String sortOption){
-        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
         FirebaseFirestore.getInstance().collection("events_info").orderBy(sortOption).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -181,7 +180,6 @@ public class EventFragment extends SuperFragment {
                                 event_adapter.notifyDataSetChanged();
                             }
                         }
-                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -189,7 +187,6 @@ public class EventFragment extends SuperFragment {
                     public void onFailure(@NonNull Exception e) {
                         Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
                         Log.e("EVENT_LIST", "Error fetching event date\n" + e.getMessage());
-                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                     }
                 });
     }

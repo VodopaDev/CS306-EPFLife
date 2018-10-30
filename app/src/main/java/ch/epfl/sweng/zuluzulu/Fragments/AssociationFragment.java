@@ -111,7 +111,6 @@ public class AssociationFragment extends SuperFragment {
     }
 
     private void fillAssociationLists() {
-        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
         FirebaseFirestore.getInstance().collection("assos_info").orderBy("name").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -129,7 +128,6 @@ public class AssociationFragment extends SuperFragment {
                                 assos_adapter.notifyDataSetChanged();
                             }
                         }
-                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE,  null);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -137,7 +135,6 @@ public class AssociationFragment extends SuperFragment {
                     public void onFailure(@NonNull Exception e) {
                         Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
                         Log.e("ASSO_LIST", "Error fetching association date\n" + e.getMessage());
-                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                     }
                 });
     }

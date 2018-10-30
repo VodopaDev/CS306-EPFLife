@@ -174,21 +174,17 @@ public class ChatFragment extends SuperFragment {
      * @param data the data to send to the database
      */
     private void addDataToFirestore(Map data) {
-        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
-        db.collection(collection_path)
-                .add(data)
+        db.collection(collection_path).add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference ref) {
                         Log.d(TAG, "DocumentSnapshot written with ID: " + ref.getId());
                         textEdit.setText("");
-                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error adding document", e);
-                mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
             }
         });
     }
@@ -217,7 +213,6 @@ public class ChatFragment extends SuperFragment {
      * Refresh the chat by reading all the messages in the database
      */
     private void updateChat() {
-        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
         db.collection(collection_path)
                 .orderBy("time", Query.Direction.ASCENDING)
                 .get()
@@ -239,7 +234,6 @@ public class ChatFragment extends SuperFragment {
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
-                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                     }
                 });
     }
