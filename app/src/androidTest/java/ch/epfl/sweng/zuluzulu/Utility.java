@@ -8,6 +8,7 @@ import android.view.Gravity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
@@ -21,7 +22,6 @@ import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.CoreMatchers.not;
 
 /**
  * Use this class for functions that are used in multiple tests

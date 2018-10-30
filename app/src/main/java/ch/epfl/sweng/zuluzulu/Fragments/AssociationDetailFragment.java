@@ -18,7 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
@@ -239,7 +238,7 @@ public class AssociationDetailFragment extends SuperFragment {
             public void onClick(View v) {
                 if(main_chat != null) {
                     if(user.isConnected())
-                        mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, main_chat.getId());
+                        mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, main_chat);
                     else
                         Snackbar.make(getView(), "Login to access chat room", 5000).show();
                 }

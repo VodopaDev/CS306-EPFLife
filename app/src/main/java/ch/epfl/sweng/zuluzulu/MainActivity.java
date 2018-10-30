@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.firebase.FirebaseApp;
@@ -34,12 +33,10 @@ import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
-
-
-//import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
@@ -94,9 +91,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     /**
      * Open fragment and add tag
+     *
      * @param fragment Any fragment
-     * @param tag Fragment tag
-     * @param data String data
+     * @param tag      Fragment tag
+     * @param data     String data
      */
     private void openFragmentWithStringData(SuperFragment fragment, String tag, String data) {
         Bundle toSend = new Bundle(1);
@@ -273,8 +271,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 setTitle((String) data);
                 break;
             case OPEN_CHAT_FRAGMENT:
-                int channelID = (Integer) data;
-                openFragment(ChatFragment.newInstance(user, channelID));
+                Channel channel = (Channel) data;
+                openFragment(ChatFragment.newInstance(user, channel));
                 break;
             case OPEN_ASSOCIATION_FRAGMENT:
                 openFragment(AssociationFragment.newInstance(user));
