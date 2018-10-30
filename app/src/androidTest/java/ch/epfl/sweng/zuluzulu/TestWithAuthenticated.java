@@ -41,7 +41,12 @@ public abstract class TestWithAuthenticated {
         return mActivityRule.getActivity().getCountingIdlingResource();
     }
 
+    protected MainActivity getMainActivity(){
+        return mActivityRule.getActivity();
+    }
+
     protected SuperFragment getCurrentFragment(){
         return mActivityRule.getActivity().getCurrentFragment();
     }
+
 }
