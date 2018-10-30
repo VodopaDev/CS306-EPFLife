@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.v4.app.Fragment;
 
 import org.junit.Before;
 import org.junit.Rule;

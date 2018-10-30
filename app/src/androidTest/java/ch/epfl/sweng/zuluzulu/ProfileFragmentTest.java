@@ -1,7 +1,5 @@
 package ch.epfl.sweng.zuluzulu;
 
-import android.support.v4.app.Fragment;
-
 import org.junit.Before;
 import org.junit.Test;
 

@@ -28,7 +28,7 @@ public class AssociationFragmentAsAuthenticatedTest {
             new ActivityTestRule<>(MainActivity.class, false, false);
 
     @Before
-    public void initAuthenticatedTest(){
+    public void initAuthenticatedTest() {
         User user = Utility.createTestUser();
         Utility.addUserToMainIntent(mActivityRule, user);
         AssociationFragment fragment = AssociationFragment.newInstance(user);
@@ -54,13 +54,13 @@ public class AssociationFragmentAsAuthenticatedTest {
     }
 
     @Test
-    public void clickOnAssociation1(){
+    public void clickOnAssociation1() {
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
         onView(withText("Agepoly")).perform(ViewActions.click());
     }
 
     @Test
-    public void clickOnAssociation2(){
+    public void clickOnAssociation2() {
         onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
         onView(withText("Club Montagne")).perform(ViewActions.click());
     }

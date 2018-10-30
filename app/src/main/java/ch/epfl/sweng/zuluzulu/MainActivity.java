@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.test.espresso.idling.CountingIdlingResource;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -16,9 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.google.firebase.FirebaseApp;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,14 +30,11 @@ import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
-import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
-import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
 
@@ -99,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     /**
      * Open the login fragment when requested by redirect uri
+     *
      * @param redirectURIwithCode redirect url
      */
     private void openLogin(String redirectURIwithCode) {
@@ -259,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         switch (tag) {
 
             case SET_USER:
-                Map<Integer, Object> received = (HashMap<Integer,Object>) data;
+                Map<Integer, Object> received = (HashMap<Integer, Object>) data;
                 this.user = (User) received.get(0);
                 updateMenuItems();
                 break;
@@ -273,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 decrementCountingIdlingResource();
                 break;
             case SET_TITLE:
-                setTitle((String)data);
+                setTitle((String) data);
                 break;
             case OPEN_CHAT_FRAGMENT:
                 int channelID = (Integer) data;
@@ -328,11 +322,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     /**
      * Gaultier code to open a webview fragment
      * Refactored in a new function
+     *
      * @param url web view url
      */
     private void openWebViewFragment(String url) {
         Bundle toSend = new Bundle(1);
-        toSend.putString("",url);
+        toSend.putString("", url);
         WebViewFragment fragment = WebViewFragment.newInstance();
         fragment.setArguments(toSend);
         openFragment(fragment);

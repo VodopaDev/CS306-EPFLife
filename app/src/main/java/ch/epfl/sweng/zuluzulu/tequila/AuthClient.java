@@ -1,8 +1,6 @@
 package ch.epfl.sweng.zuluzulu.tequila;
 
 
-import android.text.TextUtils;
-
 /**
  * Client code for Tequila authentication.
  *

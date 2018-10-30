@@ -15,15 +15,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import java.io.IOException;
-import java.util.HashMap;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -87,10 +90,10 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         StrictMode.setThreadPolicy(policy);
         try {
             redirectURICode = this.getArguments().getString("");
-        }catch(NullPointerException e){
+        } catch (NullPointerException e) {
             redirectURICode = null;
         }
-        if(redirectURICode != null){
+        if (redirectURICode != null) {
             finishLogin();
         }
 
@@ -113,7 +116,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
 
         mLoginFormView = view.findViewById(R.id.login_form);
         mProgressView = view.findViewById(R.id.login_progress);
-        if(redirectURICode != null){
+        if (redirectURICode != null) {
             showProgress(true);
         }
 
@@ -128,16 +131,14 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         // Pass the user to the activity
 
 
+        if (isWebView) {
+            mListener.onFragmentInteraction(CommunicationTag.OPENING_WEBVIEW, codeRequestUrl);
+        } else {
 
-        if(isWebView){
-            mListener.onFragmentInteraction(CommunicationTag.OPENING_WEBVIEW,codeRequestUrl);
-        }
-        else{
-
-            Map<Integer,Object> toTransfer = new HashMap<Integer, Object>();
-            toTransfer.put(0,user);
-            toTransfer.put(1,code);
-            toTransfer.put(2,config);
+            Map<Integer, Object> toTransfer = new HashMap<Integer, Object>();
+            toTransfer.put(0, user);
+            toTransfer.put(1, code);
+            toTransfer.put(2, config);
             mListener.onFragmentInteraction(CommunicationTag.SET_USER, toTransfer);
             mListener.onFragmentInteraction(CommunicationTag.OPEN_MAIN_FRAGMENT, null);
         }
@@ -145,19 +146,19 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         showProgress(false);
     }
 
-    private void finishLogin(){
+    private void finishLogin() {
         code = AuthClient.extractCode(redirectURICode);
 
         Map<String, String> tokens;
-        try{
+        try {
             tokens = AuthServer.fetchTokens(config, code);
-        } catch (IOException e){
+        } catch (IOException e) {
             return;
         }
 
-        try{
+        try {
             user = AuthServer.fetchUser(tokens.get("Tequila.profile"));
-        } catch( IOException e){
+        } catch (IOException e) {
             return;
         }
 
@@ -179,7 +180,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
                     map.put("followed_chats", new ArrayList<Integer>());
                     ref.set(map);
                     transfer_main(false);
-                } else{
+                } else {
                     FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
                     List<Integer> received_assos = fmap.getIntegerList("fav_assos");
                     List<Integer> received_events = fmap.getIntegerList("followed_events");

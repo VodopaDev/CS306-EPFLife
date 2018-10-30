@@ -8,14 +8,14 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.Utility;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class AssociationsUrlHandlerTest {
     @Rule
@@ -52,8 +52,7 @@ public class AssociationsUrlHandlerTest {
     }
 
     @Test
-    public void worksWithGoodURL()
-    {
+    public void worksWithGoodURL() {
         // Execute our async task
         object.execute(AssociationsGeneratorFragment.EPFL_URL); // Test with real URL
 
@@ -69,10 +68,11 @@ public class AssociationsUrlHandlerTest {
 
     /**
      * This function will get the datas
+     *
      * @param result arrayList
      * @return Void
      */
-    private Void handler(List<String> result){
+    private Void handler(List<String> result) {
         // Do any logic. Here we want result not to be null
         succes = result != null;
 
@@ -83,10 +83,8 @@ public class AssociationsUrlHandlerTest {
     }
 
 
-
     @Test
-    public void testNotValidURL()
-    {
+    public void testNotValidURL() {
         object.execute("wrong_url"); // Test with not valid URL
 
         Utility.openMenu();
@@ -95,8 +93,7 @@ public class AssociationsUrlHandlerTest {
     }
 
     @Test
-    public void testWrongPage()
-    {
+    public void testWrongPage() {
         object.execute("http://epfl.ch/another_page_404"); // Test with wrong page
 
         Utility.openMenu();
