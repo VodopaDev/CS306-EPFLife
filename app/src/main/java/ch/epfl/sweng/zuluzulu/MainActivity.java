@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.firebase.FirebaseApp;
@@ -94,9 +93,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     /**
      * Open fragment and add tag
+     *
      * @param fragment Any fragment
-     * @param tag Fragment tag
-     * @param data String data
+     * @param tag      Fragment tag
+     * @param data     String data
      */
     private void openFragmentWithStringData(SuperFragment fragment, String tag, String data) {
         Bundle toSend = new Bundle(1);

@@ -20,7 +20,7 @@ public class Channel {
     private Map<String, Object> restrictions;
 
     public Channel(FirebaseMapDecorator data) {
-        if(!data.hasFields(FIELDS))
+        if (!data.hasFields(FIELDS))
             throw new IllegalArgumentException();
 
         this.id = data.getInteger("id");

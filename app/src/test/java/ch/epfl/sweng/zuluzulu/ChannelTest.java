@@ -20,19 +20,16 @@ import static org.junit.Assert.assertTrue;
 @RunWith(JUnit4.class)
 public class ChannelTest {
 
-    private static Map data1 = new HashMap();
-    private static Map data2 = new HashMap();
-
     private static final Long id1 = 1L;
     private static final String name1 = "Global";
     private static final String description1 = "Global chat for everyone";
     private static final Map<String, Object> restrictions1 = new HashMap<>();
-
     private static final Long id2 = 2L;
     private static final String name2 = "IN channel";
     private static final String description2 = "Channel just for the IN";
     private static final Map<String, Object> restrictions2 = new HashMap<>();
-
+    private static Map data1 = new HashMap();
+    private static Map data2 = new HashMap();
     private Channel channelGlobal;
     private Channel channelIN;
     private AuthenticatedUser userIN;

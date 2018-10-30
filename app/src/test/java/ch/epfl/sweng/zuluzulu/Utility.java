@@ -19,7 +19,8 @@ public class Utility {
     private static final List<Integer> followedEvents = new ArrayList<>();
     private static final List<Integer> followedChats = new ArrayList<>();
 
-    private Utility() {}
+    private Utility() {
+    }
 
     /**
      * Create a default user builder for the tests
