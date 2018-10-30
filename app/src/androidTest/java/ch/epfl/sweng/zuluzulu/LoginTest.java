@@ -55,7 +55,6 @@ public class LoginTest {
         onView(withId(R.id.sign_in_button)).perform(click());
         TimeUnit.SECONDS.sleep(3);
         onView(withId(R.id.webview)).check(matches(isDisplayed()));
-
     }
 
 }

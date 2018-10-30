@@ -236,9 +236,9 @@ public class AssociationDetailFragment extends SuperFragment {
         main_chat_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (main_chat != null) {
-                    if (user.isConnected())
-                        mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, main_chat.getId());
+                if(main_chat != null) {
+                    if(user.isConnected())
+                        mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, main_chat);
                     else
                         Snackbar.make(getView(), "Login to access chat room", 5000).show();
                 }
