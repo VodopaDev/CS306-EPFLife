@@ -197,7 +197,7 @@ public class ChatFragment extends SuperFragment {
 
             @Override
             public void onTextChanged(CharSequence text, int start, int before, int count) {
-                sendButton.setEnabled(count > 0);
+                sendButton.setEnabled(text.toString().length() > 0);
             }
 
             @Override
