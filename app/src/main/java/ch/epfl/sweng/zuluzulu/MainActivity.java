@@ -55,18 +55,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private SuperFragment current_fragment;
     private User user;
 
-    private String code;
-    private OAuth2Config config;
-
-    private boolean isLogin = false;
-    private boolean openingWebView = false;
-
-    private String urlCode;
-
-
-    //(temporary) store the URI from the browser
-    private String redirectURIwithCode;
-
     // This resource is used for tests
     // That's the recommended way to implement it
     // @see https://developer.android.com/training/testing/espresso/idling-resource#integrate-recommended-approach
@@ -94,9 +82,15 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         Intent i = getIntent();
 
-        if((redirectURIwithCode= i.getStringExtra("redirectUri")) != null){
-            //get the redirectURI with the code from the intent
-            selectItem(navigationView.getMenu().findItem(R.id.nav_login));
+        if(Intent.ACTION_VIEW.equals(i.getAction())) {
+            String redirectURIwithCode = i.getStringExtra("redirectUri");
+            if (redirectURIwithCode != null) {
+                Bundle toSend = new Bundle(1);
+                toSend.putString("", redirectURIwithCode);
+                LoginFragment fragment = new LoginFragment();
+                fragment.setArguments(toSend);
+                openFragment(fragment);
+            }
         } else {
             // Look if there is a user object set
             User user = (User) i.getSerializableExtra("user");
@@ -244,34 +238,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
-    private void addArgumentsForLogin(SuperFragment fragment){
-
-
-        Bundle toSend = new Bundle(1);
-        if(isLogin){
-            isLogin = false;
-            toSend.putString("",redirectURIwithCode);
-        }
-        if(openingWebView){
-            openingWebView = false;
-            toSend.putString("",urlCode);
-        }
-
-        fragment.setArguments(toSend);
-    }
-
-    private void testThenAddArgsForLogin(SuperFragment fragment){
-        if(isLogin || openingWebView) {
-            addArgumentsForLogin(fragment);
-        }
-    }
 
     public boolean openFragment(SuperFragment fragment) {
 
         if (fragment != null) {
-            //if is a login fragment then set argument with the URI
-            testThenAddArgsForLogin(fragment);
-
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -296,9 +266,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
                 break;
             case OPENING_WEBVIEW:
-                this.urlCode = (String) data;
-                openingWebView = true;
-                openFragment(WebViewFragment.newInstance());
+                Bundle toSend = new Bundle(1);
+                toSend.putString("",(String) data);
+                WebViewFragment fragment = new WebViewFragment();
+                fragment.setArguments(toSend);
+                openFragment(fragment);
                 break;
             case INCREMENT_IDLING_RESOURCE:
                 incrementCountingIdlingResource();
