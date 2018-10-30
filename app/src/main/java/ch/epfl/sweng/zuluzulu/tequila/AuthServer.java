@@ -67,20 +67,6 @@ public final class AuthServer {
         return builder.buildAuthenticatedUser();
     }
 
-    public static void logoutTequila(String url, OAuth2Config config, String code) throws IOException {
-        HttpURLConnection httpCo = (HttpURLConnection) new URL(url).openConnection();
-        httpCo.setRequestMethod("POST");
-        httpCo.setDoOutput(true);
-        String arguments = "client_id="+ HttpUtils.urlEncode(config.clientId) +
-                "&code=" + code;
-
-        OutputStreamWriter data = new OutputStreamWriter(httpCo.getOutputStream());
-        data.write(arguments);
-        data.flush();
-        data.close();
-
-    }
-
 
     private static final class JsonTokenContainer {
         @SerializedName("error")

@@ -18,11 +18,6 @@ public final class AuthClient {
     }
 
 
-    public static String createUrlLogout() {
-        return "https://tequila.epfl.ch/cgi-bin/OAuth2IdP/logout";
-
-    }
-
     public static String extractCode(String redirectUri) {
         String marker = "code=";
         return redirectUri.substring(redirectUri.indexOf(marker) + marker.length());

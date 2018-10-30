@@ -27,14 +27,6 @@ public class AuthClientTest {
     }
 
     @Test
-    public void createCodeRequestUrlLogoutIsWorking() throws Exception{
-        String url = AuthClient.createUrlLogout();
-        if(!url.equals("https://tequila.epfl.ch/cgi-bin/OAuth2IdP/logout")){
-            throw new Exception("Url for logout isn't correct");
-        }
-    }
-
-    @Test
     public void extractCodeCorrectly() throws Exception{
         String extractedCode = AuthClient.extractCode(redirecUri);
         if (!extractedCode.equals("1234")){
