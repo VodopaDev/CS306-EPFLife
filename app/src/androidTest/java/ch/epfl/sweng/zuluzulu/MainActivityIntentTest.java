@@ -12,7 +12,6 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static junit.framework.TestCase.assertTrue;
 
 /**
  * This class is to test if the MainActivity starts the right fragment depending on the intent
@@ -29,7 +28,10 @@ public class MainActivityIntentTest {
      */
     @Test
     public void intentRedirectLogin() {
-        assertTrue(true);
+        Intent intent = new Intent();
+        intent.putExtra("redirectUri", "blablablaIHavecode=1234");
+        mActivityRule.launchActivity(intent);
+
     }
 
     /**
