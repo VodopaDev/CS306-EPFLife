@@ -1,9 +1,15 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import android.location.Location;
 import android.net.Uri;
+
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +29,7 @@ public class Event implements Serializable {
     private String short_desc;
     private String long_desc;
     private Date start_date;
+    private String start_date_string;
 
     private Uri banner_uri;
     private Uri icon_uri;
@@ -53,9 +60,11 @@ public class Event implements Serializable {
                 Uri.parse(banner_str);
 
         start_date = data.getDate("start_date");
+        start_date_string = Utils.dateFormat.format(start_date);
     }
 
-    public static Comparator<Event> getComparator() {
+
+    public static Comparator<Event> assoNameComparator() {
         return new Comparator<Event>() {
             @Override
             public int compare(Event o1, Event o2) {
@@ -64,6 +73,17 @@ public class Event implements Serializable {
         };
     }
 
+    public static Comparator<Event> dateComparator() {
+        return new Comparator<Event>() {
+            @Override
+            public int compare(Event o1, Event o2) {
+                return o1.getStartDate().compareTo(o2.getStartDate());
+            }
+        };
+    }
+
+    // TODO: Add a method to add/remove one User to admins (instead of getting/setting the admins list)
+    // TODO: Check inputs before changing fields
     public int getId() {
         return id;
     }
@@ -82,6 +102,10 @@ public class Event implements Serializable {
 
     public Date getStartDate() {
         return start_date;
+    }
+
+    public String getStartDateString() {
+        return start_date_string;
     }
 
     @Nullable
