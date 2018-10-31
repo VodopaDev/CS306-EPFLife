@@ -95,15 +95,15 @@ public class EventFragmentTest {
         onView(withId(R.id.event_fragment_checkBox_sort_date)).check(matches(isDisplayed()));
         TimeUnit.SECONDS.sleep(1);
     }
-
-    @Test
-    public void listAlternateSortOption() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(1);
-        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
-        TimeUnit.SECONDS.sleep(1);
-        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
-        TimeUnit.SECONDS.sleep(1);
-    }
+//
+//    @Test
+//    public void listAlternateSortOption() throws InterruptedException {
+//        TimeUnit.SECONDS.sleep(1);
+//        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
+//        TimeUnit.SECONDS.sleep(1);
+//        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
+//        TimeUnit.SECONDS.sleep(1);
+//    }
     @Test
     public void sortListDateFrom() throws InterruptedException {
         TimeUnit.SECONDS.sleep(1);
