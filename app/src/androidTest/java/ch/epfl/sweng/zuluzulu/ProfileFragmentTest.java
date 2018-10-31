@@ -25,6 +25,7 @@ public class ProfileFragmentTest extends TestWithLogin {
 
     @Test
     public void checkName() {
+        mActivityRule.getActivity().isAuthenticated();
         onView(withId(R.id.profile_gaspar_text)).check(matches(isCompletelyDisplayed()));
     }
 

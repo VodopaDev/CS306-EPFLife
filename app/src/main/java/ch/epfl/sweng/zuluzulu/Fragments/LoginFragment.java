@@ -60,6 +60,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     private User user;
     private String codeRequestUrl;
 
+    private boolean codeUrlRequestWorks = false;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -116,7 +117,8 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
 
         mLoginFormView = view.findViewById(R.id.login_form);
         mProgressView = view.findViewById(R.id.login_progress);
-        if (redirectURICode != null) {
+
+        if(codeUrlRequestWorks){
             showProgress(true);
         }
 
@@ -161,6 +163,8 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         } catch (IOException e) {
             return;
         }
+
+        codeUrlRequestWorks = true;
 
         updateUserAndFinishLogin();
     }
