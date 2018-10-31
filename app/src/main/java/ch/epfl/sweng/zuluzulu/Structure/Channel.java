@@ -1,5 +1,8 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import android.net.Uri;
+import android.support.annotation.Nullable;
+
 import com.google.firebase.firestore.GeoPoint;
 
 import java.io.Serializable;
@@ -8,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.R;
 
 /**
  * Class that represents a channel in a view
@@ -21,6 +25,8 @@ public class Channel implements Serializable {
     private String description;
     private Map<String, Object> restrictions;
 
+    private Uri icon_uri;
+
     public Channel(FirebaseMapDecorator data) {
         if (!data.hasFields(FIELDS))
             throw new IllegalArgumentException();
@@ -29,6 +35,11 @@ public class Channel implements Serializable {
         this.name = data.getString("name");
         this.description = data.getString("description");
         this.restrictions = data.getMap("restrictions");
+
+        String icon_str = data.getString("icon_uri");
+        icon_uri = icon_str == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
+                Uri.parse(icon_str);
     }
 
     /**
@@ -77,6 +88,16 @@ public class Channel implements Serializable {
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     * Return the Association's icon Uri
+     *
+     * @return the icon Uri
+     */
+    @Nullable
+    public Uri getIconUri() {
+        return icon_uri;
     }
 
     /**
