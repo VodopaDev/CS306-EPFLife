@@ -24,6 +24,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +39,8 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
+import ch.epfl.sweng.zuluzulu.Structure.eventSortCompByDate;
+import ch.epfl.sweng.zuluzulu.Structure.eventSortCompByName;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -168,12 +172,14 @@ public class EventFragment extends SuperFragment {
 //        checkbox_event_sort_date.setEnabled(true);
 
         checkbox_event_sort_name.setOnClickListener(new View.OnClickListener() {
-            @TargetApi(24)
             @Override
             public void onClick(View v) {
                 checkbox_event_sort_name.setEnabled(false);
-                event_all.sort(Event.assoNameComparator());
-                event_fav.sort(Event.assoNameComparator());
+
+                Collections.sort(event_all, new eventSortCompByName());
+                Collections.sort(event_fav, new eventSortCompByName());
+//                event_all.sort(Event.assoNameComparator());
+//                event_fav.sort(Event.assoNameComparator());
 
                 event_adapter = new EventArrayAdapter(getContext(), event_all, mListener);
 
@@ -185,15 +191,16 @@ public class EventFragment extends SuperFragment {
         });
 
         checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
-            @TargetApi(24)
             @Override
             public void onClick(View v) {
                 if (event_fragment_from_date.getText().toString().contains("D") || event_fragment_from_date.getText().toString().contains("M") ||
                         event_fragment_from_date.getText().toString().contains("Y")) {
 
                     checkbox_event_sort_date.setEnabled(false);
-                    event_all.sort(Event.dateComparator());
-                    event_fav.sort(Event.dateComparator());
+                    Collections.sort(event_all, new eventSortCompByDate());
+                    Collections.sort(event_fav, new eventSortCompByDate());
+//                    event_all.sort(Event.dateComparator());
+//                    event_fav.sort(Event.dateComparator());
 
                     event_adapter = new EventArrayAdapter(getContext(), event_all, mListener);
 
@@ -205,8 +212,10 @@ public class EventFragment extends SuperFragment {
                 else if (event_fragment_to_date.getText().toString().contains("D") || event_fragment_to_date.getText().toString().contains("M") ||
                         event_fragment_to_date.getText().toString().contains("Y")) {
                     checkbox_event_sort_date.setEnabled(false);
-                    event_all.sort(Event.dateComparator());
-                    event_fav.sort(Event.dateComparator());
+                    Collections.sort(event_all, new eventSortCompByDate());
+                    Collections.sort(event_fav, new eventSortCompByDate());
+//                    event_all.sort(Event.dateComparator());
+//                    event_fav.sort(Event.dateComparator());
 
                     emptySortedEventList();
 
@@ -236,8 +245,10 @@ public class EventFragment extends SuperFragment {
                 }
                 else {
                     checkbox_event_sort_date.setEnabled(false);
-                    event_all.sort(Event.dateComparator());
-                    event_fav.sort(Event.dateComparator());
+                    Collections.sort(event_all, new eventSortCompByDate());
+                    Collections.sort(event_fav, new eventSortCompByDate());
+//                    event_all.sort(Event.dateComparator());
+//                    event_fav.sort(Event.dateComparator());
 
                     emptySortedEventList();
 

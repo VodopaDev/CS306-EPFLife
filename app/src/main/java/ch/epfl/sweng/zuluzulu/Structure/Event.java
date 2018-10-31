@@ -9,6 +9,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -62,7 +63,7 @@ public class Event implements Serializable {
         start_date_string = Utils.dateFormat.format(start_date);
     }
 
-    // maybe use id instead of name
+
     public static Comparator<Event> assoNameComparator() {
         return new Comparator<Event>() {
             @Override
