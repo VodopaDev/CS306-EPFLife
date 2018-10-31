@@ -56,7 +56,7 @@ public class EventFragmentTest {
         mActivityRule.getActivity().openFragment(fragment);
 
         try {
-            TimeUnit.SECONDS.sleep(5);
+            TimeUnit.SECONDS.sleep(2);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -73,55 +73,55 @@ public class EventFragmentTest {
 
     @Test
     public void thereAreTwoButtons() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_fav_button)).check(matches(isDisplayed()));
         onView(withId(R.id.event_fragment_all_button)).check(matches(isDisplayed()));
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
     }
 
     @Test
     public void clickOnFavThenOnAll() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_all_button)).perform(ViewActions.click());
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
     }
 
     @Test
     public void thereAreTwoSortCheckbox() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_checkBox_sort_name)).check(matches(isDisplayed()));
         onView(withId(R.id.event_fragment_checkBox_sort_date)).check(matches(isDisplayed()));
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
     }
 
     @Test
     public void listAlternateSortOption() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
     }
     @Test
     public void sortListDateFrom() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_from_date)).perform(typeText("01012040")).perform(closeSoftKeyboard());
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
     }
 
     @Test
     public void sortListDateFromAndTo() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_from_date)).perform(typeText("01012040")).perform(closeSoftKeyboard());
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_to_date)).perform(typeText("01012041")).perform(closeSoftKeyboard());
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(1);
     }
 
     //
