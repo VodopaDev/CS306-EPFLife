@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -77,13 +80,13 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         initIcon(event.getIconUri(), holder.icon);
         holder.start_date.setText(event.getStartDate().toString());
 
-//        event_view.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d("FRAG_CHANGE","Switching to " + event.getName() + "detailed view");
-//                mListener.onFragmentInteraction(EventDetailFragment.TAG, event);
-//            }
-//        });
+        event_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("FRAG_CHANGE","Switching to " + event.getName() + "detailed view");
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT, event);
+            }
+        });
 
         return event_view;
     }
