@@ -75,7 +75,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         holder.name.setText(event.getName());
         holder.short_desc.setText(event.getShortDesc());
         initIcon(event.getIconUri(), holder.icon);
-        holder.start_date.setText(event.getStartDate().toString());
+        holder.start_date.setText(event.getStartDateString().toString());
 
 //        event_view.setOnClickListener(new View.OnClickListener() {
 //            @Override
