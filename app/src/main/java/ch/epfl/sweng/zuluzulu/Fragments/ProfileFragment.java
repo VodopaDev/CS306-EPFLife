@@ -99,6 +99,10 @@ public class ProfileFragment extends SuperFragment {
         TextView sciper = view.findViewById(R.id.profile_sciper_edit);
         sciper.setText(user.getSciper());
 
+
+        TextView unit = view.findViewById(R.id.profile_unit_edit);
+        unit.setText(new StringBuilder().append(user.getSection()).append("-").append(user.getSemester()));
+
         return view;
     }
 }
