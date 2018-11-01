@@ -75,8 +75,7 @@ public class ProfileFragment extends SuperFragment {
             builder.append(user.getFirstNames().substring(1));
         }
         if (user.getLastNames() != null && user.getLastNames().length() > 1) {
-            builder.append(" ");
-            builder.append(user.getLastNames().substring(0, 1).toUpperCase());
+            builder.append(" ").append(user.getLastNames().substring(0, 1).toUpperCase());
             builder.append(user.getLastNames().substring(1));
         }
         if (user.hasRole(UserRole.ADMIN)) {
@@ -98,6 +97,9 @@ public class ProfileFragment extends SuperFragment {
 
         TextView sciper = view.findViewById(R.id.profile_sciper_edit);
         sciper.setText(user.getSciper());
+
+        TextView unit = view.findViewById(R.id.profile_unit_edit);
+        unit.setText(new StringBuilder().append(user.getSection()).append("-").append(user.getSemester()));
 
         return view;
     }

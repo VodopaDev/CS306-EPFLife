@@ -48,8 +48,13 @@ public final class AuthServer {
 
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail(profile.email);
-        builder.setSection(profile.section.substring(0,profile.section.indexOf("-")));
-        builder.setSemester(profile.section.substring(profile.section.indexOf("-")+1));
+        if(profile.section != null) {
+            builder.setSection(profile.section.substring(0, profile.section.indexOf("-")));
+            builder.setSemester(profile.section.substring(profile.section.indexOf("-") + 1));
+        } else {
+            builder.setSection("");
+            builder.setSemester("");
+        }
         builder.setSciper(profile.sciper);
         builder.setGaspar(profile.gaspar);
         builder.setFirst_names(profile.firstNames);
