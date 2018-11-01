@@ -13,7 +13,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class ProfileFragmentTest extends TestWithLogin {
+public class ProfileFragmentTest extends TestWithAdminLogin {
     private SuperFragment fragment;
 
 
@@ -48,5 +48,10 @@ public class ProfileFragmentTest extends TestWithLogin {
     public void checkUnit() {
         onView(withId(R.id.profile_unit_edit)).check(matches(withText(containsString(getUser().getSection()))));
         onView(withId(R.id.profile_unit_edit)).check(matches(withText(containsString(getUser().getSemester()))));
+    }
+
+    @Test
+    public void checkAdmin() {
+        onView(withId(R.id.profile_name_text)).check(matches(withText(containsString("ADMIN"))));
     }
 }
