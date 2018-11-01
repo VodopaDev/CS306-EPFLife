@@ -43,4 +43,10 @@ public class ProfileFragmentTest extends TestWithLogin {
     public void checkSciper() {
         onView(withId(R.id.profile_sciper_edit)).check(matches(withText(containsString(getUser().getSciper()))));
     }
+
+    @Test
+    public void checkUnit() {
+        onView(withId(R.id.profile_unit_edit)).check(matches(withText(containsString(getUser().getSection()))));
+        onView(withId(R.id.profile_unit_edit)).check(matches(withText(containsString(getUser().getSemester()))));
+    }
 }
