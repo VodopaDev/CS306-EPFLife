@@ -4,6 +4,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +50,7 @@ public class ChannelFragment extends SuperFragment {
     private FirebaseFirestore db;
 
     private ListView listView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private List<Channel> listOfChannels = new ArrayList<>();
     private ChannelArrayAdapter adapter;
@@ -97,8 +99,6 @@ public class ChannelFragment extends SuperFragment {
             userLocation = Utils.toGeoPoint(gpsLocation);
         }
 
-        getChannelsFromDatabase();
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -106,6 +106,16 @@ public class ChannelFragment extends SuperFragment {
                 mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel);
             }
         });
+
+        swipeRefreshLayout = view.findViewById(R.id.swiperefresh_channel);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
+
+        getChannelsFromDatabase();
 
         return view;
     }
@@ -139,5 +149,10 @@ public class ChannelFragment extends SuperFragment {
                         }
                     }
                 });
+    }
+
+    public void refresh() {
+        getChannelsFromDatabase();
+        swipeRefreshLayout.setRefreshing(false);
     }
 }
