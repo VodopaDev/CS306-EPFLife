@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.GPS;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
@@ -56,6 +58,10 @@ public class MainFragment extends SuperFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (user.isConnected()) {
+            boolean hadPermissions = GPS.start(getContext());
+            if (!hadPermissions) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS.MY_PERMISSIONS_REQUEST_LOCATION);
+            }
             return inflater.inflate(R.layout.fragment_main_user, container, false);
         } else {
             return inflater.inflate(R.layout.fragment_main, container, false);
