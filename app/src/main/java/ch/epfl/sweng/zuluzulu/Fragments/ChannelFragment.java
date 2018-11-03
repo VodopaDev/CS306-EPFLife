@@ -152,7 +152,10 @@ public class ChannelFragment extends SuperFragment {
                 });
     }
 
-    public void refresh() {
+    /**
+     * Refresh the layout
+     */
+    private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
         getChannelsFromDatabase();
     }
