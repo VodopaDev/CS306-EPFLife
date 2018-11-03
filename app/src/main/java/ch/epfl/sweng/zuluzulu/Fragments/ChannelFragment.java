@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.Manifest;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -93,11 +92,6 @@ public class ChannelFragment extends SuperFragment {
         adapter = new ChannelArrayAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
 
-        boolean hadPermissions = GPS.start(getContext());
-        if (!hadPermissions) {
-            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, GPS.MY_PERMISSIONS_REQUEST_LOCATION);
-        }
-
         Location gpsLocation = GPS.getLocation();
         if (gpsLocation != null) {
             userLocation = Utils.toGeoPoint(gpsLocation);
@@ -114,12 +108,6 @@ public class ChannelFragment extends SuperFragment {
         });
 
         return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        GPS.stop();
     }
 
     /**

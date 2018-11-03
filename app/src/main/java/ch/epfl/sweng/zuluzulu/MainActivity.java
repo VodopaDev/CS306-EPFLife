@@ -36,6 +36,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.GPS;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
@@ -118,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-
         }
     }
 
@@ -220,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 this.user = new User.UserBuilder().buildGuestUser();
 
                 android.webkit.CookieManager.getInstance().removeAllCookie();
+                GPS.stop();
 
                 updateMenuItems();
                 fragment = MainFragment.newInstance(user);
@@ -240,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
-    public boolean openFragment(SuperFragment fragment){
+    public boolean openFragment(SuperFragment fragment) {
         return openFragment(fragment, false);
     }
 
@@ -250,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
-                if(!backPressed)
+                if (!backPressed)
                     previous_fragments.push(current_fragment);
                 current_fragment = fragment;
 
@@ -263,7 +264,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     @Override
     public void onFragmentInteraction(CommunicationTag tag, Object data) {
         switch (tag) {
-
             case SET_USER:
                 Map<Integer, Object> received = (HashMap<Integer, Object>) data;
                 this.user = (User) received.get(0);
