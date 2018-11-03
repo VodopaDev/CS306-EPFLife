@@ -42,12 +42,10 @@ public final class GPS {
 
         @Override
         public void onProviderEnabled(String provider) {
-
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-
         }
     };
 
@@ -55,9 +53,9 @@ public final class GPS {
     private static Location location;
     private static LocationManager locationManager;
 
-    private GPS() {
-    }
+    private static boolean isActivated = false;
 
+    private GPS() { }
 
     /**
      * Start requesting for location updates
@@ -88,7 +86,8 @@ public final class GPS {
                         location = tempLocation;
                     }
                 }
-                if (!isGPSEnabled && !isNetworkEnabled) {
+                isActivated = isGPSEnabled || isNetworkEnabled;
+                if (!isActivated) {
                     Toast.makeText(mcontext, "Please activate your GPS to have access to all features", Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -102,9 +101,18 @@ public final class GPS {
      * Stop asking for location updates
      */
     public static void stop() {
+        isActivated = false;
         if (locationManager != null) {
             locationManager.removeUpdates(locationListener);
         }
+    }
+
+    /**
+     * Return whether the location tracker is activated or not
+     * @return whether the location tracker is activated or not
+     */
+    public static boolean isActivated() {
+        return isActivated;
     }
 
     /**

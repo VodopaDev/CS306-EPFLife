@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -106,7 +107,6 @@ public class ChannelFragment extends SuperFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                System.out.println("Refresh !");
                 refresh();
             }
         });
@@ -153,6 +153,10 @@ public class ChannelFragment extends SuperFragment {
      * Refresh the layout
      */
     private void refresh() {
+        if (!GPS.isActivated()) {
+            Snackbar.make(getView(), "Please activate your GPS to have access to all features", 2000).show();
+            userLocation = null;
+        }
         swipeRefreshLayout.setRefreshing(true);
         getChannelsFromDatabase();
     }
