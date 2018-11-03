@@ -144,6 +144,7 @@ public class ChannelFragment extends SuperFragment {
                                 }
                             }
                             adapter.notifyDataSetChanged();
+                            swipeRefreshLayout.setRefreshing(false);
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
@@ -152,7 +153,7 @@ public class ChannelFragment extends SuperFragment {
     }
 
     public void refresh() {
+        swipeRefreshLayout.setRefreshing(true);
         getChannelsFromDatabase();
-        swipeRefreshLayout.setRefreshing(false);
     }
 }
