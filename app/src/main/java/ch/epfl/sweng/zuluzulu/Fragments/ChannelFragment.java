@@ -94,11 +94,6 @@ public class ChannelFragment extends SuperFragment {
         adapter = new ChannelArrayAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
 
-        Location gpsLocation = GPS.getLocation();
-        if (gpsLocation != null) {
-            userLocation = Utils.toGeoPoint(gpsLocation);
-        }
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -111,6 +106,7 @@ public class ChannelFragment extends SuperFragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                System.out.println("Refresh !");
                 refresh();
             }
         });
@@ -124,6 +120,7 @@ public class ChannelFragment extends SuperFragment {
      * Read data from the database and get the list of the channels
      */
     private void getChannelsFromDatabase() {
+        refreshPosition();
         db = FirebaseFirestore.getInstance();
         db.collection(CHANNELS_COLLECTION_NAME)
                 .orderBy("id", Query.Direction.ASCENDING)
@@ -158,5 +155,15 @@ public class ChannelFragment extends SuperFragment {
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
         getChannelsFromDatabase();
+    }
+
+    /**
+     * Refresh the current position
+     */
+    private void refreshPosition() {
+        Location gpsLocation = GPS.getLocation();
+        if (gpsLocation != null) {
+            userLocation = Utils.toGeoPoint(gpsLocation);
+        }
     }
 }
