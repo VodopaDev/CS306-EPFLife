@@ -153,6 +153,7 @@ public class ChatFragment extends SuperFragment {
                 String message = textEdit.getText().toString();
                 Timestamp time = Timestamp.now();
                 String sciper = user.isConnected() ? user.getSciper() : "000000";
+                textEdit.setText("");
 
                 Map<String, Object> data = new HashMap<>();
                 data.put("senderName", senderName);
@@ -177,7 +178,6 @@ public class ChatFragment extends SuperFragment {
                     @Override
                     public void onSuccess(DocumentReference ref) {
                         Log.d(TAG, "DocumentSnapshot written with ID: " + ref.getId());
-                        textEdit.setText("");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
