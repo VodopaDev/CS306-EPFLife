@@ -36,7 +36,6 @@ public class MainFragment extends SuperFragment {
      *
      * @return A new instance of fragment MainFragment.
      */
-
     public static MainFragment newInstance(User u) {
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();

@@ -110,11 +110,6 @@ public class ChannelFragment extends SuperFragment {
         return view;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
     /**
      * Read data from the database and get the list of the channels
      */

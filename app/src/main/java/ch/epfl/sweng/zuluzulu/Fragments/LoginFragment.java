@@ -125,7 +125,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
 
     /**
      * Is executed once the session is active
-     * Log in the main activity and activate the location tracker
+     * Log in the main activity
      */
     private void transfer_main(boolean isWebView) {
         // Pass the user to the activity
