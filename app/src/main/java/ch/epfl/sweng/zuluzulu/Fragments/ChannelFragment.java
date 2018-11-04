@@ -121,9 +121,7 @@ public class ChannelFragment extends SuperFragment {
      */
     private void getChannelsFromDatabase() {
         db = FirebaseFirestore.getInstance();
-        db.collection(CHANNELS_COLLECTION_NAME)
-                .orderBy("id", Query.Direction.ASCENDING)
-                .get()
+        db.collection(CHANNELS_COLLECTION_NAME).orderBy("id", Query.Direction.ASCENDING).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
