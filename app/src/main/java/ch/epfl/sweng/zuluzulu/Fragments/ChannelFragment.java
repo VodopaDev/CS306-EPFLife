@@ -111,7 +111,7 @@ public class ChannelFragment extends SuperFragment {
             }
         });
 
-        getChannelsFromDatabase();
+        refresh();
 
         return view;
     }
@@ -120,7 +120,6 @@ public class ChannelFragment extends SuperFragment {
      * Read data from the database and get the list of the channels
      */
     private void getChannelsFromDatabase() {
-        refreshPosition();
         db = FirebaseFirestore.getInstance();
         db.collection(CHANNELS_COLLECTION_NAME)
                 .orderBy("id", Query.Direction.ASCENDING)
@@ -150,7 +149,7 @@ public class ChannelFragment extends SuperFragment {
     }
 
     /**
-     * Refresh the layout
+     * Refresh the list of the channels
      */
     private void refresh() {
         if (!GPS.isActivated()) {
@@ -158,6 +157,7 @@ public class ChannelFragment extends SuperFragment {
             userLocation = null;
         }
         swipeRefreshLayout.setRefreshing(true);
+        refreshPosition();
         getChannelsFromDatabase();
     }
 

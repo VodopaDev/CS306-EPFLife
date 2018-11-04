@@ -10,6 +10,9 @@ import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.MainActivity;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
+
 public class GPSTest {
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
@@ -23,9 +26,12 @@ public class GPSTest {
             @Override
             public void run() {
                 GPS.start(mActivityRule.getActivity());
+                assertTrue(GPS.isActivated());
+                GPS.getListener().onLocationChanged(new Location(""));
                 GPS.getListener().onLocationChanged(new Location(LocationManager.GPS_PROVIDER));
                 GPS.getListener().onLocationChanged(new Location(LocationManager.NETWORK_PROVIDER));
                 GPS.stop();
+                assertFalse(GPS.isActivated());
             }
         });
     }
