@@ -50,7 +50,7 @@ public class UrlHandlerTest {
          *
          * This test function handler() will be executed when the action is finished
          */
-        this.object = new UrlHandler(this::handler, Parsers::parseAssociationsData);
+        this.object = new UrlHandler<>(this::handler, Parsers::parseAssociationsData);
     }
 
     @Test
