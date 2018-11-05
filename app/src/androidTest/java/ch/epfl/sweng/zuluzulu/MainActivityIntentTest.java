@@ -22,8 +22,16 @@ public class MainActivityIntentTest {
 
 
     /**
-     * Test if the app start on the login with an ACTION_VIEW intent
+     * Test if the app start on the login with an redirectUri intent
      */
+    @Test
+    public void intentRedirectLogin() {
+        Intent intent = new Intent();
+        intent.putExtra("redirectUri", "blablablaIHavecode=1234");
+        mActivityRule.launchActivity(intent);
+
+        Utility.checkFragmentIsOpen(R.id.login_fragment);
+    }
 
     /**
      * Check if it goes to the main

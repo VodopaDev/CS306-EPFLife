@@ -12,13 +12,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.firebase.FirebaseApp;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
@@ -34,19 +34,20 @@ import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.GPS;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
-
-
-//import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
     // Const used to send a Increment or Decrement message
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+
     private SuperFragment current_fragment;
+    private Stack<SuperFragment> previous_fragments;
     private User user;
 
     // This resource is used for tests
@@ -64,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         // Needed to use Firebase storage and Firestore
         FirebaseApp.initializeApp(getApplicationContext());
+
+        // Initialize the fragment stack used for the back button
+        previous_fragments = new Stack<>();
 
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -94,9 +98,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     /**
      * Open fragment and add tag
+     *
      * @param fragment Any fragment
-     * @param tag Fragment tag
-     * @param data String data
+     * @param tag      Fragment tag
+     * @param data     String data
      */
     private void openFragmentWithStringData(SuperFragment fragment, String tag, String data) {
         Bundle toSend = new Bundle(1);
@@ -114,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-
         }
     }
 
@@ -216,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 this.user = new User.UserBuilder().buildGuestUser();
 
                 android.webkit.CookieManager.getInstance().removeAllCookie();
+                GPS.stop();
 
                 updateMenuItems();
                 fragment = MainFragment.newInstance(user);
@@ -236,15 +241,20 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
-
     public boolean openFragment(SuperFragment fragment) {
+        return openFragment(fragment, false);
+    }
 
+    public boolean openFragment(SuperFragment fragment, boolean backPressed) {
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
+                if (!backPressed)
+                    previous_fragments.push(current_fragment);
                 current_fragment = fragment;
+
                 return true;
             }
         }
@@ -254,7 +264,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     @Override
     public void onFragmentInteraction(CommunicationTag tag, Object data) {
         switch (tag) {
-
             case SET_USER:
                 Map<Integer, Object> received = (HashMap<Integer, Object>) data;
                 this.user = (User) received.get(0);
@@ -273,8 +282,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 setTitle((String) data);
                 break;
             case OPEN_CHAT_FRAGMENT:
-                int channelID = (Integer) data;
-                openFragment(ChatFragment.newInstance(user, channelID));
+                Channel channel = (Channel) data;
+                openFragment(ChatFragment.newInstance(user, channel));
                 break;
             case OPEN_ASSOCIATION_FRAGMENT:
                 openFragment(AssociationFragment.newInstance(user));
@@ -322,6 +331,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (!previous_fragments.empty())
+            openFragment(previous_fragments.pop(), true);
+    }
 
     /**
      * Return the current fragment

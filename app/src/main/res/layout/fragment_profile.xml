@@ -129,12 +129,11 @@
         android:gravity="center"
         android:text="@string/profile_sciper"
         android:textColor="@color/colorPrimaryDark"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/profile_unit"
         app:layout_constraintEnd_toEndOf="@+id/profile_email"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/profile_email"
-        app:layout_constraintTop_toBottomOf="@+id/profile_email"
-        app:layout_constraintVertical_bias="0.47" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_email" />
 
     <TextView
         android:id="@+id/profile_sciper_edit"
@@ -148,5 +147,32 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/profile_email_edit"
         app:layout_constraintTop_toTopOf="@+id/profile_sciper" />
+
+    <TextView
+        android:id="@+id/profile_unit"
+        android:layout_width="0dp"
+        android:layout_height="19dp"
+        android:gravity="center"
+        android:text="@string/profile_unit"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/profile_email"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/profile_email"
+        app:layout_constraintTop_toBottomOf="@+id/profile_sciper" />
+
+    <TextView
+        android:id="@+id/profile_unit_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="IN"
+        android:textSize="@dimen/profile_text_values"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_unit"
+        app:layout_constraintEnd_toEndOf="@+id/profile_sciper_edit"
+        app:layout_constraintStart_toStartOf="@+id/profile_sciper_edit"
+        app:layout_constraintTop_toTopOf="@+id/profile_unit" />
 
 </android.support.constraint.ConstraintLayout>

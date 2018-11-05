@@ -37,7 +37,6 @@ import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
 import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
 import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -60,11 +59,11 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     private User user;
     private String codeRequestUrl;
 
+    private boolean codeUrlRequestWorks = false;
 
     public LoginFragment() {
         // Required empty public constructor
     }
-
 
     /**
      * Use this factory method to create a new instance of
@@ -116,7 +115,8 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
 
         mLoginFormView = view.findViewById(R.id.login_form);
         mProgressView = view.findViewById(R.id.login_progress);
-        if (redirectURICode != null) {
+
+        if (codeUrlRequestWorks) {
             showProgress(true);
         }
 
@@ -130,11 +130,9 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     private void transfer_main(boolean isWebView) {
         // Pass the user to the activity
 
-
         if (isWebView) {
             mListener.onFragmentInteraction(CommunicationTag.OPENING_WEBVIEW, codeRequestUrl);
         } else {
-
             Map<Integer, Object> toTransfer = new HashMap<Integer, Object>();
             toTransfer.put(0, user);
             toTransfer.put(1, code);
@@ -161,6 +159,8 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         } catch (IOException e) {
             return;
         }
+
+        codeUrlRequestWorks = true;
 
         updateUserAndFinishLogin();
     }
@@ -204,7 +204,6 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         showProgress(true);
         codeRequestUrl = AuthClient.createCodeRequestUrl(config);
         transfer_main(true);
-
     }
 
     /**
@@ -258,5 +257,4 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     public void onLoaderReset(@NonNull android.support.v4.content.Loader<Cursor> loader) {
 
     }
-
 }

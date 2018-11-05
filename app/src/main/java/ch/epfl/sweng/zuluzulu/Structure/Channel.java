@@ -1,32 +1,45 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import android.net.Uri;
+import android.support.annotation.Nullable;
+
 import com.google.firebase.firestore.GeoPoint;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.R;
 
 /**
  * Class that represents a channel in a view
  */
-public class Channel {
+public class Channel implements Serializable {
 
     public static final List<String> FIELDS = Arrays.asList("id", "name", "description", "restrictions");
+    private static final double MAX_DISTANCE = 30;
     private int id;
     private String name;
     private String description;
     private Map<String, Object> restrictions;
 
+    private Uri icon_uri;
+
     public Channel(FirebaseMapDecorator data) {
-        if(!data.hasFields(FIELDS))
+        if (!data.hasFields(FIELDS))
             throw new IllegalArgumentException();
 
         this.id = data.getInteger("id");
         this.name = data.getString("name");
         this.description = data.getString("description");
         this.restrictions = data.getMap("restrictions");
+
+        String icon_str = data.getString("icon_uri");
+        icon_uri = icon_str == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
+                Uri.parse(icon_str);
     }
 
     /**
@@ -78,20 +91,37 @@ public class Channel {
     }
 
     /**
+     * Return the Association's icon Uri
+     *
+     * @return the icon Uri
+     */
+    @Nullable
+    public Uri getIconUri() {
+        return icon_uri;
+    }
+
+    /**
      * Check whether a user can access to this channel or not
      *
      * @param user The user who wants to enter the channel
      * @return whether the user can access it or not
      */
-    public boolean canBeAccessedBy(AuthenticatedUser user) {
+    public boolean canBeAccessedBy(AuthenticatedUser user, GeoPoint userLocation) {
         boolean hasAccess = true;
         String section = (String) restrictions.get("section");
-        GeoPoint location = (GeoPoint) restrictions.get("location");
+        GeoPoint channelLocation = (GeoPoint) restrictions.get("location");
         if (section != null) {
             hasAccess = section.equals(user.getSection());
         }
-        if (location != null) {
-            // Todo when we use geolocalisation
+        if (channelLocation != null) {
+            if (userLocation == null) {
+                return false;
+            }
+            double distance = Utils.distanceBetween(channelLocation, userLocation);
+            System.out.println(getName() + ": (" + channelLocation.getLatitude() + ", " + channelLocation.getLongitude() + ")");
+            System.out.println("User: (" + userLocation.getLatitude() + ", " + userLocation.getLongitude() + ")");
+            System.out.println("Distance: " + distance);
+            hasAccess = hasAccess && distance < MAX_DISTANCE;
         }
         return hasAccess;
     }

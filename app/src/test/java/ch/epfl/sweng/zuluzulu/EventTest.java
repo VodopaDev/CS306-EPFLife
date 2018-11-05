@@ -34,8 +34,8 @@ public class EventTest {
 
     private void initWorkingAssociation() {
 
-        Map<String,Object> map = new HashMap<>();
-        map.put("id",1L);
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", 1L);
         map.put("name", NAME1);
         map.put("short_desc", SHORT_DESC);
         map.put("long_desc", LONG_DESC);
@@ -46,9 +46,9 @@ public class EventTest {
         event0 = new Event(new FirebaseMapDecorator(map));
     }
 
-    private void initDefaultAssociation(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("id",1L);
+    private void initDefaultAssociation() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", 1L);
         map.put("name", NAME2);
         map.put("short_desc", SHORT_DESC);
         map.put("long_desc", LONG_DESC);
@@ -59,7 +59,7 @@ public class EventTest {
 
     @Test(expected = NullPointerException.class)
     public void invalidSnapThrowIllegalArgumentException() {
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("id", 1L);
 
         FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
@@ -111,7 +111,7 @@ public class EventTest {
         initWorkingAssociation();
         initDefaultAssociation();
         assertEquals(NAME1.compareTo(NAME2),
-                Event.getComparator().compare(event0, event1));
+                Event.assoNameComparator().compare(event0, event1));
     }
 
 }

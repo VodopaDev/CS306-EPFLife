@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +12,7 @@ public class AuthenticatedUser extends User {
     private final String gaspar;
     private final String email;
     private final String section;
+    private final String semester;
     // WARNING: can user can have multiples names
     private final String first_names;
     private final String last_names;
@@ -20,12 +22,13 @@ public class AuthenticatedUser extends User {
     private List<Integer> followed_chats;
     private List<Integer> followed_events;
 
-    protected AuthenticatedUser(String sciper, String gaspar, String email, String section, String first_names, String last_names, List<Integer> fav_assos, List<Integer> followed_events, List<Integer> followed_chats) {
+    protected AuthenticatedUser(String sciper, String gaspar, String email, String section, String semester, String first_names, String last_names, List<Integer> fav_assos, List<Integer> followed_events, List<Integer> followed_chats) {
         firestore_path = "users_info/" + sciper;
         this.sciper = sciper;
         this.gaspar = gaspar;
         this.email = email;
         this.section = section;
+        this.semester = semester;
         this.first_names = first_names;
         this.last_names = last_names;
         this.fav_assos = fav_assos;
@@ -96,6 +99,9 @@ public class AuthenticatedUser extends User {
     }
 
     @Override
+    public String getSemester() { return semester; }
+
+    @Override
     public String getGaspar() {
         return gaspar;
     }
@@ -116,6 +122,7 @@ public class AuthenticatedUser extends User {
                 + "\nsciper: " + sciper
                 + "\ngaspar: " + gaspar
                 + "\nemail: " + email
-                + "\nsection: " + section;
+                + "\nsection: " + section
+                + "\nsemester: " + semester;
     }
 }

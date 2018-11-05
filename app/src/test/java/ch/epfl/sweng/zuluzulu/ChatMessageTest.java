@@ -19,9 +19,6 @@ import static org.junit.Assert.assertTrue;
 @RunWith(JUnit4.class)
 public class ChatMessageTest {
 
-    private static Map data1 = new HashMap();
-    private static Map data2 = new HashMap();
-
     private static final String senderName1 = "James";
     private static final String sciper1 = "111111";
     private static final String message1 = "James message";
@@ -29,9 +26,9 @@ public class ChatMessageTest {
     private static final String senderName2 = "Bond";
     private static final String sciper2 = "222222";
     private static final String message2 = "Bond's message";
-
     private static final String userSciper = sciper1;
-
+    private static Map data1 = new HashMap();
+    private static Map data2 = new HashMap();
     private ChatMessage chatMessage1;
     private ChatMessage chatMessage2;
 
