@@ -87,7 +87,6 @@ public class AssociationsGeneratorFragment extends SuperFragment {
      * @param nbr
      */
     private void requestIcon(int nbr) {
-        System.out.println("REQUEST" + nbr);
         if(nbr < 0 || nbr >= this.datas.size()){
             return;
         }
@@ -116,7 +115,6 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                         URL anURI = new URL(url, value);
 
                         datas.set(i, datas.get(i) + "," + anURI.toString());
-                        System.out.println(anURI.toString() + " ----");
 
                         //put db
                         Map<String, Object> docData = new HashMap<>();

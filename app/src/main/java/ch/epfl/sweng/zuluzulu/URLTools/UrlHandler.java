@@ -85,13 +85,10 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
         if (code != HttpURLConnection.HTTP_OK) {
 
             Log.d(TAG, "No 200 response code");
-            System.out.println("Not connected " + code + " - " + url);
             return null;
         }
         UrlConnection.connect();
 
-
-        System.out.println("connected " + code);
 
 
         return UrlConnection;
@@ -125,7 +122,6 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
         try {
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-            System.out.println("PARSE + " + url);
             datas = parser.apply(bufferedReader);
             bufferedReader.close();
         } catch (IOException e) {
