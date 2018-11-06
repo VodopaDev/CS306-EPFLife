@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.Headers;
+import com.bumptech.glide.load.model.LazyHeaders;
 
 import java.io.File;
 import java.util.List;
@@ -20,6 +23,8 @@ import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+
+import static com.google.common.net.HttpHeaders.AUTHORIZATION;
 
 /**
  * An ArrayAdapter for Associations
@@ -95,10 +100,17 @@ public class AssociationArrayAdapter extends ArrayAdapter<Association> {
      * @param image ImageView to put the image
      */
     private void initImageView(Uri uri, ImageView image) {
-        Glide.with(context)
-                .load(uri)
-                .centerCrop()
-                .into(image);
+        // add cookie so we can view images
+        if(uri.toString().length() > 0) {
+            Headers auth = new LazyHeaders.Builder() // This can be cached in a field and reused later.
+                    .addHeader("Cookie", "gdpr=accept")
+                    .build();
+            GlideUrl glideUrl = new GlideUrl(uri.toString(), auth);
+            Glide.with(context)
+                    .load(glideUrl)
+                    .centerCrop()
+                    .into(image);
+        }
     }
 
     private void defaultIcon(ImageView icon) {

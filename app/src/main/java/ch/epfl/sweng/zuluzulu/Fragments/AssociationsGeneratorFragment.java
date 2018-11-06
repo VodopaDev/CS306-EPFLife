@@ -2,12 +2,23 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -31,6 +42,8 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     final static public String EPFL_URL = "https://associations.epfl.ch/page-16300-fr-html/";
     private static final String ASSOCIATIONS_GENERATOR_TAG = "ASSOCIATIONS_GENERATOR_TAG";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
+
+    private List<String> datas;
 
     public AssociationsGeneratorFragment() {
         // Required empty public constructor
@@ -56,19 +69,19 @@ public class AssociationsGeneratorFragment extends SuperFragment {
      * @param datas Received datas
      * @return void
      */
-    private Void handleData(List<String> datas) {
-        TextView view = getView().findViewById(R.id.associations_generator_list_values);
-        if (datas != null) {
-            // TEMPORARY CODE
-            // Need to be replace by fill the database
-            view.setText(datas.size() + " ASSOCIATIONS FOUND : \n\n");
+    private Void handleAssociations(Pair<String, List<String>> datas) {
 
-            for (String data : datas) {
-                view.append(data.replaceAll(",", "\n"));
-                view.append("\n-----------\n");
+        if (datas != null) {
+            this.datas = datas.second;
+
+            int i = 0;
+            for (String data : datas.second) {
+                    UrlHandler urlHandler = new UrlHandler(this::handleIcon, Parsers::parseIcon);
+                    urlHandler.execute(data.split(",")[0]);
+                    mListener.onFragmentInteraction(CommunicationTag.INCREMENT_IDLING_RESOURCE, true);
             }
-        } else {
-            view.setText("ERROR NETWORK");
+
+            updateView();
         }
 
         // Tell tests the async execution is finished
@@ -77,12 +90,76 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         return null;
     }
 
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private Void handleIcon(Pair<String, List<String>> result){
+        if(result != null && result.second.size() > 0){
+            String key = result.first;
+            String value = result.second.get(0);
+
+            for(int i = 0; i < datas.size(); i++){
+                String data = datas.get(i);
+                if(data.contains(key)){
+                    try {
+                        URL url = new URL(key + "/");
+                        java.net.URI anURI=url.toURI().resolve(value);
+                        datas.set(i, datas.get(i) + "," + anURI.toString());
+                        System.out.println(anURI.toString() + " ----");
+
+                        //put db
+                        Map<String, Object> docData = new HashMap<>();
+                        docData.put("channel_id", 1);
+                        docData.put("events", new ArrayList<>());
+                        if(anURI.toString().contains("www.epfl.ch/favicon.ico")){
+                            docData.put("icon_uri", "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg");
+                        } else {
+                            docData.put("icon_uri", anURI.toString());
+                        }
+                        docData.put("name", datas.get(i).split(",")[1]);
+                        docData.put("short_desc", datas.get(i).split(",")[2]);
+                        docData.put("long_desc", datas.get(i).split(",")[2]);
+                        docData.put("id", i + 5);
+                        db.collection("assos_info").document(Integer.toString(i + 5)).set(docData);
+
+                        updateView();
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                }
+            }
+        }
+
+
+        mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
+
+        return null;
+    }
+
+    /**
+     * Fill the datas in the view
+     */
+    private void updateView() {
+        TextView view = Objects.requireNonNull(getView()).findViewById(R.id.associations_generator_list_values);
+
+        // TEMPORARY CODE
+        // Need to be replace by fill the database
+        view.setText(datas.size() + " ASSOCIATIONS FOUND : \n\n");
+
+        for (String data : datas) {
+            view.append(data.replaceAll(",", "\n"));
+            view.append("\n-----------\n");
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations Generator");
-        UrlHandler urlHandler = new UrlHandler<List<String>>(this::handleData, Parsers::parseAssociationsData);
+        UrlHandler urlHandler = new UrlHandler(this::handleAssociations, Parsers::parseAssociationsData);
         urlHandler.execute(EPFL_URL);
 
         // Send increment to wait async execution in test

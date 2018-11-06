@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.URLTools;
 
 import android.util.Log;
+import android.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -51,6 +52,46 @@ public class Parsers {
                             .replaceAll("&gt;", ">").replaceAll("&amp;", "&");
 
                     results.add(result);
+                }
+            }
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d(TAG, "Could not parse datas");
+            return null;
+        }
+        return results;
+    }
+
+    /**
+     * This function will parse the datas and return a arraylist of strings
+     *
+     * @param in Input stream
+     * @return ArrayList of strings , values separated by a comma
+     */
+    public static List<String> parseIcon(BufferedReader in) {
+        // regex
+        Pattern p = Pattern.compile("<link[^>]+href=\"(.*?(?:jpg|ico|png))\"[^>]*");
+
+
+        ArrayList<String> results = new ArrayList<>();
+        String inputLine;
+        System.out.println("PARSE\n");
+        int i = 0;
+        try {
+            while ((inputLine = in.readLine()) != null) {
+                Matcher m = p.matcher(inputLine);
+                if (m.find()) {
+                    // remove the span tag
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(m.group(1));
+                    // remplace html unicode to char
+                    String result = sb.toString();
+                    System.out.println(result);
+
+                    results.add(result);
+                    break;
                 }
             }
             in.close();

@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.test.rule.ActivityTestRule;
+import android.util.Pair;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -50,7 +51,7 @@ public class UrlHandlerTest {
          *
          * This test function handler() will be executed when the action is finished
          */
-        this.object = new UrlHandler<>(this::handler, Parsers::parseAssociationsData);
+        this.object = new UrlHandler(this::handler, Parsers::parseAssociationsData);
     }
 
     @Test
@@ -74,7 +75,7 @@ public class UrlHandlerTest {
      * @param result arrayList
      * @return Void
      */
-    private Void handler(List<String> result) {
+    private Void handler(Pair<String, List<String>> result) {
         // Do any logic. Here we want result not to be null
         succes = result != null;
 

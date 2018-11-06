@@ -2,6 +2,7 @@ package ch.epfl.sweng.zuluzulu.URLTools;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,46 +10,48 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import io.opencensus.common.Function;
 
-public class UrlHandler <T> extends AsyncTask<String, Void, Void> {
+public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String>>> {
     private final static String TAG = "UrlHandler";
 
     // Function that will be executed onPostExecute
-    private Function<T, Void> listener;
+    private Function<Pair<String, List<String>>, Void> listener;
 
     // The function that will parse the data
-    private Function<BufferedReader, T> parser;
-
-    // The result of doInBackground
-    private T result = null;
+    private Function<BufferedReader, List<String>> parser;
 
     /**
      * Create a new UrlHandler
      *
      * @param listener The callback function that will be use on PostExecute
      */
-    public UrlHandler(Function<T, Void> listener, Function<BufferedReader, T> parser) {
+    public UrlHandler(Function<Pair<String, List<String>>, Void> listener, Function<BufferedReader, List<String>> parser) {
         this.listener = listener;
         this.parser = parser;
     }
 
 
     @Override
-    protected Void doInBackground(String... urls) {
-        if (urls.length > 0)
-            result = parseUrl(urls[0]);
+    protected Pair<String, List<String>> doInBackground(String... urls) {
+        if (urls.length > 0) {
+            Pair<String, List<String>> result = new Pair<>(urls[0], parseUrl(urls[0]));
+            return result;
+        }
         else
-            result = null;
-
-        return null;
+            return null;
     }
 
 
     @Override
-    protected void onPostExecute(Void value) {
-        listener.apply(result);
+    protected void onPostExecute(Pair<String, List<String>> value) {
+        if(null != value && value.second != null){
+            listener.apply(value);
+        } else {
+            listener.apply(null);
+        }
     }
 
 
@@ -65,18 +68,31 @@ public class UrlHandler <T> extends AsyncTask<String, Void, Void> {
 
         // Open connection
         HttpURLConnection UrlConnection = (HttpURLConnection) aURL.openConnection();
-        UrlConnection.connect();
+        UrlConnection.setRequestProperty("Cookie", "gdpr=accept");
 
         // Get HTTP response code
         int code = UrlConnection.getResponseCode();
 
+        // Redirect if needed
+        if (code == HttpURLConnection.HTTP_MOVED_TEMP
+                || code == HttpURLConnection.HTTP_MOVED_PERM) {
+            String newUrl = UrlConnection.getHeaderField("Location");
+            UrlConnection = (HttpURLConnection) new URL(newUrl).openConnection();
+            UrlConnection.setRequestProperty("Cookie", "gdpr=accept");
+            code = UrlConnection.getResponseCode();
+        }
 
-        if (code != 200) {
-            // Not OK response
-            UrlConnection.disconnect();
+        if (code != HttpURLConnection.HTTP_OK) {
+
             Log.d(TAG, "No 200 response code");
+            System.out.println("Not connected " + code + " - " + url);
             return null;
         }
+        UrlConnection.connect();
+
+
+        System.out.println("connected " + code);
+
 
         return UrlConnection;
     }
@@ -87,7 +103,7 @@ public class UrlHandler <T> extends AsyncTask<String, Void, Void> {
      * @param url The URL
      * @return T Return object of type T with all the values founded
      */
-    private T parseUrl(String url) {
+    private List<String> parseUrl(String url) {
 
         HttpURLConnection urlConnection;
 
@@ -105,10 +121,11 @@ public class UrlHandler <T> extends AsyncTask<String, Void, Void> {
             return null;
         }
 
-        T datas = null;
+        List<String> datas = null;
         try {
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+            System.out.println("PARSE + " + url);
             datas = parser.apply(bufferedReader);
             bufferedReader.close();
         } catch (IOException e) {
