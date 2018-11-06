@@ -10,6 +10,8 @@ import ch.epfl.sweng.zuluzulu.TestWithAdminLogin;
 import ch.epfl.sweng.zuluzulu.Utility;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -25,6 +27,9 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminLogin {
     @Test
     public void canLoadURLs() {
         adminUser();
+        onView(withId(R.id.nbr_icon)).perform(typeText("1"));
+        onView(withId(R.id.load_icon_button)).perform(click());
+
         onView(withId(R.id.associations_generator_list_values)).check(matches(isDisplayed()));
     }
 

@@ -6,6 +6,7 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -19,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -66,28 +68,34 @@ public class AssociationsGeneratorFragment extends SuperFragment {
      * This function will handle the generated datas
      * We expect a arraylist of strings. Each information is separated by a coma in the string
      *
-     * @param datas Received datas
+     * @param results Received datas
      * @return void
      */
-    private Void handleAssociations(Pair<String, List<String>> datas) {
+    private Void handleAssociations(Pair<String, List<String>> results) {
+        mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
 
-        if (datas != null) {
-            this.datas = datas.second;
-
-            int i = 0;
-            for (String data : datas.second) {
-                    UrlHandler urlHandler = new UrlHandler(this::handleIcon, Parsers::parseIcon);
-                    urlHandler.execute(data.split(",")[0]);
-                    mListener.onFragmentInteraction(CommunicationTag.INCREMENT_IDLING_RESOURCE, true);
-            }
-
+        if (results != null) {
+            this.datas = results.second;
             updateView();
         }
 
-        // Tell tests the async execution is finished
-        mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
+
 
         return null;
+    }
+
+    private void requestIcon(int nbr) {
+        if(nbr < 0 || nbr > this.datas.size()){
+            return;
+        }
+
+        // Tell tests the async execution is finished
+        for (int i = 0; i < nbr; i++) {
+            mListener.onFragmentInteraction(CommunicationTag.INCREMENT_IDLING_RESOURCE, true);
+            UrlHandler urlHandler = new UrlHandler(this::handleIcon, Parsers::parseIcon);
+
+            urlHandler.execute(this.datas.get(i).split(",")[0]);
+        }
     }
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -101,8 +109,9 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                 String data = datas.get(i);
                 if(data.contains(key)){
                     try {
-                        URL url = new URL(key + "/");
-                        java.net.URI anURI=url.toURI().resolve(value);
+                        URL url = new URL(key);
+                        URL anURI = new URL(url, value);
+
                         datas.set(i, datas.get(i) + "," + anURI.toString());
                         System.out.println(anURI.toString() + " ----");
 
@@ -121,18 +130,15 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                         docData.put("id", i + 5);
                         db.collection("assos_info").document(Integer.toString(i + 5)).set(docData);
 
-                        updateView();
+                        //updateView();
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
                     }
+
                     break;
                 }
             }
         }
-
-
         mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
 
         return null;
@@ -169,7 +175,21 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_associations_generator, container, false);
+        if(view == null){
+            return null;
+        }
+        Button button = view.findViewById(R.id.load_icon_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                TextView text = view.findViewById(R.id.nbr_icon);
+                int number = Integer.parseInt(text.getText().toString());
+                requestIcon(number);
+            }
+        });
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_associations_generator, container, false);
+        return view;
     }
 }
