@@ -79,13 +79,16 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             updateView();
         }
 
-
-
         return null;
     }
 
+    /**
+     * Load the associations icons
+     * @param nbr
+     */
     private void requestIcon(int nbr) {
-        if(nbr < 0 || nbr > this.datas.size()){
+        System.out.println("REQUEST" + nbr);
+        if(nbr < 0 || nbr >= this.datas.size()){
             return;
         }
 
@@ -130,7 +133,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                         docData.put("id", i + 5);
                         db.collection("assos_info").document(Integer.toString(i + 5)).set(docData);
 
-                        //updateView();
+                        updateView();
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
