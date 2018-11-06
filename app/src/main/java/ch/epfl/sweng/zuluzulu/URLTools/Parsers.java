@@ -76,7 +76,6 @@ public class Parsers {
 
         ArrayList<String> results = new ArrayList<>();
         String inputLine;
-        System.out.println("PARSE\n");
         int i = 0;
         try {
             while ((inputLine = in.readLine()) != null) {
@@ -88,7 +87,6 @@ public class Parsers {
                     sb.append(m.group(1));
                     // remplace html unicode to char
                     String result = sb.toString();
-                    System.out.println(result);
 
                     results.add(result);
                     break;
