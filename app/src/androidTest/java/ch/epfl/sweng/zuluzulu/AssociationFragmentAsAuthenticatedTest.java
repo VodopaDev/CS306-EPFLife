@@ -55,7 +55,7 @@ public class AssociationFragmentAsAuthenticatedTest {
 
     @Test
     public void clickOnAssociation1() {
-        onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
+        onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
         onView(withText("Agepoly")).perform(ViewActions.click());
     }
 
