@@ -14,6 +14,10 @@ import com.google.firebase.firestore.GeoPoint;
 
 import static android.content.Context.LOCATION_SERVICE;
 
+/**
+ * Static class that represents the GPS
+ * GPS.start() and GPS.stop() can be called anywhere in the app
+ */
 public final class GPS {
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
