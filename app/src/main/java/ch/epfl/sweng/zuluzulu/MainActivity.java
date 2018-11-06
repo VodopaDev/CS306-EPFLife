@@ -149,15 +149,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private void initDrawerContent() {
         updateMenuItems();
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                        if (!menuItem.isChecked()) {
-                            selectItem(menuItem);
-                        }
-                        drawerLayout.closeDrawers();
-                        return true;
+                menuItem -> {
+                    if (!menuItem.isChecked()) {
+                        selectItem(menuItem);
                     }
+                    drawerLayout.closeDrawers();
+                    return true;
                 }
         );
     }
@@ -339,12 +336,20 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             openFragment(previous_fragments.pop(), true);
     }
 
+    /**
+     * Called when the app is no more visible by the user
+     * It is a great moment to stop the GPS
+     */
     @Override
     public void onStop() {
         super.onStop();
         GPS.stop();
     }
 
+    /**
+     * Called when the user comes back to the app
+     * It is a great moment to restart the GPS if the user is logged in
+     */
     @Override
     public void onRestart() {
         super.onRestart();

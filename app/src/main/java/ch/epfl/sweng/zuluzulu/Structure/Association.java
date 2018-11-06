@@ -78,12 +78,7 @@ public class Association implements Serializable {
      * @return compareTo of two Associations names
      */
     public static Comparator<Association> getComparator() {
-        return new Comparator<Association>() {
-            @Override
-            public int compare(Association o1, Association o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        };
+        return (o1, o2) -> o1.getName().compareTo(o2.getName());
     }
 
     /**

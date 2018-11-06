@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -139,23 +137,20 @@ public class AssociationDetailFragment extends SuperFragment {
         else
             loadFavImage(R.drawable.fav_off);
 
-        asso_fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (user.isConnected()) {
-                    AuthenticatedUser auth = (AuthenticatedUser) user;
-                    if (auth.isFavAssociation(asso)) {
-                        auth.removeFavAssociation(asso);
-                        loadFavImage(R.drawable.fav_off);
-                        asso_fav.setContentDescription(NOT_FAV_CONTENT);
-                    } else {
-                        auth.addFavAssociation(asso);
-                        loadFavImage(R.drawable.fav_on);
-                        asso_fav.setContentDescription(FAV_CONTENT);
-                    }
+        asso_fav.setOnClickListener(v -> {
+            if (user.isConnected()) {
+                AuthenticatedUser auth = (AuthenticatedUser) user;
+                if (auth.isFavAssociation(asso)) {
+                    auth.removeFavAssociation(asso);
+                    loadFavImage(R.drawable.fav_off);
+                    asso_fav.setContentDescription(NOT_FAV_CONTENT);
                 } else {
-                    Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
+                    auth.addFavAssociation(asso);
+                    loadFavImage(R.drawable.fav_on);
+                    asso_fav.setContentDescription(FAV_CONTENT);
                 }
+            } else {
+                Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
             }
         });
     }
@@ -166,12 +161,9 @@ public class AssociationDetailFragment extends SuperFragment {
      * Set up the upcoming event clicking behaviour to go on the event detailed page
      */
     private void setUpcomingEventButtonBehaviour() {
-        upcoming_event_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (upcoming_event != null) {
-                    //mListener.onFragmentInteraction(EventDetailFragment.TAG, upcoming_event);
-                }
+        upcoming_event_layout.setOnClickListener(v -> {
+            if (upcoming_event != null) {
+                //mListener.onFragmentInteraction(EventDetailFragment.TAG, upcoming_event);
             }
         });
     }
@@ -185,22 +177,19 @@ public class AssociationDetailFragment extends SuperFragment {
         if (asso.getClosestEventId() != 0) {
             FirebaseFirestore.getInstance()
                     .document("events_info/event" + asso.getClosestEventId())
-                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                    if (fmap.hasFields(Event.FIELDS)) {
-                        upcoming_event = new Event(fmap);
-                        upcoming_event_name.setText(upcoming_event.getName());
-                        upcoming_event_date.setText(upcoming_event.getStartDate().toString());
-                        Glide.with(getContext())
-                                .load(upcoming_event.getIconUri())
-                                .centerCrop()
-                                .into(upcoming_event_icon);
-                    } else
-                        upcoming_event_name.setText("Error loading the event :(");
-                }
-            });
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                        FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                        if (fmap.hasFields(Event.FIELDS)) {
+                            upcoming_event = new Event(fmap);
+                            upcoming_event_name.setText(upcoming_event.getName());
+                            upcoming_event_date.setText(upcoming_event.getStartDate().toString());
+                            Glide.with(getContext())
+                                    .load(upcoming_event.getIconUri())
+                                    .centerCrop()
+                                    .into(upcoming_event_icon);
+                        } else
+                            upcoming_event_name.setText("Error loading the event :(");
+                    });
         } else {
             upcoming_event_name.setText("No upcoming event :(");
         }
@@ -215,33 +204,27 @@ public class AssociationDetailFragment extends SuperFragment {
         if (asso.getChannelId() != 0) {
             FirebaseFirestore.getInstance()
                     .document("channels/channel" + asso.getChannelId())
-                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                    if (fmap.hasFields(Channel.FIELDS)) {
-                        main_chat = new Channel(fmap);
-                        main_chat_name.setText(main_chat.getName());
-                        main_chat_desc.setText(main_chat.getDescription());
-                    } else
-                        main_chat_name.setText("Error loading the chat :(");
-                }
-            });
+                    .get().addOnSuccessListener(documentSnapshot -> {
+                        FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                        if (fmap.hasFields(Channel.FIELDS)) {
+                            main_chat = new Channel(fmap);
+                            main_chat_name.setText(main_chat.getName());
+                            main_chat_desc.setText(main_chat.getDescription());
+                        } else
+                            main_chat_name.setText("Error loading the chat :(");
+                    });
         } else {
             main_chat_name.setText("There is no chat :(");
         }
     }
 
     private void setMainChatButtonBehaviour() {
-        main_chat_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(main_chat != null) {
-                    if(user.isConnected())
-                        mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, main_chat);
-                    else
-                        Snackbar.make(getView(), "Login to access chat room", 5000).show();
-                }
+        main_chat_layout.setOnClickListener(v -> {
+            if(main_chat != null) {
+                if(user.isConnected())
+                    mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, main_chat);
+                else
+                    Snackbar.make(getView(), "Login to access chat room", 5000).show();
             }
         });
     }

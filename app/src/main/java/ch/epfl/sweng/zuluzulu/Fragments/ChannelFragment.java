@@ -10,19 +10,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChannelArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -48,10 +45,7 @@ public class ChannelFragment extends SuperFragment {
     private static final String ARG_USER = "ARG_USER";
     private static final String CHANNELS_COLLECTION_NAME = "channels";
 
-    private FirebaseFirestore db;
-
     private View view;
-    private ListView listView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private List<Channel> listOfChannels = new ArrayList<>();
@@ -88,29 +82,21 @@ public class ChannelFragment extends SuperFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_channel, container, false);
-        listView = view.findViewById(R.id.channels_list_view);
+        ListView listView = view.findViewById(R.id.channels_list_view);
 
         adapter = new ChannelArrayAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Channel selectedChannel = listOfChannels.get(position);
-                mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel);
-            }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Channel selectedChannel = listOfChannels.get(position);
+            mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel);
         });
 
         swipeRefreshLayout = view.findViewById(R.id.swiperefresh_channel);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refresh();
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         refreshPosition();
         getChannelsFromDatabase();
@@ -122,28 +108,25 @@ public class ChannelFragment extends SuperFragment {
      * Read data from the database and get the list of the channels
      */
     private void getChannelsFromDatabase() {
-        db = FirebaseFirestore.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(CHANNELS_COLLECTION_NAME).orderBy("id", Query.Direction.ASCENDING).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            listOfChannels.clear();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
-                                if (fmap.hasFields(Channel.FIELDS)) {
-                                    Channel channel = new Channel(fmap);
-                                    if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user, userLocation)) {
-                                        listOfChannels.add(channel);
-                                    }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        listOfChannels.clear();
+                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                            Log.d(TAG, document.getId() + " => " + document.getData());
+                            FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
+                            if (fmap.hasFields(Channel.FIELDS)) {
+                                Channel channel = new Channel(fmap);
+                                if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user, userLocation)) {
+                                    listOfChannels.add(channel);
                                 }
                             }
-                            adapter.notifyDataSetChanged();
-                            swipeRefreshLayout.setRefreshing(false);
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
                         }
+                        adapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
+                    } else {
+                        Log.w(TAG, "Error getting documents.", task.getException());
                     }
                 });
     }
