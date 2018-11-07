@@ -1,5 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -12,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Switch;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -65,7 +66,6 @@ public class ChatFragment extends SuperFragment {
     private Button sendButton;
     private EditText textEdit;
     private ListView listView;
-    private Switch switchAnonym;
 
     private List<ChatMessage> messages = new ArrayList<>();
     private ChatMessageArrayAdapter adapter;
@@ -73,6 +73,8 @@ public class ChatFragment extends SuperFragment {
 
     private AuthenticatedUser user;
     private Channel channel;
+
+    private boolean anonym;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -111,7 +113,6 @@ public class ChatFragment extends SuperFragment {
         sendButton = view.findViewById(R.id.chat_send_button);
         textEdit = view.findViewById(R.id.chat_message_edit);
         listView = view.findViewById(R.id.chat_list_view);
-        switchAnonym = view.findViewById(R.id.chat_switch_anonym);
 
         collection_path = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + MESSAGES_COLLECTION_NAME;
 
@@ -119,6 +120,9 @@ public class ChatFragment extends SuperFragment {
 
         adapter = new ChatMessageArrayAdapter(view.getContext(), messages);
         listView.setAdapter(adapter);
+
+        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        anonym = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
         setUpDataOnChangeListener();
         setUpSendButton();
@@ -153,8 +157,6 @@ public class ChatFragment extends SuperFragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean anonym = switchAnonym.isChecked();
-
                 String senderName = anonym ? "" : user.getFirstNames();
                 String message = textEdit.getText().toString();
                 Timestamp time = Timestamp.now();
