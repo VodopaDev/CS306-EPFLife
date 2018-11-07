@@ -28,6 +28,9 @@ public class Parsers {
      * @return ArrayList of strings , values separated by a comma
      */
     public static List<String> parseAssociationsData(BufferedReader in) {
+        if(in == null){
+            return null;
+        }
         // regex
         Pattern p = Pattern.compile("&#\\d+.* <a href=\"(.*?)\".*>(.*)</a>.*\\((.+)\\)<.*br />.*");
 
@@ -54,7 +57,6 @@ public class Parsers {
                     results.add(result);
                 }
             }
-            in.close();
         } catch (IOException e) {
             e.printStackTrace();
             Log.d(TAG, "Could not parse datas");
@@ -70,13 +72,16 @@ public class Parsers {
      * @return ArrayList of strings , values separated by a comma
      */
     public static List<String> parseIcon(BufferedReader in) {
+        if(in == null){
+            return null;
+        }
+
         // regex
         Pattern p = Pattern.compile("<link[^>]+href=\"(.*?(?:jpg|ico|png))\"[^>]*");
 
 
-        ArrayList<String> results = new ArrayList<>();
+        String result = null;
         String inputLine;
-        int i = 0;
         try {
             while ((inputLine = in.readLine()) != null) {
                 Matcher m = p.matcher(inputLine);
@@ -86,18 +91,21 @@ public class Parsers {
                     StringBuilder sb = new StringBuilder();
                     sb.append(m.group(1));
                     // remplace html unicode to char
-                    String result = sb.toString();
-
-                    results.add(result);
-                    break;
+                    result = sb.toString();
                 }
             }
-            in.close();
         } catch (IOException e) {
             e.printStackTrace();
             Log.d(TAG, "Could not parse datas");
             return null;
         }
-        return results;
+
+        ArrayList<String> list = new ArrayList<>();
+
+        if(result != null){
+            list.add(result);
+        }
+
+        return list;
     }
 }
