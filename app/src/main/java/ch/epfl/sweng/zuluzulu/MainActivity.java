@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.CalendarView;
 
 import com.google.firebase.FirebaseApp;
 
@@ -24,6 +25,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.CalendarFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
@@ -194,6 +196,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         SuperFragment fragment;
 
         switch (menuItem.getItemId()) {
+            case R.id.nav_calendar:
+                fragment = CalendarFragment.newInstance(user);
+                break;
             case R.id.nav_main:
                 fragment = MainFragment.newInstance(user);
                 break;
