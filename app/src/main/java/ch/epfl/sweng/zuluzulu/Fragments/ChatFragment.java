@@ -13,18 +13,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import javax.annotation.Nullable;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -122,13 +130,16 @@ public class ChatFragment extends SuperFragment {
     private void setUpDataOnChangeListener() {
         db = FirebaseFirestore.getInstance();
         db.collection(collection_path)
-                .addSnapshotListener((value, e) -> {
-                    if (e != null) {
-                        Log.w(TAG, "Listen failed.", e);
-                        return;
-                    }
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
 
-                    updateChat();
+                        ChatFragment.this.updateChat();
+                    }
                 });
     }
 
@@ -136,20 +147,23 @@ public class ChatFragment extends SuperFragment {
      * Add an onClick listener on the button to send the message to the database
      */
     private void setUpSendButton() {
-        sendButton.setOnClickListener(v -> {
-            String senderName = user.isConnected() ? user.getFirstNames() : "Guest";
-            String message = textEdit.getText().toString();
-            Timestamp time = Timestamp.now();
-            String sciper = user.isConnected() ? user.getSciper() : "000000";
-            textEdit.setText("");
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String senderName = user.isConnected() ? user.getFirstNames() : "Guest";
+                String message = textEdit.getText().toString();
+                Timestamp time = Timestamp.now();
+                String sciper = user.isConnected() ? user.getSciper() : "000000";
+                textEdit.setText("");
 
-            Map<String, Object> data = new HashMap<>();
-            data.put("senderName", senderName);
-            data.put("message", message);
-            data.put("time", time);
-            data.put("sciper", sciper);
+                Map<String, Object> data = new HashMap<>();
+                data.put("senderName", senderName);
+                data.put("message", message);
+                data.put("time", time);
+                data.put("sciper", sciper);
 
-            addDataToFirestore(data);
+                ChatFragment.this.addDataToFirestore(data);
+            }
         });
     }
 
@@ -161,8 +175,18 @@ public class ChatFragment extends SuperFragment {
     private void addDataToFirestore(Map data) {
         db.collection(collection_path)
                 .add(data)
-                .addOnSuccessListener((OnSuccessListener<DocumentReference>) ref -> Log.d(TAG, "DocumentSnapshot written with ID: " + ref.getId()))
-                .addOnFailureListener(e -> Log.w(TAG, "Error adding document", e));
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference ref) {
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + ref.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
     }
 
     /**
@@ -192,21 +216,24 @@ public class ChatFragment extends SuperFragment {
         db.collection(collection_path)
                 .orderBy("time", Query.Direction.ASCENDING)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        messages.clear();
-                        for (DocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                            Log.d(TAG, document.getId() + " => " + document.getData());
-                            FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
-                            if (fmap.hasFields(ChatMessage.FIELDS)) {
-                                ChatMessage message = new ChatMessage(fmap, user.getSciper());
-                                messages.add(message);
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            messages.clear();
+                            for (DocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
+                                if (fmap.hasFields(ChatMessage.FIELDS)) {
+                                    ChatMessage message = new ChatMessage(fmap, user.getSciper());
+                                    messages.add(message);
+                                }
                             }
+                            adapter.notifyDataSetChanged();
+                            listView.setSelection(adapter.getCount() - 1);
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
                         }
-                        adapter.notifyDataSetChanged();
-                        listView.setSelection(adapter.getCount() - 1);
-                    } else {
-                        Log.w(TAG, "Error getting documents.", task.getException());
                     }
                 });
     }

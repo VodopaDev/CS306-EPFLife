@@ -51,7 +51,12 @@ public class AboutZuluzuluFragment extends SuperFragment {
         View view = inflater.inflate(R.layout.fragment_about_zuluzulu, container, false);
 
         Button button = view.findViewById(R.id.send_mail);
-        button.setOnClickListener(v -> onSendEmail());
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AboutZuluzuluFragment.this.onSendEmail();
+            }
+        });
         // Inflate the layout for this fragment
         return view;
     }

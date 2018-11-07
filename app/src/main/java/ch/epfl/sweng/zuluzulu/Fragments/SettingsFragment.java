@@ -54,9 +54,12 @@ public class SettingsFragment extends SuperFragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         Button button_clear = view.findViewById(R.id.button_clear_cache);
-        button_clear.setOnClickListener(v -> {
-            Snackbar clear_snackbar = Snackbar.make(v, "Cache cleared", LENGTH_SHORT);
-            clear_snackbar.show();
+        button_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar clear_snackbar = Snackbar.make(v, "Cache cleared", LENGTH_SHORT);
+                clear_snackbar.show();
+            }
         });
         return view;
     }

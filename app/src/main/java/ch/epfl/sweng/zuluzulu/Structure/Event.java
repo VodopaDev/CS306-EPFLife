@@ -59,11 +59,21 @@ public class Event implements Serializable {
 
 
     public static Comparator<Event> assoNameComparator() {
-        return (o1, o2) -> o1.getName().compareTo(o2.getName());
+        return new Comparator<Event>() {
+            @Override
+            public int compare(Event o1, Event o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        };
     }
 
     public static Comparator<Event> dateComparator() {
-        return (o1, o2) -> o1.getStartDate().compareTo(o2.getStartDate());
+        return new Comparator<Event>() {
+            @Override
+            public int compare(Event o1, Event o2) {
+                return o1.getStartDate().compareTo(o2.getStartDate());
+            }
+        };
     }
 
     // TODO: Add a method to add/remove one User to admins (instead of getting/setting the admins list)

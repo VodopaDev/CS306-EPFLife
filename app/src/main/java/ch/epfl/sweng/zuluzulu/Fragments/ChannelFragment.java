@@ -10,12 +10,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,9 +94,12 @@ public class ChannelFragment extends SuperFragment {
         adapter = new ChannelArrayAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            Channel selectedChannel = listOfChannels.get(position);
-            mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Channel selectedChannel = listOfChannels.get(position);
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel);
+            }
         });
 
         swipeRefreshLayout = view.findViewById(R.id.swiperefresh_channel);
@@ -110,23 +117,26 @@ public class ChannelFragment extends SuperFragment {
     private void getChannelsFromDatabase() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(CHANNELS_COLLECTION_NAME).orderBy("id", Query.Direction.ASCENDING).get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        listOfChannels.clear();
-                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                            Log.d(TAG, document.getId() + " => " + document.getData());
-                            FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
-                            if (fmap.hasFields(Channel.FIELDS)) {
-                                Channel channel = new Channel(fmap);
-                                if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user, userLocation)) {
-                                    listOfChannels.add(channel);
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            listOfChannels.clear();
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
+                                if (fmap.hasFields(Channel.FIELDS)) {
+                                    Channel channel = new Channel(fmap);
+                                    if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user, userLocation)) {
+                                        listOfChannels.add(channel);
+                                    }
                                 }
                             }
+                            adapter.notifyDataSetChanged();
+                            swipeRefreshLayout.setRefreshing(false);
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
                         }
-                        adapter.notifyDataSetChanged();
-                        swipeRefreshLayout.setRefreshing(false);
-                    } else {
-                        Log.w(TAG, "Error getting documents.", task.getException());
                     }
                 });
     }

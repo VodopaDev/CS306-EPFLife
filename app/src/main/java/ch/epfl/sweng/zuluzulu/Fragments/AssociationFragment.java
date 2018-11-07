@@ -103,14 +103,22 @@ public class AssociationFragment extends SuperFragment {
         button_assos_fav = view.findViewById(R.id.association_fragment_fav_button);
         button_assos_all = view.findViewById(R.id.association_fragment_all_button);
 
-        button_assos_fav.setOnClickListener(v -> {
-            if (user.isConnected())
-                updateListView(button_assos_fav, button_assos_all, assos_fav, listview_assos);
-            else
-                Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
+        button_assos_fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (user.isConnected())
+                    AssociationFragment.this.updateListView(button_assos_fav, button_assos_all, assos_fav, listview_assos);
+                else
+                    Snackbar.make(AssociationFragment.this.getView(), "Login to access your favorite associations", 5000).show();
+            }
         });
 
-        button_assos_all.setOnClickListener(v -> updateListView(button_assos_all, button_assos_fav, assos_all, listview_assos));
+        button_assos_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AssociationFragment.this.updateListView(button_assos_all, button_assos_fav, assos_all, listview_assos);
+            }
+        });
 
         checkbox_assos_sort_name = view.findViewById(R.id.assos_fragment_checkbox_sort_Name);
         checkbox_assos_sort_date = view.findViewById(R.id.assos_fragment_checkbox_sort_date);
@@ -118,24 +126,30 @@ public class AssociationFragment extends SuperFragment {
         checkbox_assos_sort_name.setChecked(true);
         checkbox_assos_sort_name.setEnabled(false);
 
-        checkbox_assos_sort_date.setOnClickListener(v -> {
-            checkbox_assos_sort_date.setEnabled(false);
-            assos_filtered.clear();
-            assos_all.clear();
-            assos_fav.clear();
-            fillAssociationLists("id");
-            checkbox_assos_sort_name.setChecked(false);
-            checkbox_assos_sort_name.setEnabled(true);
+        checkbox_assos_sort_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkbox_assos_sort_date.setEnabled(false);
+                assos_filtered.clear();
+                assos_all.clear();
+                assos_fav.clear();
+                AssociationFragment.this.fillAssociationLists("id");
+                checkbox_assos_sort_name.setChecked(false);
+                checkbox_assos_sort_name.setEnabled(true);
+            }
         });
 
-        checkbox_assos_sort_name.setOnClickListener(v -> {
-            checkbox_assos_sort_name.setEnabled(false);
-            assos_filtered.clear();
-            assos_all.clear();
-            assos_fav.clear();
-            fillAssociationLists("name");
-            checkbox_assos_sort_date.setChecked(false);
-            checkbox_assos_sort_date.setEnabled(true);
+        checkbox_assos_sort_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkbox_assos_sort_name.setEnabled(false);
+                assos_filtered.clear();
+                assos_all.clear();
+                assos_fav.clear();
+                AssociationFragment.this.fillAssociationLists("name");
+                checkbox_assos_sort_date.setChecked(false);
+                checkbox_assos_sort_date.setEnabled(true);
+            }
         });
 
         plainText_filter = view.findViewById(R.id.assos_fragment_plainText_filter);
@@ -169,25 +183,31 @@ public class AssociationFragment extends SuperFragment {
 
     private void fillAssociationLists(String sortOption) {
         FirebaseFirestore.getInstance().collection("assos_info").orderBy(sortOption).get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                    for (DocumentSnapshot snap : snap_list) {
-                        FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
-                        if (data.hasFields(Association.FIELDS)) {
-                            Association asso = new Association(data);
-                            assos_all.add(asso);
-                            assos_filtered.add(asso);
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
+                        for (DocumentSnapshot snap : snap_list) {
+                            FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+                            if (data.hasFields(Association.FIELDS)) {
+                                Association asso = new Association(data);
+                                assos_all.add(asso);
+                                assos_filtered.add(asso);
 
-                            if (user.isConnected() && ((AuthenticatedUser) user).isFavAssociation(asso))
-                                assos_fav.add(asso);
+                                if (user.isConnected() && ((AuthenticatedUser) user).isFavAssociation(asso))
+                                    assos_fav.add(asso);
 
-                            assos_adapter.notifyDataSetChanged();
+                                assos_adapter.notifyDataSetChanged();
+                            }
                         }
                     }
                 })
-                .addOnFailureListener(e -> {
-                    Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
-                    Log.e("ASSO_LIST", "Error fetching association date\n" + e.getMessage());
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Snackbar.make(AssociationFragment.this.getView(), "Loading error, check your connection", 5000).show();
+                        Log.e("ASSO_LIST", "Error fetching association date\n" + e.getMessage());
+                    }
                 });
     }
 

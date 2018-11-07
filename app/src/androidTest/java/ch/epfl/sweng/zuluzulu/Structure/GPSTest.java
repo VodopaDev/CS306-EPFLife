@@ -22,14 +22,17 @@ public class GPSTest {
 
     @Test
     public void testOnLocationChanged() throws Throwable {
-        mActivityRule.runOnUiThread(() -> {
-            GPS.start(mActivityRule.getActivity());
-            assertTrue(GPS.isActivated());
-            GPS.getListener().onLocationChanged(new Location(""));
-            GPS.getListener().onLocationChanged(new Location(LocationManager.GPS_PROVIDER));
-            GPS.getListener().onLocationChanged(new Location(LocationManager.NETWORK_PROVIDER));
-            GPS.stop();
-            assertFalse(GPS.isActivated());
+        mActivityRule.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                GPS.start(mActivityRule.getActivity());
+                assertTrue(GPS.isActivated());
+                GPS.getListener().onLocationChanged(new Location(""));
+                GPS.getListener().onLocationChanged(new Location(LocationManager.GPS_PROVIDER));
+                GPS.getListener().onLocationChanged(new Location(LocationManager.NETWORK_PROVIDER));
+                GPS.stop();
+                assertFalse(GPS.isActivated());
+            }
         });
     }
 }

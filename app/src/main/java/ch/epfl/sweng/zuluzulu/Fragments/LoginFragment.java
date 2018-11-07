@@ -16,7 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
@@ -104,7 +106,12 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         Button mSignInButton = view.findViewById(R.id.sign_in_button);
-        mSignInButton.setOnClickListener(view1 -> attemptLogin());
+        mSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+                LoginFragment.this.attemptLogin();
+            }
+        });
 
         mLoginFormView = view.findViewById(R.id.login_form);
         mProgressView = view.findViewById(R.id.login_progress);
@@ -163,24 +170,27 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
                 .collection("users_info")
                 .document(user.getSciper());
 
-        ref.get().addOnSuccessListener(documentSnapshot -> {
-            if (!documentSnapshot.exists()) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("fav_assos", new ArrayList<Integer>());
-                map.put("followed_events", new ArrayList<Integer>());
-                map.put("followed_chats", new ArrayList<Integer>());
-                ref.set(map);
-                transfer_main(false);
-            } else {
-                FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                List<Integer> received_assos = fmap.getIntegerList("fav_assos");
-                List<Integer> received_events = fmap.getIntegerList("followed_events");
-                List<Integer> received_chats = fmap.getIntegerList("followed_chats");
+        ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (!documentSnapshot.exists()) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("fav_assos", new ArrayList<Integer>());
+                    map.put("followed_events", new ArrayList<Integer>());
+                    map.put("followed_chats", new ArrayList<Integer>());
+                    ref.set(map);
+                    LoginFragment.this.transfer_main(false);
+                } else {
+                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                    List<Integer> received_assos = fmap.getIntegerList("fav_assos");
+                    List<Integer> received_events = fmap.getIntegerList("followed_events");
+                    List<Integer> received_chats = fmap.getIntegerList("followed_chats");
 
-                ((AuthenticatedUser) user).setFavAssos(received_assos);
-                ((AuthenticatedUser) user).setFollowedEvents(received_events);
-                ((AuthenticatedUser) user).setFollowedChats(received_chats);
-                transfer_main(false);
+                    ((AuthenticatedUser) user).setFavAssos(received_assos);
+                    ((AuthenticatedUser) user).setFollowedEvents(received_events);
+                    ((AuthenticatedUser) user).setFollowedChats(received_chats);
+                    LoginFragment.this.transfer_main(false);
+                }
             }
         });
     }
