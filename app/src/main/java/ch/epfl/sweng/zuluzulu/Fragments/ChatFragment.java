@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Switch;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -64,11 +65,13 @@ public class ChatFragment extends SuperFragment {
     private Button sendButton;
     private EditText textEdit;
     private ListView listView;
+    private Switch switchAnonym;
+
     private List<ChatMessage> messages = new ArrayList<>();
     private ChatMessageArrayAdapter adapter;
     private String collection_path;
 
-    private User user;
+    private AuthenticatedUser user;
     private Channel channel;
 
     public ChatFragment() {
@@ -108,6 +111,7 @@ public class ChatFragment extends SuperFragment {
         sendButton = view.findViewById(R.id.chat_send_button);
         textEdit = view.findViewById(R.id.chat_message_edit);
         listView = view.findViewById(R.id.chat_list_view);
+        switchAnonym = view.findViewById(R.id.chat_switch_anonym);
 
         collection_path = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + MESSAGES_COLLECTION_NAME;
 
@@ -149,10 +153,12 @@ public class ChatFragment extends SuperFragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String senderName = user.isConnected() ? user.getFirstNames() : "Guest";
+                boolean anonym = switchAnonym.isChecked();
+
+                String senderName = anonym ? "" : user.getFirstNames();
                 String message = textEdit.getText().toString();
                 Timestamp time = Timestamp.now();
-                String sciper = user.isConnected() ? user.getSciper() : "000000";
+                String sciper =  user.getSciper();
                 textEdit.setText("");
 
                 Map<String, Object> data = new HashMap<>();
