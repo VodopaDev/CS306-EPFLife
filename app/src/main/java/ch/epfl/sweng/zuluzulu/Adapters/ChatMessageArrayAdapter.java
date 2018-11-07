@@ -17,7 +17,6 @@ import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 
 public class ChatMessageArrayAdapter extends ArrayAdapter<ChatMessage> {
 
-    private static final String ownMessageSenderName = "You";
     private Context mContext;
     private List<ChatMessage> messages;
 
@@ -30,22 +29,27 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<ChatMessage> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View messageView = convertView;
-        if (messageView == null) {
+        ChatMessage currentChatMessage = messages.get(position);
+        boolean isOwnMessage = currentChatMessage.isOwnMessage();
+        boolean isAnonym = currentChatMessage.isAnonym();
+
+        View messageView = null;
+        if (isOwnMessage || isAnonym) {
+            messageView = LayoutInflater.from(mContext).inflate(R.layout.chat_message_noname, parent, false);
+        }
+        else {
             messageView = LayoutInflater.from(mContext).inflate(R.layout.chat_message, parent, false);
         }
 
-        ChatMessage currentChatMessage = messages.get(position);
-        boolean isOwnMessage = currentChatMessage.isOwnMessage();
-
         LinearLayout linearLayout = messageView.findViewById(R.id.chat_message_linearLayout);
         TextView message = messageView.findViewById(R.id.chat_message_msg);
-        TextView senderName = messageView.findViewById(R.id.chat_message_senderName);
 
-        if (isOwnMessage) {
-            senderName.setText(ownMessageSenderName);
-            linearLayout.setBackgroundResource(R.drawable.chat_message_background_ownmessage);
+        if (isOwnMessage || isAnonym) {
+            if (isOwnMessage) {
+                linearLayout.setBackgroundResource(R.drawable.chat_message_background_ownmessage);
+            }
         } else {
+            TextView senderName = messageView.findViewById(R.id.chat_message_senderName);
             senderName.setText(currentChatMessage.getSenderName());
             linearLayout.setBackgroundResource(R.drawable.chat_message_background);
         }
