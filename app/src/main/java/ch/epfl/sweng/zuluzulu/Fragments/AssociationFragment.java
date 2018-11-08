@@ -164,10 +164,10 @@ public class AssociationFragment extends SuperFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String firstLetters = s.toString();
+                String firstLetters = s.toString().toLowerCase();
                 assos_filtered.clear();
                 for(Association assos : assos_all) {
-                    if (assos.getName().startsWith(firstLetters)) {
+                    if (assos.getName().toLowerCase().contains(firstLetters)) {
                         assos_filtered.add(assos);
                     }
                 }

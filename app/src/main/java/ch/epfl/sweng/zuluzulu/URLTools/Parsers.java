@@ -77,7 +77,7 @@ public class Parsers {
         }
 
         // regex
-        Pattern p = Pattern.compile("<link[^>]+href=\"(.*?(?:jpg|ico|png))\"[^>]*");
+        Pattern p = Pattern.compile("<link[^>]+href=\"([^\"]*?(?:jpg|ico|png))\"[^>]*");
 
 
         String result = null;
