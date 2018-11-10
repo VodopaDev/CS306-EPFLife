@@ -1,10 +1,12 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.test.espresso.idling.CountingIdlingResource;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -37,6 +39,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.GPS;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
@@ -119,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-
         }
     }
 
@@ -221,6 +223,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 this.user = new User.UserBuilder().buildGuestUser();
 
                 android.webkit.CookieManager.getInstance().removeAllCookie();
+                GPS.stop();
 
                 updateMenuItems();
                 fragment = MainFragment.newInstance(user);
@@ -241,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
-    public boolean openFragment(SuperFragment fragment){
+    public boolean openFragment(SuperFragment fragment) {
         return openFragment(fragment, false);
     }
 
@@ -251,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
-                if(!backPressed)
+                if (!backPressed)
                     previous_fragments.push(current_fragment);
                 current_fragment = fragment;
 
@@ -264,7 +267,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     @Override
     public void onFragmentInteraction(CommunicationTag tag, Object data) {
         switch (tag) {
-
             case SET_USER:
                 Map<Integer, Object> received = (HashMap<Integer, Object>) data;
                 this.user = (User) received.get(0);
@@ -336,6 +338,23 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public void onBackPressed() {
         if (!previous_fragments.empty())
             openFragment(previous_fragments.pop(), true);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        GPS.stop();
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        if (user.isConnected()) {
+            boolean hadPermissions = GPS.start(this);
+            if (!hadPermissions) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS.MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+        }
     }
 
     /**

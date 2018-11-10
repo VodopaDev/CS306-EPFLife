@@ -1,10 +1,11 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.Manifest;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +50,9 @@ public class ChannelFragment extends SuperFragment {
 
     private FirebaseFirestore db;
 
+    private View view;
     private ListView listView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private List<Channel> listOfChannels = new ArrayList<>();
     private ChannelArrayAdapter adapter;
@@ -87,23 +90,11 @@ public class ChannelFragment extends SuperFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_channel, container, false);
+        view = inflater.inflate(R.layout.fragment_channel, container, false);
         listView = view.findViewById(R.id.channels_list_view);
 
         adapter = new ChannelArrayAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
-
-        boolean hadPermissions = GPS.start(getContext());
-        if (!hadPermissions) {
-            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, GPS.MY_PERMISSIONS_REQUEST_LOCATION);
-        }
-
-        Location gpsLocation = GPS.getLocation();
-        if (gpsLocation != null) {
-            userLocation = Utils.toGeoPoint(gpsLocation);
-        }
-
-        getChannelsFromDatabase();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -113,13 +104,18 @@ public class ChannelFragment extends SuperFragment {
             }
         });
 
-        return view;
-    }
+        swipeRefreshLayout = view.findViewById(R.id.swiperefresh_channel);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        GPS.stop();
+        refreshPosition();
+        getChannelsFromDatabase();
+
+        return view;
     }
 
     /**
@@ -127,9 +123,7 @@ public class ChannelFragment extends SuperFragment {
      */
     private void getChannelsFromDatabase() {
         db = FirebaseFirestore.getInstance();
-        db.collection(CHANNELS_COLLECTION_NAME)
-                .orderBy("id", Query.Direction.ASCENDING)
-                .get()
+        db.collection(CHANNELS_COLLECTION_NAME).orderBy("id", Query.Direction.ASCENDING).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -146,10 +140,34 @@ public class ChannelFragment extends SuperFragment {
                                 }
                             }
                             adapter.notifyDataSetChanged();
+                            swipeRefreshLayout.setRefreshing(false);
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
                     }
                 });
+    }
+
+    /**
+     * Refresh the list of the channels
+     */
+    private void refresh() {
+        if (!GPS.isActivated()) {
+            Snackbar.make(view, "Please activate your GPS to have access to all channels", 2000).show();
+            userLocation = null;
+        }
+        swipeRefreshLayout.setRefreshing(true);
+        refreshPosition();
+        getChannelsFromDatabase();
+    }
+
+    /**
+     * Refresh the current position
+     */
+    private void refreshPosition() {
+        Location gpsLocation = GPS.getLocation();
+        if (gpsLocation != null) {
+            userLocation = Utils.toGeoPoint(gpsLocation);
+        }
     }
 }

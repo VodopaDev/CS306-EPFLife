@@ -14,11 +14,14 @@ import com.google.firebase.firestore.GeoPoint;
 
 import static android.content.Context.LOCATION_SERVICE;
 
+/**
+ * Static class that represents the GPS
+ */
 public final class GPS {
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
-    private static final long MIN_DISTANCE_TO_REQUEST_LOCATION = 1; // In meters
-    private static final long MIN_TIME_FOR_UPDATES = 1000; // 1 sec
+    private static final long MIN_DISTANCE_TO_REQUEST_LOCATION = 5; // In meters
+    private static final long MIN_TIME_FOR_UPDATES = 3000; // 1 sec
     private static final int TWO_MINUTES = 1000 * 60 * 2; // 2 min
 
     private static LocationListener locationListener = new LocationListener() {
@@ -27,9 +30,9 @@ public final class GPS {
             if (newLocation != null && isBetterLocation(newLocation, location)) {
                 // Just for testing
                 GeoPoint user = Utils.toGeoPoint(newLocation);
-                GeoPoint sat = new GeoPoint(46.52056, 6.567835);
+                GeoPoint sat = new GeoPoint(46.752486, 6.937071);
                 double distance = Utils.distanceBetween(user, sat);
-                Toast.makeText(mcontext, "Your are at " + Math.round(distance) + "m from SAT !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mcontext, "Your are at " + Math.round(distance) + "m from the chat !", Toast.LENGTH_SHORT).show();
 
                 location = newLocation;
             }
@@ -42,12 +45,10 @@ public final class GPS {
 
         @Override
         public void onProviderEnabled(String provider) {
-
         }
 
         @Override
         public void onProviderDisabled(String provider) {
-
         }
     };
 
@@ -55,9 +56,9 @@ public final class GPS {
     private static Location location;
     private static LocationManager locationManager;
 
-    private GPS() {
-    }
+    private static boolean isActivated = false;
 
+    private GPS() { }
 
     /**
      * Start requesting for location updates
@@ -88,7 +89,8 @@ public final class GPS {
                         location = tempLocation;
                     }
                 }
-                if (!isGPSEnabled && !isNetworkEnabled) {
+                isActivated = isGPSEnabled || isNetworkEnabled;
+                if (!isActivated) {
                     Toast.makeText(mcontext, "Please activate your GPS to have access to all features", Toast.LENGTH_SHORT).show();
                 }
             } else {
@@ -102,9 +104,18 @@ public final class GPS {
      * Stop asking for location updates
      */
     public static void stop() {
+        isActivated = false;
         if (locationManager != null) {
             locationManager.removeUpdates(locationListener);
         }
+    }
+
+    /**
+     * Return whether the location tracker is activated or not
+     * @return whether the location tracker is activated or not
+     */
+    public static boolean isActivated() {
+        return isActivated;
     }
 
     /**

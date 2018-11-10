@@ -4,6 +4,12 @@ import android.location.Location;
 
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import com.google.firebase.firestore.GeoPoint;
 
 /**
@@ -60,4 +66,7 @@ public final class Utils {
 
         return R * c;
     }
+
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+    public static SimpleDateFormat stringToDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 }

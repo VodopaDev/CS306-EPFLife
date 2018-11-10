@@ -111,7 +111,7 @@ public class EventTest {
         initWorkingAssociation();
         initDefaultAssociation();
         assertEquals(NAME1.compareTo(NAME2),
-                Event.getComparator().compare(event0, event1));
+                Event.assoNameComparator().compare(event0, event1));
     }
 
 }
