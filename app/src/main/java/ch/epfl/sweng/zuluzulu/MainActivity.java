@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         FirebaseApp.initializeApp(getApplicationContext());
 
         // Needed to have easier access to the Firestore
-        FirebaseProxy.init((OnFragmentInteractionListener)getBaseContext());
+        //FirebaseProxy.init((OnFragmentInteractionListener)this.context);
 
         // Initialize the fragment stack used for the back button
         previous_fragments = new Stack<>();
