@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
@@ -68,6 +69,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         // Needed to use Firebase storage and Firestore
         FirebaseApp.initializeApp(getApplicationContext());
+
+        // Needed to have easier access to the Firestore
+        FirebaseProxy.init((OnFragmentInteractionListener)getBaseContext());
 
         // Initialize the fragment stack used for the back button
         previous_fragments = new Stack<>();
