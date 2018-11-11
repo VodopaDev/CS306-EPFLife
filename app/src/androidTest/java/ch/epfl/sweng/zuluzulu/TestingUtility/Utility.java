@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.TestingUtility;
 
 import android.content.Intent;
 import android.support.test.espresso.contrib.DrawerActions;
@@ -9,6 +9,8 @@ import android.view.Gravity;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import ch.epfl.sweng.zuluzulu.MainActivity;
+import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 

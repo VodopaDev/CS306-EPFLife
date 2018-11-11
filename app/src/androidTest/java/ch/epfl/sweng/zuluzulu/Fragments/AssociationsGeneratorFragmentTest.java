@@ -6,15 +6,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.TestWithAdminLogin;
-import ch.epfl.sweng.zuluzulu.Utility;
+import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdmin;
+import ch.epfl.sweng.zuluzulu.TestingUtility.Utility;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-public class AssociationsGeneratorFragmentTest extends TestWithAdminLogin {
+public class AssociationsGeneratorFragmentTest extends TestWithAdmin {
 
     @Before
     public void init() {

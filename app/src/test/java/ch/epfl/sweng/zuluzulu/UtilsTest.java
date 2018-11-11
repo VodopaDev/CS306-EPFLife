@@ -31,7 +31,7 @@ public class UtilsTest {
         location.setLongitude(1);
 
         GeoPoint geoPoint = Utils.toGeoPoint(location);
-        assertTrue(geoPoint.getLatitude() == location.getLatitude());
+        assertEquals(geoPoint.getLatitude(), location.getLatitude(), 0.0);
         assertTrue(geoPoint.getLongitude() == location.getLongitude());
     }
 

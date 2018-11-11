@@ -12,7 +12,7 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
-import ch.epfl.sweng.zuluzulu.Utility;
+import ch.epfl.sweng.zuluzulu.TestingUtility.Utility;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

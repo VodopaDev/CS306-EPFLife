@@ -1,12 +1,12 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.TestingUtility;
 
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.Before;
 import org.junit.Rule;
 
+import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
  * This class allow us to create the main activity as if we were connected.
@@ -14,7 +14,7 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * <p>
  * Author @dahn
  */
-public abstract class TestWithLogin {
+public abstract class TestWithAuthenticatedUser {
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =

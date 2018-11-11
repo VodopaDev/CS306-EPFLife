@@ -1,12 +1,10 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.TestingUtility;
 
 import org.junit.Before;
 
 import ch.epfl.sweng.zuluzulu.Structure.Admin;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Structure.User;
 
-public class TestWithAdminLogin extends TestWithLogin {
+public class TestWithAdmin extends TestWithAuthenticatedUser {
 
     private Admin admin;
 

@@ -13,9 +13,10 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedUser;
 
 @RunWith(AndroidJUnit4.class)
-public class ChatFragmentTest extends TestWithLogin {
+public class ChatFragmentTest extends TestWithAuthenticatedUser {
 
     private static Channel channel;
 

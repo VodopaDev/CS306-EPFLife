@@ -2,6 +2,8 @@ package ch.epfl.sweng.zuluzulu;
 
 import org.junit.Test;
 
+import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedUser;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -11,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * This class test the MainActivity as a connected User
  */
-public class MainActivityAsUserTest extends TestWithLogin {
+public class MainActivityAsUserTest extends TestWithAuthenticatedUser {
 
 
     @Test

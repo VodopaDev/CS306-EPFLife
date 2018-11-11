@@ -12,11 +12,10 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
-import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.Utility;
+import ch.epfl.sweng.zuluzulu.TestingUtility.Utility;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
