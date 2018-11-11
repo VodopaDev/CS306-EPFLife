@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
@@ -13,6 +14,13 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
 public class ChatFragmentTest extends TestWithLogin {
@@ -32,16 +40,19 @@ public class ChatFragmentTest extends TestWithLogin {
 
 
     @Test
-    public void testUserCanSendAMessageAndReadIt() {
-        /* Todo
-        I don't understand how to test this without the dependence of firestore
-        I don't want to write a message in the database during the test
-        How can I mock the behavior of firestore..?
-         */
+    public void testUserCanSeeMessages() {
+        onView(withId(R.id.chat_list_view)).check(matches(isDisplayed()));
+    }
 
-        // Type message
-        //onView(withId(R.id.chat_message_edit)).perform(replaceText(MSG));
+    @Test
+    public void testUserCanWriteInTextEditBox() {
+        onView(withId(R.id.chat_message_edit)).perform(ViewActions.typeText("test")).perform(ViewActions.closeSoftKeyboard());
+    }
 
-        //onView(withId(R.id.chat_send_button)).perform(click());
+    @Test
+    public void testSendButtonIsEnabledOnlyIfMessageNotEmpty() {
+        onView(withId(R.id.chat_send_button)).check(matches(not(isEnabled())));
+        onView(withId(R.id.chat_message_edit)).perform(ViewActions.typeText("test")).perform(ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.chat_send_button)).check(matches(isEnabled()));
     }
 }
