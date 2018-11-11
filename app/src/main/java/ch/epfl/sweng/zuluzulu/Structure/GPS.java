@@ -14,6 +14,9 @@ import com.google.firebase.firestore.GeoPoint;
 
 import static android.content.Context.LOCATION_SERVICE;
 
+/**
+ * Static class that represents the GPS
+ */
 public final class GPS {
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
