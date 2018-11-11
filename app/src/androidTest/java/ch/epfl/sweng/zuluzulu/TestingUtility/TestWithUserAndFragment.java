@@ -24,7 +24,7 @@ public abstract class TestWithUserAndFragment<U extends User, F extends SuperFra
     public void init(){
         initUser();
         initFragment();
-        
+
         // Add the user
         Utility.addUserToMainIntent(mActivityRule, user);
         // Register the idling resource
@@ -33,6 +33,11 @@ public abstract class TestWithUserAndFragment<U extends User, F extends SuperFra
         mActivityRule.getActivity().openFragment(fragment);
     }
 
+    public MainActivity getMainActivity(){
+        return mActivityRule.getActivity();
+    }
+
     public abstract void initFragment();
+
     public abstract void initUser();
 }
