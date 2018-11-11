@@ -41,7 +41,7 @@ public class Utility {
     /**
      * Create a user for the tests
      *
-     * @return Return a user
+     * @return Return an AithenticatedUser
      */
     public static AuthenticatedUser createTestAuthenticated() {
         User.UserBuilder builder = createFilledUserBuilder();
@@ -55,7 +55,7 @@ public class Utility {
     /**
      * Create a admin for the tests
      *
-     * @return Return a  admin user
+     * @return Return an Admin
      */
     public static Admin createTestAdmin() {
         User.UserBuilder builder = createFilledUserBuilder();
@@ -85,15 +85,6 @@ public class Utility {
         Intent i = new Intent();
         i.putExtra("user", user);
         mActivityRule.launchActivity(i);
-    }
-
-
-    /**
-     * Open the EventFragment
-     */
-    public static void goToEvent() {
-        openMenu();
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_events));
     }
 
     /**

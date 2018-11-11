@@ -1,6 +1,7 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
@@ -9,28 +10,28 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
-public class ChannelFragmentTest extends TestWithAuthenticatedUser {
+public class ChannelFragmentTest extends TestWithAuthenticatedAndFragment<ChannelFragment> {
 
-    private SuperFragment fragment;
-
-    @Before
-    public void init() {
-        fragment = ChannelFragment.newInstance(getUser());
-        mActivityRule.getActivity().openFragment(fragment);
+    @Override
+    public void initFragment() {
+        ChannelFragment.newInstance(user);
     }
 
     @Test
     public void testUserCanClickOnChannels() {
-        onView(withId(R.id.channels_list_view)).perform(ViewActions.click());
+        onView(ViewMatchers.withId(R.id.channels_list_view)).perform(ViewActions.click());
     }
 
     @Test
     public void testUserCanSwipeUp() {
         onView(withId(R.id.channels_list_view)).perform(ViewActions.swipeUp());
     }
+
 }
