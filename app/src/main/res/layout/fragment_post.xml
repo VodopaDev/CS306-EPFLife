@@ -6,6 +6,8 @@
     android:id="@+id/post_fragment"
     tools:context=".Fragments.PostFragment">
 
+    <include layout="@layout/chat_posts_buttons" />
+
     <ListView
         android:id="@+id/posts_list_view"
         android:layout_width="0dp"

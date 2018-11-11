@@ -45,7 +45,7 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * create an instance of this fragment.
  */
 public class PostFragment extends SuperFragment {
-    public static final String TAG = "CHAT_TAG";
+    public static final String TAG = "POST_TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_CHANNEL = "ARG_CHANNEL";
 
@@ -56,6 +56,7 @@ public class PostFragment extends SuperFragment {
 
     private ListView listView;
     private Button chatButton;
+    private Button postsButton;
 
     private List<Post> posts = new ArrayList<>();
     private PostArrayAdapter adapter;
@@ -100,8 +101,12 @@ public class PostFragment extends SuperFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post, container, false);
 
-        listView = view.findViewById(R.id.chat_list_view);
+        listView = view.findViewById(R.id.posts_list_view);
         chatButton = view.findViewById(R.id.chat_button);
+        postsButton = view.findViewById(R.id.posts_button);
+
+        chatButton.setEnabled(true);
+        postsButton.setEnabled(false);
 
         collection_path = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POSTS_COLLECTION_NAME;
 

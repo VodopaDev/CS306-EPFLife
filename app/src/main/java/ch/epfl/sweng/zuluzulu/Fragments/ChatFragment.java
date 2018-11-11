@@ -66,6 +66,7 @@ public class ChatFragment extends SuperFragment {
     private Button sendButton;
     private EditText textEdit;
     private ListView listView;
+    private Button chatButton;
     private Button postsButton;
 
     private List<ChatMessage> messages = new ArrayList<>();
@@ -114,7 +115,11 @@ public class ChatFragment extends SuperFragment {
         sendButton = view.findViewById(R.id.chat_send_button);
         textEdit = view.findViewById(R.id.chat_message_edit);
         listView = view.findViewById(R.id.chat_list_view);
+        chatButton = view.findViewById(R.id.chat_button);
         postsButton = view.findViewById(R.id.posts_button);
+
+        chatButton.setEnabled(false);
+        postsButton.setEnabled(true);
 
         collection_path = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + MESSAGES_COLLECTION_NAME;
 

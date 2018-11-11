@@ -36,7 +36,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
 
         LinearLayout linearLayout = view.findViewById(R.id.chat_message_linearLayout);
         TextView message = view.findViewById(R.id.post_msg);
-        TextView senderName = view.findViewById(R.id.chat_message_senderName);
+        TextView senderName = view.findViewById(R.id.post_senderName);
 
         senderName.setText(currentPost.getSenderName());
         message.setText(currentPost.getMessage());
