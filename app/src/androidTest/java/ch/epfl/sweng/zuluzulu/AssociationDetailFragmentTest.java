@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -18,26 +19,13 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class AssociationDetailFragmentTest {
-    @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class, false, false);
-    private AuthenticatedUser user;
+public class AssociationDetailFragmentTest extends TestWithLogin{
 
     @Before
     public void initAuthenticatedTest() {
-        user = (AuthenticatedUser) Utility.createTestUser();
-        Utility.addUserToMainIntent(mActivityRule, user);
-        AssociationFragment fragment = AssociationFragment.newInstance(user);
+        IdlingRegistry.getInstance().register(mActivityRule.getActivity().getCountingIdlingResource());
+        AssociationFragment fragment = AssociationFragment.newInstance(getUser());
         mActivityRule.getActivity().openFragment(fragment);
-
-
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
     }
 
     @Test
@@ -59,28 +47,5 @@ public class AssociationDetailFragmentTest {
             e.printStackTrace();
         }
     }
-
-    /*
-    @Test
-    public void authenticatedCanRemoveAndAddFavorite() {
-        onView(withId(R.id.association_detail_fav)).perform(ViewActions.click());
-        assertThat(false, equalTo(user.isFavAssociation(frag.getAsso())));
-        onView(withId(R.id.association_detail_fav)).perform(ViewActions.click());
-        assertThat(true, equalTo(user.isFavAssociation(frag.getAsso())));
-    }
-    */
-
-    /*
-    @Test
-    public void guestCantClickOnFavorite() {
-        initGuestTest();
-        onView(withText("Agepoly")).perform(ViewActions.click());
-        onView(withContentDescription(NOT_FAV_CONTENT))
-                .check(matches(isDisplayed()))
-                .perform(ViewActions.click());
-        onView(withContentDescription(NOT_FAV_CONTENT))
-                .check(matches(isDisplayed()));
-    }
-    */
 
 }
