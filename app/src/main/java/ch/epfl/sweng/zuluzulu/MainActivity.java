@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AddEventFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
@@ -273,6 +274,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case OPENING_WEBVIEW:
                 openFragmentWithStringData(WebViewFragment.newInstance(), WebViewFragment.URL, (String) data);
+                break;
+            case CREATE_EVENT:
+                openFragment(AddEventFragment.newInstance());
                 break;
             case INCREMENT_IDLING_RESOURCE:
                 incrementCountingIdlingResource();
