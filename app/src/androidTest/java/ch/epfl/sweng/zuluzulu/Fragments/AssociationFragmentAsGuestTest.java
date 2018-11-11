@@ -18,6 +18,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Guest;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithGuestAndFragment;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -42,9 +43,9 @@ public class AssociationFragmentAsGuestTest extends TestWithGuestAndFragment<Ass
 
     @Test
     public void guestCantClickOnFavorites(){
-        onView(withText("Agepoly")).check(matches(isDisplayed()));
+        onView(withText("ForumEPFL")).check(matches(isDisplayed()));
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
-        onView(withText("Agepoly")).check(matches(isDisplayed()));
+        onView(withText("ForumEPFL")).check(matches(isDisplayed()));
     }
 
     @Test
@@ -60,7 +61,7 @@ public class AssociationFragmentAsGuestTest extends TestWithGuestAndFragment<Ass
 
     @Test
     public void clickingAnAssociationGoesToDetail() {
-        onView(withText("Agepoly")).perform(ViewActions.click());
+        onView(withText("ForumEPFL")).perform(ViewActions.click());
         onView(withId(R.id.association_detail_icon)).check(matches(isDisplayed()));
     }
 
