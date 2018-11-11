@@ -5,19 +5,30 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import ch.epfl.sweng.zuluzulu.Adapters.PostArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
@@ -45,7 +56,6 @@ public class PostFragment extends SuperFragment {
 
     private ListView listView;
     private Button chatButton;
-    private Button postsButton;
 
     private List<Post> posts = new ArrayList<>();
     private PostArrayAdapter adapter;
@@ -92,7 +102,6 @@ public class PostFragment extends SuperFragment {
 
         listView = view.findViewById(R.id.chat_list_view);
         chatButton = view.findViewById(R.id.chat_button);
-        postsButton = view.findViewById(R.id.posts_button);
 
         collection_path = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POSTS_COLLECTION_NAME;
 
@@ -102,6 +111,69 @@ public class PostFragment extends SuperFragment {
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         anonym = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
+        setUpDataOnChangeListener();
+        setUpChatButton();
+
         return view;
+    }
+
+    /**
+     * Add a onEventChange listener on the post list in the database
+     */
+    private void setUpDataOnChangeListener() {
+        db = FirebaseFirestore.getInstance();
+        db.collection(collection_path)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e);
+                            return;
+                        }
+
+                        updatePosts();
+                    }
+                });
+    }
+
+    /**
+     * Add an onClick listener on the button to switch to the chat fragment
+     */
+    private void setUpChatButton() {
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, channel);
+            }
+        });
+    }
+
+    /**
+     * Refresh the posts by reading in the database
+     */
+    private void updatePosts() {
+        db.collection(collection_path)
+                .orderBy("time", Query.Direction.ASCENDING)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            posts.clear();
+                            for (DocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
+                                if (fmap.hasFields(Post.FIELDS)) {
+                                    Post post = new Post(fmap);
+                                    posts.add(post);
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
+                            listView.setSelection(adapter.getCount() - 1);
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
     }
 }

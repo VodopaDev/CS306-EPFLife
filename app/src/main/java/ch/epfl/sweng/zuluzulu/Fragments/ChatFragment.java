@@ -177,6 +177,9 @@ public class ChatFragment extends SuperFragment {
         });
     }
 
+    /**
+     * Add an onClick listener on the button to switch to the posts fragment
+     */
     private void setUpPostsButton() {
         postsButton.setOnClickListener(new View.OnClickListener() {
             @Override
