@@ -33,18 +33,14 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<ChatMessage> {
         boolean isOwnMessage = currentChatMessage.isOwnMessage();
         boolean isAnonym = currentChatMessage.isAnonym();
 
-        View messageView = null;
-        if (isOwnMessage || isAnonym) {
-            messageView = LayoutInflater.from(mContext).inflate(R.layout.chat_message_noname, parent, false);
-        }
-        else {
-            messageView = LayoutInflater.from(mContext).inflate(R.layout.chat_message, parent, false);
-        }
+        boolean mustHideName = isOwnMessage || isAnonym;
+        int layoutRessource = mustHideName ? R.layout.chat_message_noname : R.layout.chat_message;
+        View messageView = LayoutInflater.from(mContext).inflate(layoutRessource, parent ,false);
 
         LinearLayout linearLayout = messageView.findViewById(R.id.chat_message_linearLayout);
         TextView message = messageView.findViewById(R.id.chat_message_msg);
 
-        if (isOwnMessage || isAnonym) {
+        if (mustHideName) {
             if (isOwnMessage) {
                 linearLayout.setBackgroundResource(R.drawable.chat_message_background_ownmessage);
             }
