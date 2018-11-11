@@ -31,7 +31,7 @@ public class Utility {
      * @return Return a user
      */
     public static User createTestUser() {
-        User.UserBuilder builder = createFilledUserBuider();
+        User.UserBuilder builder = createFilledUserBuilder();
 
         User user = builder.buildAuthenticatedUser();
         assert (user != null);
@@ -46,7 +46,7 @@ public class Utility {
      * @return Return a  admin user
      */
     public static User createTestAdmin() {
-        User.UserBuilder builder = createFilledUserBuider();
+        User.UserBuilder builder = createFilledUserBuilder();
 
 
         User user = builder.buildAdmin();
@@ -127,7 +127,7 @@ public class Utility {
      *
      * @return UserBuilder
      */
-    private static User.UserBuilder createFilledUserBuider() {
+    private static User.UserBuilder createFilledUserBuilder() {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setSciper("123456");
         builder.setGaspar("gaspar");
@@ -137,7 +137,7 @@ public class Utility {
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
         builder.setFavAssos(Arrays.asList(1, 2));
-        builder.setFollowedEvents(new ArrayList<Integer>());
+        builder.setFollowedEvents(Arrays.asList(1, 2));
         builder.setFollowedChats(new ArrayList<Integer>());
 
         return builder;

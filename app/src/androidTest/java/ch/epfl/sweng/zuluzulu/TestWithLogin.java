@@ -5,6 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 import org.junit.Before;
 import org.junit.Rule;
 
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
@@ -14,16 +15,17 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * Author @dahn
  */
 public abstract class TestWithLogin {
+
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class, false, false);
 
 
-    private User user;
+    private AuthenticatedUser user;
 
     @Before
     public void setUpLogin() {
-        this.user = Utility.createTestUser();
+        this.user = (AuthenticatedUser)Utility.createTestUser();
         Utility.addUserToMainIntent(mActivityRule, this.user);
     }
 
@@ -32,7 +34,7 @@ public abstract class TestWithLogin {
      *
      * @return User
      */
-    protected User getUser() {
+    protected AuthenticatedUser getUser() {
         return this.user;
     }
 }
