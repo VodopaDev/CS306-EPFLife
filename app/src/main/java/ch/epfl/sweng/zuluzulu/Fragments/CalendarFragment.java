@@ -124,7 +124,7 @@ public class CalendarFragment extends SuperFragment {
                 Date dayDate = dayView.getDate();
                 for(Event event: followedEvents){
                     if (event.getStartDateString().equals(Utils.dateFormat.format(dayDate)))
-                        dayView.setBackgroundColor(Color.GRAY);
+                        dayView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 }
             }
         }));
