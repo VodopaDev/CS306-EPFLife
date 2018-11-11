@@ -77,5 +77,7 @@
     <string name="drawer_associations_generator">Fill the associations</string>
     <string name="profile_unit">Section</string>
     <string name="anonym">Anonym</string>
+    <string name="posts">Posts</string>
+    <string name="chat">Chat</string>
 
 </resources>

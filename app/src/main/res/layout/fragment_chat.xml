@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:text="Chat" />
+            android:text="@string/chat" />
 
         <Button
             android:id="@+id/posts_button"
@@ -31,7 +31,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:background="@color/colorGrayDarkTransparent"
-            android:text="Posts" />
+            android:text="@string/posts" />
     </LinearLayout>
 
     <ListView
