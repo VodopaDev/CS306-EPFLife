@@ -17,7 +17,6 @@ import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 
 public class ChatMessageArrayAdapter extends ArrayAdapter<ChatMessage> {
 
-    private static final String ownMessageSenderName = "You";
     private Context mContext;
     private List<ChatMessage> messages;
 
@@ -30,24 +29,23 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<ChatMessage> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View messageView = convertView;
-        if (messageView == null) {
-            messageView = LayoutInflater.from(mContext).inflate(R.layout.chat_message, parent, false);
-        }
-
         ChatMessage currentChatMessage = messages.get(position);
         boolean isOwnMessage = currentChatMessage.isOwnMessage();
+        boolean isAnonym = currentChatMessage.isAnonym();
+
+        boolean mustHideName = isOwnMessage || isAnonym;
+        int layoutResource = mustHideName ? R.layout.chat_message_noname : R.layout.chat_message;
+        View messageView = LayoutInflater.from(mContext).inflate(layoutResource, parent ,false);
 
         LinearLayout linearLayout = messageView.findViewById(R.id.chat_message_linearLayout);
         TextView message = messageView.findViewById(R.id.chat_message_msg);
-        TextView senderName = messageView.findViewById(R.id.chat_message_senderName);
 
-        if (isOwnMessage) {
-            senderName.setText(ownMessageSenderName);
-            linearLayout.setBackgroundResource(R.drawable.chat_message_background_ownmessage);
-        } else {
+        int backgroundResource = isOwnMessage ? R.drawable.chat_message_background_ownmessage : R.drawable.chat_message_background;
+        linearLayout.setBackgroundResource(backgroundResource);
+
+        if (!mustHideName) {
+            TextView senderName = messageView.findViewById(R.id.chat_message_senderName);
             senderName.setText(currentChatMessage.getSenderName());
-            linearLayout.setBackgroundResource(R.drawable.chat_message_background);
         }
 
         message.setText(currentChatMessage.getMessage());

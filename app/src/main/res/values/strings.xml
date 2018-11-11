@@ -76,5 +76,6 @@
     <string name="send_mail_button">SEND US AN EMAIL !</string>
     <string name="drawer_associations_generator">Fill the associations</string>
     <string name="profile_unit">Section</string>
+    <string name="anonym">Anonym</string>
 
 </resources>
