@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestWithAuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -17,15 +18,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class CalendarFragmentTest  extends TestWithAuthenticatedUser {
-    private CalendarFragment fragment;
+public class CalendarFragmentTest  extends TestWithAuthenticatedAndFragment<CalendarFragment> {
 
-    @Before
-    public void init() {
-        // Register the idling resource
-        IdlingRegistry.getInstance().register(mActivityRule.getActivity().getCountingIdlingResource());
-        fragment = CalendarFragment.newInstance(getUser());
-        mActivityRule.getActivity().openFragment(fragment);
+    @Override
+    public void initFragment() {
+        fragment = CalendarFragment.newInstance(user);
     }
 
     @Test

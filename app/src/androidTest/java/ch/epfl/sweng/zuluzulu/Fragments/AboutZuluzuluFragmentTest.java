@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -18,16 +19,11 @@ import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.anyIntent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-public class AboutZuluzuluFragmentTest {
+public class AboutZuluzuluFragmentTest extends TestWithAuthenticatedAndFragment<AboutZuluzuluFragment> {
 
-    @Rule
-    public final IntentsTestRule<MainActivity> mActivityRule =
-            new IntentsTestRule<>(MainActivity.class);
-
-    @Before
-    public void init() {
-        SuperFragment fragment = AboutZuluzuluFragment.newInstance();
-        mActivityRule.getActivity().openFragment(fragment);
+    @Override
+    public void initFragment() {
+        fragment = AboutZuluzuluFragment.newInstance();
     }
 
     @Test
