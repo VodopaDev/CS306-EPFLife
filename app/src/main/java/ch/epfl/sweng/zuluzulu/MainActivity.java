@@ -1,10 +1,12 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.test.espresso.idling.CountingIdlingResource;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -345,6 +347,23 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public void onBackPressed() {
         if (!previous_fragments.empty())
             openFragment(previous_fragments.pop(), true);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        GPS.stop();
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        if (user.isConnected()) {
+            boolean hadPermissions = GPS.start(this);
+            if (!hadPermissions) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS.MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+        }
     }
 
     /**

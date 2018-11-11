@@ -50,6 +50,7 @@ public class ChannelFragment extends SuperFragment {
 
     private FirebaseFirestore db;
 
+    private View view;
     private ListView listView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -89,7 +90,7 @@ public class ChannelFragment extends SuperFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_channel, container, false);
+        view = inflater.inflate(R.layout.fragment_channel, container, false);
         listView = view.findViewById(R.id.channels_list_view);
 
         adapter = new ChannelArrayAdapter(view.getContext(), listOfChannels);
@@ -111,7 +112,8 @@ public class ChannelFragment extends SuperFragment {
             }
         });
 
-        refresh();
+        refreshPosition();
+        getChannelsFromDatabase();
 
         return view;
     }
@@ -151,7 +153,7 @@ public class ChannelFragment extends SuperFragment {
      */
     private void refresh() {
         if (!GPS.isActivated()) {
-            Snackbar.make(getView(), "Please activate your GPS to have access to all features", 2000).show();
+            Snackbar.make(view, "Please activate your GPS to have access to all channels", 2000).show();
             userLocation = null;
         }
         swipeRefreshLayout.setRefreshing(true);
