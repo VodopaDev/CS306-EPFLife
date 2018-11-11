@@ -35,21 +35,21 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<ChatMessage> {
 
         boolean mustHideName = isOwnMessage || isAnonym;
         int layoutResource = mustHideName ? R.layout.chat_message_noname : R.layout.chat_message;
-        View messageView = LayoutInflater.from(mContext).inflate(layoutResource, parent ,false);
+        View view = LayoutInflater.from(mContext).inflate(layoutResource, parent ,false);
 
-        LinearLayout linearLayout = messageView.findViewById(R.id.chat_message_linearLayout);
-        TextView message = messageView.findViewById(R.id.chat_message_msg);
+        LinearLayout linearLayout = view.findViewById(R.id.chat_message_linearLayout);
+        TextView message = view.findViewById(R.id.chat_message_msg);
 
         int backgroundResource = isOwnMessage ? R.drawable.chat_message_background_ownmessage : R.drawable.chat_message_background;
         linearLayout.setBackgroundResource(backgroundResource);
 
         if (!mustHideName) {
-            TextView senderName = messageView.findViewById(R.id.chat_message_senderName);
+            TextView senderName = view.findViewById(R.id.chat_message_senderName);
             senderName.setText(currentChatMessage.getSenderName());
         }
 
         message.setText(currentChatMessage.getMessage());
 
-        return messageView;
+        return view;
     }
 }
