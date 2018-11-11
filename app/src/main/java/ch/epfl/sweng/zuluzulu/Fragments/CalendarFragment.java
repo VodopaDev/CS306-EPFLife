@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -7,8 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -16,19 +17,24 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.imanoweb.calendarview.CalendarListener;
+import com.imanoweb.calendarview.CustomCalendarView;
+import com.imanoweb.calendarview.DayDecorator;
+import com.imanoweb.calendarview.DayView;
 
-import java.time.LocalDate;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
-import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 
@@ -43,7 +49,8 @@ public class CalendarFragment extends SuperFragment {
     private EventArrayAdapter eventAdapter;
     private ListView list;
 
-    private CalendarView calendar;
+    private CustomCalendarView calendarView;
+    private Calendar calendar;
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -72,7 +79,6 @@ public class CalendarFragment extends SuperFragment {
         followedEvents = new ArrayList<>();
         selectedDayEvents = new ArrayList<>();
         eventAdapter = new EventArrayAdapter(getContext(), selectedDayEvents, mListener);
-        fillFollowedEventsList();
     }
 
     @Override
@@ -80,25 +86,50 @@ public class CalendarFragment extends SuperFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
-        calendar = view.findViewById(R.id.calendar);
         list = view.findViewById(R.id.calendar_list);
         list.setAdapter(eventAdapter);
 
-        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        //Initialize CustomCalendarView from layout
+        calendarView = view.findViewById(R.id.calendar_view);
+        //Initialize calendarView with date
+        calendar = Calendar.getInstance(Locale.getDefault());
+        //Show Monday as first date of week
+        calendarView.setFirstDayOfWeek(Calendar.MONDAY);
+        //Show/hide overflow days of a month
+        calendarView.setShowOverflowDate(true);
+        //call refreshCalendar to update calendarView the view
+        calendarView.refreshCalendar(calendar);
+        //Handling custom calendarView events
+        calendarView.setCalendarListener(new CalendarListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                selectedDayEvents.removeAll(selectedDayEvents);
-                String selectedDateString = Utils.dateFormat.format(new Date(year - 1900,month,dayOfMonth));
-                Log.d("CALENDAR", "selected date " + selectedDateString);
-
+            public void onDateSelected(Date date) {
+                selectedDayEvents.clear();
                 for(Event event: followedEvents){
-                    Log.d("CALENDAR", "followed event with date " + event.getStartDateString());
-                    if(selectedDateString.equals(event.getStartDateString()))
+                    if (event.getStartDateString().equals(Utils.dateFormat.format(date)))
                         selectedDayEvents.add(event);
                 }
                 eventAdapter.notifyDataSetChanged();
+                calendarView.refreshCalendar(calendar);
+                calendarView.markDayAsSelectedDay(date);
             }
+
+            //Required method, but not used here
+            @Override
+            public void onMonthChanged(Date date) {}
         });
+        //Set the day decorator
+        calendarView.setDecorators(Collections.singletonList(new DayDecorator() {
+            @Override
+            public void decorate(DayView dayView) {
+                Date dayDate = dayView.getDate();
+                for(Event event: followedEvents){
+                    if (event.getStartDateString().equals(Utils.dateFormat.format(dayDate)))
+                        dayView.setBackgroundColor(Color.GRAY);
+                }
+            }
+        }));
+        //Fill the followed events list from user's preferences
+        fillFollowedEventsList();
 
         return view;
     }
@@ -109,7 +140,8 @@ public class CalendarFragment extends SuperFragment {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        String now = Utils.dateFormat.format(Timestamp.now().toDate());
+                        Date date = Timestamp.now().toDate();
+                        String now = Utils.dateFormat.format(date);
                         for (DocumentSnapshot snap : snap_list) {
                             FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
                             if (fmap.hasFields(Event.FIELDS)) {
@@ -123,7 +155,8 @@ public class CalendarFragment extends SuperFragment {
                             }
                         }
                         eventAdapter.notifyDataSetChanged();
-
+                        calendarView.refreshCalendar(calendar);
+                        calendarView.markDayAsSelectedDay(date);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
