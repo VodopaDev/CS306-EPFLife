@@ -136,7 +136,7 @@ public class Utility {
         builder.setSemester("BA5");
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
-        builder.setFavAssos(Arrays.asList(1, 2));
+        builder.setFavAssos(Arrays.asList(2));
         builder.setFollowedEvents(Arrays.asList(1, 2));
         builder.setFollowedChats(new ArrayList<Integer>());
 

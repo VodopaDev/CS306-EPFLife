@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.action.ViewActions;
@@ -13,13 +13,21 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
+import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.TestWithLogin;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class AssociationDetailFragmentTest extends TestWithLogin{
+public class AssociationDetailFragmentTest extends TestWithLogin {
 
     @Before
     public void initAuthenticatedTest() {
@@ -29,23 +37,15 @@ public class AssociationDetailFragmentTest extends TestWithLogin{
     }
 
     @Test
-    public void thereIsSomething() {
-        onView(withText("Agepoly")).perform(ViewActions.click());
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public void unfollowFollowTest() {
+        onView(withText("Favorites")).perform(ViewActions.click());
+        onView(withText("Agepoly")).check(matches(isDisplayed()));
     }
 
     @Test
-    public void thereIsNothing() {
-        onView(withText("ForumEPFL")).perform(ViewActions.click());
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public void notFollowedAssociationTest() {
+        onView(withText("Favorites")).perform(ViewActions.click());
+        onView(withText("ForumEPFL")).check(doesNotExist());
     }
 
 }

@@ -1,6 +1,7 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -12,7 +13,10 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
+import ch.epfl.sweng.zuluzulu.MainActivity;
+import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Utility;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -20,8 +24,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public class AssociationFragmentAsAuthenticatedTest {
-    private static final String FAV_CONTENT = "This association is in your favorites";
-    private static final String NOT_FAV_CONTENT = "This association isn't in your favorites";
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
@@ -43,7 +45,7 @@ public class AssociationFragmentAsAuthenticatedTest {
 
     @Test
     public void authenticatedClickOnFavorites() {
-        onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
+        onView(ViewMatchers.withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
         //onView(withId(R.id.association_fragment_fav_button)).check(matches(hasBackground(R.color.colorTransparent)));
     }
 
