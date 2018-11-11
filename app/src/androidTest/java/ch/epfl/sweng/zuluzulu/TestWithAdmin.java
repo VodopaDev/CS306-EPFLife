@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu.TestingUtility;
+package ch.epfl.sweng.zuluzulu;
 
 import org.junit.Before;
 

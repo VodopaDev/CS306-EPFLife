@@ -6,8 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdmin;
-import ch.epfl.sweng.zuluzulu.TestingUtility.Utility;
+import ch.epfl.sweng.zuluzulu.TestWithAdmin;
+import ch.epfl.sweng.zuluzulu.Utility;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -38,7 +38,7 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdmin {
      * Create a fragment with non admin user
      */
     private void nonAdminUser() {
-        mActivityRule.getActivity().openFragment(AssociationsGeneratorFragment.newInstance(Utility.createTestUser()));
+        mActivityRule.getActivity().openFragment(AssociationsGeneratorFragment.newInstance(Utility.createTestAuthenticated()));
     }
 
     /**

@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu.TestingUtility;
+package ch.epfl.sweng.zuluzulu;
 
 import android.content.Intent;
 import android.support.test.espresso.contrib.DrawerActions;
@@ -11,6 +11,9 @@ import java.util.Arrays;
 
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Admin;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Structure.Guest;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
@@ -28,18 +31,25 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class Utility {
 
     /**
+     * Create a guest user
+     * @return Return a Guest
+     */
+    public static Guest createTestGuest(){
+        return (new User.UserBuilder()).buildGuestUser();
+    }
+
+    /**
      * Create a user for the tests
      *
      * @return Return a user
      */
-    public static User createTestUser() {
+    public static AuthenticatedUser createTestAuthenticated() {
         User.UserBuilder builder = createFilledUserBuilder();
-
         User user = builder.buildAuthenticatedUser();
         assert (user != null);
+        assert (user.isConnected());
 
-
-        return user;
+        return (AuthenticatedUser)user;
     }
 
     /**
@@ -47,15 +57,13 @@ public class Utility {
      *
      * @return Return a  admin user
      */
-    public static User createTestAdmin() {
+    public static Admin createTestAdmin() {
         User.UserBuilder builder = createFilledUserBuilder();
-
-
         User user = builder.buildAdmin();
         assert (user != null);
         assert (user.hasRole(UserRole.ADMIN));
 
-        return user;
+        return (Admin)user;
     }
 
     /**

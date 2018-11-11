@@ -1,11 +1,10 @@
-package ch.epfl.sweng.zuluzulu.TestingUtility;
+package ch.epfl.sweng.zuluzulu;
 
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.Before;
 import org.junit.Rule;
 
-import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 
 /**
@@ -25,7 +24,7 @@ public abstract class TestWithAuthenticatedUser {
 
     @Before
     public void setUpLogin() {
-        this.user = (AuthenticatedUser)Utility.createTestUser();
+        this.user = (AuthenticatedUser)Utility.createTestAuthenticated();
         Utility.addUserToMainIntent(mActivityRule, this.user);
     }
 

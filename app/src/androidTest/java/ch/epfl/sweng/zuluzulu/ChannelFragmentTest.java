@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
-import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedUser;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;

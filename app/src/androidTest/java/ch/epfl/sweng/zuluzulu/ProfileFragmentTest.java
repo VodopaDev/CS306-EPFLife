@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
-import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdmin;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;

@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.TestingUtility.Utility;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -37,7 +36,7 @@ public class EventFragmentTest {
 
     @Before
     public void initAuthenticatedTest() {
-        user = Utility.createTestUser();
+        user = Utility.createTestAuthenticated();
         Utility.addUserToMainIntent(mActivityRule, user);
         fragment = EventFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);
@@ -51,7 +50,7 @@ public class EventFragmentTest {
 
 //    @Before
 //    public void init() {
-//        user = Utility.createTestUser();
+//        user = Utility.createTestAuthenticated();
 //        Utility.addUserToMainIntent(mActivityRule, user);
 //
 //        fragment = EventFragment.newInstance(user);

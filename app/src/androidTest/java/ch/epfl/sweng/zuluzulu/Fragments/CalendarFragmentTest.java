@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.TestWithAuthenticatedUser;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;

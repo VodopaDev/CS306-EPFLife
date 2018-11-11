@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.TestingUtility.Utility;
+import ch.epfl.sweng.zuluzulu.Utility;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -30,7 +30,7 @@ public class AssociationFragmentAsAuthenticatedTest {
 
     @Before
     public void initAuthenticatedTest() {
-        User user = Utility.createTestUser();
+        User user = Utility.createTestAuthenticated();
         Utility.addUserToMainIntent(mActivityRule, user);
         AssociationFragment fragment = AssociationFragment.newInstance(user);
         mActivityRule.getActivity().openFragment(fragment);

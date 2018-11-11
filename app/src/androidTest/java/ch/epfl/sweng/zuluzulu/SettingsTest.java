@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static ch.epfl.sweng.zuluzulu.TestingUtility.Utility.openMenu;
+import static ch.epfl.sweng.zuluzulu.Utility.openMenu;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
