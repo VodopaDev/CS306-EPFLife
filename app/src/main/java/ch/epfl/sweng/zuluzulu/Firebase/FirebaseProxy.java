@@ -1,3 +1,4 @@
+/*
 package ch.epfl.sweng.zuluzulu.Firebase;
 
 import android.support.annotation.NonNull;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
+import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
@@ -93,3 +95,4 @@ public class FirebaseProxy {
     }
 
 }
+*/
