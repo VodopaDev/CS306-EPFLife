@@ -17,20 +17,16 @@ import ch.epfl.sweng.zuluzulu.Structure.Channel;
 @RunWith(AndroidJUnit4.class)
 public class ChatFragmentTest extends TestWithLogin {
 
-    private static Channel channel;
-
-    private SuperFragment fragment;
-
     @Before
     public void init() {
         Map data = new HashMap();
-        data.put("id", 1l);
+        data.put("id", 1L);
         data.put("name", "name");
         data.put("description", "description");
         data.put("restrictions", new HashMap<>());
         FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
-        channel = new Channel(fmap);
-        fragment = ChatFragment.newInstance(getUser(), channel);
+        Channel channel = new Channel(fmap);
+        SuperFragment fragment = ChatFragment.newInstance(getUser(), channel);
         mActivityRule.getActivity().openFragment(fragment);
     }
 
