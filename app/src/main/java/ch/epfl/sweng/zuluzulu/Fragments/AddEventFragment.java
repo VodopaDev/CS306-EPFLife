@@ -33,6 +33,17 @@ public class AddEventFragment extends SuperFragment {
     private List<String> association_names;
     private Spinner spinner;
 
+    private Spinner spinner_days;
+    private Spinner spinner_months;
+    private Spinner spinner_years;
+
+    private List<String> months = new ArrayList<>();
+    private List<String> even_months_days = new ArrayList<>();
+    private List<String> odd_months_days;
+    private List<String> feb_days;
+    private List<String> years = new ArrayList();
+
+
     public static AddEventFragment newInstance() {
         return new AddEventFragment();
     }
@@ -42,23 +53,62 @@ public class AddEventFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
 
         association_names = new ArrayList<>();
-        fillAssociationNames("name");
-        /*association_names.add("hello how are you todaay it is super fun to write asdasdklasdklashdalksdahlas");
-        association_names.add("selected");*/
+        //fillAssociationNames("name");
+        association_names.add("hello how are you todaay it is super fun to write asdasdklasdklashdalksdahlas");
+        association_names.add("selected");
 
+        months.add("Jan");
+        months.add("Feb");
+        months.add("Mar");
+        months.add("Apr");
+        months.add("May");
+        months.add("Jun");
+        months.add("Jul");
+        months.add("Aug");
+        months.add("Sep");
+        months.add("Oct");
+        months.add("Nov");
+        months.add("Dec");
+
+        for (int i = 1; i <= 31; i++){
+            even_months_days.add(String.valueOf(i));
+        }
+
+        odd_months_days = even_months_days.subList(0,30);
+        feb_days = even_months_days.subList(0,28);
+
+        for(int i = 0; i <= 10; i++){
+            years.add(String.valueOf(2018+i));
+        }
 
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_event, container, false);
-
+        ArrayAdapter adapter;
         spinner =  view.findViewById(R.id.spinner);
-        ArrayAdapter adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, association_names);
+        adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, association_names);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spinner.setAdapter(adapter);
 
+        spinner_days = view.findViewById(R.id.spinner2);
+        spinner_days =  view.findViewById(R.id.spinner2);
+        adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, even_months_days);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_days.setAdapter(adapter);
+
+        spinner_months = view.findViewById(R.id.spinner3);
+        spinner_months =  view.findViewById(R.id.spinner3);
+        adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, months);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_months.setAdapter(adapter);
+
+        spinner_years = view.findViewById(R.id.spinner4);
+        spinner_years =  view.findViewById(R.id.spinner4);
+        adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, even_months_days);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_years.setAdapter(adapter);
 
         return view;
     }
