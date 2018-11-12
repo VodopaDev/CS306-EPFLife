@@ -6,14 +6,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
-public class UrlReader implements Reader{
+public class UrlReader implements Reader {
     private static final String TAG = "URL_READER";
 
     @Override
-    public BufferedReader read(String url){
+    public BufferedReader read(String url) {
         HttpURLConnection urlConnection;
 
         try {
@@ -25,7 +24,7 @@ public class UrlReader implements Reader{
             return null;
         }
 
-        if(urlConnection == null){
+        if (urlConnection == null) {
             Log.d(TAG, "UrlConnection is null");
             return null;
         }
@@ -57,7 +56,7 @@ public class UrlReader implements Reader{
 
         // Open connection
         HttpURLConnection UrlConnection = (HttpURLConnection) aURL.openConnection();
-        if(UrlConnection == null){
+        if (UrlConnection == null) {
             throw new IOException("Url null");
         }
         // to open some epfl pages

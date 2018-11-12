@@ -1,15 +1,10 @@
 package ch.epfl.sweng.zuluzulu.URLTools;
 
 import android.os.AsyncTask;
-import android.util.Log;
 import android.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import io.opencensus.common.Function;
@@ -42,21 +37,19 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
         if (urls.length > 0) {
             Pair<String, List<String>> result = new Pair<>(urls[0], parseUrl(urls[0]));
             return result;
-        }
-        else
+        } else
             return null;
     }
 
 
     @Override
     protected void onPostExecute(Pair<String, List<String>> value) {
-        if(null != value && value.second != null){
+        if (null != value && value.second != null) {
             listener.apply(value);
         } else {
             listener.apply(null);
         }
     }
-
 
 
     /**
@@ -69,7 +62,7 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
 
         BufferedReader bf = urlReader.read(url);
 
-        if(bf == null) {
+        if (bf == null) {
             return null;
         }
 

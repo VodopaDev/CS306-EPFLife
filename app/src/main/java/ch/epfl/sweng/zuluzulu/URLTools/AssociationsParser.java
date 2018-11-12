@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.URLTools;
 
 import android.util.Log;
-import android.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +13,7 @@ import java.util.regex.Pattern;
  * This class contains parsers that can be used to parse a web page
  * All methods are static
  */
-public class AssociationsParser implements Parser<List<String>>{
+public class AssociationsParser implements Parser<List<String>> {
     private final static String TAG = "ASSOCIATIONS_PARSER";
 
     public AssociationsParser() {
@@ -29,7 +28,6 @@ public class AssociationsParser implements Parser<List<String>>{
      */
     @Override
     public List<String> parse(BufferedReader in) {
-
         if (in == null) {
             return null;
         }
@@ -41,24 +39,9 @@ public class AssociationsParser implements Parser<List<String>>{
 
         try {
             while ((inputLine = in.readLine()) != null) {
-                System.out.println(inputLine);
                 Matcher m = p.matcher(inputLine);
                 if (m.find()) {
-                    System.out.println("find");
-                    // remove the span tag
-                    String description = m.group(3).replaceAll("<.*?>", "");
-
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(m.group(1)).append(',');
-                    sb.append(m.group(2)).append(',');
-                    sb.append(description);
-
-                    // remplace html unicode to char
-                    String result = sb.toString()
-                            .replaceAll("&#8217;", "'").replaceAll("&#8211;", "-")
-                            .replaceAll("&gt;", ">").replaceAll("&amp;", "&");
-
-                    results.add(result);
+                    results.add(createResult(m.group(1), m.group(2), m.group(3)));
                 }
             }
         } catch (IOException e) {
@@ -67,5 +50,24 @@ public class AssociationsParser implements Parser<List<String>>{
             return null;
         }
         return results;
+    }
+
+    private String createResult(String url, String name, String description) {
+        // remove the span tag
+        String clean_description = description.replaceAll("<.*?>", "");
+
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(url).append(',');
+        sb.append(name).append(',');
+        sb.append(clean_description);
+
+
+        // remplace html unicode to char
+        String result = sb.toString()
+                .replaceAll("&#8217;", "'").replaceAll("&#8211;", "-")
+                .replaceAll("&gt;", ">").replaceAll("&amp;", "&");
+
+        return result;
     }
 }
