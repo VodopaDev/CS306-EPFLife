@@ -67,6 +67,7 @@ public class AddEventFragment extends SuperFragment {
 
         super.onCreate(savedInstanceState);
 
+        //fill the list for the months spinner
         short_months.add("Jan");
         short_months.add("Feb");
         short_months.add("Mar");
@@ -81,21 +82,25 @@ public class AddEventFragment extends SuperFragment {
         short_months.add("Dec");
 
 
-
+        //makes a sublist containing all the months with 31 days
         int[] indices = {0, 2, 4, 6,7,9,11};
         fillMonthsSublist(thirty_one_days_months,indices);
 
+        //a list of 31 days
         for (int i = 1; i <= 31; i++){
             thirty_one_days.add(String.valueOf(i));
         }
-
+        //goes to 30 for months with a day less
         thirty_days = thirty_one_days.subList(0,30);
+        //special case for february
         feb_days = thirty_one_days.subList(0,28);
 
+        //fills the year list for the spinner
         for(int i = 0; i <= 10; i++){
             years.add(String.valueOf(2018+i));
         }
 
+        //fills the hour list for the spinner
         for(int i = 0; i < 24; i++){
             if(i < 10){
                 hours.add("0"+String.valueOf(i));
@@ -104,6 +109,7 @@ public class AddEventFragment extends SuperFragment {
             }
         }
 
+        //fills the minute list for the spinner
         for(int i = 0; i < 60; i+= 10){
             if(i<10){
                 minutes.add("0"+String.valueOf(i));
@@ -121,6 +127,10 @@ public class AddEventFragment extends SuperFragment {
         }
     }
 
+    /**
+     * Takes the current selected Item of a spinner with numbers and convert it to int
+     * @return the int value of the selected content of the spinner
+     */
     private int getNumberSpinnerContent(Spinner spinner){
         return Integer.parseInt(spinner.getSelectedItem().toString());
     }
@@ -132,6 +142,8 @@ public class AddEventFragment extends SuperFragment {
         title_view = view.findViewById(R.id.event_title);
         description_view = view.findViewById(R.id.long_desc_text);
 
+        //the button "create event" that when clicked gather the data from all spinners and
+        //textviews and push an event on the database
         create_event = view.findViewById(R.id.create_event_button);
         create_event.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,7 +197,7 @@ public class AddEventFragment extends SuperFragment {
             }
         });
 
-
+        //fill the different spinners for the dates.
         spinner_days = view.findViewById(R.id.spinner_day);
         setSpinner(spinner_days, thirty_one_days);
 
@@ -194,6 +206,10 @@ public class AddEventFragment extends SuperFragment {
         spinner_months.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> parent, View view, int pos,
                                        long id) {
+
+                //adapts the content of the day spinner depending on the month selected
+                //in the month spinner so that the number of days corresponds
+
                 String selected_mon = ((TextView) view).getText().toString();
                 int selected = Integer.parseInt(spinner_days.getSelectedItem().toString());
 
@@ -232,14 +248,21 @@ public class AddEventFragment extends SuperFragment {
         spinner_minutes = view.findViewById(R.id.spinner_minute);
         setSpinner(spinner_minutes, minutes);
 
+        //fill the spinner for associations.
         spinner =  view.findViewById(R.id.spinner);
-        fillAssociationNames("name");
+        fillAssociationNames();
 
 
 
         return view;
     }
 
+    /**
+     * check if the arguments are valid for creating an event
+     * @param title , the title of the event
+     * @param description , the long description of the event
+     * @return if the arguments are valid
+     */
     private boolean checkIfValid(String title, String description){
         boolean valid = true;
 
@@ -259,21 +282,35 @@ public class AddEventFragment extends SuperFragment {
         return valid;
     }
 
+    /**
+     * Set an error message in a textview.
+     * @param t , the textview we take care of
+     * @param errorMessage , the message we want to show
+     * @return
+     */
     private boolean viewSetError(TextView t, String errorMessage){
         t.requestFocus();
         t.setError(errorMessage);
         return false;
     }
 
-
+    /**
+     * Set the content of a spinner
+     * @param spinner , the spinner we want to set
+     * @param list , the content of the spinner
+     */
     private void setSpinner(Spinner spinner, List<String> list){
         ArrayAdapter adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }
 
-    private void fillAssociationNames(String sortOption) {
-        FirebaseFirestore.getInstance().collection("assos_info").orderBy(sortOption).get()
+    /**
+     * fill the list for the association spinner with the associations
+     * on the database.
+     */
+    private void fillAssociationNames() {
+        FirebaseFirestore.getInstance().collection("assos_info").orderBy("name").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots){
