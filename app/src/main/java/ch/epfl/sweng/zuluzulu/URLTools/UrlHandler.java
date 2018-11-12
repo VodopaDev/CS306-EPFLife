@@ -33,7 +33,7 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
     public UrlHandler(Function<Pair<String, List<String>>, Void> listener, Parser<List<String>> parser) {
         this.listener = listener;
         this.parser = parser;
-        this.urlReader = new UrlReader();
+        this.urlReader = UrlReaderFactory.getDependency();
     }
 
 
