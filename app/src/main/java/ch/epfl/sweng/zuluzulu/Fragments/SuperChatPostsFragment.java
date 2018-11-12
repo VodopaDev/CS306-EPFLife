@@ -23,8 +23,8 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  */
 public abstract class SuperChatPostsFragment extends SuperFragment {
 
-    protected static final String ARG_USER = "ARG_USER";
-    protected static final String ARG_CHANNEL = "ARG_CHANNEL";
+    private static final String ARG_USER = "ARG_USER";
+    private static final String ARG_CHANNEL = "ARG_CHANNEL";
 
     protected static final String CHANNEL_DOCUMENT_NAME = "channels/channel";
 
@@ -71,7 +71,7 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
     }
 
     /**
-     * Add a onEventChange listener on the post list in the database
+     * Add a onEventChange listener on the elements in the database
      */
     protected void setUpDataOnChangeListener() {
         db.collection(collection_path)
@@ -88,5 +88,5 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
                 });
     }
 
-    public abstract void updateListView();
+    protected abstract void updateListView();
 }

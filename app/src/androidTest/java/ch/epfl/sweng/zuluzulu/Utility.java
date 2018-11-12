@@ -159,8 +159,7 @@ public class Utility {
         data.put("description", "description");
         data.put("restrictions", new HashMap<>());
         FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
-        Channel channel = new Channel(fmap);
-        return channel;
+        return new Channel(fmap);
     }
 
 }

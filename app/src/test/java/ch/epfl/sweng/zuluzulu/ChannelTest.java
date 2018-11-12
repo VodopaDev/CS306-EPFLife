@@ -36,7 +36,7 @@ public class ChannelTest {
     private static final String description2 = "Channel just for the IN";
     private static final Map<String, Object> restrictions2 = new HashMap<>();
 
-    private static final Long id3 = 3l;
+    private static final Long id3 = 3L;
     private static final String name3 = "SAT channel";
     private static final String description3 = "The only chat that matters";
     private static final Map<String, Object> restrictions3 = new HashMap<>();

@@ -27,12 +27,13 @@ import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.PostFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.SuperChatPostsFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -285,11 +286,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case OPEN_CHAT_FRAGMENT:
                 Channel channel = (Channel) data;
-                openFragment(SuperChatPostsFragment.newInstanceOf("chat", user, channel));
+                openFragment(ChatFragment.newInstance(user, channel));
                 break;
             case OPEN_POST_FRAGMENT:
                 channel = (Channel) data;
-                openFragment(SuperChatPostsFragment.newInstanceOf("post", user, channel));
+                openFragment(PostFragment.newInstance(user, channel));
                 break;
             case OPEN_ASSOCIATION_FRAGMENT:
                 openFragment(AssociationFragment.newInstance(user));

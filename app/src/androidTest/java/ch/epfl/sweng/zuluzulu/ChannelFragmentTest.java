@@ -16,11 +16,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @RunWith(AndroidJUnit4.class)
 public class ChannelFragmentTest extends TestWithLogin {
 
-    private SuperFragment fragment;
-
     @Before
     public void init() {
-        fragment = ChannelFragment.newInstance(getUser());
+        SuperFragment fragment = ChannelFragment.newInstance(getUser());
         mActivityRule.getActivity().openFragment(fragment);
     }
 

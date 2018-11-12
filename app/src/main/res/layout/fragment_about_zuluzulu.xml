@@ -40,7 +40,6 @@
         app:layout_constraintVertical_bias="0.058" />
 
     <TextView
-        android:id="@+id/TV_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -60,7 +59,6 @@
         app:layout_constraintVertical_bias="0.19" />
 
     <ImageView
-        android:id="@+id/imageView2"
         android:layout_width="34dp"
         android:layout_height="25dp"
         android:layout_marginBottom="8dp"
@@ -78,7 +76,6 @@
         app:layout_constraintVertical_bias="0.19" />
 
     <TextView
-        android:id="@+id/TV_devel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -116,7 +113,6 @@
         app:layout_constraintVertical_bias="0.306" />
 
     <TextView
-        android:id="@+id/TV_groupName"
         android:layout_width="71dp"
         android:layout_height="21dp"
         android:layout_marginBottom="8dp"
@@ -136,7 +132,6 @@
 
 
     <TextView
-        android:id="@+id/TV_vesion_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -155,7 +150,6 @@
         app:layout_constraintVertical_bias="0.19" />
 
     <TextView
-        android:id="@+id/TV_contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -193,7 +187,6 @@
         app:layout_constraintVertical_bias="0.41" />
 
     <TextView
-        android:id="@+id/TV_support"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -259,7 +252,6 @@
         app:layout_constraintVertical_bias="0.058" />
 
     <ImageView
-        android:id="@+id/imageView9"
         android:layout_width="38dp"
         android:layout_height="39dp"
         android:layout_marginBottom="8dp"
@@ -277,7 +269,6 @@
         app:layout_constraintVertical_bias="0.062" />
 
     <TextView
-        android:id="@+id/TV_name_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

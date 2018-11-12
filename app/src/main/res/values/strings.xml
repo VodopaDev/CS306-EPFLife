@@ -1,22 +1,13 @@
 <resources>
     <string name="app_name">EPFLife</string>
-    <string name="title_activity_login_tequila">Tequila Sign in</string>
     <string name="menu">Menu</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_username">Username</string>
-    <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_username">This username is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
 
     <!-- Drawer items names -->
     <string name="drawer_main">Home</string>
     <string name="drawer_associations">Associations</string>
-    <string name="drawer_friends">Friends</string>
     <string name="drawer_chats">Chats</string>
     <string name="drawer_settings">Settings</string>
 
@@ -35,7 +26,6 @@
 
     <string name="contactEmail">zuluzulu@epfl.ch</string>
     <string name="supportEmail">EPFLife@epfl.ch</string>
-    <string name="applicationName">EPFLife</string>
 
     <!-- AssociationFragment related -->
     <string name="fragment_assos_button_all">All</string>
@@ -45,7 +35,6 @@
     <!-- Event related -->
     <string name="fragment_event_button_all">All</string>
     <string name="fragment_event_button_fav">Favorites</string>
-    <string name="card_event_image_description">Event\'s icon</string>
     <string name="fragment_event_checkbox_sort_name">Name</string>
     <string name="fragment_event_checkbox_sort_date">Date</string>
 
@@ -66,18 +55,17 @@
     <string name="association_detail_fav_button">Click to set association in favorites (or not)</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
     <!-- Main fragment related -->
-    <string name="logo_description">Application\'s logo</string>
 
     <!-- ABOUT ZUZULULU fragment -->
     <string name="send_mail_button">SEND US AN EMAIL !</string>
     <string name="drawer_associations_generator">Fill the associations</string>
     <string name="profile_unit">Section</string>
-    <string name="anonym">Anonym</string>
     <string name="posts">Posts</string>
     <string name="chat">Chat</string>
+    <string name="channel_icon">Channel icon</string>
+    <string name="anonymity">Anonymity</string>
 
 </resources>

@@ -95,5 +95,5 @@ public class Post {
      *
      * @return Whether the post is anonymous or not
      */
-    public boolean isAnonym() { return anonym; };
+    public boolean isAnonym() { return anonym; }
 }

@@ -33,7 +33,9 @@ import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
  * A simple {@link SuperChatPostsFragment} subclass.
@@ -43,7 +45,7 @@ import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
  */
 public class ChatFragment extends SuperChatPostsFragment {
 
-    public static final String TAG = "CHAT_TAG";
+    private static final String TAG = "CHAT_TAG";
 
     private static final String MESSAGES_COLLECTION_NAME = "messages";
 
@@ -55,6 +57,10 @@ public class ChatFragment extends SuperChatPostsFragment {
 
     public ChatFragment() {
         // Required empty public constructor
+    }
+
+    public static ChatFragment newInstance(User user, Channel channel) {
+        return (ChatFragment) newInstanceOf("chat", user, channel);
     }
 
     @Override
@@ -89,11 +95,6 @@ public class ChatFragment extends SuperChatPostsFragment {
         return view;
     }
 
-    @Override
-    public void updateListView() {
-        updateChat();
-    }
-
     /**
      * Add an onClick listener on the button to send the message to the database
      */
@@ -104,7 +105,7 @@ public class ChatFragment extends SuperChatPostsFragment {
                 String senderName = anonym ? "" : user.getFirstNames();
                 String message = textEdit.getText().toString();
                 Timestamp time = Timestamp.now();
-                String sciper =  user.getSciper();
+                String sciper = user.getSciper();
                 textEdit.setText("");
 
                 Map<String, Object> data = new HashMap<>();
@@ -198,5 +199,10 @@ public class ChatFragment extends SuperChatPostsFragment {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void updateListView() {
+        updateChat();
     }
 }

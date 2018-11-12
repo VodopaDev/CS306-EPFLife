@@ -23,7 +23,9 @@ import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
+import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
  * A simple {@link SuperChatPostsFragment} subclass.
@@ -32,7 +34,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Post;
  * to handle interaction events.
  */
 public class PostFragment extends SuperChatPostsFragment {
-    public static final String TAG = "POST_TAG";
+    private static final String TAG = "POST_TAG";
 
     private static final String POSTS_COLLECTION_NAME = "posts";
 
@@ -41,6 +43,10 @@ public class PostFragment extends SuperChatPostsFragment {
 
     public PostFragment() {
         // Required empty public constructor
+    }
+
+    public static PostFragment newInstance(User user, Channel channel) {
+        return (PostFragment) newInstanceOf("post", user, channel);
     }
 
     @Override
