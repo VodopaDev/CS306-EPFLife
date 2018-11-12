@@ -4,13 +4,11 @@ import android.location.Location;
 
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import com.google.firebase.firestore.GeoPoint;
 
 /**
  * Class that contains general useful functions
@@ -65,6 +63,15 @@ public final class Utils {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         return R * c;
+    }
+
+    public static Map defaultChannelData() {
+        Map data = new HashMap();
+        data.put("id", 1L);
+        data.put("name", "name");
+        data.put("description", "description");
+        data.put("restrictions", new HashMap<>());
+        return data;
     }
 
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");

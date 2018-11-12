@@ -6,13 +6,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Fragments.PostFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -24,12 +22,7 @@ public class PostFragmentTest extends TestWithLogin {
 
     @Before
     public void init() {
-        Map data = new HashMap();
-        data.put("id", 1L);
-        data.put("name", "name");
-        data.put("description", "description");
-        data.put("restrictions", new HashMap<>());
-        FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
+        FirebaseMapDecorator fmap = new FirebaseMapDecorator(Utils.defaultChannelData());
         Channel channel = new Channel(fmap);
         SuperFragment fragment = PostFragment.newInstance(getUser(), channel);
         mActivityRule.getActivity().openFragment(fragment);
