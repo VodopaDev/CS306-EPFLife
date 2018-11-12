@@ -8,7 +8,11 @@ import android.view.Gravity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
@@ -141,6 +145,22 @@ public class Utility {
         builder.setFollowedChats(new ArrayList<Integer>());
 
         return builder;
+    }
+
+    /**
+     * Return a default channel
+     *
+     * @return a default channel
+     */
+    public static Channel defaultChannel() {
+        Map data = new HashMap();
+        data.put("id", 1L);
+        data.put("name", "name");
+        data.put("description", "description");
+        data.put("restrictions", new HashMap<>());
+        FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
+        Channel channel = new Channel(fmap);
+        return channel;
     }
 
 }

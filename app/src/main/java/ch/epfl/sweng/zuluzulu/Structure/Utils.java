@@ -7,10 +7,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
-
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 
 /**
  * Class that contains general useful functions
@@ -65,22 +61,6 @@ public final class Utils {
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         return R * c;
-    }
-
-    /**
-     * Return a default channel data map
-     *
-     * @return a default channel data map
-     */
-    public static Channel defaultChannel() {
-        Map data = new HashMap();
-        data.put("id", 1L);
-        data.put("name", "name");
-        data.put("description", "description");
-        data.put("restrictions", new HashMap<>());
-        FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
-        Channel channel = new Channel(fmap);
-        return channel;
     }
 
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
