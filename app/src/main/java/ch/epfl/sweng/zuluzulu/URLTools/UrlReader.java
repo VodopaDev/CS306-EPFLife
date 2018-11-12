@@ -25,6 +25,11 @@ public class UrlReader implements Reader{
             return null;
         }
 
+        if(urlConnection == null){
+            Log.d(TAG, "UrlConnection is null");
+            return null;
+        }
+
         BufferedReader bufferedReader = null;
         try {
             bufferedReader = new BufferedReader(
