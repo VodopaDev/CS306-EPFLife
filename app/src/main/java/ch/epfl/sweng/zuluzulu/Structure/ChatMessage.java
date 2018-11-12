@@ -86,13 +86,6 @@ public class ChatMessage {
     }
 
     /**
-     * Setter for the fact that the message is viewed by his owner
-     */
-    public void setOwnMessage(boolean ownMessage) {
-        this.ownMessage = ownMessage;
-    }
-
-    /**
      * Getter for message creation time
      *
      * @return the creation time
