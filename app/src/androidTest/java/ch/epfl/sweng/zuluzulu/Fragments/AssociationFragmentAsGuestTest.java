@@ -22,6 +22,7 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isSelected;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -39,38 +40,32 @@ public class AssociationFragmentAsGuestTest extends TestWithGuestAndFragment<Ass
     public void hasAllButtons() {
         onView(ViewMatchers.withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
         onView(withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void guestCantClickOnFavorites(){
-        //onView(withText("ForumEPFL")).check(matches(isDisplayed()));
-        onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
-        //onView(withText("ForumEPFL")).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void guestMainPageHasSomeAssociations() {
-        onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
-    }
-
-    @Test
-    public void guestClickOnFavoritesStaysOnAll() {
-        onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
-    }
-
-
-   /* @Test
-    public void clickingAnAssociationGoesToDetail() {
-        onView(withText("ForumEPFL")).perform(ViewActions.click());
-        onView(withId(R.id.association_detail_icon)).check(matches(isDisplayed()));
-    }*/
-
-    @Test
-    public void thereAreTwoSortCheckbox() {
         onView(withId(R.id.assos_fragment_checkbox_sort_Name)).check(matches(isDisplayed()));
         onView(withId(R.id.assos_fragment_checkbox_sort_date)).check(matches(isDisplayed()));
     }
 
+    @Test
+    public void guestCantClickOnFavorites(){
+        onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
+        try {
+            TimeUnit.MILLISECONDS.sleep(250);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.association_fragment_listview))
+                .check(matches(hasChildCount(7)));
+    }
+
+    @Test
+    public void guestMainPageHasSomeAssociations() {
+        try {
+            TimeUnit.MILLISECONDS.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.association_fragment_listview))
+                .check(matches(hasChildCount(7)));
+    }
     @Test
     public void listAlternateSortOption() {
         onView(withId(R.id.assos_fragment_checkbox_sort_date)).perform(ViewActions.click());

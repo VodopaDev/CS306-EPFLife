@@ -5,6 +5,7 @@ import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -51,6 +52,7 @@ public class AssociationsUrlHandlerTest {
         this.object = new AssociationsUrlHandler(this::handler);
     }
 
+    @Ignore
     @Test
     public void worksWithGoodURL() {
         // Execute our async task

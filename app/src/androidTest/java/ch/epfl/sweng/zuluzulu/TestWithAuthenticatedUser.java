@@ -24,7 +24,7 @@ public abstract class TestWithAuthenticatedUser {
 
     @Before
     public void setUpLogin() {
-        this.user = (AuthenticatedUser)Utility.createTestAuthenticated();
+        this.user = Utility.createTestAuthenticated();
         Utility.addUserToMainIntent(mActivityRule, this.user);
     }
 

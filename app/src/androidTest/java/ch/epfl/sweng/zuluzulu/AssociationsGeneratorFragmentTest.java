@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu;
 import android.support.test.espresso.IdlingRegistry;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
@@ -23,12 +24,14 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdmin {
         IdlingRegistry.getInstance().register(mActivityRule.getActivity().getCountingIdlingResource());
     }
 
+    @Ignore
     @Test
     public void canLoadURLs() {
         adminUser();
         onView(withId(R.id.associations_generator_list_values)).check(matches(isDisplayed()));
     }
 
+    @Ignore
     @Test
     public void refuseNonAdmin() {
         nonAdminUser();

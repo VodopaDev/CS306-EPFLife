@@ -48,6 +48,11 @@ public class CalendarFragmentTest  extends TestWithAuthenticatedAndFragment<Cale
     @Test
     public void clickingOn15NovemberDisplaysOneEvent(){
         onView(withText("15")).perform(ViewActions.click());
+        try {
+            TimeUnit.MILLISECONDS.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.calendar_list))
                 .check(matches(hasChildCount(1)));
     }
@@ -55,6 +60,11 @@ public class CalendarFragmentTest  extends TestWithAuthenticatedAndFragment<Cale
     @Test
     public void clickingOn14NovemberDisplaysNothing(){
         onView(withText("14")).perform(ViewActions.click());
+        try {
+            TimeUnit.MILLISECONDS.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.calendar_list))
                 .check(matches(hasChildCount(0)));
     }

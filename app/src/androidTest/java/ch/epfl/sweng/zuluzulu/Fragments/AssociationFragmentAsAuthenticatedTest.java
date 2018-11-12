@@ -23,10 +23,12 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasBackground;
+import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isSelected;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.greaterThan;
 
 @RunWith(AndroidJUnit4.class)
 public class AssociationFragmentAsAuthenticatedTest extends TestWithAuthenticatedAndFragment<AssociationFragment> {
@@ -39,8 +41,7 @@ public class AssociationFragmentAsAuthenticatedTest extends TestWithAuthenticate
     @Test
     public void authenticatedCanClickOnFavorites() {
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
-        onView(withText("ForumEPFL")).check(doesNotExist());
-        onView(withId(R.id.association_fragment_all_button)).perform(ViewActions.click());
-        onView(withText("ForumEPFL")).check(matches(isDisplayed()));
+        onView(withId(R.id.association_fragment_listview))
+                .check(matches(hasChildCount(1)));
     }
 }
