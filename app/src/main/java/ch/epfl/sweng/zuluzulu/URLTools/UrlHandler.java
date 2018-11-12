@@ -73,7 +73,15 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
             return null;
         }
 
-        return parser.parse(bf);
+        List<String> result = parser.parse(bf);
+
+        try {
+            bf.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
 }

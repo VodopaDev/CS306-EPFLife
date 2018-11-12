@@ -25,12 +25,6 @@ public class UrlReader implements Reader{
             return null;
         }
 
-        if (urlConnection == null) {
-            Log.d(TAG, "null UrlConnection");
-            return null;
-        }
-
-
         BufferedReader bufferedReader = null;
         try {
             bufferedReader = new BufferedReader(
@@ -43,20 +37,6 @@ public class UrlReader implements Reader{
         urlConnection.disconnect();
 
         return bufferedReader;
-
-    }
-
-
-
-    /**
-     * Open the url
-     *
-     * @param url url
-     * @return a URL object
-     * @throws MalformedURLException On bad url
-     */
-    private URL openUrl(String url) throws MalformedURLException {
-        return new URL(url);
     }
 
     /**
@@ -68,18 +48,21 @@ public class UrlReader implements Reader{
      */
     private HttpURLConnection connect(String url) throws IOException {
         // Open url
-        URL aURL = openUrl(url);
+        URL aURL = new URL(url);
 
         // Open connection
         HttpURLConnection UrlConnection = (HttpURLConnection) aURL.openConnection();
+        if(UrlConnection == null){
+            throw new IOException("Url null");
+        }
+        // to open some epfl pages
         UrlConnection.setRequestProperty("Cookie", "gdpr=accept");
 
         // Get HTTP response code
         int code = UrlConnection.getResponseCode();
 
         // Redirect if needed
-        if (code == HttpURLConnection.HTTP_MOVED_TEMP
-                || code == HttpURLConnection.HTTP_MOVED_PERM) {
+        if (code == HttpURLConnection.HTTP_MOVED_TEMP || code == HttpURLConnection.HTTP_MOVED_PERM) {
             String newUrl = UrlConnection.getHeaderField("Location");
             UrlConnection = (HttpURLConnection) new URL(newUrl).openConnection();
             UrlConnection.setRequestProperty("Cookie", "gdpr=accept");
@@ -92,8 +75,6 @@ public class UrlReader implements Reader{
             return null;
         }
         UrlConnection.connect();
-
-
 
         return UrlConnection;
     }
