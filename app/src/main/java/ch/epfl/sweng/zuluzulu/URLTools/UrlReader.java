@@ -44,8 +44,6 @@ public class UrlReader implements Reader {
             e.printStackTrace();
         }
 
-        urlConnection.disconnect();
-
         return bufferedReader;
     }
 
