@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -22,9 +20,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -33,78 +28,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
 import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
-import ch.epfl.sweng.zuluzulu.Structure.User;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link SuperChatPostsFragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ChatFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
-public class ChatFragment extends SuperFragment {
+public class ChatFragment extends SuperChatPostsFragment {
+
     public static final String TAG = "CHAT_TAG";
-    private static final String ARG_USER = "ARG_USER";
-    private static final String ARG_CHANNEL = "ARG_CHANNEL";
 
-    private static final String CHANNEL_DOCUMENT_NAME = "channels/channel";
     private static final String MESSAGES_COLLECTION_NAME = "messages";
-
-    private FirebaseFirestore db;
 
     private Button sendButton;
     private EditText textEdit;
-    private ListView listView;
-    private Button chatButton;
-    private Button postsButton;
 
     private List<ChatMessage> messages = new ArrayList<>();
     private ChatMessageArrayAdapter adapter;
-    private String collection_path;
-
-    private AuthenticatedUser user;
-    private Channel channel;
-
-    private boolean anonym;
 
     public ChatFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment ChatFragment.
-     */
-    public static ChatFragment newInstance(User user, Channel channel) {
-        ChatFragment fragment = new ChatFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(ARG_USER, user);
-        args.putSerializable(ARG_CHANNEL, channel);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
-            channel = (Channel) getArguments().getSerializable(ARG_CHANNEL);
-            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, channel.getName());
-        }
     }
 
     @Override
@@ -139,23 +89,9 @@ public class ChatFragment extends SuperFragment {
         return view;
     }
 
-    /**
-     * Add a onEventChange listener on the message list in the database
-     */
-    private void setUpDataOnChangeListener() {
-        db = FirebaseFirestore.getInstance();
-        db.collection(collection_path)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "Listen failed.", e);
-                            return;
-                        }
-
-                        updateChat();
-                    }
-                });
+    @Override
+    public void updateListView() {
+        updateChat();
     }
 
     /**
