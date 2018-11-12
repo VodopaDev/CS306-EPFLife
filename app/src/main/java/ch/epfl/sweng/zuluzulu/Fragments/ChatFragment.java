@@ -1,5 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -64,12 +66,15 @@ public class ChatFragment extends SuperFragment {
     private Button sendButton;
     private EditText textEdit;
     private ListView listView;
+
     private List<ChatMessage> messages = new ArrayList<>();
     private ChatMessageArrayAdapter adapter;
     private String collection_path;
 
-    private User user;
+    private AuthenticatedUser user;
     private Channel channel;
+
+    private boolean anonym;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -116,6 +121,9 @@ public class ChatFragment extends SuperFragment {
         adapter = new ChatMessageArrayAdapter(view.getContext(), messages);
         listView.setAdapter(adapter);
 
+        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        anonym = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
+
         setUpDataOnChangeListener();
         setUpSendButton();
         setUpEditText();
@@ -149,10 +157,10 @@ public class ChatFragment extends SuperFragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String senderName = user.isConnected() ? user.getFirstNames() : "Guest";
+                String senderName = anonym ? "" : user.getFirstNames();
                 String message = textEdit.getText().toString();
                 Timestamp time = Timestamp.now();
-                String sciper = user.isConnected() ? user.getSciper() : "000000";
+                String sciper =  user.getSciper();
                 textEdit.setText("");
 
                 Map<String, Object> data = new HashMap<>();

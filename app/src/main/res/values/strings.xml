@@ -77,5 +77,6 @@
     <string name="drawer_associations_generator">Fill the associations</string>
     <string name="profile_unit">Section</string>
     <string name="icon_button_go">Gharger les icones</string>
+    <string name="anonym">Anonym</string>
 
 </resources>

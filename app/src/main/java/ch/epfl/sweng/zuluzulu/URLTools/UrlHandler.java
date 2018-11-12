@@ -20,6 +20,8 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
     // Function that will be executed onPostExecute
     private Function<Pair<String, List<String>>, Void> listener;
 
+    private UrlReader urlReader;
+
     // The function that will parse the data
     private Parser<List<String>> parser;
 
@@ -31,6 +33,7 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
     public UrlHandler(Function<Pair<String, List<String>>, Void> listener, Parser<List<String>> parser) {
         this.listener = listener;
         this.parser = parser;
+        this.urlReader = new UrlReader();
     }
 
 
@@ -55,44 +58,6 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
     }
 
 
-    /**
-     * Connect to the URL, check if the response code is OK (200)
-     *
-     * @param url Url
-     * @return HttpURLConnection or null of response is not OK
-     * @throws IOException Throw exception if it cannot connect
-     */
-    private HttpURLConnection connect(String url) throws IOException {
-        // Open url
-        URL aURL = openUrl(url);
-
-        // Open connection
-        HttpURLConnection UrlConnection = (HttpURLConnection) aURL.openConnection();
-        UrlConnection.setRequestProperty("Cookie", "gdpr=accept");
-
-        // Get HTTP response code
-        int code = UrlConnection.getResponseCode();
-
-        // Redirect if needed
-        if (code == HttpURLConnection.HTTP_MOVED_TEMP
-                || code == HttpURLConnection.HTTP_MOVED_PERM) {
-            String newUrl = UrlConnection.getHeaderField("Location");
-            UrlConnection = (HttpURLConnection) new URL(newUrl).openConnection();
-            UrlConnection.setRequestProperty("Cookie", "gdpr=accept");
-            code = UrlConnection.getResponseCode();
-        }
-
-        if (code != HttpURLConnection.HTTP_OK) {
-
-            Log.d(TAG, "No 200 response code");
-            return null;
-        }
-        UrlConnection.connect();
-
-
-
-        return UrlConnection;
-    }
 
     /**
      * Connect to the URL, parse it and return the values found
@@ -102,48 +67,13 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
      */
     private List<String> parseUrl(String url) {
 
-        HttpURLConnection urlConnection;
+        BufferedReader bf = urlReader.read(url);
 
-        try {
-            // Connect to the url
-            urlConnection = connect(url);
-        } catch (IOException e) {
-            Log.d(TAG, "Cannot connect to the URL");
-            e.printStackTrace();
+        if(bf == null) {
             return null;
         }
 
-        if (urlConnection == null) {
-            Log.d(TAG, "null UrlConnection");
-            return null;
-        }
-
-        List<String> datas = null;
-        try {
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-            datas = parser.parse(bufferedReader);
-            bufferedReader.close();
-        } catch (IOException e) {
-            Log.d(TAG, "Cannot read the page");
-            e.printStackTrace();
-        } finally {
-            urlConnection.disconnect();
-        }
-
-        return datas;
-    }
-
-
-    /**
-     * Open the url
-     *
-     * @param url url
-     * @return a URL object
-     * @throws MalformedURLException On bad url
-     */
-    private URL openUrl(String url) throws MalformedURLException {
-        return new URL(url);
+        return parser.parse(bf);
     }
 
 }

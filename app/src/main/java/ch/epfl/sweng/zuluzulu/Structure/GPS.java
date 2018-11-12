@@ -10,10 +10,11 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.firebase.firestore.GeoPoint;
-
 import static android.content.Context.LOCATION_SERVICE;
 
+/**
+ * Static class that represents the GPS
+ */
 public final class GPS {
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
@@ -25,12 +26,6 @@ public final class GPS {
         @Override
         public void onLocationChanged(Location newLocation) {
             if (newLocation != null && isBetterLocation(newLocation, location)) {
-                // Just for testing
-                GeoPoint user = Utils.toGeoPoint(newLocation);
-                GeoPoint sat = new GeoPoint(46.752486, 6.937071);
-                double distance = Utils.distanceBetween(user, sat);
-                Toast.makeText(mcontext, "Your are at " + Math.round(distance) + "m from the chat !", Toast.LENGTH_SHORT).show();
-
                 location = newLocation;
             }
         }
