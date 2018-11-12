@@ -1,10 +1,11 @@
-package ch.epfl.sweng.zuluzulu.Fragments;
+package ch.epfl.sweng.zuluzulu;
 
 import android.support.test.espresso.IdlingRegistry;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestWithAdmin;
 import ch.epfl.sweng.zuluzulu.Utility;

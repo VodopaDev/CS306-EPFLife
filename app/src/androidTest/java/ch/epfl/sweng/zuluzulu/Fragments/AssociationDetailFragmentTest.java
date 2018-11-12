@@ -26,12 +26,6 @@ public class AssociationDetailFragmentTest extends TestWithAuthenticatedAndFragm
     }
 
     @Test
-    public void unfollowFollowTest() {
-        onView(withText("Favorites")).perform(ViewActions.click());
-        onView(withText("Agepoly")).check(matches(isDisplayed()));
-    }
-
-    @Test
     public void notFollowedAssociationTest() {
         onView(withText("Favorites")).perform(ViewActions.click());
         onView(withText("ForumEPFL")).check(doesNotExist());

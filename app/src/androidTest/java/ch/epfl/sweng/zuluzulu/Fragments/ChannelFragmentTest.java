@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,13 +16,14 @@ import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static junit.framework.TestCase.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class ChannelFragmentTest extends TestWithAuthenticatedAndFragment<ChannelFragment> {
 
     @Override
     public void initFragment() {
-        ChannelFragment.newInstance(user);
+        fragment = ChannelFragment.newInstance(user);
     }
 
     @Test

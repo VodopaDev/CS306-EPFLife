@@ -12,6 +12,9 @@ import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.DECREMENT_IDLING_RESOURCE;
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.INCREMENT_IDLING_RESOURCE;
+
 
 /**
  * A simple {@link Fragment} subclass.
