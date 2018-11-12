@@ -85,7 +85,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
      * @param nbr
      */
     private void requestIcon(int nbr) {
-        if(nbr < 0 || nbr >= this.datas.size()){
+        if(nbr <= 0 || nbr > this.datas.size()){
             return;
         }
 
@@ -183,9 +183,11 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 TextView text = view.findViewById(R.id.nbr_icon);
-                if(text.getText() != null) {
+                try {
                     int number = Integer.parseInt(text.getText().toString());
                     requestIcon(number);
+                } catch (NumberFormatException e) {
+                    return;
                 }
             }
         });
