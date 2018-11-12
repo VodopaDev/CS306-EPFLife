@@ -7,6 +7,10 @@ import java.io.BufferedReader;
 
 import static org.junit.Assert.*;
 
+/*
+ *This class will test the HTTP connexion. It will send network request and deppends on the network
+ * So it can fail.... But still need to be tested
+ */
 public class UrlReaderTest {
     UrlReader reader;
 
@@ -19,6 +23,12 @@ public class UrlReaderTest {
     @Test
     public void canReadGoodUrl(){
         BufferedReader result = this.reader.read("http://example.com");
+        assertNotNull(result);
+    }
+
+    @Test
+    public void canRedirectUrl(){
+        BufferedReader result = this.reader.read("http://epfl.ch");
         assertNotNull(result);
     }
 
