@@ -69,9 +69,7 @@ public class UrlReader implements Reader {
 
         // Open connection
         HttpURLConnection UrlConnection = (HttpURLConnection) aURL.openConnection();
-        if (UrlConnection == null) {
-            throw new IOException("Url null");
-        }
+
         // to open some epfl pages
         UrlConnection.setRequestProperty("Cookie", "gdpr=accept");
 
@@ -87,7 +85,6 @@ public class UrlReader implements Reader {
         }
 
         if (code != HttpURLConnection.HTTP_OK) {
-
             Log.d(TAG, "No 200 response code");
             return null;
         }

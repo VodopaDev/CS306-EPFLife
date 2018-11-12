@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.URLTools;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,11 +20,22 @@ public class UrlReaderTest {
         this.reader = new UrlReader();
     }
 
+    @After
+    public void close() {
+        this.reader.disconnect();
+    }
+
 
     @Test
     public void canReadGoodUrl(){
         BufferedReader result = this.reader.read("http://example.com");
         assertNotNull(result);
+    }
+
+    @Test
+    public void cannotRead404(){
+        BufferedReader result = this.reader.read("http://example.com/404");
+        assertNull(result);
     }
 
     @Test
@@ -42,6 +54,11 @@ public class UrlReaderTest {
     @Test
     public void cannotReadWrongUrl(){
         BufferedReader result = this.reader.read("exemple");
+        assertNull(result);
+    }
+    @Test
+    public void cannotReadNulll(){
+        BufferedReader result = this.reader.read(null);
         assertNull(result);
     }
 }

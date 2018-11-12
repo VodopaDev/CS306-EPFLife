@@ -48,6 +48,14 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminLogin {
     }
 
     @Test
+    public void buttonDoesNothingIfTexTempty() {
+        adminUser();
+        onView(withId(R.id.load_icon_button)).perform(click());
+
+        onView(withId(R.id.associations_generator_list_values)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void refuseNonAdmin() {
         nonAdminUser();
         Utility.checkFragmentIsClosed(R.id.associations_generator_fragment);

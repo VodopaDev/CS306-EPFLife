@@ -183,8 +183,10 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 TextView text = view.findViewById(R.id.nbr_icon);
-                int number = Integer.parseInt(text.getText().toString());
-                requestIcon(number);
+                if(text.getText() != null) {
+                    int number = Integer.parseInt(text.getText().toString());
+                    requestIcon(number);
+                }
             }
         });
 
