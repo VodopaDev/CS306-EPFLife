@@ -12,15 +12,12 @@ import android.widget.TextView;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -28,7 +25,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
-import ch.epfl.sweng.zuluzulu.URLTools.Parsers;
+import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
 
 
 /**
@@ -94,7 +91,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         // Tell tests the async execution is finished
         for (int i = 0; i < nbr; i++) {
             mListener.onFragmentInteraction(CommunicationTag.INCREMENT_IDLING_RESOURCE, true);
-            UrlHandler urlHandler = new UrlHandler(this::handleIcon, Parsers::parseIcon);
+            UrlHandler urlHandler = new UrlHandler(this::handleIcon, AssociationsParser::parseIcon);
 
             urlHandler.execute(this.datas.get(i).split(",")[0]);
         }
@@ -166,7 +163,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations Generator");
-        UrlHandler urlHandler = new UrlHandler(this::handleAssociations, Parsers::parseAssociationsData);
+        UrlHandler urlHandler = new UrlHandler(this::handleAssociations, AssociationsParser::parseAssociationsData);
         urlHandler.execute(EPFL_URL);
 
         // Send increment to wait async execution in test

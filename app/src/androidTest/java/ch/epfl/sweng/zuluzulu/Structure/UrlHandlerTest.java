@@ -13,7 +13,7 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
-import ch.epfl.sweng.zuluzulu.URLTools.Parsers;
+import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.Utility;
 
@@ -51,7 +51,7 @@ public class UrlHandlerTest {
          *
          * This test function handler() will be executed when the action is finished
          */
-        this.object = new UrlHandler(this::handler, Parsers::parseAssociationsData);
+        this.object = new UrlHandler(this::handler, AssociationsParser::parseAssociationsData);
     }
 
     @Test

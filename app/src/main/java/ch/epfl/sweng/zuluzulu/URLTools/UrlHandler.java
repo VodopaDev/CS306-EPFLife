@@ -21,14 +21,14 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
     private Function<Pair<String, List<String>>, Void> listener;
 
     // The function that will parse the data
-    private Function<BufferedReader, List<String>> parser;
+    private Parser<List<String>> parser;
 
     /**
      * Create a new UrlHandler
      *
      * @param listener The callback function that will be use on PostExecute
      */
-    public UrlHandler(Function<Pair<String, List<String>>, Void> listener, Function<BufferedReader, List<String>> parser) {
+    public UrlHandler(Function<Pair<String, List<String>>, Void> listener, Parser<List<String>> parser) {
         this.listener = listener;
         this.parser = parser;
     }
@@ -122,7 +122,7 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
         try {
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-            datas = parser.apply(bufferedReader);
+            datas = parser.parse(bufferedReader);
             bufferedReader.close();
         } catch (IOException e) {
             Log.d(TAG, "Cannot read the page");
@@ -145,6 +145,5 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
     private URL openUrl(String url) throws MalformedURLException {
         return new URL(url);
     }
-
 
 }

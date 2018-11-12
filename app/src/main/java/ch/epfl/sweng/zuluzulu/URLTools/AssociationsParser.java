@@ -14,10 +14,10 @@ import java.util.regex.Pattern;
  * This class contains parsers that can be used to parse a web page
  * All methods are static
  */
-public class Parsers {
-    private final static String TAG = "PARSER";
+public class AssociationsParser implements Parser<List<String>>{
+    private final static String TAG = "ASSOCIATIONS_PARSER";
 
-    private Parsers() {
+    public AssociationsParser() {
 
     }
 
@@ -27,8 +27,10 @@ public class Parsers {
      * @param in Input stream
      * @return ArrayList of strings , values separated by a comma
      */
-    public static List<String> parseAssociationsData(BufferedReader in) {
-        if(in == null){
+    @Override
+    public List<String> parse(BufferedReader in) {
+
+        if (in == null) {
             return null;
         }
         // regex
@@ -63,49 +65,5 @@ public class Parsers {
             return null;
         }
         return results;
-    }
-
-    /**
-     * This function will parse the datas and return a arraylist of strings
-     *
-     * @param in Input stream
-     * @return ArrayList of strings , values separated by a comma
-     */
-    public static List<String> parseIcon(BufferedReader in) {
-        if(in == null){
-            return null;
-        }
-
-        // regex
-        Pattern p = Pattern.compile("<link[^>]+href=\"([^\"]*?(?:jpg|ico|png))\"[^>]*");
-
-
-        String result = null;
-        String inputLine;
-        try {
-            while ((inputLine = in.readLine()) != null) {
-                Matcher m = p.matcher(inputLine);
-                if (m.find()) {
-                    // remove the span tag
-
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(m.group(1));
-                    // remplace html unicode to char
-                    result = sb.toString();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d(TAG, "Could not parse datas");
-            return null;
-        }
-
-        ArrayList<String> list = new ArrayList<>();
-
-        if(result != null){
-            list.add(result);
-        }
-
-        return list;
     }
 }
