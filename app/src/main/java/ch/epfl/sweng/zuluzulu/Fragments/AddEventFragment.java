@@ -19,7 +19,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -29,6 +33,7 @@ public class AddEventFragment extends SuperFragment {
     //for association name
     private List<String> association_names = new ArrayList<>();
     private Spinner spinner;
+    private int numberOfEvents;
 
     //for date (number of days adapt depending on the month chosen)
     private List<String> months = new ArrayList<>();
@@ -145,11 +150,45 @@ public class AddEventFragment extends SuperFragment {
                 if(!checkIfValid(tit, desc)){
                     return;
                 }
+                /*FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                db.collection("events_info").orderBy("name").get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots){
+                                List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
+                                numberOfEvents = snap_list.size();
+                                Map<String, Object> docData = new HashMap<>();
+                                docData.put("icon_uri", "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg");
+                                docData.put("id", numberOfEvents + 1);
+                                docData.put("long_desc", desc);
+                                docData.put("name", name);
+                                docData.put("short_desc", tit);
+                                docData.put("start_date", date);
+                                db.collection("events_info").document("event"+Integer.toString(numberOfEvents+1)).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_FRAGMENT, null);
+                                    }
+                                });
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
+                                Log.e("EVENT_LIST", "Error fetching event data\n" + e.getMessage());
+                            }
+                        });*/
+
+
 
                 System.out.println(name);
                 System.out.println(tit);
                 System.out.println(desc);
                 System.out.println(date);
+                getActivity().onBackPressed();
             }
         });
 
