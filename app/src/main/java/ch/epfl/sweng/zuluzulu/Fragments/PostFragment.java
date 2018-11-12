@@ -136,7 +136,6 @@ public class PostFragment extends SuperFragment {
                             return;
                         }
 
-                        Log.d(TAG, "update posts !!!");
                         updatePosts();
                     }
                 });
