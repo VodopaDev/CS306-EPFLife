@@ -60,11 +60,6 @@ public class CalendarFragmentTest  extends TestWithAuthenticatedAndFragment<Cale
     @Test
     public void clickingOn14NovemberDisplaysNothing(){
         onView(withText("14")).perform(ViewActions.click());
-        try {
-            TimeUnit.MILLISECONDS.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         onView(withId(R.id.calendar_list))
                 .check(matches(hasChildCount(0)));
     }

@@ -42,7 +42,7 @@ public class AssociationFragmentAsAuthenticatedTest extends TestWithAuthenticate
     public void authenticatedCanClickOnFavorites() {
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
         try {
-            TimeUnit.MILLISECONDS.sleep(1000);
+            TimeUnit.MILLISECONDS.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

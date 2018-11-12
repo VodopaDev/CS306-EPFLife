@@ -48,7 +48,7 @@ public class AssociationFragmentAsGuestTest extends TestWithGuestAndFragment<Ass
     public void guestCantClickOnFavorites(){
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
         try {
-            TimeUnit.MILLISECONDS.sleep(250);
+            TimeUnit.MILLISECONDS.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -59,7 +59,7 @@ public class AssociationFragmentAsGuestTest extends TestWithGuestAndFragment<Ass
     @Test
     public void guestMainPageHasSomeAssociations() {
         try {
-            TimeUnit.MILLISECONDS.sleep(1000);
+            TimeUnit.MILLISECONDS.sleep(4000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
