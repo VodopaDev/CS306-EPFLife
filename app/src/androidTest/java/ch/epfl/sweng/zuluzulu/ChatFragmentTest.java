@@ -7,13 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
-import ch.epfl.sweng.zuluzulu.Structure.Channel;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -27,17 +22,9 @@ public class ChatFragmentTest extends TestWithLogin {
 
     @Before
     public void init() {
-        Map data = new HashMap();
-        data.put("id", 1L);
-        data.put("name", "name");
-        data.put("description", "description");
-        data.put("restrictions", new HashMap<>());
-        FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
-        Channel channel = new Channel(fmap);
-        SuperFragment fragment = ChatFragment.newInstance(getUser(), channel);
+        SuperFragment fragment = ChatFragment.newInstance(getUser(), Utility.defaultChannel());
         mActivityRule.getActivity().openFragment(fragment);
     }
-
 
     @Test
     public void testUserCanSeeMessages() {
