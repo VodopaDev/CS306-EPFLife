@@ -7,9 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.zuluzulu.Fragments.PostFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -23,7 +22,7 @@ public class ChatFragmentTest extends TestWithLogin {
 
     @Before
     public void init() {
-        SuperFragment fragment = PostFragment.newInstance(getUser(), Utility.defaultChannel());
+        SuperFragment fragment = ChatFragment.newInstance(getUser(), Utility.defaultChannel());
         mActivityRule.getActivity().openFragment(fragment);
     }
 
