@@ -8,11 +8,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 
-public class UrlReader {
+public class UrlReader implements Reader{
     private static final String TAG = "URL_READER";
 
+    @Override
     public BufferedReader read(String url){
         HttpURLConnection urlConnection;
 

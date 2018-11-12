@@ -41,8 +41,10 @@ public class AssociationsParser implements Parser<List<String>>{
 
         try {
             while ((inputLine = in.readLine()) != null) {
+                System.out.println(inputLine);
                 Matcher m = p.matcher(inputLine);
                 if (m.find()) {
+                    System.out.println("find");
                     // remove the span tag
                     String description = m.group(3).replaceAll("<.*?>", "");
 

@@ -9,6 +9,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
@@ -33,7 +35,6 @@ public class UrlHandlerTest {
 
     @Before
     public void setUp() {
-
         // Register a new countingIdlingResource
         resource = new CountingIdlingResource("URL Handler test");
 
@@ -42,6 +43,21 @@ public class UrlHandlerTest {
 
         // Increment it. The test will NOT TERMINATE until it's not decremented to zero
         resource.increment();
+
+    }
+
+    @Test
+    public void worksWithGoodURL() {
+        // Change the UrlReader to avoid HTTP request
+        UrlReader reader = new UrlReader() {
+            @Override
+            public BufferedReader read(String name) {
+                return new BufferedReader(new StringReader("&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />"));
+            }
+        };
+        // Change the factory
+        UrlReaderFactory.setDependency(reader);
+
 
         // Create the object
         /*
@@ -52,10 +68,7 @@ public class UrlHandlerTest {
          * This test function handler() will be executed when the action is finished
          */
         this.object = new UrlHandler(this::handler, new AssociationsParser());
-    }
 
-    @Test
-    public void worksWithGoodURL() {
         // Execute our async task
         object.execute(AssociationsGeneratorFragment.EPFL_URL); // Test with real URL
 
@@ -77,7 +90,10 @@ public class UrlHandlerTest {
      */
     private Void handler(Pair<String, List<String>> result) {
         // Do any logic. Here we want result not to be null
-        succes = result != null;
+        succes = false;
+        if(result != null && result.second != null && result.second.size() > 0){
+            succes = result.second.get(0).toLowerCase().contains("lauzhack");
+        }
 
         // Free the resource with decrement. Now the test stop waiting !
         resource.decrement();
@@ -85,22 +101,4 @@ public class UrlHandlerTest {
         return null;
     }
 
-
-    @Test
-    public void testNotValidURL() {
-        object.execute("wrong_url"); // Test with not valid URL
-
-        Utility.openMenu();
-
-        assertFalse(succes);
-    }
-
-    @Test
-    public void testWrongPage() {
-        object.execute("http://epfl.ch/another_page_404"); // Test with wrong page
-
-        Utility.openMenu();
-
-        assertFalse(succes);
-    }
 }
