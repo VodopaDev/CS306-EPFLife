@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+
 /**
  * Class that contains general useful functions
  */
@@ -65,13 +67,20 @@ public final class Utils {
         return R * c;
     }
 
-    public static Map defaultChannelData() {
+    /**
+     * Return a default channel data map
+     *
+     * @return a default channel data map
+     */
+    public static Channel defaultChannel() {
         Map data = new HashMap();
         data.put("id", 1L);
         data.put("name", "name");
         data.put("description", "description");
         data.put("restrictions", new HashMap<>());
-        return data;
+        FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
+        Channel channel = new Channel(fmap);
+        return channel;
     }
 
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");

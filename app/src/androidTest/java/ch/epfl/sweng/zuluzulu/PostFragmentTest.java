@@ -6,10 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Fragments.PostFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
-import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -22,9 +20,7 @@ public class PostFragmentTest extends TestWithLogin {
 
     @Before
     public void init() {
-        FirebaseMapDecorator fmap = new FirebaseMapDecorator(Utils.defaultChannelData());
-        Channel channel = new Channel(fmap);
-        SuperFragment fragment = PostFragment.newInstance(getUser(), channel);
+        SuperFragment fragment = PostFragment.newInstance(getUser(), Utils.defaultChannel());
         mActivityRule.getActivity().openFragment(fragment);
     }
 
