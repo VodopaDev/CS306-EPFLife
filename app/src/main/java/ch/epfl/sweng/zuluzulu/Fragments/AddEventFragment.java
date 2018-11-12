@@ -42,6 +42,7 @@ public class AddEventFragment extends SuperFragment {
     private List<String> odd_months_days;
     private List<String> feb_days;
     private List<String> years = new ArrayList();
+    private List<String> even_months = new ArrayList<>();
 
 
     public static AddEventFragment newInstance() {
@@ -53,9 +54,8 @@ public class AddEventFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
 
         association_names = new ArrayList<>();
-        //fillAssociationNames("name");
-        association_names.add("hello how are you todaay it is super fun to write asdasdklasdklashdalksdahlas");
-        association_names.add("selected");
+        fillAssociationNames("name");
+
 
         months.add("Jan");
         months.add("Feb");
@@ -69,6 +69,10 @@ public class AddEventFragment extends SuperFragment {
         months.add("Oct");
         months.add("Nov");
         months.add("Dec");
+
+        for (int i = 0; i < 12; i+=2){
+            even_months.add(months.get(i));
+        }
 
         for (int i = 1; i <= 31; i++){
             even_months_days.add(String.valueOf(i));
@@ -86,31 +90,47 @@ public class AddEventFragment extends SuperFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_event, container, false);
-        ArrayAdapter adapter;
-        spinner =  view.findViewById(R.id.spinner);
-        adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, association_names);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
 
         spinner_days = view.findViewById(R.id.spinner2);
-        spinner_days =  view.findViewById(R.id.spinner2);
-        adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, even_months_days);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_days.setAdapter(adapter);
+        setSpinner(spinner_days, even_months_days);
 
         spinner_months = view.findViewById(R.id.spinner3);
-        spinner_months =  view.findViewById(R.id.spinner3);
-        adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, months);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_months.setAdapter(adapter);
+        setSpinner(spinner_months, months);
+        spinner_months.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
+            public void onItemSelected(AdapterView<?> parent, View view, int pos,
+                                       long id) {
+                String selected_mon = ((TextView) view).getText().toString();
+                if(selected_mon == "Feb"){
+                    setSpinner(spinner_days, feb_days);
+                }else{
+                    if(even_months.contains(selected_mon)){
+                        setSpinner(spinner_days,even_months_days);
+                    }
+                    else{
+                        setSpinner(spinner_days, odd_months_days);
+                    }
+                }
+            }
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+
+        });
 
         spinner_years = view.findViewById(R.id.spinner4);
-        spinner_years =  view.findViewById(R.id.spinner4);
-        adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, even_months_days);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_years.setAdapter(adapter);
+        setSpinner(spinner_years, years);
+
+        spinner =  view.findViewById(R.id.spinner);
+        setSpinner(spinner, association_names);
+
 
         return view;
+    }
+
+
+    private void setSpinner(Spinner spinner, List<String> list){
+        ArrayAdapter adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, list);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
     }
 
     private void fillAssociationNames(String sortOption) {
