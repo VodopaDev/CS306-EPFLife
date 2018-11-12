@@ -31,6 +31,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.PostFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
@@ -286,6 +287,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case OPEN_CHAT_FRAGMENT:
                 Channel channel = (Channel) data;
                 openFragment(ChatFragment.newInstance(user, channel));
+                break;
+            case OPEN_POST_FRAGMENT:
+                channel = (Channel) data;
+                openFragment(PostFragment.newInstance(user, channel));
                 break;
             case OPEN_ASSOCIATION_FRAGMENT:
                 openFragment(AssociationFragment.newInstance(user));

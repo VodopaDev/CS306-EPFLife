@@ -8,7 +8,6 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 public abstract class SuperFragment extends Fragment {
     protected OnFragmentInteractionListener mListener;
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

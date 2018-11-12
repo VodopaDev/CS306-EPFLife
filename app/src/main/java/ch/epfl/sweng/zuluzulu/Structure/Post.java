@@ -7,24 +7,22 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 
 /**
- * Class that represents a chat message in a view
+ * Class that represents a post in a view
  */
-public class ChatMessage {
+public class Post {
 
     public static final List<String> FIELDS = Arrays.asList("senderName", "sciper", "message", "time");
     private String senderName;
     private String sciper;
     private String message;
     private Date time;
-    private boolean ownMessage;
     private boolean anonym;
 
-    public ChatMessage(FirebaseMapDecorator data, String userSciper) {
+    public Post(FirebaseMapDecorator data) {
         senderName = data.getString("senderName");
         sciper = data.getString("sciper");
         message = data.getString("message");
         time = data.getDate("time");
-        ownMessage = sciper.equals(userSciper);
         anonym = senderName.isEmpty();
     }
 
@@ -77,16 +75,7 @@ public class ChatMessage {
     }
 
     /**
-     * Getter for the fact the message is viewed by his owner
-     *
-     * @return whether the message is viewed by his owner or not
-     */
-    public boolean isOwnMessage() {
-        return ownMessage;
-    }
-
-    /**
-     * Getter for message creation time
+     * Getter for post creation time
      *
      * @return the creation time
      */
@@ -104,7 +93,7 @@ public class ChatMessage {
     /**
      * Getter for anonym
      *
-     * @return Whether the message is anonymous or not
+     * @return Whether the post is anonymous or not
      */
     public boolean isAnonym() { return anonym; }
 }
