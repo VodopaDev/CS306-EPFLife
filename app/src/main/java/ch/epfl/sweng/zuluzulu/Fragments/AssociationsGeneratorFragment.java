@@ -164,6 +164,8 @@ public class AssociationsGeneratorFragment extends SuperFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations Generator");
         UrlHandler urlHandler = new UrlHandler(this::handleAssociations, new AssociationsParser());
         urlHandler.execute(EPFL_URL);
