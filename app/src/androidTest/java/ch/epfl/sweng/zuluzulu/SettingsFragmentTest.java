@@ -61,12 +61,10 @@ public class SettingsFragmentTest {
 
         onView(withId(R.id.switch_chat_anonym)).perform(click());
         boolean anonymAfterClick = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
-        System.err.println(anonymAfterClick);
         assertNotEquals(anonymAfterClick, anonym);
 
         onView(withId(R.id.switch_chat_anonym)).perform(click());
         boolean anonymAfterTwoClick = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
-        System.err.println(anonymAfterTwoClick);
         assertEquals(anonymAfterTwoClick, anonym);
     }
 

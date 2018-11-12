@@ -44,14 +44,11 @@ import ch.epfl.sweng.zuluzulu.Structure.Utils;
  * create an instance of this fragment.
  */
 public class ChannelFragment extends SuperFragment {
-    public static final String TAG = "CHANNEL_TAG";
+    private static final String TAG = "CHANNEL_TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String CHANNELS_COLLECTION_NAME = "channels";
 
-    private FirebaseFirestore db;
-
     private View view;
-    private ListView listView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private List<Channel> listOfChannels = new ArrayList<>();
@@ -88,10 +85,10 @@ public class ChannelFragment extends SuperFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_channel, container, false);
-        listView = view.findViewById(R.id.channels_list_view);
+        ListView listView = view.findViewById(R.id.channels_list_view);
 
         adapter = new ChannelArrayAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
@@ -105,12 +102,7 @@ public class ChannelFragment extends SuperFragment {
         });
 
         swipeRefreshLayout = view.findViewById(R.id.swiperefresh_channel);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refresh();
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         refreshPosition();
         getChannelsFromDatabase();
@@ -122,7 +114,7 @@ public class ChannelFragment extends SuperFragment {
      * Read data from the database and get the list of the channels
      */
     private void getChannelsFromDatabase() {
-        db = FirebaseFirestore.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(CHANNELS_COLLECTION_NAME).orderBy("id", Query.Direction.ASCENDING).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
