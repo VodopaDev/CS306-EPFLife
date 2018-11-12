@@ -23,7 +23,7 @@ public class ChatFragmentTest extends TestWithLogin {
 
     @Before
     public void init() {
-        SuperFragment fragment = PostFragment.newInstance(getUser(), Utils.defaultChannel());
+        SuperFragment fragment = PostFragment.newInstance(getUser(), Utility.defaultChannel());
         mActivityRule.getActivity().openFragment(fragment);
     }
 
