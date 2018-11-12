@@ -136,6 +136,7 @@ public class PostFragment extends SuperFragment {
                             return;
                         }
 
+                        Log.d(TAG, "update posts !!!");
                         updatePosts();
                     }
                 });
@@ -174,7 +175,6 @@ public class PostFragment extends SuperFragment {
                                 }
                             }
                             adapter.notifyDataSetChanged();
-                            listView.setSelection(adapter.getCount() - 1);
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }

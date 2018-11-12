@@ -34,7 +34,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
 
         View view = LayoutInflater.from(mContext).inflate(R.layout.post, parent ,false);
 
-        LinearLayout linearLayout = view.findViewById(R.id.chat_message_linearLayout);
+        LinearLayout linearLayout = view.findViewById(R.id.post_linearLayout);
         TextView message = view.findViewById(R.id.post_msg);
         TextView senderName = view.findViewById(R.id.post_senderName);
 
