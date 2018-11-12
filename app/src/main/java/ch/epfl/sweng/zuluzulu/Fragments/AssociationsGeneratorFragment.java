@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
+import ch.epfl.sweng.zuluzulu.URLTools.UrlReader;
+import ch.epfl.sweng.zuluzulu.URLTools.UrlReaderFactory;
 
 
 /**
@@ -52,7 +56,6 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     /**
      * @return A new instance of fragment AssociationsGeneratorFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static AssociationsGeneratorFragment newInstance(User user) {
         if (!user.hasRole(ROLE_REQUIRED)) {
             return null;
@@ -162,6 +165,16 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Change the UrlReader to avoid HTTP request
+        UrlReader reader = new UrlReader() {
+            @Override
+            public BufferedReader read(String name) {
+                return new BufferedReader(new StringReader("&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br /><link rel=\"icon\" type=\"image/png\" href=\"images/favicon.png\" sizes=\"16x16\">"));
+            }
+        };
+        // Change the factory
+        UrlReaderFactory.setDependency(reader);
+
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations Generator");
         UrlHandler urlHandler = new UrlHandler(this::handleAssociations, new AssociationsParser());

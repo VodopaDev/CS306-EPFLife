@@ -20,6 +20,8 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.containsString;
 
 public class AssociationsGeneratorFragmentTest extends TestWithAdminLogin {
 
@@ -44,15 +46,15 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminLogin {
         onView(withId(R.id.nbr_icon)).perform(typeText("1"));
         onView(withId(R.id.load_icon_button)).perform(click());
 
-        onView(withId(R.id.associations_generator_list_values)).check(matches(isDisplayed()));
+        onView(withId(R.id.associations_generator_list_values)).check(matches(withText(containsString("favicon.png"))));
     }
 
     @Test
-    public void buttonDoesNothingIfTexTempty() {
+    public void buttonDoesNothingIfTextEmpty() {
         adminUser();
         onView(withId(R.id.load_icon_button)).perform(click());
 
-        onView(withId(R.id.associations_generator_list_values)).check(matches(isDisplayed()));
+        onView(withId(R.id.associations_generator_list_values)).check(matches(withText(containsString("lauzhack"))));
     }
 
     @Test
