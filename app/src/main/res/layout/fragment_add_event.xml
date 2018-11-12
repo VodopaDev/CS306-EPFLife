@@ -85,7 +85,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/event_title"
             android:layout_width="243dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"

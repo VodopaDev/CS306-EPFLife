@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -36,6 +37,11 @@ public class AddEventFragment extends SuperFragment {
     private Spinner spinner_days;
     private Spinner spinner_months;
     private Spinner spinner_years;
+
+    private Button create_event;
+
+    private TextView title;
+    private TextView description;
 
     private List<String> months = new ArrayList<>();
     private List<String> even_months_days = new ArrayList<>();
@@ -90,6 +96,24 @@ public class AddEventFragment extends SuperFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_event, container, false);
+
+        title = view.findViewById(R.id.event_title);
+        description = view.findViewById(R.id.long_desc_text);
+
+        create_event = view.findViewById(R.id.create_event_button);
+        create_event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //String name = spinner.getSelectedItem().toString();
+                String tit = title.getText().toString();
+                String desc = description.getText().toString();
+                String date = spinner_days.getSelectedItem().toString() + " " + spinner_months.getSelectedItem().toString() + " " + spinner_years.getSelectedItem().toString();
+                //System.out.println(name);
+                System.out.println(tit);
+                System.out.println(desc);
+                System.out.println(date);
+            }
+        });
 
         spinner_days = view.findViewById(R.id.spinner2);
         setSpinner(spinner_days, even_months_days);
