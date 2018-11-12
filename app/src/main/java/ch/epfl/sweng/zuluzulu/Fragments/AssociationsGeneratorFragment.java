@@ -22,6 +22,7 @@ import java.util.Objects;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.URLTools.IconParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
@@ -91,7 +92,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         // Tell tests the async execution is finished
         for (int i = 0; i < nbr; i++) {
             mListener.onFragmentInteraction(CommunicationTag.INCREMENT_IDLING_RESOURCE, true);
-            UrlHandler urlHandler = new UrlHandler(this::handleIcon, AssociationsParser::parseIcon);
+            UrlHandler urlHandler = new UrlHandler(this::handleIcon, new IconParser());
 
             urlHandler.execute(this.datas.get(i).split(",")[0]);
         }
@@ -163,7 +164,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations Generator");
-        UrlHandler urlHandler = new UrlHandler(this::handleAssociations, AssociationsParser::parseAssociationsData);
+        UrlHandler urlHandler = new UrlHandler(this::handleAssociations, new AssociationsParser());
         urlHandler.execute(EPFL_URL);
 
         // Send increment to wait async execution in test

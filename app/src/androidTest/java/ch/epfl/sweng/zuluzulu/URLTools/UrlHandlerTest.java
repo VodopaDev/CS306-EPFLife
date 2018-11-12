@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu.Structure;
+package ch.epfl.sweng.zuluzulu.URLTools;
 
 import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.idling.CountingIdlingResource;
