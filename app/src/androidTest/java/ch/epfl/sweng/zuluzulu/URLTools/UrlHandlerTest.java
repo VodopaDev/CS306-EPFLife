@@ -82,6 +82,39 @@ public class UrlHandlerTest {
         assertTrue(succes);
     }
 
+    @Test
+    public void failWithNull() {
+        this.object = new UrlHandler(this::handler, new AssociationsParser());
+
+        object.execute(); // Test with real URL
+
+        Utility.openMenu();
+
+        assertFalse(succes);
+    }
+
+
+    @Test
+    public void failWithNullBufferedReader() {
+        // Change the UrlReader to avoid HTTP request
+        UrlReader reader = new UrlReader() {
+            @Override
+            public BufferedReader read(String name) {
+                return null;
+            }
+        };
+        // Change the factory
+        UrlReaderFactory.setDependency(reader);
+
+        this.object = new UrlHandler(this::handler, new AssociationsParser());
+
+        object.execute(AssociationsGeneratorFragment.EPFL_URL); // Test with real URL
+
+        Utility.openMenu();
+
+        assertFalse(succes);
+    }
+
     /**
      * This function will get the datas
      *

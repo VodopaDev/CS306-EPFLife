@@ -41,7 +41,6 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
             return null;
     }
 
-
     @Override
     protected void onPostExecute(Pair<String, List<String>> value) {
         if (null != value && value.second != null) {
@@ -51,7 +50,6 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
         }
     }
 
-
     /**
      * Connect to the URL, parse it and return the values found
      *
@@ -59,7 +57,6 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
      * @return T Return object of type T with all the values founded
      */
     private List<String> parseUrl(String url) {
-
         BufferedReader bf = urlReader.read(url);
 
         if (bf == null) {
