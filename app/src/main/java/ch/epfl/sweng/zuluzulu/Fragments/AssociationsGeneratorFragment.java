@@ -164,18 +164,6 @@ public class AssociationsGeneratorFragment extends SuperFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Change the UrlReader to avoid HTTP request
-        UrlReader reader = new UrlReader() {
-            @Override
-            public BufferedReader read(String name) {
-                return new BufferedReader(new StringReader("&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br /><link rel=\"icon\" type=\"image/png\" href=\"images/favicon.png\" sizes=\"16x16\">"));
-            }
-        };
-        // Change the factory
-        UrlReaderFactory.setDependency(reader);
-
-
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations Generator");
         UrlHandler urlHandler = new UrlHandler(this::handleAssociations, new AssociationsParser());
         urlHandler.execute(EPFL_URL);
