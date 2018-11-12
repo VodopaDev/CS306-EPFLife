@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -19,6 +18,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +36,6 @@ public class AddEventFragment extends SuperFragment {
     private int numberOfEvents;
 
     //for date (number of days adapt depending on the month chosen)
-    private List<String> months = new ArrayList<>();
     private List<String> short_months = new ArrayList<>();
     private List<String> thirty_one_days = new ArrayList<>();
     private List<String> thirty_days;
@@ -68,22 +67,20 @@ public class AddEventFragment extends SuperFragment {
 
         super.onCreate(savedInstanceState);
 
-        months.add("January");
-        months.add("February");
-        months.add("March");
-        months.add("April");
-        months.add("May");
-        months.add("June");
-        months.add("July");
-        months.add("August");
-        months.add("September");
-        months.add("October");
-        months.add("November");
-        months.add("December");
+        short_months.add("Jan");
+        short_months.add("Feb");
+        short_months.add("Mar");
+        short_months.add("Apr");
+        short_months.add("May");
+        short_months.add("Jun");
+        short_months.add("Jul");
+        short_months.add("Aug");
+        short_months.add("Sep");
+        short_months.add("Oct");
+        short_months.add("Nov");
+        short_months.add("Dec");
 
-        for(String m : months){
-            short_months.add(m.substring(0,3));
-        }
+
 
         int[] indices = {0, 2, 4, 6,7,9,11};
         fillMonthsSublist(thirty_one_days_months,indices);
@@ -107,12 +104,12 @@ public class AddEventFragment extends SuperFragment {
             }
         }
 
-        for(int i = 0; i < 60; i++){
+        for(int i = 0; i < 60; i+= 10){
             if(i<10){
                 minutes.add("0"+String.valueOf(i));
             }
             else{
-            minutes.add(String.valueOf(i));
+                minutes.add(String.valueOf(i));
             }
         }
 
@@ -122,6 +119,10 @@ public class AddEventFragment extends SuperFragment {
         for(int i : array){
             months.add(short_months.get(i));
         }
+    }
+
+    private int getNumberSpinnerContent(Spinner spinner){
+        return Integer.parseInt(spinner.getSelectedItem().toString());
     }
 
     @Override
@@ -136,21 +137,21 @@ public class AddEventFragment extends SuperFragment {
             @Override
             public void onClick(View v) {
 
-                String hour = getSpinnerContent(spinner_hours);
-                String minute = getSpinnerContent(spinner_minutes);
-                String day = getSpinnerContent(spinner_days);
-                String month = months.get(short_months.indexOf(getSpinnerContent(spinner_months)));
-                String year = getSpinnerContent(spinner_years);
+                int hour = getNumberSpinnerContent(spinner_hours);
+                int minute = getNumberSpinnerContent(spinner_minutes);
+                int day = getNumberSpinnerContent(spinner_days);
+                int month = short_months.indexOf(spinner_months.getSelectedItem().toString());
+                int year = getNumberSpinnerContent(spinner_years)-1900;
+                Date date = new Date(year,month,day,hour,minute);
 
                 String name = spinner.getSelectedItem().toString();
                 String tit = title_view.getText().toString();
                 String desc = description_view.getText().toString();
-                String date = day + " " + month + " " + year + " à " + hour + ":" + minute + ":00 UTC+1";
 
                 if(!checkIfValid(tit, desc)){
                     return;
                 }
-                /*FirebaseFirestore db = FirebaseFirestore.getInstance();
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
 
                 db.collection("events_info").orderBy("name").get()
                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -180,15 +181,7 @@ public class AddEventFragment extends SuperFragment {
                                 Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
                                 Log.e("EVENT_LIST", "Error fetching event data\n" + e.getMessage());
                             }
-                        });*/
-
-
-
-                System.out.println(name);
-                System.out.println(tit);
-                System.out.println(desc);
-                System.out.println(date);
-                getActivity().onBackPressed();
+                        });
             }
         });
 
@@ -202,14 +195,26 @@ public class AddEventFragment extends SuperFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int pos,
                                        long id) {
                 String selected_mon = ((TextView) view).getText().toString();
+                int selected = Integer.parseInt(spinner_days.getSelectedItem().toString());
+
                 if(selected_mon.equals("Feb")){
                     setSpinner(spinner_days, feb_days);
+                    if (selected < 28){
+                        spinner_days.setSelection(selected-1);
+                    }
+                    else{
+                        spinner_days.setSelection(27);
+                    }
                 }else{
                     if(thirty_one_days_months.contains(selected_mon)){
                         setSpinner(spinner_days, thirty_one_days);
+                        spinner_days.setSelection(selected-1);
                     }
                     else{
                         setSpinner(spinner_days, thirty_days);
+                        if(selected < 30){
+                            spinner_days.setSelection(selected-1);
+                        }else{spinner_days.setSelection(29);}
                     }
                 }
             }
@@ -260,9 +265,7 @@ public class AddEventFragment extends SuperFragment {
         return false;
     }
 
-    private String getSpinnerContent(Spinner spinner){
-        return spinner.getSelectedItem().toString();
-    }
+
     private void setSpinner(Spinner spinner, List<String> list){
         ArrayAdapter adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
