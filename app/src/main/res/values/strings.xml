@@ -54,8 +54,6 @@
     <string name="profile_sciper">Sciper</string>
     <string name="association_detail_fav_button">Click to set association in favorites (or not)</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-
 
     <!-- Main fragment related -->
 
@@ -67,5 +65,8 @@
     <string name="chat">Chat</string>
     <string name="channel_icon">Channel icon</string>
     <string name="anonymity">Anonymity</string>
+
+
+    <string name="drawer_calendar">Calendar</string>
 
 </resources>

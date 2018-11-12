@@ -35,6 +35,9 @@ import ch.epfl.sweng.zuluzulu.Structure.GPS;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.DECREMENT_IDLING_RESOURCE;
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.INCREMENT_IDLING_RESOURCE;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -114,6 +117,7 @@ public class ChannelFragment extends SuperFragment {
      * Read data from the database and get the list of the channels
      */
     private void getChannelsFromDatabase() {
+        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(CHANNELS_COLLECTION_NAME).orderBy("id", Query.Direction.ASCENDING).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -136,6 +140,7 @@ public class ChannelFragment extends SuperFragment {
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
+                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                     }
                 });
     }

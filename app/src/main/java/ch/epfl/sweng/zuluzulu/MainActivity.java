@@ -26,6 +26,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.CalendarFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
@@ -37,6 +38,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.GPS;
@@ -68,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         // Needed to use Firebase storage and Firestore
         FirebaseApp.initializeApp(getApplicationContext());
+
+        // Needed to have easier access to the Firestore
+        //FirebaseProxy.init(this);
 
         // Initialize the fragment stack used for the back button
         previous_fragments = new Stack<>();
@@ -197,6 +202,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         SuperFragment fragment;
 
         switch (menuItem.getItemId()) {
+            case R.id.nav_calendar:
+                fragment = CalendarFragment.newInstance((AuthenticatedUser)user);
+                break;
             case R.id.nav_main:
                 fragment = MainFragment.newInstance(user);
                 break;

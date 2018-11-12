@@ -10,9 +10,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Structure.Admin;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Structure.Guest;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Structure.UserRole;
 
@@ -30,34 +32,39 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class Utility {
 
     /**
+     * Create a guest user
+     * @return Return a Guest
+     */
+    public static Guest createTestGuest(){
+        return (new User.UserBuilder()).buildGuestUser();
+    }
+
+    /**
      * Create a user for the tests
      *
-     * @return Return a user
+     * @return Return an AithenticatedUser
      */
-    public static User createTestUser() {
-        User.UserBuilder builder = createFilledUserBuider();
-
+    public static AuthenticatedUser createTestAuthenticated() {
+        User.UserBuilder builder = createFilledUserBuilder();
         User user = builder.buildAuthenticatedUser();
         assert (user != null);
+        assert (user.isConnected());
 
-
-        return user;
+        return (AuthenticatedUser)user;
     }
 
     /**
      * Create a admin for the tests
      *
-     * @return Return a  admin user
+     * @return Return an Admin
      */
-    public static User createTestAdmin() {
-        User.UserBuilder builder = createFilledUserBuider();
-
-
+    public static Admin createTestAdmin() {
+        User.UserBuilder builder = createFilledUserBuilder();
         User user = builder.buildAdmin();
         assert (user != null);
         assert (user.hasRole(UserRole.ADMIN));
 
-        return user;
+        return (Admin)user;
     }
 
     /**
@@ -79,15 +86,6 @@ public class Utility {
         Intent i = new Intent();
         i.putExtra("user", user);
         mActivityRule.launchActivity(i);
-    }
-
-
-    /**
-     * Open the EventFragment
-     */
-    public static void goToEvent() {
-        openMenu();
-        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_events));
     }
 
     /**
@@ -131,7 +129,7 @@ public class Utility {
      *
      * @return UserBuilder
      */
-    private static User.UserBuilder createFilledUserBuider() {
+    private static User.UserBuilder createFilledUserBuilder() {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setSciper("123456");
         builder.setGaspar("gaspar");
@@ -140,8 +138,8 @@ public class Utility {
         builder.setSemester("BA5");
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
-        builder.setFavAssos(Arrays.asList(1, 2));
-        builder.setFollowedEvents(new ArrayList<Integer>());
+        builder.setFavAssos(Arrays.asList(2));
+        builder.setFollowedEvents(Arrays.asList(1, 2));
         builder.setFollowedChats(new ArrayList<Integer>());
 
         return builder;

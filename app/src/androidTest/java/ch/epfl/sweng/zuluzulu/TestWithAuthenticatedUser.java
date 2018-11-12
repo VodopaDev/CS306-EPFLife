@@ -5,7 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 import org.junit.Before;
 import org.junit.Rule;
 
-import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 
 /**
  * This class allow us to create the main activity as if we were connected.
@@ -13,17 +13,18 @@ import ch.epfl.sweng.zuluzulu.Structure.User;
  * <p>
  * Author @dahn
  */
-public abstract class TestWithLogin {
+public abstract class TestWithAuthenticatedUser {
+
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class, false, false);
 
 
-    private User user;
+    private AuthenticatedUser user;
 
     @Before
     public void setUpLogin() {
-        this.user = Utility.createTestUser();
+        this.user = Utility.createTestAuthenticated();
         Utility.addUserToMainIntent(mActivityRule, this.user);
     }
 
@@ -32,7 +33,7 @@ public abstract class TestWithLogin {
      *
      * @return User
      */
-    protected User getUser() {
+    protected AuthenticatedUser getUser() {
         return this.user;
     }
 }

@@ -8,6 +8,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
+import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithGuestAndFragment;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
@@ -16,25 +19,22 @@ import static org.junit.Assert.assertNotNull;
  * This class test the MainActivity as a Guest User
  */
 @RunWith(AndroidJUnit4.class)
-public class MainActivityAsGuestTest {
-    @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
-    private MainActivity mActivity;
+public class MainActivityAsGuestTest extends TestWithGuestAndFragment<MainFragment> {
 
-    @Before
-    public void setUp() {
-        mActivity = mActivityRule.getActivity();
+    @Override
+    public void initFragment() {
+        fragment = MainFragment.newInstance(user);
     }
 
     @Test
     public void isAuthenticated() {
         // check not authenticated
-        assertFalse(mActivity.isAuthenticated());
+        assertFalse(getMainActivity().isAuthenticated());
     }
 
     @Test
     public void getUser() {
-        assertNotNull(mActivity.getUser());
+        assertNotNull(getMainActivity().getUser());
     }
+
 }

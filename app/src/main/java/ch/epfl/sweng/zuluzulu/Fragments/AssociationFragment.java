@@ -33,6 +33,9 @@ import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.DECREMENT_IDLING_RESOURCE;
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.INCREMENT_IDLING_RESOURCE;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -88,13 +91,13 @@ public class AssociationFragment extends SuperFragment {
 
         default_sort_option = "name";
 
-        fillAssociationLists(default_sort_option);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_association, container, false);
 
+        fillAssociationLists(default_sort_option);
         listview_assos = view.findViewById(R.id.association_fragment_listview);
 
         assos_adapter = new AssociationArrayAdapter(getContext(), assos_filtered, mListener);
@@ -182,6 +185,7 @@ public class AssociationFragment extends SuperFragment {
     }
 
     private void fillAssociationLists(String sortOption) {
+        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
         FirebaseFirestore.getInstance().collection("assos_info").orderBy(sortOption).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -200,6 +204,7 @@ public class AssociationFragment extends SuperFragment {
                                 assos_adapter.notifyDataSetChanged();
                             }
                         }
+                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -207,6 +212,7 @@ public class AssociationFragment extends SuperFragment {
                     public void onFailure(@NonNull Exception e) {
                         Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
                         Log.e("ASSO_LIST", "Error fetching association date\n" + e.getMessage());
+                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                     }
                 });
     }

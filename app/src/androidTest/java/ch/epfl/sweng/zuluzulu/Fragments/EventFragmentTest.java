@@ -1,6 +1,7 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -13,7 +14,9 @@ import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -23,91 +26,47 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
-public class EventFragmentTest {
+public class EventFragmentTest extends TestWithAuthenticatedAndFragment<EventFragment> {
 
-    private static final int NB_ALL_EVENTS = 4;
-    private static final int NB_FAV_EVENTS = 3;
-
-    @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
-    private User user;
-    private SuperFragment fragment;
-
-    @Before
-    public void initAuthenticatedTest() {
-        user = Utility.createTestUser();
-        Utility.addUserToMainIntent(mActivityRule, user);
+    @Override
+    public void initFragment() {
         fragment = EventFragment.newInstance(user);
-        mActivityRule.getActivity().openFragment(fragment);
-
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
-
-//    @Before
-//    public void init() {
-//        user = Utility.createTestUser();
-//        Utility.addUserToMainIntent(mActivityRule, user);
-//
-//        fragment = EventFragment.newInstance(user);
-//        mActivityRule.getActivity().openFragment(fragment);
-//    }
 
     @Test
     public void thereAreTwoButtons() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(1);
-        onView(withId(R.id.event_fragment_fav_button)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(R.id.event_fragment_fav_button)).check(matches(isDisplayed()));
         onView(withId(R.id.event_fragment_all_button)).check(matches(isDisplayed()));
-        TimeUnit.SECONDS.sleep(1);
     }
 
     @Test
     public void clickOnFavThenOnAll() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
-        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_all_button)).perform(ViewActions.click());
-        TimeUnit.SECONDS.sleep(1);
     }
 
     @Test
     public void thereAreTwoSortCheckbox() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_checkBox_sort_name)).check(matches(isDisplayed()));
         onView(withId(R.id.event_fragment_checkBox_sort_date)).check(matches(isDisplayed()));
-        TimeUnit.SECONDS.sleep(1);
     }
 //
 //    @Test
 //    public void listAlternateSortOption() throws InterruptedException {
-//        TimeUnit.SECONDS.sleep(1);
 //        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
-//        TimeUnit.SECONDS.sleep(1);
 //        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
-//        TimeUnit.SECONDS.sleep(1);
 //    }
     @Test
     public void sortListDateFrom() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_from_date)).perform(typeText("01012040")).perform(closeSoftKeyboard());
-        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
-        TimeUnit.SECONDS.sleep(1);
     }
 
     @Test
     public void sortListDateFromAndTo() throws InterruptedException {
-        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_from_date)).perform(typeText("01012040")).perform(closeSoftKeyboard());
-        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_to_date)).perform(typeText("01012041")).perform(closeSoftKeyboard());
-        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
-        TimeUnit.SECONDS.sleep(1);
     }
 
     //
@@ -115,56 +74,37 @@ public class EventFragmentTest {
     //
 //    @Test
 //    public void guestMainPageHasSomeEvent() throws InterruptedException {
-//        TimeUnit.SECONDS.sleep(2);
 //        onView(withId(R.id.event_fragment_all_button)).perform(ViewActions.click());
-//        TimeUnit.SECONDS.sleep(2);
-//        /*
-//        TimeUnit.SECONDS.sleep(1);
 //        assertThat(list_events, hasChildCount(NB_ALL_EVENTS));
 //        */
 //    }
 
 //    @Test
 //    public void guestClickOnFavoritesStaysOnAll() throws InterruptedException {
-//        TimeUnit.SECONDS.sleep(2);
 //        onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
-//        TimeUnit.SECONDS.sleep(2);
-//        /*
-//        TimeUnit.SECONDS.sleep(1);
 //        assertThat(list_events, hasChildCount(NB_ALL_EVENTS));
-//        */
 //    }
 
 //    @Test
 //    public void authenticatedClickOnFavoritesDisplayFewerEvents() throws InterruptedException {
-//        TimeUnit.SECONDS.sleep(2);
 //        onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
-//        TimeUnit.SECONDS.sleep(2);
-//        /*
-//        TimeUnit.SECONDS.sleep(1);
 //        assertThat(list_events, hasChildCount(NB_FAV_EVENTS));
-//        */
 //    }
 
 //    @Test
 //    public void listSortByName() throws InterruptedException {
-//        TimeUnit.SECONDS.sleep(2);
 //        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
-//        TimeUnit.SECONDS.sleep(2);
 //    }
 
 //    @Test
 //    public void listSortByDate() throws InterruptedException {
-//        TimeUnit.SECONDS.sleep(2);
 //        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
-//        TimeUnit.SECONDS.sleep(2);
 //    }
 
 
 //    @Test
 //    public void AuthenticatedClickingAnEventGoesToDetail() throws InterruptedException {
 //        authenticatedGoesToEvent();
-//        TimeUnit.SECONDS.sleep(1);
 //        onView(withText("forumEpfl")).perform(ViewActions.click());
 //        onView(withId(R.id.event_detail_name)).check(matches(isDisplayed()));
 //    }
