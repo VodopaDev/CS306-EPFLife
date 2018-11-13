@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,11 +24,9 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.URLTools.IconParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
-import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.Structure.UserRole;
+import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.User.UserRole;
 import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
-import ch.epfl.sweng.zuluzulu.URLTools.UrlReader;
-import ch.epfl.sweng.zuluzulu.URLTools.UrlReaderFactory;
 
 
 /**
@@ -44,7 +40,6 @@ import ch.epfl.sweng.zuluzulu.URLTools.UrlReaderFactory;
 public class AssociationsGeneratorFragment extends SuperFragment {
     // The URL we will connect to
     final static public String EPFL_URL = "https://associations.epfl.ch/page-16300-fr-html/";
-    private static final String ASSOCIATIONS_GENERATOR_TAG = "ASSOCIATIONS_GENERATOR_TAG";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
 
     private List<String> datas;

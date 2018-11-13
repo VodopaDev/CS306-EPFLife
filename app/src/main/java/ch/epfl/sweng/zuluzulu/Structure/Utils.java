@@ -4,9 +4,9 @@ import android.location.Location;
 
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
 
 import java.text.SimpleDateFormat;
+import com.google.firebase.firestore.GeoPoint;
 
 /**
  * Class that contains general useful functions

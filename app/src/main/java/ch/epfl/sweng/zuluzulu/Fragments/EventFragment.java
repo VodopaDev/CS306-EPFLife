@@ -32,12 +32,13 @@ import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.Structure.UserRole;
+
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.User.UserRole;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
-import ch.epfl.sweng.zuluzulu.Structure.eventSortCompByDate;
-import ch.epfl.sweng.zuluzulu.Structure.eventSortCompByName;
+import ch.epfl.sweng.zuluzulu.Structure.EventSortCompByDate;
+import ch.epfl.sweng.zuluzulu.Structure.EventSortCompByName;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -185,8 +186,8 @@ public class EventFragment extends SuperFragment {
             public void onClick(View v) {
                 checkbox_event_sort_name.setEnabled(false);
 
-                Collections.sort(event_all, new eventSortCompByName());
-                Collections.sort(event_fav, new eventSortCompByName());
+                Collections.sort(event_all, new EventSortCompByName());
+                Collections.sort(event_fav, new EventSortCompByName());
 //                event_all.sort(Event.assoNameComparator());
 //                event_fav.sort(Event.assoNameComparator());
 
@@ -206,8 +207,8 @@ public class EventFragment extends SuperFragment {
                         event_fragment_from_date.getText().toString().contains("Y")) {
 
                     checkbox_event_sort_date.setEnabled(false);
-                    Collections.sort(event_all, new eventSortCompByDate());
-                    Collections.sort(event_fav, new eventSortCompByDate());
+                    Collections.sort(event_all, new EventSortCompByDate());
+                    Collections.sort(event_fav, new EventSortCompByDate());
 //                    event_all.sort(Event.dateComparator());
 //                    event_fav.sort(Event.dateComparator());
 
@@ -221,8 +222,8 @@ public class EventFragment extends SuperFragment {
                 else if (event_fragment_to_date.getText().toString().contains("D") || event_fragment_to_date.getText().toString().contains("M") ||
                         event_fragment_to_date.getText().toString().contains("Y")) {
                     checkbox_event_sort_date.setEnabled(false);
-                    Collections.sort(event_all, new eventSortCompByDate());
-                    Collections.sort(event_fav, new eventSortCompByDate());
+                    Collections.sort(event_all, new EventSortCompByDate());
+                    Collections.sort(event_fav, new EventSortCompByDate());
 //                    event_all.sort(Event.dateComparator());
 //                    event_fav.sort(Event.dateComparator());
 
@@ -254,8 +255,8 @@ public class EventFragment extends SuperFragment {
                 }
                 else {
                     checkbox_event_sort_date.setEnabled(false);
-                    Collections.sort(event_all, new eventSortCompByDate());
-                    Collections.sort(event_fav, new eventSortCompByDate());
+                    Collections.sort(event_all, new EventSortCompByDate());
+                    Collections.sort(event_fav, new EventSortCompByDate());
 //                    event_all.sort(Event.dateComparator());
 //                    event_fav.sort(Event.dateComparator());
 
