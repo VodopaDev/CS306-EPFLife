@@ -130,7 +130,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             docData.put("long_desc", datas.get(index).split(",")[2]);
             docData.put("id", index + 100);
 
-          //  db.collection("assos_info").document(Integer.toString(index + 100)).delete();
+            db.collection("assos_info").document(Integer.toString(index + 100)).set(docData);
             updateView();
         } catch (MalformedURLException e) {
             e.printStackTrace();
