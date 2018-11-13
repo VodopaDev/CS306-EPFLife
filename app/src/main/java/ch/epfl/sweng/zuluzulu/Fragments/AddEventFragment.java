@@ -347,7 +347,7 @@ public class AddEventFragment extends SuperFragment {
      * @param list , the content of the spinner
      */
     private void setSpinner(Spinner spinner, List<String> list){
-        ArrayAdapter adapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, list);
+        ArrayAdapter adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }
