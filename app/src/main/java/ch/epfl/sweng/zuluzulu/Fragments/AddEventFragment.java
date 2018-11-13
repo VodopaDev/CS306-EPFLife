@@ -28,6 +28,9 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.DECREMENT_IDLING_RESOURCE;
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.INCREMENT_IDLING_RESOURCE;
+
 public class AddEventFragment extends SuperFragment {
     private static final int[] INDICES = {0, 2, 4, 6,7,9,11};
     //for association name
@@ -173,8 +176,9 @@ public class AddEventFragment extends SuperFragment {
                 if(!checkIfValid(tit, desc)){
                     return;
                 }
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+                mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
                 db.collection("events_info").orderBy("name").get()
                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
@@ -192,6 +196,7 @@ public class AddEventFragment extends SuperFragment {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_FRAGMENT, null);
+                                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                                     }
                                 });
 
@@ -202,6 +207,7 @@ public class AddEventFragment extends SuperFragment {
                             public void onFailure(@NonNull Exception e) {
                                 Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
                                 Log.e("EVENT_LIST", "Error fetching event data\n" + e.getMessage());
+                                mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                             }
                         });
             }
@@ -351,6 +357,7 @@ public class AddEventFragment extends SuperFragment {
      * on the database.
      */
     private void fillAssociationNames() {
+        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
         FirebaseFirestore.getInstance().collection("assos_info").orderBy("name").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -363,6 +370,7 @@ public class AddEventFragment extends SuperFragment {
                             }
                         }
                         setSpinner(spinner, association_names);
+                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -370,6 +378,7 @@ public class AddEventFragment extends SuperFragment {
                     public void onFailure(@NonNull Exception e) {
                         Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
                         Log.e("ASSO_LIST", "Error fetching association data\n" + e.getMessage());
+                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                     }
                 });
     }
