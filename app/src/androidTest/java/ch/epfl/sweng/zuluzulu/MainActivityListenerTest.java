@@ -43,8 +43,6 @@ public class MainActivityListenerTest extends TestWithAdminAndFragment<MainFragm
 
     @Test
     public void communicationTest() throws Throwable {
-        TimeUnit.SECONDS.sleep(5);
-
         mActivityRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {

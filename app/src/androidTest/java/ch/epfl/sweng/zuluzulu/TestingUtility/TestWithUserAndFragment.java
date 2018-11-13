@@ -2,15 +2,18 @@ package ch.epfl.sweng.zuluzulu.TestingUtility;
 
 import android.support.test.espresso.IdlingRegistry;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.Utility;
 
+@RunWith(AndroidJUnit4.class)
 public abstract class TestWithUserAndFragment<U extends User, F extends SuperFragment> {
     protected U user;
     protected F fragment;
@@ -21,7 +24,7 @@ public abstract class TestWithUserAndFragment<U extends User, F extends SuperFra
             new ActivityTestRule<>(MainActivity.class, false, false);
 
     @Before
-    public void init() {
+    public final void init() {
         // Add the user
         initUser();
         Utility.addUserToMainIntent(mActivityRule, user);

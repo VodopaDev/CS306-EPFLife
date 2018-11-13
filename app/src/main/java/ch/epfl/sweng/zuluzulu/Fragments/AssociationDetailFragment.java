@@ -197,7 +197,7 @@ public class AssociationDetailFragment extends SuperFragment {
                         upcoming_event = new Event(fmap);
                         upcoming_event_name.setText(upcoming_event.getName());
                         upcoming_event_date.setText(upcoming_event.getStartDate().toString());
-                        Glide.with(getContext())
+                        Glide.with(getActivity())
                                 .load(upcoming_event.getIconUri())
                                 .centerCrop()
                                 .into(upcoming_event_icon);

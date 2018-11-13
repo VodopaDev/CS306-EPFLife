@@ -58,15 +58,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     // This resource is used for tests
     // That's the recommended way to implement it
     // @see https://developer.android.com/training/testing/espresso/idling-resource#integrate-recommended-approach
-    private CountingIdlingResource resource;
+    private CountingIdlingResource resource = new CountingIdlingResource("Main Activity");
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Create the resource
-        resource = new CountingIdlingResource("Main Activity");
 
         // Needed to use Firebase storage and Firestore
         FirebaseApp.initializeApp(getApplicationContext());

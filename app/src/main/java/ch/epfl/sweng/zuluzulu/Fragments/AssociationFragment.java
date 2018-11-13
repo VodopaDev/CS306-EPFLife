@@ -45,7 +45,6 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.INCREMENT_IDLING_RESOURCE;
  * create an instance of this fragment.
  */
 public class AssociationFragment extends SuperFragment {
-    private static final String TAG = "ASSOCIATIONS_TAG";
     private static final String ARG_USER = "ARG_USER";
 
     private User user;
@@ -88,9 +87,7 @@ public class AssociationFragment extends SuperFragment {
         assos_all = new ArrayList<>();
         assos_filtered = new ArrayList<>();
         assos_fav = new ArrayList<>();
-
         default_sort_option = "name";
-
     }
 
     @Override

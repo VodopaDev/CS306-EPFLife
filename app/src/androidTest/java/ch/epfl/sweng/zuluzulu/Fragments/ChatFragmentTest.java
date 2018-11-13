@@ -21,6 +21,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.core.IsNot.not;
+
 @RunWith(AndroidJUnit4.class)
 public class ChatFragmentTest extends TestWithAuthenticatedAndFragment<ChatFragment> {
     private static Channel channel;
