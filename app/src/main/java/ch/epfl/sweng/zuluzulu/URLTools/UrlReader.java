@@ -42,6 +42,7 @@ public class UrlReader implements Reader {
         } catch (IOException e) {
             Log.d(TAG, "Cannot read the page");
             e.printStackTrace();
+            urlConnection.disconnect();
         }
 
         return bufferedReader;
@@ -53,6 +54,7 @@ public class UrlReader implements Reader {
     public void disconnect(){
         if(urlConnection != null) {
             urlConnection.disconnect();
+            urlConnection = null;
         }
     }
 

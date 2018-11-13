@@ -94,11 +94,14 @@
             android:layout_height="27dp"
             android:layout_marginBottom="3dp"
             android:layout_marginEnd="32dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginRight="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:textSize="36sp"
             app:layout_constraintBottom_toBottomOf="@id/switch_notifications"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/anonym_text"
             app:layout_constraintTop_toTopOf="@id/button_clear_cache"
             app:layout_constraintVertical_bias="0.558" />
 
