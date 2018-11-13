@@ -96,6 +96,7 @@ public class UserTest {
         assertNull(guest.getGaspar());
         assertNull(guest.getLastNames());
         assertNull(guest.getSciper());
+        assertNull(guest.getSemester());
     }
 
     @Test
@@ -134,5 +135,4 @@ public class UserTest {
         assertEquals(expected, user.toString());
         assertEquals("Guest user", new User.UserBuilder().buildGuestUser().toString());
     }
-
 }
