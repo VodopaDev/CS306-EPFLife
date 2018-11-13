@@ -32,7 +32,7 @@ public class AssociationsParser implements Parser<List<String>> {
             return null;
         }
         // regex
-        Pattern p = Pattern.compile("&#\\d+.*<a href=\"(.*?)\".*>(.*)</a>.*\\((.+)\\)<")l ;
+        Pattern p = Pattern.compile("&#\\d+.*<a href=\"(.*?)\".*>(.*)</a>.*\\((.+)\\)<");
 
         ArrayList<String> results = new ArrayList<>();
         String inputLine;
