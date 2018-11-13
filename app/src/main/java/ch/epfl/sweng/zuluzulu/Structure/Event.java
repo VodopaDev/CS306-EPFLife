@@ -25,6 +25,7 @@ public class Event implements Serializable {
     private Date start_date;
     private String start_date_string;
     private int likes;
+    private String organizer;
 
     private Uri banner_uri;
     private Uri icon_uri;
@@ -44,6 +45,7 @@ public class Event implements Serializable {
         short_desc = data.getString("short_desc");
         long_desc = data.getString("long_desc");
         likes = data.getInteger("likes");
+        organizer = data.getString("organizer");
 
         String icon_str = data.getString("icon_uri");
         icon_uri = icon_str == null ?
@@ -115,5 +117,7 @@ public class Event implements Serializable {
     }
 
     public int getLikes() { return likes; }
+
+    public String getOrganizer() { return organizer; }
 
 }

@@ -71,5 +71,6 @@
     <string name="event_detail_like">Likes:</string>
     <string name="event_detail_tv_desc">Description:</string>
     <string name="event_detail_tv_date">Date:</string>
+    <string name="event_detail_tv_organizer">Organizer:</string>
 
 </resources>
