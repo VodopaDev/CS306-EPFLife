@@ -37,9 +37,9 @@ public class ChannelArrayAdapter extends ArrayAdapter<Channel> {
         Channel currentChannel = channels.get(position);
         boolean isClickable = currentChannel.isClickable();
 
-        int layoutRessource = isClickable ? R.layout.channel : R.layout.channel_toofar;
+        int layoutResource = isClickable ? R.layout.channel : R.layout.channel_toofar;
 
-        View view = LayoutInflater.from(mContext).inflate(layoutRessource, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(layoutResource, parent, false);
 
         LinearLayout linearLayout = view.findViewById(R.id.channel_layout);
         linearLayout.setBackgroundResource(R.drawable.channel_background);
