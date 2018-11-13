@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu;
 
-import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.widget.Spinner;
 
@@ -18,6 +17,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -130,5 +130,22 @@ public class AddEventFragmentTest extends TestWithAdminLogin{
         checkDayValueAfterMonthChange(spinnertest, "Nov", "5");
 
 
+    }
+
+    /**
+     * create an event and controls that it is indeed created in the event list
+     */
+    @Test
+    public void testCreateEvent(){
+        onView(withId(R.id.event_title)).perform(typeText("Test Event"));
+        onView(withId(R.id.long_desc_text)).perform(typeText("this is an awesome test event")).perform(closeSoftKeyboard());
+        onView(withId(R.id.create_event_button)).perform(click());
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.event_fragment_all_button)).check(matches(isDisplayed()));
+        onView(withText("Test Event")).check(matches(isDisplayed()));
     }
 }
