@@ -91,6 +91,12 @@ public class ChannelTest {
         channelSAT = new Channel(new FirebaseMapDecorator(data3));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testBadMapForConstructor() {
+        Map map = new HashMap();
+        new Channel(new FirebaseMapDecorator(map));
+    }
+
     @Test
     public void testGettersAndSetters() {
         assertEquals(id1.intValue(), channelGlobal.getId());

@@ -7,7 +7,6 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 
@@ -29,7 +28,7 @@ public class ChannelFragmentTest extends TestWithAuthenticatedAndFragment<Channe
 
     @Test
     public void testUserCanSwipeUp() {
-        onView(withId(R.id.channels_list_view)).perform(ViewActions.swipeUp());
+        onView(withId(R.id.channels_list_view)).perform(ViewActions.swipeDown());
     }
 
 }
