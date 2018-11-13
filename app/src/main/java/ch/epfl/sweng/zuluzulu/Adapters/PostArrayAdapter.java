@@ -31,7 +31,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Post currentPost = posts.get(position);
-        boolean isAnonym = currentPost.isAnonymous();
+        boolean anonymous = currentPost.isAnonymous();
 
         View view = LayoutInflater.from(mContext).inflate(R.layout.post, parent ,false);
 
