@@ -39,7 +39,7 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
     protected AuthenticatedUser user;
     protected Channel channel;
 
-    protected boolean anonym;
+    protected boolean anonymous;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
