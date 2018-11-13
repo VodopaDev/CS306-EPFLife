@@ -16,14 +16,14 @@ public class Post {
     private String sciper;
     private String message;
     private Date time;
-    private boolean anonym;
+    private boolean anonymous;
 
     public Post(FirebaseMapDecorator data) {
         senderName = data.getString("senderName");
         sciper = data.getString("sciper");
         message = data.getString("message");
         time = data.getDate("time");
-        anonym = senderName.isEmpty();
+        anonymous = senderName.isEmpty();
     }
 
     /**
@@ -91,9 +91,9 @@ public class Post {
     }
 
     /**
-     * Getter for anonym
+     * Getter for anonymous
      *
      * @return Whether the post is anonymous or not
      */
-    public boolean isAnonym() { return anonym; }
+    public boolean isAnonymous() { return anonymous; }
 }

@@ -3,7 +3,6 @@
     android:id="@+id/channel_layout"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorGrayDarkTransparent"
     android:layout_height="wrap_content">
 
     <LinearLayout

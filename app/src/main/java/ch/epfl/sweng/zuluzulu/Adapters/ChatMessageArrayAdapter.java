@@ -31,7 +31,7 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<ChatMessage> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ChatMessage currentChatMessage = messages.get(position);
         boolean isOwnMessage = currentChatMessage.isOwnMessage();
-        boolean isAnonym = currentChatMessage.isAnonym();
+        boolean isAnonym = currentChatMessage.isAnonymous();
 
         boolean mustHideName = isOwnMessage || isAnonym;
         int layoutResource = mustHideName ? R.layout.chat_message_noname : R.layout.chat_message;

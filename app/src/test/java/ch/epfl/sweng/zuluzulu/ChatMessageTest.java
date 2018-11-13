@@ -73,8 +73,8 @@ public class ChatMessageTest {
     }
 
     @Test
-    public void testIsAnonym() {
-        assertTrue(chatMessage2.isAnonym());
+    public void testIsAnonymous() {
+        assertTrue(chatMessage2.isAnonymous());
     }
 
 }

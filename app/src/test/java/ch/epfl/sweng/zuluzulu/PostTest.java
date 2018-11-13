@@ -65,7 +65,7 @@ public class PostTest {
     }
 
     @Test
-    public void testIsAnonym() {
-        assertTrue(post2.isAnonym());
+    public void testIsAnonymous() {
+        assertTrue(post2.isAnonymous());
     }
 }
