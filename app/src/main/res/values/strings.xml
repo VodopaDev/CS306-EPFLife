@@ -69,5 +69,7 @@
     <string name="channel_icon">Channel icon</string>
     <string name="anonymity">Anonymity</string>
     <string name="event_detail_like">Likes:</string>
+    <string name="event_detail_tv_desc">Description:</string>
+    <string name="event_detail_tv_date">Date:</string>
 
 </resources>
