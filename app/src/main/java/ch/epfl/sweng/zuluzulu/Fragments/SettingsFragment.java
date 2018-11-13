@@ -1,12 +1,16 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Switch;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -24,6 +28,9 @@ import static android.support.design.widget.Snackbar.LENGTH_SHORT;
  */
 public class SettingsFragment extends SuperFragment {
     public static final String TAG = "SETTINGS_TAG";
+    public final static String PREF_KEY_ANONYM = "PREF_KEY_ANONYM";
+
+    private SharedPreferences preferences;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -47,10 +54,12 @@ public class SettingsFragment extends SuperFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
 
         Button button_clear = view.findViewById(R.id.button_clear_cache);
         button_clear.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +69,16 @@ public class SettingsFragment extends SuperFragment {
                 clear_snackbar.show();
             }
         });
+
+        Switch switchAnonym = view.findViewById(R.id.switch_chat_anonym);
+        switchAnonym.setChecked(preferences.getBoolean(PREF_KEY_ANONYM, false));
+        switchAnonym.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                preferences.edit().putBoolean(PREF_KEY_ANONYM, switchAnonym.isChecked()).apply();
+            }
+        });
+
         return view;
     }
 }

@@ -1,15 +1,9 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import android.location.Location;
 import android.net.Uri;
-
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;

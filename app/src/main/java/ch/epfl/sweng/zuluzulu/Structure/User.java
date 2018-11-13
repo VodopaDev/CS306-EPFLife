@@ -18,7 +18,6 @@ abstract public class User implements Serializable {
         this.roles = new ArrayList<>();
     }
 
-
     public String getFirstNames() {
         return null;
     }
