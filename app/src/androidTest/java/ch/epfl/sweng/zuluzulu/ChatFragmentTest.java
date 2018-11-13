@@ -42,4 +42,16 @@ public class ChatFragmentTest extends TestWithLogin {
         onView(withId(R.id.chat_message_edit)).perform(ViewActions.typeText("test")).perform(ViewActions.closeSoftKeyboard());
         onView(withId(R.id.chat_send_button)).check(matches(isEnabled()));
     }
+
+    @Test
+    public void testOnlyOneButtonIsEnabled() {
+        onView(withId(R.id.posts_button)).check(matches(isEnabled()));
+        onView(withId(R.id.chat_button)).check(matches(not(isEnabled())));
+    }
+
+    @Test
+    public void testUserCanGoToPosts() {
+        onView(withId(R.id.posts_button)).perform(ViewActions.click());
+        onView(withId(R.id.posts_list_view)).check(matches(isDisplayed()));
+    }
 }
