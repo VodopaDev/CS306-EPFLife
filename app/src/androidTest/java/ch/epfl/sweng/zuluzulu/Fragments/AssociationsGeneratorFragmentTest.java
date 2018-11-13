@@ -24,6 +24,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
 
 public class AssociationsGeneratorFragmentTest extends TestWithAdminLogin {
 
@@ -46,16 +47,12 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminLogin {
         };
         // Change the factory
         UrlReaderFactory.setDependency(reader);
+
         adminUser();
         onView(withId(R.id.nbr_icon)).perform(replaceText("lauzhack"));
         onView(withId(R.id.load_icon_button)).perform(click());
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        onView(withId(R.id.associations_generator_list_values)).check(matches(withText(containsString("favicon.png"))));
 
+        onView(withId(R.id.associations_generator_list_values)).check(matches(withText(containsString("favicon.png"))));
     }
 
 
@@ -112,6 +109,28 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminLogin {
 
         // check no association found
         onView(withId(R.id.associations_generator_list_values)).check(matches(withText(R.string.no_association_found)));
+    }
+
+    /**
+     * Test that an icon doesn't load then the association url is fake
+     */
+    @Test
+    public void dontLoadIconWhenFakeUrl() {
+        // Change the UrlReader to avoid HTTP request
+        UrlReader reader = new UrlReader() {
+            @Override
+            public BufferedReader read(String name) {
+                return new BufferedReader(new StringReader("&#8211; <a href=\"not_url\">FakeAssos</a> (FakeAssos)<br /><link rel=\"icon\" type=\"image/png\" href=\"images/favicon.png\" sizes=\"16x16\">"));
+            }
+        };
+        // Change the factory
+        UrlReaderFactory.setDependency(reader);
+        adminUser();
+        onView(withId(R.id.nbr_icon)).perform(replaceText("FakeAssos"));
+        onView(withId(R.id.load_icon_button)).perform(click());
+
+        // check no icon found
+        onView(withId(R.id.associations_generator_list_values)).check(matches(not(withText("favicon.png"))));
     }
 
     @Test
