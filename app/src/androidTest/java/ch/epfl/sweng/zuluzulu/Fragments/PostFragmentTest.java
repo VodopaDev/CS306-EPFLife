@@ -35,8 +35,8 @@ public class PostFragmentTest extends TestWithAuthenticatedUser {
 
     @Test
     public void testChatButtonIsEnabled() {
-        onView(withId(R.id.chat_button)).check(matches(isEnabled()));
         onView(withId(R.id.posts_button)).check(matches(not(isEnabled())));
+        onView(withId(R.id.chat_button)).check(matches(isEnabled()));
     }
 
     @Test
