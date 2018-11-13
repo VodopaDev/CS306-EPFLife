@@ -39,11 +39,13 @@ public class PostTest {
         data1.put("sciper", sciper1);
         data1.put("message", message1);
         data1.put("time", time);
+        data1.put("color", color1);
 
         data2.put("senderName", senderName2);
         data2.put("sciper", sciper2);
         data2.put("message", message2);
         data2.put("time", time);
+        data2.put("color", color2);
 
         post1 = new Post(new FirebaseMapDecorator(data1));
         post2 = new Post(new FirebaseMapDecorator(data2));

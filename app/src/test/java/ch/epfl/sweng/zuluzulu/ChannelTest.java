@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 @RunWith(JUnit4.class)
 public class ChannelTest {
 
-
     private static Map data1 = new HashMap();
     private static Map data2 = new HashMap();
     private static Map data3 = new HashMap();
@@ -109,16 +108,16 @@ public class ChannelTest {
 
     @Test
     public void testChannelWithSectionRestriction() {
-        assertTrue(channelGlobal.canBeAccessedBy(userIN, nullPoint));
-        assertTrue(channelGlobal.canBeAccessedBy(userSC, nullPoint));
+        assertTrue(channelGlobal.canBeSeenBy(userIN, nullPoint));
+        assertTrue(channelGlobal.canBeSeenBy(userSC, nullPoint));
 
-        assertTrue(channelIN.canBeAccessedBy(userIN, nullPoint));
-        assertFalse(channelIN.canBeAccessedBy(userSC, nullPoint));
+        assertTrue(channelIN.canBeSeenBy(userIN, nullPoint));
+        assertFalse(channelIN.canBeSeenBy(userSC, nullPoint));
     }
 
     @Test
     public void testChannelWithDistanceRestriction() {
-        assertTrue(channelSAT.canBeAccessedBy(userIN, SATPoint));
-        assertFalse(channelSAT.canBeAccessedBy(userIN, nullPoint));
+        assertTrue(channelSAT.canBeSeenBy(userIN, SATPoint));
+        assertFalse(channelSAT.canBeSeenBy(userIN, nullPoint));
     }
 }

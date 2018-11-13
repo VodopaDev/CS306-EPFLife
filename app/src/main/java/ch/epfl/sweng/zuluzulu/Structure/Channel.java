@@ -21,7 +21,7 @@ public class Channel implements Serializable {
 
     public static final List<String> FIELDS = Arrays.asList("id", "name", "description", "restrictions");
     private static final double MAX_DISTANCE_TO_ACCESS_CHANNEL = 30;
-    private static final double MAX_DISTANCE_TO_SEE_CHANNEL = 500000000;
+    private static final double MAX_DISTANCE_TO_SEE_CHANNEL = 500;
     private int id;
     private String name;
     private String description;
