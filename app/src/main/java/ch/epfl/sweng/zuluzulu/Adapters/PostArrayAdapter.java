@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -35,6 +36,8 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         View view = LayoutInflater.from(mContext).inflate(R.layout.post, parent ,false);
 
         LinearLayout linearLayout = view.findViewById(R.id.post_linearLayout);
+        linearLayout.setBackgroundColor(Color.parseColor(currentPost.getColor()));
+
         TextView message = view.findViewById(R.id.post_msg);
         TextView senderName = view.findViewById(R.id.post_senderName);
 
