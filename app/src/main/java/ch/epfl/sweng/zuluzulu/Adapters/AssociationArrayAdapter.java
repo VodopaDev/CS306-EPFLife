@@ -2,7 +2,6 @@ package ch.epfl.sweng.zuluzulu.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.load.model.Headers;
-import com.bumptech.glide.load.model.LazyHeaders;
-
-import java.io.File;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -24,8 +17,6 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Utility.ImageLoader;
-
-import static com.google.common.net.HttpHeaders.AUTHORIZATION;
 
 /**
  * An ArrayAdapter for Associations

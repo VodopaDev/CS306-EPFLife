@@ -20,7 +20,6 @@ public class AuthenticatedUser extends User {
     // WARNING: can user can have multiples names
     private final String first_names;
     private final String last_names;
-    private Object listener;
     // All followed ids of Associations, Chats and Events
     private List<Integer> fav_assos;
     private List<Integer> followed_chats;
