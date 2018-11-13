@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
-import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.User.User;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

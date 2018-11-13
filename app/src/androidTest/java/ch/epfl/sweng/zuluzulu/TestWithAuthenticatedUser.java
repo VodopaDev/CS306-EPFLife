@@ -5,7 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 import org.junit.Before;
 import org.junit.Rule;
 
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 
 /**
  * This class allow us to create the main activity as if we were connected.

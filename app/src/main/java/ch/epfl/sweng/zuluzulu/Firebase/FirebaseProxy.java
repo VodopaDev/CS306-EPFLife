@@ -18,8 +18,8 @@ import java.util.Map;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.User.User;
 
 public class FirebaseProxy {
 

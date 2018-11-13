@@ -30,7 +30,7 @@ import java.util.Locale;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
@@ -157,7 +157,8 @@ public class CalendarFragment extends SuperFragment {
                             }
                         }
                         eventAdapter.notifyDataSetChanged();
-                        calendarView.refreshCalendar(calendar);
+                        if(getContext()!=null)
+                            calendarView.refreshCalendar(calendar);
                         calendarView.markDayAsSelectedDay(date);
                         mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                     }

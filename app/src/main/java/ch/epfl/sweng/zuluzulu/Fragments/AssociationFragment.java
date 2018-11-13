@@ -30,8 +30,8 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.User.User;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.DECREMENT_IDLING_RESOURCE;
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.INCREMENT_IDLING_RESOURCE;

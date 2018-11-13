@@ -14,11 +14,11 @@ import java.util.Map;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
-import ch.epfl.sweng.zuluzulu.Structure.Admin;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Structure.Guest;
-import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.Structure.UserRole;
+import ch.epfl.sweng.zuluzulu.User.Admin;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.User.Guest;
+import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.User.UserRole;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;

@@ -19,6 +19,7 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Utility.ImageLoader;
 
 public class ChannelArrayAdapter extends ArrayAdapter<Channel> {
 
@@ -35,9 +36,8 @@ public class ChannelArrayAdapter extends ArrayAdapter<Channel> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View channelView = convertView;
-        if (channelView == null) {
+        if (channelView == null)
             channelView = LayoutInflater.from(mContext).inflate(R.layout.channel, parent, false);
-        }
 
         Channel currentChannel = channels.get(position);
 
@@ -51,30 +51,8 @@ public class ChannelArrayAdapter extends ArrayAdapter<Channel> {
         description.setText(currentChannel.getDescription());
 
         ImageView icon = channelView.findViewById(R.id.channel_icon);
-
-        defaultIcon(icon);
-        initImageView(currentChannel.getIconUri(), icon);
+        ImageLoader.loadUriIntoImageView(icon, currentChannel.getIconUri(), getContext());
 
         return channelView;
-    }
-
-    /**
-     * Fetch an Image from the Internet and put it in an ImageView
-     *
-     * @param uri   Uri of the image to fetch
-     * @param image ImageView to put the image
-     */
-    private void initImageView(Uri uri, ImageView image) {
-        Glide.with(mContext)
-                .load(uri)
-                .centerCrop()
-                .into(image);
-    }
-
-    private void defaultIcon(ImageView icon) {
-        Glide.with(mContext)
-                .load(new File("res/asso_cache/default_icon.png"))
-                .centerCrop()
-                .into(icon);
     }
 }

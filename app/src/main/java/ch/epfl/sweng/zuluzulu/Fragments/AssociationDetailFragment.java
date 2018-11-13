@@ -20,13 +20,14 @@ import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
-import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.User.User;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.DECREMENT_IDLING_RESOURCE;
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.INCREMENT_IDLING_RESOURCE;
+import static ch.epfl.sweng.zuluzulu.Utility.ImageLoader.loadUriIntoImageView;
 
 public class AssociationDetailFragment extends SuperFragment {
     public static final String TAG = "ASSOCIATION_DETAIL__TAG";
@@ -94,17 +95,11 @@ public class AssociationDetailFragment extends SuperFragment {
 
         // Association icon
         ImageView asso_icon = view.findViewById(R.id.association_detail_icon);
-        Glide.with(getContext())
-                .load(asso.getIconUri())
-                .centerCrop()
-                .into(asso_icon);
+        loadUriIntoImageView(asso_icon, asso.getIconUri(), getContext());
 
         // Association banner
         ImageView asso_banner = view.findViewById(R.id.association_detail_banner);
-        Glide.with(getContext())
-                .load(asso.getBannerUri())
-                .centerCrop()
-                .into(asso_banner);
+        loadUriIntoImageView(asso_banner, asso.getBannerUri(), getContext());
 
         // Upcoming event views
         upcoming_event_layout = view.findViewById(R.id.association_detail_upcoming_event);
@@ -197,10 +192,7 @@ public class AssociationDetailFragment extends SuperFragment {
                         upcoming_event = new Event(fmap);
                         upcoming_event_name.setText(upcoming_event.getName());
                         upcoming_event_date.setText(upcoming_event.getStartDate().toString());
-                        Glide.with(getActivity())
-                                .load(upcoming_event.getIconUri())
-                                .centerCrop()
-                                .into(upcoming_event_icon);
+                        loadUriIntoImageView(upcoming_event_icon, upcoming_event.getIconUri(), getContext());
                     } else
                         upcoming_event_name.setText("Error loading the event :(");
                     mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);

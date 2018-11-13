@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
-import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility;
 
 @RunWith(AndroidJUnit4.class)
