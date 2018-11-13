@@ -75,6 +75,20 @@ public class EventFragmentTest extends TestWithLogin {
     }
 
     @Test
+    public void thereAreTwoEditText() throws InterruptedException {
+//        TimeUnit.SECONDS.sleep(1);
+        onView(withId(R.id.event_fragment_from_date)).check(matches(isDisplayed()));
+        onView(withId(R.id.event_fragment_to_date)).check(matches(isDisplayed()));
+//        TimeUnit.SECONDS.sleep(1);
+    }
+
+    @Test
+    public void sortListDate() throws InterruptedException{
+        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
+    }
+
+
+    @Test
     public void sortListDateFrom() throws InterruptedException {
 //        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_from_date)).perform(typeText("01012040")).perform(closeSoftKeyboard());
@@ -97,5 +111,11 @@ public class EventFragmentTest extends TestWithLogin {
     @Test
     public void sortListByMostLikedEvent() throws InterruptedException{
          onView(withId(R.id.event_fragment_checkbox_sort_like)).perform(ViewActions.click());
+    }
+
+    @Test
+    public void sortListByName() {
+        onView(withId(R.id.event_fragment_checkbox_sort_like)).perform(ViewActions.click());
+        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
     }
 }
