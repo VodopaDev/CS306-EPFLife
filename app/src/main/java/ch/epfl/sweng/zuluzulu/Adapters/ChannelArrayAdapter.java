@@ -40,6 +40,7 @@ public class ChannelArrayAdapter extends ArrayAdapter<Channel> {
         }
 
         Channel currentChannel = channels.get(position);
+        boolean isClickable = currentChannel.isClickable();
 
         ConstraintLayout constraintLayout = channelView.findViewById(R.id.channel_layout);
         constraintLayout.setBackgroundResource(R.drawable.channel_background);

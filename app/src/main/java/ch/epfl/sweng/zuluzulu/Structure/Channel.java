@@ -19,13 +19,16 @@ import ch.epfl.sweng.zuluzulu.R;
 public class Channel implements Serializable {
 
     public static final List<String> FIELDS = Arrays.asList("id", "name", "description", "restrictions");
-    private static final double MAX_DISTANCE = 30;
+    private static final double MAX_DISTANCE_TO_ACCESS_CHANNEL = 30;
+    private static final double MAX_DISTANCE_TO_SEE_CHANNEL = 500;
     private int id;
     private String name;
     private String description;
     private Map<String, Object> restrictions;
 
     private Uri icon_uri;
+
+    private boolean isClickable;
 
     public Channel(FirebaseMapDecorator data) {
         if (!data.hasFields(FIELDS))
@@ -35,6 +38,7 @@ public class Channel implements Serializable {
         this.name = data.getString("name");
         this.description = data.getString("description");
         this.restrictions = data.getMap("restrictions");
+        this.isClickable = true;
 
         String icon_str = data.getString("icon_uri");
         icon_uri = icon_str == null ?
@@ -100,29 +104,34 @@ public class Channel implements Serializable {
         return icon_uri;
     }
 
+    public boolean isClickable() { return isClickable; }
+
     /**
      * Check whether a user can access to this channel or not
      *
      * @param user The user who wants to enter the channel
      * @return whether the user can access it or not
      */
-    public boolean canBeAccessedBy(AuthenticatedUser user, GeoPoint userLocation) {
-        boolean hasAccess = true;
+    public boolean canBeSeenBy(AuthenticatedUser user, GeoPoint userLocation) {
+        boolean isVisible = true;
         String section = (String) restrictions.get("section");
         GeoPoint channelLocation = (GeoPoint) restrictions.get("location");
         if (section != null) {
-            hasAccess = section.equals(user.getSection());
+            isVisible = section.equals(user.getSection());
         }
         if (channelLocation != null) {
             if (userLocation == null) {
+                isClickable = false;
                 return false;
             }
             double distance = Utils.distanceBetween(channelLocation, userLocation);
-            System.out.println(getName() + ": (" + channelLocation.getLatitude() + ", " + channelLocation.getLongitude() + ")");
-            System.out.println("User: (" + userLocation.getLatitude() + ", " + userLocation.getLongitude() + ")");
-            System.out.println("Distance: " + distance);
-            hasAccess = hasAccess && distance < MAX_DISTANCE;
+            double diff_distance = distance - MAX_DISTANCE_TO_ACCESS_CHANNEL;
+            if (diff_distance > MAX_DISTANCE_TO_SEE_CHANNEL) {
+                isClickable = false;
+            }
+            isVisible = isVisible && distance < MAX_DISTANCE_TO_ACCESS_CHANNEL;
         }
-        return hasAccess;
+        isClickable = isClickable && isVisible;
+        return isVisible;
     }
 }
