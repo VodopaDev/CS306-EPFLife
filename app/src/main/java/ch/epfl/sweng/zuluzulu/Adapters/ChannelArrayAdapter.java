@@ -34,29 +34,34 @@ public class ChannelArrayAdapter extends ArrayAdapter<Channel> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View channelView = convertView;
-        if (channelView == null) {
-            channelView = LayoutInflater.from(mContext).inflate(R.layout.channel, parent, false);
-        }
-
         Channel currentChannel = channels.get(position);
         boolean isClickable = currentChannel.isClickable();
 
-        LinearLayout linearLayout = channelView.findViewById(R.id.channel_layout);
+        int layoutRessource = isClickable ? R.layout.channel : R.layout.channel_toofar;
+
+        View view = LayoutInflater.from(mContext).inflate(layoutRessource, parent, false);
+
+        LinearLayout linearLayout = view.findViewById(R.id.channel_layout);
         linearLayout.setBackgroundResource(R.drawable.channel_background);
 
-        TextView name = channelView.findViewById(R.id.channel_name);
+        TextView name = view.findViewById(R.id.channel_name);
         name.setText(currentChannel.getName());
 
-        TextView description = channelView.findViewById(R.id.channel_description);
+        TextView description = view.findViewById(R.id.channel_description);
         description.setText(currentChannel.getDescription());
 
-        ImageView icon = channelView.findViewById(R.id.channel_icon);
+        ImageView icon = view.findViewById(R.id.channel_icon);
 
         defaultIcon(icon);
         initImageView(currentChannel.getIconUri(), icon);
 
-        return channelView;
+        if (!isClickable) {
+            TextView distanceView = view.findViewById(R.id.channel_distance);
+            int distance = (int) Math.round(currentChannel.getDistance());
+            distanceView.setText("You are close to the channel (" + distance + "m).");
+        }
+
+        return view;
     }
 
     /**

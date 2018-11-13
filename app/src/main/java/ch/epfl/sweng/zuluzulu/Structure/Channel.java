@@ -20,7 +20,7 @@ public class Channel implements Serializable {
 
     public static final List<String> FIELDS = Arrays.asList("id", "name", "description", "restrictions");
     private static final double MAX_DISTANCE_TO_ACCESS_CHANNEL = 30;
-    private static final double MAX_DISTANCE_TO_SEE_CHANNEL = 500;
+    private static final double MAX_DISTANCE_TO_SEE_CHANNEL = 500000000;
     private int id;
     private String name;
     private String description;
@@ -29,6 +29,7 @@ public class Channel implements Serializable {
     private Uri icon_uri;
 
     private boolean isClickable;
+    private double distance;
 
     public Channel(FirebaseMapDecorator data) {
         if (!data.hasFields(FIELDS))
@@ -39,6 +40,7 @@ public class Channel implements Serializable {
         this.description = data.getString("description");
         this.restrictions = data.getMap("restrictions");
         this.isClickable = true;
+        this.distance = 0;
 
         String icon_str = data.getString("icon_uri");
         icon_uri = icon_str == null ?
@@ -106,6 +108,8 @@ public class Channel implements Serializable {
 
     public boolean isClickable() { return isClickable; }
 
+    public double getDistance() { return distance; }
+
     /**
      * Check whether a user can access to this channel or not
      *
@@ -121,15 +125,14 @@ public class Channel implements Serializable {
         }
         if (channelLocation != null) {
             if (userLocation == null) {
-                isClickable = false;
-                return false;
+                isVisible = false;
             }
-            double distance = Utils.distanceBetween(channelLocation, userLocation);
+            distance = Utils.distanceBetween(channelLocation, userLocation);
             double diff_distance = distance - MAX_DISTANCE_TO_ACCESS_CHANNEL;
             if (diff_distance > MAX_DISTANCE_TO_SEE_CHANNEL) {
-                isClickable = false;
+                isVisible = false;
             }
-            isVisible = isVisible && distance < MAX_DISTANCE_TO_ACCESS_CHANNEL;
+            isClickable = distance < MAX_DISTANCE_TO_ACCESS_CHANNEL;
         }
         isClickable = isClickable && isVisible;
         return isVisible;
