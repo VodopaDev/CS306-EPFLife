@@ -20,13 +20,17 @@ import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 public class Channel implements Serializable {
 
     public static final List<String> FIELDS = Arrays.asList("id", "name", "description", "restrictions");
-    private static final double MAX_DISTANCE = 30;
+    private static final double MAX_DISTANCE_TO_ACCESS_CHANNEL = 50;
+    private static final double MAX_DISTANCE_TO_SEE_CHANNEL = 500;
     private int id;
     private String name;
     private String description;
     private Map<String, Object> restrictions;
 
     private Uri icon_uri;
+
+    private boolean isClickable;
+    private double distance;
 
     public Channel(FirebaseMapDecorator data) {
         if (!data.hasFields(FIELDS))
@@ -36,6 +40,8 @@ public class Channel implements Serializable {
         this.name = data.getString("name");
         this.description = data.getString("description");
         this.restrictions = data.getMap("restrictions");
+        this.isClickable = true;
+        this.distance = 0;
 
         String icon_str = data.getString("icon_uri");
         icon_uri = icon_str == null ?
@@ -101,29 +107,50 @@ public class Channel implements Serializable {
         return icon_uri;
     }
 
+    public boolean isClickable() { return isClickable; }
+
+    public double getDistance() { return distance; }
+
     /**
      * Check whether a user can access to this channel or not
      *
      * @param user The user who wants to enter the channel
      * @return whether the user can access it or not
      */
-    public boolean canBeAccessedBy(AuthenticatedUser user, GeoPoint userLocation) {
-        boolean hasAccess = true;
+    public boolean canBeSeenBy(AuthenticatedUser user, GeoPoint userLocation) {
         String section = (String) restrictions.get("section");
         GeoPoint channelLocation = (GeoPoint) restrictions.get("location");
-        if (section != null) {
-            hasAccess = section.equals(user.getSection());
+
+        boolean hasGoodSection = hasGoodSection(section, user.getSection());
+
+        boolean hasGoodLocation = hasGoodLocation(channelLocation, userLocation);
+
+        return hasGoodSection && hasGoodLocation;
+    }
+
+    private boolean hasGoodSection(String requestSection, String userSection) {
+        if (requestSection == null) {
+            return true;
         }
-        if (channelLocation != null) {
-            if (userLocation == null) {
-                return false;
-            }
-            double distance = Utils.distanceBetween(channelLocation, userLocation);
-            System.out.println(getName() + ": (" + channelLocation.getLatitude() + ", " + channelLocation.getLongitude() + ")");
-            System.out.println("User: (" + userLocation.getLatitude() + ", " + userLocation.getLongitude() + ")");
-            System.out.println("Distance: " + distance);
-            hasAccess = hasAccess && distance < MAX_DISTANCE;
+        return requestSection.equals(userSection);
+    }
+
+    private boolean hasGoodLocation(GeoPoint requestedLocation, GeoPoint userLocation) {
+        if (requestedLocation == null) {
+            return true;
         }
-        return hasAccess;
+        if (userLocation == null) {
+            return false;
+        }
+
+        distance = Utils.distanceBetween(requestedLocation, userLocation);
+        double diff_distance = distance - MAX_DISTANCE_TO_ACCESS_CHANNEL;
+        isClickable = distance < MAX_DISTANCE_TO_ACCESS_CHANNEL;
+
+        if (diff_distance > MAX_DISTANCE_TO_SEE_CHANNEL) {
+            return false;
+        }
+
+        return true;
     }
 }

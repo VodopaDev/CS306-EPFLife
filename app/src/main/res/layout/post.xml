@@ -3,7 +3,7 @@
     android:id="@+id/post_linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#9faae6"
+    android:background="#e8b30f"
     android:orientation="vertical">
 
     <TextView
