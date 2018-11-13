@@ -57,8 +57,6 @@
     <string name="profile_sciper">Sciper</string>
     <string name="association_detail_fav_button">Click to set association in favorites (or not)</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-
 
     <!-- Main fragment related -->
 
@@ -71,8 +69,12 @@
     <string name="anonymity">Anonymity</string>
 
 
-    <string name="icon_button_go">Gharger les icones</string>
-    <string name="no_association_found">Aucune association</string>
-    <string name="generator_association_name">Nom de l\'association</string>
+    <string name="drawer_calendar">Calendar</string>
+    <string name="fragment_assos_sort_id">ID</string>
+    <string name="fragment_assos_sort_name">Name</string>
+
+    <string name="icon_button_go">Load icons</string>
+    <string name="no_association_found">No association</string>
+    <string name="generator_association_name">Name of the association</string>
 
 </resources>

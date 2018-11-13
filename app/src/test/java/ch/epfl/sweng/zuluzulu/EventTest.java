@@ -63,7 +63,7 @@ public class EventTest {
         event1 = new Event(new FirebaseMapDecorator(map));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void invalidSnapThrowIllegalArgumentException() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", 1L);

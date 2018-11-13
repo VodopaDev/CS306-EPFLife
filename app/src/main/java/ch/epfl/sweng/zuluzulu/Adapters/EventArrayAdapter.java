@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.util.Log;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +14,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
-import ch.epfl.sweng.zuluzulu.Structure.Guest;
-import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.User.Guest;
+import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.Utility.ImageLoader;
+
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT;
 
 //import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 
@@ -91,7 +93,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         final Event event = data.get(position);
         holder.name.setText(event.getName());
         holder.short_desc.setText(event.getShortDesc());
-        initIcon(event.getIconUri(), holder.icon);
+        ImageLoader.loadUriIntoImageView(holder.icon, event.getIconUri(), getContext());
         holder.start_date.setText(event.getStartDateString());
         holder.likes.setText(String.valueOf(event.getLikes()));
         if (user != null) {
@@ -117,28 +119,15 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
             holder.likes_button.setEnabled(false);
         }
 
-//        event_view.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d("FRAG_CHANGE","Switching to " + event.getName() + "detailed view");
-//                mListener.onFragmentInteraction(EventDetailFragment.TAG, event);
-//            }
-//        });
+        event_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("FRAG_CHANGE","Switching to " + event.getName() + " detailed view");
+                mListener.onFragmentInteraction(OPEN_EVENT_DETAIL_FRAGMENT, event);
+            }
+        });
 
         return event_view;
-    }
-
-    /**
-     * Fetch an Image from the Internet and put it in an ImageView
-     *
-     * @param uri  Uri of the image to fetch
-     * @param icon ImageView to put the image
-     */
-    private void initIcon(Uri uri, ImageView icon) {
-        Glide.with(context)
-                .load(uri)
-                .centerCrop()
-                .into(icon);
     }
 
     /**
