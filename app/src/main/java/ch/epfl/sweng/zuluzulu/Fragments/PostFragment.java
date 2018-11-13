@@ -66,7 +66,7 @@ public class PostFragment extends SuperChatPostsFragment {
         listView.setAdapter(adapter);
 
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        anonym = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
+        anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
         setUpDataOnChangeListener();
         setUpChatButton();
