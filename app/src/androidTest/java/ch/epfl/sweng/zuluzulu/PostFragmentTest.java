@@ -18,7 +18,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
-public class PostFragmentTest extends TestWithLogin {
+public class PostFragmentTest extends TestWithAuthenticatedUser {
 
     @Before
     public void init() {

@@ -64,7 +64,7 @@ public class FirebaseMapDecoratorTest {
     @Test
     public void snapshotConstructor() {
         DocumentSnapshot snap = mock(DocumentSnapshot.class);
-        when(snap.getData()).thenReturn(Collections.singletonMap("string", (Object) "test"));
+        when(snap.getData()).thenReturn(Collections.singletonMap("string", "test"));
         FirebaseMapDecorator fmap2 = new FirebaseMapDecorator(snap);
 
         assertThat("test", equalTo(fmap2.getString("string")));

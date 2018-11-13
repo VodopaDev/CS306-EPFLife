@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu.Structure;
+package ch.epfl.sweng.zuluzulu.User;
 
 public final class Guest extends User {
     protected Guest() {

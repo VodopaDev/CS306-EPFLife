@@ -44,11 +44,6 @@ public class MenuAsGuestTest {
     }
 
     @Test
-    public void testGuestCanOpenAssociationsFragment() {
-        // TODO: Add it when Glide problem is fixed
-    }
-
-    @Test
     public void testGuestCanOpenSettingsFragment() {
         onView(withId(R.id.nav_view))
                 .perform(NavigationViewActions.navigateTo(R.id.nav_settings));
