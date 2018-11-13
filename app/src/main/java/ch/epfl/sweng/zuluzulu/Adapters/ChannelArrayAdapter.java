@@ -42,7 +42,8 @@ public class ChannelArrayAdapter extends ArrayAdapter<Channel> {
         View view = LayoutInflater.from(mContext).inflate(layoutResource, parent, false);
 
         LinearLayout linearLayout = view.findViewById(R.id.channel_layout);
-        linearLayout.setBackgroundResource(R.drawable.channel_background);
+        int backgroundResource = isClickable ? R.drawable.channel_background : R.drawable.channel_notclickable_background;
+        linearLayout.setBackgroundResource(backgroundResource);
 
         TextView name = view.findViewById(R.id.channel_name);
         name.setText(currentChannel.getName());
