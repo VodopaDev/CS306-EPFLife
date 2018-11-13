@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.support.test.espresso.IdlingRegistry;
 
@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestWithAdmin;
 import java.io.BufferedReader;
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestWithAdmin;
+import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlReader;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlReaderFactory;
 import ch.epfl.sweng.zuluzulu.Utility;
@@ -29,12 +31,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-public class AssociationsGeneratorFragmentTest extends TestWithAdmin {
+public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<MainFragment> {
 
-    @Before
-    public void init() {
-        // Register the idling resource
-        IdlingRegistry.getInstance().register(mActivityRule.getActivity().getCountingIdlingResource());
+    @Override
+    public void initFragment() {
+        fragment = MainFragment.newInstance(user);
     }
 
     @Test
@@ -153,6 +154,6 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdmin {
      * Create the fragment with admin user
      */
     private void adminUser() {
-        mActivityRule.getActivity().openFragment(AssociationsGeneratorFragment.newInstance(getUser()));
+        mActivityRule.getActivity().openFragment(AssociationsGeneratorFragment.newInstance(user));
     }
 }

@@ -24,7 +24,7 @@ public abstract class TestWithUserAndFragment<U extends User, F extends SuperFra
             new ActivityTestRule<>(MainActivity.class, false, false);
 
     @Before
-    public final void init() {
+    public void init() {
         // Add the user
         initUser();
         Utility.addUserToMainIntent(mActivityRule, user);
