@@ -1,14 +1,16 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.zuluzulu.Fragments.PostFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.TestWithAuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Utility;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -28,11 +30,11 @@ public class PostFragmentTest extends TestWithAuthenticatedUser {
 
     @Test
     public void testUserCanSeePosts() {
-        onView(withId(R.id.posts_list_view)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(R.id.posts_list_view)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testOnlyOneButtonIsEnabled() {
+    public void testChatButtonIsEnabled() {
         onView(withId(R.id.chat_button)).check(matches(isEnabled()));
         onView(withId(R.id.posts_button)).check(matches(not(isEnabled())));
     }

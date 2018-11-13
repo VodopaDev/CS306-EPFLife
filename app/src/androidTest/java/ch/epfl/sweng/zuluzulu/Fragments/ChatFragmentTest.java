@@ -56,7 +56,7 @@ public class ChatFragmentTest extends TestWithAuthenticatedAndFragment<ChatFragm
     }
 
     @Test
-    public void testOnlyOneButtonIsEnabled() {
+    public void testPostButtonIsEnabled() {
         onView(withId(R.id.posts_button)).check(matches(isEnabled()));
         onView(withId(R.id.chat_button)).check(matches(not(isEnabled())));
     }
