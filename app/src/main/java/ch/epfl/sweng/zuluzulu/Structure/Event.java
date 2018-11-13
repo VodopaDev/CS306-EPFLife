@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -16,7 +17,7 @@ import ch.epfl.sweng.zuluzulu.R;
 
 // TODO: Add admin access, ending date, linked-chat id, linked-association id, position
 public class Event implements Serializable {
-    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "start_date");
+    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "start_date", "likes");
 
     private int id;
     private String name;
@@ -27,6 +28,8 @@ public class Event implements Serializable {
 
     private Uri banner_uri;
     private Uri icon_uri;
+
+    private Integer likes;
 
     /**
      * Create an event using a FirebaseMap
@@ -55,6 +58,8 @@ public class Event implements Serializable {
 
         start_date = data.getDate("start_date");
         start_date_string = Utils.dateFormat.format(start_date);
+
+        likes = data.getInteger("likes");
     }
 
 
@@ -72,6 +77,15 @@ public class Event implements Serializable {
             @Override
             public int compare(Event o1, Event o2) {
                 return o1.getStartDate().compareTo(o2.getStartDate());
+            }
+        };
+    }
+
+    public static Comparator<Event> likeComparator() {
+        return new Comparator<Event>() {
+            @Override
+            public int compare(Event o1, Event o2) {
+                return o2.getLikes().compareTo(o1.getLikes());
             }
         };
     }
@@ -112,4 +126,13 @@ public class Event implements Serializable {
         return icon_uri;
     }
 
+    public Integer getLikes() { return likes; }
+
+    public void increaseLikes() {
+        likes += 1;
+    }
+
+    public void decreaseLikes() {
+        likes -= 1;
+    }
 }

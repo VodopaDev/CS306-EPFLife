@@ -1,7 +1,10 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AuthenticatedUser extends User {
     public static final List<String> fields = Arrays.asList("fav_assos", "followed_events", "followed_chats");
@@ -20,6 +23,8 @@ public class AuthenticatedUser extends User {
     private List<Integer> fav_assos;
     private List<Integer> followed_chats;
     private List<Integer> followed_events;
+    // TODO add argument to constructor and store liked_event in firebase
+    private Set<Integer> liked_events = new HashSet<>();
 
     protected AuthenticatedUser(String sciper, String gaspar, String email, String section, String semester, String first_names, String last_names, List<Integer> fav_assos, List<Integer> followed_events, List<Integer> followed_chats) {
         firestore_path = "users_info/" + sciper;
@@ -75,6 +80,22 @@ public class AuthenticatedUser extends User {
 
     public void setFollowedEvents(List<Integer> followed_events) {
         this.followed_events = followed_events;
+    }
+
+    public void setLikedEvent(Set<Integer> liked_events){
+        this.liked_events = liked_events;
+    }
+
+    public boolean isEventLiked(Integer event){
+        return liked_events.contains(event);
+    }
+
+    public void likeEvent(Integer event){
+        this.liked_events.add(event);
+    }
+
+    public void dislikeEvent(Integer event){
+        this.liked_events.remove(event);
     }
 
     @Override
