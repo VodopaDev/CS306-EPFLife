@@ -82,19 +82,34 @@ public class AddEventFragmentTest extends TestWithAdminLogin{
      * @param month , the wanted month
      * @param expectedDay , the day we expect spinner_day to take
      */
-    private void helperSpinnerTest(Spinner spinner, String month, String expectedDay){
+    private void checkDayValueAfterMonthChange(Spinner spinner, String month, String expectedDay){
         onView(withId(R.id.spinner_month)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(month))).perform(click());
         assertEquals(expectedDay,spinner.getSelectedItem().toString());
     }
 
     /**
-     * Set the value of Spinner_day to 31;
+     * Set the value of Spinner_day to ;
      * Is based on the fact that January or a 31 day months is selected in the spinner_month
+     * @param wantedDay , the day we set the spinner to
      */
-    private void resetSpinnerDay(){
+    private void setSpinnerDay(String wantedDay){
         onView(withId(R.id.spinner_day)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("31"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is(wantedDay))).perform(click());
+    }
+
+    /**
+     * used to test limit cases where the day selected is bigger than the new month we select after.
+     * Also check that the day doesn't change after we go back to january
+     *
+     * @param spinner , the day spinner we test the value
+     * @param month , the month we want to change to
+     * @param dayTested , the value we want to obtain after month change
+     */
+    private void helperDaySpinnerTest(Spinner spinner, String month, String dayTested){
+        setSpinnerDay("31");
+        checkDayValueAfterMonthChange(spinner,month, dayTested);
+        checkDayValueAfterMonthChange(spinner, "Jan", dayTested);
     }
 
     /**
@@ -105,12 +120,15 @@ public class AddEventFragmentTest extends TestWithAdminLogin{
     public void testDaySpinner(){
         Spinner spinnertest = mActivityRule.getActivity().findViewById(R.id.spinner_day);
 
-        resetSpinnerDay();
-        helperSpinnerTest(spinnertest,"Feb", "28");
-        helperSpinnerTest(spinnertest, "Jan", "28");
+        //check that if the day is 31 that it updates itself to the max of the new month
+        helperDaySpinnerTest(spinnertest,"Feb", "28");
+        helperDaySpinnerTest(spinnertest,"Nov", "30");
 
-        resetSpinnerDay();
-        helperSpinnerTest(spinnertest, "Nov", "30");
-        helperSpinnerTest(spinnertest, "Jan", "30");
+        //Check that the value if it is smaller than 28 never change for any type of month
+        setSpinnerDay("5");
+        checkDayValueAfterMonthChange(spinnertest, "Feb", "5");
+        checkDayValueAfterMonthChange(spinnertest, "Nov", "5");
+
+
     }
 }

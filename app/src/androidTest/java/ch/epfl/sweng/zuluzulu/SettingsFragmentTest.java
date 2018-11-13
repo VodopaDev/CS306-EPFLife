@@ -13,6 +13,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.concurrent.TimeUnit;
+
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -58,6 +60,12 @@ public class SettingsFragmentTest {
     public void testClickOnAnonym() {
         SharedPreferences preferences = mActivityTestRule.getActivity().getPreferences(Context.MODE_PRIVATE);
         boolean anonym = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
+
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         onView(withId(R.id.switch_chat_anonym)).perform(click());
         boolean anonymAfterClick = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
