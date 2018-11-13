@@ -32,7 +32,7 @@ public class UtilsTest {
 
         GeoPoint geoPoint = Utils.toGeoPoint(location);
         assertEquals(geoPoint.getLatitude(), location.getLatitude(), 0.0);
-        assertTrue(geoPoint.getLongitude() == location.getLongitude());
+        assertEquals(geoPoint.getLongitude(), location.getLongitude(), 0.0);
     }
 
     @Test(expected = NullPointerException.class)

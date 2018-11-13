@@ -2,7 +2,6 @@ package ch.epfl.sweng.zuluzulu;
 
 import android.content.Intent;
 import android.support.test.espresso.contrib.DrawerActions;
-import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.view.Gravity;
 
@@ -141,9 +140,9 @@ public class Utility {
         builder.setSemester("BA5");
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
-        builder.setFavAssos(Arrays.asList(2));
+        builder.setFavAssos(Collections.singletonList(2));
         builder.setFollowedEvents(Arrays.asList(1, 2,3));
-        builder.setFollowedChats(new ArrayList<Integer>());
+        builder.setFollowedChats(new ArrayList<>());
 
         return builder;
     }
@@ -154,7 +153,7 @@ public class Utility {
      * @return a default channel
      */
     public static Channel defaultChannel() {
-        Map data = new HashMap();
+        Map<String, Object> data = new HashMap<>();
         data.put("id", 1L);
         data.put("name", "name");
         data.put("description", "description");

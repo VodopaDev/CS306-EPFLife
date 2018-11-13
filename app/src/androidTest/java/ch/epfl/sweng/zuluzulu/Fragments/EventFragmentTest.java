@@ -2,20 +2,13 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.TimeUnit;
-
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.User;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -34,19 +27,19 @@ public class EventFragmentTest extends TestWithAuthenticatedAndFragment<EventFra
     }
 
     @Test
-    public void thereAreTwoButtons() throws InterruptedException {
+    public void thereAreTwoButtons() {
         onView(ViewMatchers.withId(R.id.event_fragment_fav_button)).check(matches(isDisplayed()));
         onView(withId(R.id.event_fragment_all_button)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void clickOnFavThenOnAll() throws InterruptedException {
+    public void clickOnFavThenOnAll() {
         onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
         onView(withId(R.id.event_fragment_all_button)).perform(ViewActions.click());
     }
 
     @Test
-    public void thereAreTwoSortCheckbox() throws InterruptedException {
+    public void thereAreTwoSortCheckbox() {
         onView(withId(R.id.event_fragment_checkBox_sort_name)).check(matches(isDisplayed()));
         onView(withId(R.id.event_fragment_checkBox_sort_date)).check(matches(isDisplayed()));
     }
@@ -57,13 +50,13 @@ public class EventFragmentTest extends TestWithAuthenticatedAndFragment<EventFra
 //        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
 //    }
     @Test
-    public void sortListDateFrom() throws InterruptedException {
+    public void sortListDateFrom() {
         onView(withId(R.id.event_fragment_from_date)).perform(typeText("01012040")).perform(closeSoftKeyboard());
         onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
     }
 
     @Test
-    public void sortListDateFromAndTo() throws InterruptedException {
+    public void sortListDateFromAndTo() {
         onView(withId(R.id.event_fragment_from_date)).perform(typeText("01012040")).perform(closeSoftKeyboard());
         onView(withId(R.id.event_fragment_to_date)).perform(typeText("01012041")).perform(closeSoftKeyboard());
         onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());

@@ -10,7 +10,7 @@ public class TestWithAdmin extends TestWithAuthenticatedUser {
 
     @Before
     public void setUpLogin() {
-        this.admin = (Admin)Utility.createTestAdmin();
+        this.admin = Utility.createTestAdmin();
         Utility.addUserToMainIntent(mActivityRule, this.admin);
     }
 

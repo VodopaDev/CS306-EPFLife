@@ -3,11 +3,8 @@ package ch.epfl.sweng.zuluzulu.TestingUtility;
 import android.support.test.espresso.IdlingRegistry;
 import android.support.test.rule.ActivityTestRule;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
-
-import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
@@ -24,7 +21,7 @@ public abstract class TestWithUserAndFragment<U extends User, F extends SuperFra
             new ActivityTestRule<>(MainActivity.class, false, false);
 
     @Before
-    public void init() throws InterruptedException {
+    public void init() {
         // Add the user
         initUser();
         Utility.addUserToMainIntent(mActivityRule, user);

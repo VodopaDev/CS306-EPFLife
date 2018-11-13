@@ -3,7 +3,6 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -28,8 +27,8 @@ public class ChatFragmentTest extends TestWithAuthenticatedAndFragment<ChatFragm
 
     @Override
     public void initFragment() {
-        Map data = new HashMap();
-        data.put("id", 1l);
+        Map<String, Object> data = new HashMap<>();
+        data.put("id", 1L);
         data.put("name", "name");
         data.put("description", "description");
         data.put("restrictions", new HashMap<>());

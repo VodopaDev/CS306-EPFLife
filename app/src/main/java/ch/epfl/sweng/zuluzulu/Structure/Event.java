@@ -99,10 +99,6 @@ public class Event implements Serializable {
         return startDate;
     }
 
-    public boolean isStartingDate(int year, int month, int dayOfMonth){
-        return year == startDate.getYear() && month == startDate.getMonth() && dayOfMonth == startDate.getDay();
-    }
-
     public String getStartDateString() {
         return start_date_string;
     }
