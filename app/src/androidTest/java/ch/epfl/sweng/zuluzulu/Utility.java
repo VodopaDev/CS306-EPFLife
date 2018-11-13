@@ -8,9 +8,12 @@ import android.view.Gravity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Admin;
 import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
@@ -139,7 +142,7 @@ public class Utility {
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
         builder.setFavAssos(Arrays.asList(2));
-        builder.setFollowedEvents(Arrays.asList(1, 2));
+        builder.setFollowedEvents(Arrays.asList(1, 2,3));
         builder.setFollowedChats(new ArrayList<Integer>());
 
         return builder;
@@ -158,6 +161,24 @@ public class Utility {
         data.put("restrictions", new HashMap<>());
         FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
         return new Channel(fmap);
+    }
+
+    public static Association defaultAssociation(){
+        Map<String, Object> event = new HashMap<>();
+        Date far_date = new Date(2018, 11, 28);
+        event.put("id", 3L);
+        event.put("start", far_date);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", 2L);
+        map.put("name", "Agepoly");
+        map.put("short_desc", "Association Générale des Etudiants de l'EPFL");
+        map.put("long_desc", "Association Générale des Etudiants de l'EPFL");
+        map.put("icon_uri", "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso1_icon.png?alt=media&token=391a7bfc-1597-4935-9afe-e08ecd734e03");
+        map.put("channel_id", 5L);
+        map.put("events", Collections.singletonList(event));
+
+        return new Association(new FirebaseMapDecorator(map));
     }
 
 }
