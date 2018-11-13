@@ -7,8 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.AssociationsGeneratorFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -23,6 +21,7 @@
                 android:layout_height="match_parent">
 
                 <EditText
+                    android:hint="@string/generator_association_name"
                     android:id="@+id/nbr_icon"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

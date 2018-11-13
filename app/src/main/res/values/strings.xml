@@ -71,5 +71,6 @@
 
     <string name="icon_button_go">Gharger les icones</string>
     <string name="no_association_found">Aucune association</string>
+    <string name="generator_association_name">Nom de l\'association</string>
 
 </resources>
