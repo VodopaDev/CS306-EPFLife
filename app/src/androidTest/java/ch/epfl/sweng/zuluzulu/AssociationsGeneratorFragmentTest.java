@@ -24,7 +24,6 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdmin {
         IdlingRegistry.getInstance().register(mActivityRule.getActivity().getCountingIdlingResource());
     }
 
-    @Ignore
     @Test
     public void canLoadURLs() {
         adminUser();
