@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,12 +77,24 @@ public class EventDetailFragment extends SuperFragment{
             event_fav.setContentDescription(FAV_CONTENT);
         }
 
+        TextView event_like = view.findViewById(R.id.event_detail_tv_numberLikes);
+        event_like.setText("" + event.getLikes());
+
+        TextView event_desc = view.findViewById(R.id.event_detail_desc);
+        event_desc.setText(event.getLongDesc());
+
         // Event icon
         ImageView event_icon = view.findViewById(R.id.event_detail_icon);
         Glide.with(getContext())
                 .load(event.getIconUri())
                 .centerCrop()
                 .into(event_icon);
+
+        ImageView event_banner = view.findViewById(R.id.event_detail_banner);
+        Glide.with(getContext())
+                .load(event.getBannerUri())
+                .centerCrop()
+                .into(event_banner);
 
 
         return view;

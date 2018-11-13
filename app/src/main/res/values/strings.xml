@@ -68,5 +68,6 @@
     <string name="chat">Chat</string>
     <string name="channel_icon">Channel icon</string>
     <string name="anonymity">Anonymity</string>
+    <string name="event_detail_like">Likes:</string>
 
 </resources>

@@ -24,6 +24,7 @@ public class Event implements Serializable {
     private String long_desc;
     private Date start_date;
     private String start_date_string;
+    private int likes;
 
     private Uri banner_uri;
     private Uri icon_uri;
@@ -42,15 +43,16 @@ public class Event implements Serializable {
         name = data.getString("name");
         short_desc = data.getString("short_desc");
         long_desc = data.getString("long_desc");
+        likes = data.getInteger("likes");
 
         String icon_str = data.getString("icon_uri");
         icon_uri = icon_str == null ?
-                Uri.parse("android.ressource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(icon_str);
 
-        String banner_str = data.getString("icon_uri");
+        String banner_str = null;//data.getString("icon_uri");
         banner_uri = banner_str == null ?
-                Uri.parse("android.ressource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
                 Uri.parse(banner_str);
 
         start_date = data.getDate("start_date");
@@ -111,5 +113,7 @@ public class Event implements Serializable {
     public Uri getIconUri() {
         return icon_uri;
     }
+
+    public int getLikes() { return likes; }
 
 }
