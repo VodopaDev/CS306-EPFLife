@@ -17,52 +17,45 @@ public class UrlReaderTest {
     UrlReader reader;
 
     @Before
-    @Ignore
     public void setUp(){
         this.reader = new UrlReader();
     }
 
-    @Ignore
     @After
     public void close() {
         this.reader.disconnect();
     }
 
-    @Ignore
     @Test
     public void canReadGoodUrl(){
         BufferedReader result = this.reader.read("http://example.com");
         assertNotNull(result);
     }
 
-    @Ignore
     @Test
     public void cannotRead404(){
         BufferedReader result = this.reader.read("http://example.com/404");
         assertNull(result);
     }
 
-    @Ignore
     @Test
     public void canRedirectUrl(){
         BufferedReader result = this.reader.read("http://epfl.ch");
         assertNotNull(result);
     }
 
-    @Ignore
     @Test
     public void cannoNotExistingDomainUrl(){
         BufferedReader result = this.reader.read("http://example.not.exist");
         assertNull(result);
     }
 
-    @Ignore
     @Test
     public void cannotReadWrongUrl(){
         BufferedReader result = this.reader.read("exemple");
         assertNull(result);
     }
-    @Ignore
+
     @Test
     public void cannotReadNulll(){
         BufferedReader result = this.reader.read(null);

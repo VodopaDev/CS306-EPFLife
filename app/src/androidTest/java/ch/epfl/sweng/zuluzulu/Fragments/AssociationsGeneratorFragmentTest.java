@@ -40,9 +40,9 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminLogin {
         UrlReader reader = new UrlReader() {
             @Override
             public BufferedReader read(String name) {
-                return new BufferedReader(new StringReader("&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />\n"
-                        + "&#8211; <a href=\"http://example.com\">Other</a> (Other)<br />\n"
-                        +"<link rel=\"icon\" type=\"image/png\" href=\"images/favicon.png\" sizes=\"16x16\">"));
+                return new BufferedReader(new StringReader("&#8211; <a href=\"http://example.com\">Other</a> (Other)<br />\n"
+                                +"&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />\n"
+                                +"<link rel=\"icon\" type=\"image/png\" href=\"images/favicon.png\" sizes=\"16x16\">"));
             }
         };
         // Change the factory
