@@ -29,7 +29,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 
 public class AddEventFragment extends SuperFragment {
-
+    private static final int[] INDICES = {0, 2, 4, 6,7,9,11};
     //for association name
     private List<String> association_names = new ArrayList<>();
     private Spinner spinner;
@@ -68,23 +68,10 @@ public class AddEventFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
 
         //fill the list for the months spinner
-        short_months.add("Jan");
-        short_months.add("Feb");
-        short_months.add("Mar");
-        short_months.add("Apr");
-        short_months.add("May");
-        short_months.add("Jun");
-        short_months.add("Jul");
-        short_months.add("Aug");
-        short_months.add("Sep");
-        short_months.add("Oct");
-        short_months.add("Nov");
-        short_months.add("Dec");
-
+        populateShortMonths();
 
         //makes a sublist containing all the months with 31 days
-        int[] indices = {0, 2, 4, 6,7,9,11};
-        fillMonthsSublist(thirty_one_days_months,indices);
+        fillMonthsSublist(thirty_one_days_months,INDICES);
 
         //a list of 31 days
         for (int i = 1; i <= 31; i++){
@@ -101,24 +88,38 @@ public class AddEventFragment extends SuperFragment {
         }
 
         //fills the hour list for the spinner
-        for(int i = 0; i < 24; i++){
-            if(i < 10){
-                hours.add("0"+String.valueOf(i));
-            }else{
-                hours.add(String.valueOf(i));
-            }
-        }
+        addIntsToList(hours, 0, 24, 1);
 
         //fills the minute list for the spinner
-        for(int i = 0; i < 60; i+= 10){
-            if(i<10){
-                minutes.add("0"+String.valueOf(i));
-            }
-            else{
-                minutes.add(String.valueOf(i));
+        addIntsToList(minutes,0,60,10);
+
+
+    }
+
+    private void addIntsToList(List<String> list, int startingValue, int exclusiveMaxValue, int increment){
+        for(int i = startingValue; i < exclusiveMaxValue; i += increment){
+            if(i < 10){
+                list.add("0"+String.valueOf(i));
+            }else{
+            list.add(String.valueOf(i));
             }
         }
 
+    }
+
+    private void populateShortMonths(){
+        short_months.add("Jan");
+        short_months.add("Feb");
+        short_months.add("Mar");
+        short_months.add("Apr");
+        short_months.add("May");
+        short_months.add("Jun");
+        short_months.add("Jul");
+        short_months.add("Aug");
+        short_months.add("Sep");
+        short_months.add("Oct");
+        short_months.add("Nov");
+        short_months.add("Dec");
     }
 
     private void fillMonthsSublist(List<String> months, int[] array){
