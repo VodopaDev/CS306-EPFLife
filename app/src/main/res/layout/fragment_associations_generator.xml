@@ -28,7 +28,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
                     android:ems="10"
-                    android:inputType="number"
+                    android:inputType="text"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/load_icon_button"
                     app:layout_constraintStart_toStartOf="parent"
@@ -49,7 +49,7 @@
                 android:id="@+id/associations_generator_list_values"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="RESULTS : \n" />
+                android:text="@string/no_association_found" />
         </LinearLayout>
     </ScrollView>
 
