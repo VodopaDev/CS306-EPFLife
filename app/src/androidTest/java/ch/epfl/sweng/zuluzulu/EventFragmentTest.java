@@ -1,10 +1,17 @@
 package ch.epfl.sweng.zuluzulu;
 
 import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,42 +19,33 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
+import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Structure.User;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-public class EventFragmentTest {
-
-    private static final int NB_ALL_EVENTS = 4;
-    private static final int NB_FAV_EVENTS = 3;
-
-    @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
-    private User user;
-    private SuperFragment fragment;
+public class EventFragmentTest extends TestWithLogin {
+    SuperFragment fragment;
 
     @Before
-    public void initAuthenticatedTest() {
-        user = Utility.createTestUser();
-        Utility.addUserToMainIntent(mActivityRule, user);
-        fragment = EventFragment.newInstance(user);
+    public void init() {
+        fragment = EventFragment.newInstance(getUser());
         mActivityRule.getActivity().openFragment(fragment);
-
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
@@ -98,11 +96,6 @@ public class EventFragmentTest {
 
     @Test
     public void sortListByMostLikedEvent() throws InterruptedException{
-        onView(withId(R.id.event_fragment_checkbox_sort_like)).perform(ViewActions.click());
-    }
-
-    @Test
-    public void LikeAnEvent() {
-        onView(withId(R.id.card_event_like_button)).perform(ViewActions.click());
+         onView(withId(R.id.event_fragment_checkbox_sort_like)).perform(ViewActions.click());
     }
 }
