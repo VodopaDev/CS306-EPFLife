@@ -96,6 +96,7 @@ public class UserTest {
         assertNull(guest.getGaspar());
         assertNull(guest.getLastNames());
         assertNull(guest.getSciper());
+        assertNull(guest.getSemester());
     }
 
     @Test
