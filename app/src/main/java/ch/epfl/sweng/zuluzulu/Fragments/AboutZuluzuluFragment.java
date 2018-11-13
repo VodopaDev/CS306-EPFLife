@@ -48,7 +48,9 @@ public class AboutZuluzuluFragment extends SuperFragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_about_zuluzulu, container, false);
-
+        if(view == null){
+            return null;
+        }
         Button button = view.findViewById(R.id.send_mail);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

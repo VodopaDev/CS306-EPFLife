@@ -57,17 +57,16 @@ public class SettingsFragmentTest {
     }
 
     @Test
-    public void testClickOnAnonym() {
+    public void testClickOnAnonym() throws InterruptedException {
         SharedPreferences preferences = mActivityTestRule.getActivity().getPreferences(Context.MODE_PRIVATE);
         boolean anonym = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        onView(withId(R.id.switch_notifications))
+                .perform(click());
 
         onView(withId(R.id.switch_chat_anonym)).perform(click());
+        TimeUnit.SECONDS.sleep(1);
         boolean anonymAfterClick = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
         assertNotEquals(anonymAfterClick, anonym);
 
