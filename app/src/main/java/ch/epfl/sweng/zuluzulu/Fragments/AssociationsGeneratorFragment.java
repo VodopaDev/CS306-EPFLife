@@ -106,6 +106,9 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private void addDatabase(String base_url, String icon_url, int index) {
+        if(index < 0 || index >= this.datas.size()){
+            return;
+        }
         try {
             URL url = new URL(base_url);
             URL iconUrl = new URL(url, icon_url);
@@ -136,22 +139,32 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     }
 
     private Void handleIcon(Pair<String, List<String>> result){
-        if(result != null && result.second.size() > 0){
+        if(result != null && !result.second.isEmpty()){
             String key = result.first;
             String value = result.second.get(0);
 
-            for(int i = 0; i < datas.size(); i++){
-                String data = datas.get(i);
-                if(data.contains(key)){
-                    addDatabase(key, value, i);
-                    break;
-                }
-            }
+            int index = findIndex(key);
+
+            addDatabase(key, value, index);
         }
         mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
 
         return null;
     }
+
+    private int findIndex(String key) {
+        if(datas == null){
+            return -1;
+        }
+
+        for(int i = 0; i < datas.size(); i++){
+            if(datas.get(i).contains(key)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
 
     /**
      * Fill the datas in the view

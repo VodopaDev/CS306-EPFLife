@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestWithAdminLogin;
@@ -38,7 +39,9 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminLogin {
         UrlReader reader = new UrlReader() {
             @Override
             public BufferedReader read(String name) {
-                return new BufferedReader(new StringReader("&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br /><link rel=\"icon\" type=\"image/png\" href=\"images/favicon.png\" sizes=\"16x16\">"));
+                return new BufferedReader(new StringReader("&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />\n"
+                        + "&#8211; <a href=\"http://example.com\">Other</a> (Other)<br />\n"
+                        +"<link rel=\"icon\" type=\"image/png\" href=\"images/favicon.png\" sizes=\"16x16\">"));
             }
         };
         // Change the factory
@@ -46,8 +49,13 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminLogin {
         adminUser();
         onView(withId(R.id.nbr_icon)).perform(replaceText("lauzhack"));
         onView(withId(R.id.load_icon_button)).perform(click());
-
+        try {
+            TimeUnit.SECONDS.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.associations_generator_list_values)).check(matches(withText(containsString("favicon.png"))));
+
     }
 
 
@@ -58,7 +66,6 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminLogin {
             @Override
             public BufferedReader read(String name) {
                 return new BufferedReader(new StringReader("&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />"
-                        + "&#8211; <a href=\"http://example.com\">Other</a> (Other)<br "
                         +"<link rel=\"icon\" type=\"image/png\" href=\"www.epfl.ch/favicon.ico\" sizes=\"16x16\">"));
             }
         };
