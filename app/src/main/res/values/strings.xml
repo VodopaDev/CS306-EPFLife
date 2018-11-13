@@ -72,5 +72,6 @@
     <string name="event_detail_tv_desc">Description:</string>
     <string name="event_detail_tv_date">Date:</string>
     <string name="event_detail_tv_organizer">Organizer:</string>
+    <string name="event_detail_tv_place">Place:</string>
 
 </resources>

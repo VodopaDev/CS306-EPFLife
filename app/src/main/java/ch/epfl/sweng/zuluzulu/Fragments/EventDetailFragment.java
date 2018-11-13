@@ -90,6 +90,9 @@ public class EventDetailFragment extends SuperFragment{
         TextView event_organizer = view.findViewById(R.id.event_detail_organizer);
         event_organizer.setText(event.getOrganizer());
 
+        TextView event_place = view.findViewById(R.id.event_detail_place);
+        event_place.setText(event.getPlace());
+
         // Event icon
         ImageView event_icon = view.findViewById(R.id.event_detail_icon);
         Glide.with(getContext())
