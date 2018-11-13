@@ -4,12 +4,12 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -42,8 +42,8 @@ public class ChannelArrayAdapter extends ArrayAdapter<Channel> {
         Channel currentChannel = channels.get(position);
         boolean isClickable = currentChannel.isClickable();
 
-        ConstraintLayout constraintLayout = channelView.findViewById(R.id.channel_layout);
-        constraintLayout.setBackgroundResource(R.drawable.channel_background);
+        LinearLayout linearLayout = channelView.findViewById(R.id.channel_layout);
+        linearLayout.setBackgroundResource(R.drawable.channel_background);
 
         TextView name = channelView.findViewById(R.id.channel_name);
         name.setText(currentChannel.getName());
