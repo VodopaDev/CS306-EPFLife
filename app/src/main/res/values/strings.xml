@@ -23,6 +23,7 @@
     <string name="support">Support:</string>
     <string name="Group">ZuluZulu</string>
     <string name="numVersion">Alpha</string>
+    <string name="drawer_associations_generator">Fill the associations</string>
 
     <string name="contactEmail">zuluzulu@epfl.ch</string>
     <string name="supportEmail">EPFLife@epfl.ch</string>
@@ -59,7 +60,6 @@
 
     <!-- ABOUT ZUZULULU fragment -->
     <string name="send_mail_button">SEND US AN EMAIL !</string>
-    <string name="drawer_associations_generator">Fill the associations</string>
     <string name="profile_unit">Section</string>
     <string name="posts">Posts</string>
     <string name="chat">Chat</string>
@@ -70,5 +70,9 @@
     <string name="drawer_calendar">Calendar</string>
     <string name="fragment_assos_sort_id">ID</string>
     <string name="fragment_assos_sort_name">Name</string>
+
+    <string name="icon_button_go">Load icons</string>
+    <string name="no_association_found">No association</string>
+    <string name="generator_association_name">Name of the association</string>
 
 </resources>
