@@ -28,6 +28,10 @@ public class EventTest {
     private static final Uri DEFAULT_BANNER_URI = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner);
     private static final Uri DEFAULT_ICON_URI = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon);
     private static final Date START_DATE = new Date(2L);
+    private static final Date START_DATE_1 = new Date(3L);
+    private static final long LIKES_1 = 100L;
+    private static final long LIKES_2 = 3L;
+
 
     private Event event0;
     private Event event1;
@@ -42,6 +46,7 @@ public class EventTest {
         map.put("icon_uri", TEST_URI_STRING);
         map.put("banner_uri", TEST_URI_STRING);
         map.put("start_date", START_DATE);
+        map.put("likes", LIKES_1);
 
         event0 = new Event(new FirebaseMapDecorator(map));
     }
@@ -52,12 +57,13 @@ public class EventTest {
         map.put("name", NAME2);
         map.put("short_desc", SHORT_DESC);
         map.put("long_desc", LONG_DESC);
-        map.put("start_date", START_DATE);
+        map.put("start_date", START_DATE_1);
+        map.put("likes", LIKES_2);
 
         event1 = new Event(new FirebaseMapDecorator(map));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void invalidSnapThrowIllegalArgumentException() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", 1L);
@@ -70,6 +76,12 @@ public class EventTest {
     public void idIsCorrect() {
         initWorkingAssociation();
         assertEquals(1, event0.getId());
+    }
+
+    @Test
+    public void likesAreCorrect() {
+        initWorkingAssociation();
+        assertEquals(100, (int) event0.getLikes());
     }
 
     @Test
@@ -113,5 +125,34 @@ public class EventTest {
         assertEquals(NAME1.compareTo(NAME2),
                 Event.assoNameComparator().compare(event0, event1));
     }
+
+    @Test
+    public void dateComparTest () {
+        initWorkingAssociation();
+        initDefaultAssociation();
+        assertEquals(START_DATE.compareTo(START_DATE_1), Event.dateComparator().compare(event0, event1));
+    }
+
+    @Test
+    public void likesComparTest () {
+        initWorkingAssociation();
+        initDefaultAssociation();
+        assertEquals(-1, Event.likeComparator().compare(event0, event1));
+    }
+
+    @Test
+    public void increaseLikesTest () {
+        initWorkingAssociation();
+        event0.increaseLikes();
+        assertEquals(((int) LIKES_1) + 1, (int) event0.getLikes());
+    }
+
+    @Test
+    public void decreaseLikesTest () {
+        initWorkingAssociation();
+        event0.decreaseLikes();
+        assertEquals(((int) LIKES_1) - 1, (int) event0.getLikes());
+    }
+
 
 }

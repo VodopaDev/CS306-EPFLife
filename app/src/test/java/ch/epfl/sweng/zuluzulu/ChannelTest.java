@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
-import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.User.User;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -21,7 +21,6 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
 public class ChannelTest {
-
 
     private static Map data1 = new HashMap();
     private static Map data2 = new HashMap();
@@ -92,6 +91,12 @@ public class ChannelTest {
         channelSAT = new Channel(new FirebaseMapDecorator(data3));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testBadMapForConstructor() {
+        Map map = new HashMap();
+        new Channel(new FirebaseMapDecorator(map));
+    }
+
     @Test
     public void testGettersAndSetters() {
         assertEquals(id1.intValue(), channelGlobal.getId());
@@ -109,16 +114,16 @@ public class ChannelTest {
 
     @Test
     public void testChannelWithSectionRestriction() {
-        assertTrue(channelGlobal.canBeAccessedBy(userIN, nullPoint));
-        assertTrue(channelGlobal.canBeAccessedBy(userSC, nullPoint));
+        assertTrue(channelGlobal.canBeSeenBy(userIN, nullPoint));
+        assertTrue(channelGlobal.canBeSeenBy(userSC, nullPoint));
 
-        assertTrue(channelIN.canBeAccessedBy(userIN, nullPoint));
-        assertFalse(channelIN.canBeAccessedBy(userSC, nullPoint));
+        assertTrue(channelIN.canBeSeenBy(userIN, nullPoint));
+        assertFalse(channelIN.canBeSeenBy(userSC, nullPoint));
     }
 
     @Test
     public void testChannelWithDistanceRestriction() {
-        assertTrue(channelSAT.canBeAccessedBy(userIN, SATPoint));
-        assertFalse(channelSAT.canBeAccessedBy(userIN, nullPoint));
+        assertTrue(channelSAT.canBeSeenBy(userIN, SATPoint));
+        assertFalse(channelSAT.canBeSeenBy(userIN, nullPoint));
     }
 }

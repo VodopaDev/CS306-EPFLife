@@ -1,24 +1,21 @@
 package ch.epfl.sweng.zuluzulu.Adapters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
-import java.io.File;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Utility.ImageLoader;
 
 public class ChannelArrayAdapter extends ArrayAdapter<Channel> {
 
@@ -34,47 +31,32 @@ public class ChannelArrayAdapter extends ArrayAdapter<Channel> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View channelView = convertView;
-        if (channelView == null) {
-            channelView = LayoutInflater.from(mContext).inflate(R.layout.channel, parent, false);
-        }
-
         Channel currentChannel = channels.get(position);
+        boolean isClickable = currentChannel.isClickable();
 
-        ConstraintLayout constraintLayout = channelView.findViewById(R.id.channel_layout);
-        constraintLayout.setBackgroundResource(R.drawable.channel_background);
+        int layoutResource = isClickable ? R.layout.channel : R.layout.channel_toofar;
 
-        TextView name = channelView.findViewById(R.id.channel_name);
+        View view = LayoutInflater.from(mContext).inflate(layoutResource, parent, false);
+
+        LinearLayout linearLayout = view.findViewById(R.id.channel_layout);
+        int backgroundResource = isClickable ? R.drawable.channel_background : R.drawable.channel_notclickable_background;
+        linearLayout.setBackgroundResource(backgroundResource);
+
+        TextView name = view.findViewById(R.id.channel_name);
         name.setText(currentChannel.getName());
 
-        TextView description = channelView.findViewById(R.id.channel_description);
+        TextView description = view.findViewById(R.id.channel_description);
         description.setText(currentChannel.getDescription());
 
-        ImageView icon = channelView.findViewById(R.id.channel_icon);
+        ImageView icon = view.findViewById(R.id.channel_icon);
+        ImageLoader.loadUriIntoImageView(icon, currentChannel.getIconUri(), getContext());
 
-        defaultIcon(icon);
-        initImageView(currentChannel.getIconUri(), icon);
+        if (!isClickable) {
+            TextView distanceView = view.findViewById(R.id.channel_distance);
+            int distance = (int) Math.round(currentChannel.getDistance());
+            distanceView.setText("You are close to the channel (" + distance + "m).");
+        }
 
-        return channelView;
-    }
-
-    /**
-     * Fetch an Image from the Internet and put it in an ImageView
-     *
-     * @param uri   Uri of the image to fetch
-     * @param image ImageView to put the image
-     */
-    private void initImageView(Uri uri, ImageView image) {
-        Glide.with(mContext)
-                .load(uri)
-                .centerCrop()
-                .into(image);
-    }
-
-    private void defaultIcon(ImageView icon) {
-        Glide.with(mContext)
-                .load(new File("res/asso_cache/default_icon.png"))
-                .centerCrop()
-                .into(icon);
+        return view;
     }
 }

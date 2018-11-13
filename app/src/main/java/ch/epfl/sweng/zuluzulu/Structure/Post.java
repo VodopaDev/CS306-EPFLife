@@ -11,19 +11,21 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
  */
 public class Post {
 
-    public static final List<String> FIELDS = Arrays.asList("senderName", "sciper", "message", "time");
+    public static final List<String> FIELDS = Arrays.asList("senderName", "sciper", "message", "time", "color");
     private String senderName;
     private String sciper;
     private String message;
     private Date time;
-    private boolean anonym;
+    private String color;
+    private boolean anonymous;
 
     public Post(FirebaseMapDecorator data) {
         senderName = data.getString("senderName");
         sciper = data.getString("sciper");
         message = data.getString("message");
         time = data.getDate("time");
-        anonym = senderName.isEmpty();
+        color = data.getString("color");
+        anonymous = senderName.isEmpty();
     }
 
     /**
@@ -37,6 +39,8 @@ public class Post {
 
     /**
      * Setter for the sender name
+     *
+     * @param senderName the new senderName
      */
     public void setSenderName(String senderName) {
         this.senderName = senderName;
@@ -53,6 +57,8 @@ public class Post {
 
     /**
      * Setter for the sciper
+     *
+     * @param sciper the new sciper
      */
     public void setSciper(String sciper) {
         this.sciper = sciper;
@@ -69,6 +75,8 @@ public class Post {
 
     /**
      * Setter for the message
+     *
+     * @param message the new message
      */
     public void setMessage(String message) {
         this.message = message;
@@ -85,15 +93,31 @@ public class Post {
 
     /**
      * Setter for the creation time
+     *
+     * @param time the new time
      */
     public void setTime(Date time) {
         this.time = time;
     }
 
     /**
-     * Getter for anonym
+     * Getter for the color
+     *
+     * @return the color
+     */
+    public String getColor() { return color; }
+
+    /**
+     * Setter for the color
+     *
+     * @param color the new color
+     */
+    public void setColor(String color) { this.color = color; }
+
+    /**
+     * Getter for anonymous
      *
      * @return Whether the post is anonymous or not
      */
-    public boolean isAnonym() { return anonym; }
+    public boolean isAnonymous() { return anonymous; }
 }

@@ -29,11 +29,14 @@ import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.GPS;
-import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
+
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.DECREMENT_IDLING_RESOURCE;
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.INCREMENT_IDLING_RESOURCE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,7 +57,7 @@ public class ChannelFragment extends SuperFragment {
     private List<Channel> listOfChannels = new ArrayList<>();
     private ChannelArrayAdapter adapter;
 
-    private User user;
+    private AuthenticatedUser user;
     private GeoPoint userLocation;
 
     public ChannelFragment() {
@@ -79,7 +82,7 @@ public class ChannelFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (User) getArguments().getSerializable(ARG_USER);
+            user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Channels");
         }
     }
@@ -97,7 +100,9 @@ public class ChannelFragment extends SuperFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Channel selectedChannel = listOfChannels.get(position);
-                mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel);
+                if (selectedChannel.isClickable()) {
+                    mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel);
+                }
             }
         });
 
@@ -114,6 +119,7 @@ public class ChannelFragment extends SuperFragment {
      * Read data from the database and get the list of the channels
      */
     private void getChannelsFromDatabase() {
+        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(CHANNELS_COLLECTION_NAME).orderBy("id", Query.Direction.ASCENDING).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -126,7 +132,7 @@ public class ChannelFragment extends SuperFragment {
                                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
                                 if (fmap.hasFields(Channel.FIELDS)) {
                                     Channel channel = new Channel(fmap);
-                                    if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user, userLocation)) {
+                                    if (channel.canBeSeenBy(user, userLocation)) {
                                         listOfChannels.add(channel);
                                     }
                                 }
@@ -136,6 +142,7 @@ public class ChannelFragment extends SuperFragment {
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
+                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                     }
                 });
     }

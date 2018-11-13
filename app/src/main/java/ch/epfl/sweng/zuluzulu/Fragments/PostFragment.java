@@ -25,7 +25,7 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
-import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.User.User;
 
 /**
  * A simple {@link SuperChatPostsFragment} subclass.
@@ -66,7 +66,7 @@ public class PostFragment extends SuperChatPostsFragment {
         listView.setAdapter(adapter);
 
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        anonym = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
+        anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
         setUpDataOnChangeListener();
         setUpChatButton();
