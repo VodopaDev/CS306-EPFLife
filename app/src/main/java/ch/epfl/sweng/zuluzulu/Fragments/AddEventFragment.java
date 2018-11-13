@@ -96,6 +96,13 @@ public class AddEventFragment extends SuperFragment {
 
     }
 
+    /**
+     * fill lists requiring double digits numbers
+     * @param list , the list we want to fill
+     * @param startingValue the first value that the list will have
+     * @param exclusiveMaxValue the max value (exclusive) that the list will have
+     * @param increment of how much we increment per iteration
+     */
     private void addIntsToList(List<String> list, int startingValue, int exclusiveMaxValue, int increment){
         for(int i = startingValue; i < exclusiveMaxValue; i += increment){
             if(i < 10){
@@ -107,6 +114,9 @@ public class AddEventFragment extends SuperFragment {
 
     }
 
+    /**
+     * simply fill short_months with the 12 months of the year
+     */
     private void populateShortMonths(){
         short_months.add("Jan");
         short_months.add("Feb");
@@ -122,6 +132,11 @@ public class AddEventFragment extends SuperFragment {
         short_months.add("Dec");
     }
 
+    /**
+     * create a sublist of months containing only those we select
+     * @param months the sublist we want to fill
+     * @param array the array of indices that indicate the months we want
+     */
     private void fillMonthsSublist(List<String> months, int[] array){
         for(int i : array){
             months.add(short_months.get(i));
@@ -136,16 +151,10 @@ public class AddEventFragment extends SuperFragment {
         return Integer.parseInt(spinner.getSelectedItem().toString());
     }
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_event, container, false);
-
-        title_view = view.findViewById(R.id.event_title);
-        description_view = view.findViewById(R.id.long_desc_text);
-
-        //the button "create event" that when clicked gather the data from all spinners and
-        //textviews and push an event on the database
-        create_event = view.findViewById(R.id.create_event_button);
+    /**
+     * Set the onClick of the button with sending the event to the database
+     */
+    private void setUpCreateEventButton(){
         create_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,41 +206,35 @@ public class AddEventFragment extends SuperFragment {
                         });
             }
         });
+    }
 
-        //fill the different spinners for the dates.
-        spinner_days = view.findViewById(R.id.spinner_day);
-        setSpinner(spinner_days, thirty_one_days);
-
-        spinner_months = view.findViewById(R.id.spinner_month);
-        setSpinner(spinner_months, short_months);
+    /**
+     * Method that setup the fact that there are different days depending on the month
+     * and update the spinners values accordingly
+     */
+    private void setUpDayMonthInteraction(){
         spinner_months.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> parent, View view, int pos,
                                        long id) {
-
-                //adapts the content of the day spinner depending on the month selected
-                //in the month spinner so that the number of days corresponds
 
                 String selected_mon = ((TextView) view).getText().toString();
                 int selected = Integer.parseInt(spinner_days.getSelectedItem().toString());
 
                 if(selected_mon.equals("Feb")){
+                    //case we select february
                     setSpinner(spinner_days, feb_days);
-                    if (selected < 28){
-                        spinner_days.setSelection(selected-1);
-                    }
-                    else{
-                        spinner_days.setSelection(27);
-                    }
+                    helperSetup(selected,28,27);
+
                 }else{
                     if(thirty_one_days_months.contains(selected_mon)){
+                        //case we select a 31 days month
                         setSpinner(spinner_days, thirty_one_days);
                         spinner_days.setSelection(selected-1);
                     }
                     else{
+                        //case we select a 30 days month
                         setSpinner(spinner_days, thirty_days);
-                        if(selected < 30){
-                            spinner_days.setSelection(selected-1);
-                        }else{spinner_days.setSelection(29);}
+                        helperSetup(selected,30,29);
                     }
                 }
             }
@@ -239,6 +242,45 @@ public class AddEventFragment extends SuperFragment {
             }
 
         });
+    }
+
+    /**
+     * little method that check the selected day is within the boundaries
+     * of the days of the month and adapt the value
+     * @param selected current selected value
+     * @param conditionValue the max value (exclusive) selected can have for the current month
+     * @param setValue set the spinner at this value if selected is out of bound
+     */
+    private void helperSetup(int selected, int conditionValue, int setValue){
+        if(selected < conditionValue){
+            spinner_days.setSelection(selected-1);
+        }
+        else{
+            spinner_days.setSelection(setValue);
+        }
+
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_add_event, container, false);
+
+        title_view = view.findViewById(R.id.event_title);
+        description_view = view.findViewById(R.id.long_desc_text);
+
+        //the button "create event" that when clicked gather the data from all spinners and
+        //textviews and push an event on the database
+        create_event = view.findViewById(R.id.create_event_button);
+        setUpCreateEventButton();
+
+
+        //fill the different spinners for the dates.
+        spinner_days = view.findViewById(R.id.spinner_day);
+        setSpinner(spinner_days, thirty_one_days);
+
+        spinner_months = view.findViewById(R.id.spinner_month);
+        setSpinner(spinner_months, short_months);
+        setUpDayMonthInteraction();
 
         spinner_years = view.findViewById(R.id.spinner_year);
         setSpinner(spinner_years, years);
@@ -252,8 +294,6 @@ public class AddEventFragment extends SuperFragment {
         //fill the spinner for associations.
         spinner =  view.findViewById(R.id.spinner);
         fillAssociationNames();
-
-
 
         return view;
     }
