@@ -7,8 +7,6 @@ import android.widget.Spinner;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.concurrent.TimeUnit;
-
 
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
@@ -22,7 +20,6 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -44,11 +41,6 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
      */
     private void goToAddEvent(){
         onView(ViewMatchers.withId(R.id.event_add_button)).perform(click());
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -58,11 +50,7 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
     public void testEmptyTitleAndDesc() {
         goToAddEvent();
         onView(withId(R.id.create_event_button)).perform(click());
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         onView(withId(R.id.add_event_layout)).check(matches(isDisplayed()));
     }
 
@@ -76,11 +64,6 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
         onView(withId(R.id.long_desc_text)).perform(typeText("Okay I am now writing a whole story about the life of this test. So once upon a time, a test was created, it was supposed to be super useful and everyone was happy, until they started it, and it failed. And then started hours and hours of debugging" +
                 "continuously until it passed. That was the story, thank you")).perform(closeSoftKeyboard());
         onView(withId(R.id.create_event_button)).perform(click());
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         onView(withId(R.id.add_event_layout)).check(matches(isDisplayed()));
     }
 
@@ -150,12 +133,5 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
         onView(withId(R.id.event_title)).perform(typeText("Test Event"));
         onView(withId(R.id.long_desc_text)).perform(typeText("this is an awesome test event")).perform(closeSoftKeyboard());
         onView(withId(R.id.create_event_button)).perform(click());
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        onView(withId(R.id.event_fragment_all_button)).check(matches(isDisplayed()));
-        onView(withText("Test Event")).check(matches(isDisplayed()));
     }
 }
