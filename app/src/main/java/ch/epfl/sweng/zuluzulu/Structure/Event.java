@@ -20,13 +20,14 @@ public class Event implements Serializable {
 
     private int id;
     private String name;
-    private String short_desc;
-    private String long_desc;
-    private Date start_date;
+    private String shortDesc;
+    private String longDesc;
+
+    private Date startDate;
     private String start_date_string;
 
-    private Uri banner_uri;
-    private Uri icon_uri;
+    private Uri bannerUri;
+    private Uri iconUri;
 
     /**
      * Create an event using a FirebaseMap
@@ -36,25 +37,25 @@ public class Event implements Serializable {
      */
     public Event(FirebaseMapDecorator data) {
         if (!data.hasFields(FIELDS))
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
 
         id = data.getInteger("id");
         name = data.getString("name");
-        short_desc = data.getString("short_desc");
-        long_desc = data.getString("long_desc");
+        shortDesc = data.getString("short_desc");
+        longDesc = data.getString("long_desc");
 
         String icon_str = data.getString("icon_uri");
-        icon_uri = icon_str == null ?
+        iconUri = icon_str == null ?
                 Uri.parse("android.ressource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(icon_str);
 
-        String banner_str = data.getString("icon_uri");
-        banner_uri = banner_str == null ?
+        String banner_str = data.getString("banner_uri");
+        bannerUri = banner_str == null ?
                 Uri.parse("android.ressource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
                 Uri.parse(banner_str);
 
-        start_date = data.getDate("start_date");
-        start_date_string = Utils.dateFormat.format(start_date);
+        startDate = data.getDate("start_date");
+        start_date_string = Utils.dateFormat.format(startDate);
     }
 
 
@@ -87,15 +88,15 @@ public class Event implements Serializable {
     }
 
     public String getShortDesc() {
-        return short_desc;
+        return shortDesc;
     }
 
     public String getLongDesc() {
-        return long_desc;
+        return longDesc;
     }
 
     public Date getStartDate() {
-        return start_date;
+        return startDate;
     }
 
     public String getStartDateString() {
@@ -104,12 +105,12 @@ public class Event implements Serializable {
 
     @Nullable
     public Uri getBannerUri() {
-        return banner_uri;
+        return bannerUri;
     }
 
     @Nullable
     public Uri getIconUri() {
-        return icon_uri;
+        return iconUri;
     }
 
 }

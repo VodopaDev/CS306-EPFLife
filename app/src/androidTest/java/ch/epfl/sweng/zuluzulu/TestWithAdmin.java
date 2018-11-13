@@ -2,11 +2,11 @@ package ch.epfl.sweng.zuluzulu;
 
 import org.junit.Before;
 
-import ch.epfl.sweng.zuluzulu.Structure.User;
+import ch.epfl.sweng.zuluzulu.User.Admin;
 
-public class TestWithAdminLogin extends TestWithLogin {
+public class TestWithAdmin extends TestWithAuthenticatedUser {
 
-    private User admin;
+    private Admin admin;
 
     @Before
     public void setUpLogin() {
@@ -15,7 +15,7 @@ public class TestWithAdminLogin extends TestWithLogin {
     }
 
     @Override
-    protected User getUser() {
+    protected Admin getUser() {
         return admin;
     }
 }

@@ -15,9 +15,9 @@
 //
 //import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 //import ch.epfl.sweng.zuluzulu.R;
-//import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
+//import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 //import ch.epfl.sweng.zuluzulu.Structure.Event;
-//import ch.epfl.sweng.zuluzulu.Structure.User;
+//import ch.epfl.sweng.zuluzulu.User.User;
 //
 //public class EventDetailFragment extends SuperFragment{
 //    public static final String TAG = "EVENT_DETAIL__TAG";

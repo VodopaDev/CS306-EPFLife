@@ -6,10 +6,10 @@ import org.junit.runners.JUnit4;
 
 import java.util.Collections;
 
-import ch.epfl.sweng.zuluzulu.Structure.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Structure.Guest;
-import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.Structure.UserRole;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.User.Guest;
+import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.User.UserRole;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;

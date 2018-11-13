@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu.Structure;
+package ch.epfl.sweng.zuluzulu.User;
 
 import java.util.List;
 
