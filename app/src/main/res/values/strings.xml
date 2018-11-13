@@ -36,8 +36,10 @@
     <!-- Event related -->
     <string name="fragment_event_button_all">All</string>
     <string name="fragment_event_button_fav">Favorites</string>
+    <string name="fragment_event_checkbox_sort_likes">Like</string>
     <string name="fragment_event_checkbox_sort_name">Name</string>
     <string name="fragment_event_checkbox_sort_date">Date</string>
+    <string name="fragment_event_like_button">Like</string>
 
     <!-- Chat related -->
     <string name="chat_send">Send</string>
