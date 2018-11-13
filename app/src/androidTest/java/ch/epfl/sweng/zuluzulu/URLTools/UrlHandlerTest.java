@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
@@ -80,6 +81,33 @@ public class UrlHandlerTest {
         // stop waiting on resource.decrement()   OR timeout !
 
         assertTrue(succes);
+    }
+
+    @Test
+    public void failWithClosedBf() {
+        // Change the UrlReader to avoid HTTP request
+        UrlReader reader = new UrlReader() {
+            @Override
+            public BufferedReader read(String name) {
+                BufferedReader bf = new BufferedReader(new StringReader(""));
+                try {
+                    bf.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return bf;
+            }
+        };
+        // Change the factory
+        UrlReaderFactory.setDependency(reader);
+
+        this.object = new UrlHandler(this::handler, new AssociationsParser());
+
+        object.execute("url");
+
+        Utility.openMenu();
+
+        assertFalse(succes);
     }
 
     @Test

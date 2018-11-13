@@ -4,9 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.*;
 
 public class AssociationsParserTest {
@@ -15,12 +18,6 @@ public class AssociationsParserTest {
     @Before
     public void init(){
         this.parser = new AssociationsParser();
-    }
-
-
-    @Test
-    public void parseAssociationsDataWithNull() {
-        assertNull(parser.parse(null));
     }
 
     @Test
@@ -43,6 +40,25 @@ public class AssociationsParserTest {
         input.close();
         List<String> result = parser.parse(new BufferedReader(input));
         assertNull(result);
+    }
+
+
+    @Test
+    public void parseAssociationsDataWithNull() {
+        assertThat(parser.parse(null), is(nullValue()));
+    }
+
+    @Test
+    public void parseAssociationsDataWithClosedBf() {
+        BufferedReader bf = new BufferedReader(new StringReader(""));
+        try {
+            bf.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<String> result = parser.parse(bf);
+
+        assertThat(result, is(nullValue()));
     }
 
 }

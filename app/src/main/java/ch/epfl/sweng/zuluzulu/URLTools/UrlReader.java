@@ -32,6 +32,7 @@ public class UrlReader implements Reader {
 
         if (urlConnection == null) {
             Log.d(TAG, "UrlConnection is null");
+            this.disconnect();
             return null;
         }
 
@@ -42,7 +43,7 @@ public class UrlReader implements Reader {
         } catch (IOException e) {
             Log.d(TAG, "Cannot read the page");
             e.printStackTrace();
-            urlConnection.disconnect();
+            this.disconnect();
         }
 
         return bufferedReader;
