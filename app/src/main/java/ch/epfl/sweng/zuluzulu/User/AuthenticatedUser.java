@@ -1,7 +1,12 @@
-package ch.epfl.sweng.zuluzulu.Structure;
+package ch.epfl.sweng.zuluzulu.User;
 
 import java.util.Arrays;
 import java.util.List;
+
+import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 public class AuthenticatedUser extends User {
     public static final List<String> fields = Arrays.asList("fav_assos", "followed_events", "followed_chats");
@@ -15,7 +20,6 @@ public class AuthenticatedUser extends User {
     // WARNING: can user can have multiples names
     private final String first_names;
     private final String last_names;
-    private Object listener;
     // All followed ids of Associations, Chats and Events
     private List<Integer> fav_assos;
     private List<Integer> followed_chats;

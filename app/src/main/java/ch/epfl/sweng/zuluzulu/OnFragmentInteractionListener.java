@@ -1,6 +1,6 @@
 package ch.epfl.sweng.zuluzulu;
 
-public interface OnFragmentInteractionListener<T> {
+public interface OnFragmentInteractionListener {
 
-    void onFragmentInteraction(CommunicationTag tag, T data);
+    void onFragmentInteraction(CommunicationTag tag, Object data);
 }

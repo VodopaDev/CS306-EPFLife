@@ -26,6 +26,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.CalendarFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
@@ -37,11 +38,12 @@ import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.GPS;
-import ch.epfl.sweng.zuluzulu.Structure.User;
-import ch.epfl.sweng.zuluzulu.Structure.UserRole;
+import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.User.UserRole;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
@@ -56,18 +58,18 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     // This resource is used for tests
     // That's the recommended way to implement it
     // @see https://developer.android.com/training/testing/espresso/idling-resource#integrate-recommended-approach
-    private CountingIdlingResource resource;
+    private CountingIdlingResource resource = new CountingIdlingResource("Main Activity");
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Create the resource
-        resource = new CountingIdlingResource("Main Activity");
-
         // Needed to use Firebase storage and Firestore
         FirebaseApp.initializeApp(getApplicationContext());
+
+        // Needed to have easier access to the Firestore
+        //FirebaseProxy.init(this);
 
         // Initialize the fragment stack used for the back button
         previous_fragments = new Stack<>();
@@ -197,6 +199,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         SuperFragment fragment;
 
         switch (menuItem.getItemId()) {
+            case R.id.nav_calendar:
+                fragment = CalendarFragment.newInstance((AuthenticatedUser)user);
+                break;
             case R.id.nav_main:
                 fragment = MainFragment.newInstance(user);
                 break;
