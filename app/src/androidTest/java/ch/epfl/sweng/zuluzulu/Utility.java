@@ -52,7 +52,6 @@ public class Utility {
     public static User createTestAdmin() {
         User.UserBuilder builder = createFilledUserBuider();
 
-
         User user = builder.buildAdmin();
         assert (user != null);
         assert (user.hasRole(UserRole.ADMIN));

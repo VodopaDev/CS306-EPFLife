@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -21,6 +22,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class EventFragmentTest {
@@ -66,21 +68,14 @@ public class EventFragmentTest {
     }
 
     @Test
-    public void thereAreTwoSortCheckbox() throws InterruptedException {
+    public void thereAreThreeSortCheckbox() throws InterruptedException {
 //        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_checkBox_sort_name)).check(matches(isDisplayed()));
         onView(withId(R.id.event_fragment_checkBox_sort_date)).check(matches(isDisplayed()));
+        onView(withId(R.id.event_fragment_checkbox_sort_like)).check(matches(isDisplayed()));
 //        TimeUnit.SECONDS.sleep(1);
     }
-//
-//    @Test
-//    public void listAlternateSortOption() throws InterruptedException {
-//        TimeUnit.SECONDS.sleep(1);
-//        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
-//        TimeUnit.SECONDS.sleep(1);
-//        onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
-//        TimeUnit.SECONDS.sleep(1);
-//    }
+
     @Test
     public void sortListDateFrom() throws InterruptedException {
 //        TimeUnit.SECONDS.sleep(1);
@@ -99,5 +94,15 @@ public class EventFragmentTest {
 //        TimeUnit.SECONDS.sleep(1);
         onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
 //        TimeUnit.SECONDS.sleep(1);
+    }
+
+    @Test
+    public void sortListByMostLikedEvent() throws InterruptedException{
+        onView(withId(R.id.event_fragment_checkbox_sort_like)).perform(ViewActions.click());
+    }
+
+    @Test
+    public void LikeAnEvent() {
+        onView(withId(R.id.card_event_like_button)).perform(ViewActions.click());
     }
 }
