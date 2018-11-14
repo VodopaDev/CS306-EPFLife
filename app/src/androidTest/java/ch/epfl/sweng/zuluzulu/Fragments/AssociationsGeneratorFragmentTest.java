@@ -34,16 +34,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 
 public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<MainFragment> {
 
     @Override
     public void initFragment() {
-        FirebaseFirestore db = spy(FirebaseFirestore.class);
-
-
         fragment = MainFragment.newInstance(user);
     }
 

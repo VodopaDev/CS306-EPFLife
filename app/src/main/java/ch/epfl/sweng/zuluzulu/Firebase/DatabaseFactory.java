@@ -2,14 +2,17 @@ package ch.epfl.sweng.zuluzulu.Firebase;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class DatabaseFactory {
-    private static FirebaseFirestore dependency = FirebaseFirestore.getInstance();
+import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.FirebaseAdapter;
 
-    public static FirebaseFirestore getDependency() {
+public class DatabaseFactory {
+    private static Database dependency = new FirebaseAdapter();
+
+    public static Database getDependency() {
         return dependency;
     }
 
-    public static void setDependency(FirebaseFirestore dependency) {
+    public static void setDependency(Database dependency) {
         DatabaseFactory.dependency = dependency;
     }
 }

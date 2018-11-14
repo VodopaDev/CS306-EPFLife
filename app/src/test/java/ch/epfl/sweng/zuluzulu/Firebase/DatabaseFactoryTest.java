@@ -5,10 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.BufferedReader;
-
-import ch.epfl.sweng.zuluzulu.URLTools.UrlReader;
-import ch.epfl.sweng.zuluzulu.URLTools.UrlReaderFactory;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
@@ -18,7 +15,7 @@ public class DatabaseFactoryTest {
     @Test
     @Ignore
     public void getDependency() {
-        assertThat(DatabaseFactory.getDependency(), instanceOf(FirebaseFirestore.class));
+        assertThat(DatabaseFactory.getDependency(), instanceOf(Database.class));
     }
 
     @Test
