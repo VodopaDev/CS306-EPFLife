@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.epfl.sweng.zuluzulu.Firebase.Database.FirebaseMock;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
@@ -39,6 +40,8 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
 
     @Override
     public void initFragment() {
+        DatabaseFactory.setDependency(new FirebaseMock());
+
         fragment = MainFragment.newInstance(user);
     }
 
