@@ -2,9 +2,12 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.support.test.espresso.IdlingRegistry;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.R;
@@ -31,10 +34,16 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+
 public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<MainFragment> {
 
     @Override
     public void initFragment() {
+        FirebaseFirestore db = spy(FirebaseFirestore.class);
+
+
         fragment = MainFragment.newInstance(user);
     }
 
