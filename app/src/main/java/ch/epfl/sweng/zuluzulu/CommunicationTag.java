@@ -5,7 +5,7 @@ public enum CommunicationTag {
     // Utils to modify the main activity
     SET_TITLE,
     SET_USER,
-    OPENING_WEBVIEW,
+
 
     // Communicate to the main fragment IDLING_Ressource
     INCREMENT_IDLING_RESOURCE,
@@ -23,5 +23,8 @@ public enum CommunicationTag {
     OPEN_EVENT_FRAGMENT,
     OPEN_EVENT_DETAIL_FRAGMENT,
     OPEN_ASSOCIATION_FRAGMENT,
-    OPEN_ASSOCIATION_DETAIL_FRAGMENT
+    OPEN_ASSOCIATION_DETAIL_FRAGMENT,
+    OPENING_WEBVIEW,
+    CREATE_EVENT,
+
 }
