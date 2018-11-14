@@ -61,6 +61,7 @@ public class SettingsFragmentTest extends TestWithGuestAndFragment<SettingsFragm
         boolean anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
         onView(withId(R.id.switch_notifications)).perform(click());
+
         onView(withId(R.id.switch_chat_anonym)).perform(click());
 
         boolean anonymousAfterClick = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);

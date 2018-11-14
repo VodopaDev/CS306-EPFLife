@@ -32,8 +32,10 @@ import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.User.UserRole;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 /**
@@ -56,6 +58,7 @@ public class EventFragment extends SuperFragment {
     private ListView listview_event;
     private Button button_event_all;
     private Button button_event_fav;
+    private Button button_event_add;
 
     private CheckBox checkbox_event_sort_name;
     private CheckBox checkbox_event_sort_date;
@@ -118,6 +121,17 @@ public class EventFragment extends SuperFragment {
 
         button_event_fav = view.findViewById(R.id.event_fragment_fav_button);
         button_event_all = view.findViewById(R.id.event_fragment_all_button);
+        button_event_add = view.findViewById(R.id.event_add_button);
+
+        if(user.hasRole(UserRole.ADMIN)){
+            button_event_add.setVisibility(View.VISIBLE);
+            button_event_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onFragmentInteraction(CommunicationTag.CREATE_EVENT,null);
+                }
+            });
+        }
 
         button_event_fav.setOnClickListener(new View.OnClickListener() {
             @Override
