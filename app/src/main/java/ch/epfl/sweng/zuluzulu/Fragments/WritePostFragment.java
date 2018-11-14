@@ -11,6 +11,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.Utility.PostColor;
 
 /**
  * A simple {@link SuperFragment} subclass.
@@ -48,7 +49,11 @@ public class WritePostFragment extends SuperFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_write_post, container, false);
+        View view = inflater.inflate(R.layout.fragment_write_post, container, false);
+
+        PostColor color = PostColor.getRandomColor();
+
+        return view;
     }
 
 }

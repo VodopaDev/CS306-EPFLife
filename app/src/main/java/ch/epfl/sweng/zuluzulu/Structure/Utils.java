@@ -4,9 +4,10 @@ import android.location.Location;
 
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.text.SimpleDateFormat;
-import com.google.firebase.firestore.GeoPoint;
+import java.util.Random;
 
 /**
  * Class that contains general useful functions
@@ -65,4 +66,17 @@ public final class Utils {
 
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
     public static SimpleDateFormat stringToDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+    /**
+     * Return a random integer in the range [min, max]
+     *
+     * @param min the smallest integer you can get
+     * @param max the biggest integer you can get
+     *
+     * @return the random integer
+     */
+    public static int randomInt(int min, int max) {
+        Random rand = new Random();
+        return rand.nextInt((max - min) + 1) + min;
+    }
 }
