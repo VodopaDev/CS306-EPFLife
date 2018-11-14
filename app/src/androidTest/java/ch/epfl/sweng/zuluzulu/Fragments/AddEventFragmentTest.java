@@ -40,11 +40,6 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
      * got to add an event
      */
     private void goToAddEvent(){
-        try{
-        Thread.sleep(1500);
-        }catch (InterruptedException e){
-            System.out.println("unexpected interruption");
-        }
         onView(ViewMatchers.withId(R.id.event_add_button)).perform(click());
     }
 
