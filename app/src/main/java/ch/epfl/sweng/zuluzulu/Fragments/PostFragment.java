@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,6 +42,8 @@ public class PostFragment extends SuperChatPostsFragment {
     private List<Post> posts = new ArrayList<>();
     private PostArrayAdapter adapter;
 
+    private Button writePostButton;
+
     public PostFragment() {
         // Required empty public constructor
     }
@@ -56,6 +59,7 @@ public class PostFragment extends SuperChatPostsFragment {
         listView = view.findViewById(R.id.posts_list_view);
         chatButton = view.findViewById(R.id.chat_button);
         postsButton = view.findViewById(R.id.posts_button);
+        writePostButton = view.findViewById(R.id.posts_new_post_button);
 
         chatButton.setEnabled(true);
         postsButton.setEnabled(false);
@@ -70,6 +74,7 @@ public class PostFragment extends SuperChatPostsFragment {
 
         setUpDataOnChangeListener();
         setUpChatButton();
+        setUpNewPostButton();
 
         return view;
     }
@@ -112,6 +117,15 @@ public class PostFragment extends SuperChatPostsFragment {
                         }
                     }
                 });
+    }
+
+    private void setUpNewPostButton() {
+        writePostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_WRITE_POST_FRAGMENT, channel);
+            }
+        });
     }
 
     @Override
