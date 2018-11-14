@@ -31,17 +31,14 @@ import java.util.Map;
 import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 /**
- * A simple {@link SuperChatPostsFragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnFragmentInteractionListener} interface
- * to handle interaction events.
+ * A {@link SuperChatPostsFragment} subclass.
+ * This fragment is used to display the chat and to write in it
  */
 public class ChatFragment extends SuperChatPostsFragment {
 

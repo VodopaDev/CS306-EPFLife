@@ -34,7 +34,8 @@ import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility.PostColor;
 
 /**
- * A simple {@link SuperFragment} subclass.
+ * A {@link SuperFragment} subclass.
+ * This fragment is used to write new posts
  */
 public class WritePostFragment extends SuperFragment {
 

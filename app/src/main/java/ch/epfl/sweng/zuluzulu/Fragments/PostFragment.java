@@ -22,17 +22,14 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.Adapters.PostArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 /**
- * A simple {@link SuperChatPostsFragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnFragmentInteractionListener} interface
- * to handle interaction events.
+ * A {@link SuperChatPostsFragment} subclass.
+ * This fragment is used to display the posts
  */
 public class PostFragment extends SuperChatPostsFragment {
     private static final String TAG = "POST_TAG";
@@ -119,6 +116,9 @@ public class PostFragment extends SuperChatPostsFragment {
                 });
     }
 
+    /**
+     * Set up an onClick listener on the button to write a new post
+     */
     private void setUpNewPostButton() {
         writePostButton.setOnClickListener(new View.OnClickListener() {
             @Override
