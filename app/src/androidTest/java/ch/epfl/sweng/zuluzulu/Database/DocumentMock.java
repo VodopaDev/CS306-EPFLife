@@ -25,77 +25,79 @@ public class DocumentMock implements DatabaseDocument {
             Log.d(TAG, key);
         }
 
-        return new Task<Void>() {
-            @Override
-            public boolean isComplete() {
-                return true;
-            }
-
-            @Override
-            public boolean isSuccessful() {
-                return true;
-            }
-
-            @Override
-            public boolean isCanceled() {
-                return false;
-            }
-
-            @Nullable
-            @Override
-            public Void getResult() {
-                return null;
-            }
-
-            @Nullable
-            @Override
-            public <X extends Throwable> Void getResult(@NonNull Class<X> aClass) throws X {
-                return null;
-            }
-
-            @Nullable
-            @Override
-            public Exception getException() {
-                return new Exception("mock");
-            }
-
-            @NonNull
-            @Override
-            public Task<Void> addOnSuccessListener(@NonNull OnSuccessListener<? super Void> onSuccessListener) {
-                onSuccessListener.onSuccess(this.getResult());
-                return this;
-            }
-
-            @NonNull
-            @Override
-            public Task<Void> addOnSuccessListener(@NonNull Executor executor, @NonNull OnSuccessListener<? super Void> onSuccessListener) {
-                return null;
-            }
-
-            @NonNull
-            @Override
-            public Task<Void> addOnSuccessListener(@NonNull Activity activity, @NonNull OnSuccessListener<? super Void> onSuccessListener) {
-                return null;
-            }
-
-            @NonNull
-            @Override
-            public Task<Void> addOnFailureListener(@NonNull OnFailureListener onFailureListener) {
-                onFailureListener.onFailure(this.getException());
-                return this;
-            }
-
-            @NonNull
-            @Override
-            public Task<Void> addOnFailureListener(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
-                return null;
-            }
-
-            @NonNull
-            @Override
-            public Task<Void> addOnFailureListener(@NonNull Activity activity, @NonNull OnFailureListener onFailureListener) {
-                return null;
-            }
-        };
+        return new MyTask();
     }
+
+    private class MyTask extends Task<Void> {
+        @Override
+        public boolean isComplete() {
+            return true;
+        }
+
+        @Override
+        public boolean isSuccessful() {
+            return true;
+        }
+
+        @Override
+        public boolean isCanceled() {
+            return false;
+        }
+
+        @Nullable
+        @Override
+        public Void getResult() {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public <X extends Throwable> Void getResult(@NonNull Class<X> aClass) throws X {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public Exception getException() {
+            return new Exception("mock");
+        }
+
+        @NonNull
+        @Override
+        public com.google.android.gms.tasks.Task<Void> addOnSuccessListener(@NonNull OnSuccessListener<? super Void> onSuccessListener) {
+            onSuccessListener.onSuccess(this.getResult());
+            return this;
+        }
+
+        @NonNull
+        @Override
+        public com.google.android.gms.tasks.Task<Void> addOnSuccessListener(@NonNull Executor executor, @NonNull OnSuccessListener<? super Void> onSuccessListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public com.google.android.gms.tasks.Task<Void> addOnSuccessListener(@NonNull Activity activity, @NonNull OnSuccessListener<? super Void> onSuccessListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public com.google.android.gms.tasks.Task<Void> addOnFailureListener(@NonNull OnFailureListener onFailureListener) {
+            onFailureListener.onFailure(this.getException());
+            return this;
+        }
+
+        @NonNull
+        @Override
+        public com.google.android.gms.tasks.Task<Void> addOnFailureListener(@NonNull Executor executor, @NonNull OnFailureListener onFailureListener) {
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public com.google.android.gms.tasks.Task<Void> addOnFailureListener(@NonNull Activity activity, @NonNull OnFailureListener onFailureListener) {
+            return null;
+        }
+    };
 }
