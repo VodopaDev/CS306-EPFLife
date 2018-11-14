@@ -37,8 +37,6 @@ import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.User.UserRole;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
-import ch.epfl.sweng.zuluzulu.Structure.EventSortCompByDate;
-import ch.epfl.sweng.zuluzulu.Structure.EventSortCompByName;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,6 +62,7 @@ public class EventFragment extends SuperFragment {
 
     private CheckBox checkbox_event_sort_name;
     private CheckBox checkbox_event_sort_date;
+    private CheckBox checkbox_event_sort_like;
     private String default_sort_option;
 
     private EditText event_fragment_from_date;
@@ -103,7 +102,7 @@ public class EventFragment extends SuperFragment {
 
         event_all = new ArrayList<>();
         event_fav = new ArrayList<>();
-        event_adapter = new EventArrayAdapter(getContext(), event_all, mListener);
+        event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
 
         default_sort_option = "name";
 
@@ -153,6 +152,7 @@ public class EventFragment extends SuperFragment {
 
         checkbox_event_sort_name = view.findViewById(R.id.event_fragment_checkBox_sort_name);
         checkbox_event_sort_date = view.findViewById(R.id.event_fragment_checkBox_sort_date);
+        checkbox_event_sort_like = view.findViewById(R.id.event_fragment_checkbox_sort_like);
 
         checkbox_event_sort_name.setChecked(true);
         checkbox_event_sort_name.setEnabled(false);
@@ -161,6 +161,7 @@ public class EventFragment extends SuperFragment {
         event_fragment_from_date_mask = new DateInputMask(event_fragment_from_date);
         event_fragment_to_date = view.findViewById(R.id.event_fragment_to_date);
         event_fragment_to_date_mask = new DateInputMask(event_fragment_to_date);
+
 
 //        checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -186,15 +187,36 @@ public class EventFragment extends SuperFragment {
             public void onClick(View v) {
                 checkbox_event_sort_name.setEnabled(false);
 
-                Collections.sort(event_all, new EventSortCompByName());
-                Collections.sort(event_fav, new EventSortCompByName());
-//                event_all.sort(Event.assoNameComparator());
-//                event_fav.sort(Event.assoNameComparator());
+                Collections.sort(event_all, Event.assoNameComparator());
+                Collections.sort(event_fav, Event.assoNameComparator());
 
-                event_adapter = new EventArrayAdapter(getContext(), event_all, mListener);
+                event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
 
                 listview_event.setAdapter(event_adapter);
                 event_adapter.notifyDataSetChanged();
+
+                checkbox_event_sort_date.setChecked(false);
+                checkbox_event_sort_date.setEnabled(true);
+                checkbox_event_sort_like.setChecked(false);
+                checkbox_event_sort_like.setEnabled(true);
+            }
+        });
+
+        checkbox_event_sort_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkbox_event_sort_like.setEnabled(false);
+
+                Collections.sort(event_all, Event.likeComparator());
+                Collections.sort(event_fav, Event.likeComparator());
+
+                event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
+
+                listview_event.setAdapter(event_adapter);
+                event_adapter.notifyDataSetChanged();
+
+                checkbox_event_sort_name.setChecked(false);
+                checkbox_event_sort_name.setEnabled(true);
                 checkbox_event_sort_date.setChecked(false);
                 checkbox_event_sort_date.setEnabled(true);
             }
@@ -207,25 +229,23 @@ public class EventFragment extends SuperFragment {
                         event_fragment_from_date.getText().toString().contains("Y")) {
 
                     checkbox_event_sort_date.setEnabled(false);
-                    Collections.sort(event_all, new EventSortCompByDate());
-                    Collections.sort(event_fav, new EventSortCompByDate());
-//                    event_all.sort(Event.dateComparator());
-//                    event_fav.sort(Event.dateComparator());
+                    Collections.sort(event_all, Event.dateComparator());
+                    Collections.sort(event_fav, Event.dateComparator());
 
-                    event_adapter = new EventArrayAdapter(getContext(), event_all, mListener);
+                    event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
 
                     listview_event.setAdapter(event_adapter);
                     event_adapter.notifyDataSetChanged();
                     checkbox_event_sort_name.setChecked(false);
                     checkbox_event_sort_name.setEnabled(true);
+                    checkbox_event_sort_like.setChecked(false);
+                    checkbox_event_sort_like.setEnabled(true);
                 }
                 else if (event_fragment_to_date.getText().toString().contains("D") || event_fragment_to_date.getText().toString().contains("M") ||
                         event_fragment_to_date.getText().toString().contains("Y")) {
                     checkbox_event_sort_date.setEnabled(false);
-                    Collections.sort(event_all, new EventSortCompByDate());
-                    Collections.sort(event_fav, new EventSortCompByDate());
-//                    event_all.sort(Event.dateComparator());
-//                    event_fav.sort(Event.dateComparator());
+                    Collections.sort(event_all, Event.dateComparator());
+                    Collections.sort(event_fav, Event.dateComparator());
 
                     emptySortedEventList();
 
@@ -246,19 +266,19 @@ public class EventFragment extends SuperFragment {
                         }
                     }
 
-                    event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener);
+                    event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
                     listview_event.setAdapter(event_adapter);
                     event_adapter.notifyDataSetChanged();
 
                     checkbox_event_sort_name.setChecked(false);
                     checkbox_event_sort_name.setEnabled(true);
+                    checkbox_event_sort_like.setChecked(false);
+                    checkbox_event_sort_like.setEnabled(true);
                 }
                 else {
                     checkbox_event_sort_date.setEnabled(false);
-                    Collections.sort(event_all, new EventSortCompByDate());
-                    Collections.sort(event_fav, new EventSortCompByDate());
-//                    event_all.sort(Event.dateComparator());
-//                    event_fav.sort(Event.dateComparator());
+                    Collections.sort(event_all, Event.dateComparator());
+                    Collections.sort(event_fav, Event.dateComparator());
 
                     emptySortedEventList();
 
@@ -281,12 +301,14 @@ public class EventFragment extends SuperFragment {
                         }
                     }
 
-                    event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener);
+                    event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
                     listview_event.setAdapter(event_adapter);
                     event_adapter.notifyDataSetChanged();
 
                     checkbox_event_sort_name.setChecked(false);
                     checkbox_event_sort_name.setEnabled(true);
+                    checkbox_event_sort_like.setChecked(false);
+                    checkbox_event_sort_like.setEnabled(true);
                 }
             }
         });
@@ -331,7 +353,7 @@ public class EventFragment extends SuperFragment {
     private void updateListView(Button new_selected, Button new_unselected, ArrayList<Event> data, ListView list) {
         new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         new_unselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
-        event_adapter = new EventArrayAdapter(getContext(), data, mListener);
+        event_adapter = new EventArrayAdapter(getContext(), data, mListener, user);
         list.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
     }

@@ -110,6 +110,7 @@ abstract public class User implements Serializable {
         private List<Integer> followed_chats;
         private List<Integer> followed_events;
 
+
         /**
          * Create  an user builder
          */

@@ -78,7 +78,7 @@ public class CalendarFragment extends SuperFragment {
 
         followedEvents = new ArrayList<>();
         selectedDayEvents = new ArrayList<>();
-        eventAdapter = new EventArrayAdapter(getContext(), selectedDayEvents, mListener);
+        eventAdapter = new EventArrayAdapter(getContext(), selectedDayEvents, mListener, user);
     }
 
     @Override

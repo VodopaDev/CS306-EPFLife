@@ -17,7 +17,7 @@ public class ChatMessage {
     private String message;
     private Date time;
     private boolean ownMessage;
-    private boolean anonym;
+    private boolean anonymous;
 
     public ChatMessage(FirebaseMapDecorator data, String userSciper) {
         senderName = data.getString("senderName");
@@ -25,7 +25,7 @@ public class ChatMessage {
         message = data.getString("message");
         time = data.getDate("time");
         ownMessage = sciper.equals(userSciper);
-        anonym = senderName.isEmpty();
+        anonymous = senderName.isEmpty();
     }
 
     /**
@@ -106,5 +106,5 @@ public class ChatMessage {
      *
      * @return Whether the message is anonymous or not
      */
-    public boolean isAnonym() { return anonym; }
+    public boolean isAnonymous() { return anonymous; }
 }
