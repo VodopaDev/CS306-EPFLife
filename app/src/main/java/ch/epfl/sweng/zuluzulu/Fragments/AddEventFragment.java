@@ -58,6 +58,8 @@ public class AddEventFragment extends SuperFragment {
     //for description_view
     private TextView title_view;
     private TextView description_view;
+    private TextView place;
+    private TextView organizer;
 
     //for validating and create the event
     private Button create_event;
@@ -172,6 +174,8 @@ public class AddEventFragment extends SuperFragment {
                 String name = spinner.getSelectedItem().toString();
                 String tit = title_view.getText().toString();
                 String desc = description_view.getText().toString();
+                String pla = place.getText().toString();
+                String org = organizer.getText().toString();
 
                 if(!checkIfValid(tit, desc)){
                     return;
@@ -188,8 +192,11 @@ public class AddEventFragment extends SuperFragment {
                                 Map<String, Object> docData = new HashMap<>();
                                 docData.put("icon_uri", "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg");
                                 docData.put("id", numberOfEvents + 1);
+                                docData.put("likes", 0);
                                 docData.put("long_desc", desc);
                                 docData.put("name", name);
+                                docData.put("organizer", org);
+                                docData.put("place", pla);
                                 docData.put("short_desc", tit);
                                 docData.put("start_date", date);
                                 db.collection("events_info").document("event"+Integer.toString(numberOfEvents+1)).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -273,6 +280,8 @@ public class AddEventFragment extends SuperFragment {
 
         title_view = view.findViewById(R.id.event_title);
         description_view = view.findViewById(R.id.long_desc_text);
+        organizer = view.findViewById(R.id.organizer);
+        place = view.findViewById(R.id.place);
 
         //the button "create event" that when clicked gather the data from all spinners and
         //textviews and push an event on the database

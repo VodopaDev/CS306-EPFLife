@@ -127,11 +127,11 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
     /**
      * create an event and controls that it is indeed created in the event list
      */
-    @Test
+    /*@Test
     public void testCreateEvent(){
         goToAddEvent();
         onView(withId(R.id.event_title)).perform(typeText("Test Event"));
         onView(withId(R.id.long_desc_text)).perform(typeText("this is an awesome test event")).perform(closeSoftKeyboard());
         onView(withId(R.id.create_event_button)).perform(click());
-    }
+    }*/
 }
