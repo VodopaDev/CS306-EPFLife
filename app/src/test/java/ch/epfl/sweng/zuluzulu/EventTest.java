@@ -31,6 +31,8 @@ public class EventTest {
     private static final Date START_DATE_1 = new Date(3L);
     private static final long LIKES_1 = 100L;
     private static final long LIKES_2 = 3L;
+    private static final String ORGANIZER = "Pascal Martin";
+    private static final String PLACE = "CE";
 
 
     private Event event0;
@@ -47,6 +49,8 @@ public class EventTest {
         map.put("banner_uri", TEST_URI_STRING);
         map.put("start_date", START_DATE);
         map.put("likes", LIKES_1);
+        map.put("organizer", ORGANIZER);
+        map.put("place", PLACE);
 
         event0 = new Event(new FirebaseMapDecorator(map));
     }
@@ -152,6 +156,18 @@ public class EventTest {
         initWorkingAssociation();
         event0.decreaseLikes();
         assertEquals(((int) LIKES_1) - 1, (int) event0.getLikes());
+    }
+
+    @Test
+    public void organizorIsCorrect() {
+        initWorkingAssociation();
+        assertEquals(ORGANIZER, event0.getOrganizer());
+    }
+
+    @Test
+    public void placeIsCorrect() {
+        initWorkingAssociation();
+        assertEquals(PLACE, event0.getPlace());
     }
 
 
