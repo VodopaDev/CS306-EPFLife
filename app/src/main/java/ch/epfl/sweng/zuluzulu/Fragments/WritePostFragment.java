@@ -7,10 +7,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -44,10 +47,11 @@ public class WritePostFragment extends SuperFragment {
     private static final String POST_COLLECTION_NAME = "posts";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private InputMethodManager inputMethodManager;
 
     private String collectionPath;
 
-    private ConstraintLayout constraintLayout;
+    private ConstraintLayout layout;
     private EditText editText;
     private Button sendButton;
 
@@ -87,16 +91,24 @@ public class WritePostFragment extends SuperFragment {
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
-        constraintLayout = view.findViewById(R.id.write_post_layout);
+        layout = view.findViewById(R.id.write_post_layout);
         editText = view.findViewById(R.id.write_post_textEdit);
         sendButton = view.findViewById(R.id.write_post_send_button);
 
-        constraintLayout.setBackgroundColor(Color.parseColor(color.getValue()));
+        layout.setBackgroundColor(Color.parseColor(color.getValue()));
+
+        // Get the focus on the message field and open the keyboard
         editText.requestFocus();
+        inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+        sendButton.setEnabled(false);
 
         collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POST_COLLECTION_NAME;
 
         setUpSendButton();
+        setUpColorListener();
+        setUpTextEditListener();
 
         return view;
     }
@@ -121,6 +133,9 @@ public class WritePostFragment extends SuperFragment {
                 data.put("color", color.getValue());
 
                 addPostToDatabase(data);
+
+                inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_POST_FRAGMENT, channel);
             }
         });
     }
@@ -146,4 +161,36 @@ public class WritePostFragment extends SuperFragment {
         });
     }
 
+    /**
+     * Set up an onClick listener on the layout to be able to change the color of the post
+     */
+    private void setUpColorListener() {
+        layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                color = PostColor.getRandomColor();
+                layout.setBackgroundColor(Color.parseColor(color.getValue()));
+            }
+        });
+    }
+
+    /**
+     * Set up an onTextChanged listener on the message field to know when the post is ready to be sent
+     */
+    private void setUpTextEditListener() {
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int messageLength = s.toString().length();
+                boolean correctFormat = 0 < messageLength && messageLength < 200;;
+                sendButton.setEnabled(correctFormat);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+    }
 }
