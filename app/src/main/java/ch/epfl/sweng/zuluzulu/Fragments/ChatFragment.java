@@ -77,7 +77,7 @@ public class ChatFragment extends SuperChatPostsFragment {
         chatButton.setEnabled(false);
         postsButton.setEnabled(true);
 
-        collection_path = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + MESSAGES_COLLECTION_NAME;
+        collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + MESSAGES_COLLECTION_NAME;
 
         sendButton.setEnabled(false);
 
@@ -137,7 +137,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * @param data the data to send to the database
      */
     private void addDataToFirestore(Map data) {
-        db.collection(collection_path)
+        db.collection(collectionPath)
                 .add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -176,7 +176,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Refresh the chat by reading all the messages in the database
      */
     private void updateChat() {
-        db.collection(collection_path)
+        db.collection(collectionPath)
                 .orderBy("time", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

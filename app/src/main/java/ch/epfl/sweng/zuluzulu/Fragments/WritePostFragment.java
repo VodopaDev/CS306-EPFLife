@@ -1,10 +1,27 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.R;
@@ -18,11 +35,26 @@ import ch.epfl.sweng.zuluzulu.Utility.PostColor;
  */
 public class WritePostFragment extends SuperFragment {
 
+    private static final String TAG = "WRITE_POST_TAG";
+
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_CHANNEL = "ARG_CHANNEL";
 
+    protected static final String CHANNEL_DOCUMENT_NAME = "channels/channel";
+    private static final String POST_COLLECTION_NAME = "posts";
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private String collectionPath;
+
+    private ConstraintLayout constraintLayout;
+    private EditText editText;
+    private Button sendButton;
+
     private AuthenticatedUser user;
     private Channel channel;
+    private PostColor color;
+    private boolean anonymous;
 
     public WritePostFragment() {
         // Required empty public constructor
@@ -51,9 +83,67 @@ public class WritePostFragment extends SuperFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_write_post, container, false);
 
-        PostColor color = PostColor.getRandomColor();
+        color = PostColor.getRandomColor();
+        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
+
+        constraintLayout = view.findViewById(R.id.write_post_layout);
+        editText = view.findViewById(R.id.write_post_textEdit);
+        sendButton = view.findViewById(R.id.write_post_send_button);
+
+        constraintLayout.setBackgroundColor(Color.parseColor(color.getValue()));
+        editText.requestFocus();
+
+        collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POST_COLLECTION_NAME;
+
+        setUpSendButton();
 
         return view;
+    }
+
+    /**
+     * Set up an onClick listener on the send button
+     */
+    private void setUpSendButton() {
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String senderName = anonymous ? "" : user.getFirstNames();
+                String message = editText.getText().toString();
+                Timestamp time = Timestamp.now();
+                String sciper = user.getSciper();
+
+                Map<String, Object> data = new HashMap();
+                data.put("senderName", senderName);
+                data.put("message", message);
+                data.put("time", time);
+                data.put("sciper", sciper);
+                data.put("color", color.getValue());
+
+                addPostToDatabase(data);
+            }
+        });
+    }
+
+    /**
+     * Add the data to firebase
+     *
+     * @param data the data to send
+     */
+    private void addPostToDatabase(Map data) {
+        db.collection(collectionPath)
+                .add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference ref) {
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + ref.getId());
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error adding document", e);
+            }
+        });
     }
 
 }

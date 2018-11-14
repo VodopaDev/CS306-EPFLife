@@ -4,12 +4,12 @@ import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 public enum PostColor {
 
-    RED(""),
-    GREEN(""),
-    BLUE(""),
-    ORANGE(""),
-    YELLOW(""),
-    PURPLE("");
+    RED("#FF0000"),
+    GREEN("#32CD32"),
+    BLUE("#1E90FF"),
+    ORANGE("#FFA500"),
+    YELLOW("#F0E68C"),
+    PURPLE("#EE82EE");
 
     private String value;
 

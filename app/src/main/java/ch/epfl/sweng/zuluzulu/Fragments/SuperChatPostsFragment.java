@@ -34,7 +34,7 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
     protected Button chatButton;
     protected Button postsButton;
 
-    protected String collection_path;
+    protected String collectionPath;
 
     protected AuthenticatedUser user;
     protected Channel channel;
@@ -74,7 +74,7 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
      * Add a onEventChange listener on the elements in the database
      */
     protected void setUpDataOnChangeListener() {
-        db.collection(collection_path)
+        db.collection(collectionPath)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {

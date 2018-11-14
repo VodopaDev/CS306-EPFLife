@@ -64,7 +64,7 @@ public class PostFragment extends SuperChatPostsFragment {
         chatButton.setEnabled(true);
         postsButton.setEnabled(false);
 
-        collection_path = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POSTS_COLLECTION_NAME;
+        collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POSTS_COLLECTION_NAME;
 
         adapter = new PostArrayAdapter(view.getContext(), posts);
         listView.setAdapter(adapter);
@@ -95,7 +95,7 @@ public class PostFragment extends SuperChatPostsFragment {
      * Refresh the posts by reading in the database
      */
     private void updatePosts() {
-        db.collection(collection_path)
+        db.collection(collectionPath)
                 .orderBy("time", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
