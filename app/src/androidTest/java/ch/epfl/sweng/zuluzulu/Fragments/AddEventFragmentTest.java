@@ -40,6 +40,11 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
      * got to add an event
      */
     private void goToAddEvent(){
+        try{
+        Thread.sleep(1500);
+        }catch (InterruptedException e){
+            System.out.println("unexpected interruption");
+        }
         onView(ViewMatchers.withId(R.id.event_add_button)).perform(click());
     }
 
@@ -62,7 +67,7 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
         goToAddEvent();
         onView(withId(R.id.event_title)).perform(typeText("This is a title much too long to be able to put it on the database"));
         onView(withId(R.id.long_desc_text)).perform(typeText("Okay I am now writing a whole story about the life of this test. So once upon a time, a test was created, it was supposed to be super useful and everyone was happy, until they started it, and it failed. And then started hours and hours of debugging" +
-                "continuously until it passed. That was the story, thank you")).perform(closeSoftKeyboard());
+                " continuously until it passed. That was the story, thank you")).perform(closeSoftKeyboard());
         onView(withId(R.id.create_event_button)).perform(click());
         onView(withId(R.id.add_event_layout)).check(matches(isDisplayed()));
     }
