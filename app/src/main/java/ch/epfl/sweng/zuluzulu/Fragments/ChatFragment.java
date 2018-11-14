@@ -85,7 +85,7 @@ public class ChatFragment extends SuperChatPostsFragment {
         listView.setAdapter(adapter);
 
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        anonym = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
+        anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
         setUpDataOnChangeListener();
         setUpSendButton();
@@ -102,7 +102,7 @@ public class ChatFragment extends SuperChatPostsFragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String senderName = anonym ? "" : user.getFirstNames();
+                String senderName = anonymous ? "" : user.getFirstNames();
                 String message = textEdit.getText().toString();
                 Timestamp time = Timestamp.now();
                 String sciper = user.getSciper();

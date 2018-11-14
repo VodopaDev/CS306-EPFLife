@@ -57,7 +57,7 @@ public class ChannelFragment extends SuperFragment {
     private List<Channel> listOfChannels = new ArrayList<>();
     private ChannelArrayAdapter adapter;
 
-    private User user;
+    private AuthenticatedUser user;
     private GeoPoint userLocation;
 
     public ChannelFragment() {
@@ -82,7 +82,7 @@ public class ChannelFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (User) getArguments().getSerializable(ARG_USER);
+            user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Channels");
         }
     }
@@ -100,7 +100,9 @@ public class ChannelFragment extends SuperFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Channel selectedChannel = listOfChannels.get(position);
-                mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel);
+                if (selectedChannel.isClickable()) {
+                    mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel);
+                }
             }
         });
 
@@ -130,7 +132,7 @@ public class ChannelFragment extends SuperFragment {
                                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
                                 if (fmap.hasFields(Channel.FIELDS)) {
                                     Channel channel = new Channel(fmap);
-                                    if (user.isConnected() && channel.canBeAccessedBy((AuthenticatedUser) user, userLocation)) {
+                                    if (channel.canBeSeenBy(user, userLocation)) {
                                         listOfChannels.add(channel);
                                     }
                                 }
