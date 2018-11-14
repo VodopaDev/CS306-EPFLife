@@ -1,8 +1,10 @@
-package ch.epfl.sweng.zuluzulu.Firebase.Database;
+package ch.epfl.sweng.zuluzulu.Database;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.Test;
+
+import ch.epfl.sweng.zuluzulu.Firebase.Database.CollectionAdapter;
 
 import static org.junit.Assert.*;
 
