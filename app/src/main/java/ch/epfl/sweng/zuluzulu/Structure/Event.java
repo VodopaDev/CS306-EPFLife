@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.net.Uri;
-import android.util.Log;
 
 import java.io.Serializable;
 import java.util.Arrays;

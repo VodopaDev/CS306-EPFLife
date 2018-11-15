@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
@@ -204,10 +205,10 @@ public class AddEventFragment extends SuperFragment {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_FRAGMENT, null);
-                                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                                     }
                                 });
 
+                                mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {

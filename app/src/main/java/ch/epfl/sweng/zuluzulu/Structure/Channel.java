@@ -107,9 +107,13 @@ public class Channel implements Serializable {
         return icon_uri;
     }
 
-    public boolean isClickable() { return isClickable; }
+    public boolean isClickable() {
+        return isClickable;
+    }
 
-    public double getDistance() { return distance; }
+    public double getDistance() {
+        return distance;
+    }
 
     /**
      * Check whether a user can access to this channel or not

@@ -35,7 +35,7 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<ChatMessage> {
 
         boolean mustHideName = isOwnMessage || isAnonym;
         int layoutResource = mustHideName ? R.layout.chat_message_noname : R.layout.chat_message;
-        View view = LayoutInflater.from(mContext).inflate(layoutResource, parent ,false);
+        View view = LayoutInflater.from(mContext).inflate(layoutResource, parent, false);
 
         LinearLayout linearLayout = view.findViewById(R.id.chat_message_linearLayout);
         TextView message = view.findViewById(R.id.chat_message_msg);

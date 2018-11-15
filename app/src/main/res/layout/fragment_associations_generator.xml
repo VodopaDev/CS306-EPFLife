@@ -21,12 +21,12 @@
                 android:layout_height="match_parent">
 
                 <EditText
-                    android:hint="@string/generator_association_name"
                     android:id="@+id/nbr_icon"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
                     android:ems="10"
+                    android:hint="@string/generator_association_name"
                     android:inputType="text"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/load_icon_button"

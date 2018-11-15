@@ -21,7 +21,8 @@ public final class GPS {
     private static final long MIN_DISTANCE_TO_REQUEST_LOCATION = 5; // In meters
     private static final long MIN_TIME_FOR_UPDATES = 3000; // 1 sec
     private static final int TWO_MINUTES = 1000 * 60 * 2; // 2 min
-
+    private static Context mcontext;
+    private static Location location;
     private static LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location newLocation) {
@@ -43,14 +44,12 @@ public final class GPS {
         public void onProviderDisabled(String provider) {
         }
     };
-
-    private static Context mcontext;
-    private static Location location;
     private static LocationManager locationManager;
 
     private static boolean isActivated = false;
 
-    private GPS() { }
+    private GPS() {
+    }
 
     /**
      * Start requesting for location updates
@@ -104,6 +103,7 @@ public final class GPS {
 
     /**
      * Return whether the location tracker is activated or not
+     *
      * @return whether the location tracker is activated or not
      */
     public static boolean isActivated() {

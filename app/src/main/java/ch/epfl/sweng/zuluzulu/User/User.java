@@ -34,7 +34,9 @@ abstract public class User implements Serializable {
         return null;
     }
 
-    public  String getSemester() {return null; }
+    public String getSemester() {
+        return null;
+    }
 
     public String getGaspar() {
         return null;
@@ -160,7 +162,9 @@ abstract public class User implements Serializable {
          *
          * @param semester semester
          */
-        public void setSemester(String semester) {this.semester = semester;}
+        public void setSemester(String semester) {
+            this.semester = semester;
+        }
 
         /**
          * User last names

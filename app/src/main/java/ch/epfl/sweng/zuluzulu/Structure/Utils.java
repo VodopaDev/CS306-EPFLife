@@ -23,7 +23,8 @@ import java.util.Random;
  */
 public final class Utils {
 
-    private Utils() {}
+    private Utils() {
+    }
 
     public static void addIdToList(String path, String field, Integer id) {
         FirebaseFirestore.getInstance().document(path).update(field, FieldValue.arrayUnion(id));

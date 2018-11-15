@@ -7,14 +7,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 
 public class UrlReader implements Reader {
     private static final String TAG = "URL_READER";
 
     private HttpURLConnection urlConnection;
 
-    protected UrlReader(){
+    protected UrlReader() {
         this.urlConnection = null;
     }
 
@@ -52,8 +51,8 @@ public class UrlReader implements Reader {
     /**
      * Disconnect the http connection
      */
-    public void disconnect(){
-        if(urlConnection != null) {
+    public void disconnect() {
+        if (urlConnection != null) {
             urlConnection.disconnect();
             urlConnection = null;
         }

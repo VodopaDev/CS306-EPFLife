@@ -1,7 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Firebase;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.FirebaseAdapter;
 

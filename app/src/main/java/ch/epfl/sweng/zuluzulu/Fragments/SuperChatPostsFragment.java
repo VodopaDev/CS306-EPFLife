@@ -15,8 +15,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import javax.annotation.Nullable;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 /**
@@ -24,11 +24,9 @@ import ch.epfl.sweng.zuluzulu.User.User;
  */
 public abstract class SuperChatPostsFragment extends SuperFragment {
 
+    protected static final String CHANNEL_DOCUMENT_NAME = "channels/channel";
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_CHANNEL = "ARG_CHANNEL";
-
-    protected static final String CHANNEL_DOCUMENT_NAME = "channels/channel";
-
     protected FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     protected ListView listView;
@@ -41,16 +39,6 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
     protected Channel channel;
 
     protected boolean anonymous;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
-            channel = (Channel) getArguments().getSerializable(ARG_CHANNEL);
-            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, channel.getName());
-        }
-    }
 
     public static SuperChatPostsFragment newInstanceOf(String type, User user, Channel channel) {
         SuperChatPostsFragment fragment;
@@ -69,6 +57,16 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
         args.putSerializable(ARG_CHANNEL, channel);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
+            channel = (Channel) getArguments().getSerializable(ARG_CHANNEL);
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, channel.getName());
+        }
     }
 
     /**

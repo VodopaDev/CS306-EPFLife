@@ -41,10 +41,10 @@ import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.WritePostFragment;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
-import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.GPS;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.User.UserRole;
 
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         switch (menuItem.getItemId()) {
             case R.id.nav_calendar:
-                fragment = CalendarFragment.newInstance((AuthenticatedUser)user);
+                fragment = CalendarFragment.newInstance((AuthenticatedUser) user);
                 break;
             case R.id.nav_main:
                 fragment = MainFragment.newInstance(user);
