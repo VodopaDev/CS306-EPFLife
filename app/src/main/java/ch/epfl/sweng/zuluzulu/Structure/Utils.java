@@ -78,6 +78,9 @@ public final class Utils {
      * @return the random integer
      */
     public static int randomInt(int min, int max) {
+        if (max < min) {
+            throw new IllegalArgumentException("Max must be bigger than min");
+        }
         Random rand = new Random();
         return rand.nextInt((max - min) + 1) + min;
     }
@@ -89,6 +92,9 @@ public final class Utils {
      * @return the time passed since the given date
      */
     public static long getMillisecondsSince(Date date) {
+        if (date == null) {
+            throw new NullPointerException();
+        }
         long dateTime = date.getTime();
         long now = Calendar.getInstance().getTimeInMillis();
         return now - dateTime;

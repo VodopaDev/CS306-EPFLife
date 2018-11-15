@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.Date;
+
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 import static junit.framework.TestCase.assertEquals;
@@ -37,6 +39,31 @@ public class UtilsTest {
 
     @Test(expected = NullPointerException.class)
     public void testToGeoPointNullException() {
-        GeoPoint geoPoint = Utils.toGeoPoint(null);
+        Utils.toGeoPoint(null);
+    }
+
+    @Test
+    public void testRandomIntGoodRange() {
+        int min = -5;
+        int max = 5;
+        int random = Utils.randomInt(min, max);
+        assertTrue(min <= random && random <= max);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRandomIntWrongRange() {
+        Utils.randomInt(3, -3);
+    }
+
+    @Test
+    public void testMillisecondsSinceCorrect() {
+        Date now = com.google.firebase.Timestamp.now().toDate();
+        int oneSecond = 1000;
+        assertTrue(Utils.getMillisecondsSince(now) < oneSecond);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testMillisecondSinceWithNullDate() {
+        Utils.getMillisecondsSince(null);
     }
 }
