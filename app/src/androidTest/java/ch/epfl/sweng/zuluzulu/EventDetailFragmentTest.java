@@ -9,6 +9,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
+
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
+import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
+
 import static android.support.test.espresso.Espresso.*;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -16,7 +22,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class EventDetailFragmentTest {
+public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<EventFragment> {
 
     private static final String FAV_CONTENT = "This event is in your favorites";
     private static final String NOT_FAV_CONTENT = "This event isn't in your favorites";
@@ -25,7 +31,11 @@ public class EventDetailFragmentTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    private void guestGoesToEventDetail() throws InterruptedException {
+    @Override
+    public void initFragment() {
+        fragment = EventFragment.newInstance(user);
+    }
+    /*private void guestGoesToEventDetail() throws InterruptedException {
         Utility.goToEvent();
         TimeUnit.SECONDS.sleep(1);
     }
@@ -34,7 +44,13 @@ public class EventDetailFragmentTest {
         Utility.fullLogin();
         Utility.goToEvent();
         TimeUnit.SECONDS.sleep(1);
-    }*/
+    }
+
+    public void EventDetailFragmentIsOpen() {
+        Utility.checkFragmentIsOpen(1);
+    }
+}
+*/
 //
 //    @Test
 //    public void authenticatedAlreadyHasForumEpflInFavorite() throws InterruptedException {
