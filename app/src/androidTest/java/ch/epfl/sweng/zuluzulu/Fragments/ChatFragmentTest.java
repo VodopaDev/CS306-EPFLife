@@ -15,9 +15,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 
@@ -65,7 +63,7 @@ public class ChatFragmentTest extends TestWithAuthenticatedAndFragment<ChatFragm
 
     @Test
     public void testUserCanGoToPosts() {
-        onView(withId(R.id.posts_button)).perform(click());
+        onView(withId(R.id.posts_button)).perform(ViewActions.click());
         onView(withId(R.id.posts_list_view)).check(matches(isDisplayed()));
     }
 }
