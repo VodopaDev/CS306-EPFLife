@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.URLTools.IconParser;
@@ -98,7 +100,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         }
     }
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private Database db = DatabaseFactory.getDependency();
 
     private void addDatabase(String base_url, String icon_url, int index) {
         if(index < 0 || index >= this.datas.size()){

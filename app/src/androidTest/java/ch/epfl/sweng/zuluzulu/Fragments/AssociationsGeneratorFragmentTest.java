@@ -1,20 +1,14 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.support.test.espresso.IdlingRegistry;
-
-import org.junit.Before;
 import org.junit.Test;
 
-import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
+import ch.epfl.sweng.zuluzulu.Database.FirebaseMock;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.TestWithAdmin;
+
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.util.concurrent.TimeUnit;
 
-import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.TestWithAdmin;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlReader;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlReaderFactory;
@@ -23,18 +17,19 @@ import ch.epfl.sweng.zuluzulu.Utility;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 
+
 public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<MainFragment> {
 
     @Override
     public void initFragment() {
+        DatabaseFactory.setDependency(new FirebaseMock());
+
         fragment = MainFragment.newInstance(user);
     }
 
