@@ -5,21 +5,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -28,6 +24,7 @@ import java.util.Map;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Structure.Utils;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility.PostColor;
@@ -48,7 +45,7 @@ public class WritePostFragment extends SuperFragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private String collectionPath;
+    private CollectionReference collectionReference;
 
     private ConstraintLayout layout;
     private EditText editText;
@@ -98,7 +95,8 @@ public class WritePostFragment extends SuperFragment {
 
         sendButton.setEnabled(false);
 
-        collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POST_COLLECTION_NAME;
+        String collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POST_COLLECTION_NAME;
+        collectionReference = db.collection(collectionPath);
 
         setUpSendButton();
         setUpColorListener();
@@ -128,30 +126,9 @@ public class WritePostFragment extends SuperFragment {
                 data.put("nbUps", 0);
                 data.put("nbResponses", 0);
 
-                addPostToDatabase(data);
+                Utils.addDataToFirebase(data, collectionReference, TAG);
 
                 mListener.onFragmentInteraction(CommunicationTag.OPEN_POST_FRAGMENT, channel);
-            }
-        });
-    }
-
-    /**
-     * Add the data to firebase
-     *
-     * @param data the data to send
-     */
-    private void addPostToDatabase(Map data) {
-        db.collection(collectionPath)
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference ref) {
-                        Log.d(TAG, "DocumentSnapshot written with ID: " + ref.getId());
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error adding document", e);
             }
         });
     }

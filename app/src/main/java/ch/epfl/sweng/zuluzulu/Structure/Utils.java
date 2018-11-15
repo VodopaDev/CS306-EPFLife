@@ -1,7 +1,13 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.location.Location;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
@@ -9,6 +15,7 @@ import com.google.firebase.firestore.GeoPoint;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -98,5 +105,28 @@ public final class Utils {
         long dateTime = date.getTime();
         long now = Calendar.getInstance().getTimeInMillis();
         return now - dateTime;
+    }
+
+    /**
+     * Add the given data to firebase
+     *
+     * @param data The map to push on firebase
+     * @param collectionReference The collection reference where you want to push the data
+     * @param TAG The tag
+     */
+    public static void addDataToFirebase(Map data, CollectionReference collectionReference, String TAG) {
+        collectionReference
+                .add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference ref) {
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + ref.getId());
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error adding document", e);
+            }
+        });
     }
 }
