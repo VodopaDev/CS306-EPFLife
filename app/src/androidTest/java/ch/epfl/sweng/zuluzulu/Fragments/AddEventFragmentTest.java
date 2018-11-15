@@ -136,6 +136,6 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
         goToAddEvent();
         onView(withId(R.id.event_title)).perform(replaceText("Test Event"));
         onView(withId(R.id.long_desc_text)).perform(replaceText("this is an awesome test event")).perform(closeSoftKeyboard());
-        onView(withId(R.id.event_add_button)).perform(click());
+        onView(withId(R.id.create_event_button)).perform(click());
     }
 }
