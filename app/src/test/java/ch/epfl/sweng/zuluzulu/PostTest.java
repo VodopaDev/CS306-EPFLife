@@ -24,10 +24,14 @@ public class PostTest {
     private static final String message1 = "James message";
     private static final String color1 = "#e8b30f";
     private static final Date time = new Date();
+    private static final Long nbUps1 = 0L;
+    private static final Long nbResponses1 = 0L;
     private static final String senderName2 = "";
     private static final String sciper2 = "222222";
     private static final String message2 = "Bond's message";
     private static final String color2 = "#f8b30f";
+    private static final Long nbUps2 = 5L;
+    private static final Long nbResponses2 = 5L;
     private static Map data1 = new HashMap();
     private static Map data2 = new HashMap();
     private Post post1;
@@ -40,12 +44,16 @@ public class PostTest {
         data1.put("message", message1);
         data1.put("time", time);
         data1.put("color", color1);
+        data1.put("nbUps", nbUps1);
+        data1.put("nbResponses", nbResponses1);
 
         data2.put("senderName", senderName2);
         data2.put("sciper", sciper2);
         data2.put("message", message2);
         data2.put("time", time);
         data2.put("color", color2);
+        data2.put("nbUps", nbUps2);
+        data2.put("nbResponses", nbResponses2);
 
         post1 = new Post(new FirebaseMapDecorator(data1));
         post2 = new Post(new FirebaseMapDecorator(data2));
@@ -58,18 +66,24 @@ public class PostTest {
         assertEquals(message1, post1.getMessage());
         assertEquals(time, post1.getTime());
         assertEquals(color1, post1.getColor());
+        assertEquals(nbUps1.intValue(), post1.getNbUps());
+        assertEquals(nbResponses1.intValue(), post1.getNbResponses());
 
         post1.setSenderName(senderName2);
         post1.setSciper(sciper2);
         post1.setMessage(message2);
         post1.setTime(time);
         post1.setColor(color2);
+        post1.setNbUps(nbUps2.intValue());
+        post1.setNbResponses(nbResponses2.intValue());
 
         assertEquals(senderName2, post1.getSenderName());
         assertEquals(sciper2, post1.getSciper());
         assertEquals(message2, post1.getMessage());
         assertEquals(time, post1.getTime());
         assertEquals(color2, post1.getColor());
+        assertEquals(nbUps2.intValue(), post1.getNbUps());
+        assertEquals(nbResponses2.intValue(), post1.getNbResponses());
     }
 
     @Test
