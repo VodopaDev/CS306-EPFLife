@@ -48,7 +48,6 @@ public class ChatFragmentTest extends TestWithAuthenticatedAndFragment<ChatFragm
     @Test
     public void testUserCanWriteInTextEditBox() {
         onView(withId(R.id.chat_message_edit)).perform(ViewActions.typeText("test")).perform(ViewActions.closeSoftKeyboard());
-        onView(withId(R.id.chat_send_button)).perform(click());
     }
 
     @Test
