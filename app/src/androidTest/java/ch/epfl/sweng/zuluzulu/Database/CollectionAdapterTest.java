@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 public class CollectionAdapterTest {
 
     @Test
-    public void set() {
+    public void document() {
         CollectionAdapter db = new CollectionAdapter(FirebaseFirestore.getInstance().collection("co"));
         assertNotNull(db.document("test"));
     }
