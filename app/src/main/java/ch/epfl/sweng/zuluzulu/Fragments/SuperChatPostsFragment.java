@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -34,7 +35,7 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
     protected Button chatButton;
     protected Button postsButton;
 
-    protected String collection_path;
+    protected CollectionReference collectionReference;
 
     protected AuthenticatedUser user;
     protected Channel channel;
@@ -74,7 +75,7 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
      * Add a onEventChange listener on the elements in the database
      */
     protected void setUpDataOnChangeListener() {
-        db.collection(collection_path)
+        collectionReference
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {

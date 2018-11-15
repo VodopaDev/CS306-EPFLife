@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -21,17 +22,14 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.Adapters.PostArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 /**
- * A simple {@link SuperChatPostsFragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnFragmentInteractionListener} interface
- * to handle interaction events.
+ * A {@link SuperChatPostsFragment} subclass.
+ * This fragment is used to display the posts
  */
 public class PostFragment extends SuperChatPostsFragment {
     private static final String TAG = "POST_TAG";
@@ -40,6 +38,8 @@ public class PostFragment extends SuperChatPostsFragment {
 
     private List<Post> posts = new ArrayList<>();
     private PostArrayAdapter adapter;
+
+    private Button writePostButton;
 
     public PostFragment() {
         // Required empty public constructor
@@ -56,11 +56,13 @@ public class PostFragment extends SuperChatPostsFragment {
         listView = view.findViewById(R.id.posts_list_view);
         chatButton = view.findViewById(R.id.chat_button);
         postsButton = view.findViewById(R.id.posts_button);
+        writePostButton = view.findViewById(R.id.posts_new_post_button);
 
         chatButton.setEnabled(true);
         postsButton.setEnabled(false);
 
-        collection_path = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POSTS_COLLECTION_NAME;
+        String collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POSTS_COLLECTION_NAME;
+        collectionReference = db.collection(collectionPath);
 
         adapter = new PostArrayAdapter(view.getContext(), posts);
         listView.setAdapter(adapter);
@@ -70,6 +72,7 @@ public class PostFragment extends SuperChatPostsFragment {
 
         setUpDataOnChangeListener();
         setUpChatButton();
+        setUpNewPostButton();
 
         return view;
     }
@@ -90,7 +93,7 @@ public class PostFragment extends SuperChatPostsFragment {
      * Refresh the posts by reading in the database
      */
     private void updatePosts() {
-        db.collection(collection_path)
+        collectionReference
                 .orderBy("time", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -112,6 +115,18 @@ public class PostFragment extends SuperChatPostsFragment {
                         }
                     }
                 });
+    }
+
+    /**
+     * Set up an onClick listener on the button to write a new post
+     */
+    private void setUpNewPostButton() {
+        writePostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_WRITE_POST_FRAGMENT, channel);
+            }
+        });
     }
 
     @Override

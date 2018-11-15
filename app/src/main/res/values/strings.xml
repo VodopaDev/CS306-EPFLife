@@ -77,4 +77,7 @@
     <string name="no_association_found">No association</string>
     <string name="generator_association_name">Name of the association</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

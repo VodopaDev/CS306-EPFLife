@@ -1,12 +1,22 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.location.Location;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.text.SimpleDateFormat;
-import com.google.firebase.firestore.GeoPoint;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * Class that contains general useful functions
@@ -65,4 +75,58 @@ public final class Utils {
 
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
     public static SimpleDateFormat stringToDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+    /**
+     * Return a random integer in the range [min, max]
+     *
+     * @param min the smallest integer you can get
+     * @param max the biggest integer you can get
+     *
+     * @return the random integer
+     */
+    public static int randomInt(int min, int max) {
+        if (max < min) {
+            throw new IllegalArgumentException("Max must be bigger than min");
+        }
+        Random rand = new Random();
+        return rand.nextInt((max - min) + 1) + min;
+    }
+
+    /**
+     * Return the time passed in milliseconds since the given date
+     *
+     * @param date the date
+     * @return the time passed since the given date
+     */
+    public static long getMillisecondsSince(Date date) {
+        if (date == null) {
+            throw new NullPointerException();
+        }
+        long dateTime = date.getTime();
+        long now = Calendar.getInstance().getTimeInMillis();
+        return now - dateTime;
+    }
+
+    /**
+     * Add the given data to firebase
+     *
+     * @param data The map to push on firebase
+     * @param collectionReference The collection reference where you want to push the data
+     * @param TAG The tag
+     */
+    public static void addDataToFirebase(Map data, CollectionReference collectionReference, String TAG) {
+        collectionReference
+                .add(data)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference ref) {
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + ref.getId());
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error adding document", e);
+            }
+        });
+    }
 }
