@@ -7,6 +7,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -78,5 +80,17 @@ public final class Utils {
     public static int randomInt(int min, int max) {
         Random rand = new Random();
         return rand.nextInt((max - min) + 1) + min;
+    }
+
+    /**
+     * Return the time passed in milliseconds since the given date
+     *
+     * @param date the date
+     * @return the time passed since the given date
+     */
+    public static long getMillisecondsSince(Date date) {
+        long dateTime = date.getTime();
+        long now = Calendar.getInstance().getTimeInMillis();
+        return now - dateTime;
     }
 }
