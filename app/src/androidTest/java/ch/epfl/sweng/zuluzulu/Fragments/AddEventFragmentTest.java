@@ -8,6 +8,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 
+import ch.epfl.sweng.zuluzulu.Database.FirebaseMock;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
@@ -16,6 +18,7 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -33,6 +36,7 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
 
     @Override
     public void initFragment() {
+        DatabaseFactory.setDependency(new FirebaseMock());
         fragment = EventFragment.newInstance(user);
     }
 
@@ -127,11 +131,11 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
     /**
      * create an event and controls that it is indeed created in the event list
      */
-    /*@Test
+    @Test
     public void testCreateEvent(){
         goToAddEvent();
-        onView(withId(R.id.event_title)).perform(typeText("Test Event"));
-        onView(withId(R.id.long_desc_text)).perform(typeText("this is an awesome test event")).perform(closeSoftKeyboard());
+        onView(withId(R.id.event_title)).perform(replaceText("Test Event"));
+        onView(withId(R.id.long_desc_text)).perform(replaceText("this is an awesome test event")).perform(closeSoftKeyboard());
         onView(withId(R.id.create_event_button)).perform(click());
-    }*/
+    }
 }

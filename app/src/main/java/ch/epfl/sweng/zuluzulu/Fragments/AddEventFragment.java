@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -199,7 +200,7 @@ public class AddEventFragment extends SuperFragment {
                                 docData.put("place", pla);
                                 docData.put("short_desc", tit);
                                 docData.put("start_date", date);
-                                db.collection("events_info").document("event"+Integer.toString(numberOfEvents+1)).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                DatabaseFactory.getDependency().collection("events_info").document("event"+Integer.toString(numberOfEvents+1)).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_FRAGMENT, null);
