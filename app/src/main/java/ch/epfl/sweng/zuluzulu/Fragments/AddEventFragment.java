@@ -205,10 +205,10 @@ public class AddEventFragment extends SuperFragment {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_FRAGMENT, null);
-                                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                                     }
                                 });
 
+                                mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
