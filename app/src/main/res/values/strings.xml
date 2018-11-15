@@ -39,6 +39,7 @@
     <string name="fragment_event_checkbox_sort_likes">Like</string>
     <string name="fragment_event_checkbox_sort_name">Name</string>
     <string name="fragment_event_checkbox_sort_date">Date</string>
+    <string name="card_event_image_description">Picture</string>
     <string name="fragment_event_like_button">Like</string>
 
     <!-- Chat related -->
@@ -67,6 +68,11 @@
     <string name="chat">Chat</string>
     <string name="channel_icon">Channel icon</string>
     <string name="anonymity">Anonymity</string>
+    <string name="event_detail_like">Likes:</string>
+    <string name="event_detail_tv_desc">Description:</string>
+    <string name="event_detail_tv_date">Date:</string>
+    <string name="event_detail_tv_organizer">Organizer:</string>
+    <string name="event_detail_tv_place">Place:</string>
 
 
     <string name="drawer_calendar">Calendar</string>

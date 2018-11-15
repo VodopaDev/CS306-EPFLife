@@ -30,6 +30,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.CalendarFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
@@ -328,7 +329,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case OPEN_EVENT_DETAIL_FRAGMENT:
                 Event event = (Event) data;
-                // openFragment(EventDetailFragment.newInstance(user, event));
+                openFragment(EventDetailFragment.newInstance(user, event));
                 break;
             case OPEN_CHANNEL_FRAGMENT:
                 openFragment(ChannelFragment.newInstance(user));

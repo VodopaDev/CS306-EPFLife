@@ -26,11 +26,13 @@ public class Event implements Serializable {
 
     private Date startDate;
     private String start_date_string;
+    private int likes;
+    private String organizer;
+    private String place;
 
     private Uri bannerUri;
     private Uri iconUri;
 
-    private Integer likes;
 
     /**
      * Create an event using a FirebaseMap
@@ -46,15 +48,21 @@ public class Event implements Serializable {
         name = data.getString("name");
         shortDesc = data.getString("short_desc");
         longDesc = data.getString("long_desc");
+        likes = data.getInteger("likes");
+        organizer = data.getString("organizer");
+        place = data.getString("place");
+
+        shortDesc = data.getString("short_desc");
+        longDesc = data.getString("long_desc");
 
         String icon_str = data.getString("icon_uri");
         iconUri = icon_str == null ?
-                Uri.parse("android.ressource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(icon_str);
 
-        String banner_str = data.getString("banner_uri");
+        String banner_str = null;//data.getString("banner_uri");
         bannerUri = banner_str == null ?
-                Uri.parse("android.ressource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
                 Uri.parse(banner_str);
 
         startDate = data.getDate("start_date");
@@ -127,6 +135,10 @@ public class Event implements Serializable {
         return iconUri;
     }
 
+    public String getOrganizer() { return organizer; }
+
+    public String getPlace() { return place; }
+
     public Integer getLikes() { return likes; }
 
     public void increaseLikes() {
@@ -136,4 +148,5 @@ public class Event implements Serializable {
     public void decreaseLikes() {
         likes -= 1;
     }
+
 }
