@@ -1,4 +1,4 @@
-/*package ch.epfl.sweng.zuluzulu.Fragments;
+package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.runner.AndroidJUnit4;
@@ -25,4 +25,4 @@ public class AssociationDetailFragmentTest extends TestWithAuthenticatedAndFragm
         onView(withText("Favorites")).perform(ViewActions.click());
         onView(withText("ForumEPFL")).check(doesNotExist());
     }
-}*/
+}
