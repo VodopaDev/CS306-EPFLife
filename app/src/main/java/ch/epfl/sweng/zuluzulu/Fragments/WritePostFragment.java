@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -48,7 +47,6 @@ public class WritePostFragment extends SuperFragment {
     private static final String POST_COLLECTION_NAME = "posts";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private InputMethodManager inputMethodManager;
 
     private String collectionPath;
 
@@ -98,11 +96,6 @@ public class WritePostFragment extends SuperFragment {
 
         layout.setBackgroundColor(Color.parseColor(color.getValue()));
 
-        // Get the focus on the message field and open the keyboard
-        editText.requestFocus();
-        inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-
         sendButton.setEnabled(false);
 
         collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POST_COLLECTION_NAME;
@@ -137,7 +130,6 @@ public class WritePostFragment extends SuperFragment {
 
                 addPostToDatabase(data);
 
-                inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
                 mListener.onFragmentInteraction(CommunicationTag.OPEN_POST_FRAGMENT, channel);
             }
         });

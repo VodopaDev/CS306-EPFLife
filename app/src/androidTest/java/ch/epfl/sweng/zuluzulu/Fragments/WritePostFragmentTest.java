@@ -6,13 +6,9 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
+import ch.epfl.sweng.zuluzulu.Utility;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -21,21 +17,15 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.core.IsNot.not;
 
 @RunWith(AndroidJUnit4.class)
-public class WritePostFragmentTest extends TestWithAuthenticatedAndFragment<WritePostFragment>{
+public class WritePostFragmentTest extends TestWithAuthenticatedAndFragment<WritePostFragment> {
 
     @Override
     public void initFragment() {
-        Map<String, Object> data = new HashMap<>();
-        data.put("id", 1L);
-        data.put("name", "name");
-        data.put("description", "description");
-        data.put("restrictions", new HashMap<>());
-        FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
-        fragment = WritePostFragment.newInstance(user, new Channel(fmap));
+        fragment = WritePostFragment.newInstance(user, Utility.defaultChannel());
     }
 
     @Test
-    public void testSendButtonIsNotEnabled() {
+    public void testSendButtonIsNotEnabledAtBeginning() {
         onView(withId(R.id.write_post_send_button)).check(matches(not(isEnabled())));
     }
 
@@ -43,8 +33,12 @@ public class WritePostFragmentTest extends TestWithAuthenticatedAndFragment<Writ
     public void testUserCanWrite() {
         onView(withId(R.id.write_post_textEdit)).perform(ViewActions.typeText("test")).perform(ViewActions.closeSoftKeyboard());
         onView(withId(R.id.write_post_send_button)).check(matches(isEnabled()));
-        onView(withId(R.id.write_post_textEdit)).perform(ViewActions.clearText());
-        testSendButtonIsNotEnabled();
+        onView(withId(R.id.write_post_textEdit)).perform(ViewActions.clearText()).perform(ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.write_post_send_button)).check(matches(not(isEnabled())));
     }
 
+    @Test
+    public void testChangeColor() {
+        onView(withId(R.id.write_post_layout)).perform(ViewActions.click());
+    }
 }
