@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.net.Uri;
-import android.util.Log;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -127,7 +126,9 @@ public class Event implements Serializable {
         return iconUri;
     }
 
-    public Integer getLikes() { return likes; }
+    public Integer getLikes() {
+        return likes;
+    }
 
     public void increaseLikes() {
         likes += 1;

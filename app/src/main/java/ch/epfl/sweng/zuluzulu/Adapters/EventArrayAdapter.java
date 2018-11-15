@@ -3,8 +3,6 @@ package ch.epfl.sweng.zuluzulu.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
-import android.util.Log;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +16,8 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
-import ch.epfl.sweng.zuluzulu.User.Guest;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility.ImageLoader;
 
@@ -53,10 +50,9 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         this.mListener = mListener;
         this.context = context;
         this.data = data;
-        if (user.isConnected()){
+        if (user.isConnected()) {
             this.user = (AuthenticatedUser) user;
-        }
-        else {
+        } else {
             this.user = null;
         }
 
@@ -105,8 +101,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
                         holder.likes.setText(String.valueOf(event.getLikes()));
                         holder.likes_button.setTextColor(Color.BLUE);
                         user.likeEvent(event.getId());
-                    }
-                    else {
+                    } else {
                         event.decreaseLikes();
                         holder.likes.setText(String.valueOf(event.getLikes()));
                         holder.likes_button.setTextColor(Color.BLACK);
@@ -114,15 +109,14 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
                     }
                 }
             });
-        }
-        else {
+        } else {
             holder.likes_button.setEnabled(false);
         }
 
         event_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("FRAG_CHANGE","Switching to " + event.getName() + " detailed view");
+                Log.d("FRAG_CHANGE", "Switching to " + event.getName() + " detailed view");
                 mListener.onFragmentInteraction(OPEN_EVENT_DETAIL_FRAGMENT, event);
             }
         });

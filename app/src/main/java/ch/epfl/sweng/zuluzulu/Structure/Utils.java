@@ -4,16 +4,20 @@ import android.location.Location;
 
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.text.SimpleDateFormat;
-import com.google.firebase.firestore.GeoPoint;
 
 /**
  * Class that contains general useful functions
  */
 public final class Utils {
 
-    private Utils() {}
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+    public static SimpleDateFormat stringToDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+    private Utils() {
+    }
 
     public static void addIdToList(String path, String field, Integer id) {
         FirebaseFirestore.getInstance().document(path).update(field, FieldValue.arrayUnion(id));
@@ -62,7 +66,4 @@ public final class Utils {
 
         return R * c;
     }
-
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
-    public static SimpleDateFormat stringToDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 }

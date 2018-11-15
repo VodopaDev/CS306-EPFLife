@@ -105,19 +105,25 @@ public class Post {
      *
      * @return the color
      */
-    public String getColor() { return color; }
+    public String getColor() {
+        return color;
+    }
 
     /**
      * Setter for the color
      *
      * @param color the new color
      */
-    public void setColor(String color) { this.color = color; }
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     /**
      * Getter for anonymous
      *
      * @return Whether the post is anonymous or not
      */
-    public boolean isAnonymous() { return anonymous; }
+    public boolean isAnonymous() {
+        return anonymous;
+    }
 }

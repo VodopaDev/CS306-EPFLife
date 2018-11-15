@@ -30,9 +30,9 @@ import java.util.Locale;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.DECREMENT_IDLING_RESOURCE;
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.INCREMENT_IDLING_RESOURCE;
@@ -59,6 +59,7 @@ public class CalendarFragment extends SuperFragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
+     *
      * @return A new instance of fragment CalendarFragment.
      */
     public static CalendarFragment newInstance(AuthenticatedUser user) {
@@ -73,7 +74,7 @@ public class CalendarFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (AuthenticatedUser)getArguments().getSerializable(ARG_USER);
+            user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
         }
 
         followedEvents = new ArrayList<>();
@@ -104,7 +105,7 @@ public class CalendarFragment extends SuperFragment {
             @Override
             public void onDateSelected(Date date) {
                 selectedDayEvents.clear();
-                for(Event event: followedEvents){
+                for (Event event : followedEvents) {
                     if (event.getStartDateString().equals(Utils.dateFormat.format(date)))
                         selectedDayEvents.add(event);
                 }
@@ -115,16 +116,17 @@ public class CalendarFragment extends SuperFragment {
 
             //Required method, but not used here
             @Override
-            public void onMonthChanged(Date date) {}
+            public void onMonthChanged(Date date) {
+            }
         });
         //Set the day decorator
         calendarView.setDecorators(Collections.singletonList(new DayDecorator() {
             @Override
             public void decorate(DayView dayView) {
                 Date dayDate = dayView.getDate();
-                for(Event event: followedEvents){
+                for (Event event : followedEvents) {
                     if (event.getStartDateString().equals(Utils.dateFormat.format(dayDate))
-                        && user.isFollowedEvent(event))
+                            && user.isFollowedEvent(event))
                         dayView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 }
             }
@@ -151,13 +153,13 @@ public class CalendarFragment extends SuperFragment {
                                 if (user.isFollowedEvent(event)) {
                                     followedEvents.add(event);
                                     Log.d("CALENDAR", "added a new followed event with date " + event.getStartDateString());
-                                    if(now.equals(event.getStartDateString()))
+                                    if (now.equals(event.getStartDateString()))
                                         selectedDayEvents.add(event);
                                 }
                             }
                         }
                         eventAdapter.notifyDataSetChanged();
-                        if(getContext()!=null)
+                        if (getContext() != null)
                             calendarView.refreshCalendar(calendar);
                         calendarView.markDayAsSelectedDay(date);
                         mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);

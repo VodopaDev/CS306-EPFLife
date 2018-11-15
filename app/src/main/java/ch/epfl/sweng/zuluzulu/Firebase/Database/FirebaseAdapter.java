@@ -2,10 +2,10 @@ package ch.epfl.sweng.zuluzulu.Firebase.Database;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class FirebaseAdapter implements Database{
+public class FirebaseAdapter implements Database {
     private FirebaseFirestore firebase;
 
-    public FirebaseAdapter(){
+    public FirebaseAdapter() {
         firebase = FirebaseFirestore.getInstance();
     }
 

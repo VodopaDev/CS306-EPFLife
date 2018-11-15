@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,11 +22,11 @@ import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
 import ch.epfl.sweng.zuluzulu.URLTools.IconParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.User.UserRole;
-import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
 
 
 /**
@@ -45,6 +43,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
 
     private List<String> datas;
+    private Database db = DatabaseFactory.getDependency();
 
     public AssociationsGeneratorFragment() {
         // Required empty public constructor
@@ -82,16 +81,17 @@ public class AssociationsGeneratorFragment extends SuperFragment {
 
     /**
      * Load the associations icons
+     *
      * @param name
      */
     private void requestIcon(String name) {
-        if(name == null || name.length() == 0){
+        if (name == null || name.length() == 0) {
             return;
         }
 
         // Tell tests the async execution is finished
         for (String data : datas) {
-            if(data.toLowerCase().contains(name.toLowerCase())) {
+            if (data.toLowerCase().contains(name.toLowerCase())) {
                 mListener.onFragmentInteraction(CommunicationTag.INCREMENT_IDLING_RESOURCE, true);
                 UrlHandler urlHandler = new UrlHandler(this::handleIcon, new IconParser());
 
@@ -100,10 +100,8 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         }
     }
 
-    private Database db = DatabaseFactory.getDependency();
-
     private void addDatabase(String base_url, String icon_url, int index) {
-        if(index < 0 || index >= this.datas.size()){
+        if (index < 0 || index >= this.datas.size()) {
             return;
         }
         try {
@@ -111,7 +109,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             URL iconUrl = new URL(url, icon_url);
             String final_icon_url = iconUrl.toString();
 
-            if(final_icon_url.contains("www.epfl.ch/favicon.ico")){
+            if (final_icon_url.contains("www.epfl.ch/favicon.ico")) {
                 final_icon_url = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
             }
 
@@ -135,8 +133,8 @@ public class AssociationsGeneratorFragment extends SuperFragment {
 
     }
 
-    private Void handleIcon(Pair<String, List<String>> result){
-        if(result != null && !result.second.isEmpty()){
+    private Void handleIcon(Pair<String, List<String>> result) {
+        if (result != null && !result.second.isEmpty()) {
             String key = result.first;
             String value = result.second.get(0);
 
@@ -150,12 +148,12 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     }
 
     private int findIndex(String key) {
-        if(datas == null){
+        if (datas == null) {
             return -1;
         }
 
-        for(int i = 0; i < datas.size(); i++){
-            if(datas.get(i).contains(key)){
+        for (int i = 0; i < datas.size(); i++) {
+            if (datas.get(i).contains(key)) {
                 return i;
             }
         }
@@ -169,7 +167,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     private void updateView() {
         TextView view = Objects.requireNonNull(getView()).findViewById(R.id.associations_generator_list_values);
 
-        if(datas != null && datas.size() > 0) {
+        if (datas != null && datas.size() > 0) {
             view.setText(datas.size() + " ASSOCIATIONS FOUND : \n\n");
         }
 
@@ -197,7 +195,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_associations_generator, container, false);
-        if(view == null){
+        if (view == null) {
             return null;
         }
         Button button = view.findViewById(R.id.load_icon_button);

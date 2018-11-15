@@ -33,7 +33,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         Post currentPost = posts.get(position);
         boolean anonymous = currentPost.isAnonymous();
 
-        View view = LayoutInflater.from(mContext).inflate(R.layout.post, parent ,false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.post, parent, false);
 
         LinearLayout linearLayout = view.findViewById(R.id.post_linearLayout);
         linearLayout.setBackgroundColor(Color.parseColor(currentPost.getColor()));

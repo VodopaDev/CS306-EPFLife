@@ -7,10 +7,10 @@ import com.google.firebase.firestore.DocumentReference;
 
 import java.util.Map;
 
-public class DocumentAdapter implements DatabaseDocument{
+public class DocumentAdapter implements DatabaseDocument {
     private final DocumentReference document;
 
-    public DocumentAdapter(DocumentReference document){
+    public DocumentAdapter(DocumentReference document) {
         this.document = document;
     }
 

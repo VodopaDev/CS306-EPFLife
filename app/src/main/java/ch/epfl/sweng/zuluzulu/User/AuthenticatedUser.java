@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu.User;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -86,19 +85,19 @@ public class AuthenticatedUser extends User {
         this.followed_events = followed_events;
     }
 
-    public void setLikedEvent(Set<Integer> liked_events){
+    public void setLikedEvent(Set<Integer> liked_events) {
         this.liked_events = liked_events;
     }
 
-    public boolean isEventLiked(Integer event){
+    public boolean isEventLiked(Integer event) {
         return liked_events.contains(event);
     }
 
-    public void likeEvent(Integer event){
+    public void likeEvent(Integer event) {
         this.liked_events.add(event);
     }
 
-    public void dislikeEvent(Integer event){
+    public void dislikeEvent(Integer event) {
         this.liked_events.remove(event);
     }
 
@@ -123,7 +122,9 @@ public class AuthenticatedUser extends User {
     }
 
     @Override
-    public String getSemester() { return semester; }
+    public String getSemester() {
+        return semester;
+    }
 
     @Override
     public String getGaspar() {

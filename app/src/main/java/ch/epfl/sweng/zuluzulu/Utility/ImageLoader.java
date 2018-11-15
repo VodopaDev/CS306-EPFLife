@@ -12,11 +12,11 @@ import com.bumptech.glide.load.model.LazyHeaders;
 
 public interface ImageLoader {
 
-    static void loadUriIntoImageView(ImageView container, Uri uri, Context context){
-        if(context == null)
-            Log.e("GLIDE","Can't load an Uri in an ImageView with a null Context");
-        else{
-            if(uri.toString().length() > 0) {
+    static void loadUriIntoImageView(ImageView container, Uri uri, Context context) {
+        if (context == null)
+            Log.e("GLIDE", "Can't load an Uri in an ImageView with a null Context");
+        else {
+            if (uri.toString().length() > 0) {
                 Headers auth = new LazyHeaders.Builder() // This can be cached in a field and reused later.
                         .addHeader("Cookie", "gdpr=accept")
                         .build();

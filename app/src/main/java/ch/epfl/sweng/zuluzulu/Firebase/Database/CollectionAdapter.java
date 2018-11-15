@@ -6,7 +6,7 @@ public class CollectionAdapter implements DatabaseCollection {
 
     private final CollectionReference collection;
 
-    public CollectionAdapter(CollectionReference collection){
+    public CollectionAdapter(CollectionReference collection) {
         this.collection = collection;
     }
 

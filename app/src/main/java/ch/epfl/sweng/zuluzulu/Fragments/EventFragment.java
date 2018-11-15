@@ -25,18 +25,17 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Structure.DateInputMask;
-import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
-
+import ch.epfl.sweng.zuluzulu.Structure.DateInputMask;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.Utils;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.User.UserRole;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -123,12 +122,12 @@ public class EventFragment extends SuperFragment {
         button_event_all = view.findViewById(R.id.event_fragment_all_button);
         button_event_add = view.findViewById(R.id.event_add_button);
 
-        if(user.hasRole(UserRole.ADMIN)){
+        if (user.hasRole(UserRole.ADMIN)) {
             button_event_add.setVisibility(View.VISIBLE);
             button_event_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onFragmentInteraction(CommunicationTag.CREATE_EVENT,null);
+                    mListener.onFragmentInteraction(CommunicationTag.CREATE_EVENT, null);
                 }
             });
         }
@@ -240,8 +239,7 @@ public class EventFragment extends SuperFragment {
                     checkbox_event_sort_name.setEnabled(true);
                     checkbox_event_sort_like.setChecked(false);
                     checkbox_event_sort_like.setEnabled(true);
-                }
-                else if (event_fragment_to_date.getText().toString().contains("D") || event_fragment_to_date.getText().toString().contains("M") ||
+                } else if (event_fragment_to_date.getText().toString().contains("D") || event_fragment_to_date.getText().toString().contains("M") ||
                         event_fragment_to_date.getText().toString().contains("Y")) {
                     checkbox_event_sort_date.setEnabled(false);
                     Collections.sort(event_all, Event.dateComparator());
@@ -274,8 +272,7 @@ public class EventFragment extends SuperFragment {
                     checkbox_event_sort_name.setEnabled(true);
                     checkbox_event_sort_like.setChecked(false);
                     checkbox_event_sort_like.setEnabled(true);
-                }
-                else {
+                } else {
                     checkbox_event_sort_date.setEnabled(false);
                     Collections.sort(event_all, Event.dateComparator());
                     Collections.sort(event_fav, Event.dateComparator());
@@ -317,7 +314,7 @@ public class EventFragment extends SuperFragment {
     }
 
 
-    private void emptySortedEventList(){
+    private void emptySortedEventList() {
         event_all_sorted.clear();
         event_fav_sorted.clear();
     }

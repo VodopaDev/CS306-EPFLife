@@ -106,5 +106,7 @@ public class ChatMessage {
      *
      * @return Whether the message is anonymous or not
      */
-    public boolean isAnonymous() { return anonymous; }
+    public boolean isAnonymous() {
+        return anonymous;
+    }
 }
