@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -39,14 +39,34 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         LinearLayout linearLayout = view.findViewById(R.id.post_linearLayout);
         TextView message = view.findViewById(R.id.post_msg);
         TextView senderName = view.findViewById(R.id.post_senderName);
-        Button upButton = view.findViewById(R.id.post_up_button);
-        Button downButton = view.findViewById(R.id.post_down_button);
+        TextView timeAgo = view.findViewById(R.id.post_time_ago_textview);
+        ImageView upButton = view.findViewById(R.id.post_up_button);
+        ImageView downButton = view.findViewById(R.id.post_down_button);
         TextView nbUps = view.findViewById(R.id.post_nb_ups_textview);
         TextView nbResponses = view.findViewById(R.id.post_nb_responses_textview);
 
         linearLayout.setBackgroundColor(Color.parseColor(currentPost.getColor()));
-        senderName.setText(currentPost.getSenderName());
         message.setText(currentPost.getMessage());
+        senderName.setText(currentPost.getSenderName());
+
+        long creationTime = currentPost.getTime().getTime();
+        long now = com.google.firebase.Timestamp.now().toDate().getTime();
+        long differenceInSeconds = (now - creationTime) / 1000;
+        if (differenceInSeconds < 60) {
+            timeAgo.setText(differenceInSeconds + "s");
+        }
+        else if (differenceInSeconds < 3600) {
+            timeAgo.setText(differenceInSeconds/60 + "min");
+        }
+        else if (differenceInSeconds < 3600 * 24){
+            timeAgo.setText(differenceInSeconds/3600 + "h");
+        }
+        else {
+            timeAgo.setText(differenceInSeconds/(3600*24) + "d");
+        }
+
+        nbUps.setText("" + currentPost.getNbUps());
+        nbResponses.setText("" + currentPost.getNbResponses());
 
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override

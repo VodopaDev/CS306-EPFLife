@@ -132,6 +132,8 @@ public class WritePostFragment extends SuperFragment {
                 data.put("time", time);
                 data.put("sciper", sciper);
                 data.put("color", color.getValue());
+                data.put("nbUps", 0);
+                data.put("nbResponses", 0);
 
                 addPostToDatabase(data);
 
