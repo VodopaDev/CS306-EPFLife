@@ -14,11 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -32,17 +29,15 @@ import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
+import ch.epfl.sweng.zuluzulu.Structure.Utils;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 /**
- * A simple {@link SuperChatPostsFragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnFragmentInteractionListener} interface
- * to handle interaction events.
+ * A {@link SuperChatPostsFragment} subclass.
+ * This fragment is used to display the chat and to write in it
  */
 public class ChatFragment extends SuperChatPostsFragment {
 
@@ -78,7 +73,8 @@ public class ChatFragment extends SuperChatPostsFragment {
         chatButton.setEnabled(false);
         postsButton.setEnabled(true);
 
-        collection_path = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + MESSAGES_COLLECTION_NAME;
+        String collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + MESSAGES_COLLECTION_NAME;
+        collectionReference = db.collection(collectionPath);
 
         sendButton.setEnabled(false);
 
@@ -115,7 +111,7 @@ public class ChatFragment extends SuperChatPostsFragment {
                 data.put("time", time);
                 data.put("sciper", sciper);
 
-                addDataToFirestore(data);
+                Utils.addDataToFirebase(data, collectionReference, TAG);
             }
         });
     }
@@ -128,27 +124,6 @@ public class ChatFragment extends SuperChatPostsFragment {
             @Override
             public void onClick(View v) {
                 mListener.onFragmentInteraction(CommunicationTag.OPEN_POST_FRAGMENT, channel);
-            }
-        });
-    }
-
-    /**
-     * Send the data to the database
-     *
-     * @param data the data to send to the database
-     */
-    private void addDataToFirestore(Map data) {
-        db.collection(collection_path)
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference ref) {
-                        Log.d(TAG, "DocumentSnapshot written with ID: " + ref.getId());
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error adding document", e);
             }
         });
     }
@@ -177,7 +152,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Refresh the chat by reading all the messages in the database
      */
     private void updateChat() {
-        db.collection(collection_path)
+        collectionReference
                 .orderBy("time", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

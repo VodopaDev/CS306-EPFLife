@@ -11,12 +11,15 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
  */
 public class Post {
 
-    public static final List<String> FIELDS = Arrays.asList("senderName", "sciper", "message", "time", "color");
+    public static final List<String> FIELDS = Arrays.asList("senderName", "sciper", "message", "time", "color", "nbUps", "nbResponses");
     private String senderName;
     private String sciper;
     private String message;
     private Date time;
     private String color;
+    private int nbUps;
+    private int nbResponses;
+
     private boolean anonymous;
 
     public Post(FirebaseMapDecorator data) {
@@ -25,6 +28,9 @@ public class Post {
         message = data.getString("message");
         time = data.getDate("time");
         color = data.getString("color");
+        nbUps = data.getInteger("nbUps");
+        nbResponses = data.getInteger("nbResponses");
+
         anonymous = senderName.isEmpty();
     }
 
@@ -117,6 +123,34 @@ public class Post {
     public void setColor(String color) {
         this.color = color;
     }
+
+    /**
+     * Getter for the number of ups
+     *
+     * @return the number of ups
+     */
+    public int getNbUps() { return nbUps; }
+
+    /**
+     * Setter for the number of ups
+     *
+     * @param nbUps the new number of ups
+     */
+    public void setNbUps(int nbUps) { this.nbUps = nbUps; }
+
+    /**
+     * Getter for the number of responses
+     *
+     * @return the number of responses
+     */
+    public int getNbResponses() { return nbResponses; }
+
+    /**
+     * Setter for the number of responses
+     *
+     * @param nbResponses the new number of responses
+     */
+    public void setNbResponses(int nbResponses) { this.nbResponses = nbResponses; }
 
     /**
      * Getter for anonymous

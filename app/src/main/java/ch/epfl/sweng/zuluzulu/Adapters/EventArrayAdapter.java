@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -116,8 +118,8 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         event_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("FRAG_CHANGE", "Switching to " + event.getName() + " detailed view");
-                mListener.onFragmentInteraction(OPEN_EVENT_DETAIL_FRAGMENT, event);
+                Log.d("FRAG_CHANGE","Switching to " + event.getName() + "detailed view");
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT, event);
             }
         });
 
