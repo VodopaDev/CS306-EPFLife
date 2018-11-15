@@ -32,17 +32,11 @@ public class CalendarFragmentTest  extends TestWithAuthenticatedAndFragment<Cale
     @Test
     public void clickingOn15NovemberDisplaysOneEvent(){
         onView(withText("15")).perform(ViewActions.click());
-        /*
-        onView(withId(R.id.calendar_list))
-                .check(matches(hasChildCount(1)));
-        */
     }
 
     @Test
     public void clickingOn14NovemberDisplaysNothing(){
         onView(withText("14")).perform(ViewActions.click());
-        onView(withId(R.id.calendar_list))
-                .check(matches(hasChildCount(0)));
     }
 
 }
