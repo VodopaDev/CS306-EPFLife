@@ -42,6 +42,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     // The URL we will connect to
     final static public String EPFL_URL = "https://associations.epfl.ch/page-16300-fr-html/";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
+    private static final String EPFL_LOGO = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
 
     private List<String> datas;
     private Database db = DatabaseFactory.getDependency();
@@ -83,7 +84,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
      * @param name
      */
     private void requestIcon(String name) {
-        if (name == null || name.length() == 0) {
+        if (name == null || name.isEmpty()) {
             return;
         }
 
@@ -120,7 +121,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             String final_icon_url = iconUrl.toString();
 
             if (final_icon_url.contains("www.epfl.ch/favicon.ico")) {
-                final_icon_url = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
+                final_icon_url = EPFL_LOGO;
             }
 
             datas.set(index, datas.get(index) + "," + final_icon_url);
@@ -133,9 +134,9 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             docData.put("name", datas.get(index).split(",")[1]);
             docData.put("short_desc", datas.get(index).split(",")[2]);
             docData.put("long_desc", datas.get(index).split(",")[2]);
-            docData.put("id", index + 100);
+            docData.put("id", index);
 
-            db.collection("assos_info").document(Integer.toString(index + 100)).set(docData);
+            db.collection("assos_info").document(Integer.toString(index)).set(docData);
             updateView();
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -149,11 +150,14 @@ public class AssociationsGeneratorFragment extends SuperFragment {
      * @param result
      */
     private void handleIcon(final int index, List<String> result) {
-        if (result != null && index >= 0 && index < this.datas.size()) {
-            String value = result.get(0);
+        String value;
+        if (result != null && !result.isEmpty() && index >= 0 && index < this.datas.size()) {
+            value = result.get(0);
 
-            addDatabase(value, index);
+        } else {
+            value = EPFL_LOGO;
         }
+        addDatabase(value, index);
         mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
     }
 
