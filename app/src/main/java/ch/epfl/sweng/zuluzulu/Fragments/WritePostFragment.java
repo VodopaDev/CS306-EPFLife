@@ -140,7 +140,7 @@ public class WritePostFragment extends SuperFragment {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                color = PostColor.getRandomColor();
+                color = PostColor.getRandomColorButNot(color);
                 layout.setBackgroundColor(Color.parseColor(color.getValue()));
             }
         });

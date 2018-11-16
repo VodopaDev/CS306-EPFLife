@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Utility;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public enum PostColor {
      * @return The random postColor
      */
     public static PostColor getRandomColorButNot(PostColor color) {
-        List<PostColor> colors = Arrays.asList(PostColor.values());
+        List<PostColor> colors = new ArrayList<>(Arrays.asList(PostColor.values()));
         if (color != null) {
             colors.remove(color);
         }

@@ -1,8 +1,15 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.graphics.drawable.ColorDrawable;
+import android.support.constraint.ConstraintLayout;
 import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
+import android.widget.EditText;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -39,6 +46,23 @@ public class WritePostFragmentTest extends TestWithAuthenticatedAndFragment<Writ
 
     @Test
     public void testChangeColor() {
+        // int oldColor = getMainActivity().findViewById(R.id.write_post_layout).getSolidColor();
         onView(withId(R.id.write_post_layout)).perform(ViewActions.click());
+        // onView(withId(R.id.write_post_layout)).check(matches(not(hasBackgroundColor(oldColor))));
     }
+
+    /*
+    public static Matcher<View> hasBackgroundColor(final int color) {
+        return new BoundedMatcher<View, ConstraintLayout>(ConstraintLayout.class) {
+            @Override
+            public boolean matchesSafely(ConstraintLayout layout) {
+                return color == layout.getSolidColor();
+            }
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with background color: ");
+            }
+        };
+    }
+     */
 }
