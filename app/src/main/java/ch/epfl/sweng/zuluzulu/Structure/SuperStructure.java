@@ -2,6 +2,7 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.net.Uri;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import ch.epfl.sweng.zuluzulu.R;
 /**
  * A simple structure to hold an Association, Event or Channel
  */
-public abstract class SuperStructure {
+public abstract class SuperStructure implements Serializable{
 
     private final static String ID_FIELD = "id";
     private final static String NAME_FIELD = "name";

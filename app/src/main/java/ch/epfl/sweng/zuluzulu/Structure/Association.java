@@ -17,15 +17,13 @@ import ch.epfl.sweng.zuluzulu.R;
  * A simple class describing an Association
  * Has diverse getters and some functions to create views
  */
-public class Association implements Serializable {
-    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc");
+public class Association extends SuperStructure{
+    public final static List<String> REQUIRED_FIELDS = REQUIRED_FIELDS;
 
-    private int id;
-    private String name;
-    private String short_desc;
-    private String long_desc;
 
-    private Uri icon_uri;
+
+
+
     private Uri banner_uri;
 
     private List<Map<String, Object>> events;
@@ -39,14 +37,10 @@ public class Association implements Serializable {
      * @throws IllegalArgumentException if the map isn't an Association's map
      */
     public Association(FirebaseMapDecorator data) {
-        if (!data.hasFields(FIELDS)) {
+        super(data);
+        if (!data.hasFields(REQUIRED_FIELDS)) {
             throw new IllegalArgumentException();
         }
-
-        id = data.getInteger("id");
-        name = data.getString("name");
-        short_desc = data.getString("short_desc");
-        long_desc = data.getString("long_desc");
 
         // Init the main chat id
         channel_id = data.get("channel_id") == null ?
