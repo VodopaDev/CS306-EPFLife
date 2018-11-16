@@ -41,6 +41,9 @@
     <string name="fragment_event_checkbox_sort_date">Date</string>
     <string name="card_event_image_description">Picture</string>
     <string name="fragment_event_like_button">Like</string>
+    <string name="fragment_event_search_bar_text">Search</string>
+
+
 
     <!-- Chat related -->
     <string name="chat_send">Send</string>
