@@ -17,7 +17,9 @@ public enum PostColor {
         this.value = value;
     }
 
-    public String getValue() { return value; }
+    public String getValue() {
+        return value;
+    }
 
     public static PostColor getRandomColor() {
         PostColor[] colors = PostColor.values();
