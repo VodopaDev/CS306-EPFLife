@@ -124,7 +124,7 @@ public abstract class SuperStructure implements Serializable{
      */
     public Uri setIconUri(Uri newIconUri){
         if(newIconUri == null)
-            throw new NullPointerException("newShortDesc must be initialized");
+            throw new NullPointerException("newIconUri must be initialized");
         else
             iconUri = newIconUri;
         return iconUri;
