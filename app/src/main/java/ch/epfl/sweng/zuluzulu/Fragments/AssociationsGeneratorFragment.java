@@ -25,6 +25,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
 import ch.epfl.sweng.zuluzulu.URLTools.IconParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
+import ch.epfl.sweng.zuluzulu.URLTools.UrlResultListener;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.User.UserRole;
 
@@ -66,17 +67,14 @@ public class AssociationsGeneratorFragment extends SuperFragment {
      * We expect a arraylist of strings. Each information is separated by a coma in the string
      *
      * @param results Received datas
-     * @return void
      */
-    private Void handleAssociations(Pair<String, List<String>> results) {
+    private void handleAssociations(List<String> results) {
         mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
 
         if (results != null) {
-            this.datas = results.second;
+            this.datas = results;
             updateView();
         }
-
-        return null;
     }
 
     /**
@@ -89,22 +87,34 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             return;
         }
 
-        // Tell tests the async execution is finished
+        int index = 0;
         for (String data : datas) {
             if (data.toLowerCase().contains(name.toLowerCase())) {
+                // Tell tests the async execution is finished
                 mListener.onFragmentInteraction(CommunicationTag.INCREMENT_IDLING_RESOURCE, true);
-                UrlHandler urlHandler = new UrlHandler(this::handleIcon, new IconParser());
 
-                urlHandler.execute(data.split(",")[0]);
+                String url = data.split(",")[0];
+
+                int finalIndex = index;
+                UrlHandler urlHandler = new UrlHandler(new UrlResultListener<List<String>>() {
+                    @Override
+                    public void onFinished(List<String> result) {
+                        handleIcon(finalIndex, result);
+                    }
+                }, new IconParser());
+
+                urlHandler.execute(url);
             }
+            index++;
         }
     }
 
-    private void addDatabase(String base_url, String icon_url, int index) {
+    private void addDatabase(String icon_url, int index) {
         if (index < 0 || index >= this.datas.size()) {
             return;
         }
         try {
+            String base_url = datas.get(index).split(",")[0];
             URL url = new URL(base_url);
             URL iconUrl = new URL(url, icon_url);
             String final_icon_url = iconUrl.toString();
@@ -133,32 +143,20 @@ public class AssociationsGeneratorFragment extends SuperFragment {
 
     }
 
-    private Void handleIcon(Pair<String, List<String>> result) {
-        if (result != null && !result.second.isEmpty()) {
-            String key = result.first;
-            String value = result.second.get(0);
+    /**
+     * Add the loaded icon to database
+     * @param index
+     * @param result
+     */
+    private void handleIcon(final int index, List<String> result) {
+        if (result != null && index >= 0 && index < this.datas.size()) {
+            String value = result.get(0);
 
-            int index = findIndex(key);
-
-            addDatabase(key, value, index);
+            addDatabase(value, index);
         }
         mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
-
-        return null;
     }
 
-    private int findIndex(String key) {
-        if (datas == null) {
-            return -1;
-        }
-
-        for (int i = 0; i < datas.size(); i++) {
-            if (datas.get(i).contains(key)) {
-                return i;
-            }
-        }
-        return -1;
-    }
 
 
     /**
