@@ -68,6 +68,12 @@
             android:layout_marginRight="8dp"
             android:textColor="@android:color/white" />
 
+        <Button
+            android:id="@+id/event_detail_export"
+            android:layout_width="54dp"
+            android:layout_height="wrap_content"
+            android:text="Button" />
+
     </FrameLayout>
 
     <TextView
