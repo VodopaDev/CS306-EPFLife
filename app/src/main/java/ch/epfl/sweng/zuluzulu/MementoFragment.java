@@ -4,60 +4,91 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
+
+import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
+import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
+import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
+import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.User.UserRole;
+
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MementoFragment.OnFragmentInteractionListener} interface
+ * {@link OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link MementoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MementoFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
+public class MementoFragment extends SuperFragment {
+    private static final String TAG = "MEMENTO_FRAGMENT";
+    final static public String MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/associations/events/fr/";
+    private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
 
     public MementoFragment() {
         // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MementoFragment.
+     * New instance
+     * @param user User
+     * @return The fragment
      */
-    // TODO: Rename and change types and number of parameters
-    public static MementoFragment newInstance(String param1, String param2) {
-        MementoFragment fragment = new MementoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static MementoFragment newInstance(User user) {
+        if (!user.hasRole(ROLE_REQUIRED)) {
+            return null;
+        }
+
+        return new MementoFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
+        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations Generator");
+        UrlHandler urlHandler = new UrlHandler(this::handleMemento, new AssociationsParser());
+        urlHandler.execute(MEMENTO_URL);
+
+        // Send increment to wait async execution in test
+        mListener.onFragmentInteraction(CommunicationTag.INCREMENT_IDLING_RESOURCE, true);
+    }
+
+    /**
+     * Handle memento data
+     * @param result Json aray datas
+     */
+    private void handleMemento(List<String> result) {
+        if(result != null && !result.isEmpty() && !result.get(0).isEmpty()){
+            String datas = result.get(0);
+            JSONArray jsonarray = null;
+            try {
+                jsonarray = new JSONArray(datas);
+                for (int i = 0; i < jsonarray.length(); i++) {
+                    JSONObject jsonobject = jsonarray.getJSONObject(i);
+                    String title = jsonobject.getString("title");
+                    System.out.println(title);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.d(TAG, "Could not parse json");
+            }
         }
+
+        mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
     }
 
     @Override
@@ -65,44 +96,5 @@ public class MementoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_memento, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }

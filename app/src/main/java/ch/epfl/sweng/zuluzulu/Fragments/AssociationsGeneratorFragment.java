@@ -42,7 +42,6 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
 public class AssociationsGeneratorFragment extends SuperFragment {
     // The URL we will connect to
     final static public String EPFL_URL = "https://associations.epfl.ch/page-16300-fr-html/";
-    final static public String MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/associations/events/fr/";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
     private static final String EPFL_LOGO = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
 
@@ -72,12 +71,12 @@ public class AssociationsGeneratorFragment extends SuperFragment {
      * @param results Received datas
      */
     private void handleAssociations(List<String> results) {
-        mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
-
         if (results != null) {
             this.datas = results;
             updateView();
         }
+
+        mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
     }
 
     /**

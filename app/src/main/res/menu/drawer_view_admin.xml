@@ -27,6 +27,10 @@
             android:title="@string/drawer_profile" />
         <item
             android:id="@+id/nav_associations_generator"
+            android:icon="@drawable/ic_event_note_black_24dp"
+            android:title="@string/nav_memento" />
+        <item
+            android:id="@+id/nav_memento_admin"
             android:icon="@drawable/ic_cloud_download_black_24dp"
             android:title="@string/drawer_associations_generator" />
         <item
