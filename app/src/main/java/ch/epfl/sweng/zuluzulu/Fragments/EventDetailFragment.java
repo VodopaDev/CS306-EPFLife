@@ -80,6 +80,7 @@ public class EventDetailFragment extends SuperFragment{
         }
 
         // Export button
+        /*
         Button exportButton = view.findViewById(R.id.event_detail_export);
         exportButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +88,7 @@ public class EventDetailFragment extends SuperFragment{
                 exportEventToCalendar();
             }
         });
+        */
 
         TextView event_like = view.findViewById(R.id.event_detail_tv_numberLikes);
         event_like.setText("" + event.getLikes());
