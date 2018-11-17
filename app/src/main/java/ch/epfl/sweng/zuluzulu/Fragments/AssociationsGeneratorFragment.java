@@ -24,6 +24,7 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
 import ch.epfl.sweng.zuluzulu.URLTools.IconParser;
+import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlResultListener;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -41,6 +42,7 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
 public class AssociationsGeneratorFragment extends SuperFragment {
     // The URL we will connect to
     final static public String EPFL_URL = "https://associations.epfl.ch/page-16300-fr-html/";
+    final static public String MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/associations/events/fr/";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
     private static final String EPFL_LOGO = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
 
@@ -185,8 +187,10 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         this.datas = null;
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations Generator");
-        UrlHandler urlHandler = new UrlHandler(this::handleAssociations, new AssociationsParser());
-        urlHandler.execute(EPFL_URL);
+        UrlHandler urlHandler = new UrlHandler(this::handleAssociations, new MementoParser());
+      //  UrlHandler urlHandler = new UrlHandler(this::handleAssociations, new AssociationsParser());
+      //  urlHandler.execute(EPFL_URL);
+        urlHandler.execute(MEMENTO_URL);
 
         // Send increment to wait async execution in test
         mListener.onFragmentInteraction(CommunicationTag.INCREMENT_IDLING_RESOURCE, true);
