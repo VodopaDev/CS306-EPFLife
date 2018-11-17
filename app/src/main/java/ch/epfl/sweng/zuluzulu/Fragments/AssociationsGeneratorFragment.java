@@ -187,10 +187,8 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         this.datas = null;
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations Generator");
-        UrlHandler urlHandler = new UrlHandler(this::handleAssociations, new MementoParser());
-      //  UrlHandler urlHandler = new UrlHandler(this::handleAssociations, new AssociationsParser());
-      //  urlHandler.execute(EPFL_URL);
-        urlHandler.execute(MEMENTO_URL);
+        UrlHandler urlHandler = new UrlHandler(this::handleAssociations, new AssociationsParser());
+        urlHandler.execute(EPFL_URL);
 
         // Send increment to wait async execution in test
         mListener.onFragmentInteraction(CommunicationTag.INCREMENT_IDLING_RESOURCE, true);
