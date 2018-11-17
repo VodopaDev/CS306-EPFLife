@@ -79,16 +79,12 @@ public class EventDetailFragment extends SuperFragment{
             event_fav.setContentDescription(FAV_CONTENT);
         }
 
-        // Export button
-        /*
-        Button exportButton = view.findViewById(R.id.event_detail_export);
-        exportButton.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.event_detail_export).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 exportEventToCalendar();
             }
         });
-        */
 
         TextView event_like = view.findViewById(R.id.event_detail_tv_numberLikes);
         event_like.setText("" + event.getLikes());
