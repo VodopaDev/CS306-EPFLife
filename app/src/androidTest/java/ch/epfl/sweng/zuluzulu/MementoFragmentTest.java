@@ -74,6 +74,12 @@ public class MementoFragmentTest extends TestWithAdminAndFragment<MainFragment> 
     }
 
     @Test
+    public void canOpenFragment() {
+        mActivityRule.getActivity().openFragment(AssociationsGeneratorFragment.newInstance(user));
+        Utility.openMenu();
+    }
+
+    @Test
     public void refuseNonAdmin() {
         nonAdminUser();
         Utility.checkFragmentIsClosed(R.id.associations_generator_fragment);
