@@ -15,9 +15,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
-import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
 import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -35,7 +33,7 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
  */
 public class MementoFragment extends SuperFragment {
     private static final String TAG = "MEMENTO_FRAGMENT";
-    final static public String MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/associations/events/fr/";
+    final static public String MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/associations/events/fr/?format=json";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
 
     public MementoFragment() {
@@ -60,7 +58,7 @@ public class MementoFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations Generator");
-        UrlHandler urlHandler = new UrlHandler(this::handleMemento, new AssociationsParser());
+        UrlHandler urlHandler = new UrlHandler(this::handleMemento, new MementoParser());
         urlHandler.execute(MEMENTO_URL);
 
         // Send increment to wait async execution in test
@@ -72,6 +70,7 @@ public class MementoFragment extends SuperFragment {
      * @param result Json aray datas
      */
     private void handleMemento(List<String> result) {
+
         if(result != null && !result.isEmpty() && !result.get(0).isEmpty()){
             String datas = result.get(0);
             JSONArray jsonarray = null;
