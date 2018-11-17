@@ -86,7 +86,7 @@ public class MementoFragment extends SuperFragment {
                     System.out.println("start_time_string => " + jsonobject.getString("event_start_time"));
                     System.out.println("end_time_string => " + jsonobject.getString("event_end_time"));
                     System.out.println("place => " + jsonobject.getString("event_place_and_room"));
-                    System.out.println("organizer => " + jsonobject.getString("event_organizer"));
+                    System.out.println("organizer => " + jsonobject.getString("event_organizer")); // nom de l'association qui organise !
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
