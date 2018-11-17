@@ -73,28 +73,39 @@ public class MementoFragment extends SuperFragment {
 
         if(result != null && !result.isEmpty() && !result.get(0).isEmpty()){
             String datas = result.get(0);
-            JSONArray jsonarray = null;
-            try {
-                jsonarray = new JSONArray(datas);
-                for (int i = 0; i < jsonarray.length(); i++) {
-                    JSONObject jsonobject = jsonarray.getJSONObject(i);
-                    System.out.println("name => " + jsonobject.getString("title"));
-                    System.out.println("shortDesc => " + jsonobject.getString("description"));
-        //            System.out.println("longDesc => " + jsonobject.getString("description"));
-                    System.out.println("start_date_string => " + jsonobject.getString("event_start_date"));
-                    System.out.println("end_date_string => " + jsonobject.getString("event_end_date"));
-                    System.out.println("start_time_string => " + jsonobject.getString("event_start_time"));
-                    System.out.println("end_time_string => " + jsonobject.getString("event_end_time"));
-                    System.out.println("place => " + jsonobject.getString("event_place_and_room"));
-                    System.out.println("organizer => " + jsonobject.getString("event_organizer")); // nom de l'association qui organise !
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Log.d(TAG, "Could not parse json");
-            }
+            addEvent(datas);
         }
 
         mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
+    }
+
+    private void addEvent(String datas) {
+        if(datas == null || datas.isEmpty())
+        {
+            return;
+        }
+
+        JSONArray jsonarray = null;
+        try {
+            jsonarray = new JSONArray(datas);
+            for (int i = 0; i < jsonarray.length(); i++) {
+                JSONObject jsonobject = jsonarray.getJSONObject(i);
+                System.out.println("name => " + jsonobject.getString("title"));
+                System.out.println("shortDesc => " + jsonobject.getString("description"));
+//          System.out.println("longDesc => " + jsonobject.getString("description"));
+                System.out.println("start_date_string => " + jsonobject.getString("event_start_date"));
+                System.out.println("end_date_string => " + jsonobject.getString("event_end_date"));
+                System.out.println("start_time_string => " + jsonobject.getString("event_start_time"));
+                System.out.println("end_time_string => " + jsonobject.getString("event_end_time"));
+                System.out.println("place => " + jsonobject.getString("event_place_and_room"));
+                // nom de l'association qui organise !
+                System.out.println("organizer => " + jsonobject.getString("event_organizer"));
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d(TAG, "Could not parse json");
+        }
     }
 
     @Override
