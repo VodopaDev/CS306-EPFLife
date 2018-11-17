@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     // Const used to send a Increment or Decrement message
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private DynamicToolbar toolbar;
 
     private SuperFragment current_fragment;
     private Stack<SuperFragment> previous_fragments;
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         navigationView = initNavigationView();
         initDrawerContent();
+        toolbar.switchToBaseLayout();
 
         Intent i = getIntent();
 
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      */
     private NavigationView initNavigationView() {
         NavigationView navigationView = findViewById(R.id.nav_view);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();

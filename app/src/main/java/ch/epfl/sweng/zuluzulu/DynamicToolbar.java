@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
@@ -20,15 +21,25 @@ public class DynamicToolbar extends Toolbar {
 
     public DynamicToolbar(Context context) {
         super(context);
+        eventLayout = findViewById(R.id.toolbar_event);
+        associationLayout = findViewById(R.id.toolbar_association);
+        baseLayout = findViewById(R.id.toolbar_base);
     }
 
-    public DynamicToolbar(Context context, AttributeSet attrs) {
+    public DynamicToolbar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        eventLayout = findViewById(R.id.toolbar_event);
+        associationLayout = findViewById(R.id.toolbar_association);
+        baseLayout = findViewById(R.id.toolbar_base);
     }
 
-    public DynamicToolbar(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DynamicToolbar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        eventLayout = findViewById(R.id.toolbar_event);
+        associationLayout = findViewById(R.id.toolbar_association);
+        baseLayout = findViewById(R.id.toolbar_base);
     }
+
 
     public void switchToEventLayout(Event event){
         baseLayout.setVisibility(GONE);
