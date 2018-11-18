@@ -24,12 +24,14 @@ public class AuthenticatedUser extends User {
     private final String last_names;
     // All followed ids of Associations, Chats and Events
     private List<Integer> fav_assos;
+    private List<Integer> fav_event;
     private List<Integer> followed_chats;
     private List<Integer> followed_events;
     // TODO add argument to constructor and store liked_event in firebase
     private Set<Integer> liked_events = new HashSet<>();
 
-    protected AuthenticatedUser(String sciper, String gaspar, String email, String section, String semester, String first_names, String last_names, List<Integer> fav_assos, List<Integer> followed_events, List<Integer> followed_chats) {
+    protected AuthenticatedUser(String sciper, String gaspar, String email, String section, String semester, String first_names, String last_names,
+                                    List<Integer> fav_assos, List<Integer> followed_events, List<Integer> followed_chats, List<Integer> fav_event) {
         firestore_path = "users_info/" + sciper;
         this.sciper = sciper;
         this.gaspar = gaspar;
@@ -41,6 +43,7 @@ public class AuthenticatedUser extends User {
         this.fav_assos = fav_assos;
         this.followed_chats = followed_chats;
         this.followed_events = followed_events;
+        this.fav_event = fav_event;
 
         // Add role
         this.addRole(UserRole.USER);
@@ -53,6 +56,10 @@ public class AuthenticatedUser extends User {
 
     public boolean isFavAssociation(Association asso) {
         return fav_assos.contains(asso.getId());
+    }
+
+    public boolean isFavEvent(Event event) {
+        return fav_event.contains(event.getId());
     }
 
     public boolean isFollowedEvent(Event event) {
@@ -73,6 +80,16 @@ public class AuthenticatedUser extends User {
         Utils.removeIdFromList(firestore_path, "fav_assos", asso.getId());
     }
 
+    public void addFavEvent(Event event) {
+        fav_event.add(event.getId());
+        Utils.addIdToList(firestore_path, "fav_event", event.getId());
+    }
+
+    public void removeFavEvent(Event event) {
+        fav_event.remove((Integer) event.getId());
+        Utils.removeIdFromList(firestore_path, "fav_event", event.getId());
+    }
+
     public void setFollowedChats(List<Integer> followed_chats) {
         this.followed_chats = followed_chats;
     }
@@ -80,6 +97,11 @@ public class AuthenticatedUser extends User {
     public void setFavAssos(List<Integer> fav_assos) {
         this.fav_assos = fav_assos;
     }
+
+    public void setFavEvent(List<Integer> fav_event) {
+        this.fav_event = fav_event;
+    }
+
 
     public void setFollowedEvents(List<Integer> followed_events) {
         this.followed_events = followed_events;

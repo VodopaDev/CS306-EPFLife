@@ -1,7 +1,12 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +26,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
-public class EventDetailFragment extends SuperFragment{
+public class EventDetailFragment extends SuperFragment {
 
     public static final String TAG = "EVENT_DETAIL__TAG";
     private static final String ARG_USER = "ARG_USER";
@@ -41,10 +47,10 @@ public class EventDetailFragment extends SuperFragment{
 
 
     public static EventDetailFragment newInstance(User user, Event event) {
-        if(event == null)
+        if (event == null)
             throw new NullPointerException("Error creating an EventDetailFragment:\n" +
                     "Event is null");
-        if(user == null)
+        if (user == null)
             throw new NullPointerException("Error creating an EventDetailFragment:\n" +
                     "User is null");
 
@@ -76,12 +82,13 @@ public class EventDetailFragment extends SuperFragment{
 
         // Favorite button
         event_fav = view.findViewById(R.id.event_detail_fav);
-        //setFavButtonBehaviour();
-        event_fav.setContentDescription(NOT_FAV_CONTENT);
-        if(user.isConnected() /*&& ((AuthenticatedUser)user).isFavEvent(event)*/) {
+        setFavButtonBehaviour();
+
+        /*event_fav.setContentDescription(NOT_FAV_CONTENT);
+        if (user.isConnected() && ((AuthenticatedUser)user).isFavEvent(event)) {
             loadFavImage(R.drawable.fav_on);
             event_fav.setContentDescription(FAV_CONTENT);
-        }
+        }*/
 
         TextView event_like = view.findViewById(R.id.event_detail_tv_numberLikes);
         event_like.setText("" + event.getLikes());
@@ -122,8 +129,13 @@ public class EventDetailFragment extends SuperFragment{
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
 
-                // For showing a move to my location button
-                googleMap.setMyLocationEnabled(true);
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    // For showing a move to my location button
+                    googleMap.setMyLocationEnabled(true);
+                }
 
                 // For dropping a marker at a point on the Map
                 LatLng epfl = new LatLng(46.520537, 6.570930);
@@ -170,6 +182,33 @@ public class EventDetailFragment extends SuperFragment{
         mMapView.onLowMemory();
     }
 
+    private void setFavButtonBehaviour() {
+        if (user.isConnected() && ((AuthenticatedUser) user).isFavEvent(event))
+            loadFavImage(R.drawable.fav_on);
+        else
+            loadFavImage(R.drawable.fav_off);
+
+        event_fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (user.isConnected()) {
+                    AuthenticatedUser auth = (AuthenticatedUser) user;
+                    if (auth.isFavEvent(event)) {
+                        auth.removeFavEvent(event);
+                        loadFavImage(R.drawable.fav_off);
+                        event_fav.setContentDescription(NOT_FAV_CONTENT);
+                    } else {
+                        auth.addFavEvent(event);
+                        loadFavImage(R.drawable.fav_on);
+                        event_fav.setContentDescription(FAV_CONTENT);
+                    }
+                } else {
+                    Snackbar.make(getView(), "Login to access your favorite event", 5000).show();
+                }
+            }
+        });
+    }
+
     /*private void setFavButtonBehaviour(){
         event_fav.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,6 +232,7 @@ public class EventDetailFragment extends SuperFragment{
             }
         });
     }*/
+
 
 }
 
