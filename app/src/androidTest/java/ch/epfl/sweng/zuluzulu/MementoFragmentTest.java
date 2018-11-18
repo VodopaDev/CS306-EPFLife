@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Database.FirebaseMock;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
@@ -26,17 +27,17 @@ public class MementoFragmentTest extends TestWithAdminAndFragment<MainFragment> 
                 return new BufferedReader(new StringReader(
                         "[\n" +
                                 "    {\n" +
-                                "        \"title\": \"MoveOn - Free dance lessons\",\n" +
+                                "        \"title\": \"MoveOn - Free dance lessons\"," +
                                 "        \"description\": \"<p>MoveOn, a commission of Agepoly, offer free disco-fox lessons. Disco-fox is a couple dance that is performed on current music, on what you can hear on the radio for example. The lessons take place in the Polydôme at EPFL on Tuesdays. <br>\\r\\n<br>\\r\\n18h30 : Hustle (4-count disco-fox, recommended for complete beginners)<br>\\r\\n19h45 : Disco-fox, with choreography <br>\\r\\n<br>\\r\\nThe lessons are for beginners. No registration, you can just come to the lesson. <br>\\r\\n<br>\\r\\nMore infos : fb.me/moveonepfl</p>\",\n" +
-                                "        \"event_id\": \"43453\",\n" +
-                                "        \"event_start_date\": \"2018-09-25\",\n" +
-                                "        \"event_end_date\": \"2018-12-18\",\n" +
-                                "        \"event_start_time\": \"18:30:00\",\n" +
-                                "        \"event_end_time\": \"21:00:00\",\n" +
-                                "        \"event_place_and_room\": \"PO 094.0\",\n" +
-                                "        \"event_url_place_and_room\": \"https://plan.epfl.ch/?room=PO094.0\",\n" +
-                                "        \"event_speaker\": \"Mike Bardet, Eva Lorendeaux\",\n" +
-                                "        \"event_organizer\": \"Mike Bardet\",\n" +
+                                "        \"event_id\": \"43453\"," +
+                                "        \"event_start_date\": \"2018-09-25\"," +
+                                "        \"event_end_date\": \"2018-12-18\"," +
+                                "        \"event_start_time\": \"18:30:00\"," +
+                                "        \"event_end_time\": \"21:00:00\"," +
+                                "        \"event_place_and_room\": \"PO 094.0\"," +
+                                "        \"event_url_place_and_room\": \"https://plan.epfl.ch/?room=PO094.0\"," +
+                                "        \"event_speaker\": \"Mike Bardet, Eva Lorendeaux\"," +
+                                "        \"event_organizer\": \"Mike Bardet\"" +
                                 "    }"
                         + "]"
                 ));
@@ -48,8 +49,13 @@ public class MementoFragmentTest extends TestWithAdminAndFragment<MainFragment> 
 
     @Test
     public void canOpenFragment() {
-        mActivityRule.getActivity().openFragment(AssociationsGeneratorFragment.newInstance(user));
+        MainFragment.newInstance(user);
         Utility.openMenu();
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
