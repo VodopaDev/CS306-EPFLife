@@ -99,7 +99,7 @@ public class PostFragment extends SuperChatPostsFragment {
      */
     private void updatePosts() {
         collectionReference
-                .orderBy("time", Query.Direction.ASCENDING)
+                .orderBy("time", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
