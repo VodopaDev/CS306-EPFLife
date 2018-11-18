@@ -24,4 +24,11 @@ public class MenuAsAdminTest extends TestWithAdminAndFragment<MainFragment> {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_associations_generator));
         Utility.checkFragmentIsOpen(R.id.associations_generator_fragment);
     }
+
+    @Test
+    public void testCanOpenMemento() {
+        Utility.openMenu();
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_memento_admin));
+        Utility.checkFragmentIsOpen(R.id.memento_fragment);
+    }
 }

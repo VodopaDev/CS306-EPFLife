@@ -245,6 +245,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case R.id.nav_associations_generator:
                 fragment = AssociationsGeneratorFragment.newInstance(user);
                 break;
+            case R.id.nav_memento_admin:
+                fragment = MementoFragment.newInstance(user);
+                break;
             default:
                 fragment = MainFragment.newInstance(user);
         }
