@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
@@ -46,6 +48,7 @@ public class WritePostFragment extends SuperFragment {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private CollectionReference collectionReference;
+    private DatabaseCollection mockableCollection;
 
     private ConstraintLayout layout;
     private EditText editText;
@@ -97,6 +100,7 @@ public class WritePostFragment extends SuperFragment {
 
         String collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POST_COLLECTION_NAME;
         collectionReference = db.collection(collectionPath);
+        mockableCollection = DatabaseFactory.getDependency().collection(collectionPath);
 
         setUpSendButton();
         setUpColorListener();
@@ -126,7 +130,7 @@ public class WritePostFragment extends SuperFragment {
                 data.put("nbUps", 0);
                 data.put("nbResponses", 0);
 
-                Utils.addDataToFirebase(data, collectionReference, TAG);
+                Utils.addDataToFirebase(data, mockableCollection, TAG);
 
                 mListener.onFragmentInteraction(CommunicationTag.OPEN_POST_FRAGMENT, channel);
             }

@@ -75,6 +75,7 @@ public class ChatFragment extends SuperChatPostsFragment {
 
         String collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + MESSAGES_COLLECTION_NAME;
         collectionReference = db.collection(collectionPath);
+        mockableCollection = DatabaseFactory.getDependency().collection(collectionPath);
 
         sendButton.setEnabled(false);
 
@@ -111,7 +112,7 @@ public class ChatFragment extends SuperChatPostsFragment {
                 data.put("time", time);
                 data.put("sciper", sciper);
 
-                Utils.addDataToFirebase(data, collectionReference, TAG);
+                Utils.addDataToFirebase(data, mockableCollection, TAG);
             }
         });
     }

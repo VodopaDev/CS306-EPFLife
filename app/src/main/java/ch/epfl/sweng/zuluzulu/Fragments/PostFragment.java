@@ -21,6 +21,7 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.PostArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -63,6 +64,7 @@ public class PostFragment extends SuperChatPostsFragment {
 
         String collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POSTS_COLLECTION_NAME;
         collectionReference = db.collection(collectionPath);
+        mockableCollection = DatabaseFactory.getDependency().collection(collectionPath);
 
         adapter = new PostArrayAdapter(view.getContext(), posts);
         listView.setAdapter(adapter);
