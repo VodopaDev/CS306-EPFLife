@@ -34,8 +34,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 
-import static ch.epfl.sweng.zuluzulu.CommunicationTag.DECREMENT_IDLING_RESOURCE;
-import static ch.epfl.sweng.zuluzulu.CommunicationTag.INCREMENT_IDLING_RESOURCE;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 
 
 public class CalendarFragment extends SuperFragment {
@@ -138,7 +137,7 @@ public class CalendarFragment extends SuperFragment {
     }
 
     private void fillFollowedEventsList() {
-        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
+        IdlingResourceFactory.incrementCountingIdlingResource();
         FirebaseFirestore.getInstance().collection("events_info").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -162,7 +161,7 @@ public class CalendarFragment extends SuperFragment {
                         if (getContext() != null)
                             calendarView.refreshCalendar(calendar);
                         calendarView.markDayAsSelectedDay(date);
-                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
+                        IdlingResourceFactory.decrementCountingIdlingResource();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -170,7 +169,7 @@ public class CalendarFragment extends SuperFragment {
                     public void onFailure(@NonNull Exception e) {
                         Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
                         Log.e("EVENT_LIST", "Error fetching event\n" + e.getMessage());
-                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
+                        IdlingResourceFactory.decrementCountingIdlingResource();
                     }
                 });
     }
