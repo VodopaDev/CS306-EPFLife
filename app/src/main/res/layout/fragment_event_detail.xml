@@ -33,18 +33,17 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="bottom|start"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
             android:adjustViewBounds="false"
             android:background="@android:color/white"
             android:contentDescription="@string/card_event_image_description"
             app:layout_constraintBottom_toBottomOf="@+id/event_detail_banner"
             app:layout_constraintEnd_toEndOf="@+id/event_detail_banner"
-            app:layout_constraintStart_toStartOf="@+id/event_detail_banner"
-            app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+            app:layout_constraintStart_toStartOf="@+id/event_detail_banner" />
 
         <TextView
             android:id="@+id/event_detail_tv_like"
@@ -239,19 +238,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
-
-        <ImageView
-            android:id="@+id/imageView9"
-            android:layout_width="346dp"
-            android:layout_height="172dp"
-            android:layout_alignBottom="@+id/mapView"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="-4dp"
-            app:layout_constraintEnd_toEndOf="@+id/event_detail_border"
-            app:layout_constraintStart_toStartOf="@+id/event_detail_border"
-            app:srcCompat="@color/colorPrimaryLight"
-            tools:layout_editor_absoluteY="376dp" />
+        tools:layout_editor_absoluteY="0dp"
+        tools:ignore="MissingConstraints">
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
@@ -262,5 +250,18 @@
             android:layout_marginBottom="24dp" />
 
     </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/event_detail_export"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:adjustViewBounds="false"
+        android:background="@drawable/channel_notclickable_background"
+        android:cropToPadding="false"
+        android:src="@drawable/ic_calendar"
+        app:layout_constraintBottom_toBottomOf="@+id/event_detail_fav"
+        app:layout_constraintStart_toEndOf="@+id/event_detail_fav" />
 
 </android.support.constraint.ConstraintLayout>

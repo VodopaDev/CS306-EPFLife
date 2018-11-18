@@ -59,7 +59,10 @@ public class AuthenticatedUser extends User {
     }
 
     public boolean isFavEvent(Event event) {
-        return fav_event.contains(event.getId());
+        if(fav_event == null)
+            return false;
+        else
+            return fav_event.contains(event.getId());
     }
 
     public boolean isFollowedEvent(Event event) {

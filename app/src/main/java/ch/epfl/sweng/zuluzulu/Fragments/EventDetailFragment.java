@@ -1,8 +1,14 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+
 import android.Manifest;
 import android.content.pm.PackageManager;
+
+import android.app.usage.UsageEvents;
+import android.content.Intent;
+
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -10,10 +16,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -22,6 +30,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import com.google.android.gms.common.api.GoogleApi;
+
+import java.io.IOException;
+import java.util.Calendar;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.R;
@@ -89,6 +102,13 @@ public class EventDetailFragment extends SuperFragment {
             loadFavImage(R.drawable.fav_on);
             event_fav.setContentDescription(FAV_CONTENT);
         }*/
+
+        view.findViewById(R.id.event_detail_export).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exportEventToCalendar();
+            }
+        });
 
         TextView event_like = view.findViewById(R.id.event_detail_tv_numberLikes);
         event_like.setText("" + event.getLikes());
@@ -158,6 +178,7 @@ public class EventDetailFragment extends SuperFragment {
                 .into(event_fav);
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
@@ -207,6 +228,22 @@ public class EventDetailFragment extends SuperFragment {
                 }
             }
         });
+    }
+
+    private void exportEventToCalendar() {
+        Intent intent = new Intent(Intent.ACTION_INSERT);
+        intent.setType("vnd.android.cursor.item/event");
+
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, event.getStartDate().getTime());
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.getStartDate().getTime() + 3600*2);
+        intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
+
+        intent.putExtra(CalendarContract.Events.TITLE, event.getName());
+        intent.putExtra(CalendarContract.Events.DESCRIPTION,  event.getShortDesc());
+        intent.putExtra(CalendarContract.Events.EVENT_LOCATION, "To be precised");
+
+        startActivity(intent);
+
     }
 
     /*private void setFavButtonBehaviour(){
