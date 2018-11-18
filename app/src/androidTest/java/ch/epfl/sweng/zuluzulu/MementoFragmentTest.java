@@ -10,6 +10,7 @@ import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
+import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlReader;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlReaderFactory;
 
@@ -47,7 +48,7 @@ public class MementoFragmentTest extends TestWithAdminAndFragment<MainFragment> 
         };
         // Change the factory
         UrlReaderFactory.setDependency(reader);
-        MainFragment.newInstance(user);
+        adminUser();
         Utility.openMenu();
     }
 
@@ -63,7 +64,7 @@ public class MementoFragmentTest extends TestWithAdminAndFragment<MainFragment> 
         };
         // Change the factory
         UrlReaderFactory.setDependency(reader);
-        MainFragment.newInstance(user);
+        adminUser();
         Utility.openMenu();
     }
 
@@ -77,18 +78,22 @@ public class MementoFragmentTest extends TestWithAdminAndFragment<MainFragment> 
         };
         // Change the factory
         UrlReaderFactory.setDependency(reader);
-        MainFragment.newInstance(user);
+        adminUser();
         Utility.openMenu();
     }
 
     @Test
     public void refuseNonAdmin() {
         nonAdminUser();
-        Utility.checkFragmentIsClosed(R.id.associations_generator_fragment);
+        Utility.checkFragmentIsClosed(R.id.memento_fragment);
     }
 
     private void nonAdminUser() {
-        mActivityRule.getActivity().openFragment(AssociationsGeneratorFragment.newInstance(Utility.createTestAuthenticated()));
+        mActivityRule.getActivity().openFragment(MementoFragment.newInstance(Utility.createTestAuthenticated()));
+    }
+
+    private void adminUser() {
+        mActivityRule.getActivity().openFragment(MementoFragment.newInstance(Utility.createTestAdmin()));
     }
 
 
