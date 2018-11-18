@@ -123,7 +123,7 @@ public final class Utils {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference ref) {
-                        Log.d(TAG, "DocumentSnapshot written with ID: " + ref.getId());
+                        Log.d(TAG, "DocumentSnapshot written");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
