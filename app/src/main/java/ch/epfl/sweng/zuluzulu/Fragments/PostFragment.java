@@ -8,10 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -75,6 +78,7 @@ public class PostFragment extends SuperChatPostsFragment {
         setUpDataOnChangeListener();
         setUpChatButton();
         setUpNewPostButton();
+        setUpItemClickListener();
 
         return view;
     }
@@ -131,8 +135,57 @@ public class PostFragment extends SuperChatPostsFragment {
         });
     }
 
+    private void setUpItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Post post = posts.get(position);
+                ImageView upButton = view.findViewById(R.id.post_up_button);
+                ImageView downButton = view.findViewById(R.id.post_down_button);
+
+                DocumentReference documentReference = db.collection(CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POSTS_COLLECTION_NAME).document(post.getId());
+
+                setUpUpDownButtons(post, upButton, downButton, documentReference);
+            }
+        });
+    }
+
+    private void setUpUpDownButtons(Post post, ImageView upButton, ImageView downButton, DocumentReference documentReference) {
+        upButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!post.isUpByUser() && !post.isDownByUser()) {
+                    int newNbUps = post.getNbUps() + 1;
+                    List<String> upScipers = post.getUpScipers();
+                    upScipers.add(user.getSciper());
+
+                    documentReference.update(
+                            "nbUps", newNbUps,
+                            "upScipers", upScipers
+                    );
+                }
+            }
+        });
+
+        downButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!post.isUpByUser() && !post.isDownByUser()) {
+                    int newNbUps = post.getNbUps() - 1;
+                    List<String> downScipers = post.getDownScipers();
+                    downScipers.add(user.getSciper());
+
+                    documentReference.update(
+                            "nbUps", newNbUps,
+                            "downScipers", downScipers
+                    );
+                }
+            }
+        });
+    }
+
     @Override
-    public void updateListView() {
+    protected void updateListView() {
         updatePosts();
     }
 }

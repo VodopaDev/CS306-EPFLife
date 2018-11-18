@@ -72,7 +72,6 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         nbUps.setText("" + currentPost.getNbUps());
         nbResponses.setText("" + currentPost.getNbResponses());
 
-        setUpUpDownButtons();
         updateUpButtons();
 
         return view;
@@ -95,47 +94,6 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         else {
             timeAgo.setText(differenceInSeconds/(3600*24) + "d");
         }
-    }
-
-    /**
-     * Set up an onClick listener on the up and down buttons
-     */
-    private void setUpUpDownButtons() {
-        upButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!currentPost.isUpByUser() && !currentPost.isDownByUser()) {
-                    int newNbUps = currentPost.getNbUps() + 1;
-                    List<String> upScipers = currentPost.getUpScipers();
-                    upScipers.add(currentPost.getUserReading().getSciper());
-
-                    documentReference.update(
-                            "nbUps", newNbUps,
-                            "upScipers", upScipers
-                    );
-                    currentPost.setUpByUser(true);
-                    updateUpButtons();
-                }
-            }
-        });
-
-        downButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!currentPost.isUpByUser() && !currentPost.isDownByUser()) {
-                    int newNbUps = currentPost.getNbUps() - 1;
-                    List<String> downScipers = currentPost.getDownScipers();
-                    downScipers.add(currentPost.getUserReading().getSciper());
-
-                    documentReference.update(
-                            "nbUps", newNbUps,
-                            "downScipers", downScipers
-                    );
-                    currentPost.setDownByUser(true);
-                    updateUpButtons();
-                }
-            }
-        });
     }
 
     private void updateUpButtons() {
