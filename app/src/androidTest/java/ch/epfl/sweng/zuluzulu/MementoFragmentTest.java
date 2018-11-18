@@ -20,7 +20,10 @@ public class MementoFragmentTest extends TestWithAdminAndFragment<MainFragment> 
     @Override
     public void initFragment() {
         DatabaseFactory.setDependency(new FirebaseMock());
+    }
 
+    @Test
+    public void canOpenFragment() {
         UrlReader reader = new UrlReader() {
             @Override
             public BufferedReader read(String name) {
@@ -39,23 +42,30 @@ public class MementoFragmentTest extends TestWithAdminAndFragment<MainFragment> 
                                 "        \"event_speaker\": \"Mike Bardet, Eva Lorendeaux\"," +
                                 "        \"event_organizer\": \"Mike Bardet\"" +
                                 "    }"
-                        + "]"
+                                + "]"
                 ));
             }
         };
         // Change the factory
         UrlReaderFactory.setDependency(reader);
+        MainFragment.newInstance(user);
+        Utility.openMenu();
     }
 
     @Test
-    public void canOpenFragment() {
+    public void doNotCrashWithFakeJson() {
+        UrlReader reader = new UrlReader() {
+            @Override
+            public BufferedReader read(String name) {
+                return new BufferedReader(new StringReader(
+                        "[fakejson"
+                ));
+            }
+        };
+        // Change the factory
+        UrlReaderFactory.setDependency(reader);
         MainFragment.newInstance(user);
         Utility.openMenu();
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
