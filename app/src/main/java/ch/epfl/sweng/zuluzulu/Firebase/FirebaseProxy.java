@@ -1,11 +1,13 @@
-/*
+
 package ch.epfl.sweng.zuluzulu.Firebase;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,6 +26,7 @@ import ch.epfl.sweng.zuluzulu.User.User;
 public class FirebaseProxy {
 
     private static FirebaseProxy proxy;
+    private static OnFragmentInteractionListener mListener;
 
     private CollectionReference userCollection;
     private CollectionReference eventCollection;
@@ -31,11 +34,10 @@ public class FirebaseProxy {
     private CollectionReference channelCollection;
 
 
-    private OnFragmentInteractionListener mListener;
-
-    private FirebaseProxy(OnFragmentInteractionListener mListener){
+    private FirebaseProxy(OnFragmentInteractionListener mListener, Context appContext) {
         this.mListener = mListener;
 
+        FirebaseApp.initializeApp(appContext);
         FirebaseFirestore firebaseInstance = FirebaseFirestore.getInstance();
         userCollection = firebaseInstance.collection("users_info");
         eventCollection = firebaseInstance.collection("events_info");
@@ -43,56 +45,31 @@ public class FirebaseProxy {
         associationCollection = firebaseInstance.collection("assos_info");
     }
 
-    public static void init(OnFragmentInteractionListener mListener){
-        if(proxy == null)
-            proxy = new FirebaseProxy(mListener);
+    public static void init(OnFragmentInteractionListener mListener, Context appContext) {
+        if (proxy == null)
+            proxy = new FirebaseProxy(mListener, appContext);
         else
             throw new IllegalStateException("The FirebaseProxy is already initialized");
     }
 
-    public static FirebaseProxy getInstance(){
-        if(proxy == null)
+    public static FirebaseProxy getInstance() {
+        if (proxy == null)
             throw new IllegalStateException("The FirebaseProxy hasn't been initialized");
         else
             return proxy;
     }
 
-    public void loadUser(User user){
-        if(user == null || !user.isConnected())
-            throw new IllegalArgumentException("User must be connected to imports its preferences");
-
-        mListener.onFragmentInteraction(CommunicationTag.INCREMENT_IDLING_RESOURCE, null);
-        userCollection.document(user.getSciper()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (!documentSnapshot.exists()) {
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("fav_assos", new ArrayList<Integer>());
-                    map.put("followed_events", new ArrayList<Integer>());
-                    map.put("followed_chats", new ArrayList<Integer>());
-                    userCollection.document(user.getSciper()).set(map);
-                    Log.d("PROXY","Loaded and created new user");
-                } else {
-                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                    List<Integer> received_assos = fmap.getIntegerList("fav_assos");
-                    List<Integer> received_events = fmap.getIntegerList("followed_events");
-                    List<Integer> received_chats = fmap.getIntegerList("followed_chats");
-
-                    ((AuthenticatedUser) user).setFavAssos(received_assos);
-                    ((AuthenticatedUser) user).setFollowedEvents(received_events);
-                    ((AuthenticatedUser) user).setFollowedChats(received_chats);
-                    Log.d("PROXY","Loaded existent user n°"+user.getSciper());
-                }
-                mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, null);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("PROXY", "Error loading user n°" + user.getSciper());
-                mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, null);
-            }
-        });
+    /**
+     *
+     * @param tag Tag of the error message
+     * @param message Body of the error message
+     * @return
+     */
+    private OnFailureListener failureWithError(String tag, String message) {
+        return e -> {
+            Log.e(tag, message);
+            mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, null);
+        };
     }
 
 }
-*/
