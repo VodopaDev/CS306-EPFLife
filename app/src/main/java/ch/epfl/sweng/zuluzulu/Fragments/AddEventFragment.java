@@ -213,8 +213,7 @@ public class AddEventFragment extends SuperFragment {
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
-                                Log.e("EVENT_LIST", "Error fetching event data\n" + e.getMessage());
+                                error_message(e);
                                 IdlingResourceFactory.decrementCountingIdlingResource();
                             }
                         });
@@ -386,10 +385,14 @@ public class AddEventFragment extends SuperFragment {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
-                        Log.e("ASSO_LIST", "Error fetching association data\n" + e.getMessage());
+                        error_message(e);
                         IdlingResourceFactory.decrementCountingIdlingResource();
                     }
                 });
+    }
+
+    private void error_message(Exception e) {
+        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
+        Log.e("ASSO_LIST", "Error fetching association data\n" + e.getMessage());
     }
 }
