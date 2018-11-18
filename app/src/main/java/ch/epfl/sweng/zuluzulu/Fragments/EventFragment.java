@@ -1,15 +1,19 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -20,7 +24,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +36,6 @@ import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.DateInputMask;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
@@ -66,11 +71,15 @@ public class EventFragment extends SuperFragment {
 
     private EditText event_fragment_from_date;
     private EditText event_fragment_to_date;
-    private DateInputMask event_fragment_from_date_mask;
-    private DateInputMask event_fragment_to_date_mask;
 
     private ArrayList<Event> event_all_sorted;
-    private ArrayList<Event> event_fav_sorted;
+//    private ArrayList<Event> event_fav_sorted;
+
+    private EditText event_search_bar;
+
+    private Calendar eventCalendar;
+    DatePickerDialog.OnDateSetListener dateFromPicker;
+    DatePickerDialog.OnDateSetListener dateToPicker;
 
     public EventFragment() {
         // Required empty public constructor
@@ -108,7 +117,34 @@ public class EventFragment extends SuperFragment {
         fillEventLists(default_sort_option);
 
         event_all_sorted = new ArrayList<>();
-        event_fav_sorted = new ArrayList<>();
+//        event_fav_sorted = new ArrayList<>();
+
+        eventCalendar = Calendar.getInstance();
+        dateFromPicker = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                eventCalendar.set(Calendar.YEAR, year);
+                eventCalendar.set(Calendar.MONTH, monthOfYear);
+                eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabelDateFrom();
+            }
+
+        };
+
+        dateToPicker = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                eventCalendar.set(Calendar.YEAR, year);
+                eventCalendar.set(Calendar.MONTH, monthOfYear);
+                eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabelDateTo();
+            }
+
+        };
     }
 
     @Override
@@ -157,166 +193,32 @@ public class EventFragment extends SuperFragment {
         checkbox_event_sort_name.setEnabled(false);
 
         event_fragment_from_date = view.findViewById(R.id.event_fragment_from_date);
-        event_fragment_from_date_mask = new DateInputMask(event_fragment_from_date);
         event_fragment_to_date = view.findViewById(R.id.event_fragment_to_date);
-        event_fragment_to_date_mask = new DateInputMask(event_fragment_to_date);
 
+        event_search_bar = view.findViewById(R.id.event_fragment_search_bar);
 
-//        checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                checkbox_event_sort_date.setEnabled(false);
-//                emptyEventList();
-//                fillEventLists("start_date");
-//                checkbox_event_sort_name.setChecked(false);
-//                checkbox_event_sort_name.setEnabled(true);
-//            }
-//        });
+        sortWithSearchBar();
 
+        sortByName();
 
-//        checkbox_event_sort_name.setEnabled(false);
-//        event_all.sort(Event.assoNameComparator());
-//        event_fav.sort(Event.assoNameComparator());
-//        event_adapter.notifyDataSetChanged();
-//        checkbox_event_sort_date.setChecked(false);
-//        checkbox_event_sort_date.setEnabled(true);
+        sortByLike();
 
-        checkbox_event_sort_name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkbox_event_sort_name.setEnabled(false);
+        sortByDate();
 
-                Collections.sort(event_all, Event.assoNameComparator());
-                Collections.sort(event_fav, Event.assoNameComparator());
+        selectFromDate();
 
-                event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
+        selectToDate();
 
-                listview_event.setAdapter(event_adapter);
-                event_adapter.notifyDataSetChanged();
+        sortByFromDate();
 
-                checkbox_event_sort_date.setChecked(false);
-                checkbox_event_sort_date.setEnabled(true);
-                checkbox_event_sort_like.setChecked(false);
-                checkbox_event_sort_like.setEnabled(true);
-            }
-        });
-
-        checkbox_event_sort_like.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkbox_event_sort_like.setEnabled(false);
-
-                Collections.sort(event_all, Event.likeComparator());
-                Collections.sort(event_fav, Event.likeComparator());
-
-                event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
-
-                listview_event.setAdapter(event_adapter);
-                event_adapter.notifyDataSetChanged();
-
-                checkbox_event_sort_name.setChecked(false);
-                checkbox_event_sort_name.setEnabled(true);
-                checkbox_event_sort_date.setChecked(false);
-                checkbox_event_sort_date.setEnabled(true);
-            }
-        });
-
-        checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (event_fragment_from_date.getText().toString().contains("D") || event_fragment_from_date.getText().toString().contains("M") ||
-                        event_fragment_from_date.getText().toString().contains("Y")) {
-
-                    checkbox_event_sort_date.setEnabled(false);
-                    Collections.sort(event_all, Event.dateComparator());
-                    Collections.sort(event_fav, Event.dateComparator());
-
-                    event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
-
-                    listview_event.setAdapter(event_adapter);
-                    event_adapter.notifyDataSetChanged();
-                    checkbox_event_sort_name.setChecked(false);
-                    checkbox_event_sort_name.setEnabled(true);
-                    checkbox_event_sort_like.setChecked(false);
-                    checkbox_event_sort_like.setEnabled(true);
-                } else if (event_fragment_to_date.getText().toString().contains("D") || event_fragment_to_date.getText().toString().contains("M") ||
-                        event_fragment_to_date.getText().toString().contains("Y")) {
-                    checkbox_event_sort_date.setEnabled(false);
-                    Collections.sort(event_all, Event.dateComparator());
-                    Collections.sort(event_fav, Event.dateComparator());
-
-                    emptySortedEventList();
-
-                    Date tempDate = null;
-                    try {
-                        tempDate = Utils.stringToDateFormat.parse(event_fragment_from_date.getText().toString());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    for (int i = 0; i < event_all.size(); i++) {
-                        if (event_all.get(i).getStartDate().compareTo(tempDate) >= 0) {
-                            event_all_sorted.add(event_all.get(i));
-                        }
-                    }
-                    for (int i = 0; i < event_fav.size(); i++) {
-                        if (event_fav.get(i).getStartDate().compareTo(tempDate) >= 0) {
-                            event_fav_sorted.add(event_fav.get(i));
-                        }
-                    }
-
-                    event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
-                    listview_event.setAdapter(event_adapter);
-                    event_adapter.notifyDataSetChanged();
-
-                    checkbox_event_sort_name.setChecked(false);
-                    checkbox_event_sort_name.setEnabled(true);
-                    checkbox_event_sort_like.setChecked(false);
-                    checkbox_event_sort_like.setEnabled(true);
-                } else {
-                    checkbox_event_sort_date.setEnabled(false);
-                    Collections.sort(event_all, Event.dateComparator());
-                    Collections.sort(event_fav, Event.dateComparator());
-
-                    emptySortedEventList();
-
-                    Date tempDateFrom = null;
-                    Date tempDateTo = null;
-                    try {
-                        tempDateFrom = Utils.stringToDateFormat.parse(event_fragment_from_date.getText().toString());
-                        tempDateTo = Utils.stringToDateFormat.parse(event_fragment_to_date.getText().toString());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    for (int i = 0; i < event_all.size(); i++) {
-                        if (event_all.get(i).getStartDate().compareTo(tempDateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(tempDateTo) <= 0) {
-                            event_all_sorted.add(event_all.get(i));
-                        }
-                    }
-                    for (int i = 0; i < event_fav.size(); i++) {
-                        if (event_fav.get(i).getStartDate().compareTo(tempDateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(tempDateTo) <= 0) {
-                            event_fav_sorted.add(event_fav.get(i));
-                        }
-                    }
-
-                    event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
-                    listview_event.setAdapter(event_adapter);
-                    event_adapter.notifyDataSetChanged();
-
-                    checkbox_event_sort_name.setChecked(false);
-                    checkbox_event_sort_name.setEnabled(true);
-                    checkbox_event_sort_like.setChecked(false);
-                    checkbox_event_sort_like.setEnabled(true);
-                }
-            }
-        });
+        sortByFromAndToDate();
 
         return view;
     }
 
-
     private void emptySortedEventList() {
         event_all_sorted.clear();
-        event_fav_sorted.clear();
+//        event_fav_sorted.clear();
     }
 
     private void fillEventLists(String sortOption) {
@@ -353,5 +255,286 @@ public class EventFragment extends SuperFragment {
         event_adapter = new EventArrayAdapter(getContext(), data, mListener, user);
         list.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
+    }
+
+    private void sortByFromAndToDate(){
+        event_fragment_to_date.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (event_fragment_from_date.getText().length() == 0) {
+                    event_fragment_to_date.getText().clear();
+                    Snackbar.make(getView(), "Please first select from date", 5000).show();
+                }
+                else {
+                    String date = s.toString();
+
+                    emptySortedEventList();
+
+                    Collections.sort(event_all, Event.dateComparator());
+                    Collections.sort(event_fav, Event.dateComparator());
+
+                    Date tempDateFrom = null;
+                    try {
+                        tempDateFrom = Utils.stringToDateFormat.parse(event_fragment_from_date.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    for (int i = 0; i < event_all.size(); i++) {
+                        if (event_all.get(i).getStartDate().compareTo(tempDateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(eventCalendar.getTime()) <= 0) {
+                            event_all_sorted.add(event_all.get(i));
+                        }
+                    }
+//                for (int i = 0; i < event_fav.size(); i++) {
+//                    if (event_fav.get(i).getStartDate().compareTo(tempDateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(tempDateTo) <= 0) {
+//                        event_fav_sorted.add(event_fav.get(i));
+//                    }
+//                }
+
+                    event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
+                    listview_event.setAdapter(event_adapter);
+                    event_adapter.notifyDataSetChanged();
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void sortByFromDate(){
+        event_fragment_from_date.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String date = s.toString();
+
+                emptySortedEventList();
+
+                Collections.sort(event_all, Event.dateComparator());
+                Collections.sort(event_fav, Event.dateComparator());
+
+                for (int i = 0; i < event_all.size(); i++) {
+                    if (event_all.get(i).getStartDate().compareTo(eventCalendar.getTime()) >= 0) {
+                        event_all_sorted.add(event_all.get(i));
+                    }
+                }
+//                for (int i = 0; i < event_fav.size(); i++) {
+//                    if (event_fav.get(i).getStartDate().compareTo(tempDate) >= 0) {
+//                        event_fav_sorted.add(event_fav.get(i));
+//                    }
+//                }
+
+                event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
+                listview_event.setAdapter(event_adapter);
+                event_adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void selectFromDate(){
+        event_fragment_from_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkbox_event_sort_name.setChecked(false);
+                checkbox_event_sort_name.setEnabled(true);
+                checkbox_event_sort_like.setChecked(false);
+                checkbox_event_sort_like.setEnabled(true);
+                checkbox_event_sort_date.setChecked(false);
+                checkbox_event_sort_date.setEnabled(true);
+                event_fragment_to_date.getText().clear();
+                event_fragment_to_date.clearFocus();
+                event_search_bar.getText().clear();
+                event_search_bar.clearFocus();
+
+                new DatePickerDialog(getContext(), dateFromPicker, eventCalendar
+                        .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
+                        eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+    }
+
+    private void updateLabelDateFrom() {
+        String myFormat = "dd/MM/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+
+        event_fragment_from_date.setText(sdf.format(eventCalendar.getTime()));
+    }
+
+    private void selectToDate(){
+        event_fragment_to_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkbox_event_sort_name.setChecked(false);
+                checkbox_event_sort_name.setEnabled(true);
+                checkbox_event_sort_like.setChecked(false);
+                checkbox_event_sort_like.setEnabled(true);
+                checkbox_event_sort_date.setChecked(false);
+                checkbox_event_sort_date.setEnabled(true);
+                event_search_bar.getText().clear();
+                event_search_bar.clearFocus();
+
+                new DatePickerDialog(getContext(), dateToPicker, eventCalendar
+                        .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
+                        eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+    }
+
+    private void updateLabelDateTo() {
+        String myFormat = "dd/MM/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+
+        event_fragment_to_date.setText(sdf.format(eventCalendar.getTime()));
+    }
+
+    private void sortWithSearchBar(){
+        event_search_bar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkbox_event_sort_name.setChecked(false);
+                checkbox_event_sort_name.setEnabled(true);
+                checkbox_event_sort_like.setChecked(false);
+                checkbox_event_sort_like.setEnabled(true);
+                checkbox_event_sort_date.setChecked(false);
+                checkbox_event_sort_date.setEnabled(true);
+                event_fragment_from_date.getText().clear();
+                event_fragment_from_date.clearFocus();
+                event_fragment_to_date.getText().clear();
+                event_fragment_to_date.clearFocus();
+
+                String keyWord = s.toString().toLowerCase();
+                emptySortedEventList();
+                for (Event event : event_all) {
+                    if (event.getName().toLowerCase().contains(keyWord)) {
+                        event_all_sorted.add(event);
+                    }
+                    else if (event.getShortDesc().toLowerCase().contains(keyWord)) {
+                        event_all_sorted.add(event);
+                    }
+                    else if(event.getLongDesc().toLowerCase().contains((keyWord))){
+                        event_all_sorted.add(event);
+                    }
+                }
+                event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
+
+                listview_event.setAdapter(event_adapter);
+                event_adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void sortByName() {
+        checkbox_event_sort_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkbox_event_sort_like.setChecked(false);
+                checkbox_event_sort_like.setEnabled(true);
+                checkbox_event_sort_date.setChecked(false);
+                checkbox_event_sort_date.setEnabled(true);
+                event_fragment_from_date.getText().clear();
+                event_fragment_from_date.clearFocus();
+                event_fragment_to_date.getText().clear();
+                event_fragment_to_date.clearFocus();
+                event_search_bar.getText().clear();
+                event_search_bar.clearFocus();
+
+                Collections.sort(event_all, Event.assoNameComparator());
+                Collections.sort(event_fav, Event.assoNameComparator());
+
+                event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
+
+                listview_event.setAdapter(event_adapter);
+
+                event_adapter.notifyDataSetChanged();
+
+                checkbox_event_sort_name.setEnabled(false);
+                checkbox_event_sort_name.setChecked(true);
+            }
+        });
+    }
+
+    private void sortByLike() {
+        checkbox_event_sort_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkbox_event_sort_name.setChecked(false);
+                checkbox_event_sort_name.setEnabled(true);
+                checkbox_event_sort_date.setChecked(false);
+                checkbox_event_sort_date.setEnabled(true);
+                event_fragment_from_date.getText().clear();
+                event_fragment_from_date.clearFocus();
+                event_fragment_to_date.getText().clear();
+                event_fragment_to_date.clearFocus();
+                event_search_bar.getText().clear();
+                event_search_bar.clearFocus();
+
+                Collections.sort(event_all, Event.likeComparator());
+                Collections.sort(event_fav, Event.likeComparator());
+
+                event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
+
+                listview_event.setAdapter(event_adapter);
+
+                event_adapter.notifyDataSetChanged();
+
+                checkbox_event_sort_like.setEnabled(false);
+                checkbox_event_sort_like.setChecked(true);
+            }
+        });
+    }
+
+    private void sortByDate(){
+        checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkbox_event_sort_name.setChecked(false);
+                checkbox_event_sort_name.setEnabled(true);
+                checkbox_event_sort_like.setChecked(false);
+                checkbox_event_sort_like.setEnabled(true);
+                event_fragment_from_date.getText().clear();
+                event_fragment_from_date.clearFocus();
+                event_fragment_to_date.getText().clear();
+                event_fragment_to_date.clearFocus();
+                event_search_bar.getText().clear();
+                event_search_bar.clearFocus();
+
+                Collections.sort(event_all, Event.dateComparator());
+                Collections.sort(event_fav, Event.dateComparator());
+
+                event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
+
+                listview_event.setAdapter(event_adapter);
+
+                event_adapter.notifyDataSetChanged();
+
+                checkbox_event_sort_date.setEnabled(false);
+                checkbox_event_sort_date.setChecked(true);
+            }
+        });
     }
 }
