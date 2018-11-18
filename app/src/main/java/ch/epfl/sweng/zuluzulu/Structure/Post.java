@@ -25,6 +25,7 @@ public class Post {
     private int nbResponses;
     private List<String> upScipers;
     private List<String> downScipers;
+    String id;
 
     private boolean upByUser;
     private boolean downByUser;
@@ -43,6 +44,7 @@ public class Post {
         nbResponses = data.getInteger("nbResponses");
         upScipers = data.getStringList("upScipers");
         downScipers = data.getStringList("downScipers");
+        id = data.getId();
 
         anonymous = senderName.isEmpty();
         this.channel = channel;
@@ -191,11 +193,25 @@ public class Post {
     public boolean isUpByUser() { return upByUser; }
 
     /**
+     * Setter of upByUser
+     *
+     * @param upByUser the new upByUser value
+     */
+    public void setUpByUser(boolean upByUser) { this.upByUser = upByUser; }
+
+    /**
      * Getter for downByUser
      *
      * @return whether the user has disliked this post or not
      */
     public boolean isDownByUser() { return downByUser; }
+
+    /**
+     * Setter for downByUser
+     *
+     * @param downByUser the new downByUser value
+     */
+    public void setDownByUser(boolean downByUser) { this.downByUser = downByUser; }
 
     /**
      * Getter for the channel of the post
@@ -224,4 +240,11 @@ public class Post {
      * @return the down scipers
      */
     public List<String> getDownScipers() { return new ArrayList<>(Collections.unmodifiableCollection(downScipers)); }
+
+    /**
+     * Getter for the id
+     *
+     * @return the id
+     */
+    public String getId() { return id; }
 }

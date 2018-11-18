@@ -18,6 +18,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -129,6 +130,8 @@ public class WritePostFragment extends SuperFragment {
                 data.put("color", color.getValue());
                 data.put("nbUps", 0);
                 data.put("nbResponses", 0);
+                data.put("upScipers", new ArrayList<>());
+                data.put("downScipers", new ArrayList<>());
 
                 Utils.addDataToFirebase(data, mockableCollection, TAG);
 

@@ -16,6 +16,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.R;
@@ -33,7 +34,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     private ImageView downButton;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference collectionReference;
+    private DocumentReference documentReference;
 
     public PostArrayAdapter(@NonNull Context context, List<Post> list) {
         super(context, 0, list);
@@ -58,7 +59,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         TextView nbUps = view.findViewById(R.id.post_nb_ups_textview);
         TextView nbResponses = view.findViewById(R.id.post_nb_responses_textview);
 
-        collectionReference = db.collection("channels/channel" + currentPost.getChannel().getId() + "/posts");
+        documentReference = db.collection("channels/channel" + currentPost.getChannel().getId() + "/posts").document(currentPost.getId());
 
         linearLayout.setBackgroundColor(Color.parseColor(currentPost.getColor()));
         message.setText(currentPost.getMessage());
@@ -72,6 +73,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         nbResponses.setText("" + currentPost.getNbResponses());
 
         setUpUpDownButtons();
+        updateUpButtons();
 
         return view;
     }
@@ -102,20 +104,48 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int newNbUps = currentPost.getNbUps() + 1;
-                List<String> upScipers = currentPost.getUpScipers();
-                upScipers.add(currentPost.getUserReading().getSciper());
+                if (!currentPost.isUpByUser() && !currentPost.isDownByUser()) {
+                    int newNbUps = currentPost.getNbUps() + 1;
+                    List<String> upScipers = currentPost.getUpScipers();
+                    upScipers.add(currentPost.getUserReading().getSciper());
 
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                CollectionReference collectionReference = db.collection("channels/channel" + currentPost.getChannel().getId() + "/posts");
+                    documentReference.update(
+                            "nbUps", newNbUps,
+                            "upScipers", upScipers
+                    );
+                    currentPost.setUpByUser(true);
+                    updateUpButtons();
+                }
             }
         });
 
         downButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!currentPost.isUpByUser() && !currentPost.isDownByUser()) {
+                    int newNbUps = currentPost.getNbUps() - 1;
+                    List<String> downScipers = currentPost.getDownScipers();
+                    downScipers.add(currentPost.getUserReading().getSciper());
 
+                    documentReference.update(
+                            "nbUps", newNbUps,
+                            "downScipers", downScipers
+                    );
+                    currentPost.setDownByUser(true);
+                    updateUpButtons();
+                }
             }
         });
+    }
+
+    private void updateUpButtons() {
+        if (currentPost.isUpByUser()) {
+            upButton.setImageResource(R.drawable.up_gray);
+            downButton.setImageResource(R.drawable.down_transparent);
+        }
+        else if (currentPost.isDownByUser()) {
+            downButton.setImageResource(R.drawable.down_gray);
+            upButton.setImageResource(R.drawable.up_transparent);
+        }
     }
 }
