@@ -23,7 +23,7 @@ public interface ImageLoader {
                 GlideUrl glideUrl = new GlideUrl(uri.toString(), auth);
                 Glide.with(context)
                         .load(glideUrl)
-                        .centerCrop()
+                        .fitCenter()
                         .into(container);
             }
         }
