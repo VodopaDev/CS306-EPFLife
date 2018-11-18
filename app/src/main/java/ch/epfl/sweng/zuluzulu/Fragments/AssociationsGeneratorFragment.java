@@ -77,7 +77,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             updateView();
         }
 
-        IdlingResourceFactory.incrementCountingIdlingResource();
+        IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
     /**
@@ -94,7 +94,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         for (String data : datas) {
             if (data.toLowerCase().contains(name.toLowerCase())) {
                 // Tell tests the async execution is finished
-                IdlingResourceFactory.decrementCountingIdlingResource();
+                IdlingResourceFactory.incrementCountingIdlingResource();
 
                 String url = data.split(",")[0];
 
@@ -160,7 +160,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             value = EPFL_LOGO;
         }
         addDatabase(value, index);
-        IdlingResourceFactory.incrementCountingIdlingResource();
+        IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
 
@@ -191,7 +191,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         urlHandler.execute(EPFL_URL);
 
         // Send increment to wait async execution in test
-        IdlingResourceFactory.decrementCountingIdlingResource();
+        IdlingResourceFactory.incrementCountingIdlingResource();
     }
 
     @Override

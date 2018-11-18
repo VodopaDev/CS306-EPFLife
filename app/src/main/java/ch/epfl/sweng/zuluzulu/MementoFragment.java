@@ -63,7 +63,7 @@ public class MementoFragment extends SuperFragment {
         urlHandler.execute(MEMENTO_URL);
 
         // Send increment to wait async execution in test
-        IdlingResourceFactory.decrementCountingIdlingResource();
+        IdlingResourceFactory.incrementCountingIdlingResource();
     }
 
     /**
@@ -77,7 +77,7 @@ public class MementoFragment extends SuperFragment {
             addEvent(datas);
         }
 
-        IdlingResourceFactory.incrementCountingIdlingResource();
+        IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
     private void addEvent(String datas) {
