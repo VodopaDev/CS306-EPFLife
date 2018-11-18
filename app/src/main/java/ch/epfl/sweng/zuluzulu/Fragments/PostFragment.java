@@ -107,7 +107,7 @@ public class PostFragment extends SuperChatPostsFragment {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
                                 if (fmap.hasFields(Post.FIELDS)) {
-                                    Post post = new Post(fmap);
+                                    Post post = new Post(fmap, user, channel);
                                     posts.add(post);
                                 }
                             }

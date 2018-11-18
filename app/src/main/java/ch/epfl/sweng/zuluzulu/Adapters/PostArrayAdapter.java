@@ -12,6 +12,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.R;
@@ -27,6 +31,9 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     private TextView timeAgo;
     private ImageView upButton;
     private ImageView downButton;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference collectionReference;
 
     public PostArrayAdapter(@NonNull Context context, List<Post> list) {
         super(context, 0, list);
@@ -50,6 +57,8 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         downButton = view.findViewById(R.id.post_down_button);
         TextView nbUps = view.findViewById(R.id.post_nb_ups_textview);
         TextView nbResponses = view.findViewById(R.id.post_nb_responses_textview);
+
+        collectionReference = db.collection("channels/channel" + currentPost.getChannel().getId() + "/posts");
 
         linearLayout.setBackgroundColor(Color.parseColor(currentPost.getColor()));
         message.setText(currentPost.getMessage());
@@ -93,7 +102,12 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int newNbUps = currentPost.getNbUps() + 1;
+                List<String> upScipers = currentPost.getUpScipers();
+                upScipers.add(currentPost.getUserReading().getSciper());
 
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference collectionReference = db.collection("channels/channel" + currentPost.getChannel().getId() + "/posts");
             }
         });
 

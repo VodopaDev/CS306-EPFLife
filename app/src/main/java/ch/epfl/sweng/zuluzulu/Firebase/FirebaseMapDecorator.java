@@ -116,6 +116,16 @@ public class FirebaseMapDecorator {
     }
 
     /**
+     * Get a list of string from the adapted map
+     *
+     * @param field key to use on map
+     * @return String list casted value
+     */
+    public List<String> getStringList(String field) {
+        return (List<String>) map.get(field);
+    }
+
+    /**
      * Get a IntegerList-casted value from the adapted map
      *
      * @param field key to use on the map
