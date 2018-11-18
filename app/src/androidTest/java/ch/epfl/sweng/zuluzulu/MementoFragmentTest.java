@@ -69,6 +69,20 @@ public class MementoFragmentTest extends TestWithAdminAndFragment<MainFragment> 
     }
 
     @Test
+    public void doNotCrashWithFakeUrl() {
+        UrlReader reader = new UrlReader() {
+            @Override
+            public BufferedReader read(String name) {
+                return null;
+            }
+        };
+        // Change the factory
+        UrlReaderFactory.setDependency(reader);
+        MainFragment.newInstance(user);
+        Utility.openMenu();
+    }
+
+    @Test
     public void refuseNonAdmin() {
         nonAdminUser();
         Utility.checkFragmentIsClosed(R.id.associations_generator_fragment);
