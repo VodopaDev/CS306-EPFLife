@@ -2,10 +2,13 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.zuluzulu.Database.FirebaseMock;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 import ch.epfl.sweng.zuluzulu.Utility;
@@ -23,6 +26,7 @@ public class ChatFragmentTest extends TestWithAuthenticatedAndFragment<ChatFragm
     @Override
     public void initFragment() {
         fragment = ChatFragment.newInstance(user, Utility.defaultChannel());
+        DatabaseFactory.setDependency(new FirebaseMock());
     }
 
     @Test
@@ -52,5 +56,11 @@ public class ChatFragmentTest extends TestWithAuthenticatedAndFragment<ChatFragm
     public void testUserCanGoToPosts() {
         onView(withId(R.id.posts_button)).perform(ViewActions.click());
         onView(withId(R.id.posts_list_view)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testUserCanSendMessage() {
+        onView(withId(R.id.chat_message_edit)).perform(ViewActions.typeText("test")).perform(ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.chat_send_button)).perform(ViewActions.click());
     }
 }
