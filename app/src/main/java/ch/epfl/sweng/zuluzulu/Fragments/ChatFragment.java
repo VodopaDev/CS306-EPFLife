@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -24,6 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -178,8 +182,18 @@ public class ChatFragment extends SuperChatPostsFragment {
                 });
     }
 
-    @Override
-    public void updateListView() {
-        updateChat();
+    private void setUpDataOnChangeListener() {
+        collectionReference
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w("Chat or post", "Listen failed.", e);
+                            return;
+                        }
+
+                        updateChat();
+                    }
+                });
     }
 }

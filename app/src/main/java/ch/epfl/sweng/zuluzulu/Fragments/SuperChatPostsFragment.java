@@ -73,24 +73,4 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, channel.getName());
         }
     }
-
-    /**
-     * Add a onEventChange listener on the elements in the database
-     */
-    protected void setUpDataOnChangeListener() {
-        collectionReference
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w("Chat or post", "Listen failed.", e);
-                            return;
-                        }
-
-                        updateListView();
-                    }
-                });
-    }
-
-    protected abstract void updateListView();
 }

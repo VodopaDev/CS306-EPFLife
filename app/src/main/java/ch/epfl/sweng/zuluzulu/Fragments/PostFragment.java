@@ -75,10 +75,9 @@ public class PostFragment extends SuperChatPostsFragment {
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
-        setUpDataOnChangeListener();
+        updatePosts();
         setUpChatButton();
         setUpNewPostButton();
-        setUpItemClickListener();
 
         return view;
     }
@@ -133,59 +132,5 @@ public class PostFragment extends SuperChatPostsFragment {
                 mListener.onFragmentInteraction(CommunicationTag.OPEN_WRITE_POST_FRAGMENT, channel);
             }
         });
-    }
-
-    private void setUpItemClickListener() {
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Post post = posts.get(position);
-                ImageView upButton = view.findViewById(R.id.post_up_button);
-                ImageView downButton = view.findViewById(R.id.post_down_button);
-
-                DocumentReference documentReference = db.collection(CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POSTS_COLLECTION_NAME).document(post.getId());
-
-                setUpUpDownButtons(post, upButton, downButton, documentReference);
-            }
-        });
-    }
-
-    private void setUpUpDownButtons(Post post, ImageView upButton, ImageView downButton, DocumentReference documentReference) {
-        upButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!post.isUpByUser() && !post.isDownByUser()) {
-                    int newNbUps = post.getNbUps() + 1;
-                    List<String> upScipers = post.getUpScipers();
-                    upScipers.add(user.getSciper());
-
-                    documentReference.update(
-                            "nbUps", newNbUps,
-                            "upScipers", upScipers
-                    );
-                }
-            }
-        });
-
-        downButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!post.isUpByUser() && !post.isDownByUser()) {
-                    int newNbUps = post.getNbUps() - 1;
-                    List<String> downScipers = post.getDownScipers();
-                    downScipers.add(user.getSciper());
-
-                    documentReference.update(
-                            "nbUps", newNbUps,
-                            "downScipers", downScipers
-                    );
-                }
-            }
-        });
-    }
-
-    @Override
-    protected void updateListView() {
-        updatePosts();
     }
 }
