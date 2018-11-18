@@ -20,6 +20,7 @@ import java.util.Objects;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
@@ -76,7 +77,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             updateView();
         }
 
-        mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
+        IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
     /**
@@ -93,7 +94,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         for (String data : datas) {
             if (data.toLowerCase().contains(name.toLowerCase())) {
                 // Tell tests the async execution is finished
-                mListener.onFragmentInteraction(CommunicationTag.INCREMENT_IDLING_RESOURCE, true);
+                IdlingResourceFactory.incrementCountingIdlingResource();
 
                 String url = data.split(",")[0];
 
@@ -159,7 +160,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             value = EPFL_LOGO;
         }
         addDatabase(value, index);
-        mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
+        IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
 
@@ -190,7 +191,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         urlHandler.execute(EPFL_URL);
 
         // Send increment to wait async execution in test
-        mListener.onFragmentInteraction(CommunicationTag.INCREMENT_IDLING_RESOURCE, true);
+        IdlingResourceFactory.incrementCountingIdlingResource();
     }
 
     @Override
