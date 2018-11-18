@@ -147,11 +147,11 @@ public class UrlHandlerTest {
      * @param result arrayList
      * @return Void
      */
-    private Void handler(Pair<String, List<String>> result) {
+    private Void handler(List<String> result) {
         // Do any logic. Here we want result not to be null
         succes = false;
-        if(result != null && result.second != null && result.second.size() > 0){
-            succes = result.second.get(0).toLowerCase().contains("lauzhack");
+        if(result != null && !result.isEmpty()){
+            succes = result.get(0).toLowerCase().contains("lauzhack");
         }
 
         // Free the resource with decrement. Now the test stop waiting !

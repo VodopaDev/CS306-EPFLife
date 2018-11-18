@@ -9,11 +9,11 @@ import java.util.List;
 
 import io.opencensus.common.Function;
 
-public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String>>> {
+public class UrlHandler extends AsyncTask<String, Void,List<String>> {
     private final static String TAG = "UrlHandler";
 
     // Function that will be executed onPostExecute
-    private Function<Pair<String, List<String>>, Void> listener;
+    private UrlResultListener<List<String>> listener;
 
     private UrlReader urlReader;
 
@@ -25,29 +25,23 @@ public class UrlHandler extends AsyncTask<String, Void, Pair<String, List<String
      *
      * @param listener The callback function that will be use on PostExecute
      */
-    public UrlHandler(Function<Pair<String, List<String>>, Void> listener, Parser<List<String>> parser) {
+    public UrlHandler(UrlResultListener<List<String>> listener, Parser<List<String>> parser) {
         this.listener = listener;
         this.parser = parser;
         this.urlReader = UrlReaderFactory.getDependency();
     }
 
-
     @Override
-    protected Pair<String, List<String>> doInBackground(String... urls) {
+    protected List<String> doInBackground(String... urls) {
         if (urls.length > 0) {
-            Pair<String, List<String>> result = new Pair<>(urls[0], parseUrl(urls[0]));
-            return result;
+            return parseUrl(urls[0]);
         } else
             return null;
     }
 
     @Override
-    protected void onPostExecute(Pair<String, List<String>> value) {
-        if (null != value && value.second != null) {
-            listener.apply(value);
-        } else {
-            listener.apply(null);
-        }
+    protected void onPostExecute(List<String> value) {
+        listener.onFinished(value);
     }
 
     /**

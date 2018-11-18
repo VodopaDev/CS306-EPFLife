@@ -24,7 +24,9 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
 import ch.epfl.sweng.zuluzulu.URLTools.IconParser;
+import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
+import ch.epfl.sweng.zuluzulu.URLTools.UrlResultListener;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.User.UserRole;
 
@@ -41,6 +43,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     // The URL we will connect to
     final static public String EPFL_URL = "https://associations.epfl.ch/page-16300-fr-html/";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
+    private static final String EPFL_LOGO = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
 
     private List<String> datas;
     private Database db = DatabaseFactory.getDependency();
@@ -66,17 +69,14 @@ public class AssociationsGeneratorFragment extends SuperFragment {
      * We expect a arraylist of strings. Each information is separated by a coma in the string
      *
      * @param results Received datas
-     * @return void
      */
-    private Void handleAssociations(Pair<String, List<String>> results) {
-        mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
-
+    private void handleAssociations(List<String> results) {
         if (results != null) {
-            this.datas = results.second;
+            this.datas = results;
             updateView();
         }
 
-        return null;
+        mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
     }
 
     /**
@@ -85,32 +85,44 @@ public class AssociationsGeneratorFragment extends SuperFragment {
      * @param name
      */
     private void requestIcon(String name) {
-        if (name == null || name.length() == 0) {
+        if (name == null || name.isEmpty()) {
             return;
         }
 
-        // Tell tests the async execution is finished
+        int index = 0;
         for (String data : datas) {
             if (data.toLowerCase().contains(name.toLowerCase())) {
+                // Tell tests the async execution is finished
                 mListener.onFragmentInteraction(CommunicationTag.INCREMENT_IDLING_RESOURCE, true);
-                UrlHandler urlHandler = new UrlHandler(this::handleIcon, new IconParser());
 
-                urlHandler.execute(data.split(",")[0]);
+                String url = data.split(",")[0];
+
+                int finalIndex = index;
+                UrlHandler urlHandler = new UrlHandler(new UrlResultListener<List<String>>() {
+                    @Override
+                    public void onFinished(List<String> result) {
+                        handleIcon(finalIndex, result);
+                    }
+                }, new IconParser());
+
+                urlHandler.execute(url);
             }
+            index++;
         }
     }
 
-    private void addDatabase(String base_url, String icon_url, int index) {
+    private void addDatabase(String icon_url, int index) {
         if (index < 0 || index >= this.datas.size()) {
             return;
         }
         try {
+            String base_url = datas.get(index).split(",")[0];
             URL url = new URL(base_url);
             URL iconUrl = new URL(url, icon_url);
             String final_icon_url = iconUrl.toString();
 
             if (final_icon_url.contains("www.epfl.ch/favicon.ico")) {
-                final_icon_url = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
+                final_icon_url = EPFL_LOGO;
             }
 
             datas.set(index, datas.get(index) + "," + final_icon_url);
@@ -123,9 +135,9 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             docData.put("name", datas.get(index).split(",")[1]);
             docData.put("short_desc", datas.get(index).split(",")[2]);
             docData.put("long_desc", datas.get(index).split(",")[2]);
-            docData.put("id", index + 100);
+            docData.put("id", index);
 
-            db.collection("assos_info").document(Integer.toString(index + 100)).set(docData);
+            db.collection("assos_info").document(Integer.toString(index)).set(docData);
             updateView();
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -133,32 +145,23 @@ public class AssociationsGeneratorFragment extends SuperFragment {
 
     }
 
-    private Void handleIcon(Pair<String, List<String>> result) {
-        if (result != null && !result.second.isEmpty()) {
-            String key = result.first;
-            String value = result.second.get(0);
+    /**
+     * Add the loaded icon to database
+     * @param index
+     * @param result
+     */
+    private void handleIcon(final int index, List<String> result) {
+        String value;
+        if (result != null && !result.isEmpty() && index >= 0 && index < this.datas.size()) {
+            value = result.get(0);
 
-            int index = findIndex(key);
-
-            addDatabase(key, value, index);
+        } else {
+            value = EPFL_LOGO;
         }
+        addDatabase(value, index);
         mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
-
-        return null;
     }
 
-    private int findIndex(String key) {
-        if (datas == null) {
-            return -1;
-        }
-
-        for (int i = 0; i < datas.size(); i++) {
-            if (datas.get(i).contains(key)) {
-                return i;
-            }
-        }
-        return -1;
-    }
 
 
     /**

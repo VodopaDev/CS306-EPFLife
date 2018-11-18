@@ -40,7 +40,6 @@ public class IconParser implements Parser<List<String>> {
                 if (m.find()) {
                     // Save the result
                     list.add(0, m.group(1));
-
                 }
             }
         } catch (IOException e) {
