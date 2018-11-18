@@ -29,8 +29,8 @@ public class Event implements Serializable {
     private String organizer;
     private String place;
 
-    private Uri bannerUri;
-    private Uri iconUri;
+    private String bannerUri;
+    private String iconUri;
 
 
     /**
@@ -54,15 +54,8 @@ public class Event implements Serializable {
         shortDesc = data.getString("short_desc");
         longDesc = data.getString("long_desc");
 
-        String icon_str = data.getString("icon_uri");
-        iconUri = icon_str == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
-                Uri.parse(icon_str);
-
-        String banner_str = null;//data.getString("banner_uri");
-        bannerUri = banner_str == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
-                Uri.parse(banner_str);
+        iconUri = data.getString("icon_uri");
+        bannerUri = null; //data.getString("banner_uri");
 
         startDate = data.getDate("start_date");
         start_date_string = Utils.dateFormat.format(startDate);
@@ -124,14 +117,16 @@ public class Event implements Serializable {
         return start_date_string;
     }
 
-    @Nullable
     public Uri getBannerUri() {
-        return bannerUri;
+        return bannerUri == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
+                Uri.parse(bannerUri);
     }
 
-    @Nullable
     public Uri getIconUri() {
-        return iconUri;
+        return iconUri == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
+                Uri.parse(iconUri);
     }
 
     public String getOrganizer() { return organizer; }
