@@ -89,23 +89,12 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
     }
 
     @Test
-    public void sortWithKeywordTest1() throws InterruptedException {
+    public void sortWithKeywordTest() throws InterruptedException {
         onView(withId(R.id.event_fragment_search_bar)).perform(typeText("forum"));
-        onData(anything())
-                .inAdapterView(withId(R.id.event_fragment_listview))
-//                .atPosition(0)
-                .onChildView(withId(R.id.card_event_name))
-                .check(matches(withText("ForumEPFL")));
-    }
-
-    @Test
-    public void sortWithKeywordTest2(){
+        onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).onChildView(withId(R.id.card_event_name)).check(matches(withText("ForumEPFL")));
+        onView(withId(R.id.event_fragment_search_bar)).perform(clearText());
         onView(withId(R.id.event_fragment_search_bar)).perform(typeText("discover"));
-        onData(anything())
-                .inAdapterView(withId(R.id.event_fragment_listview))
-//                .atPosition(0)
-                .onChildView(withId(R.id.card_event_name))
-                .check(matches(withText("ForumEPFL")));
+        onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).onChildView(withId(R.id.card_event_name)).check(matches(withText("ForumEPFL")));
     }
 
     @Test
