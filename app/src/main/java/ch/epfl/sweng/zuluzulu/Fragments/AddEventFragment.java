@@ -376,7 +376,7 @@ public class AddEventFragment extends SuperFragment {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
                         for (DocumentSnapshot snap : snap_list) {
                             FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
-                            if (data.hasFields(Association.FIELDS)) {
+                            if (data.hasFields(Association.requiredFields())) {
                                 association_names.add((String) data.get("name"));
                             }
                         }

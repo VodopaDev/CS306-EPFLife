@@ -17,10 +17,8 @@ import ch.epfl.sweng.zuluzulu.R;
  * A simple class describing an Association
  * Has diverse getters and some functions to create views
  */
-public class Association implements Serializable {
-    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc");
+public class Association extends FirebaseStructure {
 
-    private int id;
     private String name;
     private String short_desc;
     private String long_desc;
@@ -29,8 +27,8 @@ public class Association implements Serializable {
     private Uri banner_uri;
 
     private List<Map<String, Object>> events;
-    private int channel_id;
-    private int closest_event_id;
+    private Long channel_id;
+    private Long closest_event_id;
 
     /**
      * Create an association using a Firebase adapted map
@@ -39,19 +37,19 @@ public class Association implements Serializable {
      * @throws IllegalArgumentException if the map isn't an Association's map
      */
     public Association(FirebaseMapDecorator data) {
-        if (!data.hasFields(FIELDS)) {
+        super(data);
+        if (!data.hasFields(requiredFields())) {
             throw new IllegalArgumentException();
         }
 
-        id = data.getInteger("id");
-        name = data.getString("name");
+        name = data.getString("name").trim();
         short_desc = data.getString("short_desc");
         long_desc = data.getString("long_desc");
 
         // Init the main chat id
         channel_id = data.get("channel_id") == null ?
-                0 :
-                data.getInteger("channel_id");
+                0L :
+                data.getLong("channel_id");
 
         // Init the upcoming event
         events = data.get("events") == null ?
@@ -77,22 +75,13 @@ public class Association implements Serializable {
      *
      * @return compareTo of two Associations names
      */
-    public static Comparator<Association> getComparator() {
-        return new Comparator<Association>() {
-            @Override
-            public int compare(Association o1, Association o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        };
-    }
-
-    /**
-     * Return the Association's id
-     *
-     * @return the id
-     */
-    public int getId() {
-        return id;
+    public static Comparator<Association> getComparatorWith(String type) {
+        if(type.toLowerCase().trim().equals("name"))
+            return (o1, o2) -> o1.getName().compareTo(o2.getName());
+        else if(type.toLowerCase().trim().equals("id"))
+            return (o1, o2) -> o1.getId().compareTo(o2.getId());
+        else
+            return (o1, o2) -> o1.getName().compareTo(o2.getName());
     }
 
     /**
@@ -127,7 +116,7 @@ public class Association implements Serializable {
      *
      * @return
      */
-    public int getChannelId() {
+    public Long getChannelId() {
         return channel_id;
     }
 
@@ -146,7 +135,7 @@ public class Association implements Serializable {
      *
      * @return
      */
-    public int getClosestEventId() {
+    public Long getClosestEventId() {
         return closest_event_id;
     }
 
@@ -155,14 +144,14 @@ public class Association implements Serializable {
      */
     private void computeClosestEvent() {
         if (events.isEmpty())
-            closest_event_id = 0;
+            closest_event_id = 0L;
         else {
-            int closest = ((Long) events.get(0).get("id")).intValue();
+            Long closest = (Long)events.get(0).get("id");
             java.util.Date closest_time = (java.util.Date) events.get(0).get("start");
             for (int i = 1; i < events.size(); i++) {
                 java.util.Date current = (java.util.Date) events.get(i).get("start");
                 if (current.before(closest_time)) {
-                    closest = ((Long) events.get(i).get("id")).intValue();
+                    closest = (Long) events.get(i).get("id");
                 }
             }
             closest_event_id = closest;
@@ -177,5 +166,9 @@ public class Association implements Serializable {
     @Nullable
     public Uri getBannerUri() {
         return banner_uri;
+    }
+
+    public static List<String> requiredFields(){
+        return Arrays.asList("id", "name", "short_desc", "long_desc");
     }
 }

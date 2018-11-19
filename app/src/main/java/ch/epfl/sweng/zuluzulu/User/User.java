@@ -108,7 +108,7 @@ abstract public class User implements Serializable {
         private String last_names;
 
         // All followed ids of Associations, Chats and Events
-        private List<Integer> fav_assos;
+        private List<Long> fav_assos;
         private List<Integer> followed_chats;
         private List<Integer> followed_events;
 
@@ -184,7 +184,7 @@ abstract public class User implements Serializable {
             this.first_names = first_names;
         }
 
-        public void setFavAssos(List<Integer> fav_assos) {
+        public void setFavAssos(List<Long> fav_assos) {
             this.fav_assos = fav_assos;
         }
 

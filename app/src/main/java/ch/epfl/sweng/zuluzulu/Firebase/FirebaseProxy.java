@@ -15,6 +15,7 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.FirebaseStructure;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.INCREMENT_IDLING_RESOURCE;
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.DECREMENT_IDLING_RESOURCE;
@@ -22,23 +23,24 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.DECREMENT_IDLING_RESOURCE;
 public class FirebaseProxy {
 
     private static FirebaseProxy proxy;
-    private static OnFragmentInteractionListener mListener;
 
-    private CollectionReference userCollection;
-    private CollectionReference eventCollection;
-    private CollectionReference associationCollection;
-    private CollectionReference channelCollection;
+    private final OnFragmentInteractionListener mListener;
+    private final FirebaseFirestore firebaseInstance;
+    private final CollectionReference assoCollection;
+    private final CollectionReference eventCollection;
+    private final CollectionReference channelCollection;
+
+
 
 
     private FirebaseProxy(OnFragmentInteractionListener mListener, Context appContext) {
         this.mListener = mListener;
 
         FirebaseApp.initializeApp(appContext);
-        FirebaseFirestore firebaseInstance = FirebaseFirestore.getInstance();
-        userCollection = firebaseInstance.collection("users_info");
+        firebaseInstance = FirebaseFirestore.getInstance();
+        assoCollection = firebaseInstance.collection("assos_info");
         eventCollection = firebaseInstance.collection("events_info");
         channelCollection = firebaseInstance.collection("channels");
-        associationCollection = firebaseInstance.collection("assos_info");
     }
 
     public static void init(OnFragmentInteractionListener mListener, Context appContext) {
@@ -60,53 +62,15 @@ public class FirebaseProxy {
      * @param onResult interface defining apply()
      */
     public void getAllAssociations(OnResult<List<Association>> onResult){
-        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
-        associationCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
+        assoCollection.orderBy("name").get().addOnSuccessListener(queryDocumentSnapshots -> {
             List<Association> resultList = new ArrayList<>();
             for(DocumentSnapshot snap: queryDocumentSnapshots){
                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
-                if(fmap.hasFields(Association.FIELDS))
+                if(fmap.hasFields(Association.requiredFields()))
                     resultList.add(new Association(fmap));
             }
             onResult.apply(resultList);
-            mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch all associations"));
-    }
-
-    /**
-     * Get all events and apply an OnResult on them
-     * @param onResult interface defining apply()
-     */
-    public void getAllEvents(OnResult<List<Event>> onResult){
-        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
-        eventCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            List<Event> resultList = new ArrayList<>();
-            for(DocumentSnapshot snap: queryDocumentSnapshots){
-                FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
-                if(fmap.hasFields(Event.FIELDS))
-                    resultList.add(new Event(fmap));
-            }
-            onResult.apply(resultList);
-            mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
-        }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch all events"));
-    }
-
-    /**
-     * Get all channels and apply an OnResult on them
-     * @param onResult interface defining apply()
-     */
-    public void getAllChannels(OnResult<List<Channel>> onResult){
-        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
-        channelCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            List<Channel> resultList = new ArrayList<>();
-            for(DocumentSnapshot snap: queryDocumentSnapshots){
-                FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
-                if(fmap.hasFields(Channel.FIELDS))
-                    resultList.add(new Channel(fmap));
-            }
-            onResult.apply(resultList);
-            mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
-        }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch all channels"));
     }
 
     /**
@@ -117,7 +81,6 @@ public class FirebaseProxy {
     private OnFailureListener onFailureWithErrorMessage(String message) {
         return e -> {
             Log.e("PROXY", message);
-            mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
         };
     }
 

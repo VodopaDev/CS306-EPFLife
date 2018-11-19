@@ -26,11 +26,11 @@ public final class Utils {
     private Utils() {
     }
 
-    public static void addIdToList(String path, String field, Integer id) {
+    public static void addIdToList(String path, String field, Long id) {
         FirebaseFirestore.getInstance().document(path).update(field, FieldValue.arrayUnion(id));
     }
 
-    public static void removeIdFromList(String path, String field, Integer id) {
+    public static void removeIdFromList(String path, String field, Long id) {
         FirebaseFirestore.getInstance().document(path).update(field, FieldValue.arrayRemove(id));
     }
 

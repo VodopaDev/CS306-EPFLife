@@ -22,11 +22,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -60,7 +65,7 @@ public class AssociationFragment extends SuperFragment {
 
     private CheckBox checkbox_assos_sort_name;
     private CheckBox checkbox_assos_sort_date;
-    private String default_sort_option;
+    private final String default_sort_option = "name";
 
     private TextView plainText_filter;
 
@@ -85,40 +90,30 @@ public class AssociationFragment extends SuperFragment {
         }
 
         assos_all = new ArrayList<>();
-        assos_filtered = new ArrayList<>();
         assos_fav = new ArrayList<>();
-        default_sort_option = "name";
+        assos_filtered = new ArrayList<>();
+        fillAssociationLists();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_association, container, false);
 
-        fillAssociationLists(default_sort_option);
         listview_assos = view.findViewById(R.id.association_fragment_listview);
-
         assos_adapter = new AssociationArrayAdapter(getContext(), assos_filtered, mListener);
         listview_assos.setAdapter(assos_adapter);
+        fillAssociationLists();
 
         button_assos_fav = view.findViewById(R.id.association_fragment_fav_button);
         button_assos_all = view.findViewById(R.id.association_fragment_all_button);
 
-        button_assos_fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (user.isConnected())
-                    updateListView(button_assos_fav, button_assos_all, assos_fav, listview_assos);
-                else
-                    Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
-            }
+        button_assos_fav.setOnClickListener(v -> {
+            if (user.isConnected())
+                updateListView(button_assos_fav, button_assos_all, assos_fav, listview_assos);
+            else
+                Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
         });
-
-        button_assos_all.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateListView(button_assos_all, button_assos_fav, assos_all, listview_assos);
-            }
-        });
+        button_assos_all.setOnClickListener(v -> updateListView(button_assos_all, button_assos_fav, assos_all, listview_assos));
 
         checkbox_assos_sort_name = view.findViewById(R.id.assos_fragment_checkbox_sort_Name);
         checkbox_assos_sort_date = view.findViewById(R.id.assos_fragment_checkbox_sort_date);
@@ -126,34 +121,21 @@ public class AssociationFragment extends SuperFragment {
         checkbox_assos_sort_name.setChecked(true);
         checkbox_assos_sort_name.setEnabled(false);
 
-        checkbox_assos_sort_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkbox_assos_sort_date.setEnabled(false);
-                assos_filtered.clear();
-                assos_all.clear();
-                assos_fav.clear();
-                fillAssociationLists("id");
-                checkbox_assos_sort_name.setChecked(false);
-                checkbox_assos_sort_name.setEnabled(true);
-            }
+        checkbox_assos_sort_date.setOnClickListener(v -> {
+            assos_filtered.clear();
+            checkbox_assos_sort_date.setEnabled(false);
+            checkbox_assos_sort_name.setChecked(false);
+            checkbox_assos_sort_name.setEnabled(true);
         });
 
-        checkbox_assos_sort_name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkbox_assos_sort_name.setEnabled(false);
-                assos_filtered.clear();
-                assos_all.clear();
-                assos_fav.clear();
-                fillAssociationLists("name");
-                checkbox_assos_sort_date.setChecked(false);
-                checkbox_assos_sort_date.setEnabled(true);
-            }
+        checkbox_assos_sort_name.setOnClickListener(v -> {
+            assos_filtered.clear();
+            checkbox_assos_sort_name.setEnabled(false);
+            checkbox_assos_sort_date.setChecked(false);
+            checkbox_assos_sort_date.setEnabled(true);
         });
 
         plainText_filter = view.findViewById(R.id.assos_fragment_plainText_filter);
-
         plainText_filter.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -181,37 +163,17 @@ public class AssociationFragment extends SuperFragment {
         return view;
     }
 
-    private void fillAssociationLists(String sortOption) {
-        mListener.onFragmentInteraction(INCREMENT_IDLING_RESOURCE, null);
-        FirebaseFirestore.getInstance().collection("assos_info").orderBy(sortOption).get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        for (DocumentSnapshot snap : snap_list) {
-                            FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
-                            if (data.hasFields(Association.FIELDS)) {
-                                Association asso = new Association(data);
-                                assos_all.add(asso);
-                                assos_filtered.add(asso);
-
-                                if (user.isConnected() && ((AuthenticatedUser) user).isFavAssociation(asso))
-                                    assos_fav.add(asso);
-
-                                assos_adapter.notifyDataSetChanged();
-                            }
-                        }
-                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
-                        Log.e("ASSO_LIST", "Error fetching association date\n" + e.getMessage());
-                        mListener.onFragmentInteraction(DECREMENT_IDLING_RESOURCE, null);
-                    }
-                });
+    private void fillAssociationLists() {
+        FirebaseProxy.getInstance().getAllAssociations(result -> {
+            for(Association asso: result){
+                assos_all.add(asso);
+                if(user.isConnected() && ((AuthenticatedUser)user).isFavAssociation(asso))
+                    assos_fav.add(asso);
+            }
+            assos_filtered.addAll(assos_all);
+            assos_adapter.sort(Association.getComparator());
+            assos_adapter.notifyDataSetChanged();
+        });
     }
 
     private void updateListView(Button new_selected, Button new_unselected, List<Association> data, ListView list) {
