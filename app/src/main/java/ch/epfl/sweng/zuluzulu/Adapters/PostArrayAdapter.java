@@ -116,20 +116,18 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     private void updateDatabase(boolean up, Post post) {
         if (!post.isUpByUser() && !post.isDownByUser()) {
             int nbUps = post.getNbUps() + (up ? 1 : -1);
+            List<String> upScipers = post.getUpScipers();
+            List<String> downScipers = post.getDownScipers();
             DocumentReference documentReference = db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
             if (up) {
-                List<String> upScipers = post.getUpScipers();
                 upScipers.add(post.getUserSciper());
-
                 documentReference.update(
                         "nbUps", nbUps,
                         "upScipers", upScipers
                 );
                 post.setUpByUser(true);
             } else {
-                List<String> downScipers = post.getDownScipers();
                 downScipers.add(post.getUserSciper());
-
                 documentReference.update(
                         "nbUps", nbUps,
                         "downScipers", downScipers
