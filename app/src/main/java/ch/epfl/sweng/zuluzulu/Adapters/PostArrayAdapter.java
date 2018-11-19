@@ -113,10 +113,9 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
 
     private void setButton(boolean up, Post post, ImageView upButton, ImageView downButton, TextView nbUpsText) {
         if (!post.isUpByUser() && !post.isDownByUser()) {
-            int nbUps = post.getNbUps();
+            int nbUps = post.getNbUps() + (up ? 1 : -1);
             DocumentReference documentReference = db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
             if (up) {
-                nbUps++;
                 List<String> upScipers = post.getUpScipers();
                 upScipers.add(post.getUserSciper());
 
@@ -126,7 +125,6 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
                 );
                 post.setUpByUser(true);
             } else {
-                nbUps--;
                 List<String> downScipers = post.getDownScipers();
                 downScipers.add(post.getUserSciper());
 
