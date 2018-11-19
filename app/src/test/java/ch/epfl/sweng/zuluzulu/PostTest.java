@@ -84,6 +84,12 @@ public class PostTest {
         post2 = new Post(new FirebaseMapDecorator(data2), user.getSciper(), channel.getId());
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void testIncorrectDataConstructor() {
+        data1.put("downScipers", upScipers1);
+        new Post(new FirebaseMapDecorator(data1), user.getSciper(), channel.getId());
+    }
+
     @Test
     public void testGetters() {
         assertEquals(senderName1, post1.getSenderName());
