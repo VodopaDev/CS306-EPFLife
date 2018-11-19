@@ -81,7 +81,7 @@ public class AssociationTest {
     @Test
     public void idIsCorrect() {
         initWorkingAssociation();
-        assertEquals(1, asso1.getId());
+        assertThat(asso1.getId(), equalTo(1L));
     }
 
     @Test
@@ -106,8 +106,8 @@ public class AssociationTest {
     public void closestEventIsCorrect() {
         initWorkingAssociation();
         initDefaultAssociation();
-        assertThat(0, equalTo(asso2.getClosestEventId()));
-        assertThat(1, equalTo(asso1.getClosestEventId()));
+        assertThat(asso2.getClosestEventId(), equalTo(0L));
+        assertThat(asso1.getClosestEventId(), equalTo(1L));
     }
 
     @Test
@@ -131,15 +131,15 @@ public class AssociationTest {
         initWorkingAssociation();
         initDefaultAssociation();
         assertEquals(NAME1.compareTo(NAME2),
-                Association.getComparator().compare(asso1, asso2));
+                asso1.compareTo(asso2));
     }
 
     @Test
     public void channelIdIsCorrect() {
         initWorkingAssociation();
         initDefaultAssociation();
-        assertThat(asso1.getChannelId(), equalTo(1));
-        assertThat(asso2.getChannelId(), equalTo(0));
+        assertThat(asso1.getChannelId(), equalTo(1L));
+        assertThat(asso2.getChannelId(), equalTo(0L));
     }
 
 

@@ -33,7 +33,7 @@ public class AuthenticatedUserTest {
     private final Channel mocked_channel = mock(Channel.class);
     private final String last_name = "jomeau";
     private AuthenticatedUser user;
-    private List<Integer> fav_assos;
+    private List<Long> fav_assos;
     private List<Integer> fol_events;
     private List<Integer> fol_chats;
 
@@ -43,7 +43,7 @@ public class AuthenticatedUserTest {
         fol_events = new ArrayList<>();
         fol_chats = new ArrayList<>();
 
-        when(mocked_asso.getId()).thenReturn(1);
+        when(mocked_asso.getId()).thenReturn(1L);
         when(mocked_channel.getId()).thenReturn(1);
         when(mocked_event.getId()).thenReturn(1);
 
@@ -83,7 +83,7 @@ public class AuthenticatedUserTest {
     @Test
     public void setList() {
         user.setFollowedChats(Collections.singletonList(1));
-        user.setFavAssos(Collections.singletonList(1));
+        user.setFavAssos(Collections.singletonList(1L));
         user.setFollowedEvents(Collections.singletonList(1));
         assertThat(true, equalTo(user.isFavAssociation(mocked_asso)));
         assertThat(true, equalTo(user.isFollowedChat(mocked_channel)));

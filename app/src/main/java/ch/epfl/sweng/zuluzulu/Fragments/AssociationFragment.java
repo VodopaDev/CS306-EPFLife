@@ -48,11 +48,6 @@ public class AssociationFragment extends SuperFragment {
     private AssociationArrayAdapter assosAdapter;
 
     private ListView listviewAssos;
-
-    private CheckBox checkboxAssosSortName;
-    private CheckBox checkboxAssosSortDate;
-    private String sortingOption = "name";
-
     private TextView plainTextFilter;
 
     public AssociationFragment() {

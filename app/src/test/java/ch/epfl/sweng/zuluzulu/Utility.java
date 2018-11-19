@@ -16,7 +16,7 @@ public class Utility {
     private static final String semester = "BA5";
     private static final String firstName = "James";
     private static final String lastName = "Bond";
-    private static final List<Integer> favAssos = Arrays.asList(1, 2);
+    private static final List<Long> favAssos = Arrays.asList(1L, 2L);
     private static final List<Integer> followedEvents = new ArrayList<>();
     private static final List<Integer> followedChats = new ArrayList<>();
 
