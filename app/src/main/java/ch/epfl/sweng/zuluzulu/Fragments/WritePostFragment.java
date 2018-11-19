@@ -18,10 +18,13 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
@@ -40,12 +43,14 @@ public class WritePostFragment extends SuperFragment {
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_CHANNEL = "ARG_CHANNEL";
 
-    protected static final String CHANNEL_DOCUMENT_NAME = "channels/channel";
+    private static final String CHANNEL_DOCUMENT_NAME = "channels/channel";
     private static final String POST_COLLECTION_NAME = "posts";
+    private static final int POST_MAX_LENGTH = 200;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private CollectionReference collectionReference;
+    private DatabaseCollection mockableCollection;
 
     private ConstraintLayout layout;
     private EditText editText;
@@ -97,6 +102,7 @@ public class WritePostFragment extends SuperFragment {
 
         String collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POST_COLLECTION_NAME;
         collectionReference = db.collection(collectionPath);
+        mockableCollection = DatabaseFactory.getDependency().collection(collectionPath);
 
         setUpSendButton();
         setUpColorListener();
@@ -125,8 +131,10 @@ public class WritePostFragment extends SuperFragment {
                 data.put("color", color.getValue());
                 data.put("nbUps", 0);
                 data.put("nbResponses", 0);
+                data.put("upScipers", new ArrayList<>());
+                data.put("downScipers", new ArrayList<>());
 
-                Utils.addDataToFirebase(data, collectionReference, TAG);
+                Utils.addDataToFirebase(data, mockableCollection, TAG);
 
                 mListener.onFragmentInteraction(CommunicationTag.OPEN_POST_FRAGMENT, channel);
             }
@@ -140,7 +148,7 @@ public class WritePostFragment extends SuperFragment {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                color = PostColor.getRandomColor();
+                color = PostColor.getRandomColorButNot(color);
                 layout.setBackgroundColor(Color.parseColor(color.getValue()));
             }
         });
@@ -157,7 +165,7 @@ public class WritePostFragment extends SuperFragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int messageLength = s.toString().length();
-                boolean correctFormat = 0 < messageLength && messageLength < 200;;
+                boolean correctFormat = 0 < messageLength && messageLength < POST_MAX_LENGTH;;
                 sendButton.setEnabled(correctFormat);
             }
 
