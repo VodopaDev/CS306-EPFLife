@@ -284,6 +284,17 @@ public class EventFragment extends SuperFragment {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+
+
+
+
+
+                    // TODO: the from date condition doesn't work
+
+
+
+
+
                     for (int i = 0; i < event_all.size(); i++) {
                         if (event_all.get(i).getStartDate().compareTo(tempDateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(eventCalendar.getTime()) <= 0) {
                             event_all_sorted.add(event_all.get(i));
