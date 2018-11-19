@@ -28,8 +28,8 @@ public class AssociationFragmentAsGuestTest extends TestWithGuestAndFragment<Ass
     public void hasAllButtons() {
         onView(ViewMatchers.withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
         onView(withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.assos_fragment_checkbox_sort_Name)).check(matches(isDisplayed()));
-        onView(withId(R.id.assos_fragment_checkbox_sort_date)).check(matches(isDisplayed()));
+        onView(withId(R.id.search_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.association_fragment_search_text)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -51,8 +51,7 @@ public class AssociationFragmentAsGuestTest extends TestWithGuestAndFragment<Ass
     */
 
     @Test
-    public void listAlternateSortOption() {
-        onView(withId(R.id.assos_fragment_checkbox_sort_date)).perform(ViewActions.click());
-        onView(withId(R.id.assos_fragment_checkbox_sort_Name)).perform(ViewActions.click());
+    public void useTheFilter() {
+        onView(withId(R.id.association_fragment_search_text)).perform(ViewActions.typeText("Agepoly"));
     }
 }

@@ -46,10 +46,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/assos_fragment_plainText_filter" />
+        app:layout_constraintTop_toBottomOf="@+id/association_fragment_search_text" />
 
     <EditText
-        android:id="@+id/assos_fragment_plainText_filter"
+        android:id="@+id/association_fragment_search_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

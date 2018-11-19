@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.util.SortedList;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -100,7 +101,7 @@ public class AssociationFragment extends SuperFragment {
         });
         buttonAssosAll.setOnClickListener(v -> updateListView(buttonAssosAll, buttonAssosFav, assosAll));
 
-        plainTextFilter = view.findViewById(R.id.assos_fragment_plainText_filter);
+        plainTextFilter = view.findViewById(R.id.association_fragment_search_text);
         plainTextFilter.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -129,6 +130,10 @@ public class AssociationFragment extends SuperFragment {
     }
 
     private void fillAssociationLists() {
+        assosAll.clear();
+        assosFiltered.clear();
+        assosToFilter.clear();
+        assosFav.clear();
         FirebaseProxy.getInstance().getAllAssociations(result -> {
             for(Association asso: result){
                 assosAll.add(asso);
