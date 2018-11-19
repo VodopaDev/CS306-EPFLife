@@ -102,9 +102,9 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
                 if (!post.isUpByUser() && !post.isDownByUser()) {
                     int newNbUps = post.getNbUps() + 1;
                     List<String> upScipers = post.getUpScipers();
-                    upScipers.add(post.getUserReading().getSciper());
+                    upScipers.add(post.getUserSciper());
 
-                    DocumentReference documentReference = db.collection("channels/channel" + post.getChannel().getId() + "/posts").document(post.getId());
+                    DocumentReference documentReference = db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
                     documentReference.update(
                             "nbUps", newNbUps,
                             "upScipers", upScipers
@@ -122,9 +122,9 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
                 if (!post.isUpByUser() && !post.isDownByUser()) {
                     int newNbUps = post.getNbUps() - 1;
                     List<String> downScipers = post.getDownScipers();
-                    downScipers.add(post.getUserReading().getSciper());
+                    downScipers.add(post.getUserSciper());
 
-                    DocumentReference documentReference = db.collection("channels/channel" + post.getChannel().getId() + "/posts").document(post.getId());
+                    DocumentReference documentReference = db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
                     documentReference.update(
                             "nbUps", newNbUps,
                             "downScipers", downScipers

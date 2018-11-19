@@ -15,7 +15,7 @@ import ch.epfl.sweng.zuluzulu.User.User;
  */
 public class Post {
 
-    public static final List<String> FIELDS = Arrays.asList("senderName", "sciper", "message", "time", "color", "nbUps", "nbResponses");
+    public static final List<String> FIELDS = Arrays.asList("senderName", "sciper", "message", "time", "color", "nbUps", "nbResponses", "upScipers", "downScipers");
     private String senderName;
     private String sciper;
     private String message;
@@ -31,10 +31,10 @@ public class Post {
     private boolean downByUser;
 
     private boolean anonymous;
-    private Channel channel;
-    private AuthenticatedUser userReading;
+    private int channelId;
+    private String userSciper;
 
-    public Post(FirebaseMapDecorator data, AuthenticatedUser userReading, Channel channel) {
+    public Post(FirebaseMapDecorator data, String userSciper, int channelId) {
         senderName = data.getString("senderName");
         sciper = data.getString("sciper");
         message = data.getString("message");
@@ -47,11 +47,11 @@ public class Post {
         id = data.getId();
 
         anonymous = senderName.isEmpty();
-        this.channel = channel;
-        this.userReading = userReading;
+        this.channelId = channelId;
+        this.userSciper = userSciper;
 
-        upByUser = upScipers.contains(userReading.getSciper());
-        downByUser = downScipers.contains(userReading.getSciper());
+        upByUser = upScipers.contains(userSciper);
+        downByUser = downScipers.contains(userSciper);
 
         if (upByUser && downByUser) {
             throw new IllegalStateException("A post cannot be liked and disliked at the same time");
@@ -68,30 +68,12 @@ public class Post {
     }
 
     /**
-     * Setter for the sender name
-     *
-     * @param senderName the new senderName
-     */
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
-    }
-
-    /**
      * Getter for the sciper
      *
      * @return the sciper
      */
     public String getSciper() {
         return sciper;
-    }
-
-    /**
-     * Setter for the sciper
-     *
-     * @param sciper the new sciper
-     */
-    public void setSciper(String sciper) {
-        this.sciper = sciper;
     }
 
     /**
@@ -104,30 +86,12 @@ public class Post {
     }
 
     /**
-     * Setter for the message
-     *
-     * @param message the new message
-     */
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    /**
      * Getter for post creation time
      *
      * @return the creation time
      */
     public Date getTime() {
         return time;
-    }
-
-    /**
-     * Setter for the creation time
-     *
-     * @param time the new time
-     */
-    public void setTime(Date time) {
-        this.time = time;
     }
 
     /**
@@ -140,15 +104,6 @@ public class Post {
     }
 
     /**
-     * Setter for the color
-     *
-     * @param color the new color
-     */
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    /**
      * Getter for the number of ups
      *
      * @return the number of ups
@@ -156,25 +111,11 @@ public class Post {
     public int getNbUps() { return nbUps; }
 
     /**
-     * Setter for the number of ups
-     *
-     * @param nbUps the new number of ups
-     */
-    public void setNbUps(int nbUps) { this.nbUps = nbUps; }
-
-    /**
      * Getter for the number of responses
      *
      * @return the number of responses
      */
     public int getNbResponses() { return nbResponses; }
-
-    /**
-     * Setter for the number of responses
-     *
-     * @param nbResponses the new number of responses
-     */
-    public void setNbResponses(int nbResponses) { this.nbResponses = nbResponses; }
 
     /**
      * Getter for anonymous
@@ -197,7 +138,12 @@ public class Post {
      *
      * @param upByUser the new upByUser value
      */
-    public void setUpByUser(boolean upByUser) { this.upByUser = upByUser; }
+    public void setUpByUser(boolean upByUser) {
+        if (downByUser) {
+            throw new IllegalArgumentException("This post is already up by the user");
+        }
+        this.upByUser = upByUser;
+    }
 
     /**
      * Getter for downByUser
@@ -211,21 +157,26 @@ public class Post {
      *
      * @param downByUser the new downByUser value
      */
-    public void setDownByUser(boolean downByUser) { this.downByUser = downByUser; }
+    public void setDownByUser(boolean downByUser) {
+        if (upByUser) {
+            throw new IllegalArgumentException("This post is already down by the user");
+        }
+        this.downByUser = downByUser;
+    }
 
     /**
-     * Getter for the channel of the post
+     * Getter for the channelId of the post
      *
-     * @return the channel
+     * @return the channelId
      */
-    public Channel getChannel() { return channel; }
+    public int getChannelId() { return channelId; }
 
     /**
      * Getter for the user reading the post
      *
      * @return the user reading the post
      */
-    public AuthenticatedUser getUserReading() { return userReading; }
+    public String getUserSciper() { return userSciper; }
 
     /**
      * Getter for the up scipers
