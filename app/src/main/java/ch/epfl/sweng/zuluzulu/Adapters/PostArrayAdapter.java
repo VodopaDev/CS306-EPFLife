@@ -70,22 +70,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         nbUpsText.setText("" + currentPost.getNbUps());
         nbResponses.setText("" + currentPost.getNbResponses());
 
-        upButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateDatabase(true, currentPost);
-                updateUpsButtons(currentPost, upButton, downButton);
-            }
-        });
-
-        downButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateDatabase(false, currentPost);
-                updateUpsButtons(currentPost, upButton, downButton);
-            }
-        });
-
+        setUpUpDownButtons(currentPost, upButton, downButton);
         updateUpsButtons(currentPost, upButton, downButton);
 
         return view;
@@ -108,6 +93,24 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         else {
             timeAgo.setText(differenceInSeconds/(3600*24) + "d");
         }
+    }
+
+    private void setUpUpDownButtons(Post post, ImageView upButton, ImageView downButton) {
+        upButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateDatabase(true, currentPost);
+                updateUpsButtons(currentPost, upButton, downButton);
+            }
+        });
+
+        downButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateDatabase(false, currentPost);
+                updateUpsButtons(currentPost, upButton, downButton);
+            }
+        });
     }
 
     private void updateDatabase(boolean up, Post post) {
