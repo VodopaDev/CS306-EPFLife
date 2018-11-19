@@ -129,7 +129,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
 
             //put db
             Map<String, Object> docData = new HashMap<>();
-            docData.put("channel_id", 1);
+            docData.put("channel_id", 0L);
             docData.put("events", new ArrayList<>());
             docData.put("icon_uri", final_icon_url);
             docData.put("name", datas.get(index).split(",")[1]);
