@@ -30,7 +30,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
 
     private Post currentPost;
     private TextView timeAgo;
-    private TextView nbUps;
+    private TextView nbUpsText;
     private ImageView upButton;
     private ImageView downButton;
 
@@ -56,7 +56,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         timeAgo = view.findViewById(R.id.post_time_ago_textview);
         upButton = view.findViewById(R.id.post_up_button);
         downButton = view.findViewById(R.id.post_down_button);
-        nbUps = view.findViewById(R.id.post_nb_ups_textview);
+        nbUpsText = view.findViewById(R.id.post_nb_ups_textview);
         TextView nbResponses = view.findViewById(R.id.post_nb_responses_textview);
 
         linearLayout.setBackgroundColor(Color.parseColor(currentPost.getColor()));
@@ -67,10 +67,10 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
 
         setUpTimeAgoField();
 
-        nbUps.setText("" + currentPost.getNbUps());
+        nbUpsText.setText("" + currentPost.getNbUps());
         nbResponses.setText("" + currentPost.getNbResponses());
 
-        setUpUpDownButtons(currentPost, upButton, downButton, nbUps);
+        setUpUpDownButtons(currentPost, upButton, downButton, nbUpsText);
         updateUps(currentPost, upButton, downButton);
 
         return view;
@@ -95,46 +95,50 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         }
     }
 
-    private void setUpUpDownButtons(Post post, ImageView upButton, ImageView downButton, TextView nbUps) {
+    private void setUpUpDownButtons(Post post, ImageView upButton, ImageView downButton, TextView nbUpsText) {
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!post.isUpByUser() && !post.isDownByUser()) {
-                    int newNbUps = post.getNbUps() + 1;
-                    List<String> upScipers = post.getUpScipers();
-                    upScipers.add(post.getUserSciper());
-
-                    DocumentReference documentReference = db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
-                    documentReference.update(
-                            "nbUps", newNbUps,
-                            "upScipers", upScipers
-                    );
-                    post.setUpByUser(true);
-                    updateUps(post, upButton, downButton);
-                    nbUps.setText("" + (Integer.parseInt(nbUps.getText().toString()) + 1));
-                }
+                setButton(true, post, upButton, downButton, nbUpsText);
             }
         });
 
         downButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!post.isUpByUser() && !post.isDownByUser()) {
-                    int newNbUps = post.getNbUps() - 1;
-                    List<String> downScipers = post.getDownScipers();
-                    downScipers.add(post.getUserSciper());
-
-                    DocumentReference documentReference = db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
-                    documentReference.update(
-                            "nbUps", newNbUps,
-                            "downScipers", downScipers
-                    );
-                    post.setDownByUser(true);
-                    updateUps(post, upButton, downButton);
-                    nbUps.setText("" + (Integer.parseInt(nbUps.getText().toString()) - 1));
-                }
+                setButton(false, post, upButton, downButton, nbUpsText);
             }
         });
+    }
+
+    private void setButton(boolean up, Post post, ImageView upButton, ImageView downButton, TextView nbUpsText) {
+        if (!post.isUpByUser() && !post.isDownByUser()) {
+            int nbUps = post.getNbUps();
+            DocumentReference documentReference = db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
+            if (up) {
+                nbUps++;
+                List<String> upScipers = post.getUpScipers();
+                upScipers.add(post.getUserSciper());
+
+                documentReference.update(
+                        "nbUps", nbUps,
+                        "upScipers", upScipers
+                );
+                post.setUpByUser(true);
+            } else {
+                nbUps--;
+                List<String> downScipers = post.getDownScipers();
+                downScipers.add(post.getUserSciper());
+
+                documentReference.update(
+                        "nbUps", nbUps,
+                        "downScipers", downScipers
+                );
+                post.setDownByUser(true);
+            }
+            updateUps(post, upButton, downButton);
+            nbUpsText.setText("" + nbUps);
+        }
     }
 
     private void updateUps(Post post, ImageView upButton, ImageView downButton) {
