@@ -70,7 +70,22 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         nbUpsText.setText("" + currentPost.getNbUps());
         nbResponses.setText("" + currentPost.getNbResponses());
 
-        setUpUpDownButtons(currentPost, view);
+        upButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateDatabase(true, currentPost);
+                updateUpsButtons(currentPost, upButton, downButton);
+            }
+        });
+
+        downButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateDatabase(false, currentPost);
+                updateUpsButtons(currentPost, upButton, downButton);
+            }
+        });
+
         updateUpsButtons(currentPost, upButton, downButton);
 
         return view;
@@ -95,27 +110,8 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         }
     }
 
-    private void setUpUpDownButtons(Post post, View view) {
-        upButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateDatabase(true, post, view);
-            }
-        });
-
-        downButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateDatabase(false, post, view);
-            }
-        });
-    }
-
-    private void updateDatabase(boolean up, Post post, View view) {
+    private void updateDatabase(boolean up, Post post) {
         if (!post.isUpByUser() && !post.isDownByUser()) {
-            ImageView upButton = view.findViewById(R.id.post_up_button);
-            ImageView downButton = view.findViewById(R.id.post_down_button);
-            TextView nbUpsText = view.findViewById(R.id.post_nb_ups_textview);
             int nbUps = post.getNbUps() + (up ? 1 : -1);
             DocumentReference documentReference = db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
             if (up) {
@@ -137,8 +133,6 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
                 );
                 post.setDownByUser(true);
             }
-            updateUpsButtons(post, upButton, downButton);
-            nbUpsText.setText("" + nbUps);
         }
     }
 
