@@ -1,15 +1,20 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,12 +22,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import ch.epfl.sweng.zuluzulu.Adapters.AddAssociationArrayAdapter;
+import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
 import ch.epfl.sweng.zuluzulu.URLTools.IconParser;
 import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
@@ -48,6 +57,10 @@ public class AssociationsGeneratorFragment extends SuperFragment {
 
     private List<String> datas;
     private Database db = DatabaseFactory.getDependency();
+    private List<Association> associations = new ArrayList<>();
+
+    private AddAssociationArrayAdapter adapter = null;
+
 
     public AssociationsGeneratorFragment() {
         // Required empty public constructor
@@ -74,25 +87,11 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     private void handleAssociations(List<String> results) {
         if (results != null) {
             this.datas = results;
-            updateView();
-        }
-
-        IdlingResourceFactory.decrementCountingIdlingResource();
-    }
-
-    /**
-     * Load the associations icons
-     *
-     * @param name
-     */
-    private void requestIcon(String name) {
-        if (name == null || name.isEmpty()) {
-            return;
-        }
-
-        int index = 0;
-        for (String data : datas) {
-            if (data.toLowerCase().contains(name.toLowerCase())) {
+            int index = 0;
+            for (String data : datas
+                 ) {
+                if(index == 10)
+                    break;
                 // Tell tests the async execution is finished
                 IdlingResourceFactory.incrementCountingIdlingResource();
 
@@ -107,9 +106,11 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                 }, new IconParser());
 
                 urlHandler.execute(url);
+                index++;
             }
-            index++;
         }
+
+        IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
     private void addDatabase(String icon_url, int index) {
@@ -130,16 +131,40 @@ public class AssociationsGeneratorFragment extends SuperFragment {
 
             //put db
             Map<String, Object> docData = new HashMap<>();
-            docData.put("channel_id", 1);
+            docData.put("channel_id", "1");
             docData.put("events", new ArrayList<>());
             docData.put("icon_uri", final_icon_url);
             docData.put("name", datas.get(index).split(",")[1]);
             docData.put("short_desc", datas.get(index).split(",")[2]);
             docData.put("long_desc", datas.get(index).split(",")[2]);
-            docData.put("id", index);
+            docData.put("id", Integer.toString(index));
 
-            db.collection("assos_info").document(Integer.toString(index)).set(docData);
-            updateView();
+            Association association = new Association(
+                        index,
+                        datas.get(index).split(",")[1]
+                        , datas.get(index).split(",")[2],
+                        datas.get(index).split(",")[2],
+                        Uri.parse(final_icon_url),
+                        Uri.parse(final_icon_url),
+                        new ArrayList<>(),
+                        1,
+                        0);
+
+            this.associations.add(association);
+
+            ListView list = Objects.requireNonNull(getView()).findViewById(R.id.associations_generator_listview);
+            if(adapter == null) {
+                adapter = new AddAssociationArrayAdapter(getContext(), this.associations, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        System.out.println("ADD");
+                    }
+                });
+                System.out.println("ADAPTER CREATED");
+            }
+            list.setAdapter(adapter);
+
+            adapter.notifyDataSetChanged();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -165,22 +190,6 @@ public class AssociationsGeneratorFragment extends SuperFragment {
 
 
 
-    /**
-     * Fill the datas in the view
-     */
-    private void updateView() {
-        TextView view = Objects.requireNonNull(getView()).findViewById(R.id.associations_generator_list_values);
-
-        if (datas != null && datas.size() > 0) {
-            view.setText(datas.size() + " ASSOCIATIONS FOUND : \n\n");
-        }
-
-        for (String data : datas) {
-            view.append(data.replaceAll(",", "\n"));
-            view.append("\n-----------\n");
-        }
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -195,21 +204,13 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_associations_generator, container, false);
         if (view == null) {
             return null;
         }
-        Button button = view.findViewById(R.id.load_icon_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                TextView text = view.findViewById(R.id.nbr_icon);
-                requestIcon(text.getText().toString());
-            }
-        });
-
         // Inflate the layout for this fragment
         return view;
     }
