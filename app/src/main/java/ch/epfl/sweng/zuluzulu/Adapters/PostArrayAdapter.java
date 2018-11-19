@@ -99,16 +99,16 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateDatabase(true, currentPost);
-                updateUpsButtons(currentPost, upButton, downButton);
+                updateDatabase(true, post);
+                updateUpsButtons(post, upButton, downButton);
             }
         });
 
         downButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateDatabase(false, currentPost);
-                updateUpsButtons(currentPost, upButton, downButton);
+                updateDatabase(false, post);
+                updateUpsButtons(post, upButton, downButton);
             }
         });
     }
