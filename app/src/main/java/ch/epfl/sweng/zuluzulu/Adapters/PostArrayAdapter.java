@@ -70,8 +70,8 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         nbUpsText.setText("" + currentPost.getNbUps());
         nbResponses.setText("" + currentPost.getNbResponses());
 
-        setUpUpDownButtons(currentPost, upButton, downButton, nbUpsText);
-        updateUps(currentPost, upButton, downButton);
+        setUpUpDownButtons(currentPost, view);
+        updateUpsButtons(currentPost, upButton, downButton);
 
         return view;
     }
@@ -95,24 +95,27 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         }
     }
 
-    private void setUpUpDownButtons(Post post, ImageView upButton, ImageView downButton, TextView nbUpsText) {
+    private void setUpUpDownButtons(Post post, View view) {
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setButton(true, post, upButton, downButton, nbUpsText);
+                updateDatabase(true, post, view);
             }
         });
 
         downButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setButton(false, post, upButton, downButton, nbUpsText);
+                updateDatabase(false, post, view);
             }
         });
     }
 
-    private void setButton(boolean up, Post post, ImageView upButton, ImageView downButton, TextView nbUpsText) {
+    private void updateDatabase(boolean up, Post post, View view) {
         if (!post.isUpByUser() && !post.isDownByUser()) {
+            ImageView upButton = view.findViewById(R.id.post_up_button);
+            ImageView downButton = view.findViewById(R.id.post_down_button);
+            TextView nbUpsText = view.findViewById(R.id.post_nb_ups_textview);
             int nbUps = post.getNbUps() + (up ? 1 : -1);
             DocumentReference documentReference = db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
             if (up) {
@@ -134,12 +137,12 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
                 );
                 post.setDownByUser(true);
             }
-            updateUps(post, upButton, downButton);
+            updateUpsButtons(post, upButton, downButton);
             nbUpsText.setText("" + nbUps);
         }
     }
 
-    private void updateUps(Post post, ImageView upButton, ImageView downButton) {
+    private void updateUpsButtons(Post post, ImageView upButton, ImageView downButton) {
         if (post.isUpByUser()) {
             upButton.setImageResource(R.drawable.up_gray);
             downButton.setImageResource(R.drawable.down_transparent);
