@@ -7,6 +7,8 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.zuluzulu.Database.FirebaseMock;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
@@ -29,6 +31,7 @@ public class PostFragmentTest extends TestWithAuthenticatedAndFragment<PostFragm
     @Override
     public void initFragment() {
         fragment = PostFragment.newInstance(user, Utility.defaultChannel());
+        DatabaseFactory.setDependency(new FirebaseMock());
     }
 
     @Test
