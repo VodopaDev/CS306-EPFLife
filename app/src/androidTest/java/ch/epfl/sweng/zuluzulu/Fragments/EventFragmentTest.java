@@ -117,7 +117,6 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
     @Test
     public void sortToDateFail(){
         onView(withId(R.id.event_fragment_to_date)).perform((click()));
-        onView(withText("OK")).perform(click());
         onView(withId(R.id.event_fragment_to_date)).check(matches(withText("")));
     }
 

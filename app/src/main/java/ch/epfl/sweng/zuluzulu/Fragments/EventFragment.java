@@ -30,6 +30,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -78,8 +79,8 @@ public class EventFragment extends SuperFragment {
     private EditText event_search_bar;
 
     private Calendar eventCalendar;
-    DatePickerDialog.OnDateSetListener dateFromPicker;
-    DatePickerDialog.OnDateSetListener dateToPicker;
+
+    DatePickerDialog.OnDateSetListener datePicker;
 
     public EventFragment() {
         // Required empty public constructor
@@ -120,31 +121,6 @@ public class EventFragment extends SuperFragment {
 //        event_fav_sorted = new ArrayList<>();
 
         eventCalendar = Calendar.getInstance();
-        dateFromPicker = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                eventCalendar.set(Calendar.YEAR, year);
-                eventCalendar.set(Calendar.MONTH, monthOfYear);
-                eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabelDateFrom();
-            }
-
-        };
-
-        dateToPicker = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                eventCalendar.set(Calendar.YEAR, year);
-                eventCalendar.set(Calendar.MONTH, monthOfYear);
-                eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabelDateTo();
-            }
-
-        };
     }
 
     @Override
@@ -197,21 +173,27 @@ public class EventFragment extends SuperFragment {
 
         event_search_bar = view.findViewById(R.id.event_fragment_search_bar);
 
-        sortWithSearchBar();
-
         sortByName();
 
         sortByLike();
 
         sortByDate();
 
-        selectFromDate();
+        sortWithSearchBar();
 
-        selectToDate();
+        event_fragment_from_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectDate(event_fragment_from_date);
+            }
+        });
 
-        sortByFromDate();
-
-        sortByFromAndToDate();
+        event_fragment_to_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectDate(event_fragment_to_date);
+            }
+        });
 
         return view;
     }
@@ -223,30 +205,30 @@ public class EventFragment extends SuperFragment {
 
     private void fillEventLists(String sortOption) {
         FirebaseFirestore.getInstance().collection("events_info").orderBy(sortOption).get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        for (DocumentSnapshot snap : snap_list) {
-                            FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
-                            if (fmap.hasFields(Event.FIELDS)) {
-                                Event event = new Event(fmap);
-                                event_all.add(event);
-                                if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))
-                                    event_fav.add(event);
-                                event_adapter.notifyDataSetChanged();
-                            }
+            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
+                    for (DocumentSnapshot snap : snap_list) {
+                        FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
+                        if (fmap.hasFields(Event.FIELDS)) {
+                            Event event = new Event(fmap);
+                            event_all.add(event);
+                            if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))
+                                event_fav.add(event);
+                            event_adapter.notifyDataSetChanged();
                         }
+                    }
 
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
-                        Log.e("EVENT_LIST", "Error fetching event date\n" + e.getMessage());
-                    }
-                });
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
+                    Log.e("EVENT_LIST", "Error fetching event date\n" + e.getMessage());
+                }
+            });
     }
 
     private void updateListView(Button new_selected, Button new_unselected, ArrayList<Event> data, ListView list) {
@@ -257,160 +239,123 @@ public class EventFragment extends SuperFragment {
         event_adapter.notifyDataSetChanged();
     }
 
-    private void sortByFromAndToDate(){
-        event_fragment_to_date.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    private void selectDate(EditText date){
+        checkbox_event_sort_name.setChecked(false);
+        checkbox_event_sort_name.setEnabled(true);
+        checkbox_event_sort_like.setChecked(false);
+        checkbox_event_sort_like.setEnabled(true);
+        checkbox_event_sort_date.setChecked(false);
+        checkbox_event_sort_date.setEnabled(true);
+        event_search_bar.getText().clear();
+        event_search_bar.clearFocus();
 
+        if (date == event_fragment_from_date){
+            event_fragment_to_date.getText().clear();
+            event_fragment_to_date.clearFocus();
+        }
+        else {
+            if (event_fragment_from_date.getText().length() == 0) {
+                event_fragment_to_date.getText().clear();
+                event_fragment_from_date.clearFocus();
+                Snackbar.make(getView(), "Please first select from date", 5000).show();
+                checkbox_event_sort_date.setChecked(true);
+                checkbox_event_sort_date.setEnabled(false);
+                sortByLike();
+                return;
+            }
+        }
+
+        datePicker = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                eventCalendar.set(Calendar.YEAR, year);
+                eventCalendar.set(Calendar.MONTH, monthOfYear);
+                eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabelDate(date);
             }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (event_fragment_from_date.getText().length() == 0) {
-                    event_fragment_to_date.getText().clear();
-                    Snackbar.make(getView(), "Please first select from date", 5000).show();
-                }
-                else {
-                    String date = s.toString();
+        };
 
-                    emptySortedEventList();
-
-                    Collections.sort(event_all, Event.dateComparator());
-                    Collections.sort(event_fav, Event.dateComparator());
-
-                    Date tempDateFrom = null;
-                    try {
-                        tempDateFrom = Utils.stringToDateFormat.parse(event_fragment_from_date.getText().toString());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
-
-
-
-
-                    // TODO: the from date condition doesn't work
-
-
-
-
-
-                    for (int i = 0; i < event_all.size(); i++) {
-                        if (event_all.get(i).getStartDate().compareTo(tempDateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(eventCalendar.getTime()) <= 0) {
-                            event_all_sorted.add(event_all.get(i));
-                        }
-                    }
-//                for (int i = 0; i < event_fav.size(); i++) {
-//                    if (event_fav.get(i).getStartDate().compareTo(tempDateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(tempDateTo) <= 0) {
-//                        event_fav_sorted.add(event_fav.get(i));
-//                    }
-//                }
-
-                    event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
-                    listview_event.setAdapter(event_adapter);
-                    event_adapter.notifyDataSetChanged();
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+        new DatePickerDialog(getContext(), datePicker, eventCalendar
+                .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
+                eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    private void sortByFromDate(){
-        event_fragment_from_date.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    private void updateLabelDate(EditText date){
+        String myFormat = "dd/MM/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
 
+        String stringDate = sdf.format(eventCalendar.getTime());
+
+        date.setText(stringDate);
+
+        if (date == event_fragment_from_date){
+            sortByFromDate(stringDate);
+        }
+        else {
+            sortByFromAndToDate(stringDate);
+        }
+    }
+
+    private void sortByFromDate(String s){
+        String date = s.toString();
+
+        emptySortedEventList();
+
+        Collections.sort(event_all, Event.dateComparator());
+        Collections.sort(event_fav, Event.dateComparator());
+
+        for (int i = 0; i < event_all.size(); i++) {
+            if (event_all.get(i).getStartDate().compareTo(eventCalendar.getTime()) >= 0) {
+                event_all_sorted.add(event_all.get(i));
             }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String date = s.toString();
-
-                emptySortedEventList();
-
-                Collections.sort(event_all, Event.dateComparator());
-                Collections.sort(event_fav, Event.dateComparator());
-
-                for (int i = 0; i < event_all.size(); i++) {
-                    if (event_all.get(i).getStartDate().compareTo(eventCalendar.getTime()) >= 0) {
-                        event_all_sorted.add(event_all.get(i));
-                    }
-                }
+        }
 //                for (int i = 0; i < event_fav.size(); i++) {
 //                    if (event_fav.get(i).getStartDate().compareTo(tempDate) >= 0) {
 //                        event_fav_sorted.add(event_fav.get(i));
 //                    }
 //                }
 
-                event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
-                listview_event.setAdapter(event_adapter);
-                event_adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+        event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
+        listview_event.setAdapter(event_adapter);
+        event_adapter.notifyDataSetChanged();
     }
 
-    private void selectFromDate(){
-        event_fragment_from_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkbox_event_sort_name.setChecked(false);
-                checkbox_event_sort_name.setEnabled(true);
-                checkbox_event_sort_like.setChecked(false);
-                checkbox_event_sort_like.setEnabled(true);
-                checkbox_event_sort_date.setChecked(false);
-                checkbox_event_sort_date.setEnabled(true);
-                event_fragment_to_date.getText().clear();
-                event_fragment_to_date.clearFocus();
-                event_search_bar.getText().clear();
-                event_search_bar.clearFocus();
+    private void sortByFromAndToDate(String s){
+        String date = s.toString();
 
-                new DatePickerDialog(getContext(), dateFromPicker, eventCalendar
-                        .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
-                        eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        emptySortedEventList();
+
+        Collections.sort(event_all, Event.dateComparator());
+        Collections.sort(event_fav, Event.dateComparator());
+
+        Date tempDateFrom = null;
+        try {
+            tempDateFrom = Utils.stringToDateFormat.parse(event_fragment_from_date.getText().toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        // TODO: the from date condition doesn't work
+
+
+        for (int i = 0; i < event_all.size(); i++) {
+            if (event_all.get(i).getStartDate().compareTo(tempDateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(eventCalendar.getTime()) <= 0) {
+                event_all_sorted.add(event_all.get(i));
             }
-        });
-    }
+        }
+//                for (int i = 0; i < event_fav.size(); i++) {
+//                    if (event_fav.get(i).getStartDate().compareTo(tempDateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(tempDateTo) <= 0) {
+//                        event_fav_sorted.add(event_fav.get(i));
+//                    }
+//                }
 
-    private void updateLabelDateFrom() {
-        String myFormat = "dd/MM/yy";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
-
-        event_fragment_from_date.setText(sdf.format(eventCalendar.getTime()));
-    }
-
-    private void selectToDate(){
-        event_fragment_to_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkbox_event_sort_name.setChecked(false);
-                checkbox_event_sort_name.setEnabled(true);
-                checkbox_event_sort_like.setChecked(false);
-                checkbox_event_sort_like.setEnabled(true);
-                checkbox_event_sort_date.setChecked(false);
-                checkbox_event_sort_date.setEnabled(true);
-                event_search_bar.getText().clear();
-                event_search_bar.clearFocus();
-
-                new DatePickerDialog(getContext(), dateToPicker, eventCalendar
-                        .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
-                        eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-    }
-
-    private void updateLabelDateTo() {
-        String myFormat = "dd/MM/yy";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
-
-        event_fragment_to_date.setText(sdf.format(eventCalendar.getTime()));
+        event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
+        listview_event.setAdapter(event_adapter);
+        event_adapter.notifyDataSetChanged();
     }
 
     private void sortWithSearchBar(){
@@ -549,3 +494,208 @@ public class EventFragment extends SuperFragment {
         });
     }
 }
+
+
+
+//************************************************************************************
+
+//        datePicker = new DatePickerDialog.OnDateSetListener() {
+//
+//            @Override
+//            public void onDateSet(DatePicker view, int year, int monthOfYear,
+//                                  int dayOfMonth) {
+//                eventCalendar.set(Calendar.YEAR, year);
+//                eventCalendar.set(Calendar.MONTH, monthOfYear);
+//                eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+//
+//            }
+//
+//        };
+
+//************************************************************************************
+//        dateFromPicker = new DatePickerDialog.OnDateSetListener() {
+
+//            @Override
+//            public void onDateSet(DatePicker view, int year, int monthOfYear,
+//                                  int dayOfMonth) {
+//                eventCalendar.set(Calendar.YEAR, year);
+//                eventCalendar.set(Calendar.MONTH, monthOfYear);
+//                eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+//                updateLabelDateFrom();
+//            }
+//
+//        };
+//
+//        dateToPicker = new DatePickerDialog.OnDateSetListener() {
+//
+//            @Override
+//            public void onDateSet(DatePicker view, int year, int monthOfYear,
+//                                  int dayOfMonth) {
+//                eventCalendar.set(Calendar.YEAR, year);
+//                eventCalendar.set(Calendar.MONTH, monthOfYear);
+//                eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+//                updateLabelDateTo();
+//            }
+//
+//        };
+
+
+//    private void sortByFromAndToDate(){
+//        event_fragment_to_date.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                String date = s.toString();
+//
+//                emptySortedEventList();
+//
+//                Collections.sort(event_all, Event.dateComparator());
+//                Collections.sort(event_fav, Event.dateComparator());
+//
+//                Date tempDateFrom = null;
+//                try {
+//                    tempDateFrom = Utils.stringToDateFormat.parse(event_fragment_from_date.getText().toString());
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//
+//
+//
+//
+//
+//                // TODO: the from date condition doesn't work
+//
+//
+//
+//
+//
+//                for (int i = 0; i < event_all.size(); i++) {
+//                    if (event_all.get(i).getStartDate().compareTo(tempDateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(eventCalendar.getTime()) <= 0) {
+//                        event_all_sorted.add(event_all.get(i));
+//                    }
+//                }
+////                for (int i = 0; i < event_fav.size(); i++) {
+////                    if (event_fav.get(i).getStartDate().compareTo(tempDateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(tempDateTo) <= 0) {
+////                        event_fav_sorted.add(event_fav.get(i));
+////                    }
+////                }
+//
+//                event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
+//                listview_event.setAdapter(event_adapter);
+//                event_adapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
+//    }
+
+//***********************************************************************************************************
+
+
+//***********************************************************************************************************
+
+//    private void sortByFromDate(){
+//        event_fragment_from_date.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                String date = s.toString();
+//
+//                emptySortedEventList();
+//
+//                Collections.sort(event_all, Event.dateComparator());
+//                Collections.sort(event_fav, Event.dateComparator());
+//
+//                for (int i = 0; i < event_all.size(); i++) {
+//                    if (event_all.get(i).getStartDate().compareTo(eventCalendar.getTime()) >= 0) {
+//                        event_all_sorted.add(event_all.get(i));
+//                    }
+//                }
+////                for (int i = 0; i < event_fav.size(); i++) {
+////                    if (event_fav.get(i).getStartDate().compareTo(tempDate) >= 0) {
+////                        event_fav_sorted.add(event_fav.get(i));
+////                    }
+////                }
+//
+//                event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
+//                listview_event.setAdapter(event_adapter);
+//                event_adapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
+//    }
+
+//***********************************************************************************************************
+
+//***********************************************************************************************************
+
+//    private void selectFromDate(){
+//        event_fragment_from_date.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                checkbox_event_sort_name.setChecked(false);
+//                checkbox_event_sort_name.setEnabled(true);
+//                checkbox_event_sort_like.setChecked(false);
+//                checkbox_event_sort_like.setEnabled(true);
+//                checkbox_event_sort_date.setChecked(false);
+//                checkbox_event_sort_date.setEnabled(true);
+//                event_fragment_to_date.getText().clear();
+//                event_fragment_to_date.clearFocus();
+//                event_search_bar.getText().clear();
+//                event_search_bar.clearFocus();
+//
+//                new DatePickerDialog(getContext(), dateFromPicker, eventCalendar
+//                        .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
+//                        eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
+//            }
+//        });
+//    }
+//
+//    private void updateLabelDateFrom() {
+//        String myFormat = "dd/MM/yy";
+//        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+//
+//        event_fragment_from_date.setText(sdf.format(eventCalendar.getTime()));
+//    }
+//
+//    private void selectToDate(){
+//        event_fragment_to_date.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                checkbox_event_sort_name.setChecked(false);
+//                checkbox_event_sort_name.setEnabled(true);
+//                checkbox_event_sort_like.setChecked(false);
+//                checkbox_event_sort_like.setEnabled(true);
+//                checkbox_event_sort_date.setChecked(false);
+//                checkbox_event_sort_date.setEnabled(true);
+//                event_search_bar.getText().clear();
+//                event_search_bar.clearFocus();
+//
+//                new DatePickerDialog(getContext(), dateToPicker, eventCalendar
+//                        .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
+//                        eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
+//            }
+//        });
+//    }
+//
+//    private void updateLabelDateTo() {
+//        String myFormat = "dd/MM/yy";
+//        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+//
+//        event_fragment_to_date.setText(sdf.format(eventCalendar.getTime()));
+//    }
