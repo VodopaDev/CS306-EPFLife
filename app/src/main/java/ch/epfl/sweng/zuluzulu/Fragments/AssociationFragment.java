@@ -76,6 +76,7 @@ public class AssociationFragment extends SuperFragment {
 
         assosAll = new ArrayList<>();
         assosFav = new ArrayList<>();
+        assosToFilter = new ArrayList<>();
         assosFiltered = new ArrayList<>();
         fillAssociationLists();
     }
@@ -123,6 +124,7 @@ public class AssociationFragment extends SuperFragment {
             }
 
         });
+
         return view;
     }
 
@@ -144,6 +146,7 @@ public class AssociationFragment extends SuperFragment {
     private void updateListView(Button newSelected, Button newUnselected, List<Association> newToFilter) {
         newSelected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         newUnselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
+        plainTextFilter.setText("");
         assosToFilter = newToFilter;
         assosFiltered.clear();
         assosFiltered.addAll(assosToFilter);
