@@ -97,6 +97,7 @@ public class PostTest {
         assertEquals(user.getSciper(), post1.getUserSciper());
         assertEquals(upScipers1, post1.getUpScipers());
         assertEquals(downScipers1, post1.getDownScipers());
+        assertEquals(null, post1.getId());
     }
 
     @Test

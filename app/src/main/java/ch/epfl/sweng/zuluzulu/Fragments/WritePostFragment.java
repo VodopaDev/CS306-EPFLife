@@ -43,8 +43,9 @@ public class WritePostFragment extends SuperFragment {
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_CHANNEL = "ARG_CHANNEL";
 
-    protected static final String CHANNEL_DOCUMENT_NAME = "channels/channel";
+    private static final String CHANNEL_DOCUMENT_NAME = "channels/channel";
     private static final String POST_COLLECTION_NAME = "posts";
+    private static final int POST_MAX_LENGTH = 200;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -164,7 +165,7 @@ public class WritePostFragment extends SuperFragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int messageLength = s.toString().length();
-                boolean correctFormat = 0 < messageLength && messageLength < 200;;
+                boolean correctFormat = 0 < messageLength && messageLength < POST_MAX_LENGTH;;
                 sendButton.setEnabled(correctFormat);
             }
 
