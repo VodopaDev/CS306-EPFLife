@@ -159,7 +159,10 @@ public class EventDetailFragment extends SuperFragment {
 
                 // For dropping a marker at a point on the Map
                 LatLng epfl = new LatLng(46.520537, 6.570930);
-                googleMap.addMarker(new MarkerOptions().position(epfl).title("Marker Title").snippet("Marker Description"));
+                LatLng co = new LatLng(46.520135, 6.565263);
+                googleMap.addMarker(new MarkerOptions().position(epfl).title("ce").snippet("ce"));
+                googleMap.addMarker(new MarkerOptions().position(co).title("co").snippet("co"));
+
 
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(epfl).zoom(12).build();
