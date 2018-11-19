@@ -61,11 +61,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private Stack<SuperFragment> previous_fragments;
     private User user;
 
-    // This resource is used for tests
-    // That's the recommended way to implement it
-    // @see https://developer.android.com/training/testing/espresso/idling-resource#integrate-recommended-approach
-    private CountingIdlingResource resource = new CountingIdlingResource("Main Activity");
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
-
     /**
      * Open fragment and add tag
      *
@@ -120,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         fragment.setArguments(toSend);
         openFragment(fragment);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -292,12 +285,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case CREATE_EVENT:
                 openFragment(AddEventFragment.newInstance());
                 break;
-            case INCREMENT_IDLING_RESOURCE:
-                incrementCountingIdlingResource();
-                break;
-            case DECREMENT_IDLING_RESOURCE:
-                decrementCountingIdlingResource();
-                break;
             case SET_TITLE:
                 setTitle((String) data);
                 break;
@@ -398,30 +385,5 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      */
     public User getUser() {
         return user;
-    }
-
-    /**
-     * Increment the countingIdlingResource
-     * Do this before a async task
-     */
-    public void incrementCountingIdlingResource() {
-        resource.increment();
-    }
-
-    /**
-     * Decrement the countingIdlingResource
-     * Do this after a async task
-     */
-    public void decrementCountingIdlingResource() {
-        resource.decrement();
-    }
-
-    /**
-     * Return the resource for the tests
-     *
-     * @return resource
-     */
-    public CountingIdlingResource getCountingIdlingResource() {
-        return resource;
     }
 }
