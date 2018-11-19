@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.TestingUtility;
 
 import android.support.test.espresso.IdlingRegistry;
+import android.support.test.espresso.IdlingResource;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -9,6 +10,7 @@ import org.junit.Rule;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility;
@@ -29,7 +31,7 @@ public abstract class TestWithUserAndFragment<U extends User, F extends SuperFra
         initUser();
         Utility.addUserToMainIntent(mActivityRule, user);
         // Register the idling resource
-        IdlingRegistry.getInstance().register(mActivityRule.getActivity().getCountingIdlingResource());
+        IdlingRegistry.getInstance().register(IdlingResourceFactory.getCountingIdlingResource());
         // Open the fragment
         initFragment();
         assert (fragment != null);

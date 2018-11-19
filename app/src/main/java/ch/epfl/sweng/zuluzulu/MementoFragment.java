@@ -1,21 +1,22 @@
 package ch.epfl.sweng.zuluzulu;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -62,7 +63,7 @@ public class MementoFragment extends SuperFragment {
         urlHandler.execute(MEMENTO_URL);
 
         // Send increment to wait async execution in test
-        mListener.onFragmentInteraction(CommunicationTag.INCREMENT_IDLING_RESOURCE, true);
+        IdlingResourceFactory.incrementCountingIdlingResource();
     }
 
     /**
@@ -76,7 +77,7 @@ public class MementoFragment extends SuperFragment {
             addEvent(datas);
         }
 
-        mListener.onFragmentInteraction(CommunicationTag.DECREMENT_IDLING_RESOURCE, true);
+        IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
     private void addEvent(String datas) {
@@ -85,6 +86,9 @@ public class MementoFragment extends SuperFragment {
             return;
         }
 
+        TextView view = Objects.requireNonNull(getView()).findViewById(R.id.memento_list);
+
+
         JSONArray jsonarray = null;
         try {
             jsonarray = new JSONArray(datas);
@@ -92,7 +96,6 @@ public class MementoFragment extends SuperFragment {
                 JSONObject jsonobject = jsonarray.getJSONObject(i);
                 System.out.println("name => " + jsonobject.getString("title"));
                 System.out.println("shortDesc => " + jsonobject.getString("description"));
-//          System.out.println("longDesc => " + jsonobject.getString("description"));
                 System.out.println("start_date_string => " + jsonobject.getString("event_start_date"));
                 System.out.println("end_date_string => " + jsonobject.getString("event_end_date"));
                 System.out.println("start_time_string => " + jsonobject.getString("event_start_time"));
@@ -101,6 +104,7 @@ public class MementoFragment extends SuperFragment {
                 // nom de l'association qui organise !
                 System.out.println("organizer => " + jsonobject.getString("event_organizer"));
 
+                view.append(jsonobject.getString("title") + "\n");
             }
         } catch (JSONException e) {
             e.printStackTrace();
