@@ -46,8 +46,6 @@ public class FirebaseProxy {
     public static void init(OnFragmentInteractionListener mListener, Context appContext) {
         if (proxy == null)
             proxy = new FirebaseProxy(mListener, appContext);
-        else
-            throw new IllegalStateException("The FirebaseProxy is already initialized");
     }
 
     public static FirebaseProxy getInstance() {
@@ -62,9 +60,9 @@ public class FirebaseProxy {
      * @param onResult interface defining apply()
      */
     public void getAllAssociations(OnResult<List<Association>> onResult){
-        assoCollection.orderBy("name").get().addOnSuccessListener(queryDocumentSnapshots -> {
+        assoCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
             List<Association> resultList = new ArrayList<>();
-            for(DocumentSnapshot snap: queryDocumentSnapshots){
+            for(DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){
                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
                 if(fmap.hasFields(Association.requiredFields()))
                     resultList.add(new Association(fmap));

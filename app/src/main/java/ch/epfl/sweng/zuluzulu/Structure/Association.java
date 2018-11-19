@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.io.Serializable;
@@ -17,7 +18,7 @@ import ch.epfl.sweng.zuluzulu.R;
  * A simple class describing an Association
  * Has diverse getters and some functions to create views
  */
-public class Association extends FirebaseStructure {
+public class Association extends FirebaseStructure implements Comparable<Association> {
 
     private String name;
     private String short_desc;
@@ -72,7 +73,7 @@ public class Association extends FirebaseStructure {
 
     /**
      * Return a Comparator for two Associations using their names
-     *
+     * @param type The field to be compared
      * @return compareTo of two Associations names
      */
     public static Comparator<Association> getComparatorWith(String type) {
@@ -170,5 +171,10 @@ public class Association extends FirebaseStructure {
 
     public static List<String> requiredFields(){
         return Arrays.asList("id", "name", "short_desc", "long_desc");
+    }
+
+    @Override
+    public int compareTo(@NonNull Association o) {
+        return name.compareTo(o.getName());
     }
 }

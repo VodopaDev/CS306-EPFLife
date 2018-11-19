@@ -54,6 +54,8 @@
         android:layout_height="34dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:checked="true"
+        android:enabled="false"
         android:text="@string/fragment_assos_sort_name"
         app:layout_constraintBottom_toTopOf="@+id/association_fragment_listview"
         app:layout_constraintEnd_toStartOf="@+id/assos_fragment_checkbox_sort_date"
