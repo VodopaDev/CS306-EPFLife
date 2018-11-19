@@ -183,8 +183,8 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
                 } else {
                     FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
                     List<Long> received_assos = fmap.getLongList("fav_assos");
-                    List<Integer> received_events = fmap.getIntegerList("followed_events");
-                    List<Integer> received_chats = fmap.getIntegerList("followed_chats");
+                    List<Long> received_events = fmap.getLongList("followed_events");
+                    List<Long> received_chats = fmap.getLongList("followed_chats");
 
                     ((AuthenticatedUser) user).setFavAssos(received_assos);
                     ((AuthenticatedUser) user).setFollowedEvents(received_events);

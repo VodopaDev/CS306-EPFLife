@@ -15,16 +15,13 @@ import ch.epfl.sweng.zuluzulu.R;
 
 
 // TODO: Add admin access, ending date, linked-chat id, linked-association id, position
-public class Event implements Serializable {
-    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "start_date", "likes");
+public class Event extends FirebaseStructure {
 
-    private int id;
     private String name;
     private String shortDesc;
     private String longDesc;
 
     private Date startDate;
-    private String start_date_string;
     private int likes;
     private String organizer;
     private String place;
@@ -40,10 +37,10 @@ public class Event implements Serializable {
      * @throws IllegalArgumentException if the FirebaseMap isn't an Event's FirebaseMap
      */
     public Event(FirebaseMapDecorator data) {
-        if (!data.hasFields(FIELDS))
+        super(data);
+        if (!data.hasFields(requiredFields()))
             throw new IllegalArgumentException();
 
-        id = data.getInteger("id");
         name = data.getString("name");
         shortDesc = data.getString("short_desc");
         longDesc = data.getString("long_desc");
@@ -58,43 +55,21 @@ public class Event implements Serializable {
         bannerUri = null; //data.getString("banner_uri");
 
         startDate = data.getDate("start_date");
-        start_date_string = Utils.dateFormat.format(startDate);
 
         likes = data.getInteger("likes");
     }
 
 
-    public static Comparator<Event> assoNameComparator() {
-        return new Comparator<Event>() {
-            @Override
-            public int compare(Event o1, Event o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        };
+    public static Comparator<Event> nameComparator() {
+        return (o1, o2) -> o1.getName().compareTo(o2.getName());
     }
 
     public static Comparator<Event> dateComparator() {
-        return new Comparator<Event>() {
-            @Override
-            public int compare(Event o1, Event o2) {
-                return o1.getStartDate().compareTo(o2.getStartDate());
-            }
-        };
+        return (o1, o2) -> o1.getStartDate().compareTo(o2.getStartDate());
     }
 
     public static Comparator<Event> likeComparator() {
-        return new Comparator<Event>() {
-            @Override
-            public int compare(Event o1, Event o2) {
-                return o2.getLikes().compareTo(o1.getLikes());
-            }
-        };
-    }
-
-    // TODO: Add a method to add/remove one User to admins (instead of getting/setting the admins list)
-    // TODO: Check inputs before changing fields
-    public int getId() {
-        return id;
+        return (o1, o2) -> o2.getLikes().compareTo(o1.getLikes());
     }
 
     public String getName() {
@@ -114,7 +89,7 @@ public class Event implements Serializable {
     }
 
     public String getStartDateString() {
-        return start_date_string;
+        return Utils.dateFormat.format(startDate);
     }
 
     public Uri getBannerUri() {
@@ -129,18 +104,29 @@ public class Event implements Serializable {
                 Uri.parse(iconUri);
     }
 
-    public String getOrganizer() { return organizer; }
+    public String getOrganizer() {
+        return organizer;
+    }
 
-    public String getPlace() { return place; }
+    public String getPlace() {
+        return place;
+    }
 
-    public Integer getLikes() { return likes; }
+    public Integer getLikes() {
+        return likes;
+    }
 
     public void increaseLikes() {
-        likes += 1;
+        likes--;
     }
 
     public void decreaseLikes() {
-        likes -= 1;
+        likes++;
     }
+
+    public static List<String> requiredFields() {
+        return Arrays.asList("id","name","short_desc","long_desc","start_date","likes");
+    }
+
 
 }

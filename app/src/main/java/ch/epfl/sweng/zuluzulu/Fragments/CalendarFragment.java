@@ -148,7 +148,7 @@ public class CalendarFragment extends SuperFragment {
                         String now = Utils.dateFormat.format(date);
                         for (DocumentSnapshot snap : snap_list) {
                             FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
-                            if (fmap.hasFields(Event.FIELDS)) {
+                            if (fmap.hasFields(Event.requiredFields())) {
                                 Event event = new Event(fmap);
                                 if (user.isFollowedEvent(event)) {
                                     followedEvents.add(event);

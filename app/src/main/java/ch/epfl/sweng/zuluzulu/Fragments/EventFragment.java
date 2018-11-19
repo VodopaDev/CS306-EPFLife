@@ -175,8 +175,8 @@ public class EventFragment extends SuperFragment {
 
 
 //        checkbox_event_sort_name.setEnabled(false);
-//        event_all.sort(Event.assoNameComparator());
-//        event_fav.sort(Event.assoNameComparator());
+//        event_all.sort(Event.nameComparator());
+//        event_fav.sort(Event.nameComparator());
 //        event_adapter.notifyDataSetChanged();
 //        checkbox_event_sort_date.setChecked(false);
 //        checkbox_event_sort_date.setEnabled(true);
@@ -186,8 +186,8 @@ public class EventFragment extends SuperFragment {
             public void onClick(View v) {
                 checkbox_event_sort_name.setEnabled(false);
 
-                Collections.sort(event_all, Event.assoNameComparator());
-                Collections.sort(event_fav, Event.assoNameComparator());
+                Collections.sort(event_all, Event.nameComparator());
+                Collections.sort(event_fav, Event.nameComparator());
 
                 event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
 
@@ -327,7 +327,7 @@ public class EventFragment extends SuperFragment {
                         List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
                         for (DocumentSnapshot snap : snap_list) {
                             FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
-                            if (fmap.hasFields(Event.FIELDS)) {
+                            if (fmap.hasFields(Event.requiredFields())) {
                                 Event event = new Event(fmap);
                                 event_all.add(event);
                                 if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))
