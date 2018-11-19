@@ -113,27 +113,20 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
 
     private void setButton(boolean up, Post post, ImageView upButton, ImageView downButton, TextView nbUpsText) {
         if (!post.isUpByUser() && !post.isDownByUser()) {
+            String userSciper = post.getUserSciper();
             int nbUps = post.getNbUps() + (up ? 1 : -1);
+            List<String> upDownScipers = up ? post.getUpScipers() : post.getDownScipers();
+            String key = up ? "upScipers" : "downScipers";
             DocumentReference documentReference = db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
-            if (up) {
-                List<String> upScipers = post.getUpScipers();
-                upScipers.add(post.getUserSciper());
 
-                documentReference.update(
-                        "nbUps", nbUps,
-                        "upScipers", upScipers
-                );
-                post.setUpByUser(true);
-            } else {
-                List<String> downScipers = post.getDownScipers();
-                downScipers.add(post.getUserSciper());
+            upDownScipers.add(userSciper);
+            documentReference.update(
+                    "nbUps", nbUps,
+                    key, upDownScipers
+            );
 
-                documentReference.update(
-                        "nbUps", nbUps,
-                        "downScipers", downScipers
-                );
-                post.setDownByUser(true);
-            }
+            post.setUpByUser(up);
+            post.setDownByUser(!up);
             updateUps(post, upButton, downButton);
             nbUpsText.setText("" + nbUps);
         }
