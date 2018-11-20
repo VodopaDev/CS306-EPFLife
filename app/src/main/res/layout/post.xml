@@ -62,8 +62,8 @@
 
             <ImageView
                 android:id="@+id/post_up_button"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center_vertical|center_horizontal"
                 app:srcCompat="@drawable/up_white" />
 
@@ -77,12 +77,12 @@
                 android:gravity="center_vertical|center_horizontal"
                 android:text="5"
                 android:textColor="@color/white"
-                android:textSize="10sp" />
+                android:textSize="16sp" />
 
             <ImageView
                 android:id="@+id/post_down_button"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center_vertical|center_horizontal"
                 app:srcCompat="@drawable/down_white" />
         </LinearLayout>
@@ -93,8 +93,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_margin="5dp">
-
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
         <TextView
             android:id="@+id/post_nb_responses_textview"
             android:layout_width="wrap_content"

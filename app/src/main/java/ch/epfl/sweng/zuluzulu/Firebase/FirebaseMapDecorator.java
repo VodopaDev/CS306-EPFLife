@@ -16,6 +16,7 @@ public class FirebaseMapDecorator {
 
     // the adapted Map
     private final Map<String, Object> map;
+    private String id;
 
     /**
      * Adapt a map
@@ -33,6 +34,7 @@ public class FirebaseMapDecorator {
      */
     public FirebaseMapDecorator(DocumentSnapshot snap) {
         this.map = snap.getData();
+        this.id = snap.getId();
     }
 
     /**
@@ -116,6 +118,16 @@ public class FirebaseMapDecorator {
     }
 
     /**
+     * Get a list of string from the adapted map
+     *
+     * @param field key to use on map
+     * @return String list casted value
+     */
+    public List<String> getStringList(String field) {
+        return (List<String>) map.get(field);
+    }
+
+    /**
      * Get a IntegerList-casted value from the adapted map
      *
      * @param field key to use on the map
@@ -157,5 +169,10 @@ public class FirebaseMapDecorator {
         return true;
     }
 
-
+    /**
+     * Get the document id
+     *
+     * @return the document id
+     */
+    public String getId() { return id; }
 }
