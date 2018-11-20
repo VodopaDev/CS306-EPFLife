@@ -4,17 +4,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.util.Pair;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.AdapterView;
 
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,19 +19,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import ch.epfl.sweng.zuluzulu.Adapters.AddAssociationArrayAdapter;
-import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
+import ch.epfl.sweng.zuluzulu.Adapters.AddAssociationAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
 import ch.epfl.sweng.zuluzulu.URLTools.IconParser;
-import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlResultListener;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -58,9 +52,6 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     private List<String> datas;
     private Database db = DatabaseFactory.getDependency();
     private List<Association> associations = new ArrayList<>();
-
-    private AddAssociationArrayAdapter adapter = null;
-
 
     public AssociationsGeneratorFragment() {
         // Required empty public constructor
@@ -89,25 +80,54 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             this.datas = results;
             int index = 0;
             for (String data : datas
-                 ) {
-                if(index == 10)
-                    break;
-                // Tell tests the async execution is finished
-                IdlingResourceFactory.incrementCountingIdlingResource();
+                    ) {
+                if (index < 0) {
+                    // Tell tests the async execution is finished
+                    IdlingResourceFactory.incrementCountingIdlingResource();
 
-                String url = data.split(",")[0];
+                    String url = data.split(",")[0];
 
-                int finalIndex = index;
-                UrlHandler urlHandler = new UrlHandler(new UrlResultListener<List<String>>() {
-                    @Override
-                    public void onFinished(List<String> result) {
-                        handleIcon(finalIndex, result);
-                    }
-                }, new IconParser());
+                    int finalIndex = index;
+                    UrlHandler urlHandler = new UrlHandler(new UrlResultListener<List<String>>() {
+                        @Override
+                        public void onFinished(List<String> result) {
+                            handleIcon(finalIndex, result);
+                        }
+                    }, new IconParser());
 
-                urlHandler.execute(url);
-                index++;
+                    urlHandler.execute(url);
+                    index++;
+                }
+
+                Association association = new Association(
+                        index,
+                        data.split(",")[1],
+                        data.split(",")[2],
+                        data.split(",")[2],
+                        Uri.parse(EPFL_LOGO),
+                        Uri.parse(EPFL_LOGO),
+                        new ArrayList<>(),
+                        1,
+                        0);
+
+                this.associations.add(association);
             }
+
+            RecyclerView mRecyclerView = (RecyclerView) getView().findViewById(R.id.associations_generator_recyclerview);
+
+            // use this setting to improve performance if you know that changes
+            // in content do not change the layout size of the RecyclerView
+            mRecyclerView.setHasFixedSize(true);
+
+            // use a linear layout manager
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+
+            // specify an adapter (see also next example)
+            AddAssociationAdapter adapter = new AddAssociationAdapter(this.getContext(), this.associations);
+            mRecyclerView.setAdapter(adapter);
+
+
         }
 
         IdlingResourceFactory.decrementCountingIdlingResource();
@@ -135,36 +155,12 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             docData.put("events", new ArrayList<>());
             docData.put("icon_uri", final_icon_url);
             docData.put("name", datas.get(index).split(",")[1]);
-            docData.put("short_desc", datas.get(index).split(",")[2]);
-            docData.put("long_desc", datas.get(index).split(",")[2]);
+                docData.put("short_desc", datas.get(index).split(",")[2]);
+                docData.put("long_desc", datas.get(index).split(",")[2]);
             docData.put("id", Integer.toString(index));
 
-            Association association = new Association(
-                        index,
-                        datas.get(index).split(",")[1]
-                        , datas.get(index).split(",")[2],
-                        datas.get(index).split(",")[2],
-                        Uri.parse(final_icon_url),
-                        Uri.parse(final_icon_url),
-                        new ArrayList<>(),
-                        1,
-                        0);
-
-            this.associations.add(association);
-
-            ListView list = Objects.requireNonNull(getView()).findViewById(R.id.associations_generator_listview);
-            if(adapter == null) {
-                adapter = new AddAssociationArrayAdapter(getContext(), this.associations, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        System.out.println("ADD");
-                    }
-                });
-                System.out.println("ADAPTER CREATED");
-            }
-            list.setAdapter(adapter);
-
-            adapter.notifyDataSetChanged();
+            System.out.println(datas.get(index).split(",")[1] + " added");
+            db.collection("assos_info").document(Integer.toString(index)).set(docData);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

@@ -7,9 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.AssociationsGeneratorFragment">
 
-    <ListView
-        android:id="@+id/associations_generator_listview"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/associations_generator_recyclerview"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:descendantFocusability="blocksDescendants"
+        />
 
 </FrameLayout>
