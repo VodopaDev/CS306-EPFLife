@@ -43,10 +43,12 @@ public class Channel implements Serializable {
         this.isClickable = true;
         this.distance = 0;
 
+        // Init the Icon URI
         String icon_str = data.getString("icon_uri");
-        icon_uri = icon_str == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon).toString() :
-                Uri.parse(icon_str).toString();
+        Uri uri = icon_str == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
+                Uri.parse(icon_str);
+        icon_uri = uri == null ? null : uri.toString();
     }
 
     /**

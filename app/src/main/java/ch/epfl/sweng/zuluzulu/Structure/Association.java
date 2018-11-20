@@ -61,15 +61,18 @@ public class Association implements Serializable {
 
         // Init the Icon URI
         String icon_str = data.getString("icon_uri");
-        icon_uri = icon_str == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon).toString() :
-                Uri.parse(icon_str).toString();
+        Uri uri = icon_str == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
+                Uri.parse(icon_str);
+        icon_uri = uri == null ? null : uri.toString();
+
 
         // Init the Banner URI
         String banner_str = data.getString("banner_uri");
-        banner_uri = banner_str == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner).toString() :
-                Uri.parse(banner_str).toString();
+        uri = banner_str == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
+                Uri.parse(banner_str);
+        banner_uri = uri == null ? null : uri.toString();
     }
 
     /**
