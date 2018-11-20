@@ -111,8 +111,6 @@ public class MementoFragment extends SuperFragment {
             return;
         }
 
-
-
         JSONArray jsonarray = null;
         try {
             jsonarray = new JSONArray(datas);
@@ -122,17 +120,14 @@ public class MementoFragment extends SuperFragment {
                 System.out.println("start_time_string => " + jsonobject.getString("event_start_time"));
                 System.out.println("end_time_string => " + jsonobject.getString("event_end_time"));
                */ // nom de l'association qui organise !
-
-                Event event = new Event(
-                        i,
+                Event event = new Event(i,
                         jsonobject.getString("title"),
                         jsonobject.getString("description"), jsonobject.getString("description"),
                         jsonobject.getString("event_start_date"),
                         0,
                         jsonobject.getString("event_organizer"),
                         jsonobject.getString("event_place_and_room"),
-                        jsonobject.getString("event_visual_absolute_url"), jsonobject.getString("event_visual_absolute_url")
-                );
+                        jsonobject.getString("event_visual_absolute_url"), jsonobject.getString("event_visual_absolute_url"));
                 this.events.add(event);
                 eventAdapter.notifyDataSetChanged();
             }
