@@ -25,8 +25,8 @@ public class Association implements Serializable {
     private String short_desc;
     private String long_desc;
 
-    private Uri icon_uri;
-    private Uri banner_uri;
+    private String icon_uri;
+    private String banner_uri;
 
     private List<Map<String, Object>> events;
     private int channel_id;
@@ -61,15 +61,18 @@ public class Association implements Serializable {
 
         // Init the Icon URI
         String icon_str = data.getString("icon_uri");
-        icon_uri = icon_str == null ?
+        Uri uri = icon_str == null ?
                 Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(icon_str);
+        icon_uri = uri == null ? null : uri.toString();
+
 
         // Init the Banner URI
         String banner_str = data.getString("banner_uri");
-        banner_uri = banner_str == null ?
+        uri = banner_str == null ?
                 Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
                 Uri.parse(banner_str);
+        banner_uri = uri == null ? null : uri.toString();
     }
 
     /**
@@ -136,8 +139,7 @@ public class Association implements Serializable {
      *
      * @return the icon Uri
      */
-    @Nullable
-    public Uri getIconUri() {
+    public String getIconUri() {
         return icon_uri;
     }
 
@@ -174,8 +176,7 @@ public class Association implements Serializable {
      *
      * @return the banner Uri
      */
-    @Nullable
-    public Uri getBannerUri() {
+    public String getBannerUri() {
         return banner_uri;
     }
 }
