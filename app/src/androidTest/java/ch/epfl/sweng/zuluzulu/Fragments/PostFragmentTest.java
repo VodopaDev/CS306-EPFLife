@@ -52,6 +52,11 @@ public class PostFragmentTest extends TestWithAuthenticatedAndFragment<PostFragm
     }
 
     @Test
+    public void testUserCanSwipeDown() {
+        onView(withId(R.id.posts_list_view)).perform(ViewActions.swipeDown());
+    }
+
+    @Test
     public void testUserCanUp() {
         // I don't know how to click on a particular element of one item in the list view
         // onData(is(instanceOf(Post.class))).atPosition(0).check(matches(isDisplayed()));

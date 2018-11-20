@@ -32,9 +32,9 @@ public class Event implements Serializable {
     private String bannerUri;
     private String iconUri;
 
+
     private int channel_id;
     private int assos_id;
-
 
     /**
      * Create an event using a FirebaseMap
@@ -57,8 +57,18 @@ public class Event implements Serializable {
         shortDesc = data.getString("short_desc");
         longDesc = data.getString("long_desc");
 
-        iconUri = data.getString("icon_uri");
-        bannerUri = null; //data.getString("banner_uri");
+        String icon_str = data.getString("icon_uri");
+        Uri uri = icon_str == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
+                Uri.parse(icon_str);
+        iconUri = uri == null ? null : uri.toString();
+
+        // Init the Banner URI
+        String banner_str = data.getString("banner_uri");
+        uri = banner_str == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
+                Uri.parse(banner_str);
+        bannerUri = uri == null ? null : uri.toString();
 
         startDate = data.getDate("start_date");
         start_date_string = Utils.dateFormat.format(startDate);
@@ -128,16 +138,12 @@ public class Event implements Serializable {
         return start_date_string;
     }
 
-    public Uri getBannerUri() {
-        return bannerUri == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
-                Uri.parse(bannerUri);
+    public String getBannerUri() {
+        return bannerUri;
     }
 
-    public Uri getIconUri() {
-        return iconUri == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
-                Uri.parse(iconUri);
+    public String getIconUri() {
+        return iconUri;
     }
 
     public String getOrganizer() { return organizer; }
