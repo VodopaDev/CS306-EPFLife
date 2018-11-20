@@ -22,11 +22,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChannelArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -95,13 +98,10 @@ public class ChannelFragment extends SuperFragment {
         adapter = new ChannelArrayAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Channel selectedChannel = listOfChannels.get(position);
-                if (selectedChannel.isAccessible()) {
-                    mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel);
-                }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Channel selectedChannel = listOfChannels.get(position);
+            if (selectedChannel.isAccessible()) {
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel);
             }
         });
 
@@ -118,32 +118,16 @@ public class ChannelFragment extends SuperFragment {
      * Read data from the database and get the list of the channels
      */
     private void getChannelsFromDatabase() {
-        IdlingResourceFactory.incrementCountingIdlingResource();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(CHANNELS_COLLECTION_NAME).orderBy("id", Query.Direction.ASCENDING).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            listOfChannels.clear();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
-                                if (fmap.hasFields(Channel.FIELDS)) {
-                                    Channel channel = new Channel(fmap);
-                                    if (channel.canBeSeenBy(user, userLocation)) {
-                                        listOfChannels.add(channel);
-                                    }
-                                }
-                            }
-                            adapter.notifyDataSetChanged();
-                            swipeRefreshLayout.setRefreshing(false);
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                        IdlingResourceFactory.decrementCountingIdlingResource();
-                    }
-                });
+        FirebaseProxy.getInstance().getAllChannels(result -> {
+            listOfChannels.clear();
+            for(Channel channel: result) {
+                if (channel.canBeSeenBy(user, userLocation))
+                    listOfChannels.add(channel);
+            }
+            adapter.notifyDataSetChanged();
+            adapter.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
+            swipeRefreshLayout.setRefreshing(false);
+        });
     }
 
     /**

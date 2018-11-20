@@ -144,7 +144,7 @@ public class CalendarFragment extends SuperFragment {
                 if (now.equals(event.getStartDateString()))
                     selectedDayEvents.add(event);
             }
-            
+
             eventAdapter.notifyDataSetChanged();
             if (getContext() != null)
                 calendarView.refreshCalendar(calendar);
