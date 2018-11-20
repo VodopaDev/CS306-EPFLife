@@ -47,6 +47,76 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
         fragment = MainFragment.newInstance(user);
     }
 
+    @Test
+    public void canLoadURLs() {
+        changeFactory("&#8211; <a href=\"http://example.com\">Other</a> (Other)<br />\n"
+                + "&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />\n"
+                + "<link rel=\"icon\" type=\"image/png\" href=\"images/favicon.png\" sizes=\"16x16\">");
+
+        adminUser();
+        onView(withId(R.id.associations_generator_recyclerview)).perform(
+                RecyclerViewActions.actionOnItem(hasDescendant(withText("LauzHack")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));
+        onView(withId(R.id.associations_generator_recyclerview)).perform(
+                RecyclerViewActions.actionOnItem(hasDescendant(withText("Other")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));
+
+    }
+
+    @Test
+    public void canChangeEpflLogo() {
+        changeFactory("&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />"
+                + "<link rel=\"icon\" type=\"image/png\" href=\"www.epfl.ch/favicon.ico\" sizes=\"16x16\">");
+        adminUser();
+        onView(withId(R.id.associations_generator_recyclerview)).perform(
+                RecyclerViewActions.actionOnItem(hasDescendant(withText("LauzHack")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));
+    }
+
+    private void changeFactory(String s) {
+        UrlReader reader = new UrlReader() {
+            @Override
+            public BufferedReader read(String name) {
+                return new BufferedReader(new StringReader(s));
+            }
+        };
+        UrlReaderFactory.setDependency(reader);
+    }
+
+    @Test
+    public void defaultLogoOnFailAssociationUrl() {
+        changeFactory("&#8211; <a href=\"faaake\">FAKE</a><br />"
+                + "<link rel=\"icon\" type=\"image/png\" href=\"www.epfl.ch/favicon.ico\" sizes=\"16x16\">");
+        adminUser();
+        onView(withId(R.id.associations_generator_recyclerview)).perform(
+                RecyclerViewActions.actionOnItem(hasDescendant(withText("FAKE")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));
+    }
+
+    @Test
+    public void showNoResults() {
+        changeFactory("nothing");
+        adminUser();
+
+        onView(withId(R.id.associations_generator_recyclerview)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void refuseNonAdmin() {
+        nonAdminUser();
+        Utility.checkFragmentIsClosed(R.id.associations_generator_fragment);
+    }
+
+    /**
+     * Create a fragment with non admin user
+     */
+    private void nonAdminUser() {
+        mActivityRule.getActivity().openFragment(AssociationsGeneratorFragment.newInstance(Utility.createTestAuthenticated()));
+    }
+
+    /**
+     * Create the fragment with admin user
+     */
+    private void adminUser() {
+        mActivityRule.getActivity().openFragment(AssociationsGeneratorFragment.newInstance(user));
+    }
+
     public class MyViewAction {
 
         public ViewAction clickChildViewWithId(final int id) {
@@ -69,76 +139,5 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
             };
         }
 
-    }
-    @Test
-    public void canLoadURLs() {
-        changeFactory("&#8211; <a href=\"http://example.com\">Other</a> (Other)<br />\n"
-                + "&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />\n"
-                + "<link rel=\"icon\" type=\"image/png\" href=\"images/favicon.png\" sizes=\"16x16\">");
-
-        adminUser();
-        onView(withId(R.id.associations_generator_recyclerview)).perform(
-                RecyclerViewActions.actionOnItem(hasDescendant(withText("LauzHack")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));
-        onView(withId(R.id.associations_generator_recyclerview)).perform(
-                RecyclerViewActions.actionOnItem(hasDescendant(withText("Other")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));
-
-    }
-
-
-    @Test
-    public void canChangeEpflLogo() {
-        changeFactory("&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />"
-                + "<link rel=\"icon\" type=\"image/png\" href=\"www.epfl.ch/favicon.ico\" sizes=\"16x16\">");
-        adminUser();
-        onView(withId(R.id.associations_generator_recyclerview)).perform(
-        RecyclerViewActions.actionOnItem(hasDescendant(withText("LauzHack")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));
-    }
-
-    private void changeFactory(String s) {
-        UrlReader reader = new UrlReader() {
-            @Override
-            public BufferedReader read(String name) {
-                return new BufferedReader(new StringReader(s));
-            }
-        };
-        UrlReaderFactory.setDependency(reader);
-    }
-
-    @Test
-    public void defaultLogoOnFailAssociationUrl() {
-        changeFactory("&#8211; <a href=\"faaake\">FAKE</a><br />"
-                + "<link rel=\"icon\" type=\"image/png\" href=\"www.epfl.ch/favicon.ico\" sizes=\"16x16\">");
-        adminUser();
-        onView(withId(R.id.associations_generator_recyclerview)).perform(
-        RecyclerViewActions.actionOnItem(hasDescendant(withText("FAKE")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));
-    }
-
-    @Test
-    public void showNoResults() {
-        changeFactory("nothing");
-        adminUser();
-
-        onView(withId(R.id.associations_generator_recyclerview)).check(matches(isDisplayed()));
-    }
-
-
-    @Test
-    public void refuseNonAdmin() {
-        nonAdminUser();
-        Utility.checkFragmentIsClosed(R.id.associations_generator_fragment);
-    }
-
-    /**
-     * Create a fragment with non admin user
-     */
-    private void nonAdminUser() {
-        mActivityRule.getActivity().openFragment(AssociationsGeneratorFragment.newInstance(Utility.createTestAuthenticated()));
-    }
-
-    /**
-     * Create the fragment with admin user
-     */
-    private void adminUser() {
-        mActivityRule.getActivity().openFragment(AssociationsGeneratorFragment.newInstance(user));
     }
 }
