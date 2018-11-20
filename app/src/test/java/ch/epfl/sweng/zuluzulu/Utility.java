@@ -21,8 +21,8 @@ public class Utility {
     private static final String firstName = "James";
     private static final String lastName = "Bond";
     private static final List<Long> favAssos = Arrays.asList(1L, 2L);
-    private static final List<Integer> followedEvents = new ArrayList<>();
-    private static final List<Integer> followedChats = new ArrayList<>();
+    private static final List<Long> followedEvents = new ArrayList<>();
+    private static final List<Long> followedChats = new ArrayList<>();
 
     private Utility() {
     }

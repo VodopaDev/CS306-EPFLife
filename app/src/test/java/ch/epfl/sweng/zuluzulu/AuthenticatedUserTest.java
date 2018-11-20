@@ -34,8 +34,8 @@ public class AuthenticatedUserTest {
     private final String last_name = "jomeau";
     private AuthenticatedUser user;
     private List<Long> fav_assos;
-    private List<Integer> fol_events;
-    private List<Integer> fol_chats;
+    private List<Long> fol_events;
+    private List<Long> fol_chats;
 
     @Before
     public void createUser() {
@@ -45,7 +45,7 @@ public class AuthenticatedUserTest {
 
         when(mocked_asso.getId()).thenReturn(1L);
         when(mocked_channel.getId()).thenReturn(1);
-        when(mocked_event.getId()).thenReturn(1);
+        when(mocked_event.getId()).thenReturn(1L);
 
 
         User.UserBuilder builder = new User.UserBuilder();
@@ -82,9 +82,9 @@ public class AuthenticatedUserTest {
 
     @Test
     public void setList() {
-        user.setFollowedChats(Collections.singletonList(1));
+        user.setFollowedChats(Collections.singletonList(1L));
         user.setFavAssos(Collections.singletonList(1L));
-        user.setFollowedEvents(Collections.singletonList(1));
+        user.setFollowedEvents(Collections.singletonList(1L));
         assertThat(true, equalTo(user.isFavAssociation(mocked_asso)));
         assertThat(true, equalTo(user.isFollowedChat(mocked_channel)));
         assertThat(true, equalTo(user.isFollowedEvent(mocked_event)));

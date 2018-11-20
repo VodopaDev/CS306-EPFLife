@@ -209,7 +209,7 @@ public class EventFragment extends SuperFragment {
                     List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
                     for (DocumentSnapshot snap : snap_list) {
                         FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
-                        if (fmap.hasFields(Event.FIELDS)) {
+                        if (fmap.hasFields(Event.requiredFields())) {
                             Event event = new Event(fmap);
                             event_all.add(event);
                             if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))

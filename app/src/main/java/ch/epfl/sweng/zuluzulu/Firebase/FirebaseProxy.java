@@ -15,10 +15,6 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
-import ch.epfl.sweng.zuluzulu.Structure.FirebaseStructure;
-
-import static ch.epfl.sweng.zuluzulu.CommunicationTag.INCREMENT_IDLING_RESOURCE;
-import static ch.epfl.sweng.zuluzulu.CommunicationTag.DECREMENT_IDLING_RESOURCE;
 
 public class FirebaseProxy {
 
@@ -69,6 +65,50 @@ public class FirebaseProxy {
             }
             onResult.apply(resultList);
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch all associations"));
+    }
+
+    /**
+     * Get one association from its id and apply an OnResult on them
+     * @param onResult interface defining apply()
+     */
+    public void getAssociationFromId(OnResult<Association> onResult, Long id){
+        assoCollection.document(id.toString()).get().addOnSuccessListener(documentSnapshot -> {
+            FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+            if(fmap.hasFields(Association.requiredFields()))
+                onResult.apply(new Association(fmap));
+        }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the association with id " + id));
+    }
+
+    /**
+     * Get all associations and apply an OnResult on them
+     * @param onResult interface defining apply()
+     */
+    public void getAssociationsFromIds(OnResult<List<Association>> onResult, List<Long> ids){
+        List<Association> result = new ArrayList<>();
+
+        for(Long id: ids){
+            assoCollection.document(id.toString()).get().addOnSuccessListener(documentSnapshot -> {
+                FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                if(fmap.hasFields(Association.requiredFields()))
+                    result.add(new Association(fmap));
+            }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the association with id " + id));
+        }
+    }
+
+    /**
+     * Get all events and apply an OnResult on them
+     * @param onResult interface defining apply()
+     */
+    public void getAllEvents(OnResult<List<Event>> onResult){
+        eventCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            List<Event> resultList = new ArrayList<>();
+            for(DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){
+                FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
+                if(fmap.hasFields(Event.requiredFields()))
+                    resultList.add(new Event(fmap));
+            }
+            onResult.apply(resultList);
+        }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch all events"));
     }
 
     /**

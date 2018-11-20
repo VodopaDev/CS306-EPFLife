@@ -4,10 +4,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -69,20 +67,6 @@ public class Association extends FirebaseStructure implements Comparable<Associa
         banner_uri = banner_str == null ?
                 Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
                 Uri.parse(banner_str);
-    }
-
-    /**
-     * Return a Comparator for two Associations using their names
-     * @param type The field to be compared
-     * @return compareTo of two Associations names
-     */
-    public static Comparator<Association> getComparatorWith(String type) {
-        if(type.toLowerCase().trim().equals("name"))
-            return (o1, o2) -> o1.getName().compareTo(o2.getName());
-        else if(type.toLowerCase().trim().equals("id"))
-            return (o1, o2) -> o1.getId().compareTo(o2.getId());
-        else
-            return (o1, o2) -> o1.getName().compareTo(o2.getName());
     }
 
     /**

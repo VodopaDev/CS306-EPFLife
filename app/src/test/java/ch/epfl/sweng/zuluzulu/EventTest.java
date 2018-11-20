@@ -29,8 +29,8 @@ public class EventTest {
     private static final Uri DEFAULT_ICON_URI = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon);
     private static final Date START_DATE = new Date(2L);
     private static final Date START_DATE_1 = new Date(3L);
-    private static final long LIKES_1 = 100L;
-    private static final long LIKES_2 = 3L;
+    private static final Long LIKES_1 = 100L;
+    private static final Long LIKES_2 = 3L;
     private static final String ORGANIZER = "Pascal Martin";
     private static final String PLACE = "CE";
 
@@ -79,13 +79,13 @@ public class EventTest {
     @Test
     public void idIsCorrect() {
         initWorkingAssociation();
-        assertEquals(1, event0.getId());
+        assertEquals(1L, event0.getId());
     }
 
     @Test
     public void likesAreCorrect() {
         initWorkingAssociation();
-        assertEquals(100, (int) event0.getLikes());
+        assertEquals(100, event0.getLikes().intValue());
     }
 
     @Test
@@ -148,18 +148,18 @@ public class EventTest {
     public void increaseLikesTest () {
         initWorkingAssociation();
         event0.increaseLikes();
-        assertEquals(((int) LIKES_1) + 1, (int) event0.getLikes());
+        assertEquals((LIKES_1.intValue()) + 1, event0.getLikes().intValue());
     }
 
     @Test
     public void decreaseLikesTest () {
         initWorkingAssociation();
         event0.decreaseLikes();
-        assertEquals(((int) LIKES_1) - 1, (int) event0.getLikes());
+        assertEquals((LIKES_1.intValue()) - 1, event0.getLikes().intValue());
     }
 
     @Test
-    public void organizorIsCorrect() {
+    public void organizerIsCorrect() {
         initWorkingAssociation();
         assertEquals(ORGANIZER, event0.getOrganizer());
     }
