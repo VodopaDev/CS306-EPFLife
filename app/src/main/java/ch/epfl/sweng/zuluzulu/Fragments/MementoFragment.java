@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,8 +15,10 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.Objects;
 
-import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
+import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
+import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -58,7 +60,7 @@ public class MementoFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations Generator");
+        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Memento loader");
         UrlHandler urlHandler = new UrlHandler(this::handleMemento, new MementoParser());
         urlHandler.execute(MEMENTO_URL);
 
@@ -104,7 +106,7 @@ public class MementoFragment extends SuperFragment {
                 // nom de l'association qui organise !
                 System.out.println("organizer => " + jsonobject.getString("event_organizer"));
 
-                view.append(jsonobject.getString("title") + "\n");
+                view.append(jsonobject.getString("title") + "\n\n");
             }
         } catch (JSONException e) {
             e.printStackTrace();
