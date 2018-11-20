@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.Adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +14,20 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.URLTools.OnClickRecyclerView;
 import ch.epfl.sweng.zuluzulu.Utility.ImageLoader;
 
 public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAdapter.AddAssociationViewHolder>{
     private final List<Association> associationList;
     private final Context context;
-    private final List<Boolean> checked;
+    private final SparseBooleanArray checked;
+    private final OnClickRecyclerView lisetner;
 
     @NonNull
     @Override
@@ -46,13 +50,15 @@ public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAd
         holder.name.setText(associationList.get(position).getName());
         holder.short_desc.setText(associationList.get(position).getShortDesc());
         ImageLoader.loadUriIntoImageView(holder.icon, associationList.get(position).getIconUri(), context);
-        holder.add_button.setEnabled(this.checked.get(position));
+
+        holder.add_button.setEnabled(this.checked.get(position, true));
         holder.add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 holder.add_button.setEnabled(false);
-                checked.set(position, false);
-                System.out.println("CLICK + " + position);
+                checked.put(holder.getAdapterPosition(), false);
+                System.out.println("CLICK + " + holder.getAdapterPosition());
+                lisetner.onClick(holder.getAdapterPosition());
             }
         });
     }
@@ -62,15 +68,14 @@ public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAd
         return associationList.size();
     }
 
-    public AddAssociationAdapter(Context context, List<Association> associationList){
+    public AddAssociationAdapter(Context context, List<Association> associationList, OnClickRecyclerView listener){
         if(context == null || associationList == null){
             throw new IllegalArgumentException("Null argument");
         }
         this.associationList = associationList;
         this.context = context;
-        this.checked = Arrays.asList(new Boolean[associationList.size()]);
-        // Can't use .map with sdk 15 min API
-        Collections.fill(this.checked, Boolean.TRUE);
+        this.checked  = new SparseBooleanArray();
+        this.lisetner = listener;
     }
 
     // Provide a reference to the views for each data item
