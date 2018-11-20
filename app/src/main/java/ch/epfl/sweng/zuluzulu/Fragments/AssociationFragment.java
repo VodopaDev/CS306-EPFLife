@@ -130,7 +130,7 @@ public class AssociationFragment extends SuperFragment {
         FirebaseProxy.getInstance().getAllAssociations(result -> {
             for(Association asso: result){
                 assosAll.add(asso);
-                if(user.isConnected() && ((AuthenticatedUser)user).isFollowedAssociation(asso))
+                if(user.isConnected() && ((AuthenticatedUser)user).isFollowedAssociation(asso.getId()))
                     assosFav.add(asso);
             }
             Collections.sort(assosAll);

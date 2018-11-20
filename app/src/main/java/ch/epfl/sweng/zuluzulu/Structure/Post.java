@@ -31,10 +31,10 @@ public class Post {
     private boolean downByUser;
 
     private boolean anonymous;
-    private int channelId;
+    private String channelId;
     private String userSciper;
 
-    public Post(FirebaseMapDecorator data, String userSciper, int channelId) {
+    public Post(FirebaseMapDecorator data, String userSciper, String channelId) {
         senderName = data.getString("senderName");
         sciper = data.getString("sciper");
         message = data.getString("message");
@@ -169,7 +169,7 @@ public class Post {
      *
      * @return the channelId
      */
-    public int getChannelId() { return channelId; }
+    public String getChannelId() { return channelId; }
 
     /**
      * Getter for the user reading the post

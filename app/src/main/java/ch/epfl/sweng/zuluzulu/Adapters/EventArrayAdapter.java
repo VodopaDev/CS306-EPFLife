@@ -98,16 +98,16 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
             holder.likes_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!user.isEventLiked(event.getId())) {
+                    if (!user.isFollowedEvent(event.getId())) {
                         event.increaseLikes();
                         holder.likes.setText(String.valueOf(event.getLikes()));
                         holder.likes_button.setTextColor(Color.BLUE);
-                        user.likeEvent(event.getId());
+                        user.addFollowedEvent(event.getId());
                     } else {
                         event.decreaseLikes();
                         holder.likes.setText(String.valueOf(event.getLikes()));
                         holder.likes_button.setTextColor(Color.BLACK);
-                        user.dislikeEvent(event.getId());
+                        user.removeFollowedEvent(event.getId());
                     }
                 }
             });

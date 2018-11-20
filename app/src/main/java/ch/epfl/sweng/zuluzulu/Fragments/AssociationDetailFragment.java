@@ -131,7 +131,7 @@ public class AssociationDetailFragment extends SuperFragment {
      * Else it favorites/unfavorites the association
      */
     private void setFavButtonBehaviour() {
-        if (user.isConnected() && ((AuthenticatedUser) user).isFollowedAssociation(asso))
+        if (user.isConnected() && ((AuthenticatedUser) user).isFollowedAssociation(asso.getId()))
             loadFavImage(R.drawable.fav_on);
         else
             loadFavImage(R.drawable.fav_off);
@@ -141,12 +141,12 @@ public class AssociationDetailFragment extends SuperFragment {
             public void onClick(View v) {
                 if (user.isConnected()) {
                     AuthenticatedUser auth = (AuthenticatedUser) user;
-                    if (auth.isFollowedAssociation(asso)) {
-                        auth.removeFavAssociation(asso);
+                    if (auth.isFollowedAssociation(asso.getId())) {
+                        auth.removeFavAssociation(asso.getId());
                         loadFavImage(R.drawable.fav_off);
                         asso_fav.setContentDescription(NOT_FAV_CONTENT);
                     } else {
-                        auth.addFollowedAssociation(asso);
+                        auth.addFollowedAssociation(asso.getId());
                         loadFavImage(R.drawable.fav_on);
                         asso_fav.setContentDescription(FAV_CONTENT);
                     }
@@ -179,7 +179,7 @@ public class AssociationDetailFragment extends SuperFragment {
      */
     private void loadUpcomingEvent() {
         // Fetch online data of the upcoming event
-        if (asso.getClosestEventId() != 0) {
+        if (!asso.getClosestEventId().equals("0")) {
             IdlingResourceFactory.incrementCountingIdlingResource();
             FirebaseFirestore.getInstance()
                     .document("events_info/event" + asso.getClosestEventId())
@@ -208,7 +208,7 @@ public class AssociationDetailFragment extends SuperFragment {
      */
     private void loadMainChat() {
         // Fetch online data of the main_chat
-        if (asso.getChannelId() != 0) {
+        if (!asso.getChannelId().equals("0")) {
             IdlingResourceFactory.incrementCountingIdlingResource();
             FirebaseFirestore.getInstance()
                     .document("channels/channel" + asso.getChannelId())

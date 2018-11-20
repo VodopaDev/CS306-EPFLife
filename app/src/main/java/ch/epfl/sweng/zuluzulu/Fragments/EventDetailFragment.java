@@ -198,7 +198,7 @@ public class EventDetailFragment extends SuperFragment {
     }
 
     private void setFavButtonBehaviour() {
-        if (user.isConnected() && ((AuthenticatedUser) user).isFavEvent(event))
+        if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event.getId()))
             loadFavImage(R.drawable.fav_on);
         else
             loadFavImage(R.drawable.fav_off);
@@ -208,12 +208,12 @@ public class EventDetailFragment extends SuperFragment {
             public void onClick(View v) {
                 if (user.isConnected()) {
                     AuthenticatedUser auth = (AuthenticatedUser) user;
-                    if (auth.isFavEvent(event)) {
-                        auth.removeFollowedChannel(event);
+                    if (auth.isFollowedEvent(event.getId())) {
+                        auth.removeFollowedChannel(event.getId());
                         loadFavImage(R.drawable.fav_off);
                         event_fav.setContentDescription(NOT_FAV_CONTENT);
                     } else {
-                        auth.addFavEvent(event);
+                        auth.addFollowedEvent(event.getId());
                         loadFavImage(R.drawable.fav_on);
                         event_fav.setContentDescription(FAV_CONTENT);
                     }
@@ -239,31 +239,5 @@ public class EventDetailFragment extends SuperFragment {
         startActivity(intent);
 
     }
-
-    /*private void setFavButtonBehaviour(){
-        event_fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(user.isConnected()){
-                    AuthenticatedUser auth = (AuthenticatedUser)user;
-                    if(auth.isFavEvent(event)){
-                        auth.removeFollowedChannel(event);
-                        loadFavImage(R.drawable.fav_off);
-                        event_fav.setContentDescription(NOT_FAV_CONTENT);
-                    }
-                    else{
-                        auth.addFavEvent(event);
-                        loadFavImage(R.drawable.fav_on);
-                        event_fav.setContentDescription(FAV_CONTENT);
-                    }
-                }
-                else {
-                    Snackbar.make(getView(), "Login to access your favorite events", 5000).show();
-                }
-            }
-        });
-    }*/
-
-
 }
 

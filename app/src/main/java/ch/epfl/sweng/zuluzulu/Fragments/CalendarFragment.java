@@ -125,7 +125,7 @@ public class CalendarFragment extends SuperFragment {
                 Date dayDate = dayView.getDate();
                 for (Event event : followedEvents) {
                     if (event.getStartDateString().equals(Utils.dateFormat.format(dayDate))
-                            && user.isFollowedEvent(event))
+                            && user.isFollowedEvent(event.getId()))
                         dayView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
                 }
             }
@@ -149,7 +149,7 @@ public class CalendarFragment extends SuperFragment {
                             FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
                             if (fmap.hasFields(Event.requiredFields())) {
                                 Event event = new Event(fmap);
-                                if (user.isFollowedEvent(event)) {
+                                if (user.isFollowedEvent(event.getId())) {
                                     followedEvents.add(event);
                                     Log.d("CALENDAR", "added a new followed event with date " + event.getStartDateString());
                                     if (now.equals(event.getStartDateString()))
