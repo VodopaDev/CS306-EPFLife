@@ -82,7 +82,7 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
 
     @Test
     public void defaultLogoOnFailAssociationUrl() {
-        changeFactory("&#8211; <a href=\"faaake\">FAKE</a><br /><link rel=\"icon\" type=\"image/png\" href=\"www.epfl.ch/favicon.ico\" sizes=\"16x16\">");
+        changeFactory("&#8211; <a href=\"faaake\">FAKE</a> (fake)<br /><link rel=\"icon\" type=\"image/png\" href=\"www.epfl.ch/favicon.ico\" sizes=\"16x16\">");
         adminUser();
         onView(withId(R.id.associations_generator_recyclerview)).perform(
                 RecyclerViewActions.actionOnItem(hasDescendant(withText("FAKE")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));

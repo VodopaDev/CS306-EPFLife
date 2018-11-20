@@ -159,7 +159,6 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                 value = EPFL_LOGO;
             }
         } catch (MalformedURLException e) {
-            IdlingResourceFactory.decrementCountingIdlingResource();
             e.printStackTrace();
         }
         return value;
