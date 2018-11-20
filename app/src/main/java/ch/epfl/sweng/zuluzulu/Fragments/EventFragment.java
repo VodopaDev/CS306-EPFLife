@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -60,7 +61,7 @@ public class EventFragment extends SuperFragment {
     private ListView listview_event;
     private Button button_event_all;
     private Button button_event_fav;
-    private Button button_event_add;
+    private ImageButton button_event_add;
 
     private CheckBox checkbox_event_sort_name;
     private CheckBox checkbox_event_sort_date;

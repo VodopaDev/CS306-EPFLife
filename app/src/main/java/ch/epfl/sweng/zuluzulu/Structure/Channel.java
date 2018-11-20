@@ -124,12 +124,13 @@ public class Channel implements Serializable {
     public boolean canBeSeenBy(AuthenticatedUser user, GeoPoint userLocation) {
         String section = (String) restrictions.get("section");
         GeoPoint channelLocation = (GeoPoint) restrictions.get("location");
+        boolean isNotEvent = (boolean) restrictions.get("isNotEvent");
 
         boolean hasGoodSection = hasGoodSection(section, user.getSection());
 
         boolean hasGoodLocation = hasGoodLocation(channelLocation, userLocation);
 
-        return hasGoodSection && hasGoodLocation;
+        return hasGoodSection && hasGoodLocation && isNotEvent;
     }
 
     private boolean hasGoodSection(String requestSection, String userSection) {

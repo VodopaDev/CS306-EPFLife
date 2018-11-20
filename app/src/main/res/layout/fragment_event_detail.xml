@@ -264,4 +264,16 @@
         app:layout_constraintBottom_toBottomOf="@+id/event_detail_fav"
         app:layout_constraintStart_toEndOf="@+id/event_detail_fav" />
 
+    <Button
+        android:id="@+id/event_detail_chat"
+        android:layout_width="9mm"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:adjustViewBounds="false"
+        android:background="@drawable/channel_notclickable_background"
+        android:text="CHAT"
+        app:layout_constraintBottom_toBottomOf="@+id/event_detail_fav"
+        app:layout_constraintStart_toEndOf="@+id/event_detail_export" />
+
 </android.support.constraint.ConstraintLayout>

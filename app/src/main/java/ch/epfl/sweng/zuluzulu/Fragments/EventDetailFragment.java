@@ -32,12 +32,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.google.android.gms.common.api.GoogleApi;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.util.Calendar;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -51,6 +57,9 @@ public class EventDetailFragment extends SuperFragment {
     private static final String NOT_FAV_CONTENT = "This event isn't in your favorites";
 
     private ImageView event_fav;
+
+    private Button chat_event;
+    private Channel channel;
 
     private Event event;
     private User user;
@@ -82,6 +91,7 @@ public class EventDetailFragment extends SuperFragment {
             user = (User) getArguments().getSerializable(ARG_USER);
             event = (Event) getArguments().getSerializable(ARG_EVENT);
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, event.getName());
+            loadEventChannel();
         }
     }
 
@@ -96,6 +106,24 @@ public class EventDetailFragment extends SuperFragment {
         // Favorite button
         event_fav = view.findViewById(R.id.event_detail_fav);
         setFavButtonBehaviour();
+
+        chat_event = view.findViewById(R.id.event_detail_chat);
+        chat_event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (channel != null) {
+                    if (user.isConnected())
+                        mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, channel);
+                    else
+                        Snackbar.make(getView(), "Login to access chat room", 5000).show();
+                }
+                else{
+                    Snackbar.make(getView(), "There is no chat for this event", 5000).show();
+                }
+            }
+
+        });
+
 
         /*event_fav.setContentDescription(NOT_FAV_CONTENT);
         if (user.isConnected() && ((AuthenticatedUser)user).isFavEvent(event)) {
@@ -247,6 +275,28 @@ public class EventDetailFragment extends SuperFragment {
 
         startActivity(intent);
 
+    }
+
+    private void loadEventChannel() {
+        // Fetch online data of the main_chat
+        if (event.getChannel() != 0) {
+            IdlingResourceFactory.incrementCountingIdlingResource();
+            FirebaseFirestore.getInstance()
+                    .document("channels/channel" + event.getChannel())
+                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                    if (fmap.hasFields(Channel.FIELDS)) {
+                        channel = new Channel(fmap);
+                    } else
+                        channel = null;
+                    IdlingResourceFactory.decrementCountingIdlingResource();
+                }
+            });
+        } else {
+            channel = null;
+        }
     }
 
     /*private void setFavButtonBehaviour(){
