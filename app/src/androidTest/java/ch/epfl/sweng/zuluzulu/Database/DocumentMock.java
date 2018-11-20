@@ -27,4 +27,10 @@ public class DocumentMock implements DatabaseDocument {
 
         return new TaskMock<Void>();
     }
+
+    @Override
+    public Task<Void> update(String field, Object value, Object... moreFieldAndValues) {
+        Log.d(TAG, field + " -> " + value);
+        return new TaskMock<>();
+    }
 }

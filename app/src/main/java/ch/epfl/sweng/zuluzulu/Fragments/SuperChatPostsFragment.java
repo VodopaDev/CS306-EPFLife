@@ -2,6 +2,7 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ListView;
@@ -15,6 +16,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import javax.annotation.Nullable;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -34,6 +38,7 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
     protected Button postsButton;
 
     protected CollectionReference collectionReference;
+    protected DatabaseCollection mockableCollection;
 
     protected AuthenticatedUser user;
     protected Channel channel;
@@ -68,24 +73,4 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, channel.getName());
         }
     }
-
-    /**
-     * Add a onEventChange listener on the elements in the database
-     */
-    protected void setUpDataOnChangeListener() {
-        collectionReference
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w("Chat or post", "Listen failed.", e);
-                            return;
-                        }
-
-                        updateListView();
-                    }
-                });
-    }
-
-    protected abstract void updateListView();
 }

@@ -50,12 +50,12 @@
         android:id="@+id/event_fragment_checkBox_sort_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:checked="false"
         android:text="@string/fragment_event_checkbox_sort_name"
         android:textSize="14sp"
@@ -65,18 +65,18 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_fragment_checkBox_sort_date"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.51" />
 
     <CheckBox
         android:id="@+id/event_fragment_checkBox_sort_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/fragment_event_checkbox_sort_date"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/event_fragment_listview"
@@ -85,61 +85,65 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttons_layout"
-        app:layout_constraintVertical_bias="0.100000024" />
+        app:layout_constraintVertical_bias="0.050000012" />
 
     <EditText
         android:id="@+id/event_fragment_from_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:longClickable="false"
+        android:focusable="false"
         android:ems="10"
+        android:hint="From date"
         android:inputType="date"
         android:singleLine="true"
-        android:text="DD/MM/YYYY"
+        android:textColor="#80000000"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/event_fragment_listview"
         app:layout_constraintEnd_toStartOf="@+id/event_fragment_to_date"
         app:layout_constraintStart_toEndOf="@+id/event_fragment_checkBox_sort_date"
-        app:layout_constraintTop_toBottomOf="@+id/buttons_layout"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/buttons_layout" />
 
     <EditText
         android:id="@+id/event_fragment_to_date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:longClickable="false"
+        android:focusable="false"
         android:ems="10"
+        android:hint="To date"
         android:inputType="date"
         android:singleLine="true"
-        android:text="DD/MM/YYYY"
+        android:textColor="#80000000"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/event_fragment_listview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.347"
         app:layout_constraintStart_toEndOf="@+id/event_fragment_from_date"
-        app:layout_constraintTop_toBottomOf="@+id/buttons_layout"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/buttons_layout" />
 
     <CheckBox
         android:id="@+id/event_fragment_checkbox_sort_like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/fragment_event_checkbox_sort_likes"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/event_fragment_listview"
+        app:layout_constraintEnd_toStartOf="@+id/event_fragment_search_bar"
         app:layout_constraintStart_toEndOf="@+id/event_fragment_checkBox_sort_name"
-        app:layout_constraintTop_toBottomOf="@+id/event_fragment_from_date"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/event_fragment_from_date" />
 
     <Button
         android:id="@+id/event_add_button"
@@ -153,5 +157,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteX="269dp"
         tools:layout_editor_absoluteY="502dp" />
+
+    <EditText
+        android:id="@+id/event_fragment_search_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="@string/fragment_event_search_bar_text"
+        android:inputType="textPersonName"
+        android:textColor="#80000000"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toTopOf="@+id/event_fragment_listview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/event_fragment_checkbox_sort_like"
+        app:layout_constraintTop_toBottomOf="@+id/event_fragment_from_date"
+        app:layout_constraintVertical_bias="0.3" />
 
 </android.support.constraint.ConstraintLayout>

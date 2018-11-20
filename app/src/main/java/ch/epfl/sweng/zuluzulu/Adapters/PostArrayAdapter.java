@@ -12,6 +12,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.R;
@@ -25,8 +30,11 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
 
     private Post currentPost;
     private TextView timeAgo;
+    private TextView nbUpsText;
     private ImageView upButton;
     private ImageView downButton;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public PostArrayAdapter(@NonNull Context context, List<Post> list) {
         super(context, 0, list);
@@ -48,7 +56,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         timeAgo = view.findViewById(R.id.post_time_ago_textview);
         upButton = view.findViewById(R.id.post_up_button);
         downButton = view.findViewById(R.id.post_down_button);
-        TextView nbUps = view.findViewById(R.id.post_nb_ups_textview);
+        nbUpsText = view.findViewById(R.id.post_nb_ups_textview);
         TextView nbResponses = view.findViewById(R.id.post_nb_responses_textview);
 
         linearLayout.setBackgroundColor(Color.parseColor(currentPost.getColor()));
@@ -59,10 +67,11 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
 
         setUpTimeAgoField();
 
-        nbUps.setText("" + currentPost.getNbUps());
+        nbUpsText.setText("" + currentPost.getNbUps());
         nbResponses.setText("" + currentPost.getNbResponses());
 
-        setUpUpDownButtons();
+        setUpUpDownButtons(currentPost, upButton, downButton);
+        updateUpsButtons(currentPost, upButton, downButton);
 
         return view;
     }
@@ -86,22 +95,56 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         }
     }
 
-    /**
-     * Set up an onClick listener on the up and down buttons
-     */
-    private void setUpUpDownButtons() {
+    private void setUpUpDownButtons(Post post, ImageView upButton, ImageView downButton) {
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                updateDatabase(true, post);
+                updateUpsButtons(post, upButton, downButton);
             }
         });
 
         downButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                updateDatabase(false, post);
+                updateUpsButtons(post, upButton, downButton);
             }
         });
+    }
+
+    private void updateDatabase(boolean up, Post post) {
+        if (!post.isUpByUser() && !post.isDownByUser()) {
+            int nbUps = post.getNbUps() + (up ? 1 : -1);
+            List<String> upScipers = post.getUpScipers();
+            List<String> downScipers = post.getDownScipers();
+            DocumentReference documentReference = db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
+            if (up) {
+                upScipers.add(post.getUserSciper());
+                documentReference.update(
+                        "nbUps", nbUps,
+                        "upScipers", upScipers
+                );
+                post.setUpByUser(true);
+            } else {
+                downScipers.add(post.getUserSciper());
+                documentReference.update(
+                        "nbUps", nbUps,
+                        "downScipers", downScipers
+                );
+                post.setDownByUser(true);
+            }
+        }
+    }
+
+    private void updateUpsButtons(Post post, ImageView upButton, ImageView downButton) {
+        if (post.isUpByUser()) {
+            upButton.setImageResource(R.drawable.up_gray);
+            downButton.setImageResource(R.drawable.down_transparent);
+        }
+        else if (post.isDownByUser()) {
+            downButton.setImageResource(R.drawable.down_gray);
+            upButton.setImageResource(R.drawable.up_transparent);
+        }
     }
 }

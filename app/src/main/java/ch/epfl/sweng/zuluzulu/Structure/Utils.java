@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 
+import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
+
 /**
  * Class that contains general useful functions
  */
@@ -112,16 +114,16 @@ public final class Utils {
      * Add the given data to firebase
      *
      * @param data The map to push on firebase
-     * @param collectionReference The collection reference where you want to push the data
+     * @param collection The collection reference where you want to push the data
      * @param TAG The tag
      */
-    public static void addDataToFirebase(Map data, CollectionReference collectionReference, String TAG) {
-        collectionReference
+    public static void addDataToFirebase(Map data, DatabaseCollection collection, String TAG) {
+        collection
                 .add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference ref) {
-                        Log.d(TAG, "DocumentSnapshot written with ID: " + ref.getId());
+                        Log.d(TAG, "DocumentSnapshot written");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
