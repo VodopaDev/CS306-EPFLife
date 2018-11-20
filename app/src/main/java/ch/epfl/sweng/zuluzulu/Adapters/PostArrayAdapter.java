@@ -16,6 +16,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.w3c.dom.Text;
+
 import java.util.Date;
 import java.util.List;
 
@@ -57,7 +59,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         upButton = view.findViewById(R.id.post_up_button);
         downButton = view.findViewById(R.id.post_down_button);
         nbUpsText = view.findViewById(R.id.post_nb_ups_textview);
-        TextView nbResponses = view.findViewById(R.id.post_nb_responses_textview);
+        TextView nbResponsesText = view.findViewById(R.id.post_nb_responses_textview);
 
         linearLayout.setBackgroundColor(Color.parseColor(currentPost.getColor()));
         message.setText(currentPost.getMessage());
@@ -68,9 +70,14 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         setUpTimeAgoField();
 
         nbUpsText.setText("" + currentPost.getNbUps());
-        nbResponses.setText("" + currentPost.getNbResponses());
 
-        setUpUpDownButtons(currentPost, upButton, downButton);
+        int nbResponses = currentPost.getNbResponses();
+        nbResponsesText.setText("" + currentPost.getNbResponses());
+        if (nbResponses == 0) {
+            view.findViewById(R.id.post_responses_linearlayout).setVisibility(LinearLayout.GONE);
+        }
+
+        setUpUpDownButtons(currentPost, upButton, downButton, nbUpsText);
         updateUpsButtons(currentPost, upButton, downButton);
 
         return view;
@@ -95,11 +102,11 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         }
     }
 
-    private void setUpUpDownButtons(Post post, ImageView upButton, ImageView downButton) {
+    private void setUpUpDownButtons(Post post, ImageView upButton, ImageView downButton, TextView nbUpsText) {
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateDatabase(true, post);
+                updateDatabase(true, post, nbUpsText);
                 updateUpsButtons(post, upButton, downButton);
             }
         });
@@ -107,13 +114,13 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         downButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateDatabase(false, post);
+                updateDatabase(false, post, nbUpsText);
                 updateUpsButtons(post, upButton, downButton);
             }
         });
     }
 
-    private void updateDatabase(boolean up, Post post) {
+    private void updateDatabase(boolean up, Post post, TextView nbUpsText) {
         if (!post.isUpByUser() && !post.isDownByUser()) {
             int nbUps = post.getNbUps() + (up ? 1 : -1);
             List<String> upScipers = post.getUpScipers();
@@ -126,6 +133,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
                         "upScipers", upScipers
                 );
                 post.setUpByUser(true);
+
             } else {
                 downScipers.add(post.getUserSciper());
                 documentReference.update(
@@ -134,6 +142,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
                 );
                 post.setDownByUser(true);
             }
+            nbUpsText.setText("" + nbUps);
         }
     }
 

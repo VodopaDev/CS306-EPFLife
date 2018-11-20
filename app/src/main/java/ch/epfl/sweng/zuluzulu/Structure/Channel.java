@@ -27,7 +27,7 @@ public class Channel implements Serializable {
     private String description;
     private Map<String, Object> restrictions;
 
-    private Uri icon_uri;
+    private String icon_uri;
 
     private boolean isClickable;
     private double distance;
@@ -43,10 +43,12 @@ public class Channel implements Serializable {
         this.isClickable = true;
         this.distance = 0;
 
+        // Init the Icon URI
         String icon_str = data.getString("icon_uri");
-        icon_uri = icon_str == null ?
+        Uri uri = icon_str == null ?
                 Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(icon_str);
+        icon_uri = uri == null ? null : uri.toString();
     }
 
     /**
@@ -102,8 +104,7 @@ public class Channel implements Serializable {
      *
      * @return the icon Uri
      */
-    @Nullable
-    public Uri getIconUri() {
+    public String getIconUri() {
         return icon_uri;
     }
 
