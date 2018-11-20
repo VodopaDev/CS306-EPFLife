@@ -18,6 +18,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -174,27 +176,18 @@ public class AssociationDetailFragment extends SuperFragment {
      */
     private void loadUpcomingEvent() {
         // Fetch online data of the upcoming event
-        if (!asso.getClosestEventId().equals("0")) {
-            IdlingResourceFactory.incrementCountingIdlingResource();
-            FirebaseFirestore.getInstance()
-                    .document("events_info/event" + asso.getClosestEventId())
-                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        if (asso.getClosestEventId() == null)
+            upcoming_event_name.setText("No upcoming event :(");
+        else
+            FirebaseProxy.getInstance().getEventFromId(asso.getClosestEventId(), new OnResult<Event>() {
                 @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                    if (fmap.hasFields(Event.requiredFields())) {
-                        upcoming_event = new Event(fmap);
-                        upcoming_event_name.setText(upcoming_event.getName());
-                        upcoming_event_date.setText(upcoming_event.getStartDate().toString());
-                        loadUriIntoImageView(upcoming_event_icon, upcoming_event.getIconUri(), getContext());
-                    } else
-                        upcoming_event_name.setText("Error loading the event :(");
-                    IdlingResourceFactory.decrementCountingIdlingResource();
+                public void apply(Event result) {
+                    upcoming_event = result;
+                    upcoming_event_name.setText(upcoming_event.getName());
+                    upcoming_event_date.setText(upcoming_event.getStartDate().toString());
+                    loadUriIntoImageView(upcoming_event_icon, upcoming_event.getIconUri(), getContext());
                 }
             });
-        } else {
-            upcoming_event_name.setText("No upcoming event :(");
-        }
     }
 
     /**

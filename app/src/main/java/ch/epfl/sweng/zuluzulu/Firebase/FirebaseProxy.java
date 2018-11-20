@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -14,10 +15,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
+import java.util.Map;
+
 import ch.epfl.sweng.zuluzulu.Structure.Association;
-import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.User.User;
 
 public class FirebaseProxy {
 
@@ -76,8 +79,8 @@ public class FirebaseProxy {
      * Get one association from its id and apply an OnResult on them
      * @param onResult interface defining apply()
      */
-    public void getAssociationFromId(Long id, OnResult<Association> onResult){
-        assoCollection.document(id.toString()).get().addOnSuccessListener(documentSnapshot -> {
+    public void getAssociationFromId(String id, OnResult<Association> onResult){
+        assoCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
             FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
             if(fmap.hasFields(Association.requiredFields()))
                 onResult.apply(new Association(fmap));
@@ -88,11 +91,11 @@ public class FirebaseProxy {
      * Get all associations from an ID list and apply an OnResult on them
      * @param onResult interface defining apply()
      */
-    public void getAssociationsFromIds(List<Long> ids, OnResult<List<Association>> onResult){
+    public void getAssociationsFromIds(List<String> ids, OnResult<List<Association>> onResult){
         List<Association> result = new ArrayList<>();
         Counter counter = new Counter(ids.size());
 
-        for(Long id: ids){
+        for(String id: ids){
             assoCollection.document(id.toString()).get().addOnSuccessListener(documentSnapshot -> {
                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
                 if(fmap.hasFields(Association.requiredFields()))
@@ -117,6 +120,8 @@ public class FirebaseProxy {
             newRef.delete();
     }
 
+    //----- Event related methods -----\\
+
     /**
      * Get all events and apply an OnResult on them
      * @param onResult interface defining apply()
@@ -137,8 +142,8 @@ public class FirebaseProxy {
      * Get one event from its id and apply an OnResult on them
      * @param onResult interface defining apply()
      */
-    public void getEventFromId(Long id, OnResult<Event> onResult){
-        eventCollection.document(id.toString()).get().addOnSuccessListener(documentSnapshot -> {
+    public void getEventFromId(String id, OnResult<Event> onResult){
+        eventCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
             FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
             if(fmap.hasFields(Event.requiredFields()))
                 onResult.apply(new Event(fmap));
@@ -149,12 +154,12 @@ public class FirebaseProxy {
      * Get all events from an ID list and apply an OnResult on them
      * @param onResult interface defining apply()
      */
-    public void getEventsFromIds(List<Long> ids, OnResult<List<Event>> onResult){
+    public void getEventsFromIds(List<String> ids, OnResult<List<Event>> onResult){
         List<Event> result = new ArrayList<>();
         Counter counter = new Counter(ids.size());
 
-        for(Long id: ids){
-            eventCollection.document(id.toString()).get().addOnSuccessListener(documentSnapshot -> {
+        for(String id: ids){
+            eventCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
                 if(fmap.hasFields(Event.requiredFields()))
                     result.add(new Event(fmap));
@@ -166,6 +171,25 @@ public class FirebaseProxy {
                             onResult.apply(result);
                     });
         }
+    }
+
+    //----- User related methods -----\\
+
+    public void getUserWithIdOrCreateIt(String id, OnResult<FirebaseMapDecorator> onResult){
+        userCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
+            if (!documentSnapshot.exists()) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("followed_associations", new ArrayList<String>());
+                map.put("followed_events", new ArrayList<String>());
+                map.put("followed_channels", new ArrayList<String>());
+                userCollection.document(id).set(map);
+                onResult.apply(new FirebaseMapDecorator(map));
+            } else {
+                FirebaseMapDecorator data = new FirebaseMapDecorator(documentSnapshot);
+                onResult.apply(data);
+            }
+        });
+
     }
 
     /**

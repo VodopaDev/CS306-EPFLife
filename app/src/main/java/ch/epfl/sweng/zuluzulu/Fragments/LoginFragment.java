@@ -29,6 +29,8 @@ import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
@@ -166,32 +168,15 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     }
 
     private void updateUserAndFinishLogin() {
-        final DocumentReference ref = FirebaseFirestore.getInstance()
-                .collection("users_info")
-                .document(user.getSciper());
+        FirebaseProxy.getInstance().getUserWithIdOrCreateIt(user.getSciper(), result -> {
+            List<String> receivedAssociations = result.getStringList("followed_associations");
+            List<String> receivedEvents = result.getStringList("followed_events");
+            List<String> receivedChannels = result.getStringList("followed_channels");
 
-        ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (!documentSnapshot.exists()) {
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("followed_associations", new ArrayList<Integer>());
-                    map.put("followed_events", new ArrayList<String>());
-                    map.put("followed_channels", new ArrayList<String>());
-                    ref.set(map);
-                    transfer_main(false);
-                } else {
-                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                    List<String> receivedAssociations = fmap.getStringList("followed_associations");
-                    List<String> receivedEvents = fmap.getStringList("followed_events");
-                    List<String> receivedChannels = fmap.getStringList("followed_channels");
-
-                    ((AuthenticatedUser) user).setFollowedAssociation(receivedAssociations);
-                    ((AuthenticatedUser) user).setFollowedEvents(receivedEvents);
-                    ((AuthenticatedUser) user).setFollowedChannels(receivedChannels);
-                    transfer_main(false);
-                }
-            }
+            ((AuthenticatedUser) user).setFollowedAssociation(receivedAssociations);
+            ((AuthenticatedUser) user).setFollowedEvents(receivedEvents);
+            ((AuthenticatedUser) user).setFollowedChannels(receivedChannels);
+            transfer_main(false);
         });
     }
 
