@@ -102,6 +102,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_detail_framelayout"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@android:color/white" />
 
     <TextView
@@ -233,12 +234,29 @@
         app:layout_constraintStart_toStartOf="@+id/event_detail_border"
         app:layout_constraintTop_toBottomOf="@+id/event_detail_tv_place" />
 
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:ignore="MissingConstraints">
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="339dp"
+            android:layout_height="165dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="24dp" />
+
+    </RelativeLayout>
+
     <ImageButton
         android:id="@+id/event_detail_export"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:adjustViewBounds="false"
         android:background="@drawable/channel_notclickable_background"
         android:cropToPadding="false"
