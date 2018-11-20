@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,16 +17,14 @@ import ch.epfl.sweng.zuluzulu.R;
  * Has diverse getters and some functions to create views
  */
 public class Association extends FirebaseStructure implements Comparable<Association> {
-
     private String name;
     private String shortDescription;
-    private String longDescription;
 
     private String iconUri;
     private String bannerUri;
 
-    private List<Map<String, Object>> events;
-    private String mainChannelId;
+    private List<Map<String, Object>> upcomingEvents;
+    private String channelId;
     private String closestEventId;
 
     /**
@@ -43,13 +41,12 @@ public class Association extends FirebaseStructure implements Comparable<Associa
 
         name = data.getString("name").trim();
         shortDescription = data.getString("short_description");
-        longDescription = data.getString("long_description");
 
         // Init the main chat id
-        mainChannelId = data.getString("channel_id");
+        channelId = data.getString("channel_id");
 
         // Init the upcoming event
-        events = (List<Map<String, Object>>) data.get("events");
+        upcomingEvents = (List<Map<String, Object>>) data.get("upcomingEvents");
         computeClosestEvent();
 
         // Init the Icon URI
@@ -58,6 +55,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
         // Init the Banner URI
         bannerUri = data.getString("banner_uri");
     }
+
 
     /**
      * Return the Association's name
@@ -73,17 +71,8 @@ public class Association extends FirebaseStructure implements Comparable<Associa
      *
      * @return the short description
      */
-    public String getShortDesc() {
+    public String getShortDescription() {
         return shortDescription;
-    }
-
-    /**
-     * Return the Association's long description
-     *
-     * @return the long description
-     */
-    public String getLongDesc() {
-        return longDescription;
     }
 
     /**
@@ -93,7 +82,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
      */
     @Nullable
     public String getChannelId() {
-        return mainChannelId;
+        return channelId;
     }
 
     /**
@@ -132,28 +121,89 @@ public class Association extends FirebaseStructure implements Comparable<Associa
      * Compute the closest event id and store it in the class
      */
     private void computeClosestEvent() {
-        if (events == null || events.isEmpty())
+        if (upcomingEvents == null || upcomingEvents.isEmpty())
             closestEventId = null;
         else {
-            String closest = (String)events.get(0).get("id");
-            java.util.Date closest_time = (java.util.Date) events.get(0).get("start");
-            for (int i = 1; i < events.size(); i++) {
-                java.util.Date current = (java.util.Date) events.get(i).get("start");
+            String closest = (String) upcomingEvents.get(0).get("id");
+            java.util.Date closest_time = (java.util.Date) upcomingEvents.get(0).get("start");
+            for (int i = 1; i < upcomingEvents.size(); i++) {
+                java.util.Date current = (java.util.Date) upcomingEvents.get(i).get("start");
                 if (current.before(closest_time)) {
-                    closest = (String) events.get(i).get("id");
+                    closest = (String) upcomingEvents.get(i).get("id");
                 }
             }
             closestEventId = closest;
         }
     }
 
+    public Map<String,Object> getData(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", getId());
+        map.put("name", name);
+        map.put("short_description", shortDescription);
+        map.put("icon_uri", iconUri);
+        map.put("banner_uri", bannerUri);
+        map.put("upcoming_events", upcomingEvents);
+        map.put("channel_id", channelId);
+        return map;
+    }
 
     public static List<String> requiredFields(){
-        return Arrays.asList("id", "name", "short_description", "long_description");
+        return Arrays.asList("id", "name", "short_description");
     }
 
     @Override
     public int compareTo(@NonNull Association o) {
         return name.compareTo(o.getName());
+    }
+
+    public static final class AssociationBuilder {
+        private String id;
+        private String name;
+        private String shortDescription;
+
+        private String iconUri;
+        private String bannerUri;
+
+        private List<Map<String, Object>> upcomingEvents;
+        private String channelId;
+
+        public AssociationBuilder(){}
+
+        public void setId(String id){
+            this.id = id;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+        public void setShortDescription(String shortDescription) {
+            this.shortDescription = shortDescription;
+        }
+        public void setIconUri(String iconUri) {
+            this.iconUri = iconUri;
+        }
+        public void setBannerUri(String bannerUri) {
+            this.bannerUri = bannerUri;
+        }
+        public void setUpcomingEvents(List<Map<String, Object>> upcomingEvents) {
+            this.upcomingEvents = upcomingEvents;
+        }
+        public void setChannelId(String channelId) {
+            this.channelId = channelId;
+        }
+
+        public Association build(){
+            if(id == null || name == null || shortDescription == null)
+                return null;
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", id);
+            map.put("name", name);
+            map.put("short_description", shortDescription);
+            map.put("icon_uri", iconUri);
+            map.put("banner_uri", bannerUri);
+            map.put("upcoming_events", upcomingEvents);
+            map.put("channel_id", channelId);
+            return new Association(new FirebaseMapDecorator(map));
+        }
     }
 }

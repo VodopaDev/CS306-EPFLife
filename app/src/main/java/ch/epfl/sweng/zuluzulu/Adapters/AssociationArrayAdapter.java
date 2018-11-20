@@ -69,7 +69,7 @@ public class AssociationArrayAdapter extends ArrayAdapter<Association> {
 
         final Association asso = data.get(position);
         holder.name.setText(asso.getName());
-        holder.short_desc.setText(asso.getShortDesc());
+        holder.short_desc.setText(asso.getShortDescription());
         ImageLoader.loadUriIntoImageView(holder.icon, asso.getIconUri(), getContext());
 
         asso_view.setOnClickListener(new View.OnClickListener() {

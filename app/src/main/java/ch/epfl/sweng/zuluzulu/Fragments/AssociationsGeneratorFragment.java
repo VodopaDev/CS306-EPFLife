@@ -20,9 +20,11 @@ import java.util.Objects;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
 import ch.epfl.sweng.zuluzulu.URLTools.IconParser;
 import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
@@ -129,16 +131,13 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             datas.set(index, datas.get(index) + "," + final_icon_url);
 
             //put db
-            Map<String, Object> docData = new HashMap<>();
-            docData.put("channel_id", 0L);
-            docData.put("events", new ArrayList<>());
-            docData.put("icon_uri", final_icon_url);
-            docData.put("name", datas.get(index).split(",")[1]);
-            docData.put("short_desc", datas.get(index).split(",")[2]);
-            docData.put("long_desc", datas.get(index).split(",")[2]);
-            docData.put("id", index);
+            Association.AssociationBuilder builder = new Association.AssociationBuilder();
+            builder.setName(datas.get(index).split(",")[1].trim());
+            builder.setIconUri(final_icon_url);
+            builder.setShortDescription(datas.get(index).split(",")[2].trim());
+            //builder.setLongDescription("long_desc", datas.get(index).split(",")[2].trim());
 
-            db.collection("assos_info").document(Integer.toString(index)).set(docData);
+            FirebaseProxy.getInstance().addAssociation(builder);
             updateView();
         } catch (MalformedURLException e) {
             e.printStackTrace();

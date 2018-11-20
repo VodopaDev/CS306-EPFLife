@@ -99,7 +99,7 @@ public class AssociationTest {
     @Test
     public void shortDescIsCorrect() {
         initWorkingAssociation();
-        assertEquals(SHORT_DESC, asso1.getShortDesc());
+        assertEquals(SHORT_DESC, asso1.getShortDescription());
     }
 
     @Test

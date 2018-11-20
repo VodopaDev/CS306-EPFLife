@@ -7,10 +7,12 @@ import android.util.Log;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -51,6 +53,8 @@ public class FirebaseProxy {
         else
             return proxy;
     }
+
+    //----- Association related methods -----\\
 
     /**
      * Get all associations and apply an OnResult on them
@@ -101,6 +105,16 @@ public class FirebaseProxy {
                     onResult.apply(result);
             });
         }
+    }
+
+    public void addAssociation(Association.AssociationBuilder builder){
+        DocumentReference newRef = assoCollection.document();
+        builder.setId(newRef.getId());
+        Association association = builder.build();
+        if(association != null)
+            newRef.set(association.getData());
+        else
+            newRef.delete();
     }
 
     /**
