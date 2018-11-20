@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.ChannelFragment">
 
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="25dp"
+        android:background="@android:drawable/list_selector_background"
+        android:src="@drawable/custom_plus"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh_channel"
         android:layout_width="match_parent"
