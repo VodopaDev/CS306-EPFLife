@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +45,7 @@ public class PostFragment extends SuperChatPostsFragment {
     private PostArrayAdapter adapter;
 
     private Button writePostButton;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public PostFragment() {
         // Required empty public constructor
@@ -61,6 +63,7 @@ public class PostFragment extends SuperChatPostsFragment {
         chatButton = view.findViewById(R.id.chat_button);
         postsButton = view.findViewById(R.id.posts_button);
         writePostButton = view.findViewById(R.id.posts_new_post_button);
+        swipeRefreshLayout = view.findViewById(R.id.swiperefresh_post);
 
         chatButton.setEnabled(true);
         postsButton.setEnabled(false);
@@ -71,6 +74,7 @@ public class PostFragment extends SuperChatPostsFragment {
 
         adapter = new PostArrayAdapter(view.getContext(), posts);
         listView.setAdapter(adapter);
+        swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
@@ -115,6 +119,7 @@ public class PostFragment extends SuperChatPostsFragment {
                                 }
                             }
                             adapter.notifyDataSetChanged();
+                            swipeRefreshLayout.setRefreshing(false);
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
@@ -132,5 +137,13 @@ public class PostFragment extends SuperChatPostsFragment {
                 mListener.onFragmentInteraction(CommunicationTag.OPEN_WRITE_POST_FRAGMENT, channel);
             }
         });
+    }
+
+    /**
+     * This function is called when the user swipes down to refresh the list of posts
+     */
+    private void refresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        updatePosts();
     }
 }
