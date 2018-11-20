@@ -178,6 +178,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
                     map.put("fav_assos", new ArrayList<Integer>());
                     map.put("followed_events", new ArrayList<Integer>());
                     map.put("followed_chats", new ArrayList<Integer>());
+                    map.put("fav_event", new ArrayList<Integer>());
                     ref.set(map);
                     transfer_main(false);
                 } else {
@@ -185,10 +186,12 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
                     List<Integer> received_assos = fmap.getIntegerList("fav_assos");
                     List<Integer> received_events = fmap.getIntegerList("followed_events");
                     List<Integer> received_chats = fmap.getIntegerList("followed_chats");
+                    List<Integer> received_event = fmap.getIntegerList("fav_event");
 
                     ((AuthenticatedUser) user).setFavAssos(received_assos);
                     ((AuthenticatedUser) user).setFollowedEvents(received_events);
                     ((AuthenticatedUser) user).setFollowedChats(received_chats);
+                    ((AuthenticatedUser) user).setFavEvent(received_event);
                     transfer_main(false);
                 }
             }
