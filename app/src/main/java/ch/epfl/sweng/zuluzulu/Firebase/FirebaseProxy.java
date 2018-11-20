@@ -11,6 +11,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -225,6 +227,18 @@ public class FirebaseProxy {
                             onResult.apply(result);
                     });
         }
+    }
+
+    public void getMessagesFromChannelWithUser(String id, String userId, OnResult<List<ChatMessage>> onResult){
+        channelCollection.document(id).collection("messages").get().addOnSuccessListener(queryDocumentSnapshots -> {
+            List<ChatMessage> result = new ArrayList<>();
+            for(DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){
+                FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+                if(data.hasFields(ChatMessage.FIELDS))
+                    result.add(new ChatMessage(data, userId));
+            }
+           onResult.apply(result);
+        });
     }
 
     //----- User related methods -----\\

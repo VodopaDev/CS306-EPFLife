@@ -18,11 +18,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,11 +36,15 @@ import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 import ch.epfl.sweng.zuluzulu.User.User;
+
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_POST_FRAGMENT;
 
 /**
  * A {@link SuperChatPostsFragment} subclass.
@@ -101,23 +108,20 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Add an onClick listener on the button to send the message to the database
      */
     private void setUpSendButton() {
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String senderName = anonymous ? "" : user.getFirstNames();
-                String message = textEdit.getText().toString();
-                Timestamp time = Timestamp.now();
-                String sciper = user.getSciper();
-                textEdit.setText("");
+        sendButton.setOnClickListener(v -> {
+            String senderName = anonymous ? "" : user.getFirstNames();
+            String message = textEdit.getText().toString();
+            Timestamp time = Timestamp.now();
+            String sciper = user.getSciper();
+            textEdit.setText("");
 
-                Map<String, Object> data = new HashMap<>();
-                data.put("senderName", senderName);
-                data.put("message", message);
-                data.put("time", time);
-                data.put("sciper", sciper);
+            Map<String, Object> data = new HashMap<>();
+            data.put("senderName", senderName);
+            data.put("message", message);
+            data.put("time", time);
+            data.put("sciper", sciper);
 
-                Utils.addDataToFirebase(data, mockableCollection, TAG);
-            }
+            Utils.addDataToFirebase(data, mockableCollection, TAG);
         });
     }
 
@@ -125,12 +129,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Add an onClick listener on the button to switch to the posts fragment
      */
     private void setUpPostsButton() {
-        postsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onFragmentInteraction(CommunicationTag.OPEN_POST_FRAGMENT, channel);
-            }
-        });
+        postsButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_POST_FRAGMENT, channel));
     }
 
     /**
@@ -139,8 +138,7 @@ public class ChatFragment extends SuperChatPostsFragment {
     private void setUpEditText() {
         textEdit.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence text, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence text, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence text, int start, int before, int count) {
@@ -148,8 +146,7 @@ public class ChatFragment extends SuperChatPostsFragment {
             }
 
             @Override
-            public void afterTextChanged(Editable text) {
-            }
+            public void afterTextChanged(Editable text) {}
         });
     }
 
@@ -157,43 +154,26 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Refresh the chat by reading all the messages in the database
      */
     private void updateChat() {
-        collectionReference
-                .orderBy("time", Query.Direction.ASCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            messages.clear();
-                            for (DocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
-                                if (fmap.hasFields(ChatMessage.FIELDS)) {
-                                    ChatMessage message = new ChatMessage(fmap, user.getSciper());
-                                    messages.add(message);
-                                }
-                            }
-                            adapter.notifyDataSetChanged();
-                            listView.setSelection(adapter.getCount() - 1);
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
+        FirebaseProxy.getInstance().getMessagesFromChannelWithUser(channel.getId(), user.getSciper(), result -> {
+            messages = result;
+            Collections.sort(messages, (o1, o2) -> {
+                if (o1.getTime().before(o2.getTime()))
+                    return -1;
+                else
+                    return 1;
+            });
+            adapter.notifyDataSetChanged();
+            listView.setSelection(adapter.getCount() - 1);
+        });
     }
 
     private void setUpDataOnChangeListener() {
-        collectionReference
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w("Chat or post", "Listen failed.", e);
-                            return;
-                        }
-
+        FirebaseFirestore.getInstance().collection(collectionReference)
+                .addSnapshotListener((value, e) -> {
+                    if (e != null)
+                        Log.w("Chat or post", "Listen failed.", e);
+                    else
                         updateChat();
-                    }
                 });
     }
 }

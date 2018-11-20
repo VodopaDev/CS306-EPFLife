@@ -37,7 +37,7 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
     protected Button chatButton;
     protected Button postsButton;
 
-    protected CollectionReference collectionReference;
+    protected String collectionReference;
     protected DatabaseCollection mockableCollection;
 
     protected AuthenticatedUser user;
