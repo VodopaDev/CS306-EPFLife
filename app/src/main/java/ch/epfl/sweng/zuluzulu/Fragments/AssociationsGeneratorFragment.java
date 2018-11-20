@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -98,16 +97,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                 urlHandler.execute(url);
                 index++;
 
-                Association association = new Association(
-                        index,
-                        data.split(",")[1],
-                        data.split(",")[2],
-                        data.split(",")[2],
-                        EPFL_LOGO,
-                        EPFL_LOGO,
-                        new ArrayList<>(),
-                        1,
-                        0);
+                Association association = new Association(index, data.split(",")[1], data.split(",")[2], data.split(",")[2], EPFL_LOGO, EPFL_LOGO, new ArrayList<>(), 1, 0);
 
                 this.associations.add(association);
             }
@@ -171,17 +161,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
 
 
         Association asso = this.associations.get(index);
-        Association newAssociation = new Association(
-                asso.getId(),
-                asso.getName(),
-                asso.getShortDesc(),
-                asso.getLongDesc(),
-                value,
-                asso.getBannerUri(),
-                new ArrayList<>(),
-                asso.getChannelId(),
-                asso.getClosestEventId()
-        );
+        Association newAssociation = new Association(asso.getId(), asso.getName(), asso.getShortDesc(), asso.getLongDesc(), value, asso.getBannerUri(), new ArrayList<>(), asso.getChannelId(), asso.getClosestEventId());
         this.associations.set(index, newAssociation);
         adapter.notifyDataSetChanged();
         IdlingResourceFactory.decrementCountingIdlingResource();
