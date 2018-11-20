@@ -32,6 +32,18 @@ public class Association implements Serializable {
     private int channel_id;
     private int closest_event_id;
 
+    public Association(int id, String name, String short_desc, String long_desc, String icon_uri, String banner_uri, List<Map<String, Object>> events, int channel_id, int closest_event_id){
+        this.id = id;
+        this.name = name;
+        this.short_desc = short_desc;
+        this.long_desc = long_desc;
+        this.icon_uri = icon_uri;
+        this.banner_uri = banner_uri;
+        this.events = events;
+        this.channel_id = channel_id;
+        this.closest_event_id = closest_event_id;
+    }
+
     /**
      * Create an association using a Firebase adapted map
      *

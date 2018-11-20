@@ -1,13 +1,14 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Pair;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -15,17 +16,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
+import ch.epfl.sweng.zuluzulu.Adapters.AddAssociationAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
 import ch.epfl.sweng.zuluzulu.URLTools.IconParser;
-import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
+import ch.epfl.sweng.zuluzulu.URLTools.OnClickRecyclerView;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlResultListener;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -48,6 +50,8 @@ public class AssociationsGeneratorFragment extends SuperFragment {
 
     private List<String> datas;
     private Database db = DatabaseFactory.getDependency();
+    private List<Association> associations;
+    private AddAssociationAdapter adapter;
 
     public AssociationsGeneratorFragment() {
         // Required empty public constructor
@@ -73,26 +77,10 @@ public class AssociationsGeneratorFragment extends SuperFragment {
      */
     private void handleAssociations(List<String> results) {
         if (results != null) {
-            this.datas = results;
-            updateView();
-        }
-
-        IdlingResourceFactory.decrementCountingIdlingResource();
-    }
-
-    /**
-     * Load the associations icons
-     *
-     * @param name
-     */
-    private void requestIcon(String name) {
-        if (name == null || name.isEmpty()) {
-            return;
-        }
-
-        int index = 0;
-        for (String data : datas) {
-            if (data.toLowerCase().contains(name.toLowerCase())) {
+            this.datas.addAll(results);
+            int index = 0;
+            for (String data : datas
+                    ) {
                 // Tell tests the async execution is finished
                 IdlingResourceFactory.incrementCountingIdlingResource();
 
@@ -107,102 +95,109 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                 }, new IconParser());
 
                 urlHandler.execute(url);
+                index++;
+
+                Association association = new Association(index, data.split(",")[1], data.split(",")[2], data.split(",")[2], EPFL_LOGO, EPFL_LOGO, new ArrayList<>(), 1, 0);
+
+                this.associations.add(association);
             }
-            index++;
         }
+
+        adapter.notifyDataSetChanged();
+
+        IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
-    private void addDatabase(String icon_url, int index) {
-        if (index < 0 || index >= this.datas.size()) {
+    private void addDatabase(int index) {
+        if (index < 0 || index >= this.associations.size()) {
             return;
         }
-        try {
-            String base_url = datas.get(index).split(",")[0];
-            URL url = new URL(base_url);
-            URL iconUrl = new URL(url, icon_url);
-            String final_icon_url = iconUrl.toString();
 
-            if (final_icon_url.contains("www.epfl.ch/favicon.ico")) {
-                final_icon_url = EPFL_LOGO;
-            }
+        //creating the channel for the DB
+        Map<String, Object> docDataChannel = new HashMap<>();
+        docDataChannel.put("description", "chat of the association : " + associations.get(index).getName());
+        docDataChannel.put("icon_uri", associations.get(index).getBannerUri());
+        docDataChannel.put("id", index + 20);
+        docDataChannel.put("name", associations.get(index).getName());
 
-            datas.set(index, datas.get(index) + "," + final_icon_url);
+        Map<String, Object> restrictions = new HashMap<>();
+        restrictions.put("location", null);
+        restrictions.put("section", null);
 
-            String name = datas.get(index).split(",")[1];
-
-            //creating the channel for the DB
-            Map<String, Object> docDataChannel = new HashMap<>();
-            docDataChannel.put("description", "chat of the association : " +name);
-            docDataChannel.put("icon_uri", final_icon_url);
-            docDataChannel.put("id", index + 20);
-            docDataChannel.put("name", name);
-
-            Map<String, Object> restrictions = new HashMap<>();
-            restrictions.put("location", null);
-            restrictions.put("section", null);
-
-            docDataChannel.put("restrictions", restrictions);
-            db.collection("channels").document("channel" +Integer.toString(index + 20)).set(docDataChannel);
-
-            //creating the association for the DB
-            Map<String, Object> docData = new HashMap<>();
-            docData.put("channel_id", index + 20);
-            docData.put("events", new ArrayList<>());
-            docData.put("icon_uri", final_icon_url);
-            docData.put("name", name);
-            docData.put("short_desc", datas.get(index).split(",")[2]);
-            docData.put("long_desc", datas.get(index).split(",")[2]);
-            docData.put("id", index);
+        docDataChannel.put("restrictions", restrictions);
+        db.collection("channels").document("channel" +Integer.toString(index + 20)).set(docDataChannel);
 
 
+        //put db
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("channel_id", index + 20);
+        docData.put("events", new ArrayList<>());
+        docData.put("icon_uri", associations.get(index).getBannerUri());
+        docData.put("banner_uri", EPFL_LOGO);
+        docData.put("name", associations.get(index).getName());
+        docData.put("short_desc", associations.get(index).getShortDesc());
+        docData.put("long_desc", associations.get(index).getLongDesc());
+        docData.put("id", index);
 
-            db.collection("assos_info").document(Integer.toString(index)).set(docData);
-            updateView();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
+        db.collection("assos_info").document(Integer.toString(index)).set(docData);
     }
 
     /**
      * Add the loaded icon to database
-     * @param index
-     * @param result
+     *
+     * @param index  index
+     * @param result Icon found
      */
     private void handleIcon(final int index, List<String> result) {
-        String value;
-        if (result != null && !result.isEmpty() && index >= 0 && index < this.datas.size()) {
+        String value = EPFL_LOGO;
+        if (result != null && !result.isEmpty() && checkBound(index)) {
             value = result.get(0);
-
-        } else {
-            value = EPFL_LOGO;
+            value = createUrl(datas.get(index).split(",")[0], value);
         }
-        addDatabase(value, index);
+
+        Association asso = this.associations.get(index);
+        Association newAssociation = new Association(asso.getId(), asso.getName(), asso.getShortDesc(), asso.getLongDesc(), value, asso.getBannerUri(), new ArrayList<>(), asso.getChannelId(), asso.getClosestEventId());
+        this.associations.set(index, newAssociation);
+        adapter.notifyDataSetChanged();
+
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
+    private String createUrl(String base, String icon_path) {
+        String value = EPFL_LOGO;
+        try {
+            URL url = new URL(base);
+            URL iconUrl = new URL(url, icon_path);
 
-
-    /**
-     * Fill the datas in the view
-     */
-    private void updateView() {
-        TextView view = Objects.requireNonNull(getView()).findViewById(R.id.associations_generator_list_values);
-
-        if (datas != null && datas.size() > 0) {
-            view.setText(datas.size() + " ASSOCIATIONS FOUND : \n\n");
+            value = iconUrl.toString();
+            if (value.contains("www.epfl.ch/favicon.ico")) {
+                value = EPFL_LOGO;
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
         }
-
-        for (String data : datas) {
-            view.append(data.replaceAll(",", "\n"));
-            view.append("\n-----------\n");
-        }
+        return value;
     }
+
+    private boolean checkBound(int index) {
+        return index >= 0 && index < datas.size() && datas.size() == associations.size();
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.datas = null;
+        this.datas = new ArrayList<>();
+        this.associations = new ArrayList<>();
+        this.adapter = new AddAssociationAdapter(this.getContext(), this.associations, new OnClickRecyclerView() {
+            @Override
+            public void onClick(int i) {
+                if (checkBound(i)) {
+                    addDatabase(i);
+                    Snackbar.make(getView(), associations.get(i).getName() + " added", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations Generator");
         UrlHandler urlHandler = new UrlHandler(this::handleAssociations, new AssociationsParser());
@@ -213,20 +208,26 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_associations_generator, container, false);
         if (view == null) {
             return null;
         }
-        Button button = view.findViewById(R.id.load_icon_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                TextView text = view.findViewById(R.id.nbr_icon);
-                requestIcon(text.getText().toString());
-            }
-        });
+
+        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.associations_generator_recyclerview);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(false);
+
+        // use a linear layout manager
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this.getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
+        mRecyclerView.setAdapter(adapter);
 
         // Inflate the layout for this fragment
         return view;
