@@ -128,15 +128,33 @@ public class AssociationsGeneratorFragment extends SuperFragment {
 
             datas.set(index, datas.get(index) + "," + final_icon_url);
 
-            //put db
+            String name = datas.get(index).split(",")[1];
+
+            Map<String, Object> docDataChannel = new HashMap<>();
+            docDataChannel.put("description", "chat of the association : " +name);
+            docDataChannel.put("icon_uri", final_icon_url);
+            docDataChannel.put("id", index);
+            docDataChannel.put("name", name);
+
+            Map<String, Object> restrictions = new HashMap<>();
+            restrictions.put("isNotEvent", true);
+            restrictions.put("location", null);
+            restrictions.put("section", null);
+
+            docDataChannel.put("restrictions", restrictions);
+            db.collection("channels").document("channel" +Integer.toString(index)).set(docDataChannel);
+
+                    //put db
             Map<String, Object> docData = new HashMap<>();
-            docData.put("channel_id", 1);
+            docData.put("channel_id", index);
             docData.put("events", new ArrayList<>());
             docData.put("icon_uri", final_icon_url);
-            docData.put("name", datas.get(index).split(",")[1]);
+            docData.put("name", name);
             docData.put("short_desc", datas.get(index).split(",")[2]);
             docData.put("long_desc", datas.get(index).split(",")[2]);
             docData.put("id", index);
+
+
 
             db.collection("assos_info").document(Integer.toString(index)).set(docData);
             updateView();
