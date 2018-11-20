@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -78,7 +80,10 @@ public class EventFragment extends SuperFragment {
     private Calendar eventCalendar;
     private Date dateFrom;
 
-    DatePickerDialog.OnDateSetListener datePicker;
+    private DatePickerDialog.OnDateSetListener datePicker;
+
+    private ImageButton filter_button;
+    private ConstraintLayout event_filter_constraint_layout;
 
     public EventFragment() {
         // Required empty public constructor
@@ -171,6 +176,11 @@ public class EventFragment extends SuperFragment {
 
         event_search_bar = view.findViewById(R.id.event_fragment_search_bar);
 
+        filter_button = view.findViewById(R.id.event_fragment_filter_button);
+        event_filter_constraint_layout = view.findViewById(R.id.even_filter_constraintLayout);
+
+        openCloseFilterOption();
+
         sortByName();
 
         sortByLike();
@@ -235,6 +245,20 @@ public class EventFragment extends SuperFragment {
         event_adapter = new EventArrayAdapter(getContext(), data, mListener, user);
         list.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
+    }
+
+    public void openCloseFilterOption(){
+        filter_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (event_filter_constraint_layout.getVisibility() == View.VISIBLE) {
+                    event_filter_constraint_layout.setVisibility(View.GONE);
+                }
+                else {
+                    event_filter_constraint_layout.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private void selectDate(EditText date){
