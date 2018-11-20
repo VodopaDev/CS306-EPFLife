@@ -8,10 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -21,6 +24,7 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.PostArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -63,6 +67,7 @@ public class PostFragment extends SuperChatPostsFragment {
 
         String collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POSTS_COLLECTION_NAME;
         collectionReference = db.collection(collectionPath);
+        mockableCollection = DatabaseFactory.getDependency().collection(collectionPath);
 
         adapter = new PostArrayAdapter(view.getContext(), posts);
         listView.setAdapter(adapter);
@@ -70,7 +75,7 @@ public class PostFragment extends SuperChatPostsFragment {
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
-        setUpDataOnChangeListener();
+        updatePosts();
         setUpChatButton();
         setUpNewPostButton();
 
@@ -94,7 +99,7 @@ public class PostFragment extends SuperChatPostsFragment {
      */
     private void updatePosts() {
         collectionReference
-                .orderBy("time", Query.Direction.ASCENDING)
+                .orderBy("time", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -105,7 +110,7 @@ public class PostFragment extends SuperChatPostsFragment {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
                                 if (fmap.hasFields(Post.FIELDS)) {
-                                    Post post = new Post(fmap);
+                                    Post post = new Post(fmap, user.getSciper(), channel.getId());
                                     posts.add(post);
                                 }
                             }
@@ -127,10 +132,5 @@ public class PostFragment extends SuperChatPostsFragment {
                 mListener.onFragmentInteraction(CommunicationTag.OPEN_WRITE_POST_FRAGMENT, channel);
             }
         });
-    }
-
-    @Override
-    public void updateListView() {
-        updatePosts();
     }
 }

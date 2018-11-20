@@ -6,11 +6,6 @@ public enum CommunicationTag {
     SET_TITLE,
     SET_USER,
 
-
-    // Communicate to the main fragment IDLING_Ressource
-    INCREMENT_IDLING_RESOURCE,
-    DECREMENT_IDLING_RESOURCE,
-
     // Opening fragments
     OPEN_MAIN_FRAGMENT,
     OPEN_SETTINGS_FRAGMENT,

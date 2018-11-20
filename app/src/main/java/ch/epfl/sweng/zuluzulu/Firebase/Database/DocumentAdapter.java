@@ -18,4 +18,9 @@ public class DocumentAdapter implements DatabaseDocument {
     public Task<Void> set(@NonNull Map<String, Object> data) {
         return document.set(data);
     }
+
+    @Override
+    public Task<Void> update(String field, Object value, Object... moreFieldAndValues) {
+        return document.update(field, value, moreFieldAndValues);
+    }
 }

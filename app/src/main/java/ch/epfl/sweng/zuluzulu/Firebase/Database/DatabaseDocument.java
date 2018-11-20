@@ -8,4 +8,6 @@ import java.util.Map;
 
 public interface DatabaseDocument {
     public Task<Void> set(@NonNull Map<String, Object> data);
+
+    public Task<Void> update(String field, Object value, Object... moreFieldAndValues);
 }
