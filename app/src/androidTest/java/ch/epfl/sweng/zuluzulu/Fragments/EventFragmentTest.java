@@ -37,6 +37,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 public class EventFragmentTest extends TestWithAuthenticatedUser {
@@ -46,6 +47,8 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
     public void init() throws InterruptedException {
         fragment = EventFragment.newInstance(getUser());
         mActivityRule.getActivity().openFragment(fragment);
+
+        onView(withId(R.id.event_fragment_filter_button)).perform(click());
 
         TimeUnit.SECONDS.sleep(3);
     }
@@ -115,5 +118,16 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
        onView(withText("OK")).perform(click());
        onView(withId(R.id.event_fragment_to_date)).perform((click()));
        onView(withText("OK")).perform(click());
+   }
+
+   @Test
+   public void optionPanelIsDisplayed(){
+       onView(withId(R.id.even_filter_constraintLayout)).check(matches(isDisplayed()));
+   }
+
+   @Test
+    public void optionPanelIsNotDisplayed(){
+        onView(withId(R.id.event_fragment_filter_button)).perform(click());
+        onView(withId(R.id.even_filter_constraintLayout)).check(matches(not(isDisplayed())));
    }
 }
