@@ -130,26 +130,14 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     /**
      * Add the loaded icon to database
      *
-     * @param index
-     * @param result
+     * @param index  index
+     * @param result Icon found
      */
     private void handleIcon(final int index, List<String> result) {
         String value = EPFL_LOGO;
         if (result != null && !result.isEmpty() && checkBound(index)) {
             value = result.get(0);
-            try {
-                URL url = new URL(datas.get(index).split(",")[0]);
-                URL iconUrl = new URL(url, value);
-
-                value = iconUrl.toString();
-                if (value.contains("www.epfl.ch/favicon.ico")) {
-                    value = EPFL_LOGO;
-                }
-            } catch (MalformedURLException e) {
-                IdlingResourceFactory.decrementCountingIdlingResource();
-                e.printStackTrace();
-                return;
-            }
+            value = createUrl(datas.get(index).split(",")[0], value);
         }
 
         Association asso = this.associations.get(index);
@@ -158,6 +146,23 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         adapter.notifyDataSetChanged();
 
         IdlingResourceFactory.decrementCountingIdlingResource();
+    }
+
+    private String createUrl(String base, String icon_path) {
+        String value = EPFL_LOGO;
+        try {
+            URL url = new URL(base);
+            URL iconUrl = new URL(url, icon_path);
+
+            value = iconUrl.toString();
+            if (value.contains("www.epfl.ch/favicon.ico")) {
+                value = EPFL_LOGO;
+            }
+        } catch (MalformedURLException e) {
+            IdlingResourceFactory.decrementCountingIdlingResource();
+            e.printStackTrace();
+        }
+        return value;
     }
 
     private boolean checkBound(int index) {
