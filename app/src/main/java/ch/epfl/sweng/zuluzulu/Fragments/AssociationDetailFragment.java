@@ -196,7 +196,7 @@ public class AssociationDetailFragment extends SuperFragment {
      */
     private void loadMainChat() {
         // Fetch online data of the main_chat
-        if (!asso.getChannelId().equals("0")) {
+        if (asso.getChannelId() != null){
             IdlingResourceFactory.incrementCountingIdlingResource();
             FirebaseFirestore.getInstance()
                     .document("channels/channel" + asso.getChannelId())

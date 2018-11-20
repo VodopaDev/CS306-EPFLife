@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -163,6 +164,59 @@ public class FirebaseProxy {
                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
                 if(fmap.hasFields(Event.requiredFields()))
                     result.add(new Event(fmap));
+                if(counter.increment())
+                    onResult.apply(result);
+            }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the association with id " + id))
+                    .addOnFailureListener(e -> {
+                        if(counter.increment())
+                            onResult.apply(result);
+                    });
+        }
+    }
+
+    //----- Channel related methods -----\\
+
+    /**
+     * Get all events and apply an OnResult on them
+     * @param onResult interface defining apply()
+     */
+    public void getAllChannels(OnResult<List<Channel>> onResult){
+        channelCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            List<Channel> resultList = new ArrayList<>();
+            for(DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){
+                FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
+                if(fmap.hasFields(Channel.FIELDS))
+                    resultList.add(new Channel(fmap));
+            }
+            onResult.apply(resultList);
+        }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch all channels"));
+    }
+
+    /**
+     * Get one event from its id and apply an OnResult on them
+     * @param onResult interface defining apply()
+     */
+    public void getChannelFromId(String id, OnResult<Channel> onResult){
+        channelCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
+            FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+            if(fmap.hasFields(Channel.FIELDS))
+                onResult.apply(new Channel(fmap));
+        }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the channel with id " + id));
+    }
+
+    /**
+     * Get all events from an ID list and apply an OnResult on them
+     * @param onResult interface defining apply()
+     */
+    public void getChannelsFromIds(List<String> ids, OnResult<List<Channel>> onResult){
+        List<Channel> result = new ArrayList<>();
+        Counter counter = new Counter(ids.size());
+
+        for(String id: ids){
+            channelCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
+                FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                if(fmap.hasFields(Channel.FIELDS))
+                    result.add(new Channel(fmap));
                 if(counter.increment())
                     onResult.apply(result);
             }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the association with id " + id))

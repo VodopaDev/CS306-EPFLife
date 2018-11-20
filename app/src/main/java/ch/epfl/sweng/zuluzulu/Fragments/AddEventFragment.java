@@ -27,6 +27,8 @@ import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 
@@ -366,29 +368,13 @@ public class AddEventFragment extends SuperFragment {
      * on the database.
      */
     private void fillAssociationNames() {
-        IdlingResourceFactory.incrementCountingIdlingResource();
-        FirebaseFirestore.getInstance().collection("assos_info").orderBy("name").get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots){
-                        List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        for (DocumentSnapshot snap : snap_list) {
-                            FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
-                            if (data.hasFields(Association.requiredFields())) {
-                                association_names.add((String) data.get("name"));
-                            }
-                        }
-                        setSpinner(spinner, association_names);
-                        IdlingResourceFactory.decrementCountingIdlingResource();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        error_message(e);
-                        IdlingResourceFactory.decrementCountingIdlingResource();
-                    }
-                });
+        FirebaseProxy.getInstance().getAllAssociations(new OnResult<List<Association>>() {
+            @Override
+            public void apply(List<Association> result) {
+                for (Association association : result)
+                    association_names.add(association.getName());
+            }
+        });
     }
 
     private void error_message(Exception e) {
