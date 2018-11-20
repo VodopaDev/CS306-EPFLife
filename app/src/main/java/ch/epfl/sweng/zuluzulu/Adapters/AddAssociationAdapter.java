@@ -57,7 +57,6 @@ public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAd
             public void onClick(View view) {
                 holder.add_button.setEnabled(false);
                 checked.put(holder.getAdapterPosition(), false);
-                System.out.println("CLICK + " + holder.getAdapterPosition());
                 lisetner.onClick(holder.getAdapterPosition());
             }
         });

@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -83,21 +82,21 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             int index = 0;
             for (String data : datas
                     ) {
-                    // Tell tests the async execution is finished
-                    IdlingResourceFactory.incrementCountingIdlingResource();
+                // Tell tests the async execution is finished
+                IdlingResourceFactory.incrementCountingIdlingResource();
 
-                    String url = data.split(",")[0];
+                String url = data.split(",")[0];
 
-                    int finalIndex = index;
-                    UrlHandler urlHandler = new UrlHandler(new UrlResultListener<List<String>>() {
-                        @Override
-                        public void onFinished(List<String> result) {
-                            handleIcon(finalIndex, result);
-                        }
-                    }, new IconParser());
+                int finalIndex = index;
+                UrlHandler urlHandler = new UrlHandler(new UrlResultListener<List<String>>() {
+                    @Override
+                    public void onFinished(List<String> result) {
+                        handleIcon(finalIndex, result);
+                    }
+                }, new IconParser());
 
-                    urlHandler.execute(url);
-                    index++;
+                urlHandler.execute(url);
+                index++;
 
                 Association association = new Association(
                         index,
@@ -129,7 +128,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         Map<String, Object> docData = new HashMap<>();
         docData.put("channel_id", 1);
         docData.put("events", new ArrayList<>());
-        docData.put("icon_uri", associations.get(index).getIconUri().toString());
+        docData.put("icon_uri", associations.get(index).getBannerUri().toString());
         docData.put("banner_uri", EPFL_LOGO);
         docData.put("name", associations.get(index).getName());
         docData.put("short_desc", associations.get(index).getShortDesc());
@@ -141,6 +140,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
 
     /**
      * Add the loaded icon to database
+     *
      * @param index
      * @param result
      */
@@ -189,16 +189,15 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     }
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.datas          = new ArrayList<>();
-        this.associations   = new ArrayList<>();
-        this.adapter        = new AddAssociationAdapter(this.getContext(), this.associations, new OnClickRecyclerView() {
+        this.datas = new ArrayList<>();
+        this.associations = new ArrayList<>();
+        this.adapter = new AddAssociationAdapter(this.getContext(), this.associations, new OnClickRecyclerView() {
             @Override
             public void onClick(int i) {
-                if(i >= 0 && i < associations.size()) {
+                if (i >= 0 && i < associations.size()) {
                     addDatabase(i);
                     Snackbar.make(getView(), associations.get(i).getName() + " added", Snackbar.LENGTH_SHORT).show();
                 }

@@ -1,5 +1,15 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.support.test.espresso.NoMatchingViewException;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.ViewAssertion;
+import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.contrib.RecyclerViewActions;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+
+import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.Database.FirebaseMock;
@@ -18,10 +28,14 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 
 public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<MainFragment> {
@@ -33,6 +47,29 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
         fragment = MainFragment.newInstance(user);
     }
 
+    public class MyViewAction {
+
+        public ViewAction clickChildViewWithId(final int id) {
+            return new ViewAction() {
+                @Override
+                public Matcher<View> getConstraints() {
+                    return null;
+                }
+
+                @Override
+                public String getDescription() {
+                    return "Click on a child view with specified id.";
+                }
+
+                @Override
+                public void perform(UiController uiController, View view) {
+                    View v = view.findViewById(id);
+                    v.performClick();
+                }
+            };
+        }
+
+    }
     @Test
     public void canLoadURLs() {
         // Change the UrlReader to avoid HTTP request
@@ -40,18 +77,19 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
             @Override
             public BufferedReader read(String name) {
                 return new BufferedReader(new StringReader("&#8211; <a href=\"http://example.com\">Other</a> (Other)<br />\n"
-                                +"&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />\n"
-                                +"<link rel=\"icon\" type=\"image/png\" href=\"images/favicon.png\" sizes=\"16x16\">"));
+                        + "&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />\n"
+                        + "<link rel=\"icon\" type=\"image/png\" href=\"images/favicon.png\" sizes=\"16x16\">"));
             }
         };
         // Change the factory
         UrlReaderFactory.setDependency(reader);
 
         adminUser();
-        onView(withId(R.id.nbr_icon)).perform(replaceText("lauzhack"));
-        onView(withId(R.id.load_icon_button)).perform(click());
+        onView(withId(R.id.associations_generator_recyclerview)).perform(
+                RecyclerViewActions.actionOnItem(hasDescendant(withText("LauzHack")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));
+        onView(withId(R.id.associations_generator_recyclerview)).perform(
+                RecyclerViewActions.actionOnItem(hasDescendant(withText("Other")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));
 
-        onView(withId(R.id.associations_generator_list_values)).check(matches(withText(containsString("favicon.png"))));
     }
 
 
@@ -62,33 +100,14 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
             @Override
             public BufferedReader read(String name) {
                 return new BufferedReader(new StringReader("&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />"
-                        +"<link rel=\"icon\" type=\"image/png\" href=\"www.epfl.ch/favicon.ico\" sizes=\"16x16\">"));
+                        + "<link rel=\"icon\" type=\"image/png\" href=\"www.epfl.ch/favicon.ico\" sizes=\"16x16\">"));
             }
         };
         // Change the factory
         UrlReaderFactory.setDependency(reader);
         adminUser();
-        onView(withId(R.id.nbr_icon)).perform(replaceText("lauzhack"));
-        onView(withId(R.id.load_icon_button)).perform(click());
-
-        onView(withId(R.id.associations_generator_list_values)).check(matches(withText(containsString("EPFL-Logo.jpg"))));
-    }
-
-    @Test
-    public void buttonDoesNothingIfTextEmpty() {
-        // Change the UrlReader to avoid HTTP request
-        UrlReader reader = new UrlReader() {
-            @Override
-            public BufferedReader read(String name) {
-                return new BufferedReader(new StringReader("&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br /><link rel=\"icon\" type=\"image/png\" href=\"images/favicon.png\" sizes=\"16x16\">"));
-            }
-        };
-        // Change the factory
-        UrlReaderFactory.setDependency(reader);
-        adminUser();
-        onView(withId(R.id.load_icon_button)).perform(click());
-
-        onView(withId(R.id.associations_generator_list_values)).check(matches(withText(containsString("lauzhack"))));
+        onView(withId(R.id.associations_generator_recyclerview)).perform(
+        RecyclerViewActions.actionOnItem(hasDescendant(withText("LauzHack")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));
     }
 
     @Test
@@ -103,34 +122,10 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
         // Change the factory
         UrlReaderFactory.setDependency(reader);
         adminUser();
-        onView(withId(R.id.nbr_icon)).perform(replaceText("test"));
-        onView(withId(R.id.load_icon_button)).perform(click());
 
-        // check no association found
-        onView(withId(R.id.associations_generator_list_values)).check(matches(withText(R.string.no_association_found)));
+        onView(withId(R.id.associations_generator_recyclerview)).check(matches(isDisplayed()));
     }
 
-    /**
-     * Test that an icon doesn't load then the association url is fake
-     */
-    @Test
-    public void dontLoadIconWhenFakeUrl() {
-        // Change the UrlReader to avoid HTTP request
-        UrlReader reader = new UrlReader() {
-            @Override
-            public BufferedReader read(String name) {
-                return new BufferedReader(new StringReader("&#8211; <a href=\"not_url\">FakeAssos</a> (FakeAssos)<br /><link rel=\"icon\" type=\"image/png\" href=\"images/favicon.png\" sizes=\"16x16\">"));
-            }
-        };
-        // Change the factory
-        UrlReaderFactory.setDependency(reader);
-        adminUser();
-        onView(withId(R.id.nbr_icon)).perform(replaceText("FakeAssos"));
-        onView(withId(R.id.load_icon_button)).perform(click());
-
-        // check no icon found
-        onView(withId(R.id.associations_generator_list_values)).check(matches(not(withText("favicon.png"))));
-    }
 
     @Test
     public void refuseNonAdmin() {

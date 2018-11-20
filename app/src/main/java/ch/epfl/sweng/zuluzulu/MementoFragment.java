@@ -58,7 +58,7 @@ public class MementoFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations Generator");
+        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Memento loader");
         UrlHandler urlHandler = new UrlHandler(this::handleMemento, new MementoParser());
         urlHandler.execute(MEMENTO_URL);
 
@@ -104,7 +104,7 @@ public class MementoFragment extends SuperFragment {
                 // nom de l'association qui organise !
                 System.out.println("organizer => " + jsonobject.getString("event_organizer"));
 
-                view.append(jsonobject.getString("title") + "\n");
+                view.append(jsonobject.getString("title") + "\n\n");
             }
         } catch (JSONException e) {
             e.printStackTrace();
