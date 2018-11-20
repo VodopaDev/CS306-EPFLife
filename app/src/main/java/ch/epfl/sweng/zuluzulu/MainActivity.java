@@ -69,14 +69,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         super.onCreate(savedInstanceState);
 
         // Needed to have access to the Firestore
-        FirebaseProxy.init(this, getApplicationContext());
+        FirebaseProxy.init(getApplicationContext());
 
         // Needed to use Google Maps
-        try {
-            MapsInitializer.initialize(getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        MapsInitializer.initialize(getApplicationContext());
 
         // Initialize the fragment stack used for the back button
         previous_fragments = new Stack<>();

@@ -20,9 +20,9 @@ import ch.epfl.sweng.zuluzulu.Structure.Event;
 public class FirebaseProxy {
 
     private static FirebaseProxy proxy;
-
-    private final OnFragmentInteractionListener mListener;
     private final FirebaseFirestore firebaseInstance;
+
+    private final CollectionReference userCollection;
     private final CollectionReference assoCollection;
     private final CollectionReference eventCollection;
     private final CollectionReference channelCollection;
@@ -30,19 +30,19 @@ public class FirebaseProxy {
 
 
 
-    private FirebaseProxy(OnFragmentInteractionListener mListener, Context appContext) {
-        this.mListener = mListener;
+    private FirebaseProxy(Context appContext) {
 
         FirebaseApp.initializeApp(appContext);
         firebaseInstance = FirebaseFirestore.getInstance();
-        assoCollection = firebaseInstance.collection("assos_info");
-        eventCollection = firebaseInstance.collection("events_info");
-        channelCollection = firebaseInstance.collection("channels");
+        userCollection = firebaseInstance.collection("new_user");
+        assoCollection = firebaseInstance.collection("new_asso");
+        eventCollection = firebaseInstance.collection("new_even");
+        channelCollection = firebaseInstance.collection("new_chan");
     }
 
-    public static void init(OnFragmentInteractionListener mListener, Context appContext) {
+    public static void init(Context appContext) {
         if (proxy == null)
-            proxy = new FirebaseProxy(mListener, appContext);
+            proxy = new FirebaseProxy(appContext);
     }
 
     public static FirebaseProxy getInstance() {
