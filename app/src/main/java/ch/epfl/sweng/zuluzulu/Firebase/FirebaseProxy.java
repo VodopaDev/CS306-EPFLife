@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Firebase;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -71,7 +72,7 @@ public class FirebaseProxy {
      * Get one association from its id and apply an OnResult on them
      * @param onResult interface defining apply()
      */
-    public void getAssociationFromId(OnResult<Association> onResult, Long id){
+    public void getAssociationFromId(Long id, OnResult<Association> onResult){
         assoCollection.document(id.toString()).get().addOnSuccessListener(documentSnapshot -> {
             FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
             if(fmap.hasFields(Association.requiredFields()))
@@ -80,18 +81,25 @@ public class FirebaseProxy {
     }
 
     /**
-     * Get all associations and apply an OnResult on them
+     * Get all associations from an ID list and apply an OnResult on them
      * @param onResult interface defining apply()
      */
-    public void getAssociationsFromIds(OnResult<List<Association>> onResult, List<Long> ids){
+    public void getAssociationsFromIds(List<Long> ids, OnResult<List<Association>> onResult){
         List<Association> result = new ArrayList<>();
+        Counter counter = new Counter(ids.size());
 
         for(Long id: ids){
             assoCollection.document(id.toString()).get().addOnSuccessListener(documentSnapshot -> {
                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
                 if(fmap.hasFields(Association.requiredFields()))
                     result.add(new Association(fmap));
-            }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the association with id " + id));
+                if(counter.increment())
+                    onResult.apply(result);
+            }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the association with id " + id))
+            .addOnFailureListener(e -> {
+                if(counter.increment())
+                    onResult.apply(result);
+            });
         }
     }
 
@@ -112,6 +120,41 @@ public class FirebaseProxy {
     }
 
     /**
+     * Get one event from its id and apply an OnResult on them
+     * @param onResult interface defining apply()
+     */
+    public void getEventFromId(Long id, OnResult<Event> onResult){
+        eventCollection.document(id.toString()).get().addOnSuccessListener(documentSnapshot -> {
+            FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+            if(fmap.hasFields(Event.requiredFields()))
+                onResult.apply(new Event(fmap));
+        }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the association with id " + id));
+    }
+
+    /**
+     * Get all events from an ID list and apply an OnResult on them
+     * @param onResult interface defining apply()
+     */
+    public void getEventsFromIds(List<Long> ids, OnResult<List<Event>> onResult){
+        List<Event> result = new ArrayList<>();
+        Counter counter = new Counter(ids.size());
+
+        for(Long id: ids){
+            eventCollection.document(id.toString()).get().addOnSuccessListener(documentSnapshot -> {
+                FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                if(fmap.hasFields(Event.requiredFields()))
+                    result.add(new Event(fmap));
+                if(counter.increment())
+                    onResult.apply(result);
+            }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the association with id " + id))
+                    .addOnFailureListener(e -> {
+                        if(counter.increment())
+                            onResult.apply(result);
+                    });
+        }
+    }
+
+    /**
      * Return a new OnFailureListener logging the error in the error section of the console
      * @param message Body of the error message
      * @return OnFailureListener with customized text
@@ -120,6 +163,20 @@ public class FirebaseProxy {
         return e -> {
             Log.e("PROXY", message);
         };
+    }
+
+    private class Counter {
+        private int counter = 0;
+        private int end;
+
+        public Counter(int end) {
+            this.end = end;
+        }
+
+        public boolean increment() {
+            counter++;
+            return counter >= end;
+        }
     }
 
 }

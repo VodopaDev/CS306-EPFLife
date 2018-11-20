@@ -13,7 +13,9 @@ import java.util.Map;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 //import java.util.Date;
 
@@ -79,7 +81,7 @@ public class EventTest {
     @Test
     public void idIsCorrect() {
         initWorkingAssociation();
-        assertEquals(1L, event0.getId());
+        assertThat(event0.getId(), equalTo(1L));
     }
 
     @Test
