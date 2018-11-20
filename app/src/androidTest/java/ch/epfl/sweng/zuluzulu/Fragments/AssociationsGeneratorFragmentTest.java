@@ -116,7 +116,7 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
         UrlReader reader = new UrlReader() {
             @Override
             public BufferedReader read(String name) {
-                return new BufferedReader(new StringReader("&#8211; <a href=\"faaake\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />"
+                return new BufferedReader(new StringReader("&#8211; <a href=\"faaake\">FAKE</a><br />"
                         + "<link rel=\"icon\" type=\"image/png\" href=\"www.epfl.ch/favicon.ico\" sizes=\"16x16\">"));
             }
         };
@@ -124,7 +124,7 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
         UrlReaderFactory.setDependency(reader);
         adminUser();
         onView(withId(R.id.associations_generator_recyclerview)).perform(
-        RecyclerViewActions.actionOnItem(hasDescendant(withText("LauzHack")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));
+        RecyclerViewActions.actionOnItem(hasDescendant(withText("FAKE")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));
     }
 
     @Test

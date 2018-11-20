@@ -134,11 +134,11 @@ public class AssociationsGeneratorFragment extends SuperFragment {
      * @param result
      */
     private void handleIcon(final int index, List<String> result) {
-        String value;
+        String value = EPFL_LOGO;
         if (result != null && !result.isEmpty() && index >= 0 && index < this.datas.size()) {
             value = result.get(0);
 
-            URL url = null;
+            URL url;
             URL iconUrl;
             try {
                 url = new URL(datas.get(index).split(",")[0]);
@@ -154,9 +154,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                 value = EPFL_LOGO;
             }
         }
-        else {
-            value = EPFL_LOGO;
-        }
+
 
         Association asso = this.associations.get(index);
         Association newAssociation = new Association(asso.getId(), asso.getName(), asso.getShortDesc(), asso.getLongDesc(), value, asso.getBannerUri(), new ArrayList<>(), asso.getChannelId(), asso.getClosestEventId());
