@@ -16,7 +16,7 @@ import ch.epfl.sweng.zuluzulu.R;
 
 // TODO: Add admin access, ending date, linked-chat id, linked-association id, position
 public class Event implements Serializable {
-    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "start_date", "likes", "organizer", "place", "channel_id", "assos_id");
+    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "start_date", "likes");
 
     private int id;
     private String name;
