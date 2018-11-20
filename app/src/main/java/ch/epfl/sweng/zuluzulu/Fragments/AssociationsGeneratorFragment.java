@@ -117,7 +117,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         Map<String, Object> docData = new HashMap<>();
         docData.put("channel_id", 1);
         docData.put("events", new ArrayList<>());
-        docData.put("icon_uri", associations.get(index).getBannerUri());
+        docData.put("icon_uri", associations.get(index).getIconUri());
         docData.put("banner_uri", EPFL_LOGO);
         docData.put("name", associations.get(index).getName());
         docData.put("short_desc", associations.get(index).getShortDesc());

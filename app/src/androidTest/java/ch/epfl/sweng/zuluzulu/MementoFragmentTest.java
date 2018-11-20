@@ -38,6 +38,7 @@ public class MementoFragmentTest extends TestWithAdminAndFragment<MainFragment> 
                                 "        \"event_end_time\": \"21:00:00\"," +
                                 "        \"event_place_and_room\": \"PO 094.0\"," +
                                 "        \"event_url_place_and_room\": \"https://plan.epfl.ch/?room=PO094.0\"," +
+                                "        \"event_visual_absolute_url\": \"https://memento.epfl.ch/image/11476/112x112.jpg\"," +
                                 "        \"event_speaker\": \"Mike Bardet, Eva Lorendeaux\"," +
                                 "        \"event_organizer\": \"Mike Bardet\"" +
                                 "    }"
