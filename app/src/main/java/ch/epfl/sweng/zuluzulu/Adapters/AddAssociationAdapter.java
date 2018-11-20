@@ -50,7 +50,6 @@ public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAd
         holder.add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                view.setBackgroundResource(R.drawable.ic_cloud_done_green_24dp);
                 holder.add_button.setEnabled(false);
                 checked.set(position, false);
                 System.out.println("CLICK + " + position);
