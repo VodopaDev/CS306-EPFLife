@@ -1,15 +1,12 @@
 package ch.epfl.sweng.zuluzulu.URLTools;
 
 import android.os.AsyncTask;
-import android.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 
-import io.opencensus.common.Function;
-
-public class UrlHandler extends AsyncTask<String, Void,List<String>> {
+public class UrlHandler extends AsyncTask<String, Void, List<String>> {
     private final static String TAG = "UrlHandler";
 
     // Function that will be executed onPostExecute
