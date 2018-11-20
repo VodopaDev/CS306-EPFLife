@@ -29,6 +29,8 @@ import java.util.Locale;
 
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
@@ -119,15 +121,12 @@ public class CalendarFragment extends SuperFragment {
             }
         });
         //Set the day decorator
-        calendarView.setDecorators(Collections.singletonList(new DayDecorator() {
-            @Override
-            public void decorate(DayView dayView) {
-                Date dayDate = dayView.getDate();
-                for (Event event : followedEvents) {
-                    if (event.getStartDateString().equals(Utils.dateFormat.format(dayDate))
-                            && user.isFollowedEvent(event.getId()))
-                        dayView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
-                }
+        calendarView.setDecorators(Collections.singletonList(dayView -> {
+            Date dayDate = dayView.getDate();
+            for (Event event : followedEvents) {
+                if (event.getStartDateString().equals(Utils.dateFormat.format(dayDate))
+                        && user.isFollowedEvent(event.getId()))
+                    dayView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
             }
         }));
         //Fill the followed events list from user's preferences
@@ -137,40 +136,19 @@ public class CalendarFragment extends SuperFragment {
     }
 
     private void fillFollowedEventsList() {
-        IdlingResourceFactory.incrementCountingIdlingResource();
-        FirebaseFirestore.getInstance().collection("events_info").get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        Date date = Timestamp.now().toDate();
-                        String now = Utils.dateFormat.format(date);
-                        for (DocumentSnapshot snap : snap_list) {
-                            FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
-                            if (fmap.hasFields(Event.requiredFields())) {
-                                Event event = new Event(fmap);
-                                if (user.isFollowedEvent(event.getId())) {
-                                    followedEvents.add(event);
-                                    Log.d("CALENDAR", "added a new followed event with date " + event.getStartDateString());
-                                    if (now.equals(event.getStartDateString()))
-                                        selectedDayEvents.add(event);
-                                }
-                            }
-                        }
-                        eventAdapter.notifyDataSetChanged();
-                        if (getContext() != null)
-                            calendarView.refreshCalendar(calendar);
-                        calendarView.markDayAsSelectedDay(date);
-                        IdlingResourceFactory.decrementCountingIdlingResource();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
-                        Log.e("EVENT_LIST", "Error fetching event\n" + e.getMessage());
-                        IdlingResourceFactory.decrementCountingIdlingResource();
-                    }
-                });
+        FirebaseProxy.getInstance().getEventsFromIds(user.getFollowedEvents(), result -> {
+            Date date = Timestamp.now().toDate();
+            String now = Utils.dateFormat.format(date);
+            for(Event event: result) {
+                followedEvents.add(event);
+                if (now.equals(event.getStartDateString()))
+                    selectedDayEvents.add(event);
+            }
+            
+            eventAdapter.notifyDataSetChanged();
+            if (getContext() != null)
+                calendarView.refreshCalendar(calendar);
+            calendarView.markDayAsSelectedDay(date);
+        });
     }
 }

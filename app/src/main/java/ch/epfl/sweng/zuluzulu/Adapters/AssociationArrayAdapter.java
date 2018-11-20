@@ -72,12 +72,9 @@ public class AssociationArrayAdapter extends ArrayAdapter<Association> {
         holder.short_desc.setText(asso.getShortDescription());
         ImageLoader.loadUriIntoImageView(holder.icon, asso.getIconUri(), getContext());
 
-        asso_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("FRAG_CHANGE", "Switching to " + asso.getName() + " detailed view");
-                mListener.onFragmentInteraction(CommunicationTag.OPEN_ASSOCIATION_DETAIL_FRAGMENT, asso);
-            }
+        asso_view.setOnClickListener(v -> {
+            Log.d("FRAG_CHANGE", "Switching to " + asso.getName() + " detailed view");
+            mListener.onFragmentInteraction(CommunicationTag.OPEN_ASSOCIATION_DETAIL_FRAGMENT, asso);
         });
 
         return asso_view;
