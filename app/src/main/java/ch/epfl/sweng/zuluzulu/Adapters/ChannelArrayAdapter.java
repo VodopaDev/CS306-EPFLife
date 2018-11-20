@@ -32,7 +32,7 @@ public class ChannelArrayAdapter extends ArrayAdapter<Channel> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Channel currentChannel = channels.get(position);
-        boolean isClickable = currentChannel.isClickable();
+        boolean isClickable = currentChannel.isAccessible();
 
         int layoutResource = isClickable ? R.layout.channel : R.layout.channel_toofar;
 

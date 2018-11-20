@@ -99,7 +99,7 @@ public class ChannelFragment extends SuperFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Channel selectedChannel = listOfChannels.get(position);
-                if (selectedChannel.isClickable()) {
+                if (selectedChannel.isAccessible()) {
                     mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel);
                 }
             }

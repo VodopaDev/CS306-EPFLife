@@ -50,18 +50,8 @@ public class Event extends FirebaseStructure {
         shortDesc = data.getString("short_desc");
         longDesc = data.getString("long_desc");
 
-        String icon_str = data.getString("icon_uri");
-        Uri uri = icon_str == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
-                Uri.parse(icon_str);
-        iconUri = uri == null ? null : uri.toString();
-
-        // Init the Banner URI
-        String banner_str = data.getString("banner_uri");
-        uri = banner_str == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
-                Uri.parse(banner_str);
-        bannerUri = uri == null ? null : uri.toString();
+        iconUri = data.getString("icon_uri");
+        bannerUri = data.getString("banner_uri");
 
         startDate = data.getDate("start_date");
 
@@ -101,12 +91,26 @@ public class Event extends FirebaseStructure {
         return Utils.dateFormat.format(startDate);
     }
 
-    public String getBannerUri() {
-        return bannerUri;
+    /**
+     * Return the Association's icon Uri
+     *
+     * @return the icon Uri
+     */
+    public Uri getIconUri() {
+        return iconUri == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
+                Uri.parse(iconUri);
     }
 
-    public String getIconUri() {
-        return iconUri;
+    /**
+     * Return the Association's banner Uri
+     *
+     * @return the banner Uri
+     */
+    public Uri getBannerUri() {
+        return bannerUri == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
+                Uri.parse(bannerUri);
     }
 
     public String getOrganizer() {

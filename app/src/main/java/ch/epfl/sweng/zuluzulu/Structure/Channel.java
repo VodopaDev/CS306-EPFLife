@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.net.Uri;
-import android.support.annotation.Nullable;
 
 import com.google.firebase.firestore.GeoPoint;
 
@@ -26,10 +25,9 @@ public class Channel implements Serializable {
     private String name;
     private String description;
     private Map<String, Object> restrictions;
+    private String iconUri;
 
-    private String icon_uri;
-
-    private boolean isClickable;
+    private boolean isAccessible;
     private double distance;
 
     public Channel(FirebaseMapDecorator data) {
@@ -40,15 +38,11 @@ public class Channel implements Serializable {
         this.name = data.getString("name");
         this.description = data.getString("description");
         this.restrictions = data.getMap("restrictions");
-        this.isClickable = true;
+        this.isAccessible = true;
         this.distance = 0;
 
         // Init the Icon URI
-        String icon_str = data.getString("icon_uri");
-        Uri uri = icon_str == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
-                Uri.parse(icon_str);
-        icon_uri = uri == null ? null : uri.toString();
+        this.iconUri = data.getString("icon_uri");
     }
 
     /**
@@ -104,12 +98,14 @@ public class Channel implements Serializable {
      *
      * @return the icon Uri
      */
-    public String getIconUri() {
-        return icon_uri;
+    public Uri getIconUri() {
+        return iconUri == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
+                Uri.parse(iconUri);
     }
 
-    public boolean isClickable() {
-        return isClickable;
+    public boolean isAccessible() {
+        return isAccessible;
     }
 
     public double getDistance() {
@@ -150,7 +146,7 @@ public class Channel implements Serializable {
 
         distance = Utils.distanceBetween(requestedLocation, userLocation);
         double diff_distance = distance - MAX_DISTANCE_TO_ACCESS_CHANNEL;
-        isClickable = distance < MAX_DISTANCE_TO_ACCESS_CHANNEL;
+        isAccessible = distance < MAX_DISTANCE_TO_ACCESS_CHANNEL;
 
         if (diff_distance > MAX_DISTANCE_TO_SEE_CHANNEL) {
             return false;

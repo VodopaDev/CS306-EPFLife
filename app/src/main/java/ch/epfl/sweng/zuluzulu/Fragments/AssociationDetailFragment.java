@@ -26,6 +26,8 @@ import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
+
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT;
 import static ch.epfl.sweng.zuluzulu.Utility.ImageLoader.loadUriIntoImageView;
 
 public class AssociationDetailFragment extends SuperFragment {
@@ -136,23 +138,20 @@ public class AssociationDetailFragment extends SuperFragment {
         else
             loadFavImage(R.drawable.fav_off);
 
-        asso_fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (user.isConnected()) {
-                    AuthenticatedUser auth = (AuthenticatedUser) user;
-                    if (auth.isFollowedAssociation(asso.getId())) {
-                        auth.removeFavAssociation(asso.getId());
-                        loadFavImage(R.drawable.fav_off);
-                        asso_fav.setContentDescription(NOT_FAV_CONTENT);
-                    } else {
-                        auth.addFollowedAssociation(asso.getId());
-                        loadFavImage(R.drawable.fav_on);
-                        asso_fav.setContentDescription(FAV_CONTENT);
-                    }
+        asso_fav.setOnClickListener(v -> {
+            if (user.isConnected()) {
+                AuthenticatedUser auth = (AuthenticatedUser) user;
+                if (auth.isFollowedAssociation(asso.getId())) {
+                    auth.removeFavAssociation(asso.getId());
+                    loadFavImage(R.drawable.fav_off);
+                    asso_fav.setContentDescription(NOT_FAV_CONTENT);
                 } else {
-                    Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
+                    auth.addFollowedAssociation(asso.getId());
+                    loadFavImage(R.drawable.fav_on);
+                    asso_fav.setContentDescription(FAV_CONTENT);
                 }
+            } else {
+                Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
             }
         });
     }
@@ -163,13 +162,9 @@ public class AssociationDetailFragment extends SuperFragment {
      * Set up the upcoming event clicking behaviour to go on the event detailed page
      */
     private void setUpcomingEventButtonBehaviour() {
-        upcoming_event_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (upcoming_event != null) {
-                    //mListener.onFragmentInteraction(EventDetailFragment.TAG, upcoming_event);
-                }
-            }
+        upcoming_event_layout.setOnClickListener(v -> {
+            if (upcoming_event != null)
+                mListener.onFragmentInteraction(OPEN_EVENT_DETAIL_FRAGMENT, upcoming_event);
         });
     }
 

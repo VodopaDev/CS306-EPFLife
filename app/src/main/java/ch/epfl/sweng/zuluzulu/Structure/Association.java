@@ -19,15 +19,15 @@ import ch.epfl.sweng.zuluzulu.R;
 public class Association extends FirebaseStructure implements Comparable<Association> {
 
     private String name;
-    private String short_desc;
-    private String long_desc;
+    private String shortDescription;
+    private String longDescription;
 
-    private String icon_uri;
-    private String banner_uri;
+    private String iconUri;
+    private String bannerUri;
 
     private List<Map<String, Object>> events;
-    private String channel_id;
-    private String closest_event_id;
+    private String mainChannelId;
+    private String closestEventId;
 
     /**
      * Create an association using a Firebase adapted map
@@ -42,34 +42,21 @@ public class Association extends FirebaseStructure implements Comparable<Associa
         }
 
         name = data.getString("name").trim();
-        short_desc = data.getString("short_desc");
-        long_desc = data.getString("long_desc");
+        shortDescription = data.getString("short_description");
+        longDescription = data.getString("long_description");
 
         // Init the main chat id
-        channel_id = data.get("channel_id") == null ?
-                "0" :
-                data.getString("channel_id");
+        mainChannelId = data.getString("channel_id");
 
         // Init the upcoming event
-        events = data.get("events") == null ?
-                Collections.EMPTY_LIST :
-                (List<Map<String, Object>>) data.get("events");
+        events = (List<Map<String, Object>>) data.get("events");
         computeClosestEvent();
 
         // Init the Icon URI
-        String icon_str = data.getString("icon_uri");
-        Uri uri = icon_str == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
-                Uri.parse(icon_str);
-        icon_uri = uri == null ? null : uri.toString();
-
+        iconUri = data.getString("icon_uri");
 
         // Init the Banner URI
-        String banner_str = data.getString("banner_uri");
-        uri = banner_str == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
-                Uri.parse(banner_str);
-        banner_uri = uri == null ? null : uri.toString();
+        bannerUri = data.getString("banner_uri");
     }
 
     /**
@@ -87,7 +74,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
      * @return the short description
      */
     public String getShortDesc() {
-        return short_desc;
+        return shortDescription;
     }
 
     /**
@@ -96,7 +83,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
      * @return the long description
      */
     public String getLongDesc() {
-        return long_desc;
+        return longDescription;
     }
 
     /**
@@ -104,8 +91,9 @@ public class Association extends FirebaseStructure implements Comparable<Associa
      *
      * @return
      */
+    @Nullable
     public String getChannelId() {
-        return channel_id;
+        return mainChannelId;
     }
 
     /**
@@ -113,8 +101,21 @@ public class Association extends FirebaseStructure implements Comparable<Associa
      *
      * @return the icon Uri
      */
-    public String getIconUri() {
-        return icon_uri;
+    public Uri getIconUri() {
+        return iconUri == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
+                Uri.parse(iconUri);
+    }
+
+    /**
+     * Return the Association's banner Uri
+     *
+     * @return the banner Uri
+     */
+    public Uri getBannerUri() {
+        return bannerUri == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
+                Uri.parse(bannerUri);
     }
 
     /**
@@ -122,16 +123,17 @@ public class Association extends FirebaseStructure implements Comparable<Associa
      *
      * @return
      */
+    @Nullable
     public String getClosestEventId() {
-        return closest_event_id;
+        return closestEventId;
     }
 
     /**
      * Compute the closest event id and store it in the class
      */
     private void computeClosestEvent() {
-        if (events.isEmpty())
-            closest_event_id = "0";
+        if (events == null || events.isEmpty())
+            closestEventId = null;
         else {
             String closest = (String)events.get(0).get("id");
             java.util.Date closest_time = (java.util.Date) events.get(0).get("start");
@@ -141,21 +143,13 @@ public class Association extends FirebaseStructure implements Comparable<Associa
                     closest = (String) events.get(i).get("id");
                 }
             }
-            closest_event_id = closest;
+            closestEventId = closest;
         }
     }
 
-    /**
-     * Return the Association's banner Uri
-     *
-     * @return the banner Uri
-     */
-    public String getBannerUri() {
-        return banner_uri;
-    }
 
     public static List<String> requiredFields(){
-        return Arrays.asList("id", "name", "short_desc", "long_desc");
+        return Arrays.asList("id", "name", "short_description", "long_description");
     }
 
     @Override
