@@ -103,8 +103,8 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                         data.split(",")[1],
                         data.split(",")[2],
                         data.split(",")[2],
-                        Uri.parse(EPFL_LOGO),
-                        Uri.parse(EPFL_LOGO),
+                        EPFL_LOGO,
+                        EPFL_LOGO,
                         new ArrayList<>(),
                         1,
                         0);
@@ -122,13 +122,12 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         if (index < 0 || index >= this.associations.size()) {
             return;
         }
-        assert associations.get(index).getBannerUri() != null;
 
         //put db
         Map<String, Object> docData = new HashMap<>();
         docData.put("channel_id", 1);
         docData.put("events", new ArrayList<>());
-        docData.put("icon_uri", associations.get(index).getBannerUri().toString());
+        docData.put("icon_uri", associations.get(index).getBannerUri());
         docData.put("banner_uri", EPFL_LOGO);
         docData.put("name", associations.get(index).getName());
         docData.put("short_desc", associations.get(index).getShortDesc());
@@ -177,7 +176,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                 asso.getName(),
                 asso.getShortDesc(),
                 asso.getLongDesc(),
-                Uri.parse(value),
+                value,
                 asso.getBannerUri(),
                 new ArrayList<>(),
                 asso.getChannelId(),

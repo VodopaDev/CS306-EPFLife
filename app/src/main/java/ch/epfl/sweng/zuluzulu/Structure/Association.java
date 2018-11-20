@@ -32,7 +32,7 @@ public class Association implements Serializable {
     private int channel_id;
     private int closest_event_id;
 
-    public Association(int id, String name, String short_desc, String long_desc, Uri icon_uri, Uri banner_uri, List<Map<String, Object>> events, int channel_id, int closest_event_id){
+    public Association(int id, String name, String short_desc, String long_desc, String icon_uri, String banner_uri, List<Map<String, Object>> events, int channel_id, int closest_event_id){
         this.id = id;
         this.name = name;
         this.short_desc = short_desc;
