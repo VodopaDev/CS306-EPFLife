@@ -179,14 +179,11 @@ public class AssociationDetailFragment extends SuperFragment {
         if (asso.getClosestEventId() == null)
             upcoming_event_name.setText("No upcoming event :(");
         else
-            FirebaseProxy.getInstance().getEventFromId(asso.getClosestEventId(), new OnResult<Event>() {
-                @Override
-                public void apply(Event result) {
-                    upcoming_event = result;
-                    upcoming_event_name.setText(upcoming_event.getName());
-                    upcoming_event_date.setText(upcoming_event.getStartDate().toString());
-                    loadUriIntoImageView(upcoming_event_icon, upcoming_event.getIconUri(), getContext());
-                }
+            FirebaseProxy.getInstance().getEventFromId(asso.getClosestEventId(), result -> {
+                upcoming_event = result;
+                upcoming_event_name.setText(upcoming_event.getName());
+                upcoming_event_date.setText(upcoming_event.getStartDate().toString());
+                loadUriIntoImageView(upcoming_event_icon, upcoming_event.getIconUri(), getContext());
             });
     }
 
@@ -196,38 +193,23 @@ public class AssociationDetailFragment extends SuperFragment {
      */
     private void loadMainChat() {
         // Fetch online data of the main_chat
-        if (asso.getChannelId() != null){
-            IdlingResourceFactory.incrementCountingIdlingResource();
-            FirebaseFirestore.getInstance()
-                    .document("channels/channel" + asso.getChannelId())
-                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                    if (fmap.hasFields(Channel.FIELDS)) {
-                        main_chat = new Channel(fmap);
-                        main_chat_name.setText(main_chat.getName());
-                        main_chat_desc.setText(main_chat.getDescription());
-                    } else
-                        main_chat_name.setText("Error loading the chat :(");
-                    IdlingResourceFactory.decrementCountingIdlingResource();
-                }
-            });
-        } else {
+        if (asso.getChannelId() == null)
             main_chat_name.setText("There is no chat :(");
-        }
+        else
+            FirebaseProxy.getInstance().getChannelFromId(asso.getChannelId(), result -> {
+                main_chat = result;
+                main_chat_name.setText(main_chat.getName());
+                main_chat_desc.setText(main_chat.getDescription());
+            });
     }
 
     private void setMainChatButtonBehaviour() {
-        main_chat_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (main_chat != null) {
-                    if (user.isConnected())
-                        mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, main_chat);
-                    else
-                        Snackbar.make(getView(), "Login to access chat room", 5000).show();
-                }
+        main_chat_layout.setOnClickListener(v -> {
+            if (main_chat != null) {
+                if (user.isConnected())
+                    mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, main_chat);
+                else
+                    Snackbar.make(getView(), "Login to access chat room", 5000).show();
             }
         });
     }
