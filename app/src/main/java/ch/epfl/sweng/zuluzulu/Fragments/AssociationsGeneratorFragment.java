@@ -137,21 +137,18 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         String value = EPFL_LOGO;
         if (result != null && !result.isEmpty() && checkBound(index)) {
             value = result.get(0);
-
-            URL url;
-            URL iconUrl;
             try {
-                url = new URL(datas.get(index).split(",")[0]);
-                iconUrl = new URL(url, value);
+                URL url = new URL(datas.get(index).split(",")[0]);
+                URL iconUrl = new URL(url, value);
+
+                value = iconUrl.toString();
+                if (value.contains("www.epfl.ch/favicon.ico")) {
+                    value = EPFL_LOGO;
+                }
             } catch (MalformedURLException e) {
                 IdlingResourceFactory.decrementCountingIdlingResource();
                 e.printStackTrace();
                 return;
-            }
-            value = iconUrl.toString();
-
-            if (value.contains("www.epfl.ch/favicon.ico")) {
-                value = EPFL_LOGO;
             }
         }
 
