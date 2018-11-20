@@ -137,16 +137,14 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         String value;
         if (result != null && !result.isEmpty() && index >= 0 && index < this.datas.size()) {
             value = result.get(0);
-
         } else {
             value = EPFL_LOGO;
         }
 
-        String base_url = datas.get(index).split(",")[0];
         URL url = null;
         URL iconUrl;
         try {
-            url = new URL(base_url);
+            url = new URL(datas.get(index).split(",")[0]);
             iconUrl = new URL(url, value);
         } catch (MalformedURLException e) {
             IdlingResourceFactory.decrementCountingIdlingResource();
@@ -164,6 +162,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         Association newAssociation = new Association(asso.getId(), asso.getName(), asso.getShortDesc(), asso.getLongDesc(), value, asso.getBannerUri(), new ArrayList<>(), asso.getChannelId(), asso.getClosestEventId());
         this.associations.set(index, newAssociation);
         adapter.notifyDataSetChanged();
+
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
