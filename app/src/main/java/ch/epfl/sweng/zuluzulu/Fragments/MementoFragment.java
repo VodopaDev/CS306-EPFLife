@@ -6,19 +6,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -38,6 +42,9 @@ public class MementoFragment extends SuperFragment {
     private static final String TAG = "MEMENTO_FRAGMENT";
     final static public String MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/associations/events/fr/?format=json";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
+    private EventArrayAdapter eventAdapter;
+    private User user;
+    private ArrayList<Event> events;
 
     public MementoFragment() {
         // Required empty public constructor
@@ -53,12 +60,28 @@ public class MementoFragment extends SuperFragment {
             return null;
         }
 
-        return new MementoFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(TAG, user);
+
+        // Transmit data
+        MementoFragment fragment = new MementoFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            this.user = (User) getArguments().getSerializable(TAG);
+        }
+
+        this.events = new ArrayList<Event>();
+
+        this.eventAdapter = new EventArrayAdapter(getContext(), events, mListener, user);
+
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Memento loader");
         UrlHandler urlHandler = new UrlHandler(this::handleMemento, new MementoParser());
@@ -88,7 +111,6 @@ public class MementoFragment extends SuperFragment {
             return;
         }
 
-        TextView view = Objects.requireNonNull(getView()).findViewById(R.id.memento_list);
 
 
         JSONArray jsonarray = null;
@@ -96,9 +118,6 @@ public class MementoFragment extends SuperFragment {
             jsonarray = new JSONArray(datas);
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject jsonobject = jsonarray.getJSONObject(i);
-                System.out.println("name => " + jsonobject.getString("title"));
-                System.out.println("shortDesc => " + jsonobject.getString("description"));
-                System.out.println("start_date_string => " + jsonobject.getString("event_start_date"));
                 System.out.println("end_date_string => " + jsonobject.getString("event_end_date"));
                 System.out.println("start_time_string => " + jsonobject.getString("event_start_time"));
                 System.out.println("end_time_string => " + jsonobject.getString("event_end_time"));
@@ -106,7 +125,18 @@ public class MementoFragment extends SuperFragment {
                 // nom de l'association qui organise !
                 System.out.println("organizer => " + jsonobject.getString("event_organizer"));
 
-                view.append(jsonobject.getString("title") + "\n\n");
+                Event event = new Event(
+                        i,
+                        jsonobject.getString("title"),
+                        jsonobject.getString("description"), jsonobject.getString("description"),
+                        jsonobject.getString("event_start_date"),
+                        0,
+                        jsonobject.getString("event_organizer"),
+                        jsonobject.getString("event_place_and_room"),
+                        jsonobject.getString("event_visual_absolute_url"), jsonobject.getString("event_visual_absolute_url")
+                );
+                this.events.add(event);
+                eventAdapter.notifyDataSetChanged();
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -118,6 +148,11 @@ public class MementoFragment extends SuperFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_memento, container, false);
+        View view = inflater.inflate(R.layout.fragment_memento, container, false);
+
+        ListView list = view.findViewById(R.id.memento_list_view);
+        list.setAdapter(eventAdapter);
+
+        return view;
     }
 }

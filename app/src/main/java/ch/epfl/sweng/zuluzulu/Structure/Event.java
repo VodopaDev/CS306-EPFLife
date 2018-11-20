@@ -32,6 +32,19 @@ public class Event implements Serializable {
     private String bannerUri;
     private String iconUri;
 
+    public Event(int id, String name, String shortDesc, String longDesc, String start_date_string, int likes, String organizer, String place, String bannerUri, String iconUri){
+        this.id = id;
+        this.name = name;
+        this.shortDesc = shortDesc;
+        this.longDesc = longDesc;
+        this.start_date_string = start_date_string;
+        this.likes = likes;
+        this.organizer =  organizer;
+        this.place = place;
+        this.bannerUri  = bannerUri;
+        this.iconUri = iconUri;
+    }
+
     /**
      * Create an event using a FirebaseMap
      *
