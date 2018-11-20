@@ -116,8 +116,7 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
         UrlReader reader = new UrlReader() {
             @Override
             public BufferedReader read(String name) {
-                return new BufferedReader(new StringReader("&#8211; <a href=\"faaake\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />"
-                        + "<link rel=\"icon\" type=\"image/png\" href=\"www.epfl.ch/favicon.ico\" sizes=\"16x16\">"));
+                return new BufferedReader(new StringReader("&#8211; <a href=\"faaake\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />"));
             }
         };
         // Change the factory
