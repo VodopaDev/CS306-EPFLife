@@ -111,6 +111,23 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
     }
 
     @Test
+    public void defaultLogoOnFailAssociationUrl() {
+        // Change the UrlReader to avoid HTTP request
+        UrlReader reader = new UrlReader() {
+            @Override
+            public BufferedReader read(String name) {
+                return new BufferedReader(new StringReader("&#8211; <a href=\"faaake\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />"
+                        + "<link rel=\"icon\" type=\"image/png\" href=\"www.epfl.ch/favicon.ico\" sizes=\"16x16\">"));
+            }
+        };
+        // Change the factory
+        UrlReaderFactory.setDependency(reader);
+        adminUser();
+        onView(withId(R.id.associations_generator_recyclerview)).perform(
+        RecyclerViewActions.actionOnItem(hasDescendant(withText("LauzHack")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));
+    }
+
+    @Test
     public void showNoResults() {
         // Change the UrlReader to avoid HTTP request
         UrlReader reader = new UrlReader() {
