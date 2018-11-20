@@ -135,7 +135,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
      */
     private void handleIcon(final int index, List<String> result) {
         String value = EPFL_LOGO;
-        if (result != null && !result.isEmpty() && index >= 0 && index < this.datas.size()) {
+        if (result != null && !result.isEmpty() && checkBound(index)) {
             value = result.get(0);
 
             URL url;
@@ -155,13 +155,16 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             }
         }
 
-
         Association asso = this.associations.get(index);
         Association newAssociation = new Association(asso.getId(), asso.getName(), asso.getShortDesc(), asso.getLongDesc(), value, asso.getBannerUri(), new ArrayList<>(), asso.getChannelId(), asso.getClosestEventId());
         this.associations.set(index, newAssociation);
         adapter.notifyDataSetChanged();
 
         IdlingResourceFactory.decrementCountingIdlingResource();
+    }
+
+    private boolean checkBound(int index) {
+        return index >= 0 && index < datas.size() && datas.size() == associations.size();
     }
 
 
@@ -173,7 +176,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         this.adapter = new AddAssociationAdapter(this.getContext(), this.associations, new OnClickRecyclerView() {
             @Override
             public void onClick(int i) {
-                if (i >= 0 && i < associations.size()) {
+                if (checkBound(i)) {
                     addDatabase(i);
                     Snackbar.make(getView(), associations.get(i).getName() + " added", Snackbar.LENGTH_SHORT).show();
                 }
