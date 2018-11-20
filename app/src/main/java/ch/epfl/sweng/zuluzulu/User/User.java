@@ -111,6 +111,7 @@ abstract public class User implements Serializable {
         private List<Integer> fav_assos;
         private List<Integer> followed_chats;
         private List<Integer> followed_events;
+        private List<Integer> fav_event;
 
 
         /**
@@ -196,6 +197,10 @@ abstract public class User implements Serializable {
             this.followed_events = followed_events;
         }
 
+        public void setFavEvent(List<Integer> fav_event) {
+            this.fav_event = fav_event;
+        }
+
         /**
          * This function create a User and return the built child
          *
@@ -217,7 +222,7 @@ abstract public class User implements Serializable {
          */
         public AuthenticatedUser buildAuthenticatedUser() {
             if (hasRequirementsForAuthentication())
-                return new AuthenticatedUser(this.sciper, this.gaspar, this.email, this.section, this.semester, this.first_names, this.last_names, this.fav_assos, this.followed_events, this.followed_chats);
+                return new AuthenticatedUser(this.sciper, this.gaspar, this.email, this.section, this.semester, this.first_names, this.last_names, this.fav_assos, this.followed_events, this.followed_chats, this.fav_event);
             return null;
         }
 
@@ -228,7 +233,7 @@ abstract public class User implements Serializable {
          */
         public Admin buildAdmin() {
             if (hasRequirementsForAuthentication()) {
-                return new Admin(sciper, gaspar, email, section, semester, first_names, last_names, fav_assos, followed_events, followed_chats);
+                return new Admin(sciper, gaspar, email, section, semester, first_names, last_names, fav_assos, followed_events, followed_chats, fav_event);
             }
 
             return null;
@@ -259,6 +264,7 @@ abstract public class User implements Serializable {
                     && this.fav_assos != null
                     && this.followed_chats != null
                     && this.followed_events != null;
+                    //&& this.fav_event != null;
         }
 
     }
