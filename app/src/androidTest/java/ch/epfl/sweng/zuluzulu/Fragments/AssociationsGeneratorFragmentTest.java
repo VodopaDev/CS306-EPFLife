@@ -72,17 +72,9 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
     }
     @Test
     public void canLoadURLs() {
-        // Change the UrlReader to avoid HTTP request
-        UrlReader reader = new UrlReader() {
-            @Override
-            public BufferedReader read(String name) {
-                return new BufferedReader(new StringReader("&#8211; <a href=\"http://example.com\">Other</a> (Other)<br />\n"
-                        + "&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />\n"
-                        + "<link rel=\"icon\" type=\"image/png\" href=\"images/favicon.png\" sizes=\"16x16\">"));
-            }
-        };
-        // Change the factory
-        UrlReaderFactory.setDependency(reader);
+        changeFactory("&#8211; <a href=\"http://example.com\">Other</a> (Other)<br />\n"
+                + "&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />\n"
+                + "<link rel=\"icon\" type=\"image/png\" href=\"images/favicon.png\" sizes=\"16x16\">");
 
         adminUser();
         onView(withId(R.id.associations_generator_recyclerview)).perform(
@@ -95,33 +87,27 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
 
     @Test
     public void canChangeEpflLogo() {
-        // Change the UrlReader to avoid HTTP request
-        UrlReader reader = new UrlReader() {
-            @Override
-            public BufferedReader read(String name) {
-                return new BufferedReader(new StringReader("&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />"
-                        + "<link rel=\"icon\" type=\"image/png\" href=\"www.epfl.ch/favicon.ico\" sizes=\"16x16\">"));
-            }
-        };
-        // Change the factory
-        UrlReaderFactory.setDependency(reader);
+        changeFactory("&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />"
+                + "<link rel=\"icon\" type=\"image/png\" href=\"www.epfl.ch/favicon.ico\" sizes=\"16x16\">");
         adminUser();
         onView(withId(R.id.associations_generator_recyclerview)).perform(
         RecyclerViewActions.actionOnItem(hasDescendant(withText("LauzHack")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));
     }
 
-    @Test
-    public void defaultLogoOnFailAssociationUrl() {
-        // Change the UrlReader to avoid HTTP request
+    private void changeFactory(String s) {
         UrlReader reader = new UrlReader() {
             @Override
             public BufferedReader read(String name) {
-                return new BufferedReader(new StringReader("&#8211; <a href=\"faaake\">FAKE</a><br />"
-                        + "<link rel=\"icon\" type=\"image/png\" href=\"www.epfl.ch/favicon.ico\" sizes=\"16x16\">"));
+                return new BufferedReader(new StringReader(s));
             }
         };
-        // Change the factory
         UrlReaderFactory.setDependency(reader);
+    }
+
+    @Test
+    public void defaultLogoOnFailAssociationUrl() {
+        changeFactory("&#8211; <a href=\"faaake\">FAKE</a><br />"
+                + "<link rel=\"icon\" type=\"image/png\" href=\"www.epfl.ch/favicon.ico\" sizes=\"16x16\">");
         adminUser();
         onView(withId(R.id.associations_generator_recyclerview)).perform(
         RecyclerViewActions.actionOnItem(hasDescendant(withText("FAKE")), new MyViewAction().clickChildViewWithId(R.id.add_card_add_button)));
@@ -129,15 +115,7 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
 
     @Test
     public void showNoResults() {
-        // Change the UrlReader to avoid HTTP request
-        UrlReader reader = new UrlReader() {
-            @Override
-            public BufferedReader read(String name) {
-                return new BufferedReader(new StringReader("nothing !"));
-            }
-        };
-        // Change the factory
-        UrlReaderFactory.setDependency(reader);
+        changeFactory("nothing");
         adminUser();
 
         onView(withId(R.id.associations_generator_recyclerview)).check(matches(isDisplayed()));
