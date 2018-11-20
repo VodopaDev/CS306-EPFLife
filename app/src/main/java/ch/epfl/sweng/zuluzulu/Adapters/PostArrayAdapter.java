@@ -59,7 +59,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         upButton = view.findViewById(R.id.post_up_button);
         downButton = view.findViewById(R.id.post_down_button);
         nbUpsText = view.findViewById(R.id.post_nb_ups_textview);
-        TextView nbResponses = view.findViewById(R.id.post_nb_responses_textview);
+        TextView nbResponsesText = view.findViewById(R.id.post_nb_responses_textview);
 
         linearLayout.setBackgroundColor(Color.parseColor(currentPost.getColor()));
         message.setText(currentPost.getMessage());
@@ -70,7 +70,12 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         setUpTimeAgoField();
 
         nbUpsText.setText("" + currentPost.getNbUps());
-        nbResponses.setText("" + currentPost.getNbResponses());
+
+        int nbResponses = currentPost.getNbResponses();
+        nbResponsesText.setText("" + currentPost.getNbResponses());
+        if (nbResponses == 0) {
+            view.findViewById(R.id.post_responses_linearlayout).setVisibility(LinearLayout.GONE);
+        }
 
         setUpUpDownButtons(currentPost, upButton, downButton, nbUpsText);
         updateUpsButtons(currentPost, upButton, downButton);
