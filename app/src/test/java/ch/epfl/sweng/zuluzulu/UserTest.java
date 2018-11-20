@@ -46,8 +46,8 @@ public class UserTest {
         builder.setGaspar("admin");
         builder.setFirst_names("admin_first_name");
         builder.setLast_names("admin_last_name");
-        builder.setFollowedChats(Collections.EMPTY_LIST);
-        builder.setFavAssos(Collections.EMPTY_LIST);
+        builder.setFollowedChannels(Collections.EMPTY_LIST);
+        builder.setFollowedAssociations(Collections.EMPTY_LIST);
         builder.setFollowedEvents(Collections.EMPTY_LIST);
 
         AuthenticatedUser user = builder.buildAdmin();
@@ -108,8 +108,8 @@ public class UserTest {
         builder.setGaspar("test");
         builder.setFirst_names("first_name");
         builder.setLast_names("last_name");
-        builder.setFollowedChats(Collections.EMPTY_LIST);
-        builder.setFavAssos(Collections.EMPTY_LIST);
+        builder.setFollowedChannels(Collections.EMPTY_LIST);
+        builder.setFollowedAssociations(Collections.EMPTY_LIST);
         builder.setFollowedEvents(Collections.EMPTY_LIST);
 
         User user = builder.build();

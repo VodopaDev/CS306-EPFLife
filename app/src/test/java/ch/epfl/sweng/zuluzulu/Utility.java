@@ -41,9 +41,9 @@ public class Utility {
         builder.setSemester(semester);
         builder.setFirst_names(firstName);
         builder.setLast_names(lastName);
-        builder.setFavAssos(favAssos);
+        builder.setFollowedAssociations(favAssos);
         builder.setFollowedEvents(followedEvents);
-        builder.setFollowedChats(followedChats);
+        builder.setFollowedChannels(followedChats);
 
         return builder;
     }

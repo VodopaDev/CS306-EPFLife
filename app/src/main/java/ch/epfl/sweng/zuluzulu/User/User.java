@@ -108,16 +108,9 @@ abstract public class User implements Serializable {
         private String last_names;
 
         // All followed ids of Associations, Chats and Events
-<<<<<<< HEAD
-        private List<Long> fav_assos;
-        private List<Long> followed_chats;
-        private List<Long> followed_events;
-=======
-        private List<Integer> fav_assos;
-        private List<Integer> followed_chats;
-        private List<Integer> followed_events;
-        private List<Integer> fav_event;
->>>>>>> master
+        private List<String> followedAssociations;
+        private List<String> followedChannels;
+        private List<String> followedEvents;
 
 
         /**
@@ -191,20 +184,16 @@ abstract public class User implements Serializable {
             this.first_names = first_names;
         }
 
-        public void setFavAssos(List<Long> fav_assos) {
-            this.fav_assos = fav_assos;
+        public void setFollowedAssociations(List<String> followedAssociations) {
+            this.followedAssociations = followedAssociations;
         }
 
-        public void setFollowedChats(List<Long> followed_chats) {
-            this.followed_chats = followed_chats;
+        public void setFollowedChannels(List<String> followedChannels) {
+            this.followedChannels = followedChannels;
         }
 
-        public void setFollowedEvents(List<Long> followed_events) {
-            this.followed_events = followed_events;
-        }
-
-        public void setFavEvent(List<Integer> fav_event) {
-            this.fav_event = fav_event;
+        public void setFollowedEvents(List<String> followedEvents) {
+            this.followedEvents = followedEvents;
         }
 
         /**
@@ -228,7 +217,7 @@ abstract public class User implements Serializable {
          */
         public AuthenticatedUser buildAuthenticatedUser() {
             if (hasRequirementsForAuthentication())
-                return new AuthenticatedUser(this.sciper, this.gaspar, this.email, this.section, this.semester, this.first_names, this.last_names, this.fav_assos, this.followed_events, this.followed_chats, this.fav_event);
+                return new AuthenticatedUser(this.sciper, this.gaspar, this.email, this.section, this.semester, this.first_names, this.last_names, this.followedAssociations, this.followedEvents, this.followedChannels);
             return null;
         }
 
@@ -239,7 +228,7 @@ abstract public class User implements Serializable {
          */
         public Admin buildAdmin() {
             if (hasRequirementsForAuthentication()) {
-                return new Admin(sciper, gaspar, email, section, semester, first_names, last_names, fav_assos, followed_events, followed_chats, fav_event);
+                return new Admin(sciper, gaspar, email, section, semester, first_names, last_names, followedAssociations, followedEvents, followedChannels);
             }
 
             return null;
@@ -267,9 +256,9 @@ abstract public class User implements Serializable {
                     && this.gaspar != null
                     && this.first_names != null
                     && this.last_names != null
-                    && this.fav_assos != null
-                    && this.followed_chats != null
-                    && this.followed_events != null;
+                    && this.followedAssociations != null
+                    && this.followedChannels != null
+                    && this.followedEvents != null;
                     //&& this.fav_event != null;
         }
 

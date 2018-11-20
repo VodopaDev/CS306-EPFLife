@@ -56,8 +56,8 @@ public class AuthenticatedUserTest {
         builder.setGaspar(gaspar);
         builder.setFirst_names(first_name);
         builder.setLast_names(last_name);
-        builder.setFollowedChats(fol_chats);
-        builder.setFavAssos(fav_assos);
+        builder.setFollowedChannels(fol_chats);
+        builder.setFollowedAssociations(fav_assos);
         builder.setFollowedEvents(fol_events);
         user = builder.buildAuthenticatedUser();
     }
