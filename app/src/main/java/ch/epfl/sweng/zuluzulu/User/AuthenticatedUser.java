@@ -1,9 +1,7 @@
 package ch.epfl.sweng.zuluzulu.User;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -11,8 +9,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 public class AuthenticatedUser extends User {
-    public static final List<String> fields = Arrays.asList("fav_assos", "followed_events", "followed_chats");
-    private final String firestore_path;
+    public static final List<String> fields = Arrays.asList("followedAssociations", "followedEvents", "followedChannels");
     // Use sciper to check User (and not mail or gaspar)
     private final String sciper;
     private final String gaspar;
@@ -20,27 +17,28 @@ public class AuthenticatedUser extends User {
     private final String section;
     private final String semester;
     // WARNING: can user can have multiples names
-    private final String first_names;
-    private final String last_names;
-    // All followed ids of Associations, Chats and Events
-    private List<Long> fav_assos;
-    private List<Long> followed_chats;
-    private List<Long> followed_events;
-    // TODO add argument to constructor and store liked_event in firebase
-    private Set<Long> liked_events = new HashSet<>();
+    private final String firstNames;
+    private final String lastNames;
 
-    protected AuthenticatedUser(String sciper, String gaspar, String email, String section, String semester, String first_names, String last_names, List<Long> fav_assos, List<Long> followed_events, List<Long> followed_chats) {
-        firestore_path = "users_info/" + sciper;
+    // All followed ids of Associations, Chats and Events
+    private List<String> followedAssociations;
+    private List<String> followedChannels;
+    private List<String> followedEvents;
+
+    protected AuthenticatedUser(String sciper, String gaspar, String email, String section,
+                                String semester, String firstNames, String lastNames,
+                                List<String> followedAssociations, List<String> followedEvents,
+                                List<String> followedChannels) {
         this.sciper = sciper;
         this.gaspar = gaspar;
         this.email = email;
         this.section = section;
         this.semester = semester;
-        this.first_names = first_names;
-        this.last_names = last_names;
-        this.fav_assos = fav_assos;
-        this.followed_chats = followed_chats;
-        this.followed_events = followed_events;
+        this.firstNames = firstNames;
+        this.lastNames = lastNames;
+        this.followedAssociations = followedAssociations;
+        this.followedChannels = followedChannels;
+        this.followedEvents = followedEvents;
 
         // Add role
         this.addRole(UserRole.USER);
@@ -51,64 +49,102 @@ public class AuthenticatedUser extends User {
         }
     }
 
-    public boolean isFavAssociation(Association asso) {
-        return fav_assos.contains(asso.getId());
+    //----- Association related methods -----\\
+
+    public boolean isFollowedAssociation(String associationId) {
+        if(associationId == null || associationId.isEmpty())
+            return false;
+        return followedAssociations.contains(associationId);
     }
 
-    public boolean isFollowedEvent(Event event) {
-        return followed_events.contains(event.getId());
+    public boolean addFollowedAssociation(String associationId) {
+        if(associationId == null || associationId.isEmpty())
+            return false;
+        return followedAssociations.add(associationId);
     }
 
-    public boolean isFollowedChat(Channel channel) {
-        return followed_chats.contains(channel.getId());
+    public boolean removeFavAssociation(String associationId) {
+        if(associationId == null || associationId.isEmpty())
+            return false;
+        return followedAssociations.remove(associationId);
     }
 
-    public void addFavAssociation(Association asso) {
-        fav_assos.add(asso.getId());
-        Utils.addIdToList(firestore_path, "fav_assos", asso.getId());
+    public void setFollowedAssociation(List<String> associationsIds){
+        assert(associationsIds != null);
+        followedAssociations = associationsIds;
     }
 
-    public void removeFavAssociation(Association asso) {
-        fav_assos.remove(asso.getId());
-        Utils.removeIdFromList(firestore_path, "fav_assos", asso.getId());
+    public List<String> getFollowedAssociations(){
+        return followedAssociations;
     }
 
-    public void setFollowedChats(List<Long> followed_chats) {
-        this.followed_chats = followed_chats;
+    //----- Event related methods -----\\
+
+    public boolean isFollowedEvent(String eventId) {
+        if(eventId == null || eventId.isEmpty())
+            return false;
+        return followedEvents.contains(eventId);
     }
 
-    public void setFavAssos(List<Long> fav_assos) {
-        this.fav_assos = fav_assos;
+    public boolean addFollowedEvent(String eventId) {
+        if(eventId == null || eventId.isEmpty())
+            return false;
+        return followedEvents.add(eventId);
     }
 
-    public void setFollowedEvents(List<Long> followed_events) {
-        this.followed_events = followed_events;
+    public boolean removeFollowedEvent(String eventId) {
+        if(eventId == null || eventId.isEmpty())
+            return false;
+        return followedEvents.remove(eventId);
     }
 
-    public void setLikedEvent(Set<Long> liked_events) {
-        this.liked_events = liked_events;
+    public void setFollowedEvents(List<String> eventsIds){
+        assert(eventsIds != null);
+        followedEvents = eventsIds;
     }
 
-    public boolean isEventLiked(Long event) {
-        return liked_events.contains(event);
+    public List<String> getFollowedEvents(){
+        return followedEvents;
     }
 
-    public void likeEvent(Long event) {
-        this.liked_events.add(event);
+    //----- Channel related methods -----\\
+
+    public boolean isFollowedChannel(String channelId) {
+        if(channelId == null || channelId.isEmpty())
+            return false;
+        return followedChannels.contains(channelId);
     }
 
-    public void dislikeEvent(Long event) {
-        this.liked_events.remove(event);
+    public boolean addFollowedChannel(String channelId) {
+        if(channelId == null || channelId.isEmpty())
+            return false;
+        return followedEvents.add(channelId);
     }
+
+    public boolean removeFollowedChannel(String channelId) {
+        if(channelId == null || channelId.isEmpty())
+            return false;
+        return followedEvents.remove(channelId);
+    }
+
+    public void setFollowedChannels(List<String> channelsIds){
+        assert(channelsIds != null);
+        followedEvents = channelsIds;
+    }
+
+    public List<String> getFollowedChannels(){
+        return followedEvents;
+    }
+
 
     @Override
     public String getFirstNames() {
-        return first_names;
+        return firstNames;
     }
 
     @Override
     public String getLastNames() {
-        return last_names;
+        return lastNames;
     }
 
     @Override
@@ -143,7 +179,7 @@ public class AuthenticatedUser extends User {
 
     @Override
     public String toString() {
-        return first_names + " " + last_names
+        return firstNames + " " + lastNames
                 + "\nsciper: " + sciper
                 + "\ngaspar: " + gaspar
                 + "\nemail: " + email

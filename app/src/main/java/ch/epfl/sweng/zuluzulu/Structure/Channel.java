@@ -22,12 +22,12 @@ public class Channel implements Serializable {
     public static final List<String> FIELDS = Arrays.asList("id", "name", "description", "restrictions");
     private static final double MAX_DISTANCE_TO_ACCESS_CHANNEL = 50;
     private static final double MAX_DISTANCE_TO_SEE_CHANNEL = 500;
-    private int id;
+    private String id;
     private String name;
     private String description;
     private Map<String, Object> restrictions;
 
-    private Uri icon_uri;
+    private String icon_uri;
 
     private boolean isClickable;
     private double distance;
@@ -36,17 +36,19 @@ public class Channel implements Serializable {
         if (!data.hasFields(FIELDS))
             throw new IllegalArgumentException();
 
-        this.id = data.getInteger("id");
+        this.id = data.getString("id");
         this.name = data.getString("name");
         this.description = data.getString("description");
         this.restrictions = data.getMap("restrictions");
         this.isClickable = true;
         this.distance = 0;
 
+        // Init the Icon URI
         String icon_str = data.getString("icon_uri");
-        icon_uri = icon_str == null ?
+        Uri uri = icon_str == null ?
                 Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(icon_str);
+        icon_uri = uri == null ? null : uri.toString();
     }
 
     /**
@@ -54,14 +56,14 @@ public class Channel implements Serializable {
      *
      * @return the id
      */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     /**
      * Setter for the id
      */
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -102,8 +104,7 @@ public class Channel implements Serializable {
      *
      * @return the icon Uri
      */
-    @Nullable
-    public Uri getIconUri() {
+    public String getIconUri() {
         return icon_uri;
     }
 

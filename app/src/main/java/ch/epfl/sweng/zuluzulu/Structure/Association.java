@@ -22,12 +22,12 @@ public class Association extends FirebaseStructure implements Comparable<Associa
     private String short_desc;
     private String long_desc;
 
-    private Uri icon_uri;
-    private Uri banner_uri;
+    private String icon_uri;
+    private String banner_uri;
 
     private List<Map<String, Object>> events;
-    private Long channel_id;
-    private Long closest_event_id;
+    private String channel_id;
+    private String closest_event_id;
 
     /**
      * Create an association using a Firebase adapted map
@@ -47,8 +47,8 @@ public class Association extends FirebaseStructure implements Comparable<Associa
 
         // Init the main chat id
         channel_id = data.get("channel_id") == null ?
-                0L :
-                data.getLong("channel_id");
+                "0" :
+                data.getString("channel_id");
 
         // Init the upcoming event
         events = data.get("events") == null ?
@@ -58,15 +58,18 @@ public class Association extends FirebaseStructure implements Comparable<Associa
 
         // Init the Icon URI
         String icon_str = data.getString("icon_uri");
-        icon_uri = icon_str == null ?
+        Uri uri = icon_str == null ?
                 Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(icon_str);
+        icon_uri = uri == null ? null : uri.toString();
+
 
         // Init the Banner URI
         String banner_str = data.getString("banner_uri");
-        banner_uri = banner_str == null ?
+        uri = banner_str == null ?
                 Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
                 Uri.parse(banner_str);
+        banner_uri = uri == null ? null : uri.toString();
     }
 
     /**
@@ -101,7 +104,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
      *
      * @return
      */
-    public Long getChannelId() {
+    public String getChannelId() {
         return channel_id;
     }
 
@@ -110,8 +113,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
      *
      * @return the icon Uri
      */
-    @Nullable
-    public Uri getIconUri() {
+    public String getIconUri() {
         return icon_uri;
     }
 
@@ -120,7 +122,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
      *
      * @return
      */
-    public Long getClosestEventId() {
+    public String getClosestEventId() {
         return closest_event_id;
     }
 
@@ -129,14 +131,14 @@ public class Association extends FirebaseStructure implements Comparable<Associa
      */
     private void computeClosestEvent() {
         if (events.isEmpty())
-            closest_event_id = 0L;
+            closest_event_id = "0";
         else {
-            Long closest = (Long)events.get(0).get("id");
+            String closest = (String)events.get(0).get("id");
             java.util.Date closest_time = (java.util.Date) events.get(0).get("start");
             for (int i = 1; i < events.size(); i++) {
                 java.util.Date current = (java.util.Date) events.get(i).get("start");
                 if (current.before(closest_time)) {
-                    closest = (Long) events.get(i).get("id");
+                    closest = (String) events.get(i).get("id");
                 }
             }
             closest_event_id = closest;
@@ -148,8 +150,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
      *
      * @return the banner Uri
      */
-    @Nullable
-    public Uri getBannerUri() {
+    public String getBannerUri() {
         return banner_uri;
     }
 

@@ -175,20 +175,20 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (!documentSnapshot.exists()) {
                     Map<String, Object> map = new HashMap<>();
-                    map.put("fav_assos", new ArrayList<Integer>());
-                    map.put("followed_events", new ArrayList<Integer>());
-                    map.put("followed_chats", new ArrayList<Integer>());
+                    map.put("followed_associations", new ArrayList<Integer>());
+                    map.put("followed_events", new ArrayList<String>());
+                    map.put("followed_channels", new ArrayList<String>());
                     ref.set(map);
                     transfer_main(false);
                 } else {
                     FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                    List<Long> received_assos = fmap.getLongList("fav_assos");
-                    List<Long> received_events = fmap.getLongList("followed_events");
-                    List<Long> received_chats = fmap.getLongList("followed_chats");
+                    List<String> receivedAssociations = fmap.getStringList("followed_associations");
+                    List<String> receivedEvents = fmap.getStringList("followed_events");
+                    List<String> receivedChannels = fmap.getStringList("followed_channels");
 
-                    ((AuthenticatedUser) user).setFavAssos(received_assos);
-                    ((AuthenticatedUser) user).setFollowedEvents(received_events);
-                    ((AuthenticatedUser) user).setFollowedChats(received_chats);
+                    ((AuthenticatedUser) user).setFollowedAssociation(receivedAssociations);
+                    ((AuthenticatedUser) user).setFollowedEvents(receivedEvents);
+                    ((AuthenticatedUser) user).setFollowedChannels(receivedChannels);
                     transfer_main(false);
                 }
             }

@@ -131,7 +131,7 @@ public class AssociationDetailFragment extends SuperFragment {
      * Else it favorites/unfavorites the association
      */
     private void setFavButtonBehaviour() {
-        if (user.isConnected() && ((AuthenticatedUser) user).isFavAssociation(asso))
+        if (user.isConnected() && ((AuthenticatedUser) user).isFollowedAssociation(asso))
             loadFavImage(R.drawable.fav_on);
         else
             loadFavImage(R.drawable.fav_off);
@@ -141,12 +141,12 @@ public class AssociationDetailFragment extends SuperFragment {
             public void onClick(View v) {
                 if (user.isConnected()) {
                     AuthenticatedUser auth = (AuthenticatedUser) user;
-                    if (auth.isFavAssociation(asso)) {
+                    if (auth.isFollowedAssociation(asso)) {
                         auth.removeFavAssociation(asso);
                         loadFavImage(R.drawable.fav_off);
                         asso_fav.setContentDescription(NOT_FAV_CONTENT);
                     } else {
-                        auth.addFavAssociation(asso);
+                        auth.addFollowedAssociation(asso);
                         loadFavImage(R.drawable.fav_on);
                         asso_fav.setContentDescription(FAV_CONTENT);
                     }

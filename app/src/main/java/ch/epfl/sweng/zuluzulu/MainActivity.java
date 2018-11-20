@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.firebase.FirebaseApp;
 
 import java.util.HashMap;
@@ -69,6 +70,13 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         // Needed to have access to the Firestore
         FirebaseProxy.init(this, getApplicationContext());
+
+        // Needed to use Google Maps
+        try {
+            MapsInitializer.initialize(getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Initialize the fragment stack used for the back button
         previous_fragments = new Stack<>();

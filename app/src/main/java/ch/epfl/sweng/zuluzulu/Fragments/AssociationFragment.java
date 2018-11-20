@@ -4,19 +4,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.util.SortedList;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,7 +25,6 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
-import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -134,7 +130,7 @@ public class AssociationFragment extends SuperFragment {
         FirebaseProxy.getInstance().getAllAssociations(result -> {
             for(Association asso: result){
                 assosAll.add(asso);
-                if(user.isConnected() && ((AuthenticatedUser)user).isFavAssociation(asso))
+                if(user.isConnected() && ((AuthenticatedUser)user).isFollowedAssociation(asso))
                     assosFav.add(asso);
             }
             Collections.sort(assosAll);

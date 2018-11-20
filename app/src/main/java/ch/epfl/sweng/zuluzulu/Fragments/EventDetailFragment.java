@@ -1,29 +1,39 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.app.usage.UsageEvents;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+
 import android.content.Intent;
+
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.common.api.GoogleApi;
 
-import java.io.IOException;
-import java.util.Calendar;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
-public class EventDetailFragment extends SuperFragment{
+public class EventDetailFragment extends SuperFragment {
 
     public static final String TAG = "EVENT_DETAIL__TAG";
     private static final String ARG_USER = "ARG_USER";
@@ -36,11 +46,15 @@ public class EventDetailFragment extends SuperFragment{
     private Event event;
     private User user;
 
+    MapView mMapView;
+    private GoogleMap googleMap;
+
+
     public static EventDetailFragment newInstance(User user, Event event) {
-        if(event == null)
+        if (event == null)
             throw new NullPointerException("Error creating an EventDetailFragment:\n" +
                     "Event is null");
-        if(user == null)
+        if (user == null)
             throw new NullPointerException("Error creating an EventDetailFragment:\n" +
                     "User is null");
 
@@ -72,12 +86,13 @@ public class EventDetailFragment extends SuperFragment{
 
         // Favorite button
         event_fav = view.findViewById(R.id.event_detail_fav);
-        //setFavButtonBehaviour();
-        event_fav.setContentDescription(NOT_FAV_CONTENT);
-        if(user.isConnected() /*&& ((AuthenticatedUser)user).isFavEvent(event)*/) {
+        setFavButtonBehaviour();
+
+        /*event_fav.setContentDescription(NOT_FAV_CONTENT);
+        if (user.isConnected() && ((AuthenticatedUser)user).isFavEvent(event)) {
             loadFavImage(R.drawable.fav_on);
             event_fav.setContentDescription(FAV_CONTENT);
-        }
+        }*/
 
         view.findViewById(R.id.event_detail_export).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +130,37 @@ public class EventDetailFragment extends SuperFragment{
                 .centerCrop()
                 .into(event_banner);
 
+        //google map integration
+        mMapView = (MapView) view.findViewById(R.id.mapView);
+        mMapView.onCreate(savedInstanceState);
+        mMapView.onResume();
+
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                googleMap = mMap;
+
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    // For showing a move to my location button
+                    googleMap.setMyLocationEnabled(true);
+                }
+
+                // For dropping a marker at a point on the Map
+                LatLng epfl = new LatLng(46.520537, 6.570930);
+                LatLng co = new LatLng(46.520135, 6.565263);
+                googleMap.addMarker(new MarkerOptions().position(epfl).title("ce").snippet("ce"));
+                googleMap.addMarker(new MarkerOptions().position(co).title("co").snippet("co"));
+
+
+                // For zooming automatically to the location of the marker
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(epfl).zoom(12).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+        });
+
 
         return view;
     }
@@ -124,6 +170,58 @@ public class EventDetailFragment extends SuperFragment{
                 .load(drawable)
                 .centerCrop()
                 .into(event_fav);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
+    }
+
+    private void setFavButtonBehaviour() {
+        if (user.isConnected() && ((AuthenticatedUser) user).isFavEvent(event))
+            loadFavImage(R.drawable.fav_on);
+        else
+            loadFavImage(R.drawable.fav_off);
+
+        event_fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (user.isConnected()) {
+                    AuthenticatedUser auth = (AuthenticatedUser) user;
+                    if (auth.isFavEvent(event)) {
+                        auth.removeFollowedChannel(event);
+                        loadFavImage(R.drawable.fav_off);
+                        event_fav.setContentDescription(NOT_FAV_CONTENT);
+                    } else {
+                        auth.addFavEvent(event);
+                        loadFavImage(R.drawable.fav_on);
+                        event_fav.setContentDescription(FAV_CONTENT);
+                    }
+                } else {
+                    Snackbar.make(getView(), "Login to access your favorite event", 5000).show();
+                }
+            }
+        });
     }
 
     private void exportEventToCalendar() {
@@ -139,6 +237,7 @@ public class EventDetailFragment extends SuperFragment{
         intent.putExtra(CalendarContract.Events.EVENT_LOCATION, "To be precised");
 
         startActivity(intent);
+
     }
 
     /*private void setFavButtonBehaviour(){
@@ -148,7 +247,7 @@ public class EventDetailFragment extends SuperFragment{
                 if(user.isConnected()){
                     AuthenticatedUser auth = (AuthenticatedUser)user;
                     if(auth.isFavEvent(event)){
-                        auth.removeFavEvent(event);
+                        auth.removeFollowedChannel(event);
                         loadFavImage(R.drawable.fav_off);
                         event_fav.setContentDescription(NOT_FAV_CONTENT);
                     }
@@ -164,6 +263,7 @@ public class EventDetailFragment extends SuperFragment{
             }
         });
     }*/
+
 
 }
 
