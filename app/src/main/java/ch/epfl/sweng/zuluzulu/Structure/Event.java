@@ -16,7 +16,7 @@ import ch.epfl.sweng.zuluzulu.R;
 
 // TODO: Add admin access, ending date, linked-chat id, linked-association id, position
 public class Event implements Serializable {
-    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "start_date", "likes");
+    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "start_date", "likes", "organizer", "place", "channel_id", "assos_id");
 
     private int id;
     private String name;
@@ -31,6 +31,9 @@ public class Event implements Serializable {
 
     private String bannerUri;
     private String iconUri;
+
+    private int channel_id;
+    private int assos_id;
 
 
     /**
@@ -61,6 +64,14 @@ public class Event implements Serializable {
         start_date_string = Utils.dateFormat.format(startDate);
 
         likes = data.getInteger("likes");
+
+        channel_id = data.get("channel_id") == null ?
+                0 :
+                data.getInteger("channel_id");
+
+        assos_id = data.get("assos_id") == null ?
+                0 :
+                data.getInteger("assos_id");
     }
 
 
@@ -142,5 +153,9 @@ public class Event implements Serializable {
     public void decreaseLikes() {
         likes -= 1;
     }
+
+    public int getChannelId() { return channel_id; }
+
+    public int getAssosId() { return assos_id; }
 
 }

@@ -212,7 +212,7 @@ public class EventFragment extends SuperFragment {
                         if (fmap.hasFields(Event.FIELDS)) {
                             Event event = new Event(fmap);
                             event_all.add(event);
-                            if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))
+                            if (user.isConnected() && ((AuthenticatedUser) user).isFavEvent(event))
                                 event_fav.add(event);
                             event_adapter.notifyDataSetChanged();
                         }
