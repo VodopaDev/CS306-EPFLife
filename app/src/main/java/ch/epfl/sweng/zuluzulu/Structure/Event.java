@@ -117,16 +117,16 @@ public class Event implements Serializable {
         return start_date_string;
     }
 
-    public Uri getBannerUri() {
+    public String getBannerUri() {
         return bannerUri == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
-                Uri.parse(bannerUri);
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner).toString() :
+                Uri.parse(bannerUri).toString();
     }
 
-    public Uri getIconUri() {
+    public String getIconUri() {
         return iconUri == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
-                Uri.parse(iconUri);
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon).toString() :
+                Uri.parse(iconUri).toString();
     }
 
     public String getOrganizer() { return organizer; }
