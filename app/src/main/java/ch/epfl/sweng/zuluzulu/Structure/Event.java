@@ -31,11 +31,14 @@ public class Event implements Serializable {
     private String bannerUri;
     private String iconUri;
 
+    private String url_place_and_room;
+    private String website;
+    private String contact;
 
     private int channel_id;
     private int assos_id;
 
-    public Event(int id, String name, String shortDesc, String longDesc, String start_date_string, int likes, String organizer, String place, String bannerUri, String iconUri) {
+    public Event(int id, String name, String shortDesc, String longDesc, String start_date_string, int likes, String organizer, String place, String bannerUri, String iconUri, String url_place_and_room, String website, String contact) {
         this.id = id;
         this.name = name;
         this.shortDesc = shortDesc;
@@ -46,6 +49,9 @@ public class Event implements Serializable {
         this.place = place;
         this.bannerUri = bannerUri;
         this.iconUri = iconUri;
+        setWebsite(website);
+        setUrl_place_and_room(url_place_and_room);
+        setContact(contact);
     }
 
     /**
@@ -191,4 +197,36 @@ public class Event implements Serializable {
         return assos_id;
     }
 
+    public String getUrl_place_and_room() {
+        return url_place_and_room;
+    }
+
+    public void setUrl_place_and_room(String url_place_and_room) {
+        if(url_place_and_room == null || website.isEmpty()){
+            throw new IllegalArgumentException();
+        }
+        this.url_place_and_room = url_place_and_room;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        if(website == null || website.isEmpty()){
+            throw new IllegalArgumentException();
+        }
+        this.website = website;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        if(contact == null || contact.isEmpty()){
+            throw new IllegalArgumentException();
+        }
+        this.contact = contact;
+    }
 }
