@@ -84,10 +84,6 @@ public class ChatFragment extends SuperChatPostsFragment {
         chatButton.setEnabled(false);
         postsButton.setEnabled(true);
 
-        String collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + MESSAGES_COLLECTION_NAME;
-        collectionReference = db.collection(collectionPath);
-        mockableCollection = DatabaseFactory.getDependency().collection(collectionPath);
-
         sendButton.setEnabled(false);
 
         adapter = new ChatMessageArrayAdapter(view.getContext(), messages);
@@ -96,6 +92,7 @@ public class ChatFragment extends SuperChatPostsFragment {
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
+        loadInitialMessages();
         setUpDataOnChangeListener();
         setUpSendButton();
         setUpEditText();
@@ -153,7 +150,7 @@ public class ChatFragment extends SuperChatPostsFragment {
     /**
      * Refresh the chat by reading all the messages in the database
      */
-    private void updateChat() {
+    private void loadInitialMessages() {
         FirebaseProxy.getInstance().getMessagesFromChannelWithUser(channel.getId(), user.getSciper(), result -> {
             messages = result;
             Collections.sort(messages, (o1, o2) -> {
@@ -168,12 +165,16 @@ public class ChatFragment extends SuperChatPostsFragment {
     }
 
     private void setUpDataOnChangeListener() {
-        FirebaseFirestore.getInstance().collection(collectionReference)
-                .addSnapshotListener((value, e) -> {
-                    if (e != null)
-                        Log.w("Chat or post", "Listen failed.", e);
-                    else
-                        updateChat();
-                });
+        FirebaseProxy.getInstance().onMessageAddedInChannel(channel.getId(), user.getSciper(), result -> {
+            messages.add(result);
+        });
+        Collections.sort(messages, (o1, o2) -> {
+            if (o1.getTime().before(o2.getTime()))
+                return -1;
+            else
+                return 1;
+        });
+        adapter.notifyDataSetChanged();
+        listView.setSelection(adapter.getCount() - 1);
     }
 }

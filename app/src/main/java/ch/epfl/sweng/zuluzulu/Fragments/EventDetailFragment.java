@@ -88,12 +88,6 @@ public class EventDetailFragment extends SuperFragment {
         event_fav = view.findViewById(R.id.event_detail_fav);
         setFavButtonBehaviour();
 
-        /*event_fav.setContentDescription(NOT_FAV_CONTENT);
-        if (user.isConnected() && ((AuthenticatedUser)user).isFavEvent(event)) {
-            loadFavImage(R.drawable.fav_on);
-            event_fav.setContentDescription(FAV_CONTENT);
-        }*/
-
         view.findViewById(R.id.event_detail_export).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,34 +125,31 @@ public class EventDetailFragment extends SuperFragment {
                 .into(event_banner);
 
         //google map integration
-        mMapView = (MapView) view.findViewById(R.id.mapView);
+        mMapView = view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
 
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                googleMap = mMap;
+        mMapView.getMapAsync(mMap -> {
+            googleMap = mMap;
 
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-                } else {
-                    // For showing a move to my location button
-                    googleMap.setMyLocationEnabled(true);
-                }
-
-                // For dropping a marker at a point on the Map
-                LatLng epfl = new LatLng(46.520537, 6.570930);
-                LatLng co = new LatLng(46.520135, 6.565263);
-                googleMap.addMarker(new MarkerOptions().position(epfl).title("ce").snippet("ce"));
-                googleMap.addMarker(new MarkerOptions().position(co).title("co").snippet("co"));
-
-
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(epfl).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            } else {
+                // For showing a move to my location button
+                googleMap.setMyLocationEnabled(true);
             }
+
+            // For dropping a marker at a point on the Map
+            LatLng epfl = new LatLng(46.520537, 6.570930);
+            LatLng co = new LatLng(46.520135, 6.565263);
+            googleMap.addMarker(new MarkerOptions().position(epfl).title("ce").snippet("ce"));
+            googleMap.addMarker(new MarkerOptions().position(co).title("co").snippet("co"));
+
+
+            // For zooming automatically to the location of the marker
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(epfl).zoom(12).build();
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         });
 
 
@@ -203,23 +194,20 @@ public class EventDetailFragment extends SuperFragment {
         else
             loadFavImage(R.drawable.fav_off);
 
-        event_fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (user.isConnected()) {
-                    AuthenticatedUser auth = (AuthenticatedUser) user;
-                    if (auth.isFollowedEvent(event.getId())) {
-                        auth.removeFollowedChannel(event.getId());
-                        loadFavImage(R.drawable.fav_off);
-                        event_fav.setContentDescription(NOT_FAV_CONTENT);
-                    } else {
-                        auth.addFollowedEvent(event.getId());
-                        loadFavImage(R.drawable.fav_on);
-                        event_fav.setContentDescription(FAV_CONTENT);
-                    }
+        event_fav.setOnClickListener(v -> {
+            if (user.isConnected()) {
+                AuthenticatedUser auth = (AuthenticatedUser) user;
+                if (auth.isFollowedEvent(event.getId())) {
+                    auth.removeFollowedChannel(event.getId());
+                    loadFavImage(R.drawable.fav_off);
+                    event_fav.setContentDescription(NOT_FAV_CONTENT);
                 } else {
-                    Snackbar.make(getView(), "Login to access your favorite event", 5000).show();
+                    auth.addFollowedEvent(event.getId());
+                    loadFavImage(R.drawable.fav_on);
+                    event_fav.setContentDescription(FAV_CONTENT);
                 }
+            } else {
+                Snackbar.make(getView(), "Login to access your favorite event", 5000).show();
             }
         });
     }
@@ -237,7 +225,6 @@ public class EventDetailFragment extends SuperFragment {
         intent.putExtra(CalendarContract.Events.EVENT_LOCATION, "To be precised");
 
         startActivity(intent);
-
     }
 }
 
