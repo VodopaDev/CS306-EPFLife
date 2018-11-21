@@ -1,11 +1,14 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -148,8 +151,17 @@ public class WritePostFragment extends SuperFragment {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int oldColor = Color.parseColor(color.getValue());
                 color = PostColor.getRandomColorButNot(color);
-                layout.setBackgroundColor(Color.parseColor(color.getValue()));
+                int newColor = Color.parseColor(color.getValue());
+                ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), oldColor, newColor);
+                colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animator) {
+                        layout.setBackgroundColor((Integer) animator.getAnimatedValue());
+                    }
+                });
+                colorAnimation.start();
             }
         });
     }
