@@ -49,7 +49,7 @@
             android:id="@+id/event_detail_tv_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="top|end"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="32dp"
@@ -62,8 +62,9 @@
             android:id="@+id/event_detail_tv_numberLikes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="top|end"
             android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:textColor="@android:color/white" />
 
@@ -234,22 +235,36 @@
         app:layout_constraintStart_toStartOf="@+id/event_detail_border"
         app:layout_constraintTop_toBottomOf="@+id/event_detail_tv_place" />
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
-        tools:ignore="MissingConstraints">
+    <Button
+        android:id="@+id/event_detail_but_assos"
+        android:layout_width="171dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/chat_message_background"
+        android:text="Association"
+        app:layout_constraintBottom_toBottomOf="@+id/event_detail_border"
+        app:layout_constraintEnd_toEndOf="@+id/event_detail_border" />
 
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mapView"
-            android:layout_width="339dp"
-            android:layout_height="165dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="24dp" />
 
-    </RelativeLayout>
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/event_detail_chatRoom"
+        app:layout_constraintEnd_toEndOf="@+id/event_detail_border"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="@+id/event_detail_border"
+        app:layout_constraintTop_toBottomOf="@+id/event_detail_place" />
+
+
 
     <ImageButton
         android:id="@+id/event_detail_export"
@@ -263,5 +278,20 @@
         android:src="@drawable/ic_calendar"
         app:layout_constraintBottom_toBottomOf="@+id/event_detail_fav"
         app:layout_constraintStart_toEndOf="@+id/event_detail_fav" />
+
+    <Button
+        android:id="@+id/event_detail_chatRoom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/chat_message_background"
+        android:text="CHAT ROOM"
+        app:layout_constraintBottom_toBottomOf="@+id/event_detail_border"
+        app:layout_constraintEnd_toStartOf="@+id/event_detail_but_assos"
+        app:layout_constraintStart_toStartOf="@+id/event_detail_border" />
 
 </android.support.constraint.ConstraintLayout>
