@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -146,12 +147,14 @@ public class MementoFragment extends SuperFragment {
             docData.put("place", event.getPlace());
             docData.put("short_desc", event.getShortDesc());
             docData.put("start_date", date);
+            int finalI = i;
             DatabaseFactory.getDependency().collection("events_info").document("event" + Integer.toString(i)).set(docData).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    Snackbar.make(getView(), "DONE", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(getView(), finalI + " events added", Snackbar.LENGTH_LONG).show();
                 }
             });
+            i++;
             }
     }
 

@@ -202,7 +202,7 @@ public class Event implements Serializable {
     }
 
     public void setUrl_place_and_room(String url_place_and_room) {
-        if(url_place_and_room == null || website.isEmpty()){
+        if(url_place_and_room == null){
             throw new IllegalArgumentException();
         }
         this.url_place_and_room = url_place_and_room;
@@ -213,7 +213,7 @@ public class Event implements Serializable {
     }
 
     public void setWebsite(String website) {
-        if(website == null || website.isEmpty()){
+        if(website == null){
             throw new IllegalArgumentException();
         }
         this.website = website;
@@ -224,7 +224,7 @@ public class Event implements Serializable {
     }
 
     public void setContact(String contact) {
-        if(contact == null || contact.isEmpty()){
+        if(contact == null){
             throw new IllegalArgumentException();
         }
         this.contact = contact;
