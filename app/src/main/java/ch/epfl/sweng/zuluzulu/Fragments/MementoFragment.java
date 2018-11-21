@@ -121,41 +121,46 @@ public class MementoFragment extends SuperFragment {
     }
 
     private void addDatabase(){
-        int i = 0;
         for (Event event : events
              ) {
-            String pattern = "yyyy-MM-dd HH:mm:ss";
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
-            Date date = null;
-            try {
-                date = simpleDateFormat.parse(event.getStartDateString());
-            } catch (ParseException e) {
-                date = new Date();
-            }
             //the map for the event
-            Map<String, Object> docData = new HashMap<>();
-            docData.put("icon_uri", event.getIconUri());
-            docData.put("banner_uri", event.getIconUri());
-            docData.put("id", i);
-            docData.put("assos_id", 0);
-            docData.put("channel_id", 1);
-            docData.put("likes", event.getLikes());
-            docData.put("long_desc", event.getLongDesc());
-            docData.put("name", event.getName());
-            docData.put("organizer", event.getOrganizer());
-            docData.put("place", event.getPlace());
-            docData.put("short_desc", event.getShortDesc());
-            docData.put("start_date", date);
-            int finalI = i;
-            DatabaseFactory.getDependency().collection("events_info").document("event" + Integer.toString(i)).set(docData).addOnCompleteListener(new OnCompleteListener<Void>() {
+            Map<String, Object> docData = createHashmap(event);
+
+            DatabaseFactory.getDependency().collection("events_info").document("event" + Integer.toString(event.getId())).set(docData).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    Snackbar.make(getView(), finalI + " events added", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(getView(), event.getId() + " events added", Snackbar.LENGTH_LONG).show();
                 }
             });
-            i++;
             }
+    }
+
+    private Map<String,Object> createHashmap(Event event) {
+        String pattern = "yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse(event.getStartDateString());
+        } catch (ParseException e) {
+            date = new Date();
+        }
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("icon_uri", event.getIconUri());
+        docData.put("banner_uri", event.getIconUri());
+        docData.put("id", event.getId());
+        docData.put("assos_id", 0);
+        docData.put("channel_id", 1);
+        docData.put("likes", event.getLikes());
+        docData.put("long_desc", event.getLongDesc());
+        docData.put("name", event.getName());
+        docData.put("organizer", event.getOrganizer());
+        docData.put("place", event.getPlace());
+        docData.put("short_desc", event.getShortDesc());
+        docData.put("start_date", date);
+
+        return docData;
     }
 
     private void addEvent(String datas) {
