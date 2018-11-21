@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.net.Uri;
-import android.support.annotation.Nullable;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -32,7 +31,7 @@ public class Association implements Serializable {
     private int channel_id;
     private int closest_event_id;
 
-    public Association(int id, String name, String short_desc, String long_desc, String icon_uri, String banner_uri, List<Map<String, Object>> events, int channel_id, int closest_event_id){
+    public Association(int id, String name, String short_desc, String long_desc, String icon_uri, String banner_uri, List<Map<String, Object>> events, int channel_id, int closest_event_id) {
         this.id = id;
         this.name = name;
         this.short_desc = short_desc;

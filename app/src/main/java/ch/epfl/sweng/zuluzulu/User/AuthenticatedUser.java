@@ -31,7 +31,7 @@ public class AuthenticatedUser extends User {
     private Set<Integer> liked_events = new HashSet<>();
 
     protected AuthenticatedUser(String sciper, String gaspar, String email, String section, String semester, String first_names, String last_names,
-                                    List<Integer> fav_assos, List<Integer> followed_events, List<Integer> followed_chats, List<Integer> fav_event) {
+                                List<Integer> fav_assos, List<Integer> followed_events, List<Integer> followed_chats, List<Integer> fav_event) {
         firestore_path = "users_info/" + sciper;
         this.sciper = sciper;
         this.gaspar = gaspar;
@@ -59,7 +59,7 @@ public class AuthenticatedUser extends User {
     }
 
     public boolean isFavEvent(Event event) {
-        if(fav_event == null)
+        if (fav_event == null)
             return false;
         else
             return fav_event.contains(event.getId());

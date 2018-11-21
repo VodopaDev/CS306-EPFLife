@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -172,17 +171,20 @@ public class WritePostFragment extends SuperFragment {
     private void setUpTextEditListener() {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int messageLength = s.toString().length();
-                boolean correctFormat = 0 < messageLength && messageLength < POST_MAX_LENGTH;;
+                boolean correctFormat = 0 < messageLength && messageLength < POST_MAX_LENGTH;
+                ;
                 sendButton.setEnabled(correctFormat);
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
     }
 }

@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Utility;
 
 import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
 

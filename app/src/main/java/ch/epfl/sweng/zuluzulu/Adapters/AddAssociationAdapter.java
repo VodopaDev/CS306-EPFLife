@@ -11,23 +11,28 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.URLTools.OnClickRecyclerView;
 import ch.epfl.sweng.zuluzulu.Utility.ImageLoader;
 
-public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAdapter.AddAssociationViewHolder>{
+public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAdapter.AddAssociationViewHolder> {
     private final List<Association> associationList;
     private final Context context;
     private final SparseBooleanArray checked;
     private final OnClickRecyclerView lisetner;
+
+    public AddAssociationAdapter(Context context, List<Association> associationList, OnClickRecyclerView listener) {
+        if (context == null || associationList == null) {
+            throw new IllegalArgumentException("Null argument");
+        }
+        this.associationList = associationList;
+        this.context = context;
+        this.checked = new SparseBooleanArray();
+        this.lisetner = listener;
+    }
 
     @NonNull
     @Override
@@ -44,7 +49,7 @@ public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAd
     public void onBindViewHolder(@NonNull AddAssociationViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        if(position < 0 || position >= associationList.size()){
+        if (position < 0 || position >= associationList.size()) {
             return;
         }
         holder.name.setText(associationList.get(position).getName());
@@ -67,16 +72,6 @@ public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAd
         return associationList.size();
     }
 
-    public AddAssociationAdapter(Context context, List<Association> associationList, OnClickRecyclerView listener){
-        if(context == null || associationList == null){
-            throw new IllegalArgumentException("Null argument");
-        }
-        this.associationList = associationList;
-        this.context = context;
-        this.checked  = new SparseBooleanArray();
-        this.lisetner = listener;
-    }
-
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -86,6 +81,7 @@ public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAd
         TextView name;
         TextView short_desc;
         ImageButton add_button;
+
         public AddAssociationViewHolder(View view) {
             super(view);
             this.name = view.findViewById(R.id.add_card_asso_name);
