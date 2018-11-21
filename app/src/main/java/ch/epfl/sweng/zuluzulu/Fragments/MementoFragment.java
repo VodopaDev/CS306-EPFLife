@@ -102,7 +102,6 @@ public class MementoFragment extends SuperFragment {
 
         // Send increment to wait async execution in test
         IdlingResourceFactory.incrementCountingIdlingResource();
-        IdlingResourceFactory.incrementCountingIdlingResource();
     }
 
     /**
