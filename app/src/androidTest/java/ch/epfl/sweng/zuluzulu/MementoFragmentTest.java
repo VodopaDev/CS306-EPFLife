@@ -26,8 +26,7 @@ public class MementoFragmentTest extends TestWithAdminAndFragment<MainFragment> 
         UrlReader reader = new UrlReader() {
             @Override
             public BufferedReader read(String name) {
-                return new BufferedReader(new StringReader(
-                        "[{\n" +
+                return new BufferedReader(new StringReader("[{\n" +
                                 "        \"title\": \"MoveOn - Free dance lessons\"," +
                                 "        \"description\": \"<p>MoveOn, a commission of Agepoly, offer free disco-fox lessons. Disco-fox is a couple dance that is performed on current music, on what you can hear on the radio for example. The lessons take place in the Polydôme at EPFL on Tuesdays. <br>\\r\\n<br>\\r\\n18h30 : Hustle (4-count disco-fox, recommended for complete beginners)<br>\\r\\n19h45 : Disco-fox, with choreography <br>\\r\\n<br>\\r\\nThe lessons are for beginners. No registration, you can just come to the lesson. <br>\\r\\n<br>\\r\\nMore infos : fb.me/moveonepfl</p>\",\n" +
                                 "        \"event_id\": \"43453\"," +
@@ -43,10 +42,8 @@ public class MementoFragmentTest extends TestWithAdminAndFragment<MainFragment> 
                                 "        \"event_contact\": \"Mike Bardet\"," +
                                 "        \"event_url_link\": \"\"," +
                                 "        \"event_url_place_and_room\": \"https://plan.epfl.ch/?room=PO094.0\",\n" +
-                                "    }]"
-                ));
-            }
-        };
+                                "    }]"));
+            }};
         // Change the factory
         UrlReaderFactory.setDependency(reader);
         adminUser();
