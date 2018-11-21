@@ -246,7 +246,7 @@ public class FirebaseProxy {
         });
     }
 
-    public void onMessageAddedInChannel(String id, String userId, OnResult<ChatMessage> onResult){
+    public void onMessageAddedInChannel(String id, String userId, OnResult<ChatMessage> onResult) {
         channelCollection.document(id).collection("messages").addSnapshotListener((queryDocumentSnapshots, e) -> {
             if (e != null)
                 System.err.println("Listen failed: " + e);
@@ -255,13 +255,14 @@ public class FirebaseProxy {
                     switch (dc.getType()) {
                         case ADDED:
                             FirebaseMapDecorator data = new FirebaseMapDecorator(dc.getDocument());
-                            if(data.hasFields(ChatMessage.FIELDS))
-                                onResult.apply(new ChatMessage(data,userId));
+                            if (data.hasFields(ChatMessage.FIELDS))
+                                onResult.apply(new ChatMessage(data, userId));
                             break;
                         default:
                             break;
                     }
 
+                }
         });
     }
 
