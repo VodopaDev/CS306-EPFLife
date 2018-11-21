@@ -44,6 +44,7 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
@@ -60,6 +61,9 @@ public class EventDetailFragment extends SuperFragment {
     private static final String NOT_FAV_CONTENT = "This event isn't in your favorites";
 
     private ImageView event_fav;
+
+    private Button chat_event;
+    private Channel channel;
 
     private Event event;
     private User user;
@@ -111,6 +115,7 @@ public class EventDetailFragment extends SuperFragment {
         // Favorite button
         event_fav = view.findViewById(R.id.event_detail_fav);
         setFavButtonBehaviour();
+
 
         /*event_fav.setContentDescription(NOT_FAV_CONTENT);
         if (user.isConnected() && ((AuthenticatedUser)user).isFavEvent(event)) {
@@ -274,6 +279,7 @@ public class EventDetailFragment extends SuperFragment {
 
     private void setMainChatButtonBehaviour() {
         chat_room.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 if (chat != null) {

@@ -42,6 +42,7 @@ public class EventTest {
 
         Map<String, Object> map = new HashMap<>();
         map.put("id", 1L);
+        map.put("channel_id", 1L);
         map.put("name", NAME1);
         map.put("short_desc", SHORT_DESC);
         map.put("long_desc", LONG_DESC);
@@ -58,6 +59,7 @@ public class EventTest {
     private void initDefaultAssociation() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", 1L);
+        map.put("channel_id", 1L);
         map.put("name", NAME2);
         map.put("short_desc", SHORT_DESC);
         map.put("long_desc", LONG_DESC);

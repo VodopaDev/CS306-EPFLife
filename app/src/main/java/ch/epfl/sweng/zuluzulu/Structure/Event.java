@@ -22,6 +22,7 @@ public class Event implements Serializable {
     private String name;
     private String shortDesc;
     private String longDesc;
+    private int channel;
 
     private Date startDate;
     private String start_date_string;
@@ -60,6 +61,7 @@ public class Event implements Serializable {
             throw new IllegalArgumentException();
 
         id = data.getInteger("id");
+        channel = data.getInteger("channel_id");
         name = data.getString("name");
         shortDesc = data.getString("short_desc");
         longDesc = data.getString("long_desc");
@@ -134,6 +136,8 @@ public class Event implements Serializable {
     public String getName() {
         return name;
     }
+
+    public int getChannel() {return channel;}
 
     public String getShortDesc() {
         return shortDesc;

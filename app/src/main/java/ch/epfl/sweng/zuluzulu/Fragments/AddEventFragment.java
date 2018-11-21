@@ -36,6 +36,7 @@ public class AddEventFragment extends SuperFragment {
     private static final int[] INDICES = {0, 2, 4, 6,7,9,11};
     //for association name
     private List<String> association_names = new ArrayList<>();
+    private List<Integer> association_ids = new ArrayList<>();
     private Spinner spinner;
     private int numberOfEvents;
 
@@ -190,9 +191,29 @@ public class AddEventFragment extends SuperFragment {
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots){
                                 List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
                                 numberOfEvents = snap_list.size();
+
+                                int id_channel = 170 + numberOfEvents + 1;
+
+                                //the map for the corresponding channel
+                                Map<String, Object> docDataChannel = new HashMap<>();
+                                docDataChannel.put("description", "chat of the event : " + tit + " from " + name);
+                                docDataChannel.put("icon_uri", "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg");
+                                docDataChannel.put("id", id_channel);
+                                docDataChannel.put("name", name + "'s event");
+
+                                Map<String, Object> restrictions = new HashMap<>();
+                                restrictions.put("location", null);
+                                restrictions.put("section", null);
+
+                                docDataChannel.put("restrictions", restrictions);
+                                db.collection("channels").document("channel" +Integer.toString(id_channel)).set(docDataChannel);
+
+                                //the map for the event
                                 Map<String, Object> docData = new HashMap<>();
                                 docData.put("icon_uri", "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg");
                                 docData.put("id", numberOfEvents + 1);
+                                docData.put("assos_id", association_ids.get(association_names.indexOf(name)));
+                                docData.put("channel_id", id_channel);
                                 docData.put("likes", 0);
                                 docData.put("long_desc", desc);
                                 docData.put("name", name);
@@ -376,6 +397,7 @@ public class AddEventFragment extends SuperFragment {
                             FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
                             if (data.hasFields(Association.FIELDS)) {
                                 association_names.add((String) data.get("name"));
+                                association_ids.add(data.getInteger("id"));
                             }
                         }
                         setSpinner(spinner, association_names);
