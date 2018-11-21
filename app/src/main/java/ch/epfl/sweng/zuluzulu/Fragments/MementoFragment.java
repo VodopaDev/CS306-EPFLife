@@ -51,6 +51,7 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
 public class MementoFragment extends SuperFragment {
     final static public String EPFL_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/epfl/events/fr/?format=json";
     final static public String ASSOCIATION_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/associations/events/fr/?format=json";
+    final static public String ENAC_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/enac/events/fr/?format=json";
     private static final String TAG = "MEMENTO_FRAGMENT";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
     private EventArrayAdapter eventAdapter;
@@ -159,6 +160,7 @@ public class MementoFragment extends SuperFragment {
         docData.put("place", event.getPlace());
         docData.put("short_desc", event.getShortDesc());
         docData.put("category", event.getCategory());
+        docData.put("speaker", event.getSpeaker());
         docData.put("start_date", date);
 
         return docData;
@@ -182,12 +184,12 @@ public class MementoFragment extends SuperFragment {
                 Event event = new Event(i,
                         jsonobject.getString("title"),
                         jsonobject.getString("description"), jsonobject.getString("description"),
-                        jsonobject.getString("event_start_date") + " " + jsonobject.getString("event_start_time"),
-                        0,
+                        jsonobject.getString("event_start_date") + " " + jsonobject.getString("event_start_time"), 0,
                         jsonobject.getString("event_organizer"),
                         jsonobject.getString("event_place_and_room"),
                         jsonobject.getString("event_visual_absolute_url"), jsonobject.getString("event_visual_absolute_url"),
-                        jsonobject.getString("event_url_place_and_room"), jsonobject.getString("event_url_link"), jsonobject.getString("event_contact"), jsonobject.getString(        "event_category_fr"));
+                        jsonobject.getString("event_url_place_and_room"), jsonobject.getString("event_url_link"),
+                        jsonobject.getString("event_contact"), jsonobject.getString(        "event_category_fr"), jsonobject.getString("event_speaker"));
                 this.events.add(event);
                 eventAdapter.notifyDataSetChanged();
             }

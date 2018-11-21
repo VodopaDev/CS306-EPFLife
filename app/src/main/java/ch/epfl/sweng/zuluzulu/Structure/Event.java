@@ -35,13 +35,14 @@ public class Event implements Serializable {
     private String website;
     private String contact;
     private String category;
+    private String speaker;
 
     private int channel_id;
     private int assos_id;
 
     public Event(int id, String name, String shortDesc, String longDesc, String start_date_string,
                  int likes, String organizer, String place, String bannerUri, String iconUri,
-                 String url_place_and_room, String website, String contact, String category) {
+                 String url_place_and_room, String website, String contact, String category, String speaker) {
         this.id = id;
         setName(name);
         this.shortDesc = shortDesc;
@@ -56,6 +57,7 @@ public class Event implements Serializable {
         setUrl_place_and_room(url_place_and_room);
         setContact(contact);
         setCategory(category);
+        setSpeaker(speaker);
     }
 
     /**
@@ -250,5 +252,16 @@ public class Event implements Serializable {
             throw  new IllegalArgumentException();
         }
         this.category = category;
+    }
+
+    public String getSpeaker() {
+        return speaker;
+    }
+
+    public void setSpeaker(String speaker) {
+        if(speaker == null){
+            throw new IllegalArgumentException();
+        }
+        this.speaker = speaker;
     }
 }
