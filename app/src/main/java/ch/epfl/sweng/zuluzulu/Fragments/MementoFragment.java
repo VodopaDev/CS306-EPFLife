@@ -158,6 +158,7 @@ public class MementoFragment extends SuperFragment {
         docData.put("organizer", event.getOrganizer());
         docData.put("place", event.getPlace());
         docData.put("short_desc", event.getShortDesc());
+        docData.put("category", event.getCategory());
         docData.put("start_date", date);
 
         return docData;
@@ -186,7 +187,7 @@ public class MementoFragment extends SuperFragment {
                         jsonobject.getString("event_organizer"),
                         jsonobject.getString("event_place_and_room"),
                         jsonobject.getString("event_visual_absolute_url"), jsonobject.getString("event_visual_absolute_url"),
-                        jsonobject.getString("event_url_place_and_room"), jsonobject.getString("event_url_link"), jsonobject.getString("event_contact"));
+                        jsonobject.getString("event_url_place_and_room"), jsonobject.getString("event_url_link"), jsonobject.getString("event_contact"), jsonobject.getString(        "event_category_fr"));
                 this.events.add(event);
                 eventAdapter.notifyDataSetChanged();
             }
