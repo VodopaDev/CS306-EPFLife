@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,7 +14,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -29,7 +27,6 @@ import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.User.UserRole;
 
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -39,8 +36,8 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
  * create an instance of this fragment.
  */
 public class MementoFragment extends SuperFragment {
-    private static final String TAG = "MEMENTO_FRAGMENT";
     final static public String MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/associations/events/fr/?format=json";
+    private static final String TAG = "MEMENTO_FRAGMENT";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
     private EventArrayAdapter eventAdapter;
     private User user;
@@ -52,6 +49,7 @@ public class MementoFragment extends SuperFragment {
 
     /**
      * New instance
+     *
      * @param user User
      * @return The fragment
      */
@@ -93,11 +91,12 @@ public class MementoFragment extends SuperFragment {
 
     /**
      * Handle memento data
+     *
      * @param result Json aray datas
      */
     private void handleMemento(List<String> result) {
 
-        if(result != null && !result.isEmpty() && !result.get(0).isEmpty()){
+        if (result != null && !result.isEmpty() && !result.get(0).isEmpty()) {
             String datas = result.get(0);
             addEvent(datas);
         }
@@ -106,8 +105,7 @@ public class MementoFragment extends SuperFragment {
     }
 
     private void addEvent(String datas) {
-        if(datas == null || datas.isEmpty())
-        {
+        if (datas == null || datas.isEmpty()) {
             return;
         }
 

@@ -116,7 +116,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         //creating the channel for the DB
         Map<String, Object> docDataChannel = new HashMap<>();
         docDataChannel.put("description", "chat of the association : " + associations.get(index).getName());
-        docDataChannel.put("icon_uri", associations.get(index).getBannerUri());
+        docDataChannel.put("icon_uri", associations.get(index).getIconUri());
         docDataChannel.put("id", index + 20);
         docDataChannel.put("name", associations.get(index).getName());
 
@@ -125,14 +125,14 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         restrictions.put("section", null);
 
         docDataChannel.put("restrictions", restrictions);
-        db.collection("channels").document("channel" +Integer.toString(index + 20)).set(docDataChannel);
+        db.collection("channels").document("channel" + Integer.toString(index + 20)).set(docDataChannel);
 
 
         //put db
         Map<String, Object> docData = new HashMap<>();
         docData.put("channel_id", index + 20);
         docData.put("events", new ArrayList<>());
-        docData.put("icon_uri", associations.get(index).getBannerUri());
+        docData.put("icon_uri", associations.get(index).getIconUri());
         docData.put("banner_uri", EPFL_LOGO);
         docData.put("name", associations.get(index).getName());
         docData.put("short_desc", associations.get(index).getShortDesc());

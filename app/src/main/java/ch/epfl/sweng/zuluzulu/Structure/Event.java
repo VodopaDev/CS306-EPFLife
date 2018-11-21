@@ -8,8 +8,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
 
@@ -37,16 +35,16 @@ public class Event implements Serializable {
     private int channel_id;
     private int assos_id;
 
-    public Event(int id, String name, String shortDesc, String longDesc, String start_date_string, int likes, String organizer, String place, String bannerUri, String iconUri){
+    public Event(int id, String name, String shortDesc, String longDesc, String start_date_string, int likes, String organizer, String place, String bannerUri, String iconUri) {
         this.id = id;
         this.name = name;
         this.shortDesc = shortDesc;
         this.longDesc = longDesc;
         this.start_date_string = start_date_string;
         this.likes = likes;
-        this.organizer =  organizer;
+        this.organizer = organizer;
         this.place = place;
-        this.bannerUri  = bannerUri;
+        this.bannerUri = bannerUri;
         this.iconUri = iconUri;
     }
 
@@ -137,7 +135,9 @@ public class Event implements Serializable {
         return name;
     }
 
-    public int getChannel() {return channel;}
+    public int getChannel() {
+        return channel;
+    }
 
     public String getShortDesc() {
         return shortDesc;
@@ -163,11 +163,17 @@ public class Event implements Serializable {
         return iconUri;
     }
 
-    public String getOrganizer() { return organizer; }
+    public String getOrganizer() {
+        return organizer;
+    }
 
-    public String getPlace() { return place; }
+    public String getPlace() {
+        return place;
+    }
 
-    public Integer getLikes() { return likes; }
+    public Integer getLikes() {
+        return likes;
+    }
 
     public void increaseLikes() {
         likes += 1;
@@ -177,8 +183,12 @@ public class Event implements Serializable {
         likes -= 1;
     }
 
-    public int getChannelId() { return channel_id; }
+    public int getChannelId() {
+        return channel_id;
+    }
 
-    public int getAssosId() { return assos_id; }
+    public int getAssosId() {
+        return assos_id;
+    }
 
 }

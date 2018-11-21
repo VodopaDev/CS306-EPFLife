@@ -44,7 +44,7 @@ public class FirebaseMapDecorator {
      * @return Integer-casted value
      */
     public Integer getInteger(String field) {
-         return ((Long) map.get(field)).intValue();
+        return ((Long) map.get(field)).intValue();
     }
 
     /**
@@ -174,5 +174,7 @@ public class FirebaseMapDecorator {
      *
      * @return the document id
      */
-    public String getId() { return id; }
+    public String getId() {
+        return id;
+    }
 }

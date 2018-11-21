@@ -2,17 +2,13 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 
 import android.Manifest;
-import android.content.pm.PackageManager;
-
-import android.app.usage.UsageEvents;
 import android.content.Intent;
-
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,30 +17,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.io.IOException;
-import java.util.Calendar;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
-
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
@@ -59,16 +47,12 @@ public class EventDetailFragment extends SuperFragment {
     private static final String ARG_EVENT = "ARG_EVENT";
     private static final String FAV_CONTENT = "This event is in your favorites";
     private static final String NOT_FAV_CONTENT = "This event isn't in your favorites";
-
+    MapView mMapView;
     private ImageView event_fav;
-
     private Button chat_event;
     private Channel channel;
-
     private Event event;
     private User user;
-
-    MapView mMapView;
     private GoogleMap googleMap;
 
     private Button chat_room;
@@ -202,7 +186,7 @@ public class EventDetailFragment extends SuperFragment {
         return view;
     }
 
-    private void loadFavImage(int drawable){
+    private void loadFavImage(int drawable) {
         Glide.with(getContext())
                 .load(drawable)
                 .centerCrop()
@@ -266,11 +250,11 @@ public class EventDetailFragment extends SuperFragment {
         intent.setType("vnd.android.cursor.item/event");
 
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, event.getStartDate().getTime());
-        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.getStartDate().getTime() + 3600*2);
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.getStartDate().getTime() + 3600 * 2);
         intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
 
         intent.putExtra(CalendarContract.Events.TITLE, event.getName());
-        intent.putExtra(CalendarContract.Events.DESCRIPTION,  event.getShortDesc());
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, event.getShortDesc());
         intent.putExtra(CalendarContract.Events.EVENT_LOCATION, "To be precised");
 
         startActivity(intent);
@@ -319,7 +303,7 @@ public class EventDetailFragment extends SuperFragment {
         assos_but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(assos != null)
+                if (assos != null)
                     mListener.onFragmentInteraction(OPEN_ASSOCIATION_DETAIL_FRAGMENT, assos);
             }
         });

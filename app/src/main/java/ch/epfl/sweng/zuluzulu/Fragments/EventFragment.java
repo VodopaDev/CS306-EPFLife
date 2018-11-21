@@ -213,30 +213,30 @@ public class EventFragment extends SuperFragment {
 
     private void fillEventLists(String sortOption) {
         FirebaseFirestore.getInstance().collection("events_info").orderBy(sortOption).get()
-            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                    for (DocumentSnapshot snap : snap_list) {
-                        FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
-                        if (fmap.hasFields(Event.FIELDS)) {
-                            Event event = new Event(fmap);
-                            event_all.add(event);
-                            if (user.isConnected() && ((AuthenticatedUser) user).isFavEvent(event))
-                                event_fav.add(event);
-                            event_adapter.notifyDataSetChanged();
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
+                        for (DocumentSnapshot snap : snap_list) {
+                            FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
+                            if (fmap.hasFields(Event.FIELDS)) {
+                                Event event = new Event(fmap);
+                                event_all.add(event);
+                                if (user.isConnected() && ((AuthenticatedUser) user).isFavEvent(event))
+                                    event_fav.add(event);
+                                event_adapter.notifyDataSetChanged();
+                            }
                         }
-                    }
 
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
-                    Log.e("EVENT_LIST", "Error fetching event date\n" + e.getMessage());
-                }
-            });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
+                        Log.e("EVENT_LIST", "Error fetching event date\n" + e.getMessage());
+                    }
+                });
     }
 
     private void updateListView(Button new_selected, Button new_unselected, ArrayList<Event> data, ListView list) {
@@ -247,21 +247,20 @@ public class EventFragment extends SuperFragment {
         event_adapter.notifyDataSetChanged();
     }
 
-    public void openCloseFilterOption(){
+    public void openCloseFilterOption() {
         filter_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (event_filter_constraint_layout.getVisibility() == View.VISIBLE) {
                     event_filter_constraint_layout.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     event_filter_constraint_layout.setVisibility(View.VISIBLE);
                 }
             }
         });
     }
 
-    private void selectDate(EditText date){
+    private void selectDate(EditText date) {
         checkbox_event_sort_name.setChecked(false);
         checkbox_event_sort_name.setEnabled(true);
         checkbox_event_sort_like.setChecked(false);
@@ -271,11 +270,10 @@ public class EventFragment extends SuperFragment {
         event_search_bar.getText().clear();
         event_search_bar.clearFocus();
 
-        if (date == event_fragment_from_date){
+        if (date == event_fragment_from_date) {
             event_fragment_to_date.getText().clear();
             event_fragment_to_date.clearFocus();
-        }
-        else {
+        } else {
             if (event_fragment_from_date.getText().length() == 0) {
                 event_fragment_to_date.getText().clear();
                 event_fragment_from_date.clearFocus();
@@ -305,7 +303,7 @@ public class EventFragment extends SuperFragment {
                 eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    private void updateLabelDate(EditText date){
+    private void updateLabelDate(EditText date) {
         String myFormat = "dd/MM/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
 
@@ -313,15 +311,14 @@ public class EventFragment extends SuperFragment {
 
         date.setText(stringDate);
 
-        if (date == event_fragment_from_date){
+        if (date == event_fragment_from_date) {
             sortByFromDate(stringDate);
-        }
-        else {
+        } else {
             sortByFromAndToDate(stringDate);
         }
     }
 
-    private void sortByFromDate(String s){
+    private void sortByFromDate(String s) {
         String date = s.toString();
 
         emptySortedEventList();
@@ -347,7 +344,7 @@ public class EventFragment extends SuperFragment {
         dateFrom = eventCalendar.getTime();
     }
 
-    private void sortByFromAndToDate(String s){
+    private void sortByFromAndToDate(String s) {
         String date = s.toString();
 
         emptySortedEventList();
@@ -371,7 +368,7 @@ public class EventFragment extends SuperFragment {
         event_adapter.notifyDataSetChanged();
     }
 
-    private void sortWithSearchBar(){
+    private void sortWithSearchBar() {
         event_search_bar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -396,11 +393,9 @@ public class EventFragment extends SuperFragment {
                 for (Event event : event_all) {
                     if (event.getName().toLowerCase().contains(keyWord)) {
                         event_all_sorted.add(event);
-                    }
-                    else if (event.getShortDesc().toLowerCase().contains(keyWord)) {
+                    } else if (event.getShortDesc().toLowerCase().contains(keyWord)) {
                         event_all_sorted.add(event);
-                    }
-                    else if(event.getLongDesc().toLowerCase().contains((keyWord))){
+                    } else if (event.getLongDesc().toLowerCase().contains((keyWord))) {
                         event_all_sorted.add(event);
                     }
                 }
@@ -477,7 +472,7 @@ public class EventFragment extends SuperFragment {
         });
     }
 
-    private void sortByDate(){
+    private void sortByDate() {
         checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
