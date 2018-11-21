@@ -34,13 +34,16 @@ public class Event implements Serializable {
     private String url_place_and_room;
     private String website;
     private String contact;
+    private String category;
 
     private int channel_id;
     private int assos_id;
 
-    public Event(int id, String name, String shortDesc, String longDesc, String start_date_string, int likes, String organizer, String place, String bannerUri, String iconUri, String url_place_and_room, String website, String contact) {
+    public Event(int id, String name, String shortDesc, String longDesc, String start_date_string,
+                 int likes, String organizer, String place, String bannerUri, String iconUri,
+                 String url_place_and_room, String website, String contact, String category) {
         this.id = id;
-        this.name = name;
+        setName(name);
         this.shortDesc = shortDesc;
         this.longDesc = longDesc;
         this.start_date_string = start_date_string;
@@ -52,6 +55,7 @@ public class Event implements Serializable {
         setWebsite(website);
         setUrl_place_and_room(url_place_and_room);
         setContact(contact);
+        setCategory(category);
     }
 
     /**
@@ -135,6 +139,13 @@ public class Event implements Serializable {
     // TODO: Check inputs before changing fields
     public int getId() {
         return id;
+    }
+
+    public void setName(String name){
+        if(name == null){
+            throw new IllegalArgumentException();
+        }
+        this.name = name.trim().replaceAll("\"", "");
     }
 
     public String getName() {
@@ -228,5 +239,16 @@ public class Event implements Serializable {
             throw new IllegalArgumentException();
         }
         this.contact = contact;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        if(category == null){
+            throw  new IllegalArgumentException();
+        }
+        this.category = category;
     }
 }

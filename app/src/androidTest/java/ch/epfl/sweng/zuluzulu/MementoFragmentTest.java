@@ -42,7 +42,7 @@ public class MementoFragmentTest extends TestWithAdminAndFragment<MainFragment> 
                                 "        \"event_contact\": \"Mike Bardet\"," +
                                 "        \"event_url_link\": \"\"," +
                                 "        \"event_url_place_and_room\": \"https://plan.epfl.ch/?room=PO094.0\",\n" +
-                                "    }]"));
+                                "        \"event_category_fr\": \"Divers\",\n" + "    }]"));
             }};
         // Change the factory
         UrlReaderFactory.setDependency(reader);
