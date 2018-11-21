@@ -260,49 +260,31 @@ public class EventFragment extends SuperFragment {
 
         date.setText(stringDate);
 
-        if (date == event_fragment_from_date){
-            sortByFromDate(stringDate);
-        }
-        else {
-            sortByFromAndToDate(stringDate);
-        }
+        if (date == event_fragment_from_date)
+            sortByFromDate();
+        else
+            sortByFromAndToDate();
     }
 
-    private void sortByFromDate(String s){
+    private void sortByFromDate(){
         eventsFiltered.clear();
-        for (Event event: eventsToFilter) {
-            if (event.getStartDate().compareTo(eventCalendar.getTime()) >= 0 && ) {
-                event_all_sorted.add(allEvents.get(i));
-            }
+        for (Event event: eventsToFilter)
+            if (event.getStartDate().compareTo(eventCalendar.getTime()) >= 0) {
+                eventsToFilter.add(event);
         }
-//                for (int i = 0; i < followedEvents.size(); i++) {
-//                    if (followedEvents.get(i).getStartDate().compareTo(tempDate) >= 0) {
-//                        event_fav_sorted.add(followedEvents.get(i));
-//                    }
-//                }
-
-        event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
         listview_event.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
 
         dateFrom = eventCalendar.getTime();
     }
 
-    private void sortByFromAndToDate(String s){
-        String date = s.toString();
-
-        for (int i = 0; i < allEvents.size(); i++) {
-            if (allEvents.get(i).getStartDate().compareTo(dateFrom) >= 0 && allEvents.get(i).getStartDate().compareTo(eventCalendar.getTime()) <= 0) {
-                event_all_sorted.add(allEvents.get(i));
+    private void sortByFromAndToDate(){
+        eventsFiltered.clear();
+        for (Event event: eventsToFilter) {
+            if (event.getStartDate().compareTo(dateFrom) >= 0 && event.getStartDate().compareTo(eventCalendar.getTime()) <= 0) {
+                eventsToFilter.add(event);
             }
         }
-//                for (int i = 0; i < followedEvents.size(); i++) {
-//                    if (followedEvents.get(i).getStartDate().compareTo(dateFrom) >= 0 && allEvents.get(i).getStartDate().compareTo(tempDateTo) <= 0) {
-//                        event_fav_sorted.add(followedEvents.get(i));
-//                    }
-//                }
-
-        event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
         listview_event.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
     }
@@ -332,9 +314,9 @@ public class EventFragment extends SuperFragment {
                 for (Event event : eventsToFilter) {
                     if (event.getName().toLowerCase().contains(keyWord))
                         eventsFiltered.add(event);
-                    else if (event.getShortDesc().toLowerCase().contains(keyWord))
+                    else if (event.getShortDescription().toLowerCase().contains(keyWord))
                         eventsFiltered.add(event);
-                    else if(event.getLongDesc().toLowerCase().contains((keyWord)))
+                    else if(event.getLongDescription().toLowerCase().contains((keyWord)))
                         eventsFiltered.add(event);
                 }
                 event_adapter.notifyDataSetChanged();

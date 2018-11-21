@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +46,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
         channelId = data.getString("channel_id");
 
         // Init the upcoming event
-        upcomingEvents = (List<Map<String, Object>>) data.get("upcomingEvents");
+        upcomingEvents = (List<Map<String, Object>>) data.get("upcoming_events");
         computeClosestEvent();
 
         // Init the Icon URI
@@ -84,6 +83,10 @@ public class Association extends FirebaseStructure implements Comparable<Associa
     @Nullable
     public String getChannelId() {
         return channelId;
+    }
+
+    public void setChannelId(String channelId){
+        this.channelId = channelId;
     }
 
     /**
@@ -158,53 +161,4 @@ public class Association extends FirebaseStructure implements Comparable<Associa
         return name.compareTo(o.getName());
     }
 
-    public static final class AssociationBuilder {
-        private String id;
-        private String name;
-        private String shortDescription;
-
-        private String iconUri;
-        private String bannerUri;
-
-        private List<Map<String, Object>> upcomingEvents = Collections.EMPTY_LIST;
-        private String channelId;
-
-        public AssociationBuilder(){}
-
-        public void setId(String id){
-            this.id = id;
-        }
-        public void setName(String name) {
-            this.name = name;
-        }
-        public void setShortDescription(String shortDescription) {
-            this.shortDescription = shortDescription;
-        }
-        public void setIconUri(String iconUri) {
-            this.iconUri = iconUri;
-        }
-        public void setBannerUri(String bannerUri) {
-            this.bannerUri = bannerUri;
-        }
-        public void setUpcomingEvents(List<Map<String, Object>> upcomingEvents) {
-            this.upcomingEvents = upcomingEvents;
-        }
-        public void setChannelId(String channelId) {
-            this.channelId = channelId;
-        }
-
-        public Association build(){
-            if(id == null || name == null || shortDescription == null)
-                return null;
-            Map<String, Object> map = new HashMap<>();
-            map.put("id", id);
-            map.put("name", name);
-            map.put("short_description", shortDescription);
-            map.put("icon_uri", iconUri);
-            map.put("banner_uri", bannerUri);
-            map.put("upcoming_events", upcomingEvents);
-            map.put("channel_id", channelId);
-            return new Association(new FirebaseMapDecorator(map));
-        }
-    }
 }

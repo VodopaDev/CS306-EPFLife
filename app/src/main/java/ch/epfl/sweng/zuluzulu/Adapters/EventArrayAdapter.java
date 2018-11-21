@@ -15,15 +15,12 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility.ImageLoader;
-
-import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT;
 
 //import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 
@@ -90,7 +87,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
 
         final Event event = data.get(position);
         holder.name.setText(event.getName());
-        holder.short_desc.setText(event.getShortDesc());
+        holder.short_desc.setText(event.getShortDescription());
         ImageLoader.loadUriIntoImageView(holder.icon, event.getIconUri(), getContext());
         holder.start_date.setText(event.getStartDateString());
         holder.likes.setText(String.valueOf(event.getLikes()));

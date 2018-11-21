@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import java.util.Objects;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -101,13 +103,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                 String url = data.split(",")[0];
 
                 int finalIndex = index;
-                UrlHandler urlHandler = new UrlHandler(new UrlResultListener<List<String>>() {
-                    @Override
-                    public void onFinished(List<String> result) {
-                        handleIcon(finalIndex, result);
-                    }
-                }, new IconParser());
-
+                UrlHandler urlHandler = new UrlHandler(result -> handleIcon(finalIndex, result), new IconParser());
                 urlHandler.execute(url);
             }
             index++;
@@ -131,13 +127,16 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             datas.set(index, datas.get(index) + "," + final_icon_url);
 
             //put db
-            Association.AssociationBuilder builder = new Association.AssociationBuilder();
-            builder.setName(datas.get(index).split(",")[1].trim());
-            builder.setIconUri(final_icon_url);
-            builder.setShortDescription(datas.get(index).split(",")[2].trim());
-            //builder.setLongDescription("long_desc", datas.get(index).split(",")[2].trim());
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", "no_id");
+            map.put("channel_id","no_id");
+            map.put("icon_uri", final_icon_url);
+            map.put("name", datas.get(index).split(",")[1].trim());
+            map.put("short_description", datas.get(index).split(",")[2].trim());
+            map.put("long_description", datas.get(index).split(",")[2].trim());
+            map.put("upcoming_events", (List<Map<String,Object>>)Collections.EMPTY_LIST);
 
-            FirebaseProxy.getInstance().addAssociation(builder);
+            FirebaseProxy.getInstance().addAssociation(new Association(new FirebaseMapDecorator(map)));
             updateView();
         } catch (MalformedURLException e) {
             e.printStackTrace();

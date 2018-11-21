@@ -22,7 +22,6 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -99,7 +98,7 @@ public class EventDetailFragment extends SuperFragment {
         event_like.setText("" + event.getLikes());
 
         TextView event_desc = view.findViewById(R.id.event_detail_desc);
-        event_desc.setText(event.getLongDesc());
+        event_desc.setText(event.getLongDescription());
 
         TextView event_date = view.findViewById(R.id.event_detail_date);
         event_date.setText("" + event.getStartDateString());
@@ -221,7 +220,7 @@ public class EventDetailFragment extends SuperFragment {
         intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
 
         intent.putExtra(CalendarContract.Events.TITLE, event.getName());
-        intent.putExtra(CalendarContract.Events.DESCRIPTION,  event.getShortDesc());
+        intent.putExtra(CalendarContract.Events.DESCRIPTION,  event.getShortDescription());
         intent.putExtra(CalendarContract.Events.EVENT_LOCATION, "To be precised");
 
         startActivity(intent);

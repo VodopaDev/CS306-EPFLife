@@ -49,9 +49,7 @@ import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
  * create an instance of this fragment.
  */
 public class ChannelFragment extends SuperFragment {
-    private static final String TAG = "CHANNEL_TAG";
     private static final String ARG_USER = "ARG_USER";
-    private static final String CHANNELS_COLLECTION_NAME = "channels";
 
     private View view;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -120,9 +118,9 @@ public class ChannelFragment extends SuperFragment {
     private void getChannelsFromDatabase() {
         FirebaseProxy.getInstance().getAllChannels(result -> {
             listOfChannels.clear();
+            Log.d("TAGGGGG", result.size() + " channels");
             for(Channel channel: result) {
-                if (channel.canBeSeenBy(user, userLocation))
-                    listOfChannels.add(channel);
+                listOfChannels.add(channel);
             }
             adapter.notifyDataSetChanged();
             adapter.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));

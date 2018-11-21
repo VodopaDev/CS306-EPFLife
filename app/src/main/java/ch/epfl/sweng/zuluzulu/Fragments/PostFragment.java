@@ -27,6 +27,7 @@ import ch.epfl.sweng.zuluzulu.Adapters.PostArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
@@ -68,10 +69,6 @@ public class PostFragment extends SuperChatPostsFragment {
         chatButton.setEnabled(true);
         postsButton.setEnabled(false);
 
-        String collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POSTS_COLLECTION_NAME;
-        collectionReference = db.collection(collectionPath);
-        mockableCollection = DatabaseFactory.getDependency().collection(collectionPath);
-
         adapter = new PostArrayAdapter(view.getContext(), posts);
         listView.setAdapter(adapter);
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
@@ -90,53 +87,25 @@ public class PostFragment extends SuperChatPostsFragment {
      * Add an onClick listener on the button to switch to the chat fragment
      */
     private void setUpChatButton() {
-        chatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, channel);
-            }
-        });
+        chatButton.setOnClickListener(v -> mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, channel));
     }
 
     /**
      * Refresh the posts by reading in the database
      */
     private void updatePosts() {
-        collectionReference
-                .orderBy("time", Query.Direction.DESCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            posts.clear();
-                            for (DocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
-                                if (fmap.hasFields(Post.FIELDS)) {
-                                    Post post = new Post(fmap, user.getSciper(), channel.getId());
-                                    posts.add(post);
-                                }
-                            }
-                            adapter.notifyDataSetChanged();
-                            swipeRefreshLayout.setRefreshing(false);
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
+        FirebaseProxy.getInstance().onPostAddedInChannel(channel.getId(), user.getSciper(), result -> {
+            posts.add(result);
+            adapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
+        });
     }
 
     /**
      * Set up an onClick listener on the button to write a new post
      */
     private void setUpNewPostButton() {
-        writePostButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onFragmentInteraction(CommunicationTag.OPEN_WRITE_POST_FRAGMENT, channel);
-            }
-        });
+        writePostButton.setOnClickListener(v -> mListener.onFragmentInteraction(CommunicationTag.OPEN_WRITE_POST_FRAGMENT, channel));
     }
 
     /**

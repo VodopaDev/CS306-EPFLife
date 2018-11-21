@@ -99,13 +99,13 @@ public class EventTest {
     @Test
     public void longDescIsCorrect() {
         initWorkingAssociation();
-        assertEquals(LONG_DESC, event0.getLongDesc());
+        assertEquals(LONG_DESC, event0.getLongDescription());
     }
 
     @Test
     public void shortDescIsCorrect() {
         initWorkingAssociation();
-        assertEquals(SHORT_DESC, event0.getShortDesc());
+        assertEquals(SHORT_DESC, event0.getShortDescription());
     }
 
     @Test

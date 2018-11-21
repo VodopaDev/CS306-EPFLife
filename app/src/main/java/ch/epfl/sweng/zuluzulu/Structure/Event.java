@@ -2,13 +2,13 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.net.Uri;
 
-import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.annotation.Nullable;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
@@ -18,8 +18,9 @@ import ch.epfl.sweng.zuluzulu.R;
 public class Event extends FirebaseStructure {
 
     private String name;
-    private String shortDesc;
-    private String longDesc;
+    private String shortDescription;
+    private String longDescription;
+    private String channelId;
 
     private Date startDate;
     private int likes;
@@ -41,21 +42,15 @@ public class Event extends FirebaseStructure {
             throw new IllegalArgumentException();
 
         name = data.getString("name");
-        shortDesc = data.getString("short_desc");
-        longDesc = data.getString("long_desc");
+        shortDescription = data.getString("short_description");
+        longDescription = data.getString("long_description");
+        channelId = data.getString("channel_id");
         likes = data.getInteger("likes");
         organizer = data.getString("organizer");
         place = data.getString("place");
-
-        shortDesc = data.getString("short_desc");
-        longDesc = data.getString("long_desc");
-
         iconUri = data.getString("icon_uri");
         bannerUri = data.getString("banner_uri");
-
         startDate = data.getDate("start_date");
-
-        likes = data.getInteger("likes");
     }
 
 
@@ -75,12 +70,12 @@ public class Event extends FirebaseStructure {
         return name;
     }
 
-    public String getShortDesc() {
-        return shortDesc;
+    public String getShortDescription() {
+        return shortDescription;
     }
 
-    public String getLongDesc() {
-        return longDesc;
+    public String getLongDescription() {
+        return longDescription;
     }
 
     public Date getStartDate() {
@@ -89,6 +84,14 @@ public class Event extends FirebaseStructure {
 
     public String getStartDateString() {
         return Utils.dateFormat.format(startDate);
+    }
+
+    public String getChannelId(){
+        return channelId;
+    }
+
+    public void setChannelId(String channelId){
+        this.channelId = channelId;
     }
 
     /**
@@ -134,8 +137,23 @@ public class Event extends FirebaseStructure {
     }
 
     public static List<String> requiredFields() {
-        return Arrays.asList("id","name","short_desc","long_desc","start_date","likes");
+        return Arrays.asList("id","name","short_description","long_description","start_date","likes", "channel_id");
     }
 
 
+    public Map<String,Object> getData(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", getId());
+        map.put("name", name);
+        map.put("short_description", shortDescription);
+        map.put("long_description", longDescription);
+        map.put("icon_uri", iconUri);
+        map.put("banner_uri", bannerUri);
+        map.put("likes", likes);
+        map.put("channel_id", channelId);
+        map.put("start_date", startDate);
+        map.put("place", place);
+        map.put("organizer", organizer);
+        return map;
+    }
 }

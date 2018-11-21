@@ -23,10 +23,12 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
@@ -72,6 +74,7 @@ public class FirebaseProxy {
      * @param onResult interface defining apply()
      */
     public void getAllAssociations(OnResult<List<Association>> onResult){
+        IdlingResourceFactory.incrementCountingIdlingResource();
         assoCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
             List<Association> resultList = new ArrayList<>();
             for(DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){
@@ -80,6 +83,7 @@ public class FirebaseProxy {
                     resultList.add(new Association(fmap));
             }
             onResult.apply(resultList);
+            IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch all associations"));
     }
 
@@ -88,10 +92,13 @@ public class FirebaseProxy {
      * @param onResult interface defining apply()
      */
     public void getAssociationFromId(String id, OnResult<Association> onResult){
+        IdlingResourceFactory.incrementCountingIdlingResource();
         assoCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
             FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-            if(fmap.hasFields(Association.requiredFields()))
+            if(fmap.hasFields(Association.requiredFields())) {
                 onResult.apply(new Association(fmap));
+            }
+            IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the association with id " + id));
     }
 
@@ -100,6 +107,7 @@ public class FirebaseProxy {
      * @param onResult interface defining apply()
      */
     public void getAssociationsFromIds(List<String> ids, OnResult<List<Association>> onResult){
+        IdlingResourceFactory.incrementCountingIdlingResource();
         List<Association> result = new ArrayList<>();
         Counter counter = new Counter(ids.size());
 
@@ -108,33 +116,52 @@ public class FirebaseProxy {
                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
                 if(fmap.hasFields(Association.requiredFields()))
                     result.add(new Association(fmap));
-                if(counter.increment())
+                if(counter.increment()) {
                     onResult.apply(result);
+                    IdlingResourceFactory.decrementCountingIdlingResource();
+                }
             }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the association with id " + id))
             .addOnFailureListener(e -> {
-                if(counter.increment())
+                if(counter.increment()) {
                     onResult.apply(result);
+                    IdlingResourceFactory.decrementCountingIdlingResource();
+                }
             });
         }
     }
 
-    public void addAssociation(Association.AssociationBuilder builder){
-        DocumentReference newRef = assoCollection.document();
-        builder.setId(newRef.getId());
-        Association association = builder.build();
-        if(association != null)
-            newRef.set(association.getData());
-        else
-            newRef.delete();
+    public void addAssociation(Association association){
+        IdlingResourceFactory.incrementCountingIdlingResource();
+        DocumentReference assoRef = assoCollection.document();
+        DocumentReference channelRef = channelCollection.document();
+        association.setId(assoRef.getId());
+        association.setChannelId(channelRef.getId());
+
+        createChannel(association);
+        assoRef.set(association.getData());
+        IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
     //----- Event related methods -----\\
+
+    public void addEvent(Event event){
+        IdlingResourceFactory.incrementCountingIdlingResource();
+        DocumentReference eventRef = eventCollection.document();
+        DocumentReference channelRef = channelCollection.document();
+        event.setId(eventRef.getId());
+        event.setChannelId(channelRef.getId());
+
+        createChannel(event);
+        eventRef.set(event.getData());
+        IdlingResourceFactory.decrementCountingIdlingResource();
+    }
 
     /**
      * Get all events and apply an OnResult on them
      * @param onResult interface defining apply()
      */
     public void getAllEvents(OnResult<List<Event>> onResult){
+        IdlingResourceFactory.incrementCountingIdlingResource();
         eventCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
             List<Event> resultList = new ArrayList<>();
             for(DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){
@@ -143,6 +170,7 @@ public class FirebaseProxy {
                     resultList.add(new Event(fmap));
             }
             onResult.apply(resultList);
+            IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch all events"));
     }
 
@@ -151,10 +179,13 @@ public class FirebaseProxy {
      * @param onResult interface defining apply()
      */
     public void getEventFromId(String id, OnResult<Event> onResult){
+        IdlingResourceFactory.incrementCountingIdlingResource();
         eventCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
             FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-            if(fmap.hasFields(Event.requiredFields()))
+            if(fmap.hasFields(Event.requiredFields())) {
                 onResult.apply(new Event(fmap));
+            }
+            IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the association with id " + id));
     }
 
@@ -163,6 +194,7 @@ public class FirebaseProxy {
      * @param onResult interface defining apply()
      */
     public void getEventsFromIds(List<String> ids, OnResult<List<Event>> onResult){
+        IdlingResourceFactory.incrementCountingIdlingResource();
         List<Event> result = new ArrayList<>();
         Counter counter = new Counter(ids.size());
 
@@ -171,23 +203,51 @@ public class FirebaseProxy {
                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
                 if(fmap.hasFields(Event.requiredFields()))
                     result.add(new Event(fmap));
-                if(counter.increment())
+                if(counter.increment()) {
                     onResult.apply(result);
-            }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the association with id " + id))
-                    .addOnFailureListener(e -> {
-                        if(counter.increment())
+                    IdlingResourceFactory.decrementCountingIdlingResource();
+                }
+            }).addOnFailureListener(e -> {
+                        if(counter.increment()) {
                             onResult.apply(result);
+                            IdlingResourceFactory.decrementCountingIdlingResource();
+                        }
                     });
         }
     }
 
     //----- Channel related methods -----\\
 
+    private void createChannel(Association association){
+        IdlingResourceFactory.incrementCountingIdlingResource();
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", association.getChannelId());
+        map.put("name", association.getName());
+        map.put("description", association.getShortDescription());
+        map.put("restrictions", new HashMap<>());
+        map.put("icon_uri", association.getIconUri().toString());
+        channelCollection.document(association.getChannelId()).set(map);
+        IdlingResourceFactory.decrementCountingIdlingResource();
+    }
+
+    private void createChannel(Event event){
+        IdlingResourceFactory.incrementCountingIdlingResource();
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", event.getChannelId());
+        map.put("name", event.getName());
+        map.put("description", event.getShortDescription());
+        map.put("restrictions", new HashMap<>());
+        map.put("icon_uri", event.getIconUri().toString());
+        channelCollection.document(event.getChannelId()).set(map);
+        IdlingResourceFactory.decrementCountingIdlingResource();
+    }
+
     /**
      * Get all events and apply an OnResult on them
      * @param onResult interface defining apply()
      */
     public void getAllChannels(OnResult<List<Channel>> onResult){
+        IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
             List<Channel> resultList = new ArrayList<>();
             for(DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){
@@ -196,6 +256,7 @@ public class FirebaseProxy {
                     resultList.add(new Channel(fmap));
             }
             onResult.apply(resultList);
+            IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch all channels"));
     }
 
@@ -204,10 +265,13 @@ public class FirebaseProxy {
      * @param onResult interface defining apply()
      */
     public void getChannelFromId(String id, OnResult<Channel> onResult){
+        IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
             FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-            if(fmap.hasFields(Channel.FIELDS))
+            if(fmap.hasFields(Channel.FIELDS)) {
                 onResult.apply(new Channel(fmap));
+            }
+            IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the channel with id " + id));
     }
 
@@ -216,6 +280,7 @@ public class FirebaseProxy {
      * @param onResult interface defining apply()
      */
     public void getChannelsFromIds(List<String> ids, OnResult<List<Channel>> onResult){
+        IdlingResourceFactory.incrementCountingIdlingResource();
         List<Channel> result = new ArrayList<>();
         Counter counter = new Counter(ids.size());
 
@@ -224,17 +289,21 @@ public class FirebaseProxy {
                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
                 if(fmap.hasFields(Channel.FIELDS))
                     result.add(new Channel(fmap));
-                if(counter.increment())
+                if(counter.increment()) {
                     onResult.apply(result);
-            }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the association with id " + id))
-                    .addOnFailureListener(e -> {
-                        if(counter.increment())
+                    IdlingResourceFactory.decrementCountingIdlingResource();
+                }
+            }).addOnFailureListener(e -> {
+                        if(counter.increment()) {
                             onResult.apply(result);
+                            IdlingResourceFactory.decrementCountingIdlingResource();
+                        }
                     });
         }
     }
 
     public void getMessagesFromChannelWithUser(String id, String userId, OnResult<List<ChatMessage>> onResult){
+        IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(id).collection("messages").get().addOnSuccessListener(queryDocumentSnapshots -> {
             List<ChatMessage> result = new ArrayList<>();
             for(DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){
@@ -242,7 +311,8 @@ public class FirebaseProxy {
                 if(data.hasFields(ChatMessage.FIELDS))
                     result.add(new ChatMessage(data, userId));
             }
-           onResult.apply(result);
+            onResult.apply(result);
+            IdlingResourceFactory.decrementCountingIdlingResource();
         });
     }
 
@@ -250,7 +320,8 @@ public class FirebaseProxy {
         channelCollection.document(id).collection("messages").addSnapshotListener((queryDocumentSnapshots, e) -> {
             if (e != null)
                 System.err.println("Listen failed: " + e);
-            else
+            else {
+                IdlingResourceFactory.incrementCountingIdlingResource();
                 for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
                     switch (dc.getType()) {
                         case ADDED:
@@ -261,14 +332,47 @@ public class FirebaseProxy {
                         default:
                             break;
                     }
+                }
+                IdlingResourceFactory.decrementCountingIdlingResource();
+            }
+        });
+    }
+
+    public void onPostAddedInChannel(String id, String userId, OnResult<Post> onResult) {
+        IdlingResourceFactory.incrementCountingIdlingResource();
+        channelCollection.document(id).collection("messages").addSnapshotListener((queryDocumentSnapshots, e) -> {
+            if (e != null)
+                System.err.println("Listen failed: " + e);
+            else {
+                IdlingResourceFactory.incrementCountingIdlingResource();
+                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
+                    switch (dc.getType()) {
+                        case ADDED:
+                            FirebaseMapDecorator data = new FirebaseMapDecorator(dc.getDocument());
+                            if (data.hasFields(ChatMessage.FIELDS))
+                                onResult.apply(new Post(data, userId, id));
+                            break;
+                        default:
+                            break;
+                    }
 
                 }
+                IdlingResourceFactory.decrementCountingIdlingResource();
+            }
         });
+    }
+
+    public void addPostInChannel(String channelId, Post post){
+        IdlingResourceFactory.incrementCountingIdlingResource();
+        DocumentReference postRef = channelCollection.document(channelId).collection("posts").document();
+        postRef.set(post.getData());
+        IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
     //----- User related methods -----\\
 
     public void getUserWithIdOrCreateIt(String id, OnResult<FirebaseMapDecorator> onResult){
+        IdlingResourceFactory.incrementCountingIdlingResource();
         userCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
             if (!documentSnapshot.exists()) {
                 Map<String, Object> map = new HashMap<>();
@@ -281,6 +385,7 @@ public class FirebaseProxy {
                 FirebaseMapDecorator data = new FirebaseMapDecorator(documentSnapshot);
                 onResult.apply(data);
             }
+            IdlingResourceFactory.decrementCountingIdlingResource();
         });
 
     }
@@ -293,6 +398,7 @@ public class FirebaseProxy {
     private OnFailureListener onFailureWithErrorMessage(String message) {
         return e -> {
             Log.e("PROXY", message);
+            IdlingResourceFactory.decrementCountingIdlingResource();
         };
     }
 

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
@@ -198,4 +200,18 @@ public class Post {
      * @return the id
      */
     public String getId() { return id; }
+
+    public Map<String, Object> getData(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("senderName", senderName);
+        map.put("message", message);
+        map.put("time", time);
+        map.put("sciper", sciper);
+        map.put("color", color);
+        map.put("nbUps", 0);
+        map.put("nbResponses", 0);
+        map.put("upScipers", new ArrayList<>());
+        map.put("downScipers", new ArrayList<>());
+        return map;
+    }
 }

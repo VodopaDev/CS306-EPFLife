@@ -25,8 +25,11 @@ import java.util.Map;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -37,20 +40,9 @@ import ch.epfl.sweng.zuluzulu.Utility.PostColor;
  * This fragment is used to write new posts
  */
 public class WritePostFragment extends SuperFragment {
-
-    private static final String TAG = "WRITE_POST_TAG";
-
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_CHANNEL = "ARG_CHANNEL";
-
-    private static final String CHANNEL_DOCUMENT_NAME = "channels/channel";
-    private static final String POST_COLLECTION_NAME = "posts";
     private static final int POST_MAX_LENGTH = 200;
-
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-    private CollectionReference collectionReference;
-    private DatabaseCollection mockableCollection;
 
     private ConstraintLayout layout;
     private EditText editText;
@@ -97,12 +89,7 @@ public class WritePostFragment extends SuperFragment {
         sendButton = view.findViewById(R.id.write_post_send_button);
 
         layout.setBackgroundColor(Color.parseColor(color.getValue()));
-
         sendButton.setEnabled(false);
-
-        String collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + POST_COLLECTION_NAME;
-        collectionReference = db.collection(collectionPath);
-        mockableCollection = DatabaseFactory.getDependency().collection(collectionPath);
 
         setUpSendButton();
         setUpColorListener();
@@ -115,29 +102,25 @@ public class WritePostFragment extends SuperFragment {
      * Set up an onClick listener on the send button
      */
     private void setUpSendButton() {
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String senderName = anonymous ? "" : user.getFirstNames();
-                String message = editText.getText().toString();
-                Timestamp time = Timestamp.now();
-                String sciper = user.getSciper();
+        sendButton.setOnClickListener(v -> {
+            String senderName = anonymous ? "" : user.getFirstNames();
+            String message = editText.getText().toString();
+            Timestamp time = Timestamp.now();
+            String sciper = user.getSciper();
 
-                Map<String, Object> data = new HashMap();
-                data.put("senderName", senderName);
-                data.put("message", message);
-                data.put("time", time);
-                data.put("sciper", sciper);
-                data.put("color", color.getValue());
-                data.put("nbUps", 0);
-                data.put("nbResponses", 0);
-                data.put("upScipers", new ArrayList<>());
-                data.put("downScipers", new ArrayList<>());
-
-                Utils.addDataToFirebase(data, mockableCollection, TAG);
-
-                mListener.onFragmentInteraction(CommunicationTag.OPEN_POST_FRAGMENT, channel);
-            }
+            Map<String, Object> data = new HashMap();
+            data.put("senderName", senderName);
+            data.put("message", message);
+            data.put("time", time.toDate());
+            data.put("sciper", sciper);
+            data.put("color", color.getValue());
+            data.put("nbUps", 0L);
+            data.put("nbResponses", 0L);
+            data.put("upScipers", new ArrayList<>());
+            data.put("downScipers", new ArrayList<>());
+            Post post = new Post(new FirebaseMapDecorator(data), user.getSciper(), channel.getId());
+            FirebaseProxy.getInstance().addPostInChannel(channel.getId(), post);
+            mListener.onFragmentInteraction(CommunicationTag.OPEN_POST_FRAGMENT, channel);
         });
     }
 
@@ -145,12 +128,9 @@ public class WritePostFragment extends SuperFragment {
      * Set up an onClick listener on the layout to be able to change the color of the post
      */
     private void setUpColorListener() {
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                color = PostColor.getRandomColorButNot(color);
-                layout.setBackgroundColor(Color.parseColor(color.getValue()));
-            }
+        layout.setOnClickListener(v -> {
+            color = PostColor.getRandomColorButNot(color);
+            layout.setBackgroundColor(Color.parseColor(color.getValue()));
         });
     }
 

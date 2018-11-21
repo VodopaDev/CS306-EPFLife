@@ -140,9 +140,9 @@ public class Utility {
         builder.setSemester("BA5");
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
-        builder.setFollowedAssociations(Collections.singletonList(2L));
-        builder.setFollowedEvents(Arrays.asList(1L, 2L,3L));
-        builder.setFollowedChannels(new ArrayList<>());
+        builder.setFollowedAssociations(Collections.singletonList("1"));
+        builder.setFollowedEvents(Arrays.asList("1", "2", "3"));
+        builder.setFollowedChannels(Collections.singletonList("1"));
 
         return builder;
     }
@@ -154,7 +154,7 @@ public class Utility {
      */
     public static Channel defaultChannel() {
         Map<String, Object> data = new HashMap<>();
-        data.put("id", 1L);
+        data.put("id", "1");
         data.put("name", "name");
         data.put("description", "description");
         data.put("restrictions", new HashMap<>());
@@ -165,16 +165,16 @@ public class Utility {
     public static Association defaultAssociation(){
         Map<String, Object> event = new HashMap<>();
         Date far_date = new Date(2018, 11, 28);
-        event.put("id", 3L);
+        event.put("id", "1");
         event.put("start", far_date);
 
         Map<String, Object> map = new HashMap<>();
-        map.put("id", 2L);
+        map.put("id", "1");
         map.put("name", "Agepoly");
         map.put("short_desc", "Association Générale des Etudiants de l'EPFL");
         map.put("long_desc", "Association Générale des Etudiants de l'EPFL");
         map.put("icon_uri", "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso1_icon.png?alt=media&token=391a7bfc-1597-4935-9afe-e08ecd734e03");
-        map.put("channel_id", 5L);
+        map.put("channel_id", "1");
         map.put("events", Collections.singletonList(event));
 
         return new Association(new FirebaseMapDecorator(map));

@@ -33,6 +33,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 
 public class AddEventFragment extends SuperFragment {
     private static final int[] INDICES = {0, 2, 4, 6,7,9,11};
@@ -184,41 +185,19 @@ public class AddEventFragment extends SuperFragment {
                     return;
                 }
 
-                IdlingResourceFactory.incrementCountingIdlingResource();
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("events_info").orderBy("name").get()
-                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots){
-                                List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                                numberOfEvents = snap_list.size();
-                                Map<String, Object> docData = new HashMap<>();
-                                docData.put("icon_uri", "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg");
-                                docData.put("id", numberOfEvents + 1);
-                                docData.put("likes", 0);
-                                docData.put("long_desc", desc);
-                                docData.put("name", name);
-                                docData.put("organizer", org);
-                                docData.put("place", pla);
-                                docData.put("short_desc", tit);
-                                docData.put("start_date", date);
-                                DatabaseFactory.getDependency().collection("events_info").document("event"+Integer.toString(numberOfEvents+1)).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_FRAGMENT, null);
-                                    }
-                                });
+                Map<String, Object> docData = new HashMap<>();
+                docData.put("icon_uri", "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg");
+                docData.put("id", "no_id");
+                docData.put("channel_id", "no_id");
+                docData.put("likes", 0L);
+                docData.put("long_description", desc);
+                docData.put("name", name);
+                docData.put("organizer", org);
+                docData.put("place", pla);
+                docData.put("short_description", tit);
+                docData.put("start_date", date);
 
-                                IdlingResourceFactory.decrementCountingIdlingResource();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                error_message(e);
-                                IdlingResourceFactory.decrementCountingIdlingResource();
-                            }
-                        });
+                FirebaseProxy.getInstance().addEvent(new Event(new FirebaseMapDecorator(docData)));
             }
         });
     }
@@ -368,17 +347,12 @@ public class AddEventFragment extends SuperFragment {
      * on the database.
      */
     private void fillAssociationNames() {
-        FirebaseProxy.getInstance().getAllAssociations(new OnResult<List<Association>>() {
-            @Override
-            public void apply(List<Association> result) {
-                for (Association association : result)
-                    association_names.add(association.getName());
+        FirebaseProxy.getInstance().getAllAssociations(result -> {
+            for (Association association : result) {
+                association_names.add(association.getName());
+                Log.d("EVENT_CREATOR", "added association " + association.getName());
             }
+            setSpinner(spinner, association_names);
         });
-    }
-
-    private void error_message(Exception e) {
-        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
-        Log.e("ASSO_LIST", "Error fetching association data\n" + e.getMessage());
     }
 }
