@@ -62,7 +62,7 @@ public class EventFragment extends SuperFragment {
     private ListView listview_event;
     private Button button_event_all;
     private Button button_event_fav;
-    private Button button_event_add;
+    private ImageButton button_event_add;
 
     private CheckBox checkbox_event_sort_name;
     private CheckBox checkbox_event_sort_date;
@@ -222,7 +222,7 @@ public class EventFragment extends SuperFragment {
                         if (fmap.hasFields(Event.FIELDS)) {
                             Event event = new Event(fmap);
                             event_all.add(event);
-                            if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event))
+                            if (user.isConnected() && ((AuthenticatedUser) user).isFavEvent(event))
                                 event_fav.add(event);
                             event_adapter.notifyDataSetChanged();
                         }
