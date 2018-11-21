@@ -62,16 +62,9 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
         }
     }
 
-    @Test
-    public void authenticatedAlreadyHasForumEpflInFavorite() {
-        waitABit();
-        onView(withText("Favorites")).perform(ViewActions.click());
-        onView(withText("ForumEPFL")).check(matches(isDisplayed()));
-        onView(withText("ForumEPFL")).perform(ViewActions.click());
-    }
 
     @Test
-    public void authenticatedCanOpenAnEvent() throws InterruptedException {
+    public void authenticatedCanOpenAnEvent(){
         waitABit();
         onView(withText("ForumEPFL")).perform(ViewActions.click());
         onView(withId(R.id.event_detail_fav))
@@ -87,12 +80,20 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
         onView(withContentDescription(NOT_FAV_CONTENT))
                 .check(matches(isDisplayed()));
     }*/
-    @Test
+   @Test
     public void authenticatedCanOpenTheChatOfAnEvent() {
         waitABit();
-        onView(withText("OSUL")).perform(ViewActions.click());
-        onView(withId(R.id.event_detail_chat)).perform(ViewActions.click());
+        onView(withText("Hacking Contest!")).perform(ViewActions.click());
+        onView(withId(R.id.event_detail_chatRoom)).perform(ViewActions.click());
         onView(withId(R.id.chat_send_button)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void authenticatedCanOpenTheAssociationOfAnEvent() {
+        waitABit();
+        onView(withText("Hacking Contest!")).perform(ViewActions.click());
+        onView(withId(R.id.event_detail_but_assos)).perform(ViewActions.click());
+        onView(withText("LauzHack")).check(matches(isDisplayed()));
     }
 
 }

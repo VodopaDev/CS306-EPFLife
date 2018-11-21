@@ -36,6 +36,7 @@ public class AddEventFragment extends SuperFragment {
     private static final int[] INDICES = {0, 2, 4, 6,7,9,11};
     //for association name
     private List<String> association_names = new ArrayList<>();
+    private List<Integer> association_ids = new ArrayList<>();
     private Spinner spinner;
     private int numberOfEvents;
 
@@ -211,7 +212,7 @@ public class AddEventFragment extends SuperFragment {
                                 Map<String, Object> docData = new HashMap<>();
                                 docData.put("icon_uri", "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg");
                                 docData.put("id", numberOfEvents + 1);
-                                docData.put("assos_id", association_names.indexOf(name));
+                                docData.put("assos_id", association_ids.get(association_names.indexOf(name)));
                                 docData.put("channel_id", id_channel);
                                 docData.put("likes", 0);
                                 docData.put("long_desc", desc);
@@ -396,6 +397,7 @@ public class AddEventFragment extends SuperFragment {
                             FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
                             if (data.hasFields(Association.FIELDS)) {
                                 association_names.add((String) data.get("name"));
+                                association_ids.add(data.getInteger("id"));
                             }
                         }
                         setSpinner(spinner, association_names);
