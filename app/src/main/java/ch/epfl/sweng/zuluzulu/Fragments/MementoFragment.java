@@ -132,16 +132,13 @@ public class MementoFragment extends SuperFragment {
     }
 
     private Map<String,Object> createHashmap(Event event) {
-        String pattern = "yyyy-MM-dd HH:mm:ss";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        Date start_date = null;
-        Date end_date = null;
+        Date start_date, end_date = null;
         try {
             start_date  = simpleDateFormat.parse(event.getStartDateString());
             end_date    = simpleDateFormat.parse(event.getEndDateString());
-        } catch (ParseException e) {
-            // TODO exit ?
+        } catch (ParseException e) {             // TODO exit ?
             start_date  = new Date();
             end_date    = new Date();
         }
