@@ -165,16 +165,10 @@ public class MementoFragment extends SuperFragment {
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject jsonobject = jsonarray.getJSONObject(i);
 
-                String start_time = jsonobject.getString("event_start_time");
-                start_time = start_time.equals("null") ? "" : start_time;
-
-                String end_time = jsonobject.getString("event_end_time");
-                end_time = end_time.equals("null") ? "" : end_time;
-
                 Event event = new Event(i, jsonobject.getString("title"),
                         jsonobject.getString("description"), jsonobject.getString("description"),
-                        jsonobject.getString("event_start_date") + " " + start_time,
-                        jsonobject.getString("event_end_date") + " " + end_time,0,
+                        jsonobject.getString("event_start_date") + " " + jsonobject.getString("event_start_time"),
+                        jsonobject.getString("event_end_date") + " " + jsonobject.getString("event_end_time"),0,
                         jsonobject.getString("event_organizer"),
                         jsonobject.getString("event_place_and_room"),
                         jsonobject.getString("event_visual_absolute_url"), jsonobject.getString("event_visual_absolute_url"),

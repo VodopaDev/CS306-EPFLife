@@ -279,14 +279,10 @@ public class Event implements Serializable {
         }
 
         String date = end_date_string;
-        if(date.length() == "2018-01-01 ".length()){
-            date = date + "00:00:00";
+        if(date.length() == "2018-01-01 null".length()){
+            date = date.substring(0, 11) + "23:59:59";
         }
-        if(date.length() != "2018-01-01 23:59:59".length()){
-            System.out.println(date + "--" + end_date_string);
-            throw new IllegalArgumentException();
-        }
-
+        checkDateLength(date);
         this.setEndDate(createDate(date));
     }
 
@@ -296,15 +292,18 @@ public class Event implements Serializable {
         }
 
         String date = start_date_string;
-        if(date.length() == "2018-01-01 ".length()){
-            date = date + "00:00:00";
+        if(date.length() == "2018-01-01 null".length()){
+            date = date.substring(0, 11) + "00:00:00";
         }
-        if(date.length() != "2018-01-01 00:00:00".length()){
-            System.out.println(date + "--" + start_date_string);
-            throw new IllegalArgumentException();
-        }
+        checkDateLength(date);
 
         this.setStartDate(createDate(date));
+    }
+
+    private void checkDateLength(String date) {
+        if(date.length() != "2018-01-01 00:00:00".length()){
+            throw new IllegalArgumentException();
+        }
     }
 
     private Date createDate(String date){
