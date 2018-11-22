@@ -66,7 +66,7 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
     @Test
     public void authenticatedCanOpenAnEvent(){
         waitABit();
-        onView(withText("ForumEPFL")).perform(ViewActions.click());
+        onView(withText("Royko")).perform(ViewActions.click());
         onView(withId(R.id.event_detail_fav))
                 .check(matches(isDisplayed()));
     }
@@ -83,7 +83,7 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
    @Test
     public void authenticatedCanOpenTheChatOfAnEvent() {
         waitABit();
-        onView(withText("Hacking Contest!")).perform(ViewActions.click());
+        onView(withText("Royko")).perform(ViewActions.click());
         onView(withId(R.id.event_detail_chatRoom)).perform(ViewActions.click());
         onView(withId(R.id.chat_send_button)).check(matches(isDisplayed()));
     }
@@ -91,7 +91,7 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
     @Test
     public void authenticatedCanOpenTheAssociationOfAnEvent() {
         waitABit();
-        onView(withText("Hacking Contest!")).perform(ViewActions.click());
+        onView(withText("Royko")).perform(ViewActions.click());
         onView(withId(R.id.event_detail_but_assos)).perform(ViewActions.click());
         Utility.checkFragmentIsOpen(R.id.association_detail_fragment);
     }
