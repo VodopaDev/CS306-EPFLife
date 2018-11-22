@@ -92,7 +92,7 @@ public class EventDate {
 
         String date = start_date_string;
 
-        if (start_time_string.length() == "hh:mm:ss".length()) {
+        if ("hh:mm:ss".length() == start_time_string.length()) {
             date = date + " " + start_time_string;
         } else {
             date = date + " 00:00:01";
