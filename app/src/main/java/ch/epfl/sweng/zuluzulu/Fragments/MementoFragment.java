@@ -15,10 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +45,6 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
 public class MementoFragment extends SuperFragment {
     final static public String EPFL_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/epfl/events/fr/?format=json";
     final static public String ASSOCIATION_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/associations/events/fr/?format=json";
-    final static public String ENAC_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/enac/events/fr/?format=json";
     private static final String TAG = "MEMENTO_FRAGMENT";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
     private EventArrayAdapter eventAdapter;
@@ -152,6 +148,9 @@ public class MementoFragment extends SuperFragment {
         docData.put("speaker", event.getSpeaker());
         docData.put("start_date", event.getStartDate());
         docData.put("end_date", event.getEndDate());
+        docData.put("contact", event.getContact());
+        docData.put("website", event.getWebsite());
+        docData.put("url_place_and_room", event.getUrlPlaceAndRoom());
 
         return docData;
     }
