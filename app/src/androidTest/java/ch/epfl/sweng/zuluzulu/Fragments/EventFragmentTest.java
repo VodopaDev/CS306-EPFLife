@@ -41,19 +41,19 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
     }
 
     @Test
-    public void thereAreTwoButtons() throws InterruptedException {
+    public void thereAreTwoButtons() {
         onView(withId(R.id.event_fragment_fav_button)).check(matches(isDisplayed()));
         onView(withId(R.id.event_fragment_all_button)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void clickOnFavThenOnAll() throws InterruptedException {
+    public void clickOnFavThenOnAll() {
         onView(withId(R.id.event_fragment_fav_button)).perform(ViewActions.click());
         onView(withId(R.id.event_fragment_all_button)).perform(ViewActions.click());
     }
 
     @Test
-    public void thereAreThreeSortCheckbox() throws InterruptedException {
+    public void thereAreThreeSortCheckbox() {
         onView(withId(R.id.event_fragment_checkBox_sort_name)).check(matches(isDisplayed()));
         onView(withId(R.id.event_fragment_checkBox_sort_date)).check(matches(isDisplayed()));
         onView(withId(R.id.event_fragment_checkbox_sort_like)).check(matches(isDisplayed()));
@@ -68,18 +68,19 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
     @Test
     public void thereIsEventInTheListView() {
         onView(withId(R.id.event_fragment_listview)).check(matches(hasMinimumChildCount(4)));
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasDescendant(withText("ForumEPFL"))));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasDescendant(withText("ForumEPFL"))
+        ));
     }
 
     @Test
-    public void sortEventWithTheThreeSimpleSort() throws InterruptedException {
+    public void sortEventWithTheThreeSimpleSort()  {
         onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
         onView(withId(R.id.event_fragment_checkbox_sort_like)).perform(ViewActions.click());
         onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
     }
 
     @Test
-    public void sortWithKeywordTest() throws InterruptedException {
+    public void sortWithKeywordTest() {
         onView(withId(R.id.event_fragment_search_bar)).perform(typeText("forum"));
         onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).onChildView(withId(R.id.card_event_name)).check(matches(withText("ForumEPFL")));
         onView(withId(R.id.event_fragment_search_bar)).perform(clearText());

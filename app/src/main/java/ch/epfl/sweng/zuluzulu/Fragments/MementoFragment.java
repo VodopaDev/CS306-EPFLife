@@ -118,11 +118,12 @@ public class MementoFragment extends SuperFragment {
     }
 
     private void addDatabase(){
+        int i = 0;
         for (Event event : events
              ) {
             //the map for the event
             Map<String, Object> docData = createHashmap(event);
-            if (docData != null) {
+            if (docData != null && i++ <5) {
                 DatabaseFactory.getDependency().collection("events_info").document("event" + Integer.toString(event.getId())).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
