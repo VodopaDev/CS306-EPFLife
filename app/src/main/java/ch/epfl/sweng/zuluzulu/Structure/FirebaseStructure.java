@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 
@@ -45,4 +46,11 @@ public abstract class FirebaseStructure implements Serializable {
     public static List<String> requiredFields(){
         return Collections.singletonList("id");
     }
+
+    /**
+     * Return a map of all properties of the class.
+     * Usable to put data on the FireStore.
+     * @return a map of all fields
+     */
+    public abstract Map<String, Object> getData();
 }

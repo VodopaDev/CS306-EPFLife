@@ -132,13 +132,11 @@ public class FirebaseProxy {
 
     public void addAssociation(Association association){
         IdlingResourceFactory.incrementCountingIdlingResource();
-        DocumentReference assoRef = assoCollection.document();
         DocumentReference channelRef = channelCollection.document();
-        association.setId(assoRef.getId());
         association.setChannelId(channelRef.getId());
 
         createChannel(association);
-        assoRef.set(association.getData());
+        assoCollection.document(association.getId()).set(association.getData());
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
@@ -252,7 +250,7 @@ public class FirebaseProxy {
             List<Channel> resultList = new ArrayList<>();
             for(DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){
                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
-                if(fmap.hasFields(Channel.FIELDS))
+                if(fmap.hasFields(Channel.requiredFields()))
                     resultList.add(new Channel(fmap));
             }
             onResult.apply(resultList);
@@ -268,7 +266,7 @@ public class FirebaseProxy {
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
             FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-            if(fmap.hasFields(Channel.FIELDS)) {
+            if(fmap.hasFields(Channel.requiredFields())) {
                 onResult.apply(new Channel(fmap));
             }
             IdlingResourceFactory.decrementCountingIdlingResource();
@@ -287,7 +285,7 @@ public class FirebaseProxy {
         for(String id: ids){
             channelCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                if(fmap.hasFields(Channel.FIELDS))
+                if(fmap.hasFields(Channel.requiredFields()))
                     result.add(new Channel(fmap));
                 if(counter.increment()) {
                     onResult.apply(result);
@@ -302,21 +300,21 @@ public class FirebaseProxy {
         }
     }
 
-    public void getMessagesFromChannelWithUser(String id, String userId, OnResult<List<ChatMessage>> onResult){
+    public void getMessagesFromChannel(String id, OnResult<List<ChatMessage>> onResult){
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(id).collection("messages").get().addOnSuccessListener(queryDocumentSnapshots -> {
             List<ChatMessage> result = new ArrayList<>();
             for(DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){
                 FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
-                if(data.hasFields(ChatMessage.FIELDS))
-                    result.add(new ChatMessage(data, userId));
+                if(data.hasFields(ChatMessage.requiredFields()))
+                    result.add(new ChatMessage(data));
             }
             onResult.apply(result);
             IdlingResourceFactory.decrementCountingIdlingResource();
         });
     }
 
-    public void onMessageAddedInChannel(String id, String userId, OnResult<ChatMessage> onResult) {
+    public void onMessageAddedInChannel(String id, OnResult<ChatMessage> onResult) {
         channelCollection.document(id).collection("messages").addSnapshotListener((queryDocumentSnapshots, e) -> {
             if (e != null)
                 System.err.println("Listen failed: " + e);
@@ -326,8 +324,8 @@ public class FirebaseProxy {
                     switch (dc.getType()) {
                         case ADDED:
                             FirebaseMapDecorator data = new FirebaseMapDecorator(dc.getDocument());
-                            if (data.hasFields(ChatMessage.FIELDS))
-                                onResult.apply(new ChatMessage(data, userId));
+                            if (data.hasFields(ChatMessage.requiredFields()))
+                                onResult.apply(new ChatMessage(data));
                             break;
                         default:
                             break;
@@ -349,7 +347,7 @@ public class FirebaseProxy {
                     switch (dc.getType()) {
                         case ADDED:
                             FirebaseMapDecorator data = new FirebaseMapDecorator(dc.getDocument());
-                            if (data.hasFields(ChatMessage.FIELDS))
+                            if (data.hasFields(ChatMessage.requiredFields()))
                                 onResult.apply(new Post(data, userId, id));
                             break;
                         default:
@@ -364,8 +362,19 @@ public class FirebaseProxy {
 
     public void addPostInChannel(String channelId, Post post){
         IdlingResourceFactory.incrementCountingIdlingResource();
-        DocumentReference postRef = channelCollection.document(channelId).collection("posts").document();
-        postRef.set(post.getData());
+        channelCollection.document(channelId)
+                .collection("posts")
+                .document(post.getId())
+                .set(post.getData());
+        IdlingResourceFactory.decrementCountingIdlingResource();
+    }
+
+    public void addMessageInChannel(String channelId, ChatMessage message){
+        IdlingResourceFactory.incrementCountingIdlingResource();
+        channelCollection.document(channelId)
+                .collection("messages")
+                .document(message.getId())
+                .set(message.getData());
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
@@ -388,6 +397,28 @@ public class FirebaseProxy {
             IdlingResourceFactory.decrementCountingIdlingResource();
         });
 
+    }
+
+    //----- Generating new id to store -----\\
+
+    public String getNewChannelId(){
+        return channelCollection.document().getId();
+    }
+
+    public String getNewEventId(){
+        return eventCollection.document().getId();
+    }
+
+    public String getNewAssociationId(){
+        return assoCollection.document().getId();
+    }
+
+    public String getNewPostId(String channelId){
+        return channelCollection.document(channelId).collection("posts").document().getId();
+    }
+
+    public String getNewMessageId(String channelId){
+        return channelCollection.document(channelId).collection("messages").document().getId();
     }
 
     /**

@@ -46,7 +46,7 @@ public class ChannelArrayAdapter extends ArrayAdapter<Channel> {
         name.setText(currentChannel.getName());
 
         TextView description = view.findViewById(R.id.channel_description);
-        description.setText(currentChannel.getDescription());
+        description.setText(currentChannel.getShortDescription());
 
         ImageView icon = view.findViewById(R.id.channel_icon);
         ImageLoader.loadUriIntoImageView(icon, currentChannel.getIconUri(), getContext());

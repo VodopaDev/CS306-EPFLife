@@ -140,6 +140,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
         }
     }
 
+    @Override
     public Map<String,Object> getData(){
         Map<String, Object> map = new HashMap<>();
         map.put("id", getId());

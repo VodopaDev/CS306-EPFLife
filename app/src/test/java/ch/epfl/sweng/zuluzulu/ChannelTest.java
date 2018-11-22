@@ -101,15 +101,15 @@ public class ChannelTest {
     public void testGettersAndSetters() {
         assertEquals(id1.intValue(), channelGlobal.getId());
         assertEquals(name1, channelGlobal.getName());
-        assertEquals(description1, channelGlobal.getDescription());
+        assertEquals(description1, channelGlobal.getShortDescription());
 
         channelGlobal.setId(id2.intValue());
         channelGlobal.setName(name2);
-        channelGlobal.setDescription(description2);
+        channelGlobal.setShortDescription(description2);
 
         assertEquals(id2.intValue(), channelGlobal.getId());
         assertEquals(name2, channelGlobal.getName());
-        assertEquals(description2, channelGlobal.getDescription());
+        assertEquals(description2, channelGlobal.getShortDescription());
     }
 
     @Test

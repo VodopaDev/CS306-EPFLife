@@ -4,8 +4,8 @@ import android.net.Uri;
 
 import com.google.firebase.firestore.GeoPoint;
 
-import java.io.Serializable;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,14 +16,11 @@ import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 /**
  * Class that represents a channel in a view
  */
-public class Channel implements Serializable {
-
-    public static final List<String> FIELDS = Arrays.asList("id", "name", "description", "restrictions");
+public class Channel extends FirebaseStructure {
     private static final double MAX_DISTANCE_TO_ACCESS_CHANNEL = 50;
     private static final double MAX_DISTANCE_TO_SEE_CHANNEL = 500;
-    private String id;
     private String name;
-    private String description;
+    private String shortDescription;
     private Map<String, Object> restrictions;
     private String iconUri;
 
@@ -31,12 +28,12 @@ public class Channel implements Serializable {
     private double distance;
 
     public Channel(FirebaseMapDecorator data) {
-        if (!data.hasFields(FIELDS))
+        super(data);
+        if (!data.hasFields(requiredFields()))
             throw new IllegalArgumentException();
 
-        this.id = data.getString("id");
         this.name = data.getString("name");
-        this.description = data.getString("description");
+        this.shortDescription = data.getString("short_description");
         this.restrictions = data.getMap("restrictions");
         this.isAccessible = true;
         this.distance = 0;
@@ -45,20 +42,15 @@ public class Channel implements Serializable {
         this.iconUri = data.getString("icon_uri");
     }
 
-    /**
-     * Getter for the id
-     *
-     * @return the id
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * Setter for the id
-     */
-    public void setId(String id) {
-        this.id = id;
+    @Override
+    public Map<String, Object> getData() {
+        Map<String, Object> map = new HashMap();
+        map.put("id", getId());
+        map.put("name", name);
+        map.put("restrictions", restrictions);
+        map.put("icon_uri", getIconUri().toString());
+        map.put("short_description", shortDescription);
+        return map;
     }
 
     /**
@@ -78,19 +70,19 @@ public class Channel implements Serializable {
     }
 
     /**
-     * Getter for the description
+     * Getter for the shortDescription
      *
-     * @return the description
+     * @return the shortDescription
      */
-    public String getDescription() {
-        return description;
+    public String getShortDescription() {
+        return shortDescription;
     }
 
     /**
-     * Setter for the description
+     * Setter for the shortDescription
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
     }
 
     /**
@@ -153,5 +145,9 @@ public class Channel implements Serializable {
         }
 
         return true;
+    }
+
+    public static List<String> requiredFields(){
+        return Arrays.asList("id", "name", "short_description", "restrictions");
     }
 }

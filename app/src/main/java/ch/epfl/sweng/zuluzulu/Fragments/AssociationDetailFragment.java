@@ -12,22 +12,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
-import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
-
-import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT;
 import static ch.epfl.sweng.zuluzulu.Utility.ImageLoader.loadUriIntoImageView;
@@ -199,7 +192,7 @@ public class AssociationDetailFragment extends SuperFragment {
             FirebaseProxy.getInstance().getChannelFromId(asso.getChannelId(), result -> {
                 main_chat = result;
                 main_chat_name.setText(main_chat.getName());
-                main_chat_desc.setText(main_chat.getDescription());
+                main_chat_desc.setText(main_chat.getShortDescription());
             });
     }
 

@@ -6,42 +6,26 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
 import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageArrayAdapter;
-import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
-import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_POST_FRAGMENT;
@@ -117,8 +101,8 @@ public class ChatFragment extends SuperChatPostsFragment {
             data.put("message", message);
             data.put("time", time);
             data.put("sciper", sciper);
-
-            Utils.addDataToFirebase(data, mockableCollection, TAG);
+            ChatMessage chatMessage = new ChatMessage(new FirebaseMapDecorator(data));
+            FirebaseProxy.getInstance().addMessageInChannel(channel.getId(), chatMessage);
         });
     }
 
@@ -151,7 +135,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Refresh the chat by reading all the messages in the database
      */
     private void loadInitialMessages() {
-        FirebaseProxy.getInstance().getMessagesFromChannelWithUser(channel.getId(), user.getSciper(), result -> {
+        FirebaseProxy.getInstance().getMessagesFromChannel(channel.getId(), result -> {
             messages = result;
             Collections.sort(messages, (o1, o2) -> {
                 if (o1.getTime().before(o2.getTime()))
@@ -165,7 +149,7 @@ public class ChatFragment extends SuperChatPostsFragment {
     }
 
     private void setUpDataOnChangeListener() {
-        FirebaseProxy.getInstance().onMessageAddedInChannel(channel.getId(), user.getSciper(), result -> {
+        FirebaseProxy.getInstance().onMessageAddedInChannel(channel.getId(), result -> {
             messages.add(result);
         });
         Collections.sort(messages, (o1, o2) -> {

@@ -2,30 +2,27 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 
 /**
  * Class that represents a chat message in a view
  */
-public class ChatMessage {
-
-    public static final List<String> FIELDS = Arrays.asList("senderName", "sciper", "message", "time");
+public class ChatMessage extends FirebaseStructure{
     private String senderName;
     private String sciper;
     private String message;
     private Date time;
-    private boolean ownMessage;
-    private boolean anonymous;
 
-    public ChatMessage(FirebaseMapDecorator data, String userSciper) {
-        senderName = data.getString("senderName");
-        sciper = data.getString("sciper");
+    public ChatMessage(FirebaseMapDecorator data) {
+        super(data);
+        senderName = data.getString("sender_name");
+        sciper = data.getString("sender_sciper");
         message = data.getString("message");
         time = data.getDate("time");
-        ownMessage = sciper.equals(userSciper);
-        anonymous = senderName.isEmpty();
     }
 
     /**
@@ -81,8 +78,8 @@ public class ChatMessage {
      *
      * @return whether the message is viewed by his owner or not
      */
-    public boolean isOwnMessage() {
-        return ownMessage;
+    public boolean isOwnMessage(String sciper) {
+        return sciper.equals(this.sciper);
     }
 
     /**
@@ -107,6 +104,21 @@ public class ChatMessage {
      * @return Whether the message is anonymous or not
      */
     public boolean isAnonymous() {
-        return anonymous;
+        return senderName.isEmpty();
+    }
+
+    @Override
+    public Map<String, Object> getData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", getId());
+        map.put("sender_sciper", sciper);
+        map.put("sender_name", senderName);
+        map.put("message", message);
+        map.put("time", time);
+        return map;
+    }
+
+    public static List<String> requiredFields(){
+        return Arrays.asList("sender_name", "sender_sciper", "message", "time", "id");
     }
 }
