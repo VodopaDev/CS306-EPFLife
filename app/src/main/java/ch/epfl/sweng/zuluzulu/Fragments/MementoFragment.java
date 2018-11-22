@@ -30,6 +30,7 @@ import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -167,8 +168,8 @@ public class MementoFragment extends SuperFragment {
 
                 Event event = new Event(i, jsonobject.getString("title"),
                         jsonobject.getString("description"), jsonobject.getString("description"),
-                        jsonobject.getString("event_start_date") + " " + jsonobject.getString("event_start_time"),
-                        jsonobject.getString("event_end_date") + " " + jsonobject.getString("event_end_time"),0,
+                        new EventDate(jsonobject.getString("event_start_date"), jsonobject.getString("event_start_time"),
+                                jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")),0,
                         jsonobject.getString("event_organizer"),
                         jsonobject.getString("event_place_and_room"),
                         jsonobject.getString("event_visual_absolute_url"), jsonobject.getString("event_visual_absolute_url"),

@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import android.net.Uri;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -16,8 +17,7 @@ import ch.epfl.sweng.zuluzulu.R;
 
 // TODO: Add admin access, ending date, linked-chat id, linked-association id, position
 public class Event implements Serializable {
-    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "start_date", "likes");
-    private static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "start_date", "end_date", "likes");
 
     private int id;
     private String name;
@@ -25,8 +25,6 @@ public class Event implements Serializable {
     private String longDesc;
     private int channel;
 
-    private Date startDate;
-    private Date endDate;
     private int likes;
     private String organizer;
     private String place;
@@ -40,18 +38,19 @@ public class Event implements Serializable {
     private String category;
     private String speaker;
 
+    private EventDate date;
+
     private int channel_id;
     private int assos_id;
 
-    public Event(int id, String name, String shortDesc, String longDesc, String start_date_string, String end_date_string,
+    public Event(int id, String name, String shortDesc, String longDesc, EventDate date,
                  int likes, String organizer, String place, String bannerUri, String iconUri,
                  String url_place_and_room, String website, String contact, String category, String speaker) {
         this.id = id;
         setName(name);
         this.shortDesc = shortDesc;
         this.longDesc = longDesc;
-        setStartDateString(start_date_string);
-        setEndDateString(end_date_string);
+        setDate(date);
         this.likes = likes;
         this.organizer = organizer;
         this.place = place;
@@ -95,7 +94,7 @@ public class Event implements Serializable {
         uri = banner_str == null ? Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) : Uri.parse(banner_str);
         bannerUri = uri == null ? null : uri.toString();
 
-        startDate = data.getDate("start_date");
+        setDate(new EventDate(data.getDate("start_date"), data.getDate("end_date")));
 
         likes = data.getInteger("likes");
 
@@ -159,31 +158,6 @@ public class Event implements Serializable {
 
     public String getLongDesc() {
         return longDesc;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        assert(startDate != null);
-        this.startDate = startDate;
-    }
-
-    public String getStartDateString() {
-        return DateToString(startDate);
-    }
-
-    public void setStartDateString(String start_date_string) {
-        assert (start_date_string != null);
-
-        String date = start_date_string;
-        if ("2018-01-01 null".length() == date.length()) {
-            date = date.substring(0, 11) + "00:00:00";
-        }
-        checkDateLength(date);
-
-        this.setStartDate(createDate(date));
     }
 
     public String getBannerUri() {
@@ -272,52 +246,25 @@ public class Event implements Serializable {
         this.speaker = speaker;
     }
 
-    public String getEndDateString() {
-        return DateToString(endDate);
+
+    private void setDate(EventDate date) {
+        assert(date != null);
+        this.date = date;
     }
 
-    public void setEndDateString(String end_date_string) {
-        assert (end_date_string != null);
-
-        String date = end_date_string;
-        if (date.length() == "2018-01-01 null".length()) {
-            date = date.substring(0, 11) + "23:59:59";
-        }
-        checkDateLength(date);
-        this.setEndDate(createDate(date));
-    }
-
-    private void checkDateLength(String date) {
-        if (date.length() != "2018-01-01 00:00:00".length()) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    private Date createDate(String date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_PATTERN);
-
-        Date start_date = null;
-        try {
-            start_date = simpleDateFormat.parse(date);
-        } catch (ParseException e) {
-            throw new IllegalArgumentException();
-        }
-        return start_date;
-    }
-
-    private String DateToString(Date date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_PATTERN);
-        return simpleDateFormat.format(date);
+    public Date getStartDate() {
+        return date.getStartDate();
     }
 
     public Date getEndDate() {
-        return endDate;
+        return date.getEndDate();
     }
 
-    public void setEndDate(Date endDate) {
-        if (endDate == null) {
-            throw new IllegalArgumentException();
-        }
-        this.endDate = endDate;
+    public String getStartDateString() {
+        return date.getStartDateString();
+    }
+
+    public String getEndDateString() {
+        return date.getEndDateString();
     }
 }
