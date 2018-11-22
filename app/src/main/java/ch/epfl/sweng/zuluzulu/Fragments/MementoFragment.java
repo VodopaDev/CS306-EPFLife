@@ -121,14 +121,15 @@ public class MementoFragment extends SuperFragment {
              ) {
             //the map for the event
             Map<String, Object> docData = createHashmap(event);
-
-            DatabaseFactory.getDependency().collection("events_info").document("event" + Integer.toString(event.getId())).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Snackbar.make(getView(), event.getId() + " event added", Snackbar.LENGTH_LONG).show();
-                }
-            });
+            if (docData != null) {
+                DatabaseFactory.getDependency().collection("events_info").document("event" + Integer.toString(event.getId())).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Snackbar.make(getView(), event.getId() + " event added", Snackbar.LENGTH_LONG).show();
+                    }
+                });
             }
+        }
     }
 
     private Map<String,Object> createHashmap(Event event) {
@@ -138,9 +139,8 @@ public class MementoFragment extends SuperFragment {
         try {
             start_date  = simpleDateFormat.parse(event.getStartDateString());
             end_date    = simpleDateFormat.parse(event.getEndDateString());
-        } catch (ParseException e) {             // TODO exit ?
-            start_date  = new Date();
-            end_date    = new Date();
+        } catch (ParseException e) {             // TODO do this inside event
+            return null;
         }
 
         Map<String, Object> docData = new HashMap<>();
