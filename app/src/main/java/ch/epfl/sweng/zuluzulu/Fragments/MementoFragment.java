@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,19 +9,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -36,7 +46,9 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
  * create an instance of this fragment.
  */
 public class MementoFragment extends SuperFragment {
-    final static public String MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/associations/events/fr/?format=json";
+    final static public String EPFL_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/epfl/events/fr/?format=json";
+    final static public String ASSOCIATION_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/associations/events/fr/?format=json";
+    final static public String ENAC_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/enac/events/fr/?format=json";
     private static final String TAG = "MEMENTO_FRAGMENT";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
     private EventArrayAdapter eventAdapter;
@@ -83,7 +95,7 @@ public class MementoFragment extends SuperFragment {
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Memento loader");
         UrlHandler urlHandler = new UrlHandler(this::handleMemento, new MementoParser());
-        urlHandler.execute(MEMENTO_URL);
+        urlHandler.execute(EPFL_MEMENTO_URL, ASSOCIATION_MEMENTO_URL);
 
         // Send increment to wait async execution in test
         IdlingResourceFactory.incrementCountingIdlingResource();
@@ -101,7 +113,47 @@ public class MementoFragment extends SuperFragment {
             addEvent(datas);
         }
 
+        addDatabase();
         IdlingResourceFactory.decrementCountingIdlingResource();
+    }
+
+    private void addDatabase(){
+        int i = 0;
+        for (Event event : events
+             ) {
+            //the map for the event
+            Map<String, Object> docData = createHashmap(event);
+            if (docData != null && i++ <5) {
+                DatabaseFactory.getDependency().collection("events_info").document("event" + Integer.toString(event.getId())).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Snackbar.make(getView(), event.getId() + " event added", Snackbar.LENGTH_LONG).show();
+                    }
+                });
+            }
+        }
+    }
+
+    private Map<String,Object> createHashmap(Event event) {
+
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("icon_uri", event.getIconUri());
+        docData.put("banner_uri", event.getIconUri());
+        docData.put("id", event.getId());
+        docData.put("assos_id", 1);
+        docData.put("channel_id", 1);
+        docData.put("likes", event.getLikes());
+        docData.put("long_desc", event.getLongDesc());
+        docData.put("name", event.getName());
+        docData.put("organizer", event.getOrganizer());
+        docData.put("place", event.getPlace());
+        docData.put("short_desc", event.getShortDesc());
+        docData.put("category", event.getCategory());
+        docData.put("speaker", event.getSpeaker());
+        docData.put("start_date", event.getStartDate());
+        docData.put("end_date", event.getEndDate());
+
+        return docData;
     }
 
     private void addEvent(String datas) {
@@ -114,18 +166,16 @@ public class MementoFragment extends SuperFragment {
             jsonarray = new JSONArray(datas);
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject jsonobject = jsonarray.getJSONObject(i);
-               /* System.out.println("end_date_string => " + jsonobject.getString("event_end_date"));
-                System.out.println("start_time_string => " + jsonobject.getString("event_start_time"));
-                System.out.println("end_time_string => " + jsonobject.getString("event_end_time"));
-               */ // nom de l'association qui organise !
-                Event event = new Event(i,
-                        jsonobject.getString("title"),
+
+                Event event = new Event(i, jsonobject.getString("title"),
                         jsonobject.getString("description"), jsonobject.getString("description"),
-                        jsonobject.getString("event_start_date"),
-                        0,
+                        new EventDate(jsonobject.getString("event_start_date"), jsonobject.getString("event_start_time"),
+                                jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")),0,
                         jsonobject.getString("event_organizer"),
                         jsonobject.getString("event_place_and_room"),
-                        jsonobject.getString("event_visual_absolute_url"), jsonobject.getString("event_visual_absolute_url"));
+                        jsonobject.getString("event_visual_absolute_url"), jsonobject.getString("event_visual_absolute_url"),
+                        jsonobject.getString("event_url_place_and_room"), jsonobject.getString("event_url_link"),
+                        jsonobject.getString("event_contact"), jsonobject.getString(        "event_category_fr"), jsonobject.getString("event_speaker"));
                 this.events.add(event);
                 eventAdapter.notifyDataSetChanged();
             }
