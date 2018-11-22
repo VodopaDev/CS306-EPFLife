@@ -18,7 +18,7 @@ import ch.epfl.sweng.zuluzulu.R;
 public class Event implements Serializable {
     public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "start_date", "likes");
 
-    private static final String DATE_TIME_PATTERN  = "yyyy-MM-dd HH:mm:ss";
+    private static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     private int id;
     private String name;
@@ -147,15 +147,15 @@ public class Event implements Serializable {
         return id;
     }
 
-    public void setName(String name){
-        if(name == null){
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        if (name == null) {
             throw new IllegalArgumentException();
         }
         this.name = name.trim().replaceAll("\"", "");
-    }
-
-    public String getName() {
-        return name;
     }
 
     public int getChannel() {
@@ -174,8 +174,27 @@ public class Event implements Serializable {
         return startDate;
     }
 
+    public void setStartDate(Date startDate) {
+        if (startDate == null) {
+            throw new IllegalArgumentException();
+        }
+        this.startDate = startDate;
+    }
+
     public String getStartDateString() {
         return DateToString(startDate);
+    }
+
+    public void setStartDateString(String start_date_string) {
+        assert (start_date_string != null);
+
+        String date = start_date_string;
+        if (date.length() == "2018-01-01 null".length()) {
+            date = date.substring(0, 11) + "00:00:00";
+        }
+        checkDateLength(date);
+
+        this.setStartDate(createDate(date));
     }
 
     public String getBannerUri() {
@@ -219,7 +238,7 @@ public class Event implements Serializable {
     }
 
     public void setUrl_place_and_room(String url_place_and_room) {
-        if(url_place_and_room == null){
+        if (url_place_and_room == null) {
             throw new IllegalArgumentException();
         }
         this.url_place_and_room = url_place_and_room;
@@ -230,7 +249,7 @@ public class Event implements Serializable {
     }
 
     public void setWebsite(String website) {
-        if(website == null){
+        if (website == null) {
             throw new IllegalArgumentException();
         }
         this.website = website;
@@ -241,7 +260,7 @@ public class Event implements Serializable {
     }
 
     public void setContact(String contact) {
-        if(contact == null){
+        if (contact == null) {
             throw new IllegalArgumentException();
         }
         this.contact = contact;
@@ -252,8 +271,8 @@ public class Event implements Serializable {
     }
 
     public void setCategory(String category) {
-        if(category == null){
-            throw  new IllegalArgumentException();
+        if (category == null) {
+            throw new IllegalArgumentException();
         }
         this.category = category;
     }
@@ -263,7 +282,7 @@ public class Event implements Serializable {
     }
 
     public void setSpeaker(String speaker) {
-        if(speaker == null){
+        if (speaker == null) {
             throw new IllegalArgumentException();
         }
         this.speaker = speaker;
@@ -274,71 +293,47 @@ public class Event implements Serializable {
     }
 
     public void setEndDateString(String end_date_string) {
-        if(end_date_string == null){
-            throw new IllegalArgumentException();
-        }
+        assert (end_date_string != null);
 
         String date = end_date_string;
-        if(date.length() == "2018-01-01 null".length()){
+        if (date.length() == "2018-01-01 null".length()) {
             date = date.substring(0, 11) + "23:59:59";
         }
         checkDateLength(date);
         this.setEndDate(createDate(date));
     }
 
-    public void setStartDateString(String start_date_string) {
-        if(start_date_string == null){
-            throw new IllegalArgumentException();
-        }
-
-        String date = start_date_string;
-        if(date.length() == "2018-01-01 null".length()){
-            date = date.substring(0, 11) + "00:00:00";
-        }
-        checkDateLength(date);
-
-        this.setStartDate(createDate(date));
-    }
-
     private void checkDateLength(String date) {
-        if(date.length() != "2018-01-01 00:00:00".length()){
+        if (date.length() != "2018-01-01 00:00:00".length()) {
             throw new IllegalArgumentException();
         }
     }
 
-    private Date createDate(String date){
+    private Date createDate(String date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_PATTERN);
 
         Date start_date = null;
         try {
-            start_date  = simpleDateFormat.parse(date);
+            start_date = simpleDateFormat.parse(date);
         } catch (ParseException e) {
             throw new IllegalArgumentException();
         }
         return start_date;
     }
 
-    private String DateToString(Date date){
+    private String DateToString(Date date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_PATTERN);
         return simpleDateFormat.format(date);
     }
 
-
-    public void setStartDate(Date startDate) {
-        if(startDate == null){
-            throw new IllegalArgumentException();
-        }
-        this.startDate = startDate;
+    public Date getEndDate() {
+        return endDate;
     }
 
     public void setEndDate(Date endDate) {
-        if(endDate == null){
+        if (endDate == null) {
             throw new IllegalArgumentException();
         }
         this.endDate = endDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
     }
 }
