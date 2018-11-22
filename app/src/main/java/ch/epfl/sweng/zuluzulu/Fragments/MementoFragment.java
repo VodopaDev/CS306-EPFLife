@@ -133,15 +133,6 @@ public class MementoFragment extends SuperFragment {
     }
 
     private Map<String,Object> createHashmap(Event event) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        Date start_date, end_date = null;
-        try {
-            start_date  = simpleDateFormat.parse(event.getStartDateString());
-            end_date    = simpleDateFormat.parse(event.getEndDateString());
-        } catch (ParseException e) {             // TODO do this inside event
-            return null;
-        }
 
         Map<String, Object> docData = new HashMap<>();
         docData.put("icon_uri", event.getIconUri());
@@ -157,8 +148,8 @@ public class MementoFragment extends SuperFragment {
         docData.put("short_desc", event.getShortDesc());
         docData.put("category", event.getCategory());
         docData.put("speaker", event.getSpeaker());
-        docData.put("start_date", start_date);
-        docData.put("end_date", end_date);
+        docData.put("start_date", event.getStartDate());
+        docData.put("end_date", event.getEndDate());
 
         return docData;
     }

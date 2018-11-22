@@ -3,6 +3,8 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import android.net.Uri;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
@@ -16,6 +18,8 @@ import ch.epfl.sweng.zuluzulu.R;
 public class Event implements Serializable {
     public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "start_date", "likes");
 
+    private static final String DATE_TIME_PATTERN  = "yyyy-MM-dd HH:mm:ss";
+
     private int id;
     private String name;
     private String shortDesc;
@@ -23,8 +27,7 @@ public class Event implements Serializable {
     private int channel;
 
     private Date startDate;
-    private String start_date_string;
-    private String end_date_string;
+    private Date endDate;
     private int likes;
     private String organizer;
     private String place;
@@ -48,8 +51,8 @@ public class Event implements Serializable {
         setName(name);
         this.shortDesc = shortDesc;
         this.longDesc = longDesc;
-        this.start_date_string = start_date_string;
-        setEnd_date_string(end_date_string);
+        setStartDateString(start_date_string);
+        setEndDateString(end_date_string);
         this.likes = likes;
         this.organizer = organizer;
         this.place = place;
@@ -98,7 +101,6 @@ public class Event implements Serializable {
         bannerUri = uri == null ? null : uri.toString();
 
         startDate = data.getDate("start_date");
-        start_date_string = Utils.dateFormat.format(startDate);
 
         likes = data.getInteger("likes");
 
@@ -173,7 +175,7 @@ public class Event implements Serializable {
     }
 
     public String getStartDateString() {
-        return start_date_string;
+        return DateToString(startDate);
     }
 
     public String getBannerUri() {
@@ -268,13 +270,63 @@ public class Event implements Serializable {
     }
 
     public String getEndDateString() {
-        return end_date_string;
+        return DateToString(endDate);
     }
 
-    public void setEnd_date_string(String end_date_string) {
+    public void setEndDateString(String end_date_string) {
         if(end_date_string != null && end_date_string.length() != "2018-01-01 12:00:00".length()){
             throw new IllegalArgumentException();
         }
-        this.end_date_string = end_date_string;
+
+
+        Date date = createDate(end_date_string);
+
+        this.setEndDate(date);
+    }
+
+    public void setStartDateString(String start_date_string) {
+        if(start_date_string != null && start_date_string.length() != "2018-01-01 12:00:00".length()){
+            throw new IllegalArgumentException();
+        }
+
+        Date date = createDate(start_date_string);
+
+        this.setStartDate(date);
+    }
+
+    private Date createDate(String date){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_PATTERN);
+
+        Date start_date = null;
+        try {
+            start_date  = simpleDateFormat.parse(date);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException();
+        }
+        return start_date;
+    }
+
+    private String DateToString(Date date){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_PATTERN);
+        return simpleDateFormat.format(date);
+    }
+
+
+    public void setStartDate(Date startDate) {
+        if(startDate == null){
+            throw new IllegalArgumentException();
+        }
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        if(endDate == null){
+            throw new IllegalArgumentException();
+        }
+        this.endDate = endDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
     }
 }
