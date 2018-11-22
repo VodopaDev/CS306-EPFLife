@@ -16,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -132,9 +133,6 @@ public class FirebaseProxy {
 
     public void addAssociation(Association association){
         IdlingResourceFactory.incrementCountingIdlingResource();
-        DocumentReference channelRef = channelCollection.document();
-        association.setChannelId(channelRef.getId());
-
         createChannel(association);
         assoCollection.document(association.getId()).set(association.getData());
         IdlingResourceFactory.decrementCountingIdlingResource();
@@ -144,13 +142,8 @@ public class FirebaseProxy {
 
     public void addEvent(Event event){
         IdlingResourceFactory.incrementCountingIdlingResource();
-        DocumentReference eventRef = eventCollection.document();
-        DocumentReference channelRef = channelCollection.document();
-        event.setId(eventRef.getId());
-        event.setChannelId(channelRef.getId());
-
         createChannel(event);
-        eventRef.set(event.getData());
+        eventCollection.document(event.getId()).set(event.getData());
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
@@ -348,7 +341,7 @@ public class FirebaseProxy {
                         case ADDED:
                             FirebaseMapDecorator data = new FirebaseMapDecorator(dc.getDocument());
                             if (data.hasFields(ChatMessage.requiredFields()))
-                                onResult.apply(new Post(data, userId, id));
+                                onResult.apply(new Post(data));
                             break;
                         default:
                             break;

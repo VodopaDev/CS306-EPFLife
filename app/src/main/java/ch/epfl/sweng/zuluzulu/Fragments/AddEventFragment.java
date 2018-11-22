@@ -187,8 +187,8 @@ public class AddEventFragment extends SuperFragment {
 
                 Map<String, Object> docData = new HashMap<>();
                 docData.put("icon_uri", "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg");
-                docData.put("id", "no_id");
-                docData.put("channel_id", "no_id");
+                docData.put("id", FirebaseProxy.getInstance().getNewAssociationId());
+                docData.put("channel_id", FirebaseProxy.getInstance().getNewChannelId());
                 docData.put("likes", 0L);
                 docData.put("long_description", desc);
                 docData.put("name", name);

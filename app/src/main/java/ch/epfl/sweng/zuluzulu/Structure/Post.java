@@ -15,9 +15,8 @@ import ch.epfl.sweng.zuluzulu.User.User;
 /**
  * Class that represents a post in a view
  */
-public class Post {
+public class Post extends FirebaseStructure{
 
-    public static final List<String> FIELDS = Arrays.asList("senderName", "sciper", "message", "time", "color", "nbUps", "nbResponses", "upScipers", "downScipers");
     private String senderName;
     private String sciper;
     private String message;
@@ -27,37 +26,18 @@ public class Post {
     private int nbResponses;
     private List<String> upScipers;
     private List<String> downScipers;
-    String id;
 
-    private boolean upByUser;
-    private boolean downByUser;
-
-    private boolean anonymous;
-    private String channelId;
-    private String userSciper;
-
-    public Post(FirebaseMapDecorator data, String userSciper, String channelId) {
-        senderName = data.getString("senderName");
+    public Post(FirebaseMapDecorator data) {
+        super(data);
+        senderName = data.getString("sender_name");
         sciper = data.getString("sciper");
         message = data.getString("message");
         time = data.getDate("time");
         color = data.getString("color");
-        nbUps = data.getInteger("nbUps");
-        nbResponses = data.getInteger("nbResponses");
-        upScipers = data.getStringList("upScipers");
-        downScipers = data.getStringList("downScipers");
-        id = data.getId();
-
-        anonymous = senderName.isEmpty();
-        this.channelId = channelId;
-        this.userSciper = userSciper;
-
-        upByUser = upScipers.contains(userSciper);
-        downByUser = downScipers.contains(userSciper);
-
-        if (upByUser && downByUser) {
-            throw new IllegalStateException("A post cannot be liked and disliked at the same time");
-        }
+        nbUps = data.getInteger("nb_ups");
+        nbResponses = data.getInteger("nb_responses");
+        upScipers = data.getStringList("up_scipers");
+        downScipers = data.getStringList("down_scipers");
     }
 
     /**
@@ -125,7 +105,7 @@ public class Post {
      * @return Whether the post is anonymous or not
      */
     public boolean isAnonymous() {
-        return anonymous;
+        return senderName.isEmpty();
     }
 
     /**
@@ -133,52 +113,15 @@ public class Post {
      *
      * @return whether the user has liked this post or not
      */
-    public boolean isUpByUser() { return upByUser; }
-
-    /**
-     * Setter of upByUser
-     *
-     * @param upByUser the new upByUser value
-     */
-    public void setUpByUser(boolean upByUser) {
-        if (downByUser) {
-            throw new IllegalArgumentException("This post is already up by the user");
-        }
-        this.upByUser = upByUser;
-    }
+    public boolean isUpByUser(String userID) { return upScipers.contains(userID); }
 
     /**
      * Getter for downByUser
      *
      * @return whether the user has disliked this post or not
      */
-    public boolean isDownByUser() { return downByUser; }
+    public boolean isDownByUser(String userID) { return downScipers.contains(userID); }
 
-    /**
-     * Setter for downByUser
-     *
-     * @param downByUser the new downByUser value
-     */
-    public void setDownByUser(boolean downByUser) {
-        if (upByUser) {
-            throw new IllegalArgumentException("This post is already down by the user");
-        }
-        this.downByUser = downByUser;
-    }
-
-    /**
-     * Getter for the channelId of the post
-     *
-     * @return the channelId
-     */
-    public String getChannelId() { return channelId; }
-
-    /**
-     * Getter for the user reading the post
-     *
-     * @return the user reading the post
-     */
-    public String getUserSciper() { return userSciper; }
 
     /**
      * Getter for the up scipers
@@ -194,24 +137,21 @@ public class Post {
      */
     public List<String> getDownScipers() { return new ArrayList<>(Collections.unmodifiableCollection(downScipers)); }
 
-    /**
-     * Getter for the id
-     *
-     * @return the id
-     */
-    public String getId() { return id; }
+    public static List<String> requiredFields(){
+        return Arrays.asList("sender_name", "sciper", "message", "time", "color", "nb_ups", "nb_responses", "up_scipers", "down_scipers", "id");
+    }
 
     public Map<String, Object> getData(){
         Map<String, Object> map = new HashMap<>();
-        map.put("senderName", senderName);
+        map.put("sender_name", senderName);
         map.put("message", message);
         map.put("time", time);
         map.put("sciper", sciper);
         map.put("color", color);
-        map.put("nbUps", 0);
-        map.put("nbResponses", 0);
-        map.put("upScipers", new ArrayList<>());
-        map.put("downScipers", new ArrayList<>());
+        map.put("nb_ups", nbUps);
+        map.put("nb_responses", nbResponses);
+        map.put("up_scipers", upScipers);
+        map.put("down_scipers", downScipers);
         return map;
     }
 }
