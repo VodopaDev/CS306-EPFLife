@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,11 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -139,11 +135,15 @@ public class MementoFragment extends SuperFragment {
         String pattern = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
-        Date date = null;
+        Date start_date = null;
+        Date end_date = null;
         try {
-            date = simpleDateFormat.parse(event.getStartDateString());
+            start_date  = simpleDateFormat.parse(event.getStartDateString());
+            end_date    = simpleDateFormat.parse(event.getEndDateString());
         } catch (ParseException e) {
-            date = new Date();
+            // TODO exit ?
+            start_date  = new Date();
+            end_date    = new Date();
         }
 
         Map<String, Object> docData = new HashMap<>();
@@ -160,7 +160,8 @@ public class MementoFragment extends SuperFragment {
         docData.put("short_desc", event.getShortDesc());
         docData.put("category", event.getCategory());
         docData.put("speaker", event.getSpeaker());
-        docData.put("start_date", date);
+        docData.put("start_date", start_date);
+        docData.put("end_date", end_date);
 
         return docData;
     }
@@ -175,15 +176,11 @@ public class MementoFragment extends SuperFragment {
             jsonarray = new JSONArray(datas);
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject jsonobject = jsonarray.getJSONObject(i);
-               /* System.out.println("end_date_string => " + jsonobject.getString("event_end_date"));
-                System.out.println("start_time_string => " + jsonobject.getString("event_start_time"));
-                System.out.println("end_time_string => " + jsonobject.getString("event_end_time"));
-               */ // nom de l'association qui organise !
 
-                Event event = new Event(i,
-                        jsonobject.getString("title"),
+                Event event = new Event(i, jsonobject.getString("title"),
                         jsonobject.getString("description"), jsonobject.getString("description"),
-                        jsonobject.getString("event_start_date") + " " + jsonobject.getString("event_start_time"), 0,
+                        jsonobject.getString("event_start_date") + " " + jsonobject.getString("event_start_time"),
+                        jsonobject.getString("event_end_date") + " " + jsonobject.getString("event_end_time"),0,
                         jsonobject.getString("event_organizer"),
                         jsonobject.getString("event_place_and_room"),
                         jsonobject.getString("event_visual_absolute_url"), jsonobject.getString("event_visual_absolute_url"),

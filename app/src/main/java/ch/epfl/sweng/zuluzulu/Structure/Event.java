@@ -24,6 +24,7 @@ public class Event implements Serializable {
 
     private Date startDate;
     private String start_date_string;
+    private String end_date_string;
     private int likes;
     private String organizer;
     private String place;
@@ -40,7 +41,7 @@ public class Event implements Serializable {
     private int channel_id;
     private int assos_id;
 
-    public Event(int id, String name, String shortDesc, String longDesc, String start_date_string,
+    public Event(int id, String name, String shortDesc, String longDesc, String start_date_string, String end_date_string,
                  int likes, String organizer, String place, String bannerUri, String iconUri,
                  String url_place_and_room, String website, String contact, String category, String speaker) {
         this.id = id;
@@ -48,6 +49,7 @@ public class Event implements Serializable {
         this.shortDesc = shortDesc;
         this.longDesc = longDesc;
         this.start_date_string = start_date_string;
+        setEnd_date_string(end_date_string);
         this.likes = likes;
         this.organizer = organizer;
         this.place = place;
@@ -263,5 +265,16 @@ public class Event implements Serializable {
             throw new IllegalArgumentException();
         }
         this.speaker = speaker;
+    }
+
+    public String getEndDateString() {
+        return end_date_string;
+    }
+
+    public void setEnd_date_string(String end_date_string) {
+        if(end_date_string != null && end_date_string.length() != "2018-01-01 12:00:00".length()){
+            throw new IllegalArgumentException();
+        }
+        this.end_date_string = end_date_string;
     }
 }
