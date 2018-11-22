@@ -17,7 +17,6 @@ import ch.epfl.sweng.zuluzulu.R;
 // TODO: Add admin access, ending date, linked-chat id, linked-association id, position
 public class Event implements Serializable {
     public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "start_date", "likes");
-
     private static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     private int id;
@@ -88,29 +87,21 @@ public class Event implements Serializable {
         longDesc = data.getString("long_desc");
 
         String icon_str = data.getString("icon_uri");
-        Uri uri = icon_str == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
-                Uri.parse(icon_str);
+        Uri uri = icon_str == null ? Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) : Uri.parse(icon_str);
         iconUri = uri == null ? null : uri.toString();
 
         // Init the Banner URI
         String banner_str = data.getString("banner_uri");
-        uri = banner_str == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
-                Uri.parse(banner_str);
+        uri = banner_str == null ? Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) : Uri.parse(banner_str);
         bannerUri = uri == null ? null : uri.toString();
 
         startDate = data.getDate("start_date");
 
         likes = data.getInteger("likes");
 
-        channel_id = data.get("channel_id") == null ?
-                0 :
-                data.getInteger("channel_id");
+        channel_id = data.get("channel_id") == null ? 0 : data.getInteger("channel_id");
 
-        assos_id = data.get("assos_id") == null ?
-                0 :
-                data.getInteger("assos_id");
+        assos_id = data.get("assos_id") == null ? 0 : data.getInteger("assos_id");
     }
 
 
@@ -175,9 +166,7 @@ public class Event implements Serializable {
     }
 
     public void setStartDate(Date startDate) {
-        if (startDate == null) {
-            throw new IllegalArgumentException();
-        }
+        assert(startDate != null);
         this.startDate = startDate;
     }
 
@@ -189,7 +178,7 @@ public class Event implements Serializable {
         assert (start_date_string != null);
 
         String date = start_date_string;
-        if (date.length() == "2018-01-01 null".length()) {
+        if ("2018-01-01 null".length() == date.length()) {
             date = date.substring(0, 11) + "00:00:00";
         }
         checkDateLength(date);
@@ -238,9 +227,8 @@ public class Event implements Serializable {
     }
 
     public void setUrl_place_and_room(String url_place_and_room) {
-        if (url_place_and_room == null) {
-            throw new IllegalArgumentException();
-        }
+        assert(url_place_and_room != null);
+
         this.url_place_and_room = url_place_and_room;
     }
 
@@ -249,9 +237,8 @@ public class Event implements Serializable {
     }
 
     public void setWebsite(String website) {
-        if (website == null) {
-            throw new IllegalArgumentException();
-        }
+        assert(website != null);
+
         this.website = website;
     }
 
@@ -260,9 +247,8 @@ public class Event implements Serializable {
     }
 
     public void setContact(String contact) {
-        if (contact == null) {
-            throw new IllegalArgumentException();
-        }
+        assert(contact != null);
+
         this.contact = contact;
     }
 
@@ -271,9 +257,8 @@ public class Event implements Serializable {
     }
 
     public void setCategory(String category) {
-        if (category == null) {
-            throw new IllegalArgumentException();
-        }
+        assert(category != null);
+
         this.category = category;
     }
 
@@ -282,9 +267,8 @@ public class Event implements Serializable {
     }
 
     public void setSpeaker(String speaker) {
-        if (speaker == null) {
-            throw new IllegalArgumentException();
-        }
+        assert(speaker != null);
+
         this.speaker = speaker;
     }
 
