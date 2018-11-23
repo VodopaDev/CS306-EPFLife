@@ -37,6 +37,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MementoFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.PostFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.ReplyFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
@@ -45,6 +46,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.GPS;
+import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.User.UserRole;
@@ -300,6 +302,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case OPEN_POST_FRAGMENT:
                 channel = (Channel) data;
                 openFragment(PostFragment.newInstance(user, channel));
+                break;
+            case OPEN_REPLY_FRAGMENT:
+                Post post = (Post) data;
+                openFragment(ReplyFragment.newInstance(user, post));
                 break;
             case OPEN_WRITE_POST_FRAGMENT:
                 channel = (Channel) data;

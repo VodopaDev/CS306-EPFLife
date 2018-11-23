@@ -79,10 +79,6 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         return view;
     }
 
-    public void setUserSciper(String userSciper) {
-
-    }
-
     /**
      * Set up the correct time passed since the creation of the post in the field
      */
