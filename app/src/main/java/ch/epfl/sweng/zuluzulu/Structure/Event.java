@@ -39,7 +39,7 @@ public class Event implements Serializable {
     private int channel_id;
     private int assos_id;
 
-    public Event(int id, String name, String shortDesc, String longDesc, EventDate date,
+    private Event(int id, String name, String shortDesc, String longDesc, EventDate date,
                  int likes, String organizer, String place, String bannerUri, String iconUri,
                  String url_place_and_room, String website, String contact, String category, String speaker) {
         this.id = id;
