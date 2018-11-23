@@ -217,7 +217,7 @@ public class FirebaseProxy {
         Map<String, Object> map = new HashMap<>();
         map.put("id", association.getChannelId());
         map.put("name", association.getName());
-        map.put("description", association.getShortDescription());
+        map.put("short_description", association.getShortDescription());
         map.put("restrictions", new HashMap<>());
         map.put("icon_uri", association.getIconUri().toString());
         channelCollection.document(association.getChannelId()).set(map);
@@ -229,7 +229,7 @@ public class FirebaseProxy {
         Map<String, Object> map = new HashMap<>();
         map.put("id", event.getChannelId());
         map.put("name", event.getName());
-        map.put("description", event.getShortDescription());
+        map.put("short_description", event.getShortDescription());
         map.put("restrictions", new HashMap<>());
         map.put("icon_uri", event.getIconUri().toString());
         channelCollection.document(event.getChannelId()).set(map);

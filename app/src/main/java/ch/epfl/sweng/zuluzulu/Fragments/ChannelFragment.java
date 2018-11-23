@@ -118,7 +118,6 @@ public class ChannelFragment extends SuperFragment {
     private void getChannelsFromDatabase() {
         FirebaseProxy.getInstance().getAllChannels(result -> {
             listOfChannels.clear();
-            Log.d("TAGGGGG", result.size() + " channels");
             for(Channel channel: result) {
                 listOfChannels.add(channel);
             }
