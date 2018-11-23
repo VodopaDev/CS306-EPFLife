@@ -40,8 +40,8 @@ public class Event implements Serializable {
     private int assos_id;
 
     private Event(int id, String name, String shortDesc, String longDesc, EventDate date,
-                 int likes, String organizer, String place, String bannerUri, String iconUri,
-                 String url_place_and_room, String website, String contact, String category, String speaker) {
+                  int likes, String organizer, String place, String bannerUri, String iconUri,
+                  String url_place_and_room, String website, String contact, String category, String speaker, int channel_id, int assos_id) {
         this.id = id;
         setName(name);
         this.shortDesc = shortDesc;
@@ -57,6 +57,8 @@ public class Event implements Serializable {
         setContact(contact);
         setCategory(category);
         setSpeaker(speaker);
+        this.channel_id = channel_id;
+        this.assos_id = assos_id;
     }
 
     /**
@@ -290,7 +292,7 @@ public class Event implements Serializable {
         }
 
         public Event build(){
-            return new Event(id, name, shortDesc, longDesc, date, likes, organizer, place, bannerUri, iconUri, url_place_and_room, website, contact, category, speaker);
+            return new Event(id, name, shortDesc, longDesc, date, likes, organizer, place, bannerUri, iconUri, url_place_and_room, website, contact, category, speaker, channel_id, assos_id);
         }
 
         public EventBuilder setId(int id) {
