@@ -242,14 +242,8 @@ public class Event implements Serializable {
             this.category = data.getString("category");
             this.speaker = data.getString("speaker");
 
-            String icon_str = data.getString("icon_uri");
-            Uri uri = icon_str == null ? Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) : Uri.parse(icon_str);
-            iconUri = uri == null ? null : uri.toString();
-
-            // Init the Banner URI
-            String banner_str = data.getString("banner_uri");
-            uri = banner_str == null ? Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) : Uri.parse(banner_str);
-            bannerUri = uri == null ? null : uri.toString();
+            setIconUri(data.getString("icon_uri"));
+            setBannerUri(data.getString("banner_uri"));
 
             this.date = new EventDate(data.getDate("start_date"), data.getDate("end_date"));
 
@@ -300,13 +294,32 @@ public class Event implements Serializable {
             return this;
         }
 
+        /**
+         * Create banner, default if null given
+         * @param bannerUri Banner url
+         * @return this
+         */
         public EventBuilder setBannerUri(String bannerUri) {
-            this.bannerUri = bannerUri;
+            if(bannerUri == null){
+                this.bannerUri = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner;
+            } else {
+                this.bannerUri = bannerUri;
+            }
             return this;
         }
 
+        /**
+         * Create icon, default if null given
+         * @param iconUri Icon url
+         * @return this
+         */
         public EventBuilder setIconUri(String iconUri) {
-            this.iconUri = iconUri;
+            if(iconUri == null){
+                System.out.println("null");
+                this.iconUri = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon;
+            } else {
+                this.iconUri = iconUri;
+            }
             return this;
         }
 

@@ -24,8 +24,8 @@ public class EventTest {
     private static final String SHORT_DESC = "Beuverie à Zelig";
     private static final String LONG_DESC = "This is only random bla bla bla";
     private static final String TEST_URI_STRING = "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso1_icon.png?alt=media&token=391a7bfc-1597-4935-9afe-e08ecd734e03";
-    private static final Uri DEFAULT_BANNER_URI = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner);
-    private static final Uri DEFAULT_ICON_URI = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon);
+    private static final String DEFAULT_BANNER_URI = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner;
+    private static final String DEFAULT_ICON_URI = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon;
     private static final Date START_DATE = new Date(2L);
     private static final Date START_DATE_1 = new Date(3L);
     private static final long LIKES_1 = 100L;
@@ -128,8 +128,8 @@ public class EventTest {
     public void uriAreCorrect() {
         initWorkingAssociation();
         initDefaultAssociation();
-        assertEquals(Uri.parse(TEST_URI_STRING), event0.getIconUri());
-        assertEquals(Uri.parse(TEST_URI_STRING), event0.getBannerUri());
+        assertEquals(TEST_URI_STRING, event0.getIconUri());
+        assertEquals(TEST_URI_STRING, event0.getBannerUri());
         assertEquals(DEFAULT_ICON_URI, event1.getIconUri());
         assertEquals(DEFAULT_BANNER_URI, event1.getBannerUri());
     }
