@@ -31,22 +31,25 @@ public class Post implements Serializable {
     private boolean anonymous;
     private int channelId;
     private String userSciper;
+    private Post originalPost;
 
-    public Post(FirebaseMapDecorator data, String userSciper, int channelId) {
+    public Post(FirebaseMapDecorator data, String userSciper, int channelId, Post originalPost) {
+        this.channelId = channelId;
+        this.userSciper = userSciper;
+        this.originalPost = originalPost;
+
         senderName = data.getString("senderName");
         sciper = data.getString("sciper");
         message = data.getString("message");
         time = data.getDate("time");
         color = data.getString("color");
         nbUps = data.getInteger("nbUps");
-        nbResponses = data.getInteger("nbResponses");
+        nbResponses = isReply() ? 0 : data.getInteger("nbResponses");
         upScipers = data.getStringList("upScipers");
         downScipers = data.getStringList("downScipers");
         id = data.getId();
 
         anonymous = senderName.isEmpty();
-        this.channelId = channelId;
-        this.userSciper = userSciper;
 
         upByUser = upScipers.contains(userSciper);
         downByUser = downScipers.contains(userSciper);
@@ -214,4 +217,18 @@ public class Post implements Serializable {
     public String getId() {
         return id;
     }
+
+    /**
+     * Getter for the fact that the post is a reply or not
+     *
+     * @return Whether the post is a reply or not
+     */
+    public boolean isReply() { return originalPost != null; }
+
+    /**
+     * Getter for the original post
+     *
+     * @return The original post
+     */
+    public Post getOriginalPost() { return originalPost; }
 }

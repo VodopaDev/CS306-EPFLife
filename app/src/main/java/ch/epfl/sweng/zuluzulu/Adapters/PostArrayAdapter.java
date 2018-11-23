@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -69,7 +72,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
 
         int nbResponses = currentPost.getNbResponses();
         nbResponsesText.setText("" + currentPost.getNbResponses());
-        if (nbResponses == 0) {
+        if (nbResponses == 0 || currentPost.isReply()) {
             view.findViewById(R.id.post_responses_linearlayout).setVisibility(LinearLayout.GONE);
         }
 
@@ -118,15 +121,26 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
             int nbUps = post.getNbUps() + (up ? 1 : -1);
             List<String> upScipers = post.getUpScipers();
             List<String> downScipers = post.getDownScipers();
-            DocumentReference documentReference = db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
+            DocumentReference documentReference = post.isReply() ?
+                    db.collection("channels/channel" + post.getOriginalPost().getChannelId() + "/posts/" + post.getOriginalPost().getId() + "/replies").document(post.getId()) :
+                    db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
             if (up) {
                 upScipers.add(post.getUserSciper());
                 documentReference.update(
                         "nbUps", nbUps,
                         "upScipers", upScipers
-                );
+                ).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("up", "success");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("up", "fail");
+                    }
+                });
                 post.setUpByUser(true);
-
             } else {
                 downScipers.add(post.getUserSciper());
                 documentReference.update(
