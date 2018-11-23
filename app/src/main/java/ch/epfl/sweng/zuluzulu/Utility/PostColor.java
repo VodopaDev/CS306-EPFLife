@@ -3,8 +3,6 @@ package ch.epfl.sweng.zuluzulu.Utility;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 public enum PostColor {

@@ -70,7 +70,7 @@ public class ChatFragment extends SuperChatPostsFragment {
 
         sendButton.setEnabled(false);
 
-        adapter = new ChatMessageArrayAdapter(view.getContext(), messages);
+        adapter = new ChatMessageArrayAdapter(view.getContext(), messages, user);
         listView.setAdapter(adapter);
 
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
@@ -90,19 +90,15 @@ public class ChatFragment extends SuperChatPostsFragment {
      */
     private void setUpSendButton() {
         sendButton.setOnClickListener(v -> {
-            String senderName = anonymous ? "" : user.getFirstNames();
-            String message = textEdit.getText().toString();
-            Timestamp time = Timestamp.now();
-            String sciper = user.getSciper();
-            textEdit.setText("");
-
             Map<String, Object> data = new HashMap<>();
-            data.put("senderName", senderName);
-            data.put("message", message);
-            data.put("time", time);
-            data.put("sciper", sciper);
+            data.put("senderName", anonymous ? "" : user.getFirstNames());
+            data.put("message", textEdit.getText().toString());
+            data.put("time", Timestamp.now().toDate());
+            data.put("sciper", user.getSciper());
+            data.put("channel_id", channel.getId());
             ChatMessage chatMessage = new ChatMessage(new FirebaseMapDecorator(data));
-            FirebaseProxy.getInstance().addMessageInChannel(channel.getId(), chatMessage);
+            FirebaseProxy.getInstance().addMessage(chatMessage);
+            textEdit.setText("");
         });
     }
 

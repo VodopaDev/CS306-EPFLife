@@ -26,9 +26,14 @@ public class Post extends FirebaseStructure{
     private int nbResponses;
     private List<String> upScipers;
     private List<String> downScipers;
+    private String channelId;
 
     public Post(FirebaseMapDecorator data) {
         super(data);
+        if(!data.hasFields(requiredFields()))
+            throw new IllegalArgumentException();
+
+        channelId = data.getString("channel_id");
         senderName = data.getString("sender_name");
         sciper = data.getString("sciper");
         message = data.getString("message");
@@ -122,6 +127,9 @@ public class Post extends FirebaseStructure{
      */
     public boolean isDownByUser(String userID) { return downScipers.contains(userID); }
 
+    public String getChannelId(){
+        return channelId;
+    }
 
     /**
      * Getter for the up scipers
@@ -137,12 +145,21 @@ public class Post extends FirebaseStructure{
      */
     public List<String> getDownScipers() { return new ArrayList<>(Collections.unmodifiableCollection(downScipers)); }
 
+    public boolean upvoteWithUser(String userId){
+        return !downScipers.contains(userId) && upScipers.add(userId);
+    }
+
+    public boolean downvoteWithUser(String userId){
+        return !upScipers.contains(userId) && downScipers.add(userId);
+    }
+
     public static List<String> requiredFields(){
-        return Arrays.asList("sender_name", "sciper", "message", "time", "color", "nb_ups", "nb_responses", "up_scipers", "down_scipers", "id");
+        return Arrays.asList("sender_name", "sciper", "message", "time", "color", "nb_ups", "nb_responses", "up_scipers", "down_scipers", "id", "channel_id");
     }
 
     public Map<String, Object> getData(){
         Map<String, Object> map = new HashMap<>();
+        map.put("channel_id", channelId);
         map.put("sender_name", senderName);
         map.put("message", message);
         map.put("time", time);

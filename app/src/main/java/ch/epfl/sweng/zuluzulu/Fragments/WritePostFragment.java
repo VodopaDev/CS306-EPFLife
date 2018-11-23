@@ -15,25 +15,22 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
-import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility.PostColor;
+
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_POST_FRAGMENT;
 
 /**
  * A {@link SuperFragment} subclass.
@@ -109,18 +106,20 @@ public class WritePostFragment extends SuperFragment {
             String sciper = user.getSciper();
 
             Map<String, Object> data = new HashMap();
-            data.put("senderName", senderName);
+            data.put("id", FirebaseProxy.getInstance().getNewPostId(channel.getId()));
+            data.put("channel_id", channel.getId());
+            data.put("sender_name", senderName);
             data.put("message", message);
             data.put("time", time.toDate());
             data.put("sciper", sciper);
             data.put("color", color.getValue());
-            data.put("nbUps", 0L);
-            data.put("nbResponses", 0L);
-            data.put("upScipers", new ArrayList<>());
-            data.put("downScipers", new ArrayList<>());
-            Post post = new Post(new FirebaseMapDecorator(data), user.getSciper(), channel.getId());
-            FirebaseProxy.getInstance().addPostInChannel(channel.getId(), post);
-            mListener.onFragmentInteraction(CommunicationTag.OPEN_POST_FRAGMENT, channel);
+            data.put("nb_ups", 0L);
+            data.put("nb_responses", 0L);
+            data.put("up_scipers", new ArrayList<>());
+            data.put("down_scipers", new ArrayList<>());
+            Post post = new Post(new FirebaseMapDecorator(data));
+            FirebaseProxy.getInstance().addPost(post);
+            mListener.onFragmentInteraction(OPEN_POST_FRAGMENT, channel);
         });
     }
 

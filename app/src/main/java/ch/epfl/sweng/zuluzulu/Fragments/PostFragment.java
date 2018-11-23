@@ -33,15 +33,15 @@ import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.User;
 
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_CHAT_FRAGMENT;
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_WRITE_POST_FRAGMENT;
+import static ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment.PREF_KEY_ANONYM;
+
 /**
  * A {@link SuperChatPostsFragment} subclass.
  * This fragment is used to display the posts
  */
 public class PostFragment extends SuperChatPostsFragment {
-    private static final String TAG = "POST_TAG";
-
-    private static final String POSTS_COLLECTION_NAME = "posts";
-
     private List<Post> posts = new ArrayList<>();
     private PostArrayAdapter adapter;
 
@@ -69,12 +69,12 @@ public class PostFragment extends SuperChatPostsFragment {
         chatButton.setEnabled(true);
         postsButton.setEnabled(false);
 
-        adapter = new PostArrayAdapter(view.getContext(), posts);
+        adapter = new PostArrayAdapter(view.getContext(), posts, user);
         listView.setAdapter(adapter);
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
+        anonymous = preferences.getBoolean(PREF_KEY_ANONYM, false);
 
         updatePosts();
         setUpChatButton();
@@ -87,14 +87,14 @@ public class PostFragment extends SuperChatPostsFragment {
      * Add an onClick listener on the button to switch to the chat fragment
      */
     private void setUpChatButton() {
-        chatButton.setOnClickListener(v -> mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, channel));
+        chatButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_CHAT_FRAGMENT, channel));
     }
 
     /**
      * Refresh the posts by reading in the database
      */
     private void updatePosts() {
-        FirebaseProxy.getInstance().onPostAddedInChannel(channel.getId(), user.getSciper(), result -> {
+        FirebaseProxy.getInstance().onPostAddedInChannel(channel.getId(), result -> {
             posts.add(result);
             adapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);
@@ -105,7 +105,7 @@ public class PostFragment extends SuperChatPostsFragment {
      * Set up an onClick listener on the button to write a new post
      */
     private void setUpNewPostButton() {
-        writePostButton.setOnClickListener(v -> mListener.onFragmentInteraction(CommunicationTag.OPEN_WRITE_POST_FRAGMENT, channel));
+        writePostButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_WRITE_POST_FRAGMENT, channel));
     }
 
     /**

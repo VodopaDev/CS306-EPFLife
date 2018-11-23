@@ -3,11 +3,6 @@ package ch.epfl.sweng.zuluzulu.User;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Structure.Association;
-import ch.epfl.sweng.zuluzulu.Structure.Channel;
-import ch.epfl.sweng.zuluzulu.Structure.Event;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
-
 public class AuthenticatedUser extends User {
     public static final List<String> fields = Arrays.asList("followedAssociations", "followedEvents", "followedChannels");
     // Use sciper to check User (and not mail or gaspar)

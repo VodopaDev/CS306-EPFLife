@@ -28,17 +28,12 @@ import ch.epfl.sweng.zuluzulu.User.User;
  */
 public abstract class SuperChatPostsFragment extends SuperFragment {
 
-    protected static final String CHANNEL_DOCUMENT_NAME = "channels/channel";
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_CHANNEL = "ARG_CHANNEL";
-    protected FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     protected ListView listView;
     protected Button chatButton;
     protected Button postsButton;
-
-    protected String collectionReference;
-    protected DatabaseCollection mockableCollection;
 
     protected AuthenticatedUser user;
     protected Channel channel;

@@ -21,14 +21,17 @@ import org.w3c.dom.Text;
 import java.util.Date;
 import java.util.List;
 
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
+import ch.epfl.sweng.zuluzulu.User.User;
 
 public class PostArrayAdapter extends ArrayAdapter<Post> {
 
     private Context mContext;
     private List<Post> posts;
+    private User user;
 
     private Post currentPost;
     private TextView timeAgo;
@@ -36,12 +39,11 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     private ImageView upButton;
     private ImageView downButton;
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-    public PostArrayAdapter(@NonNull Context context, List<Post> list) {
+    public PostArrayAdapter(@NonNull Context context, List<Post> list, User user) {
         super(context, 0, list);
         mContext = context;
         posts = list;
+        this.user = user;
     }
 
     @NonNull
@@ -121,37 +123,18 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     }
 
     private void updateDatabase(boolean up, Post post, TextView nbUpsText) {
-        if (!post.isUpByUser() && !post.isDownByUser()) {
-            int nbUps = post.getNbUps() + (up ? 1 : -1);
-            List<String> upScipers = post.getUpScipers();
-            List<String> downScipers = post.getDownScipers();
-            DocumentReference documentReference = db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
-            if (up) {
-                upScipers.add(post.getUserSciper());
-                documentReference.update(
-                        "nbUps", nbUps,
-                        "upScipers", upScipers
-                );
-                post.setUpByUser(true);
-
-            } else {
-                downScipers.add(post.getUserSciper());
-                documentReference.update(
-                        "nbUps", nbUps,
-                        "downScipers", downScipers
-                );
-                post.setDownByUser(true);
-            }
-            nbUpsText.setText("" + nbUps);
+        if(!up && post.downvoteWithUser(user.getSciper()) || up && post.upvoteWithUser(user.getSciper())){
+            FirebaseProxy.getInstance().updatePost(post);
+            nbUpsText.setText("" + post.getNbUps());
         }
     }
 
     private void updateUpsButtons(Post post, ImageView upButton, ImageView downButton) {
-        if (post.isUpByUser()) {
+        if (post.isUpByUser(user.getSciper())) {
             upButton.setImageResource(R.drawable.up_gray);
             downButton.setImageResource(R.drawable.down_transparent);
         }
-        else if (post.isDownByUser()) {
+        else if (post.isDownByUser(user.getSciper())) {
             downButton.setImageResource(R.drawable.down_gray);
             upButton.setImageResource(R.drawable.up_transparent);
         }

@@ -128,8 +128,8 @@ public class AssociationsGeneratorFragment extends SuperFragment {
 
             //put db
             Map<String, Object> map = new HashMap<>();
-            map.put("id", "no_id");
-            map.put("channel_id","no_id");
+            map.put("id", FirebaseProxy.getInstance().getNewAssociationId());
+            map.put("channel_id", FirebaseProxy.getInstance().getNewChannelId());
             map.put("icon_uri", final_icon_url);
             map.put("name", datas.get(index).split(",")[1].trim());
             map.put("short_description", datas.get(index).split(",")[2].trim());

@@ -16,13 +16,18 @@ public class ChatMessage extends FirebaseStructure{
     private String sciper;
     private String message;
     private Date time;
+    private String channelId;
 
     public ChatMessage(FirebaseMapDecorator data) {
         super(data);
+        if(!data.hasFields(requiredFields()))
+            throw new IllegalArgumentException();
+
         senderName = data.getString("sender_name");
         sciper = data.getString("sender_sciper");
         message = data.getString("message");
         time = data.getDate("time");
+        channelId = data.getString("channel_id");
     }
 
     /**
@@ -32,6 +37,10 @@ public class ChatMessage extends FirebaseStructure{
      */
     public String getSenderName() {
         return senderName;
+    }
+
+    public String getChannelId(){
+        return channelId;
     }
 
     /**
@@ -99,7 +108,7 @@ public class ChatMessage extends FirebaseStructure{
     }
 
     /**
-     * Getter for anonym
+     * Getter for anonymous
      *
      * @return Whether the message is anonymous or not
      */
@@ -111,6 +120,7 @@ public class ChatMessage extends FirebaseStructure{
     public Map<String, Object> getData() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", getId());
+        map.put("channel_id", channelId);
         map.put("sender_sciper", sciper);
         map.put("sender_name", senderName);
         map.put("message", message);
@@ -119,6 +129,6 @@ public class ChatMessage extends FirebaseStructure{
     }
 
     public static List<String> requiredFields(){
-        return Arrays.asList("sender_name", "sender_sciper", "message", "time", "id");
+        return Arrays.asList("sender_name", "sender_sciper", "message", "time", "id", "channel_id");
     }
 }

@@ -18,6 +18,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.sql.Ref;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +34,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.User.UserRole;
 
 public class FirebaseProxy {
 
@@ -113,7 +116,7 @@ public class FirebaseProxy {
         Counter counter = new Counter(ids.size());
 
         for(String id: ids){
-            assoCollection.document(id.toString()).get().addOnSuccessListener(documentSnapshot -> {
+            assoCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
                 if(fmap.hasFields(Association.requiredFields()))
                     result.add(new Association(fmap));
@@ -329,7 +332,7 @@ public class FirebaseProxy {
         });
     }
 
-    public void onPostAddedInChannel(String id, String userId, OnResult<Post> onResult) {
+    public void onPostAddedInChannel(String id, OnResult<Post> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(id).collection("messages").addSnapshotListener((queryDocumentSnapshots, e) -> {
             if (e != null)
@@ -353,23 +356,33 @@ public class FirebaseProxy {
         });
     }
 
-    public void addPostInChannel(String channelId, Post post){
+    public void addPost(Post post){
         IdlingResourceFactory.incrementCountingIdlingResource();
-        channelCollection.document(channelId)
+        channelCollection.document(post.getChannelId())
                 .collection("posts")
                 .document(post.getId())
                 .set(post.getData());
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
-    public void addMessageInChannel(String channelId, ChatMessage message){
+    public void updatePost(Post post){
+        channelCollection.document(post.getChannelId())
+                .collection("posts")
+                .document(post.getId())
+                .update(post.getData());
+        IdlingResourceFactory.decrementCountingIdlingResource();
+    }
+
+    public void addMessage(ChatMessage message){
         IdlingResourceFactory.incrementCountingIdlingResource();
-        channelCollection.document(channelId)
+        channelCollection.document(message.getChannelId())
                 .collection("messages")
                 .document(message.getId())
                 .set(message.getData());
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
+
+
 
     //----- User related methods -----\\
 
@@ -381,6 +394,7 @@ public class FirebaseProxy {
                 map.put("followed_associations", new ArrayList<String>());
                 map.put("followed_events", new ArrayList<String>());
                 map.put("followed_channels", new ArrayList<String>());
+                map.put("roles", Collections.singletonList("user"));
                 userCollection.document(id).set(map);
                 onResult.apply(new FirebaseMapDecorator(map));
             } else {
