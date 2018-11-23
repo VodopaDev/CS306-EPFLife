@@ -18,13 +18,20 @@ public abstract class FirebaseStructure implements Serializable {
 
     /**
      * Construct a FirebaseStructure from a FirebaseMap
-     * @param data the FirebaseMap
+     * @param id the ID
+     */
+    public FirebaseStructure(String id){
+        this.id = id;
+    }
+
+    /**
+     * Construct a FirebaseStructure from a FirebaseMap
+     * @param data the data containing the ID
      */
     public FirebaseStructure(FirebaseMapDecorator data){
         if(!data.hasFields(requiredFields()))
-            throw new IllegalArgumentException("The Firebase map is missing an ID");
-
-        id = data.getString("id");
+            throw new IllegalArgumentException();
+        this.id = data.getString("id");
     }
 
     /**

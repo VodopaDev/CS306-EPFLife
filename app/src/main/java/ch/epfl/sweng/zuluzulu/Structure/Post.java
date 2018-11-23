@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.User.User;
 
 /**
  * Class that represents a post in a view
@@ -27,6 +25,11 @@ public class Post extends FirebaseStructure{
     private List<String> upScipers;
     private List<String> downScipers;
     private String channelId;
+
+    //TODO: fill the constructor
+    public Post(String id){
+        super(id);
+    }
 
     public Post(FirebaseMapDecorator data) {
         super(data);
@@ -95,14 +98,18 @@ public class Post extends FirebaseStructure{
      *
      * @return the number of ups
      */
-    public int getNbUps() { return nbUps; }
+    public int getNbUps() {
+        return nbUps;
+    }
 
     /**
      * Getter for the number of responses
      *
      * @return the number of responses
      */
-    public int getNbResponses() { return nbResponses; }
+    public int getNbResponses() {
+        return nbResponses;
+    }
 
     /**
      * Getter for anonymous
@@ -136,14 +143,18 @@ public class Post extends FirebaseStructure{
      *
      * @return the up scipers
      */
-    public List<String> getUpScipers() { return new ArrayList<>(Collections.unmodifiableCollection(upScipers)); }
+    public List<String> getUpScipers() {
+        return new ArrayList<>(Collections.unmodifiableCollection(upScipers));
+    }
 
     /**
      * Getter for the down scipers
      *
      * @return the down scipers
      */
-    public List<String> getDownScipers() { return new ArrayList<>(Collections.unmodifiableCollection(downScipers)); }
+    public List<String> getDownScipers() {
+        return new ArrayList<>(Collections.unmodifiableCollection(downScipers));
+    }
 
     public boolean upvoteWithUser(String userId){
         return !downScipers.contains(userId) && upScipers.add(userId);
@@ -157,7 +168,7 @@ public class Post extends FirebaseStructure{
         return Arrays.asList("sender_name", "sciper", "message", "time", "color", "nb_ups", "nb_responses", "up_scipers", "down_scipers", "id", "channel_id");
     }
 
-    public Map<String, Object> getData(){
+    public Map<String, Object> getData() {
         Map<String, Object> map = new HashMap<>();
         map.put("channel_id", channelId);
         map.put("sender_name", senderName);

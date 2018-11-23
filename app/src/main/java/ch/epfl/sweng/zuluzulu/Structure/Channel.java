@@ -118,7 +118,7 @@ public class Channel extends FirebaseStructure {
 
         boolean hasGoodLocation = hasGoodLocation(channelLocation, userLocation);
 
-        return hasGoodSection && hasGoodLocation;
+        return hasGoodSection && hasGoodLocation && (id <= 170);
     }
 
     private boolean hasGoodSection(String requestSection, String userSection) {

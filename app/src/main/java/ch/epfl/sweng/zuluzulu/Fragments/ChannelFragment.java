@@ -28,8 +28,12 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.Adapters.ChannelArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+<<<<<<< HEAD
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
+=======
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
+>>>>>>> master
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -37,8 +41,6 @@ import ch.epfl.sweng.zuluzulu.Structure.GPS;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
-
-import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 
 /**
  * A simple {@link Fragment} subclass.

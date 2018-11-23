@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,6 +23,9 @@ import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
  * Interface that contains general useful functions
  */
 public interface Utils {
+
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+    public static SimpleDateFormat stringToDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
      * Create a GeoPoint from a Location
@@ -65,15 +67,11 @@ public interface Utils {
         return R * c;
     }
 
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
-    SimpleDateFormat stringToDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
     /**
      * Return a random integer in the range [min, max]
      *
      * @param min the smallest integer you can get
      * @param max the biggest integer you can get
-     *
      * @return the random integer
      */
     static int randomInt(int min, int max) {

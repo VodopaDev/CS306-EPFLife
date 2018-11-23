@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AuthenticatedUser extends User {
-    public static final List<String> fields = Arrays.asList("followedAssociations", "followedEvents", "followedChannels");
     // Use sciper to check User (and not mail or gaspar)
     private final String sciper;
     private final String gaspar;

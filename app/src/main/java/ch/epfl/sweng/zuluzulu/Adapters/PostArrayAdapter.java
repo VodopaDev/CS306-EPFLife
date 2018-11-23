@@ -12,13 +12,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Text;
-
-import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
@@ -92,15 +88,12 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         long differenceInSeconds = Utils.getMillisecondsSince(currentPost.getTime()) / 1000;
         if (differenceInSeconds < 60) {
             timeAgo.setText(differenceInSeconds + "s");
-        }
-        else if (differenceInSeconds < 3600) {
-            timeAgo.setText(differenceInSeconds/60 + "min");
-        }
-        else if (differenceInSeconds < 3600 * 24){
-            timeAgo.setText(differenceInSeconds/3600 + "h");
-        }
-        else {
-            timeAgo.setText(differenceInSeconds/(3600*24) + "d");
+        } else if (differenceInSeconds < 3600) {
+            timeAgo.setText(differenceInSeconds / 60 + "min");
+        } else if (differenceInSeconds < 3600 * 24) {
+            timeAgo.setText(differenceInSeconds / 3600 + "h");
+        } else {
+            timeAgo.setText(differenceInSeconds / (3600 * 24) + "d");
         }
     }
 
@@ -133,8 +126,12 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         if (post.isUpByUser(user.getSciper())) {
             upButton.setImageResource(R.drawable.up_gray);
             downButton.setImageResource(R.drawable.down_transparent);
+<<<<<<< HEAD
         }
         else if (post.isDownByUser(user.getSciper())) {
+=======
+        } else if (post.isDownByUser()) {
+>>>>>>> master
             downButton.setImageResource(R.drawable.down_gray);
             upButton.setImageResource(R.drawable.up_transparent);
         }

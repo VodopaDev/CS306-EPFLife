@@ -259,7 +259,6 @@ abstract public class User implements Serializable {
                     && this.followedAssociations != null
                     && this.followedChannels != null
                     && this.followedEvents != null;
-                    //&& this.fav_event != null;
         }
 
     }

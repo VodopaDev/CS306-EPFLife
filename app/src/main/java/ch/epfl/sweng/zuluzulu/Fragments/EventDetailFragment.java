@@ -2,10 +2,13 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 
 import android.Manifest;
+<<<<<<< HEAD
 import android.content.pm.PackageManager;
 
+=======
+>>>>>>> master
 import android.content.Intent;
-
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
@@ -18,20 +21,34 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+<<<<<<< HEAD
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+=======
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+>>>>>>> master
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
+
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_ASSOCIATION_DETAIL_FRAGMENT;
 
 public class EventDetailFragment extends SuperFragment {
 
@@ -40,14 +57,19 @@ public class EventDetailFragment extends SuperFragment {
     private static final String ARG_EVENT = "ARG_EVENT";
     private static final String FAV_CONTENT = "This event is in your favorites";
     private static final String NOT_FAV_CONTENT = "This event isn't in your favorites";
-
+    MapView mMapView;
     private ImageView event_fav;
-
+    private Button chat_event;
+    private Channel channel;
     private Event event;
     private User user;
-
-    MapView mMapView;
     private GoogleMap googleMap;
+
+    private Button chat_room;
+    private Channel chat;
+
+    private Button assos_but;
+    private Association assos;
 
 
     public static EventDetailFragment newInstance(User user, Event event) {
@@ -88,6 +110,16 @@ public class EventDetailFragment extends SuperFragment {
         event_fav = view.findViewById(R.id.event_detail_fav);
         setFavButtonBehaviour();
 
+<<<<<<< HEAD
+=======
+
+        /*event_fav.setContentDescription(NOT_FAV_CONTENT);
+        if (user.isConnected() && ((AuthenticatedUser)user).isFavEvent(event)) {
+            loadFavImage(R.drawable.fav_on);
+            event_fav.setContentDescription(FAV_CONTENT);
+        }*/
+
+>>>>>>> master
         view.findViewById(R.id.event_detail_export).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,11 +184,19 @@ public class EventDetailFragment extends SuperFragment {
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         });
 
+        assos_but = view.findViewById(R.id.event_detail_but_assos);
+        loadAssos();
+        setAssosButtonBehavior();
+
+        chat_room = view.findViewById(R.id.event_detail_chatRoom);
+        loadMainChat();
+        setMainChatButtonBehaviour();
+
 
         return view;
     }
 
-    private void loadFavImage(int drawable){
+    private void loadFavImage(int drawable) {
         Glide.with(getContext())
                 .load(drawable)
                 .centerCrop()
@@ -217,14 +257,94 @@ public class EventDetailFragment extends SuperFragment {
         intent.setType("vnd.android.cursor.item/event");
 
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, event.getStartDate().getTime());
-        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.getStartDate().getTime() + 3600*2);
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.getStartDate().getTime() + 3600 * 2);
         intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
 
         intent.putExtra(CalendarContract.Events.TITLE, event.getName());
+<<<<<<< HEAD
         intent.putExtra(CalendarContract.Events.DESCRIPTION,  event.getShortDescription());
+=======
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, event.getShortDesc());
+>>>>>>> master
         intent.putExtra(CalendarContract.Events.EVENT_LOCATION, "To be precised");
 
         startActivity(intent);
     }
+<<<<<<< HEAD
+=======
+
+    private void setMainChatButtonBehaviour() {
+        chat_room.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (chat != null) {
+                    if (user.isConnected())
+                        mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, chat);
+                    else
+                        Snackbar.make(getView(), "Login to access chat room", 5000).show();
+                }
+            }
+        });
+    }
+
+    private void loadMainChat() {
+        // Fetch online data of the main_chat
+        if (event.getChannelId() != 0) {
+            IdlingResourceFactory.incrementCountingIdlingResource();
+            FirebaseFirestore.getInstance()
+                    .document("channels/channel" + event.getChannelId())
+                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                    if (fmap.hasFields(Channel.FIELDS)) {
+                        chat = new Channel(fmap);
+                        chat_room.setText(chat.getName() + " Chat");
+                    } else
+                        chat_room.setText("Error loading the chat :(");
+                    IdlingResourceFactory.decrementCountingIdlingResource();
+                }
+            });
+        } else {
+            chat_room.setText("There is no chat :(");
+        }
+    }
+
+    public void setAssosButtonBehavior() {
+        assos_but.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (assos != null)
+                    mListener.onFragmentInteraction(OPEN_ASSOCIATION_DETAIL_FRAGMENT, assos);
+            }
+        });
+    }
+
+    private void loadAssos() {
+        // Fetch online data of the main_chat
+        if (event.getAssosId() != 0) {
+            IdlingResourceFactory.incrementCountingIdlingResource();
+            FirebaseFirestore.getInstance()
+                    .document("assos_info/" + event.getAssosId())
+                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                    if (fmap.hasFields(Association.FIELDS)) {
+                        assos = new Association(fmap);
+                        assos_but.setText(assos.getName());
+                    } else
+                        assos_but.setText("Error loading the association :(");
+                    IdlingResourceFactory.decrementCountingIdlingResource();
+                }
+            });
+        } else {
+            assos_but.setText("There is no association :(");
+        }
+    }
+
+
+>>>>>>> master
 }
 

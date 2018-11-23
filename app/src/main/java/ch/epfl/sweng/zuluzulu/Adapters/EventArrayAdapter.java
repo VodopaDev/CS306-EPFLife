@@ -115,7 +115,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         event_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("FRAG_CHANGE","Switching to " + event.getName() + "detailed view");
+                Log.d("FRAG_CHANGE", "Switching to " + event.getName() + "detailed view");
                 mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT, event);
             }
         });

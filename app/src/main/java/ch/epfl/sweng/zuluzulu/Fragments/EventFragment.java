@@ -59,7 +59,7 @@ public class EventFragment extends SuperFragment {
     private ListView listview_event;
     private Button button_event_all;
     private Button button_event_fav;
-    private Button button_event_add;
+    private ImageButton button_event_add;
 
     private CheckBox checkbox_event_sort_name;
     private CheckBox checkbox_event_sort_date;
@@ -187,7 +187,6 @@ public class EventFragment extends SuperFragment {
             eventsFiltered.addAll(eventsToFilter);
             event_adapter.notifyDataSetChanged();
         });
-    }
 
     private void updateListView(Button new_selected, Button new_unselected, ArrayList<Event> data, ListView list) {
         new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
@@ -208,7 +207,7 @@ public class EventFragment extends SuperFragment {
         });
     }
 
-    private void selectDate(EditText date){
+    private void selectDate(EditText date) {
         checkbox_event_sort_name.setChecked(false);
         checkbox_event_sort_name.setEnabled(true);
         checkbox_event_sort_like.setChecked(false);
@@ -218,11 +217,10 @@ public class EventFragment extends SuperFragment {
         event_search_bar.getText().clear();
         event_search_bar.clearFocus();
 
-        if (date == event_fragment_from_date){
+        if (date == event_fragment_from_date) {
             event_fragment_to_date.getText().clear();
             event_fragment_to_date.clearFocus();
-        }
-        else {
+        } else {
             if (event_fragment_from_date.getText().length() == 0) {
                 event_fragment_to_date.getText().clear();
                 event_fragment_from_date.clearFocus();
@@ -252,7 +250,7 @@ public class EventFragment extends SuperFragment {
                 eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    private void updateLabelDate(EditText date){
+    private void updateLabelDate(EditText date) {
         String myFormat = "dd/MM/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
 
@@ -260,6 +258,7 @@ public class EventFragment extends SuperFragment {
 
         date.setText(stringDate);
 
+<<<<<<< HEAD
         if (date == event_fragment_from_date)
             sortByFromDate();
         else
@@ -271,6 +270,27 @@ public class EventFragment extends SuperFragment {
         for (Event event: eventsToFilter)
             if (event.getStartDate().compareTo(eventCalendar.getTime()) >= 0) {
                 eventsToFilter.add(event);
+=======
+        if (date == event_fragment_from_date) {
+            sortByFromDate(stringDate);
+        } else {
+            sortByFromAndToDate(stringDate);
+        }
+    }
+
+    private void sortByFromDate(String s) {
+        String date = s.toString();
+
+        emptySortedEventList();
+
+        Collections.sort(event_all, Event.dateComparator());
+        Collections.sort(event_fav, Event.dateComparator());
+
+        for (int i = 0; i < event_all.size(); i++) {
+            if (event_all.get(i).getStartDate().compareTo(eventCalendar.getTime()) >= 0) {
+                event_all_sorted.add(event_all.get(i));
+            }
+>>>>>>> master
         }
         listview_event.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
@@ -278,18 +298,32 @@ public class EventFragment extends SuperFragment {
         dateFrom = eventCalendar.getTime();
     }
 
+<<<<<<< HEAD
     private void sortByFromAndToDate(){
         eventsFiltered.clear();
         for (Event event: eventsToFilter) {
             if (event.getStartDate().compareTo(dateFrom) >= 0 && event.getStartDate().compareTo(eventCalendar.getTime()) <= 0) {
                 eventsToFilter.add(event);
+=======
+    private void sortByFromAndToDate(String s) {
+        String date = s.toString();
+
+        emptySortedEventList();
+
+        Collections.sort(event_all, Event.dateComparator());
+        Collections.sort(event_fav, Event.dateComparator());
+
+        for (int i = 0; i < event_all.size(); i++) {
+            if (event_all.get(i).getStartDate().compareTo(dateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(eventCalendar.getTime()) <= 0) {
+                event_all_sorted.add(event_all.get(i));
+>>>>>>> master
             }
         }
         listview_event.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
     }
 
-    private void setFilterWithSearchBar(){
+    private void sortWithSearchBar() {
         event_search_bar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -310,6 +344,7 @@ public class EventFragment extends SuperFragment {
                 event_fragment_to_date.clearFocus();
 
                 String keyWord = s.toString().toLowerCase();
+
                 eventsFiltered.clear();
                 for (Event event : eventsToFilter) {
                     if (event.getName().toLowerCase().contains(keyWord))

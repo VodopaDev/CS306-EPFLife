@@ -19,6 +19,7 @@ import ch.epfl.sweng.zuluzulu.R;
 public class Association extends FirebaseStructure implements Comparable<Association> {
     private String name;
     private String shortDescription;
+    private String longDescription;
 
     private String iconUri;
     private String bannerUri;
@@ -26,6 +27,17 @@ public class Association extends FirebaseStructure implements Comparable<Associa
     private List<Map<String, Object>> upcomingEvents;
     private String channelId;
     private String closestEventId;
+
+    public Association(String id, String name, String short_desc, String long_desc, String icon_uri, String banner_uri, List<Map<String, Object>> events, String channel_id) {
+        super(id);
+        this.name = name;
+        this.shortDescription = short_desc;
+        this.longDescription = long_desc;
+        this.iconUri = icon_uri;
+        this.bannerUri = banner_uri;
+        this.upcomingEvents = events;
+        this.channelId = channel_id;
+    }
 
     /**
      * Create an association using a Firebase adapted map
@@ -83,10 +95,6 @@ public class Association extends FirebaseStructure implements Comparable<Associa
     @Nullable
     public String getChannelId() {
         return channelId;
-    }
-
-    public void setChannelId(String channelId){
-        this.channelId = channelId;
     }
 
     /**

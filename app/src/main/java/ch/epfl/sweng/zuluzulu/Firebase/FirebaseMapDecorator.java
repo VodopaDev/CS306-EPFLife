@@ -174,5 +174,7 @@ public class FirebaseMapDecorator {
      *
      * @return the document id
      */
-    public String getId() { return id; }
+    public String getId() {
+        return id;
+    }
 }
