@@ -49,6 +49,7 @@ public class EventTest {
         map.put("icon_uri", TEST_URI_STRING);
         map.put("banner_uri", TEST_URI_STRING);
         map.put("start_date", START_DATE);
+        map.put("end_date", START_DATE);
         map.put("likes", LIKES_1);
         map.put("organizer", ORGANIZER);
         map.put("place", PLACE);
@@ -64,6 +65,7 @@ public class EventTest {
         map.put("short_desc", SHORT_DESC);
         map.put("long_desc", LONG_DESC);
         map.put("start_date", START_DATE_1);
+        map.put("end_date", START_DATE_1);
         map.put("likes", LIKES_2);
 
         event1 = new Event(new FirebaseMapDecorator(map));

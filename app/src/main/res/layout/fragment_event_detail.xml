@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/event_detail_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.EventDetailFragment">
@@ -33,11 +34,11 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="bottom|start"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
             android:adjustViewBounds="false"
             android:background="@android:color/white"
             android:contentDescription="@string/card_event_image_description"
@@ -64,8 +65,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
             android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
             android:textColor="@android:color/white" />
 
     </FrameLayout>
@@ -263,7 +264,6 @@
         app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="@+id/event_detail_border"
         app:layout_constraintTop_toBottomOf="@+id/event_detail_place" />
-
 
 
     <ImageButton

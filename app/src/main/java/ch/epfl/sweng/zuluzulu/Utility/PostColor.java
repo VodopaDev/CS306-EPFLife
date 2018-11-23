@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 
 public enum PostColor {
@@ -22,10 +21,6 @@ public enum PostColor {
         this.value = value;
     }
 
-    public String getValue() {
-        return value;
-    }
-
     /**
      * Return a random postColor
      *
@@ -39,7 +34,6 @@ public enum PostColor {
      * Return a random postColor among all except the one given in parameter
      *
      * @param color The color we don't want
-     *
      * @return The random postColor
      */
     public static PostColor getRandomColorButNot(PostColor color) {
@@ -49,5 +43,9 @@ public enum PostColor {
         }
         int randomIndex = Utils.randomInt(0, colors.size() - 1);
         return colors.get(randomIndex);
+    }
+
+    public String getValue() {
+        return value;
     }
 }

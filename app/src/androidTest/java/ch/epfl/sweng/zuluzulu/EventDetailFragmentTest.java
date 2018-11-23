@@ -93,7 +93,7 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
         waitABit();
         onView(withText("Hacking Contest!")).perform(ViewActions.click());
         onView(withId(R.id.event_detail_but_assos)).perform(ViewActions.click());
-        onView(withText("LauzHack")).check(matches(isDisplayed()));
+        Utility.checkFragmentIsOpen(R.id.association_detail_fragment);
     }
 
 }

@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,6 +23,9 @@ import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
  * Class that contains general useful functions
  */
 public final class Utils {
+
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+    public static SimpleDateFormat stringToDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     private Utils() {
     }
@@ -76,15 +78,11 @@ public final class Utils {
         return R * c;
     }
 
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
-    public static SimpleDateFormat stringToDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
     /**
      * Return a random integer in the range [min, max]
      *
      * @param min the smallest integer you can get
      * @param max the biggest integer you can get
-     *
      * @return the random integer
      */
     public static int randomInt(int min, int max) {
@@ -113,9 +111,9 @@ public final class Utils {
     /**
      * Add the given data to firebase
      *
-     * @param data The map to push on firebase
+     * @param data       The map to push on firebase
      * @param collection The collection reference where you want to push the data
-     * @param TAG The tag
+     * @param TAG        The tag
      */
     public static void addDataToFirebase(Map data, DatabaseCollection collection, String TAG) {
         collection
