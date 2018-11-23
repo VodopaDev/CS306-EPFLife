@@ -27,6 +27,7 @@ import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
 import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
@@ -176,7 +177,7 @@ public class MementoFragment extends SuperFragment {
     }
 
     private Event createEvent(JSONObject jsonobject) throws JSONException {
-        return new Event.EventBuilder()
+        return new EventBuilder()
                 .setId(0)
                 .setDate(new EventDate(
                         jsonobject.getString("event_start_date"), jsonobject.getString("event_start_time"),
