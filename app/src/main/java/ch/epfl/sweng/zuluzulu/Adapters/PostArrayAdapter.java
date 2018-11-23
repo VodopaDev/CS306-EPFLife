@@ -129,17 +129,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
                 documentReference.update(
                         "nbUps", nbUps,
                         "upScipers", upScipers
-                ).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("up", "success");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("up", "fail");
-                    }
-                });
+                );
                 post.setUpByUser(true);
             } else {
                 downScipers.add(post.getUserSciper());
