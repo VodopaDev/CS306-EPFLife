@@ -113,13 +113,13 @@ public class MementoFragment extends SuperFragment {
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
-    private void addDatabase(){
+    private void addDatabase() {
         int i = 0;
         for (Event event : events
-             ) {
+                ) {
             //the map for the event
             Map<String, Object> docData = createHashmap(event);
-            if (docData != null && i++ <5) {
+            if (docData != null && i++ < 5) {
                 DatabaseFactory.getDependency().collection("events_info").document("event" + Integer.toString(event.getId())).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -130,7 +130,7 @@ public class MementoFragment extends SuperFragment {
         }
     }
 
-    private Map<String,Object> createHashmap(Event event) {
+    private Map<String, Object> createHashmap(Event event) {
 
         Map<String, Object> docData = new HashMap<>();
         docData.put("icon_uri", event.getIconUri());
@@ -182,20 +182,20 @@ public class MementoFragment extends SuperFragment {
                         jsonobject.getString("event_start_date"), jsonobject.getString("event_start_time"),
                         jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")))
                 .setUrlPlaceAndRoom(jsonobject.getString("event_url_place_and_room"))
-                .setAssosId(    1)
-                .setChannelId( 1)
-                .setLikes(      0)
-                .setShortDesc(  jsonobject.getString("description"))
-                .setName(       jsonobject.getString("title"))
-                .setLongDesc(   jsonobject.getString("description"))
-                .setOrganizer(  jsonobject.getString("event_organizer"))
-                .setPlace(      jsonobject.getString("event_place_and_room"))
-                .setBannerUri(  jsonobject.getString("event_visual_absolute_url"))
-                .setIconUri(    jsonobject.getString("event_visual_absolute_url"))
-                .setWebsite(    jsonobject.getString("event_url_link"))
-                .setContact(    jsonobject.getString("event_contact"))
-                .setCategory(   jsonobject.getString(        "event_category_fr"))
-                .setSpeaker(    jsonobject.getString("event_speaker"))
+                .setAssosId(1)
+                .setChannelId(1)
+                .setLikes(0)
+                .setShortDesc(jsonobject.getString("description"))
+                .setName(jsonobject.getString("title"))
+                .setLongDesc(jsonobject.getString("description"))
+                .setOrganizer(jsonobject.getString("event_organizer"))
+                .setPlace(jsonobject.getString("event_place_and_room"))
+                .setBannerUri(jsonobject.getString("event_visual_absolute_url"))
+                .setIconUri(jsonobject.getString("event_visual_absolute_url"))
+                .setWebsite(jsonobject.getString("event_url_link"))
+                .setContact(jsonobject.getString("event_contact"))
+                .setCategory(jsonobject.getString("event_category_fr"))
+                .setSpeaker(jsonobject.getString("event_speaker"))
                 .build();
     }
 

@@ -30,8 +30,8 @@ public class EventDate {
      * @param end   start date
      */
     public EventDate(Date start, Date end) {
-        assert(start != null);
-        assert(end != null);
+        assert (start != null);
+        assert (end != null);
 
         this.setStartDate(start);
         this.setEndDate(end);
@@ -47,35 +47,6 @@ public class EventDate {
      */
     public EventDate(String start_date, String start_time, String end_date, String end_time) {
         this(stringToStartDate(start_date, start_time), stringToEndDate(end_date, end_time));
-    }
-
-
-    /**
-     * return the start date
-     *
-     * @return Date
-     */
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    /**
-     * Set start date
-     *
-     * @param startDate Date
-     */
-    private void setStartDate(Date startDate) {
-        assert (startDate != null);
-        this.startDate = startDate;
-    }
-
-    /**
-     * Get date string format
-     *
-     * @return String
-     */
-    public String getStartDateString() {
-        return DateToString(startDate);
     }
 
     /**
@@ -121,15 +92,6 @@ public class EventDate {
         return createDate(date);
     }
 
-    /**
-     * get End date as string
-     *
-     * @return string
-     */
-    public String getEndDateString() {
-        return DateToString(endDate);
-    }
-
     private static void checkDateStringInput(String date, String time) {
         if (date == null || "2018-01-01".length() != date.length()) {
             throw new IllegalArgumentException();
@@ -153,6 +115,43 @@ public class EventDate {
             throw new IllegalArgumentException();
         }
         return start_date;
+    }
+
+    /**
+     * return the start date
+     *
+     * @return Date
+     */
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    /**
+     * Set start date
+     *
+     * @param startDate Date
+     */
+    private void setStartDate(Date startDate) {
+        assert (startDate != null);
+        this.startDate = startDate;
+    }
+
+    /**
+     * Get date string format
+     *
+     * @return String
+     */
+    public String getStartDateString() {
+        return DateToString(startDate);
+    }
+
+    /**
+     * get End date as string
+     *
+     * @return string
+     */
+    public String getEndDateString() {
+        return DateToString(endDate);
     }
 
     /**

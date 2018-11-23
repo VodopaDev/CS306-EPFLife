@@ -1,7 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import android.net.Uri;
-
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -209,6 +207,7 @@ public class Event implements Serializable {
 
         /**
          * Build an Event
+         *
          * @return Event
          */
         public Event build() {
@@ -296,11 +295,12 @@ public class Event implements Serializable {
 
         /**
          * Create banner, default if null given
+         *
          * @param bannerUri Banner url
          * @return this
          */
         public EventBuilder setBannerUri(String bannerUri) {
-            if(bannerUri == null){
+            if (bannerUri == null) {
                 this.bannerUri = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner;
             } else {
                 this.bannerUri = bannerUri;
@@ -310,11 +310,12 @@ public class Event implements Serializable {
 
         /**
          * Create icon, default if null given
+         *
          * @param iconUri Icon url
          * @return this
          */
         public EventBuilder setIconUri(String iconUri) {
-            if(iconUri == null){
+            if (iconUri == null) {
                 System.out.println("null");
                 this.iconUri = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon;
             } else {
