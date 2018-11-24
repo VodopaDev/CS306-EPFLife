@@ -59,7 +59,8 @@ public class PostFragmentTest extends TestWithAuthenticatedAndFragment<PostFragm
     }
 
     @Test
-    public void testUserCanUp() throws InterruptedException {
+    public void testUserCanUpPost() throws InterruptedException {
+        // Todo
         // TimeUnit.SECONDS.sleep(10);
         // onData(anything()).inAdapterView(withId(R.id.posts_list_view)).onChildView(withId(R.id.post_up_button)).check(matches(isDisplayed()));
     }
