@@ -14,12 +14,14 @@ import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 import ch.epfl.sweng.zuluzulu.Utility;
 
 import static android.support.test.espresso.Espresso.closeSoftKeyboard;
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.not;
 
 @RunWith(AndroidJUnit4.class)
@@ -57,12 +59,14 @@ public class ReplyFragmentTest extends TestWithAuthenticatedAndFragment<ReplyFra
     }
 
     @Test
-    public void testUserCanUpOriginalPost() {
-        // Todo
+    public void testUserCanUpDownOriginalPost() {
+        onData(anything()).inAdapterView(withId(R.id.reply_original_post)).atPosition(0).onChildView(withId(R.id.post_up_button)).check(matches(isDisplayed()));
+        onData(anything()).inAdapterView(withId(R.id.reply_original_post)).atPosition(0).onChildView(withId(R.id.post_down_button)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testUserCanUpReply() {
-        // Todo
+        onData(anything()).inAdapterView(withId(R.id.reply_list_view)).onChildView(withId(R.id.post_up_button)).check(matches(isDisplayed()));
+        onData(anything()).inAdapterView(withId(R.id.reply_list_view)).onChildView(withId(R.id.post_down_button)).check(matches(isDisplayed()));
     }
 }
