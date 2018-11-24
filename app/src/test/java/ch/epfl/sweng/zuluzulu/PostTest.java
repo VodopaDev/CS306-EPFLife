@@ -15,7 +15,7 @@ import java.util.Map;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
+import Utils;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 
 import static org.junit.Assert.assertEquals;

@@ -12,15 +12,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
+import ch.epfl.sweng.zuluzulu.Utility.Utils;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 public class PostArrayAdapter extends ArrayAdapter<Post> {
@@ -126,12 +123,8 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         if (post.isUpByUser(user.getSciper())) {
             upButton.setImageResource(R.drawable.up_gray);
             downButton.setImageResource(R.drawable.down_transparent);
-<<<<<<< HEAD
         }
         else if (post.isDownByUser(user.getSciper())) {
-=======
-        } else if (post.isDownByUser()) {
->>>>>>> master
             downButton.setImageResource(R.drawable.down_gray);
             upButton.setImageResource(R.drawable.up_transparent);
         }

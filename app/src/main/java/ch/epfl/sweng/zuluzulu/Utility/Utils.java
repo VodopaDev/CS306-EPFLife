@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu.Structure;
+package ch.epfl.sweng.zuluzulu.Utility;
 
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -24,8 +24,8 @@ import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
  */
 public interface Utils {
 
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
-    public static SimpleDateFormat stringToDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+    SimpleDateFormat stringToDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
      * Create a GeoPoint from a Location

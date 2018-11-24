@@ -3,7 +3,6 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import android.net.Uri;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +11,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Utility.Utils;
 
 
 // TODO: Add admin access, ending date, linked-chat id, linked-association id, position
@@ -21,9 +21,10 @@ public class Event extends FirebaseStructure {
     private String shortDescription;
     private String longDescription;
     private String channelId;
+    private String associationId;
 
-    private Date startDate;
     private int likes;
+    private EventDate date;
     private String organizer;
     private String place;
 
@@ -36,10 +37,6 @@ public class Event extends FirebaseStructure {
     private String category;
     private String speaker;
 
-    private EventDate date;
-
-    private int channel_id;
-    private int assos_id;
 
     public Event(String id, String name, String shortDesc, String longDesc, EventDate date,
                  int likes, String organizer, String place, String bannerUri, String iconUri,
@@ -72,26 +69,17 @@ public class Event extends FirebaseStructure {
         if (!data.hasFields(requiredFields()))
             throw new IllegalArgumentException();
 
-<<<<<<< HEAD
-=======
-        id = data.getInteger("id");
-        channel = data.getInteger("channel_id");
->>>>>>> master
         name = data.getString("name");
         shortDescription = data.getString("short_description");
         longDescription = data.getString("long_description");
         channelId = data.getString("channel_id");
+        associationId = data.getString("association_id");
         likes = data.getInteger("likes");
         organizer = data.getString("organizer");
         place = data.getString("place");
-<<<<<<< HEAD
         iconUri = data.getString("icon_uri");
         bannerUri = data.getString("banner_uri");
-        startDate = data.getDate("start_date");
-=======
-
-        shortDesc = data.getString("short_desc");
-        longDesc = data.getString("long_desc");
+        date = new EventDate(data.getDate("start_date"), data.getDate("end_date"));
 
         setUrlPlaceAndRoom(data.getString("url_place_and_room"));
         setWebsite(data.getString("website"));
@@ -100,23 +88,10 @@ public class Event extends FirebaseStructure {
         setSpeaker(data.getString("speaker"));
 
 
-        String icon_str = data.getString("icon_uri");
-        Uri uri = icon_str == null ? Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) : Uri.parse(icon_str);
-        iconUri = uri == null ? null : uri.toString();
-
-        // Init the Banner URI
-        String banner_str = data.getString("banner_uri");
-        uri = banner_str == null ? Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) : Uri.parse(banner_str);
-        bannerUri = uri == null ? null : uri.toString();
-
-        setDate(new EventDate(data.getDate("start_date"), data.getDate("end_date")));
+        iconUri = data.getString("icon_uri");
+        bannerUri = data.getString("banner_uri");
 
         likes = data.getInteger("likes");
-
-        channel_id = data.get("channel_id") == null ? 0 : data.getInteger("channel_id");
-
-        assos_id = data.get("assos_id") == null ? 0 : data.getInteger("assos_id");
->>>>>>> master
     }
 
 
@@ -125,7 +100,7 @@ public class Event extends FirebaseStructure {
     }
 
     public static Comparator<Event> dateComparator() {
-        return (o1, o2) -> o1.getStartDate().compareTo(o2.getStartDate());
+        return (o1, o2) -> o1.date.getStartDate().compareTo(o2.date.getStartDate());
     }
 
     public static Comparator<Event> likeComparator() {
@@ -136,14 +111,14 @@ public class Event extends FirebaseStructure {
         return name;
     }
 
-<<<<<<< HEAD
     public String getShortDescription() {
         return shortDescription;
     }
 
     public String getLongDescription() {
         return longDescription;
-=======
+    }
+
     public void setName(String name) {
         if (name == null) {
             throw new IllegalArgumentException();
@@ -151,30 +126,8 @@ public class Event extends FirebaseStructure {
         this.name = name.trim().replaceAll("\"", "");
     }
 
-    public int getChannel() {
-        return channel;
->>>>>>> master
-    }
-
-    public String getShortDesc() {
-        return shortDesc;
-    }
-
-<<<<<<< HEAD
-    public String getStartDateString() {
-        return Utils.dateFormat.format(startDate);
-    }
-
     public String getChannelId(){
         return channelId;
-    }
-
-    public void setChannelId(String channelId){
-        this.channelId = channelId;
-=======
-    public String getLongDesc() {
-        return longDesc;
->>>>>>> master
     }
 
     /**
@@ -219,33 +172,38 @@ public class Event extends FirebaseStructure {
         likes++;
     }
 
-<<<<<<< HEAD
     public static List<String> requiredFields() {
-        return Arrays.asList("id","name","short_description","long_description","start_date","likes", "channel_id");
+        return Arrays.asList(
+                "id","name","short_description","long_description", "category", "icon_uri",
+                "banner_uri", "likes", "channel_id", "association_id", "start_date", "end_date",
+                "place", "organizer", "url_place_and_room", "website", "contact", "speaker");
     }
 
 
-    public Map<String,Object> getData(){
+    public Map<String,Object> getData() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", getId());
         map.put("name", name);
         map.put("short_description", shortDescription);
         map.put("long_description", longDescription);
+        map.put("category", category);
+
         map.put("icon_uri", iconUri);
         map.put("banner_uri", bannerUri);
+
         map.put("likes", likes);
         map.put("channel_id", channelId);
-        map.put("start_date", startDate);
+        map.put("association_id",associationId);
+
+        map.put("start_date", date.getStartDate());
+        map.put("end_date", date.getEndDate());
         map.put("place", place);
         map.put("organizer", organizer);
+        map.put("url_place_and_room", url_place_and_room);
+        map.put("website", website);
+        map.put("contact", contact);
+        map.put("speaker", speaker);
         return map;
-=======
-    public int getChannelId() {
-        return channel_id;
-    }
-
-    public int getAssosId() {
-        return assos_id;
     }
 
     public String getUrlPlaceAndRoom() {
@@ -318,6 +276,5 @@ public class Event extends FirebaseStructure {
 
     public String getEndDateString() {
         return date.getEndDateString();
->>>>>>> master
     }
 }

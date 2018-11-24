@@ -1,24 +1,14 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.imanoweb.calendarview.CalendarListener;
 import com.imanoweb.calendarview.CustomCalendarView;
-import com.imanoweb.calendarview.DayDecorator;
-import com.imanoweb.calendarview.DayView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,15 +18,10 @@ import java.util.List;
 import java.util.Locale;
 
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
-<<<<<<< HEAD
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
-=======
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
->>>>>>> master
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
+import ch.epfl.sweng.zuluzulu.Utility.Utils;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 
 

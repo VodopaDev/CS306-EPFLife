@@ -10,7 +10,7 @@ import org.junit.runners.JUnit4;
 
 import java.util.Date;
 
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
+import Utils;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
