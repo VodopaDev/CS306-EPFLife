@@ -122,13 +122,15 @@ public class CalendarFragment extends SuperFragment {
     }
 
     private void fillFollowedEventsList() {
-        FirebaseProxy.getInstance().getEventsFromIds(user.getFollowedEvents(), result -> {
+        FirebaseProxy.getInstance().getAllEvents(result -> {
             Date date = Timestamp.now().toDate();
             String now = Utils.dateFormat.format(date);
             for(Event event: result) {
-                followedEvents.add(event);
-                if (now.equals(event.getStartDateString()))
-                    selectedDayEvents.add(event);
+                if(user.isFollowedEvent(event.getId())) {
+                    followedEvents.add(event);
+                    if (now.equals(event.getStartDateString()))
+                        selectedDayEvents.add(event);
+                }
             }
 
             eventAdapter.notifyDataSetChanged();

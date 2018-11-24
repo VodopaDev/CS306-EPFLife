@@ -125,7 +125,9 @@ public class MementoFragment extends SuperFragment {
                 Event event = new Event(
                         FirebaseProxy.getInstance().getNewEventId(),
                         jsonobject.getString("title"),
-                        jsonobject.getString("description"), jsonobject.getString("description"),
+                        jsonobject.getString("description"),
+                        jsonobject.getString("description"),
+                        FirebaseProxy.getInstance().getNewChannelId(),
                         new EventDate(jsonobject.getString("event_start_date"), jsonobject.getString("event_start_time"),
                                 jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")),
                         0,

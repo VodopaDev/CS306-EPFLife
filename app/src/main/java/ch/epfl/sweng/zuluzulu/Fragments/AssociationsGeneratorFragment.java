@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -99,8 +100,8 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                         data.split(",")[1], // name
                         data.split(",")[2], // short description
                         data.split(",")[2], // long description
-                        "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon, // icon uri
-                        "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner, // banner_icon
+                        EPFL_LOGO, // icon uri
+                        EPFL_LOGO, // banner_icon
                         new ArrayList<>(), // events
                         FirebaseProxy.getInstance().getNewChannelId() // channel id
                         );

@@ -38,8 +38,10 @@ import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 
 public class AddEventFragment extends SuperFragment {
+    private static final String EPFL_LOGO = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
     private static final int[] INDICES = {0, 2, 4, 6, 7, 9, 11};
     //for association name
     private List<String> association_names = new ArrayList<>();
@@ -193,19 +195,25 @@ public class AddEventFragment extends SuperFragment {
                     return;
                 }
 
-                Map<String, Object> docData = new HashMap<>();
-                docData.put("icon_uri", "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg");
-                docData.put("id", FirebaseProxy.getInstance().getNewAssociationId());
-                docData.put("channel_id", FirebaseProxy.getInstance().getNewChannelId());
-                docData.put("likes", 0L);
-                docData.put("long_description", desc);
-                docData.put("name", name);
-                docData.put("organizer", org);
-                docData.put("place", pla);
-                docData.put("short_description", tit);
-                docData.put("start_date", date);
-
-                FirebaseProxy.getInstance().addEvent(new Event(new FirebaseMapDecorator(docData)));
+                Event event = new Event(
+                        FirebaseProxy.getInstance().getNewAssociationId(),
+                        name,
+                        tit,
+                        desc,
+                        FirebaseProxy.getInstance().getNewChannelId(),
+                        new EventDate(date,date),
+                        0,
+                        org,
+                        pla,
+                        EPFL_LOGO,
+                        EPFL_LOGO,
+                        "EPFL",
+                        "epfl.ch",
+                        "contact",
+                        "no category",
+                        "speaker"
+                );
+                FirebaseProxy.getInstance().addEvent(event);
             }
         });
     }

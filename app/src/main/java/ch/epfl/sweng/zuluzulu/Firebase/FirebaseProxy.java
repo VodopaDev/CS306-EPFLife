@@ -188,24 +188,22 @@ public class FirebaseProxy {
      * @param onResult interface defining apply()
      */
     public void getEventsFromIds(List<String> ids, OnResult<List<Event>> onResult){
-        IdlingResourceFactory.incrementCountingIdlingResource();
         List<Event> result = new ArrayList<>();
         Counter counter = new Counter(ids.size());
 
         for(String id: ids){
+            IdlingResourceFactory.incrementCountingIdlingResource();
             eventCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
                 if(fmap.hasFields(Event.requiredFields()))
                     result.add(new Event(fmap));
-                if(counter.increment()) {
+                if(counter.increment())
                     onResult.apply(result);
-                    IdlingResourceFactory.decrementCountingIdlingResource();
-                }
+                IdlingResourceFactory.decrementCountingIdlingResource();
             }).addOnFailureListener(e -> {
-                        if(counter.increment()) {
+                        if(counter.increment())
                             onResult.apply(result);
-                            IdlingResourceFactory.decrementCountingIdlingResource();
-                        }
+                        IdlingResourceFactory.decrementCountingIdlingResource();
                     });
         }
     }
