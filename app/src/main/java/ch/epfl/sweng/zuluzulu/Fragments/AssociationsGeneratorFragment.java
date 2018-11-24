@@ -94,47 +94,22 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                 urlHandler.execute(url);
                 index++;
 
-                Association association = new Association(index, data.split(",")[1], data.split(",")[2], data.split(",")[2], EPFL_LOGO, EPFL_LOGO, new ArrayList<>(), 1, 0);
-
-                this.associations.add(association);
+                Association association = new Association(
+                        FirebaseProxy.getInstance().getNewAssociationId(), //id
+                        data.split(",")[1], // name
+                        data.split(",")[2], // short description
+                        data.split(",")[2], // long description
+                        "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon, // icon uri
+                        "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner, // banner_icon
+                        new ArrayList<>(), // events
+                        FirebaseProxy.getInstance().getNewChannelId() // channel id
+                        );
+                associations.add(association);
             }
         }
 
         adapter.notifyDataSetChanged();
         IdlingResourceFactory.decrementCountingIdlingResource();
-    }
-
-    private void addDatabase(int index) {
-        if (index < 0 || index >= this.associations.size())
-            return;
-
-        //creating the channel for the DB
-        Map<String, Object> docDataChannel = new HashMap<>();
-        docDataChannel.put("description", "chat of the association : " + associations.get(index).getName());
-        docDataChannel.put("icon_uri", associations.get(index).getIconUri());
-        docDataChannel.put("id", index + 20);
-        docDataChannel.put("name", associations.get(index).getName());
-
-        Map<String, Object> restrictions = new HashMap<>();
-        restrictions.put("location", null);
-        restrictions.put("section", null);
-
-        docDataChannel.put("restrictions", restrictions);
-        db.collection("channels").document("channel" + Integer.toString(index + 20)).set(docDataChannel);
-
-
-        //put db
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("channel_id", index + 20);
-        docData.put("events", new ArrayList<>());
-        docData.put("icon_uri", associations.get(index).getIconUri());
-        docData.put("banner_uri", EPFL_LOGO);
-        docData.put("name", associations.get(index).getName());
-        docData.put("short_desc", associations.get(index).getShortDescription());
-        docData.put("long_desc", associations.get(index).getLongDescription());
-        docData.put("id", index);
-
-        db.collection("assos_info").document(Integer.toString(index)).set(docData);
     }
 
     /**
@@ -151,8 +126,17 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         }
 
         Association asso = this.associations.get(index);
-        Association newAssociation = new Association(asso.getId(), asso.getName(), asso.getShortDescription(), asso.getLongDescription(), value, asso.getBannerUri(), new ArrayList<>(), asso.getChannelId(), asso.getClosestEventId());
-        this.associations.set(index, newAssociation);
+        Association newAssociation = new Association(
+                asso.getId(), // id
+                asso.getName(), // name
+                asso.getShortDescription(), // short description
+                asso.getLongDescription(), // long description
+                value, // icon uri
+                asso.getBannerUri().toString(), // banner uri
+                new ArrayList<>(), // events
+                asso.getChannelId() // channel id
+                );
+        associations.set(index, newAssociation);
         adapter.notifyDataSetChanged();
 
         IdlingResourceFactory.decrementCountingIdlingResource();
@@ -188,7 +172,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             @Override
             public void onClick(int i) {
                 if (checkBound(i)) {
-                    addDatabase(i);
+                    FirebaseProxy.getInstance().addAssociation(associations.get(i));
                     Snackbar.make(getView(), associations.get(i).getName() + " added", Snackbar.LENGTH_SHORT).show();
                 }
             }

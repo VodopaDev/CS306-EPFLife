@@ -87,6 +87,10 @@ public class Association extends FirebaseStructure implements Comparable<Associa
         return shortDescription;
     }
 
+    public String getLongDescription(){
+        return longDescription;
+    }
+
     /**
      * Return the Association's main chat id
      *

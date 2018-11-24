@@ -107,6 +107,8 @@ public class Event extends FirebaseStructure {
         return (o1, o2) -> o2.getLikes().compareTo(o1.getLikes());
     }
 
+    public String getAssociationId(){return associationId;}
+
     public String getName() {
         return name;
     }

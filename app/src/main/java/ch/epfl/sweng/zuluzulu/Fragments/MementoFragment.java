@@ -23,6 +23,7 @@ import java.util.Map;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -84,17 +85,14 @@ public class MementoFragment extends SuperFragment {
             this.user = (User) getArguments().getSerializable(TAG);
         }
 
-        this.events = new ArrayList<Event>();
-
-        this.eventAdapter = new EventArrayAdapter(getContext(), events, mListener, user);
-
-
-        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Memento loader");
-        UrlHandler urlHandler = new UrlHandler(this::handleMemento, new MementoParser());
-        urlHandler.execute(EPFL_MEMENTO_URL, ASSOCIATION_MEMENTO_URL);
+        events = new ArrayList<>();
+        eventAdapter = new EventArrayAdapter(getContext(), events, mListener, user);
 
         // Send increment to wait async execution in test
         IdlingResourceFactory.incrementCountingIdlingResource();
+        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Memento loader");
+        UrlHandler urlHandler = new UrlHandler(this::handleMemento, new MementoParser());
+        urlHandler.execute(EPFL_MEMENTO_URL, ASSOCIATION_MEMENTO_URL);
     }
 
     /**
@@ -103,79 +101,44 @@ public class MementoFragment extends SuperFragment {
      * @param result Json aray datas
      */
     private void handleMemento(List<String> result) {
-
         if (result != null && !result.isEmpty() && !result.get(0).isEmpty()) {
-            String datas = result.get(0);
-            addEvent(datas);
+            String data = result.get(0);
+            addEvent(data);
         }
 
-        addDatabase();
+        for (Event event : events)
+            FirebaseProxy.getInstance().addEvent(event);
+
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
-    private void addDatabase(){
-        int i = 0;
-        for (Event event : events
-             ) {
-            //the map for the event
-            Map<String, Object> docData = createHashmap(event);
-            if (docData != null && i++ <5) {
-                DatabaseFactory.getDependency().collection("events_info").document("event" + Integer.toString(event.getId())).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Snackbar.make(getView(), event.getId() + " event added", Snackbar.LENGTH_LONG).show();
-                    }
-                });
-            }
-        }
-    }
-
-    private Map<String,Object> createHashmap(Event event) {
-
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("icon_uri", event.getIconUri());
-        docData.put("banner_uri", event.getIconUri());
-        docData.put("id", event.getId());
-        docData.put("assos_id", 1);
-        docData.put("channel_id", 1);
-        docData.put("likes", event.getLikes());
-        docData.put("long_desc", event.getLongDesc());
-        docData.put("name", event.getName());
-        docData.put("organizer", event.getOrganizer());
-        docData.put("place", event.getPlace());
-        docData.put("short_desc", event.getShortDesc());
-        docData.put("category", event.getCategory());
-        docData.put("speaker", event.getSpeaker());
-        docData.put("start_date", event.getStartDate());
-        docData.put("end_date", event.getEndDate());
-        docData.put("contact", event.getContact());
-        docData.put("website", event.getWebsite());
-        docData.put("url_place_and_room", event.getUrlPlaceAndRoom());
-
-        return docData;
-    }
-
-    private void addEvent(String datas) {
-        if (datas == null || datas.isEmpty()) {
+    private void addEvent(String data) {
+        if (data == null || data.isEmpty()) {
             return;
         }
 
-        JSONArray jsonarray = null;
         try {
-            jsonarray = new JSONArray(datas);
+            JSONArray jsonarray = new JSONArray(data);
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject jsonobject = jsonarray.getJSONObject(i);
 
-                Event event = new Event(i, jsonobject.getString("title"),
+                Event event = new Event(
+                        FirebaseProxy.getInstance().getNewEventId(),
+                        jsonobject.getString("title"),
                         jsonobject.getString("description"), jsonobject.getString("description"),
                         new EventDate(jsonobject.getString("event_start_date"), jsonobject.getString("event_start_time"),
-                                jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")),0,
+                                jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")),
+                        0,
                         jsonobject.getString("event_organizer"),
                         jsonobject.getString("event_place_and_room"),
-                        jsonobject.getString("event_visual_absolute_url"), jsonobject.getString("event_visual_absolute_url"),
-                        jsonobject.getString("event_url_place_and_room"), jsonobject.getString("event_url_link"),
-                        jsonobject.getString("event_contact"), jsonobject.getString(        "event_category_fr"), jsonobject.getString("event_speaker"));
-                this.events.add(event);
+                        jsonobject.getString("event_visual_absolute_url"),
+                        jsonobject.getString("event_visual_absolute_url"),
+                        jsonobject.getString("event_url_place_and_room"),
+                        jsonobject.getString("event_url_link"),
+                        jsonobject.getString("event_contact"),
+                        jsonobject.getString("event_category_fr"),
+                        jsonobject.getString("event_speaker"));
+                events.add(event);
                 eventAdapter.notifyDataSetChanged();
             }
         } catch (JSONException e) {

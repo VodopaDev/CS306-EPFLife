@@ -114,38 +114,25 @@ public class Channel extends FirebaseStructure {
     public boolean canBeSeenBy(AuthenticatedUser user, GeoPoint userLocation) {
         String section = (String) restrictions.get("section");
         GeoPoint channelLocation = (GeoPoint) restrictions.get("location");
-
-        boolean hasGoodSection = hasGoodSection(section, user.getSection());
-
-        boolean hasGoodLocation = hasGoodLocation(channelLocation, userLocation);
-
-        return hasGoodSection && hasGoodLocation && (id <= 170);
+        return hasGoodSection(section, user.getSection()) && hasGoodLocation(channelLocation, userLocation);
     }
 
     private boolean hasGoodSection(String requestSection, String userSection) {
-        if (requestSection == null) {
+        if (requestSection == null)
             return true;
-        }
+
         return requestSection.equals(userSection);
     }
 
     private boolean hasGoodLocation(GeoPoint requestedLocation, GeoPoint userLocation) {
-        if (requestedLocation == null) {
+        if (requestedLocation == null || userLocation == null)
             return true;
-        }
-        if (userLocation == null) {
-            return false;
-        }
 
         distance = Utils.distanceBetween(requestedLocation, userLocation);
         double diff_distance = distance - MAX_DISTANCE_TO_ACCESS_CHANNEL;
         isAccessible = distance < MAX_DISTANCE_TO_ACCESS_CHANNEL;
 
-        if (diff_distance > MAX_DISTANCE_TO_SEE_CHANNEL) {
-            return false;
-        }
-
-        return true;
+        return (diff_distance <= MAX_DISTANCE_TO_SEE_CHANNEL);
     }
 
     public static List<String> requiredFields(){
