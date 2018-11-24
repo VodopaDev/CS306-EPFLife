@@ -188,7 +188,7 @@ public class AssociationDetailFragment extends SuperFragment {
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
                     if (fmap.hasFields(Event.FIELDS)) {
-                        upcoming_event = new Event(fmap);
+                        upcoming_event = new Event.EventBuilder().build(fmap);
                         upcoming_event_name.setText(upcoming_event.getName());
                         upcoming_event_date.setText(upcoming_event.getStartDate().toString());
                         loadUriIntoImageView(upcoming_event_icon, upcoming_event.getIconUri(), getContext());

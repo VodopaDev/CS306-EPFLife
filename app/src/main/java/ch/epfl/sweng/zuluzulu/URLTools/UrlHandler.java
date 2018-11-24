@@ -32,9 +32,9 @@ public class UrlHandler extends AsyncTask<String, Void, List<String>> {
     @Override
     protected List<String> doInBackground(String... urls) {
         ArrayList<String> list = new ArrayList<>();
-        for(int i = 0; i < urls.length; i++){
+        for (int i = 0; i < urls.length; i++) {
             List<String> result = parseUrl(urls[i]);
-            if(null == result){
+            if (null == result) {
                 return null;
             }
             list.addAll(result);

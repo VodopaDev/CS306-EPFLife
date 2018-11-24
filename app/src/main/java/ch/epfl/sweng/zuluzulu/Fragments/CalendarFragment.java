@@ -147,7 +147,7 @@ public class CalendarFragment extends SuperFragment {
                         for (DocumentSnapshot snap : snap_list) {
                             FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
                             if (fmap.hasFields(Event.FIELDS)) {
-                                Event event = new Event(fmap);
+                                Event event = new Event.EventBuilder().build(fmap);
                                 if (user.isFollowedEvent(event)) {
                                     followedEvents.add(event);
                                     Log.d("CALENDAR", "added a new followed event with date " + event.getStartDateString());
