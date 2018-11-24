@@ -59,6 +59,12 @@ public class PostFragmentTest extends TestWithAuthenticatedAndFragment<PostFragm
     }
 
     @Test
+    public void testUserCanOpenWritePostFragment() {
+        onView(withId(R.id.posts_new_post_button)).perform(ViewActions.click());
+        onView(withId(R.id.write_post_layout)).check(matches(isDisplayed()));
+    }
+
+    @Test
     public void testUserCanOpenPost() {
         // onData(anything()).inAdapterView(withId(R.id.posts_list_view)).atPosition(0).perform(ViewActions.click());
     }
