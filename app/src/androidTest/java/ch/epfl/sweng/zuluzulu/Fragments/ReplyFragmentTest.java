@@ -55,6 +55,7 @@ public class ReplyFragmentTest extends TestWithAuthenticatedAndFragment<ReplyFra
     @Test
     public void testUserCanSendReply() {
         onView(withId(R.id.reply_text_edit)).perform(ViewActions.typeText("This is a reply test !")).perform(ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.reply_send_button)).check(matches(isEnabled()));
         onView(withId(R.id.reply_send_button)).perform(ViewActions.click());
     }
 
