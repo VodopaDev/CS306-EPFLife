@@ -88,7 +88,7 @@ public class ReplyFragment extends SuperFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reply, container, false);
 
-        View postView = view.findViewById(R.id.reply_original_post);
+        ListView postView = view.findViewById(R.id.reply_original_post);
         ListView listView = view.findViewById(R.id.reply_list_view);
         replyText = view.findViewById(R.id.reply_text_edit);
         sendButton = view.findViewById(R.id.reply_send_button);
@@ -97,6 +97,8 @@ public class ReplyFragment extends SuperFragment {
         collectionReference = db.collection(collectionPath);
         mockableCollection = DatabaseFactory.getDependency().collection(collectionPath);
 
+        PostArrayAdapter adapterOriginalPost = new PostArrayAdapter(view.getContext(), new ArrayList<>(Arrays.asList(postOriginal)));
+        postView.setAdapter(adapterOriginalPost);
         adapter = new PostArrayAdapter(view.getContext(), replies);
         listView.setAdapter(adapter);
 
