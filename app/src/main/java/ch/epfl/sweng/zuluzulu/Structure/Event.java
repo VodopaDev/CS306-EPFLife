@@ -3,9 +3,6 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import android.net.Uri;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
@@ -57,7 +54,7 @@ public class Event implements Serializable {
         this.bannerUri = bannerUri;
         this.iconUri = iconUri;
         setWebsite(website);
-        setUrl_place_and_room(url_place_and_room);
+        setUrlPlaceAndRoom(url_place_and_room);
         setContact(contact);
         setCategory(category);
         setSpeaker(speaker);
@@ -84,6 +81,13 @@ public class Event implements Serializable {
 
         shortDesc = data.getString("short_desc");
         longDesc = data.getString("long_desc");
+
+        setUrlPlaceAndRoom(data.getString("url_place_and_room"));
+        setWebsite(data.getString("website"));
+        setContact(data.getString("contact"));
+        setCategory(data.getString("category"));
+        setSpeaker(data.getString("speaker"));
+
 
         String icon_str = data.getString("icon_uri");
         Uri uri = icon_str == null ? Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) : Uri.parse(icon_str);
@@ -196,11 +200,11 @@ public class Event implements Serializable {
         return assos_id;
     }
 
-    public String getUrl_place_and_room() {
+    public String getUrlPlaceAndRoom() {
         return url_place_and_room;
     }
 
-    public void setUrl_place_and_room(String url_place_and_room) {
+    public void setUrlPlaceAndRoom(String url_place_and_room) {
         assert(url_place_and_room != null);
 
         this.url_place_and_room = url_place_and_room;
