@@ -2,7 +2,6 @@ package ch.epfl.sweng.zuluzulu;
 
 import android.support.test.espresso.contrib.NavigationViewActions;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;

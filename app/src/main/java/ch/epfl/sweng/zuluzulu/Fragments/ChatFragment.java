@@ -138,7 +138,8 @@ public class ChatFragment extends SuperChatPostsFragment {
     private void setUpEditText() {
         textEdit.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence text, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence text, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence text, int start, int before, int count) {
@@ -147,7 +148,8 @@ public class ChatFragment extends SuperChatPostsFragment {
             }
 
             @Override
-            public void afterTextChanged(Editable text) { }
+            public void afterTextChanged(Editable text) {
+            }
         });
     }
 
