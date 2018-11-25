@@ -68,7 +68,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
 
         int nbResponses = currentPost.getNbResponses();
         nbResponsesText.setText("" + currentPost.getNbResponses());
-        if (nbResponses == 0) {
+        if (nbResponses == 0 || currentPost.isReply()) {
             view.findViewById(R.id.post_responses_linearlayout).setVisibility(LinearLayout.GONE);
         }
 

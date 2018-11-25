@@ -14,6 +14,7 @@ import java.util.Map;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.Admin;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.Guest;
@@ -160,6 +161,22 @@ public class Utility {
         data.put("restrictions", new HashMap<>());
         FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
         return new Channel(fmap);
+    }
+
+    public static Post defaultPost() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("senderName", "James");
+        data.put("message", "message");
+        data.put("time", new Date());
+        data.put("sciper", "000000");
+        data.put("color", "#F0E68C");
+        data.put("nbUps", 0L);
+        data.put("nbResponses", 0L);
+        data.put("upScipers", new ArrayList<>());
+        data.put("downScipers", new ArrayList<>());
+        FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
+        AuthenticatedUser user = createTestAuthenticated();
+        return new Post(fmap, user.getSciper(), defaultChannel().getId(), null);
     }
 
     public static Association defaultAssociation(){

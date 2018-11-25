@@ -37,6 +37,7 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_POST_FRAGMENT;
  * This fragment is used to display the chat and to write in it
  */
 public class ChatFragment extends SuperChatPostsFragment {
+    private static final int MAX_MESSAGE_LENGTH = 100;
     private Button sendButton;
     private EditText textEdit;
 
@@ -52,8 +53,7 @@ public class ChatFragment extends SuperChatPostsFragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
         sendButton = view.findViewById(R.id.chat_send_button);
@@ -116,7 +116,8 @@ public class ChatFragment extends SuperChatPostsFragment {
 
             @Override
             public void onTextChanged(CharSequence text, int start, int before, int count) {
-                sendButton.setEnabled(text.toString().length() > 0);
+                int length = text.toString().length();
+                sendButton.setEnabled(0 < length && length < MAX_MESSAGE_LENGTH);
             }
 
             @Override

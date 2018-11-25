@@ -15,11 +15,15 @@ import java.util.Map;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
+<<<<<<< HEAD
 import Utils;
+=======
+>>>>>>> master
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
@@ -80,14 +84,14 @@ public class PostTest {
         data2.put("upScipers", new ArrayList<>());
         data2.put("downScipers", new ArrayList<>(Arrays.asList(user.getSciper())));
 
-        post1 = new Post(new FirebaseMapDecorator(data1), user.getSciper(), channel.getId());
-        post2 = new Post(new FirebaseMapDecorator(data2), user.getSciper(), channel.getId());
+        post1 = new Post(new FirebaseMapDecorator(data1), user.getSciper(), channel.getId(), null);
+        post2 = new Post(new FirebaseMapDecorator(data2), user.getSciper(), channel.getId(), post1);
     }
 
     @Test(expected = IllegalStateException.class)
     public void testIncorrectDataConstructor() {
         data1.put("downScipers", upScipers1);
-        new Post(new FirebaseMapDecorator(data1), user.getSciper(), channel.getId());
+        new Post(new FirebaseMapDecorator(data1), user.getSciper(), channel.getId(), null);
     }
 
     @Test
@@ -123,6 +127,15 @@ public class PostTest {
         assertTrue(post2.isDownByUser());
         post2.setDownByUser(false);
         assertFalse(post2.isDownByUser());
+    }
+
+    @Test
+    public void testReply() {
+        assertNull(post1.getOriginalPost());
+        assertFalse(post1.isReply());
+
+        assertEquals(post1, post2.getOriginalPost());
+        assertTrue(post2.isReply());
     }
 
     @Test(expected = IllegalArgumentException.class)

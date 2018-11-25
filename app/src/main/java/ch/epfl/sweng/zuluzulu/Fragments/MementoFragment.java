@@ -121,7 +121,6 @@ public class MementoFragment extends SuperFragment {
             JSONArray jsonarray = new JSONArray(data);
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject jsonobject = jsonarray.getJSONObject(i);
-
                 Event event = new Event(
                         FirebaseProxy.getInstance().getNewEventId(),
                         jsonobject.getString("title"),

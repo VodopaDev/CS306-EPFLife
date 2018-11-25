@@ -108,6 +108,7 @@ public class WritePostFragment extends SuperFragment {
             Post post = new Post(
                     FirebaseProxy.getInstance().getNewPostId(channel.getId()),
                     channel.getId(),
+                    null,
                     editText.getText().toString(),
                     anonymous ? "" : user.getFirstNames(),
                     user.getSciper(),

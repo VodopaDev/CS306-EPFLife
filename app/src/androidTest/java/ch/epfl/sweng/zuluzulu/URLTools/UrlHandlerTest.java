@@ -3,7 +3,6 @@ package ch.epfl.sweng.zuluzulu.URLTools;
 import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.test.rule.ActivityTestRule;
-import android.util.Pair;
 
 import org.junit.Before;
 import org.junit.Rule;

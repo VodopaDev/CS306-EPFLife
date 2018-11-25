@@ -322,6 +322,33 @@ public class FirebaseProxy {
         });
     }
 
+    public void addReplyToPost(Post post){
+        IdlingResourceFactory.incrementCountingIdlingResource();
+        channelCollection.document(post.getChannelId())
+                .collection("posts")
+                .document(post.getOriginalPostId())
+                .collection("replies")
+                .document(post.getId())
+                .set(post.getData());
+        IdlingResourceFactory.decrementCountingIdlingResource();
+    }
+
+    public void getRepliesFromPost(String channelId, String postId, OnResult<List<Post>> onResult){
+        IdlingResourceFactory.incrementCountingIdlingResource();
+        channelCollection.document(channelId).collection("posts")
+                .document(postId)
+                .collection("replies").get().addOnSuccessListener(queryDocumentSnapshots -> {
+            List<Post> result = new ArrayList<>();
+            for(DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){
+                FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+                if(data.hasFields(Post.requiredFields()))
+                    result.add(new Post(data));
+            }
+            onResult.apply(result);
+            IdlingResourceFactory.decrementCountingIdlingResource();
+        });
+    }
+
     public void onMessageAddedInChannel(String id, OnResult<List<ChatMessage>> onResult) {
         channelCollection.document(id).collection("messages").addSnapshotListener((queryDocumentSnapshots, e) -> {
             if (e != null)

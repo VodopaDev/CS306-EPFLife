@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.TestingUtility;
 
 import android.support.test.espresso.IdlingRegistry;
-import android.support.test.espresso.IdlingResource;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 

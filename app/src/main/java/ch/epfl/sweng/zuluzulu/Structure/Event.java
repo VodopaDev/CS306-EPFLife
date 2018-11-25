@@ -1,7 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.net.Uri;
-
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
@@ -37,7 +37,6 @@ public class Event extends FirebaseStructure {
     private String category;
     private String speaker;
 
-
     public Event(String id, String name, String shortDesc, String longDesc, String channelId, String associationId, EventDate date,
                  int likes, String organizer, String place, String iconUri, String bannerUri,
                  String url_place_and_room, String website, String contact, String category, String speaker) {
@@ -47,17 +46,17 @@ public class Event extends FirebaseStructure {
         this.associationId = associationId;
         this.shortDescription = shortDesc;
         this.longDescription = longDesc;
-        setDate(date);
+        this.date = date;
         this.likes = likes;
         this.organizer = organizer;
         this.place = place;
         this.bannerUri = bannerUri;
         this.iconUri = iconUri;
-        setWebsite(website);
-        setUrlPlaceAndRoom(url_place_and_room);
-        setContact(contact);
-        setCategory(category);
-        setSpeaker(speaker);
+        this.website = website;
+        this.url_place_and_room = url_place_and_room;
+        this.contact = contact;
+        this.category = category;
+        this.speaker = speaker;
     }
 
     /**
@@ -83,11 +82,11 @@ public class Event extends FirebaseStructure {
         bannerUri = data.getString("banner_uri");
         date = new EventDate(data.getDate("start_date"), data.getDate("end_date"));
 
-        setUrlPlaceAndRoom(data.getString("url_place_and_room"));
-        setWebsite(data.getString("website"));
-        setContact(data.getString("contact"));
-        setCategory(data.getString("category"));
-        setSpeaker(data.getString("speaker"));
+        url_place_and_room = (data.getString("url_place_and_room"));
+        website = (data.getString("website"));
+        contact = (data.getString("contact"));
+        category = (data.getString("category"));
+        speaker = (data.getString("speaker"));
 
         iconUri = data.getString("icon_uri");
         bannerUri = data.getString("banner_uri");
@@ -211,56 +210,20 @@ public class Event extends FirebaseStructure {
         return url_place_and_room;
     }
 
-    public void setUrlPlaceAndRoom(String url_place_and_room) {
-        assert(url_place_and_room != null);
-
-        this.url_place_and_room = url_place_and_room;
-    }
-
     public String getWebsite() {
         return website;
-    }
-
-    public void setWebsite(String website) {
-        assert(website != null);
-
-        this.website = website;
     }
 
     public String getContact() {
         return contact;
     }
 
-    public void setContact(String contact) {
-        assert(contact != null);
-
-        this.contact = contact;
-    }
-
     public String getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
-        assert(category != null);
-
-        this.category = category;
-    }
-
     public String getSpeaker() {
         return speaker;
-    }
-
-    public void setSpeaker(String speaker) {
-        assert(speaker != null);
-
-        this.speaker = speaker;
-    }
-
-
-    private void setDate(EventDate date) {
-        assert(date != null);
-        this.date = date;
     }
 
     public Date getStartDate() {

@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,10 +26,12 @@ public class Post extends FirebaseStructure{
     private List<String> upScipers;
     private List<String> downScipers;
     private String channelId;
+    private String originalPostId;
 
-    public Post(String id, String channelId, String message, String senderName, String senderSciper, Date time, String color,int nbResponses, int nbUps, List<String> upScipers, List<String> downScipers){
+    public Post(String id, String channelId, String originalPostId, String message, String senderName, String senderSciper, Date time, String color,int nbResponses, int nbUps, List<String> upScipers, List<String> downScipers){
         super(id);
         this.channelId = channelId;
+        this.originalPostId = originalPostId;
         this.message = message;
         this.senderName = senderName;
         this.senderSciper = senderSciper;
@@ -54,6 +57,7 @@ public class Post extends FirebaseStructure{
         time = data.getDate("time");
         color = data.getString("color");
         nbUps = data.getInteger("nb_ups");
+        originalPostId = data.getString("original_post_id");
         nbResponses = data.getInteger("nb_responses");
         upScipers = data.getStringList("up_scipers");
         downScipers = data.getStringList("down_scipers");
@@ -183,6 +187,7 @@ public class Post extends FirebaseStructure{
         Map<String, Object> map = new HashMap<>();
         map.put("id", getId());
         map.put("channel_id", channelId);
+        map.put("original_post_id", originalPostId);
         map.put("sender_name", senderName);
         map.put("message", message);
         map.put("time", time);
@@ -194,4 +199,18 @@ public class Post extends FirebaseStructure{
         map.put("down_scipers", downScipers);
         return map;
     }
+
+    /**
+     * Getter for the fact that the post is a reply or not
+     *
+     * @return Whether the post is a reply or not
+     */
+    public boolean isReply() { return originalPostId != null; }
+
+    /**
+     * Getter for the original post
+     *
+     * @return The original post
+     */
+    public String getOriginalPostId() { return originalPostId; }
 }
