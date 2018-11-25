@@ -69,7 +69,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
 
         int nbResponses = currentPost.getNbResponses();
         nbResponsesText.setText("" + currentPost.getNbResponses());
-        if (nbResponses == 0) {
+        if (nbResponses == 0 || currentPost.isReply()) {
             view.findViewById(R.id.post_responses_linearlayout).setVisibility(LinearLayout.GONE);
         }
 
@@ -118,7 +118,9 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
             int nbUps = post.getNbUps() + (up ? 1 : -1);
             List<String> upScipers = post.getUpScipers();
             List<String> downScipers = post.getDownScipers();
-            DocumentReference documentReference = db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
+            DocumentReference documentReference = post.isReply() ?
+                    db.collection("channels/channel" + post.getOriginalPost().getChannelId() + "/posts/" + post.getOriginalPost().getId() + "/replies").document(post.getId()) :
+                    db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
             if (up) {
                 upScipers.add(post.getUserSciper());
                 documentReference.update(
@@ -126,7 +128,6 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
                         "upScipers", upScipers
                 );
                 post.setUpByUser(true);
-
             } else {
                 downScipers.add(post.getUserSciper());
                 documentReference.update(

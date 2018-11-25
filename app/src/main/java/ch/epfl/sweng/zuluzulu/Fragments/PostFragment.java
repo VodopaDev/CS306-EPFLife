@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -79,6 +80,7 @@ public class PostFragment extends SuperChatPostsFragment {
         updatePosts();
         setUpChatButton();
         setUpNewPostButton();
+        setUpReplyListener();
 
         return view;
     }
@@ -111,7 +113,7 @@ public class PostFragment extends SuperChatPostsFragment {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
                                 if (fmap.hasFields(Post.FIELDS)) {
-                                    Post post = new Post(fmap, user.getSciper(), channel.getId());
+                                    Post post = new Post(fmap, user.getSciper(), channel.getId(), null);
                                     posts.add(post);
                                 }
                             }
@@ -142,5 +144,18 @@ public class PostFragment extends SuperChatPostsFragment {
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
         updatePosts();
+    }
+
+    /**
+     * Set up the listener on a post to go to the reply fragment when we click on it
+     */
+    private void setUpReplyListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Post post = posts.get(position);
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_REPLY_FRAGMENT, post);
+            }
+        });
     }
 }
