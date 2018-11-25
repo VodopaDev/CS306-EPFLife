@@ -35,6 +35,7 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.User.UserRole;
 import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
 import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
 import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
@@ -173,6 +174,8 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
             List<String> receivedEvents = result.getStringList("followed_events");
             List<String> receivedChannels = result.getStringList("followed_channels");
 
+            for(String role: result.getStringList("roles"))
+                user.addRole(UserRole.getRoleFromString(role));
             ((AuthenticatedUser) user).setFollowedAssociation(receivedAssociations);
             ((AuthenticatedUser) user).setFollowedEvents(receivedEvents);
             ((AuthenticatedUser) user).setFollowedChannels(receivedChannels);

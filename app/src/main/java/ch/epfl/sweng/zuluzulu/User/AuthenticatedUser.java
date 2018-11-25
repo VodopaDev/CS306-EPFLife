@@ -33,14 +33,7 @@ public class AuthenticatedUser extends User {
         this.followedAssociations = followedAssociations;
         this.followedChannels = followedChannels;
         this.followedEvents = followedEvents;
-
-        // Add role
-        this.addRole(UserRole.USER);
-
-        // TO REMOVE , change with database access
-        if (gaspar.equals("dahn") || sciper.equals("268785") || sciper.equals("270103") || sciper.equals("250482")) {
-            this.addRole(UserRole.ADMIN);
-        }
+        addRole(UserRole.USER);
     }
 
     //----- Association related methods -----\\

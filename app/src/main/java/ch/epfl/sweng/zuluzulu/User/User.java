@@ -1,8 +1,12 @@
 package ch.epfl.sweng.zuluzulu.User;
 
+import android.net.wifi.p2p.WifiP2pManager;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * This parent class represent an user
@@ -12,10 +16,10 @@ abstract public class User implements Serializable {
     /**
      * This list will contain the roles of the User
      */
-    final protected ArrayList<UserRole> roles;
+    final protected Set<UserRole> roles;
 
     protected User() {
-        this.roles = new ArrayList<>();
+        this.roles = new TreeSet<>();
     }
 
     public String getFirstNames() {
@@ -61,7 +65,7 @@ abstract public class User implements Serializable {
      *
      * @param role UserRole
      */
-    protected void addRole(UserRole role) {
+    public void addRole(UserRole role) {
         this.roles.add(role);
     }
 
@@ -71,40 +75,17 @@ abstract public class User implements Serializable {
      * This class is used to create a builder
      */
     public static final class UserBuilder {
-        /**
-         * This is the user ID, it is guaranteed to be unique.
-         */
+
         private String sciper;
-
-        /**
-         * Gaspar account - it's the username // TODO was in string in Profile. See if it's logic or need to be number
-         */
         private String gaspar;
-
-        /**
-         * User email
-         */
         private String email;
-
-        /**
-         * User's section
-         */
         private String section;
-
-        /**
-         * User's current semester
-         */
         private String semester;
-
 
         /**
          * User first names (he can have few first names)
          */
         private String first_names;
-
-        /**
-         * User last names, same remark as first_names
-         */
         private String last_names;
 
         // All followed ids of Associations, Chats and Events
@@ -120,8 +101,7 @@ abstract public class User implements Serializable {
         }
 
         /**
-         * Set the sciper // TODO cf number ?
-         *
+         * Set the sciper
          * @param sciper User sciper number
          */
         public void setSciper(String sciper) {
@@ -130,7 +110,6 @@ abstract public class User implements Serializable {
 
         /**
          * User gaspar - username
-         *
          * @param gaspar gaspar
          */
         public void setGaspar(String gaspar) {
@@ -139,7 +118,6 @@ abstract public class User implements Serializable {
 
         /**
          * User email
-         *
          * @param email email
          */
         public void setEmail(String email) {
