@@ -73,7 +73,7 @@ public class PostFragment extends SuperChatPostsFragment {
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         anonymous = preferences.getBoolean(PREF_KEY_ANONYM, false);
 
-        updatePosts();
+        loadAllPosts();
         setUpChatButton();
         setUpNewPostButton();
 
@@ -87,12 +87,10 @@ public class PostFragment extends SuperChatPostsFragment {
         chatButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_CHAT_FRAGMENT, channel));
     }
 
-    /**
-     * Refresh the posts by reading in the database
-     */
-    private void updatePosts() {
-        FirebaseProxy.getInstance().onPostAddedInChannel(channel.getId(), result -> {
-            posts.add(result);
+    private void loadAllPosts() {
+        FirebaseProxy.getInstance().getPostsFromChannel(channel.getId(), result -> {
+            posts.clear();
+            posts.addAll(result);
             adapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);
         });
@@ -110,6 +108,6 @@ public class PostFragment extends SuperChatPostsFragment {
      */
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
-        updatePosts();
+        loadAllPosts();
     }
 }

@@ -16,7 +16,7 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 public class Post extends FirebaseStructure{
 
     private String senderName;
-    private String sciper;
+    private String senderSciper;
     private String message;
     private Date time;
     private String color;
@@ -26,9 +26,20 @@ public class Post extends FirebaseStructure{
     private List<String> downScipers;
     private String channelId;
 
-    //TODO: fill the constructor
-    public Post(String id){
+    public Post(String id, String channelId, String message, String senderName, String senderSciper, Date time, String color,int nbResponses, int nbUps, List<String> upScipers, List<String> downScipers){
         super(id);
+        this.channelId = channelId;
+        this.message = message;
+        this.senderName = senderName;
+        this.senderSciper = senderSciper;
+        this.time = time;
+        this.color = color;
+        this.nbResponses = nbResponses;
+
+        assert(nbUps == upScipers.size() - downScipers.size());
+        this.nbUps = nbUps;
+        this.upScipers = upScipers;
+        this.downScipers = downScipers;
     }
 
     public Post(FirebaseMapDecorator data) {
@@ -38,7 +49,7 @@ public class Post extends FirebaseStructure{
 
         channelId = data.getString("channel_id");
         senderName = data.getString("sender_name");
-        sciper = data.getString("sciper");
+        senderSciper = data.getString("sender_sciper");
         message = data.getString("message");
         time = data.getDate("time");
         color = data.getString("color");
@@ -58,12 +69,12 @@ public class Post extends FirebaseStructure{
     }
 
     /**
-     * Getter for the sciper
+     * Getter for the senderSciper
      *
-     * @return the sciper
+     * @return the senderSciper
      */
-    public String getSciper() {
-        return sciper;
+    public String getSenderSciper() {
+        return senderSciper;
     }
 
     /**
@@ -165,16 +176,17 @@ public class Post extends FirebaseStructure{
     }
 
     public static List<String> requiredFields(){
-        return Arrays.asList("sender_name", "sciper", "message", "time", "color", "nb_ups", "nb_responses", "up_scipers", "down_scipers", "id", "channel_id");
+        return Arrays.asList("sender_name", "sender_sciper", "message", "time", "color", "nb_ups", "nb_responses", "up_scipers", "down_scipers", "id", "channel_id");
     }
 
     public Map<String, Object> getData() {
         Map<String, Object> map = new HashMap<>();
+        map.put("id", getId());
         map.put("channel_id", channelId);
         map.put("sender_name", senderName);
         map.put("message", message);
         map.put("time", time);
-        map.put("sciper", sciper);
+        map.put("sender_sciper", senderSciper);
         map.put("color", color);
         map.put("nb_ups", nbUps);
         map.put("nb_responses", nbResponses);

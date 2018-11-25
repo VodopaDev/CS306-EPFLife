@@ -308,6 +308,20 @@ public class FirebaseProxy {
         });
     }
 
+    public void getPostsFromChannel(String id, OnResult<List<Post>> onResult){
+        IdlingResourceFactory.incrementCountingIdlingResource();
+        channelCollection.document(id).collection("posts").get().addOnSuccessListener(queryDocumentSnapshots -> {
+            List<Post> result = new ArrayList<>();
+            for(DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){
+                FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+                if(data.hasFields(Post.requiredFields()))
+                    result.add(new Post(data));
+            }
+            onResult.apply(result);
+            IdlingResourceFactory.decrementCountingIdlingResource();
+        });
+    }
+
     public void onMessageAddedInChannel(String id, OnResult<List<ChatMessage>> onResult) {
         channelCollection.document(id).collection("messages").addSnapshotListener((queryDocumentSnapshots, e) -> {
             if (e != null)
@@ -326,25 +340,19 @@ public class FirebaseProxy {
         });
     }
 
-    public void onPostAddedInChannel(String id, OnResult<Post> onResult) {
-        IdlingResourceFactory.incrementCountingIdlingResource();
-        channelCollection.document(id).collection("messages").addSnapshotListener((queryDocumentSnapshots, e) -> {
+    public void onPostAddedInChannel(String id, OnResult<List<Post>> onResult) {
+        channelCollection.document(id).collection("posts").addSnapshotListener((queryDocumentSnapshots, e) -> {
             if (e != null)
                 System.err.println("Listen failed: " + e);
             else {
                 IdlingResourceFactory.incrementCountingIdlingResource();
-                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-                    switch (dc.getType()) {
-                        case ADDED:
-                            FirebaseMapDecorator data = new FirebaseMapDecorator(dc.getDocument());
-                            if (data.hasFields(ChatMessage.requiredFields()))
-                                onResult.apply(new Post(data));
-                            break;
-                        default:
-                            break;
-                    }
-
+                List<Post> result = new ArrayList<>();
+                for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
+                    FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+                    if (data.hasFields(Post.requiredFields()))
+                        result.add(new Post(data));
                 }
+                onResult.apply(result);
                 IdlingResourceFactory.decrementCountingIdlingResource();
             }
         });
@@ -360,6 +368,7 @@ public class FirebaseProxy {
     }
 
     public void updatePost(Post post){
+        IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(post.getChannelId())
                 .collection("posts")
                 .document(post.getId())

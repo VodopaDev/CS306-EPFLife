@@ -93,7 +93,7 @@ public class PostTest {
     @Test
     public void testGetters() {
         assertEquals(senderName1, post1.getSenderName());
-        assertEquals(sciper1, post1.getSciper());
+        assertEquals(sciper1, post1.getSenderSciper());
         assertEquals(message1, post1.getMessage());
         assertEquals(time, post1.getTime());
         assertEquals(color1, post1.getColor());

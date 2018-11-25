@@ -19,7 +19,10 @@ import android.widget.EditText;
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -102,24 +105,19 @@ public class WritePostFragment extends SuperFragment {
      */
     private void setUpSendButton() {
         sendButton.setOnClickListener(v -> {
-            String senderName = anonymous ? "" : user.getFirstNames();
-            String message = editText.getText().toString();
-            Timestamp time = Timestamp.now();
-            String sciper = user.getSciper();
-
-            Map<String, Object> data = new HashMap();
-            data.put("id", FirebaseProxy.getInstance().getNewPostId(channel.getId()));
-            data.put("channel_id", channel.getId());
-            data.put("sender_name", senderName);
-            data.put("message", message);
-            data.put("time", time.toDate());
-            data.put("sciper", sciper);
-            data.put("color", color.getValue());
-            data.put("nb_ups", 0L);
-            data.put("nb_responses", 0L);
-            data.put("up_scipers", new ArrayList<>());
-            data.put("down_scipers", new ArrayList<>());
-            Post post = new Post(new FirebaseMapDecorator(data));
+            Post post = new Post(
+                    FirebaseProxy.getInstance().getNewPostId(channel.getId()),
+                    channel.getId(),
+                    editText.getText().toString(),
+                    anonymous ? "" : user.getFirstNames(),
+                    user.getSciper(),
+                    Timestamp.now().toDate(),
+                    color.getValue(),
+                    0,
+                    1,
+                    Collections.singletonList(user.getSciper()),
+                    Collections.EMPTY_LIST
+            );
             FirebaseProxy.getInstance().addPost(post);
             mListener.onFragmentInteraction(OPEN_POST_FRAGMENT, channel);
         });
