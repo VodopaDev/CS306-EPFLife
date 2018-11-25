@@ -44,8 +44,7 @@ public class AddEventFragment extends SuperFragment {
     private static final String EPFL_LOGO = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
     private static final int[] INDICES = {0, 2, 4, 6, 7, 9, 11};
     //for association name
-    private List<String> association_names = new ArrayList<>();
-    private List<Integer> association_ids = new ArrayList<>();
+    private Map<String, String> association_map = new HashMap<>();
     private Spinner spinner;
     private int numberOfEvents;
 
@@ -196,11 +195,12 @@ public class AddEventFragment extends SuperFragment {
                 }
 
                 Event event = new Event(
-                        FirebaseProxy.getInstance().getNewAssociationId(),
+                        FirebaseProxy.getInstance().getNewEventId(),
                         name,
                         tit,
                         desc,
                         FirebaseProxy.getInstance().getNewChannelId(),
+                        association_map.get(name),
                         new EventDate(date,date),
                         0,
                         org,
@@ -368,10 +368,10 @@ public class AddEventFragment extends SuperFragment {
     private void fillAssociationNames() {
         FirebaseProxy.getInstance().getAllAssociations(result -> {
             for (Association association : result) {
-                association_names.add(association.getName());
+                association_map.put(association.getName(), association.getId());
                 Log.d("EVENT_CREATOR", "added association " + association.getName());
             }
-            setSpinner(spinner, association_names);
+            setSpinner(spinner, new ArrayList<>(association_map.keySet()));
         });
     }
 }

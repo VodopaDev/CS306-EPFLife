@@ -308,23 +308,19 @@ public class FirebaseProxy {
         });
     }
 
-    public void onMessageAddedInChannel(String id, OnResult<ChatMessage> onResult) {
+    public void onMessageAddedInChannel(String id, OnResult<List<ChatMessage>> onResult) {
         channelCollection.document(id).collection("messages").addSnapshotListener((queryDocumentSnapshots, e) -> {
             if (e != null)
                 System.err.println("Listen failed: " + e);
             else {
                 IdlingResourceFactory.incrementCountingIdlingResource();
-                for (DocumentChange dc : queryDocumentSnapshots.getDocumentChanges()) {
-                    switch (dc.getType()) {
-                        case ADDED:
-                            FirebaseMapDecorator data = new FirebaseMapDecorator(dc.getDocument());
-                            if (data.hasFields(ChatMessage.requiredFields()))
-                                onResult.apply(new ChatMessage(data));
-                            break;
-                        default:
-                            break;
-                    }
+                List<ChatMessage> result = new ArrayList<>();
+                for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
+                    FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+                    if (data.hasFields(ChatMessage.requiredFields()))
+                        result.add(new ChatMessage(data));
                 }
+                onResult.apply(result);
                 IdlingResourceFactory.decrementCountingIdlingResource();
             }
         });

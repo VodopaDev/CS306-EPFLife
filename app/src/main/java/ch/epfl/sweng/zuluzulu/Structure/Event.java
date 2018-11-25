@@ -38,12 +38,13 @@ public class Event extends FirebaseStructure {
     private String speaker;
 
 
-    public Event(String id, String name, String shortDesc, String longDesc, String channelId, EventDate date,
+    public Event(String id, String name, String shortDesc, String longDesc, String channelId, String associationId, EventDate date,
                  int likes, String organizer, String place, String iconUri, String bannerUri,
                  String url_place_and_room, String website, String contact, String category, String speaker) {
         super(id);
         this.name = name;
         this.channelId = channelId;
+        this.associationId = associationId;
         this.shortDescription = shortDesc;
         this.longDescription = longDesc;
         setDate(date);

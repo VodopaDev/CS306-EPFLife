@@ -13,7 +13,7 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
  */
 public class ChatMessage extends FirebaseStructure{
     private String senderName;
-    private String sciper;
+    private String senderSciper;
     private String message;
     private Date time;
     private String channelId;
@@ -24,10 +24,19 @@ public class ChatMessage extends FirebaseStructure{
             throw new IllegalArgumentException();
 
         senderName = data.getString("sender_name");
-        sciper = data.getString("sender_sciper");
+        senderSciper = data.getString("sender_sciper");
         message = data.getString("message");
         time = data.getDate("time");
         channelId = data.getString("channel_id");
+    }
+
+    public ChatMessage(String id, String channelId, String message, Date time, String senderName, String senderSciper){
+        super(id);
+        this.channelId = channelId;
+        this.message = message;
+        this.time = time;
+        this.senderName = senderName;
+        this.senderSciper = senderSciper;
     }
 
     /**
@@ -44,26 +53,12 @@ public class ChatMessage extends FirebaseStructure{
     }
 
     /**
-     * Setter for the sender name
-     */
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
-    }
-
-    /**
-     * Getter for the sciper
+     * Getter for the senderSciper
      *
-     * @return the sciper
+     * @return the senderSciper
      */
-    public String getSciper() {
-        return sciper;
-    }
-
-    /**
-     * Setter for the sciper
-     */
-    public void setSciper(String sciper) {
-        this.sciper = sciper;
+    public String getSenderSciper() {
+        return senderSciper;
     }
 
     /**
@@ -76,19 +71,12 @@ public class ChatMessage extends FirebaseStructure{
     }
 
     /**
-     * Setter for the message
-     */
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    /**
      * Getter for the fact the message is viewed by his owner
      *
      * @return whether the message is viewed by his owner or not
      */
     public boolean isOwnMessage(String sciper) {
-        return sciper.equals(this.sciper);
+        return sciper.equals(senderSciper);
     }
 
     /**
@@ -98,13 +86,6 @@ public class ChatMessage extends FirebaseStructure{
      */
     public Date getTime() {
         return time;
-    }
-
-    /**
-     * Setter for the creation time
-     */
-    public void setTime(Date time) {
-        this.time = time;
     }
 
     /**
@@ -121,7 +102,7 @@ public class ChatMessage extends FirebaseStructure{
         Map<String, Object> map = new HashMap<>();
         map.put("id", getId());
         map.put("channel_id", channelId);
-        map.put("sender_sciper", sciper);
+        map.put("sender_sciper", senderSciper);
         map.put("sender_name", senderName);
         map.put("message", message);
         map.put("time", time);

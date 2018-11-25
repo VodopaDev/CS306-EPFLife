@@ -51,17 +51,17 @@ public class ChatMessageTest {
     @Test
     public void testGettersAndSetters() {
         assertEquals(senderName1, chatMessage1.getSenderName());
-        assertEquals(sciper1, chatMessage1.getSciper());
+        assertEquals(sciper1, chatMessage1.getSenderSciper());
         assertEquals(message1, chatMessage1.getMessage());
         assertEquals(time, chatMessage1.getTime());
 
         chatMessage1.setSenderName(senderName2);
-        chatMessage1.setSciper(sciper2);
+        chatMessage1.setSenderSciper(sciper2);
         chatMessage1.setMessage(message2);
         chatMessage1.setTime(time);
 
         assertEquals(senderName2, chatMessage1.getSenderName());
-        assertEquals(sciper2, chatMessage1.getSciper());
+        assertEquals(sciper2, chatMessage1.getSenderSciper());
         assertEquals(message2, chatMessage1.getMessage());
         assertEquals(time, chatMessage1.getTime());
     }

@@ -97,7 +97,6 @@ public class CalendarFragment extends SuperFragment {
                         selectedDayEvents.add(event);
                 }
                 eventAdapter.notifyDataSetChanged();
-                calendarView.refreshCalendar(calendar);
                 calendarView.markDayAsSelectedDay(date);
             }
 

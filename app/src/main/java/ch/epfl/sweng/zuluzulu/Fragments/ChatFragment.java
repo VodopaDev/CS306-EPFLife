@@ -3,9 +3,11 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,11 +37,6 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_POST_FRAGMENT;
  * This fragment is used to display the chat and to write in it
  */
 public class ChatFragment extends SuperChatPostsFragment {
-
-    private static final String TAG = "CHAT_TAG";
-
-    private static final String MESSAGES_COLLECTION_NAME = "messages";
-
     private Button sendButton;
     private EditText textEdit;
 
@@ -90,13 +87,13 @@ public class ChatFragment extends SuperChatPostsFragment {
      */
     private void setUpSendButton() {
         sendButton.setOnClickListener(v -> {
-            Map<String, Object> data = new HashMap<>();
-            data.put("senderName", anonymous ? "" : user.getFirstNames());
-            data.put("message", textEdit.getText().toString());
-            data.put("time", Timestamp.now().toDate());
-            data.put("sciper", user.getSciper());
-            data.put("channel_id", channel.getId());
-            ChatMessage chatMessage = new ChatMessage(new FirebaseMapDecorator(data));
+            ChatMessage chatMessage = new ChatMessage(
+                    FirebaseProxy.getInstance().getNewMessageId(channel.getId()),
+                    channel.getId(),
+                    textEdit.getText().toString(),
+                    Timestamp.now().toDate(),
+                    anonymous ? "" : user.getFirstNames(),
+                    user.getSciper());
             FirebaseProxy.getInstance().addMessage(chatMessage);
             textEdit.setText("");
         });
@@ -132,7 +129,9 @@ public class ChatFragment extends SuperChatPostsFragment {
      */
     private void loadInitialMessages() {
         FirebaseProxy.getInstance().getMessagesFromChannel(channel.getId(), result -> {
-            messages = result;
+            Log.d("TEST", result.size() + " messages");
+            messages.clear();
+            messages.addAll(result);
             Collections.sort(messages, (o1, o2) -> {
                 if (o1.getTime().before(o2.getTime()))
                     return -1;
@@ -146,15 +145,16 @@ public class ChatFragment extends SuperChatPostsFragment {
 
     private void setUpDataOnChangeListener() {
         FirebaseProxy.getInstance().onMessageAddedInChannel(channel.getId(), result -> {
-            messages.add(result);
+            messages.clear();
+            messages.addAll(result);
+            Collections.sort(messages, (o1, o2) -> {
+                if (o1.getTime().before(o2.getTime()))
+                    return -1;
+                else
+                    return 1;
+            });
+            adapter.notifyDataSetChanged();
+            listView.setSelection(adapter.getCount() - 1);
         });
-        Collections.sort(messages, (o1, o2) -> {
-            if (o1.getTime().before(o2.getTime()))
-                return -1;
-            else
-                return 1;
-        });
-        adapter.notifyDataSetChanged();
-        listView.setSelection(adapter.getCount() - 1);
     }
 }
