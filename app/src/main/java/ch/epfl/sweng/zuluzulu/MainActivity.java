@@ -16,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.google.android.gms.maps.MapsInitializer;
-import com.google.firebase.FirebaseApp;
 
 import java.util.HashMap;
 import java.util.Map;

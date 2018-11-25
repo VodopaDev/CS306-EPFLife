@@ -1,9 +1,6 @@
 package ch.epfl.sweng.zuluzulu.User;
 
-import android.net.wifi.p2p.WifiP2pManager;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;

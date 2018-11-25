@@ -1,23 +1,13 @@
 package ch.epfl.sweng.zuluzulu.Utility;
 
 import android.location.Location;
-import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
 import java.util.Random;
-
-import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
 
 /**
  * Interface that contains general useful functions

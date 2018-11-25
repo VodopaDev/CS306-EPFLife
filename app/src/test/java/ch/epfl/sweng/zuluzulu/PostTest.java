@@ -7,6 +7,7 @@ import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -59,10 +60,10 @@ public class PostTest {
         user = Utility.createTestUser();
         channel = Utility.defaultChannel();
 
-        upScipers1 = new ArrayList<>(Arrays.asList(user.getSciper()));
         downScipers1 = new ArrayList<>();
         upScipers2 = new ArrayList<>();
-        downScipers2 = new ArrayList<>(Arrays.asList(user.getSciper()));
+        upScipers1 = new ArrayList<>(Collections.singletonList(user.getSciper()));
+        downScipers2 = new ArrayList<>(Collections.singletonList(user.getSciper()));
 
         data1.put("senderName", senderName1);
         data1.put("sciper", sciper1);
@@ -82,7 +83,7 @@ public class PostTest {
         data2.put("nbUps", nbUps2);
         data2.put("nbResponses", nbResponses2);
         data2.put("upScipers", new ArrayList<>());
-        data2.put("downScipers", new ArrayList<>(Arrays.asList(user.getSciper())));
+        data2.put("downScipers", new ArrayList<>(Collections.singletonList(user.getSciper())));
 
         post1 = new Post(new FirebaseMapDecorator(data1), user.getSciper(), channel.getId(), null);
         post2 = new Post(new FirebaseMapDecorator(data2), user.getSciper(), channel.getId(), post1);

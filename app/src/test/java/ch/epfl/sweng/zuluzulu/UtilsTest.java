@@ -10,8 +10,6 @@ import org.junit.runners.JUnit4;
 
 import java.util.Date;
 
-import Utils;
-
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 

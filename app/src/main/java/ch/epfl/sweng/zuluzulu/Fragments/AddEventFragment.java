@@ -2,7 +2,6 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,29 +12,15 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
-import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
-import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.Association;
 
-import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
-import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.EventDate;
@@ -318,22 +303,16 @@ public class AddEventFragment extends SuperFragment {
      * @return if the arguments are valid
      */
     private boolean checkIfValid(String title, String description) {
-        boolean valid = true;
+        if (title.length() > 30)
+            return viewSetError(title_view, "title is too long");
+        if (title.isEmpty())
+            return viewSetError(title_view, "please write a title");
+        if (description.length() > 80)
+            return viewSetError(description_view, "description is too long");
+        if (description.isEmpty())
+            return viewSetError(description_view, "please write a description");
 
-        if (title.length() > 30) {
-            valid = viewSetError(title_view, "title is too long");
-        }
-        if (title.isEmpty()) {
-            valid = viewSetError(title_view, "please write a title");
-        }
-        if (description.length() > 80) {
-            valid = viewSetError(description_view, "description is too long");
-        }
-        if (description.isEmpty()) {
-            valid = viewSetError(description_view, "please write a description");
-        }
-
-        return valid;
+        return true;
     }
 
     /**

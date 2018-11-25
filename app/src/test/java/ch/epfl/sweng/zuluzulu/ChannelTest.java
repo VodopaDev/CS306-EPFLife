@@ -99,7 +99,7 @@ public class ChannelTest {
 
     @Test
     public void testGettersAndSetters() {
-        assertEquals(id1.intValue(), channelGlobal.getId());
+        assertEquals(id1, channelGlobal.getId());
         assertEquals(name1, channelGlobal.getName());
         assertEquals(description1, channelGlobal.getShortDescription());
 
