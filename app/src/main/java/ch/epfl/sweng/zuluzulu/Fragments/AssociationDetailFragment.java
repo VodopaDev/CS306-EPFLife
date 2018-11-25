@@ -153,8 +153,6 @@ public class AssociationDetailFragment extends SuperFragment {
         });
     }
 
-    // TODO: Remove comment when EventDetailFragment is fixed
-
     /**
      * Set up the upcoming event clicking behaviour to go on the event detailed page
      */

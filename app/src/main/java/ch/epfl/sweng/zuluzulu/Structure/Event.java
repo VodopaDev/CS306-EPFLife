@@ -13,8 +13,6 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Utility.Utils;
 
-
-// TODO: Add admin access, ending date, linked-chat id, linked-association id, position
 public class Event extends FirebaseStructure {
 
     private String name;

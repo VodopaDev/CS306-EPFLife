@@ -60,7 +60,7 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
     }
 
     @Test
-    public void thereAreTwoEditText() throws InterruptedException {
+    public void thereAreTwoEditText() {
         onView(withId(R.id.event_fragment_from_date)).check(matches(isDisplayed()));
         onView(withId(R.id.event_fragment_to_date)).check(matches(isDisplayed()));
     }

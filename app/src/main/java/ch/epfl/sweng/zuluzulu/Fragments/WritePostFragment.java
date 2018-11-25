@@ -159,7 +159,6 @@ public class WritePostFragment extends SuperFragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int messageLength = s.toString().length();
                 boolean correctFormat = 0 < messageLength && messageLength < POST_MAX_LENGTH;
-                ;
                 sendButton.setEnabled(correctFormat);
             }
 

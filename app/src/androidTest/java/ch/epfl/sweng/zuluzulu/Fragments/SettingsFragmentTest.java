@@ -49,7 +49,7 @@ public class SettingsFragmentTest extends TestWithGuestAndFragment<SettingsFragm
     }
 
     @Test
-    public void testClickOnAnonymous() throws InterruptedException {
+    public void testClickOnAnonymous() {
         SharedPreferences preferences = getMainActivity().getPreferences(Context.MODE_PRIVATE);
         boolean anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
