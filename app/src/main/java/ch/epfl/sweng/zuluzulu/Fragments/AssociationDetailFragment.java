@@ -146,6 +146,7 @@ public class AssociationDetailFragment extends SuperFragment {
                     loadFavImage(R.drawable.fav_on);
                     asso_fav.setContentDescription(FAV_CONTENT);
                 }
+                FirebaseProxy.getInstance().updateUser(auth);
             } else {
                 Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
             }

@@ -16,21 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
-import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
@@ -175,7 +167,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
             List<String> receivedChannels = result.getStringList("followed_channels");
 
             for(String role: result.getStringList("roles"))
-                user.addRole(UserRole.getRoleFromString(role));
+                user.addRole(UserRole.valueOf(role));
             ((AuthenticatedUser) user).setFollowedAssociation(receivedAssociations);
             ((AuthenticatedUser) user).setFollowedEvents(receivedEvents);
             ((AuthenticatedUser) user).setFollowedChannels(receivedChannels);

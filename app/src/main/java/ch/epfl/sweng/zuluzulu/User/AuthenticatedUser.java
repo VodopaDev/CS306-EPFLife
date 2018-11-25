@@ -1,7 +1,10 @@
 package ch.epfl.sweng.zuluzulu.User;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AuthenticatedUser extends User {
     // Use sciper to check User (and not mail or gaspar)
@@ -162,6 +165,19 @@ public class AuthenticatedUser extends User {
     @Override
     public boolean isConnected() {
         return true;
+    }
+
+    public Map<String, Object> getData(){
+        ArrayList<String> roles = new ArrayList<>();
+        for(UserRole role: this.roles)
+            roles.add(role.name());
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("followed_associations", followedAssociations);
+        map.put("followed_events", followedEvents);
+        map.put("followed_channels", followedChannels);
+        map.put("roles", roles);
+        return map;
     }
 
     @Override

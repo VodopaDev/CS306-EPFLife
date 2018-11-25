@@ -389,6 +389,12 @@ public class FirebaseProxy {
 
     //----- User related methods -----\\
 
+    public void updateUser(AuthenticatedUser user){
+        IdlingResourceFactory.incrementCountingIdlingResource();
+        userCollection.document(user.getSciper()).set(user.getData());
+        IdlingResourceFactory.decrementCountingIdlingResource();
+    }
+
     public void getUserWithIdOrCreateIt(String id, OnResult<FirebaseMapDecorator> onResult){
         IdlingResourceFactory.incrementCountingIdlingResource();
         userCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
@@ -397,7 +403,7 @@ public class FirebaseProxy {
                 map.put("followed_associations", new ArrayList<String>());
                 map.put("followed_events", new ArrayList<String>());
                 map.put("followed_channels", new ArrayList<String>());
-                map.put("roles", Collections.singletonList("user"));
+                map.put("roles", Collections.singletonList("USER"));
                 userCollection.document(id).set(map);
                 onResult.apply(new FirebaseMapDecorator(map));
             } else {
