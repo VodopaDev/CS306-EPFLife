@@ -150,11 +150,6 @@ public class FirebaseProxy implements Proxy{
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
-    @Override
-    public void addChannel(Channel channel) {
-
-    }
-
     /**
      * Get all events and apply an OnResult on them
      * @param onResult interface defining apply()
@@ -343,8 +338,8 @@ public class FirebaseProxy implements Proxy{
         });
     }
 
-    public void onMessageAddedInChannel(String id, OnResult<List<ChatMessage>> onResult) {
-        channelCollection.document(id).collection("messages").addSnapshotListener((queryDocumentSnapshots, e) -> {
+    public void updateOnNewMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult) {
+        channelCollection.document(channelId).collection("messages").addSnapshotListener((queryDocumentSnapshots, e) -> {
             if (e != null)
                 System.err.println("Listen failed: " + e);
             else {
@@ -354,24 +349,6 @@ public class FirebaseProxy implements Proxy{
                     FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
                     if (data.hasFields(ChatMessage.requiredFields()))
                         result.add(new ChatMessage(data));
-                }
-                onResult.apply(result);
-                IdlingResourceFactory.decrementCountingIdlingResource();
-            }
-        });
-    }
-
-    public void onPostAddedInChannel(String id, OnResult<List<Post>> onResult) {
-        channelCollection.document(id).collection("posts").addSnapshotListener((queryDocumentSnapshots, e) -> {
-            if (e != null)
-                System.err.println("Listen failed: " + e);
-            else {
-                IdlingResourceFactory.incrementCountingIdlingResource();
-                List<Post> result = new ArrayList<>();
-                for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                    FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
-                    if (data.hasFields(Post.requiredFields()))
-                        result.add(new Post(data));
                 }
                 onResult.apply(result);
                 IdlingResourceFactory.decrementCountingIdlingResource();

@@ -3,7 +3,6 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,12 +17,9 @@ import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageArrayAdapter;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -145,7 +141,7 @@ public class ChatFragment extends SuperChatPostsFragment {
     }
 
     private void setUpDataOnChangeListener() {
-        FirebaseProxy.getInstance().onMessageAddedInChannel(channel.getId(), result -> {
+        FirebaseProxy.getInstance().updateOnNewMessagesFromChannel(channel.getId(), result -> {
             messages.clear();
             messages.addAll(result);
             Collections.sort(messages, (o1, o2) -> {

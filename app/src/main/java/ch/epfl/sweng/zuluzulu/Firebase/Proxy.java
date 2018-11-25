@@ -20,7 +20,6 @@ public interface Proxy {
 
     void addAssociation(Association association);
     void addEvent(Event event);
-    void addChannel(Channel channel);
     void addMessage(ChatMessage message);
     void addPost(Post post);
     void addReply(Post post);
@@ -38,6 +37,7 @@ public interface Proxy {
     void getEventFromId(String id, OnResult<Event> onResult);
     void getAssociationFromId(String id, OnResult<Association> onResult);
 
+    void updateOnNewMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult);
     void getMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult);
     void getPostsFromChannel(String channelId, OnResult<List<Post>> onResult);
     void getRepliesFromPost(String channelId, String postId, OnResult<List<Post>> onResult);
