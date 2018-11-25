@@ -36,7 +36,7 @@ import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.User.UserRole;
 
-public class FirebaseProxy {
+public class FirebaseProxy implements Proxy{
 
     private static FirebaseProxy proxy;
     private final FirebaseFirestore firebaseInstance;
@@ -148,6 +148,11 @@ public class FirebaseProxy {
         createChannel(event);
         eventCollection.document(event.getId()).set(event.getData());
         IdlingResourceFactory.decrementCountingIdlingResource();
+    }
+
+    @Override
+    public void addChannel(Channel channel) {
+
     }
 
     /**
@@ -322,17 +327,6 @@ public class FirebaseProxy {
         });
     }
 
-    public void addReplyToPost(Post post){
-        IdlingResourceFactory.incrementCountingIdlingResource();
-        channelCollection.document(post.getChannelId())
-                .collection("posts")
-                .document(post.getOriginalPostId())
-                .collection("replies")
-                .document(post.getId())
-                .set(post.getData());
-        IdlingResourceFactory.decrementCountingIdlingResource();
-    }
-
     public void getRepliesFromPost(String channelId, String postId, OnResult<List<Post>> onResult){
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(channelId).collection("posts")
@@ -394,6 +388,23 @@ public class FirebaseProxy {
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
+    @Override
+    public void addReply(Post post) {
+        IdlingResourceFactory.incrementCountingIdlingResource();
+        channelCollection.document(post.getChannelId())
+                .collection("posts")
+                .document(post.getOriginalPostId())
+                .collection("replies")
+                .document(post.getId())
+                .set(post.getData());
+        IdlingResourceFactory.decrementCountingIdlingResource();
+    }
+
+    @Override
+    public void updateUser(User user) {
+
+    }
+
     public void updatePost(Post post){
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(post.getChannelId())
@@ -421,7 +432,6 @@ public class FirebaseProxy {
         userCollection.document(user.getSciper()).set(user.getData());
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
-
     public void getUserWithIdOrCreateIt(String id, OnResult<FirebaseMapDecorator> onResult){
         IdlingResourceFactory.incrementCountingIdlingResource();
         userCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
@@ -447,21 +457,20 @@ public class FirebaseProxy {
     public String getNewChannelId(){
         return channelCollection.document().getId();
     }
-
     public String getNewEventId(){
         return eventCollection.document().getId();
     }
-
     public String getNewAssociationId(){
         return assoCollection.document().getId();
     }
-
     public String getNewPostId(String channelId){
         return channelCollection.document(channelId).collection("posts").document().getId();
     }
-
     public String getNewMessageId(String channelId){
         return channelCollection.document(channelId).collection("messages").document().getId();
+    }
+    public String getNewReplyId(String channelId, String originalPostId) {
+        return channelCollection.document(channelId).collection("posts").document(originalPostId).collection("replies").getId();
     }
 
     /**

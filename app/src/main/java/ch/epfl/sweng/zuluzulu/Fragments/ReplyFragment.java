@@ -141,7 +141,7 @@ public class ReplyFragment extends SuperFragment {
                         Collections.singletonList(user.getSciper()),
                         Collections.EMPTY_LIST
                 );
-                FirebaseProxy.getInstance().addReplyToPost(post);
+                FirebaseProxy.getInstance().addReply(post);
                 loadReplies();
             }
         });
