@@ -194,51 +194,17 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <DatePicker
+                    android:id="@+id/date_for_add"
                     android:layout_width="50mm"
                     android:layout_height="65mm"
                     android:endYear="2100"
+                    android:headerBackground="@color/colorPrimaryDark"
                     android:startYear="2018"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/textView11"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-                <Spinner
-                    android:id="@+id/spinner_day"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/spinner_month"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/textView11"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <Spinner
-                    android:id="@+id/spinner_month"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/spinner_day"
-                    app:layout_constraintEnd_toStartOf="@+id/spinner_year"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/spinner_day" />
-
-                <Spinner
-                    android:id="@+id/spinner_year"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:minWidth="30dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/spinner_month"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/spinner_month" />
 
             </android.support.constraint.ConstraintLayout>
 

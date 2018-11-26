@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -51,15 +52,7 @@ public class AddEventFragment extends SuperFragment {
     private int numberOfEvents;
 
     //for date (number of days adapt depending on the month chosen)
-    private List<String> short_months = new ArrayList<>();
-    private List<String> thirty_one_days = new ArrayList<>();
-    private List<String> thirty_days;
-    private List<String> feb_days;
-    private List<String> years = new ArrayList();
-    private List<String> thirty_one_days_months = new ArrayList<>();
-    private Spinner spinner_days;
-    private Spinner spinner_months;
-    private Spinner spinner_years;
+    private DatePicker date_pick;
 
     //for time
     private List<String> hours = new ArrayList<>();
@@ -86,28 +79,7 @@ public class AddEventFragment extends SuperFragment {
     }
 
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
-        //fill the list for the months spinner
-        populateShortMonths();
-
-        //makes a sublist containing all the months with 31 days
-        fillMonthsSublist(thirty_one_days_months, INDICES);
-
-        //a list of 31 days
-        for (int i = 1; i <= 31; i++) {
-            thirty_one_days.add(String.valueOf(i));
-        }
-        //goes to 30 for months with a day less
-        thirty_days = thirty_one_days.subList(0, 30);
-        //special case for february
-        feb_days = thirty_one_days.subList(0, 28);
-
-        //fills the year list for the spinner
-        for (int i = 0; i <= 10; i++) {
-            years.add(String.valueOf(2018 + i));
-        }
 
         //fills the hour list for the spinner
         addIntsToList(hours, 0, 24, 1);
@@ -138,36 +110,6 @@ public class AddEventFragment extends SuperFragment {
     }
 
     /**
-     * simply fill short_months with the 12 months of the year
-     */
-    private void populateShortMonths() {
-        short_months.add("Jan");
-        short_months.add("Feb");
-        short_months.add("Mar");
-        short_months.add("Apr");
-        short_months.add("May");
-        short_months.add("Jun");
-        short_months.add("Jul");
-        short_months.add("Aug");
-        short_months.add("Sep");
-        short_months.add("Oct");
-        short_months.add("Nov");
-        short_months.add("Dec");
-    }
-
-    /**
-     * create a sublist of months containing only those we select
-     *
-     * @param months the sublist we want to fill
-     * @param array  the array of indices that indicate the months we want
-     */
-    private void fillMonthsSublist(List<String> months, int[] array) {
-        for (int i : array) {
-            months.add(short_months.get(i));
-        }
-    }
-
-    /**
      * Takes the current selected Item of a spinner with numbers and convert it to int
      *
      * @return the int value of the selected content of the spinner
@@ -186,10 +128,11 @@ public class AddEventFragment extends SuperFragment {
 
                 int hour = getNumberSpinnerContent(spinner_hours);
                 int minute = getNumberSpinnerContent(spinner_minutes);
-                int day = getNumberSpinnerContent(spinner_days);
-                int month = short_months.indexOf(spinner_months.getSelectedItem().toString());
-                int year = getNumberSpinnerContent(spinner_years) - 1900;
+                int day = date_pick.getDayOfMonth();
+                int month = date_pick.getMonth();
+                int year = date_pick.getYear() - 1900;
                 Date date = new Date(year, month, day, hour, minute);
+
 
                 String name = spinner.getSelectedItem().toString();
                 String tit = title_view.getText().toString();
@@ -260,58 +203,6 @@ public class AddEventFragment extends SuperFragment {
         });
     }
 
-    /**
-     * Method that setup the fact that there are different days depending on the month
-     * and update the spinners values accordingly
-     */
-    private void setUpDayMonthInteraction() {
-        spinner_months.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int pos,
-                                       long id) {
-
-                String selected_mon = ((TextView) view).getText().toString();
-                int selected = Integer.parseInt(spinner_days.getSelectedItem().toString());
-
-                if (selected_mon.equals("Feb")) {
-                    //case we select february
-                    setSpinner(spinner_days, feb_days);
-                    helperSetup(selected, 28, 27);
-
-                } else {
-                    if (thirty_one_days_months.contains(selected_mon)) {
-                        //case we select a 31 days month
-                        setSpinner(spinner_days, thirty_one_days);
-                        spinner_days.setSelection(selected - 1);
-                    } else {
-                        //case we select a 30 days month
-                        setSpinner(spinner_days, thirty_days);
-                        helperSetup(selected, 30, 29);
-                    }
-                }
-            }
-
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-
-        });
-    }
-
-    /**
-     * little method that check the selected day is within the boundaries
-     * of the days of the month and adapt the value
-     *
-     * @param selected       current selected value
-     * @param conditionValue the max value (exclusive) selected can have for the current month
-     * @param setValue       set the spinner at this value if selected is out of bound
-     */
-    private void helperSetup(int selected, int conditionValue, int setValue) {
-        if (selected < conditionValue) {
-            spinner_days.setSelection(selected - 1);
-        } else {
-            spinner_days.setSelection(setValue);
-        }
-
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -327,18 +218,6 @@ public class AddEventFragment extends SuperFragment {
         create_event = view.findViewById(R.id.create_event_button);
         setUpCreateEventButton();
 
-
-        //fill the different spinners for the dates.
-        spinner_days = view.findViewById(R.id.spinner_day);
-        setSpinner(spinner_days, thirty_one_days);
-
-        spinner_months = view.findViewById(R.id.spinner_month);
-        setSpinner(spinner_months, short_months);
-        setUpDayMonthInteraction();
-
-        spinner_years = view.findViewById(R.id.spinner_year);
-        setSpinner(spinner_years, years);
-
         spinner_hours = view.findViewById(R.id.spinner_hour);
         setSpinner(spinner_hours, hours);
 
@@ -349,7 +228,7 @@ public class AddEventFragment extends SuperFragment {
         spinner = view.findViewById(R.id.spinner);
         fillAssociationNames();
 
-        mMapView = (MapView) view.findViewById(R.id.mapView);
+        mMapView = (MapView) view.findViewById(R.id.mapViewAdd);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
 
@@ -368,9 +247,6 @@ public class AddEventFragment extends SuperFragment {
 
                 // For dropping a marker at a point on the Map
                 LatLng epfl = new LatLng(46.520537, 6.570930);
-                LatLng co = new LatLng(46.520135, 6.565263);
-                googleMap.addMarker(new MarkerOptions().position(epfl).title("ce").snippet("ce"));
-                googleMap.addMarker(new MarkerOptions().position(co).title("co").snippet("co"));
 
                 // For zooming automatically to the location of the marker
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(epfl).zoom(12).build();
@@ -378,7 +254,11 @@ public class AddEventFragment extends SuperFragment {
             }
         });
 
+        date_pick = (DatePicker) view.findViewById(R.id.date_for_add);
+
         return view;
+
+
     }
 
     /**
