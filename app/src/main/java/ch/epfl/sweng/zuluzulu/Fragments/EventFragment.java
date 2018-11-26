@@ -491,6 +491,9 @@ public class EventFragment extends SuperFragment {
 
                 event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
                 listview_event.setAdapter(event_adapter);
+
+                checkbox_event_sort_date.setEnabled(false);
+                checkbox_event_sort_date.setChecked(true);
             }
         });
     }
