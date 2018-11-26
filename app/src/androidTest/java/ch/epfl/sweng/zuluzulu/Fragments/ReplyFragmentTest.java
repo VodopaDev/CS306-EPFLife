@@ -61,30 +61,16 @@ public class ReplyFragmentTest extends TestWithAuthenticatedAndFragment<ReplyFra
     }
 
     @Test
-    public void testUserCanUpOriginalPost() throws InterruptedException {
-        // Can remove comments when update document function is mocked
-        // TimeUnit.SECONDS.sleep(3);
-        // onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_original_post)).atPosition(0).onChildView(withId(R.id.post_up_button)).perform(click());
+    public void testUserCanUpOrDownOriginalPost() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(3);
+        onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_original_post)).atPosition(0).onChildView(withId(R.id.post_up_button)).perform(click());
     }
 
     @Test
-    public void testUserCanDownOriginalPost() throws InterruptedException {
-        // Can remove comments when update document function is mocked
-        // TimeUnit.SECONDS.sleep(3);
-        // onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_original_post)).atPosition(0).onChildView(withId(R.id.post_down_button)).perform(click());
-    }
-
-    @Test
-    public void testUserCanUpReply() throws InterruptedException {
+    public void testUserCanUpOrDownReply() throws InterruptedException {
         // Can remove comments when update document function is mocked
         // TimeUnit.SECONDS.sleep(3);
         // onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_list_view)).atPosition(0).onChildView(withId(R.id.post_up_button)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testUserCanDownReply() throws InterruptedException {
-        // Can remove comments when update document function is mocked
-        // TimeUnit.SECONDS.sleep(3);
         // onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_list_view)).atPosition(0).onChildView(withId(R.id.post_down_button)).check(matches(isDisplayed()));
     }
 }

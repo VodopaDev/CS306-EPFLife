@@ -70,20 +70,13 @@ public class PostFragmentTest extends TestWithAuthenticatedAndFragment<PostFragm
     public void testUserCanOpenPost() throws InterruptedException {
         TimeUnit.SECONDS.sleep(3);
         onData(instanceOf(Post.class)).atPosition(0).perform(click());
-        onView(withId(R.id.write_post_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.reply_list_view)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testUserCanUpPost() throws InterruptedException {
-        // Can remove comments when update document function is mocked
-        // TimeUnit.SECONDS.sleep(3);
-        // onData(instanceOf(Post.class)).atPosition(0).onChildView(withId(R.id.post_up_button)).perform(click());
-    }
-
-    @Test
-    public void testUserCanDownPost() throws InterruptedException {
-        // Can remove comments when update document function is mocked
-        // TimeUnit.SECONDS.sleep(3);
-        // onData(instanceOf(Post.class)).atPosition(0).onChildView(withId(R.id.post_down_button)).perform(click());
+    public void testUserCanUpOrDownPost() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(3);
+        onData(instanceOf(Post.class)).atPosition(0).onChildView(withId(R.id.post_up_button)).perform(click());
+        onData(instanceOf(Post.class)).atPosition(0).onChildView(withId(R.id.post_down_button)).perform(click());
     }
 }
