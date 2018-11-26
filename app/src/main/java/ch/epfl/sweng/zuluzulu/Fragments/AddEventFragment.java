@@ -141,7 +141,8 @@ public class AddEventFragment extends SuperFragment {
                 int year = date_pick.getYear() - 1900;
                 Date date = new Date(year, month, day, hour, minute);
 
-                //Set the end date
+                //Set the end date (to avoid adding another calendar to the layout I compute the duration in days and add it to the date
+                // to find the end date)
                 int dur = Integer.parseInt(duration.getText().toString());
                 dur = dur * DAYSTOSEC * 1000;
                 long d = date.getTime();
