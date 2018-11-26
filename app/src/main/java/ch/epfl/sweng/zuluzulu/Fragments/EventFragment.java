@@ -417,7 +417,12 @@ public class EventFragment extends SuperFragment {
                     }
                 }
 
-                event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
+                if (isFavDisplayed){
+                    event_adapter = new EventArrayAdapter(getContext(), event_fav_sorted, mListener, user);
+                }
+                else {
+                    event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
+                }
 
                 listview_event.setAdapter(event_adapter);
                 event_adapter.notifyDataSetChanged();
