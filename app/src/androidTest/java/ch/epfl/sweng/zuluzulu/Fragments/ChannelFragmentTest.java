@@ -19,6 +19,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.instanceOf;
 
 @RunWith(AndroidJUnit4.class)
@@ -37,6 +38,7 @@ public class ChannelFragmentTest extends TestWithAuthenticatedAndFragment<Channe
     @Test
     public void testUserCanOpenChannel() throws InterruptedException {
         TimeUnit.SECONDS.sleep(3);
+        onData(instanceOf(Channel.class)).atPosition(0).check(matches(isDisplayed()));
         onData(instanceOf(Channel.class)).atPosition(0).perform(click());
         onView(withId(R.id.chat_list_view)).check(matches(isDisplayed()));
     }
