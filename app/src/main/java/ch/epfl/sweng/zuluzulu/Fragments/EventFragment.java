@@ -437,7 +437,12 @@ public class EventFragment extends SuperFragment {
                 Collections.sort(event_all, Event.assoNameComparator());
                 Collections.sort(event_fav, Event.assoNameComparator());
 
-                event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
+                if (isFavDisplayed){
+                    event_adapter = new EventArrayAdapter(getContext(), event_fav, mListener, user);
+                }
+                else {
+                    event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
+                }
 
                 listview_event.setAdapter(event_adapter);
 
