@@ -318,16 +318,11 @@ public class EventFragment extends SuperFragment {
 
         date.setText(stringDate);
 
-        if (date == event_fragment_from_date) {
-            sortByFromDate(stringDate);
-        } else {
-            sortByFromAndToDate(stringDate);
-        }
+        if (date == event_fragment_from_date) sortByFromDate();
+        else sortByFromAndToDate();
     }
 
-    private void sortByFromDate(String s) {
-        String date = s.toString();
-
+    private void sortByFromDate() {
         emptySortedEventList();
 
         Collections.sort(event_all, Event.dateComparator());
@@ -338,22 +333,26 @@ public class EventFragment extends SuperFragment {
                 event_all_sorted.add(event_all.get(i));
             }
         }
-//                for (int i = 0; i < event_fav.size(); i++) {
-//                    if (event_fav.get(i).getStartDate().compareTo(tempDate) >= 0) {
-//                        event_fav_sorted.add(event_fav.get(i));
-//                    }
-//                }
+        for (int i = 0; i < event_fav.size(); i++) {
+            if (event_fav.get(i).getStartDate().compareTo(eventCalendar.getTime()) >= 0) {
+                event_fav_sorted.add(event_fav.get(i));
+            }
+        }
 
-        event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
+        if (isFavDisplayed){
+            event_adapter = new EventArrayAdapter(getContext(), event_fav_sorted, mListener, user);
+        }
+        else {
+            event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
+        }
+
         listview_event.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
 
         dateFrom = eventCalendar.getTime();
     }
 
-    private void sortByFromAndToDate(String s) {
-        String date = s.toString();
-
+    private void sortByFromAndToDate() {
         emptySortedEventList();
 
         Collections.sort(event_all, Event.dateComparator());
@@ -364,13 +363,20 @@ public class EventFragment extends SuperFragment {
                 event_all_sorted.add(event_all.get(i));
             }
         }
-//                for (int i = 0; i < event_fav.size(); i++) {
-//                    if (event_fav.get(i).getStartDate().compareTo(dateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(tempDateTo) <= 0) {
-//                        event_fav_sorted.add(event_fav.get(i));
-//                    }
-//                }
 
-        event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
+        for (int i = 0; i < event_fav.size(); i++) {
+            if (event_fav.get(i).getStartDate().compareTo(dateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(eventCalendar.getTime()) <= 0) {
+                event_fav_sorted.add(event_fav.get(i));
+            }
+        }
+
+        if (isFavDisplayed){
+            event_adapter = new EventArrayAdapter(getContext(), event_fav_sorted, mListener, user);
+        }
+        else {
+            event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
+        }
+
         listview_event.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
     }
