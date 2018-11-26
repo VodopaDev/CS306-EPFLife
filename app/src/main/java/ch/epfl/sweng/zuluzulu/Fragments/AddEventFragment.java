@@ -1,8 +1,11 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,13 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -65,6 +75,11 @@ public class AddEventFragment extends SuperFragment {
 
     //for validating and create the event
     private Button create_event;
+
+    // for the map
+    private MapView mMapView;
+    private GoogleMap googleMap;
+
 
     public static AddEventFragment newInstance() {
         return new AddEventFragment();
@@ -333,6 +348,35 @@ public class AddEventFragment extends SuperFragment {
         //fill the spinner for associations.
         spinner = view.findViewById(R.id.spinner);
         fillAssociationNames();
+
+        mMapView = (MapView) view.findViewById(R.id.mapView);
+        mMapView.onCreate(savedInstanceState);
+        mMapView.onResume();
+
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                googleMap = mMap;
+
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    // For showing a move to my location button
+                    googleMap.setMyLocationEnabled(true);
+                }
+
+                // For dropping a marker at a point on the Map
+                LatLng epfl = new LatLng(46.520537, 6.570930);
+                LatLng co = new LatLng(46.520135, 6.565263);
+                googleMap.addMarker(new MarkerOptions().position(epfl).title("ce").snippet("ce"));
+                googleMap.addMarker(new MarkerOptions().position(co).title("co").snippet("co"));
+
+                // For zooming automatically to the location of the marker
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(epfl).zoom(12).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+        });
 
         return view;
     }
