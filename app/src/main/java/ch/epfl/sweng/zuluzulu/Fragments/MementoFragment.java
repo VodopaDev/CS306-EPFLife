@@ -184,7 +184,7 @@ public class MementoFragment extends SuperFragment {
                 .setAssosId(1)
                 .setChannelId(1)
                 .setLikes(0)
-                .setShortDesc(jsonobject.getString("description"))
+                .setShortDesc(jsonobject.getString("description").length() > 30 ? jsonobject.getString("description").substring(0, 29) + "..." :jsonobject.getString("description"))
                 .setName(jsonobject.getString("title"))
                 .setLongDesc(jsonobject.getString("description"))
                 .setOrganizer(jsonobject.getString("event_organizer"))
