@@ -75,7 +75,7 @@ public class EventFragment extends SuperFragment {
     private EditText event_fragment_to_date;
 
     private ArrayList<Event> event_all_sorted;
-//    private ArrayList<Event> event_fav_sorted;
+    private ArrayList<Event> event_fav_sorted;
 
     private boolean isFavDisplayed;
 
@@ -127,7 +127,7 @@ public class EventFragment extends SuperFragment {
         isFavDisplayed = false;
 
         event_all_sorted = new ArrayList<>();
-//        event_fav_sorted = new ArrayList<>();
+        event_fav_sorted = new ArrayList<>();
 
         eventCalendar = Calendar.getInstance();
     }
@@ -214,7 +214,7 @@ public class EventFragment extends SuperFragment {
 
     private void emptySortedEventList() {
         event_all_sorted.clear();
-//        event_fav_sorted.clear();
+        event_fav_sorted.clear();
     }
 
     private void fillEventLists(String sortOption) {
@@ -406,6 +406,17 @@ public class EventFragment extends SuperFragment {
                         event_all_sorted.add(event);
                     }
                 }
+
+                for (Event event : event_fav) {
+                    if (event.getName().toLowerCase().contains(keyWord)) {
+                        event_fav_sorted.add(event);
+                    } else if (event.getShortDesc().toLowerCase().contains(keyWord)) {
+                        event_fav_sorted.add(event);
+                    } else if (event.getLongDesc().toLowerCase().contains((keyWord))) {
+                        event_fav_sorted.add(event);
+                    }
+                }
+
                 event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
 
                 listview_event.setAdapter(event_adapter);
