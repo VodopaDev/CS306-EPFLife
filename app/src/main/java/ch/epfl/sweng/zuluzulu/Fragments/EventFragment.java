@@ -227,7 +227,6 @@ public class EventFragment extends SuperFragment {
                                 event_adapter.notifyDataSetChanged();
                             }
                         }
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
