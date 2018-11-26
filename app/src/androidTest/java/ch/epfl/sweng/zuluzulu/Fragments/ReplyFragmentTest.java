@@ -64,11 +64,11 @@ public class ReplyFragmentTest extends TestWithAuthenticatedAndFragment<ReplyFra
     public void testUserCanUpOrDownOriginalPost() throws InterruptedException {
         TimeUnit.SECONDS.sleep(3);
         onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_original_post)).atPosition(0).onChildView(withId(R.id.post_up_button)).perform(click());
+        onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_original_post)).atPosition(0).onChildView(withId(R.id.post_down_button)).perform(click());
     }
 
     @Test
     public void testUserCanUpOrDownReply() throws InterruptedException {
-        // Can remove comments when update document function is mocked
         // TimeUnit.SECONDS.sleep(3);
         // onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_list_view)).atPosition(0).onChildView(withId(R.id.post_up_button)).check(matches(isDisplayed()));
         // onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_list_view)).atPosition(0).onChildView(withId(R.id.post_down_button)).check(matches(isDisplayed()));
