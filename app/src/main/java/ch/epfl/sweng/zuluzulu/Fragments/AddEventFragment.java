@@ -76,9 +76,6 @@ public class AddEventFragment extends SuperFragment {
     //for validating and create the event
     private Button create_event;
 
-    // for the map
-    private MapView mMapView;
-    private GoogleMap googleMap;
 
 
     public static AddEventFragment newInstance() {
@@ -271,32 +268,6 @@ public class AddEventFragment extends SuperFragment {
         //fill the spinner for associations.
         spinner = view.findViewById(R.id.spinner);
         fillAssociationNames();
-
-        mMapView = (MapView) view.findViewById(R.id.mapViewAdd);
-        mMapView.onCreate(savedInstanceState);
-        mMapView.onResume();
-
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                googleMap = mMap;
-
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                } else {
-                    // For showing a move to my location button
-                    googleMap.setMyLocationEnabled(true);
-                }
-
-                // For dropping a marker at a point on the Map
-                LatLng epfl = new LatLng(46.520537, 6.570930);
-
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(epfl).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            }
-        });
 
         date_pick = (DatePicker) view.findViewById(R.id.date_for_add);
 
