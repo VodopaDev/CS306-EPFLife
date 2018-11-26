@@ -18,6 +18,7 @@ import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -37,7 +38,7 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
 
         onView(withId(R.id.event_fragment_filter_button)).perform(click());
 
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.SECONDS.sleep(2);
     }
 
     @Test
@@ -66,10 +67,8 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
     }
 
     @Test
-    public void thereIsEventInTheListView() {
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasMinimumChildCount(4)));
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasDescendant(withText("ForumEPFL"))
-        ));
+    public void eventsArePresentInTheListView() {
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasMinimumChildCount(1)));
     }
 
     @Test
@@ -81,11 +80,11 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
 
     @Test
     public void sortWithKeywordTest() {
-        onView(withId(R.id.event_fragment_search_bar)).perform(typeText("forum"));
-        onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).onChildView(withId(R.id.card_event_name)).check(matches(withText("ForumEPFL")));
+        onView(withId(R.id.event_fragment_search_bar)).perform(typeText("a"));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasMinimumChildCount(1)));
         onView(withId(R.id.event_fragment_search_bar)).perform(clearText());
         onView(withId(R.id.event_fragment_search_bar)).perform(typeText("discover"));
-        onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).onChildView(withId(R.id.card_event_name)).check(matches(withText("ForumEPFL")));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasMinimumChildCount(1)));
     }
 
     @Test
