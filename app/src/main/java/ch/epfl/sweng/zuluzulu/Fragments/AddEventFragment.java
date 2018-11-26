@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -23,13 +22,13 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,7 +43,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 
 public class AddEventFragment extends SuperFragment {
-    private static final int[] INDICES = {0, 2, 4, 6, 7, 9, 11};
+    private final static int DAYSTOSEC = 86400;
     //for association name
     private List<String> association_names = new ArrayList<>();
     private List<Integer> association_ids = new ArrayList<>();
@@ -60,11 +59,19 @@ public class AddEventFragment extends SuperFragment {
     private Spinner spinner_hours;
     private Spinner spinner_minutes;
 
+    private Spinner spinner_end_hours;
+    private Spinner spinner_end_minutes;
+
     //for description_view
     private TextView title_view;
     private TextView description_view;
     private TextView place;
     private TextView organizer;
+    private TextView website;
+    private TextView duration;
+    private TextView speaker;
+    private TextView category;
+    private TextView contact;
 
     //for validating and create the event
     private Button create_event;
@@ -114,7 +121,7 @@ public class AddEventFragment extends SuperFragment {
      *
      * @return the int value of the selected content of the spinner
      */
-    private int getNumberSpinnerContent(Spinner spinner) {
+    private int getIntSpinnerContent(Spinner spinner) {
         return Integer.parseInt(spinner.getSelectedItem().toString());
     }
 
@@ -126,19 +133,34 @@ public class AddEventFragment extends SuperFragment {
             @Override
             public void onClick(View v) {
 
-                int hour = getNumberSpinnerContent(spinner_hours);
-                int minute = getNumberSpinnerContent(spinner_minutes);
+                //Set the starting date
+                int hour = getIntSpinnerContent(spinner_hours)-1;
+                int minute = getIntSpinnerContent(spinner_minutes);
                 int day = date_pick.getDayOfMonth();
                 int month = date_pick.getMonth();
                 int year = date_pick.getYear() - 1900;
                 Date date = new Date(year, month, day, hour, minute);
 
+                //Set the end date
+                int dur = Integer.parseInt(duration.getText().toString());
+                dur = dur * DAYSTOSEC * 1000;
+                long d = date.getTime();
+                d = d + dur;
+                Date end_date = new Date();
+                end_date.setTime(d);
+                end_date.setHours(getIntSpinnerContent(spinner_end_hours)-1);
+                end_date.setMinutes(getIntSpinnerContent(spinner_end_minutes));
 
+                //Set the other fields
                 String name = spinner.getSelectedItem().toString();
                 String tit = title_view.getText().toString();
                 String desc = description_view.getText().toString();
                 String pla = place.getText().toString();
                 String org = organizer.getText().toString();
+                String web = website.getText().toString();
+                String speak = speaker.getText().toString();
+                String cat = category.getText().toString();
+                String cont = contact.getText().toString();
 
                 if (!checkIfValid(tit, desc)) {
                     return;
@@ -171,18 +193,28 @@ public class AddEventFragment extends SuperFragment {
 
                                 //the map for the event
                                 Map<String, Object> docData = new HashMap<>();
+
+                                docData.put("assos_id", association_ids.get(association_names.indexOf(name)));
+                                docData.put("banner_uri", "null");
+                                docData.put("category", cat);
+                                docData.put("channel_id", id_channel);
+                                docData.put("contact", cont);
+                                docData.put("end_date", end_date);
                                 docData.put("icon_uri", "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg");
                                 docData.put("id", numberOfEvents + 1);
-                                docData.put("assos_id", association_ids.get(association_names.indexOf(name)));
-                                docData.put("channel_id", id_channel);
                                 docData.put("likes", 0);
                                 docData.put("long_desc", desc);
                                 docData.put("name", name);
                                 docData.put("organizer", org);
                                 docData.put("place", pla);
                                 docData.put("short_desc", tit);
+                                docData.put("speaker", speak);
                                 docData.put("start_date", date);
-                                DatabaseFactory.getDependency().collection("events_info").document("event" + Integer.toString(numberOfEvents + 1)).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                docData.put("url_place_and_room", "https://plan.epfl.ch/?room=" + pla.replaceAll("\\s+",""));
+                                docData.put("website", web);
+                                DatabaseFactory.getDependency().collection("events_info")
+                                        .document("event" + Integer.toString(numberOfEvents + 1))
+                                        .set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_FRAGMENT, null);
@@ -212,6 +244,11 @@ public class AddEventFragment extends SuperFragment {
         description_view = view.findViewById(R.id.long_desc_text);
         organizer = view.findViewById(R.id.organizer);
         place = view.findViewById(R.id.place);
+        website = view.findViewById(R.id.website);
+        duration = view.findViewById(R.id.duration);
+        speaker = view.findViewById(R.id.speaker);
+        category = view.findViewById(R.id.category);
+        contact = view.findViewById(R.id.contact);
 
         //the button "create event" that when clicked gather the data from all spinners and
         //textviews and push an event on the database
@@ -223,6 +260,12 @@ public class AddEventFragment extends SuperFragment {
 
         spinner_minutes = view.findViewById(R.id.spinner_minute);
         setSpinner(spinner_minutes, minutes);
+
+        spinner_end_hours = view.findViewById(R.id.end_spinner_hour);
+        setSpinner(spinner_end_hours, hours);
+
+        spinner_end_minutes = view.findViewById(R.id.end_spinner_minute);
+        setSpinner(spinner_end_minutes, minutes);
 
         //fill the spinner for associations.
         spinner = view.findViewById(R.id.spinner);
@@ -255,6 +298,8 @@ public class AddEventFragment extends SuperFragment {
         });
 
         date_pick = (DatePicker) view.findViewById(R.id.date_for_add);
+
+
 
         return view;
 
