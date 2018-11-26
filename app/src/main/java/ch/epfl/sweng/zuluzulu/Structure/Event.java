@@ -15,17 +15,16 @@ public class Event implements Serializable {
     public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "start_date", "end_date", "likes");
 
     private int id;
+    private int likes;
+    private int channel_id;
+    private int assos_id;
     private String name;
     private String shortDesc;
     private String longDesc;
-
-    private int likes;
     private String organizer;
     private String place;
-
     private String bannerUri;
     private String iconUri;
-
     private String url_place_and_room;
     private String website;
     private String contact;
@@ -34,12 +33,8 @@ public class Event implements Serializable {
 
     private EventDate date;
 
-    private int channel_id;
-    private int assos_id;
 
-    private Event(int id, String name, String shortDesc, String longDesc, EventDate date,
-                  int likes, String organizer, String place, String bannerUri, String iconUri,
-                  String url_place_and_room, String website, String contact, String category, String speaker, int channel_id, int assos_id) {
+    private Event(int id, String name, String shortDesc, String longDesc, EventDate date, int likes, String organizer, String place, String bannerUri, String iconUri, String url_place_and_room, String website, String contact, String category, String speaker, int channel_id, int assos_id) {
         this.id = id;
         this.name = name;
         this.shortDesc = shortDesc;

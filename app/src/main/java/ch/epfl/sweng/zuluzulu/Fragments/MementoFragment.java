@@ -114,12 +114,11 @@ public class MementoFragment extends SuperFragment {
     }
 
     private void addDatabase() {
-        int i = 0;
         for (Event event : events
                 ) {
             //the map for the event
             Map<String, Object> docData = createHashmap(event);
-            if (docData != null && i++ < 5) {
+            if (docData != null ) {
                 DatabaseFactory.getDependency().collection("events_info").document("event" + Integer.toString(event.getId())).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -166,7 +165,7 @@ public class MementoFragment extends SuperFragment {
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject jsonobject = jsonarray.getJSONObject(i);
 
-                this.events.add(createEvent(jsonobject));
+                this.events.add(createEvent(jsonobject, i));
                 eventAdapter.notifyDataSetChanged();
             }
         } catch (JSONException e) {
@@ -175,9 +174,9 @@ public class MementoFragment extends SuperFragment {
         }
     }
 
-    private Event createEvent(JSONObject jsonobject) throws JSONException {
+    private Event createEvent(JSONObject jsonobject, int id) throws JSONException {
         return new Event.EventBuilder()
-                .setId(0)
+                .setId(id)
                 .setDate(new EventDate(
                         jsonobject.getString("event_start_date"), jsonobject.getString("event_start_time"),
                         jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")))
