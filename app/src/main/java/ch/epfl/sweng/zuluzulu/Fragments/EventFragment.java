@@ -1,8 +1,10 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.app.DatePickerDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -75,6 +77,8 @@ public class EventFragment extends SuperFragment {
     private ArrayList<Event> event_all_sorted;
 //    private ArrayList<Event> event_fav_sorted;
 
+    private boolean isFavDisplayed;
+
     private EditText event_search_bar;
 
     private Calendar eventCalendar;
@@ -119,6 +123,8 @@ public class EventFragment extends SuperFragment {
         default_sort_option = "name";
 
         fillEventLists(default_sort_option);
+
+        isFavDisplayed = false;
 
         event_all_sorted = new ArrayList<>();
 //        event_fav_sorted = new ArrayList<>();
@@ -241,6 +247,8 @@ public class EventFragment extends SuperFragment {
     private void updateListView(Button new_selected, Button new_unselected, ArrayList<Event> data, ListView list) {
         new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         new_unselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
+        if (new_selected == button_event_fav) isFavDisplayed = true;
+        else isFavDisplayed = false;
         event_adapter = new EventArrayAdapter(getContext(), data, mListener, user);
         list.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
@@ -473,6 +481,7 @@ public class EventFragment extends SuperFragment {
 
     private void sortByDate() {
         checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
                 checkbox_event_sort_name.setChecked(false);
@@ -489,7 +498,13 @@ public class EventFragment extends SuperFragment {
                 Collections.sort(event_all, Event.dateComparator());
                 Collections.sort(event_fav, Event.dateComparator());
 
-                event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
+                if (isFavDisplayed){
+                    event_adapter = new EventArrayAdapter(getContext(), event_fav, mListener, user);
+                }
+                else {
+                    event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
+                }
+
                 listview_event.setAdapter(event_adapter);
 
                 checkbox_event_sort_date.setEnabled(false);
