@@ -436,16 +436,16 @@ public class EventFragment extends SuperFragment {
     }
 
     private void sortBy(String type) {
-        CheckBox checkBox = getCheckBoxFor(type);
+        CheckBox clickedCheckBox = getCheckBoxFor(type);
         Comparator<Event> comparator = getComparatorFor(type);
         List<CheckBox> checkBoxes = new ArrayList<>(Arrays.asList(checkbox_event_sort_like, checkbox_event_sort_name, checkbox_event_sort_date));
-        checkBoxes.remove(checkBox);
-        checkBox.setOnClickListener(new View.OnClickListener() {
+        clickedCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 for (CheckBox box : checkBoxes) {
-                    box.setChecked(false);
-                    box.setEnabled(true);
+                    boolean isClickedBox = box.equals(clickedCheckBox);
+                    box.setChecked(isClickedBox);
+                    box.setEnabled(!isClickedBox);
                 }
                 event_fragment_from_date.getText().clear();
                 event_fragment_from_date.clearFocus();
@@ -462,8 +462,8 @@ public class EventFragment extends SuperFragment {
                 listview_event.setAdapter(event_adapter);
                 event_adapter.notifyDataSetChanged();
 
-                checkBox.setEnabled(false);
-                checkBox.setChecked(true);
+                clickedCheckBox.setEnabled(false);
+                clickedCheckBox.setChecked(true);
             }
         });
     }
