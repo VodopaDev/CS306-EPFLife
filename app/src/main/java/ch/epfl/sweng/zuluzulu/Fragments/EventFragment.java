@@ -447,12 +447,8 @@ public class EventFragment extends SuperFragment {
                     box.setChecked(isClickedBox);
                     box.setEnabled(!isClickedBox);
                 }
-                event_fragment_from_date.getText().clear();
-                event_fragment_from_date.clearFocus();
-                event_fragment_to_date.getText().clear();
-                event_fragment_to_date.clearFocus();
-                event_search_bar.getText().clear();
-                event_search_bar.clearFocus();
+
+                clearTextAndFocus();
 
                 sortEventLists(comparator);
 
@@ -466,6 +462,15 @@ public class EventFragment extends SuperFragment {
                 clickedCheckBox.setChecked(true);
             }
         });
+    }
+
+    private void clearTextAndFocus() {
+        event_fragment_from_date.getText().clear();
+        event_fragment_from_date.clearFocus();
+        event_fragment_to_date.getText().clear();
+        event_fragment_to_date.clearFocus();
+        event_search_bar.getText().clear();
+        event_search_bar.clearFocus();
     }
 
     private CheckBox getCheckBoxFor(String type) {
