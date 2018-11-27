@@ -16,7 +16,7 @@
         android:gravity="center"
         android:text="date"
         android:textAlignment="gravity"
-        android:textSize="14sp"
+        android:textSize="9sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/divider"
@@ -27,13 +27,15 @@
         android:id="@+id/card_event_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="4dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="2dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/card_event_short_desc"
-        app:layout_constraintEnd_toStartOf="@+id/linear"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/card_event_image"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,14 +44,10 @@
         android:layout_width="55dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/divider7"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/card_event_name"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/card_event_name">
 
 
         <ImageButton
@@ -65,7 +63,7 @@
             android:contentDescription="@string/like_icon"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:src="@drawable/ic_like_24dp"
+            android:src="@drawable/likebutton"
 
 
             />
@@ -89,7 +87,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="2dp"
-        android:textSize="14sp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/divider7"
         app:layout_constraintEnd_toStartOf="@+id/linear"
         app:layout_constraintStart_toStartOf="@+id/card_event_name"
@@ -114,12 +112,11 @@
         android:id="@+id/divider"
         android:layout_width="2dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_event_short_desc" />
+        app:layout_constraintTop_toTopOf="@+id/divider7" />
 
     <View
         android:id="@+id/divider7"
