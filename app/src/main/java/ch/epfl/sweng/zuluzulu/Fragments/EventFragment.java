@@ -436,24 +436,8 @@ public class EventFragment extends SuperFragment {
     }
 
     private void sortBy(String type) {
-        CheckBox checkBox;
-        Comparator<Event> comparator;
-        switch (type) {
-            case "like":
-                checkBox = checkbox_event_sort_like;
-                comparator = Event.likeComparator();
-                break;
-            case "name":
-                checkBox = checkbox_event_sort_name;
-                comparator = Event.assoNameComparator();
-                break;
-            case "date":
-                checkBox = checkbox_event_sort_date;
-                comparator = Event.dateComparator();
-                break;
-            default:
-                throw new IllegalArgumentException("The type " + type + " is invalid");
-        }
+        CheckBox checkBox = getCheckBoxFor(type);
+        Comparator<Event> comparator = getComparatorFor(type);
         List<CheckBox> checkBoxes = new ArrayList<>(Arrays.asList(checkbox_event_sort_like, checkbox_event_sort_name, checkbox_event_sort_date));
         checkBoxes.remove(checkBox);
         checkBox.setOnClickListener(new View.OnClickListener() {
@@ -482,6 +466,42 @@ public class EventFragment extends SuperFragment {
                 checkBox.setChecked(true);
             }
         });
+    }
+
+    private CheckBox getCheckBoxFor(String type) {
+        CheckBox checkBox;
+        switch (type) {
+            case "like":
+                checkBox = checkbox_event_sort_like;
+                break;
+            case "name":
+                checkBox = checkbox_event_sort_name;
+                break;
+            case "date":
+                checkBox = checkbox_event_sort_date;
+                break;
+            default:
+                throw new IllegalArgumentException("The type " + type + " is invalid");
+        }
+        return checkBox;
+    }
+
+    private Comparator<Event> getComparatorFor(String type) {
+        Comparator<Event> comparator;
+        switch (type) {
+            case "like":
+                comparator = Event.likeComparator();
+                break;
+            case "name":
+                comparator = Event.assoNameComparator();
+                break;
+            case "date":
+                comparator = Event.dateComparator();
+                break;
+            default:
+                throw new IllegalArgumentException("The type " + type + " is invalid");
+        }
+        return comparator;
     }
 
     public void sortEventLists(Comparator<Event> comparator){
