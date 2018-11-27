@@ -6,21 +6,6 @@
     android:layout_height="wrap_content"
     tools:layout_editor_absoluteY="5dp">
 
-    <TextView
-        android:id="@+id/card_event_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:layout_marginTop="2dp"
-        android:ems="10"
-        android:gravity="center"
-        android:text="date"
-        android:textAlignment="gravity"
-        android:textSize="9sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider7"
-        app:layout_constraintVertical_bias="0.52" />
 
     <TextView
         android:id="@+id/card_event_name"
@@ -103,22 +88,38 @@
         app:layout_constraintTop_toTopOf="@+id/card_event_name"
         app:layout_constraintVertical_bias="0.50" />
 
-    <View
+    <LinearLayout
         android:id="@+id/divider"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="?android:attr/listDivider"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/divider7" />
+        app:layout_constraintTop_toTopOf="@+id/divider7"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/card_event_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="date"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+
+            />
+
+    </LinearLayout>
 
     <View
         android:id="@+id/divider7"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toTopOf="@+id/card_event_date"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/card_event_short_desc" />
