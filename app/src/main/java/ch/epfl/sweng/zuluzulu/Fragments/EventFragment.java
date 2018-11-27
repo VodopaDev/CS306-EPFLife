@@ -90,6 +90,8 @@ public class EventFragment extends SuperFragment {
     private ImageButton filter_button;
     private ConstraintLayout event_filter_constraint_layout;
 
+    private Button archive;
+
     public EventFragment() {
         // Required empty public constructor
     }
@@ -126,8 +128,10 @@ public class EventFragment extends SuperFragment {
 
         fillEventLists(default_sort_option);
         fillEventArchiveLists(default_sort_option);
-
+        Log.e("sizeEventAll", event_all.size()+"");
         keepOnlyDateBeforeNow();
+
+        Log.e("sizeArchive", event_archive.size()+"");
 
         updateEventDataBase("events_archive");
         //updateEventDataBase("events_info");
@@ -214,6 +218,9 @@ public class EventFragment extends SuperFragment {
                 selectDate(event_fragment_to_date);
             }
         });
+
+        archive = view.findViewById(R.id.event_fragment_archive);
+        printOldEvent();
 
         return view;
     }
@@ -577,5 +584,16 @@ public class EventFragment extends SuperFragment {
                 event_adapter.notifyDataSetChanged();
             }
         }
+    }
+
+    private void printOldEvent() {
+        archive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                event_adapter = new EventArrayAdapter(getContext(), event_archive, mListener, user);
+                listview_event.setAdapter(event_adapter);
+            }
+        });
+
     }
 }
