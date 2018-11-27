@@ -76,6 +76,7 @@ public class PostFragmentTest extends TestWithAuthenticatedAndFragment<PostFragm
     @Test
     public void testUserCanUpDownPost() throws InterruptedException {
         TimeUnit.SECONDS.sleep(3);
+        onData(instanceOf(Post.class)).atPosition(0).onChildView(withId(R.id.post_up_button)).check(matches(isDisplayed()));
         onData(instanceOf(Post.class)).atPosition(0).onChildView(withId(R.id.post_up_button)).perform(click());
     }
 

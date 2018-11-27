@@ -63,6 +63,7 @@ public class ReplyFragmentTest extends TestWithAuthenticatedAndFragment<ReplyFra
     @Test
     public void testUserCanUpOriginalPost() throws InterruptedException {
         TimeUnit.SECONDS.sleep(3);
+        onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_original_post)).atPosition(0).onChildView(withId(R.id.post_up_button)).check(matches(isDisplayed()));
         onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_original_post)).atPosition(0).onChildView(withId(R.id.post_up_button)).perform(click());
     }
 
