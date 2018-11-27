@@ -168,34 +168,34 @@ public class MementoFragment extends SuperFragment {
                 this.events.add(createEvent(jsonobject, i));
                 eventAdapter.notifyDataSetChanged();
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, "Could not parse json");
         }
     }
 
-    private Event createEvent(JSONObject jsonobject, int id) throws JSONException {
-        return new Event.EventBuilder()
-                .setId(id)
-                .setDate(new EventDate(
-                        jsonobject.getString("event_start_date"), jsonobject.getString("event_start_time"),
-                        jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")))
-                .setUrlPlaceAndRoom(jsonobject.getString("event_url_place_and_room"))
-                .setAssosId(1)
-                .setChannelId(1)
-                .setLikes(0)
-                .setShortDesc(jsonobject.getString("description"))
-                .setName(jsonobject.getString("title"))
-                .setLongDesc(jsonobject.getString("description"))
-                .setOrganizer(jsonobject.getString("event_organizer"))
-                .setPlace(jsonobject.getString("event_place_and_room"))
-                .setBannerUri(jsonobject.getString("event_visual_absolute_url"))
-                .setIconUri(jsonobject.getString("event_visual_absolute_url"))
-                .setWebsite(jsonobject.getString("event_url_link"))
-                .setContact(jsonobject.getString("event_contact"))
-                .setCategory(jsonobject.getString("event_category_fr"))
-                .setSpeaker(jsonobject.getString("event_speaker"))
-                .build();
+    private Event createEvent(JSONObject jsonobject, int id) throws JSONException, IllegalArgumentException {
+            return new Event.EventBuilder()
+                    .setId(id)
+                    .setDate(new EventDate(
+                            jsonobject.getString("event_start_date"), jsonobject.getString("event_start_time"),
+                            jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")))
+                    .setUrlPlaceAndRoom(jsonobject.getString("event_url_place_and_room"))
+                    .setAssosId(1)
+                    .setChannelId(1)
+                    .setLikes(0)
+                    .setShortDesc(jsonobject.getString("description"))
+                    .setName(jsonobject.getString("title"))
+                    .setLongDesc(jsonobject.getString("description"))
+                    .setOrganizer(jsonobject.getString("event_organizer"))
+                    .setPlace(jsonobject.getString("event_place_and_room"))
+                    .setBannerUri(jsonobject.getString("event_visual_absolute_url"))
+                    .setIconUri(jsonobject.getString("event_visual_absolute_url"))
+                    .setWebsite(jsonobject.getString("event_url_link"))
+                    .setContact(jsonobject.getString("event_contact"))
+                    .setCategory(jsonobject.getString("event_category_fr"))
+                    .setSpeaker(jsonobject.getString("event_speaker"))
+                    .build();
     }
 
     @Override
