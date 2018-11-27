@@ -97,12 +97,12 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
                     if (!user.isEventLiked(event.getId())) {
                         event.increaseLikes();
                         holder.likes.setText(String.valueOf(event.getLikes()));
-                        v.setEnabled(false);
+                        holder.likes_button.setEnabled(false);
                         user.likeEvent(event.getId());
                     } else {
                         event.decreaseLikes();
                         holder.likes.setText(String.valueOf(event.getLikes()));
-                        v.setEnabled(false);
+                        holder.likes_button.setEnabled(false);
                         user.dislikeEvent(event.getId());
                     }
                 }
