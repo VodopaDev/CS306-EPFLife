@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,8 +22,6 @@ import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility.ImageLoader;
-
-//import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 
 
 /**
@@ -98,12 +97,12 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
                     if (!user.isEventLiked(event.getId())) {
                         event.increaseLikes();
                         holder.likes.setText(String.valueOf(event.getLikes()));
-                        holder.likes_button.setTextColor(Color.BLUE);
+                   //     holder.likes_button.setTextColor(Color.BLUE);
                         user.likeEvent(event.getId());
                     } else {
                         event.decreaseLikes();
                         holder.likes.setText(String.valueOf(event.getLikes()));
-                        holder.likes_button.setTextColor(Color.BLACK);
+                     //   holder.likes_button.setTextColor(Color.BLACK);
                         user.dislikeEvent(event.getId());
                     }
                 }
@@ -132,6 +131,6 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         TextView short_desc;
         TextView start_date;
         TextView likes;
-        Button likes_button;
+        ImageButton likes_button;
     }
 }
