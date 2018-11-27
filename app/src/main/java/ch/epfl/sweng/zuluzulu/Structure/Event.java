@@ -173,6 +173,10 @@ public class Event implements Serializable {
         return date.getEndDateString();
     }
 
+    public String getDateTimeUser() {
+        return date.getDateTimeUser();
+    }
+
     public static final class EventBuilder {
         private static final int SHORT_DESC_MAXLENGTH = 100;
 

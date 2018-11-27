@@ -2,13 +2,11 @@ package ch.epfl.sweng.zuluzulu.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -88,7 +86,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         holder.name.setText(event.getName());
         holder.short_desc.setText(event.getShortDesc());
         ImageLoader.loadUriIntoImageView(holder.icon, event.getIconUri(), getContext());
-        holder.start_date.setText(event.getStartDateString());
+        holder.start_date.setText(event.getDateTimeUser());
         holder.likes.setText(String.valueOf(event.getLikes()));
         if (user != null) {
             holder.likes_button.setOnClickListener(new View.OnClickListener() {
