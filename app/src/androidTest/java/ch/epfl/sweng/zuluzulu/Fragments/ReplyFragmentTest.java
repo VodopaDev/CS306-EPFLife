@@ -61,16 +61,14 @@ public class ReplyFragmentTest extends TestWithAuthenticatedAndFragment<ReplyFra
     }
 
     @Test
-    public void testUserCanUpOrDownOriginalPost() throws InterruptedException {
+    public void testUserCanUpOriginalPost() throws InterruptedException {
         TimeUnit.SECONDS.sleep(3);
         onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_original_post)).atPosition(0).onChildView(withId(R.id.post_up_button)).perform(click());
-        onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_original_post)).atPosition(0).onChildView(withId(R.id.post_down_button)).perform(click());
     }
 
     @Test
-    public void testUserCanUpOrDownReply() throws InterruptedException {
-        // TimeUnit.SECONDS.sleep(3);
-        // onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_list_view)).atPosition(0).onChildView(withId(R.id.post_up_button)).check(matches(isDisplayed()));
-        // onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_list_view)).atPosition(0).onChildView(withId(R.id.post_down_button)).check(matches(isDisplayed()));
+    public void testUserCanDownOriginalPost() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(3);
+        onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_original_post)).atPosition(0).onChildView(withId(R.id.post_down_button)).perform(click());
     }
 }
