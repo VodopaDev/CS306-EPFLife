@@ -46,252 +46,251 @@
             app:layout_constraintEnd_toEndOf="@+id/event_detail_banner"
             app:layout_constraintStart_toStartOf="@+id/event_detail_banner" />
 
-        <TextView
-            android:id="@+id/event_detail_tv_like"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/event_detail_like"
-            android:textColor="@android:color/white"
-            tools:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/event_detail_tv_numberLikes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:layout_marginBottom="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:textColor="@android:color/white" />
-
     </FrameLayout>
 
     <TextView
         android:id="@+id/event_detail_name"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="78dp"
-        android:layout_marginStart="78dp"
-        android:gravity="center_horizontal|start"
-        android:maxLines="1"
-        android:minLines="1"
-        android:singleLine="true"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
-        android:typeface="sans"
-        app:layout_constraintBottom_toBottomOf="@+id/event_detail_framelayout"
-        app:layout_constraintStart_toStartOf="@+id/event_detail_framelayout" />
-
-    <ImageView
-        android:id="@+id/event_detail_border"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:background="@android:drawable/spinner_dropdown_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_detail_framelayout"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@android:color/white" />
-
-    <TextView
-        android:id="@+id/event_detail_tv_desc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:text="@string/event_detail_tv_desc"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/event_detail_desc"
-        app:layout_constraintEnd_toEndOf="@+id/event_detail_border"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/event_detail_border" />
-
-    <TextView
-        android:id="@+id/event_detail_desc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:gravity="top|left"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:textSize="12sp"
+        android:ellipsize="end"
+        android:gravity="center_horizontal|start"
+        android:maxLines="2"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:typeface="sans"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_detail_framelayout" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/event_detail_fav"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginLeft="75dp"
+        android:layout_marginBottom="6dp"
         android:contentDescription="@string/card_event_image_description"
-        app:layout_constraintBottom_toBottomOf="@+id/event_detail_name"
-        app:layout_constraintStart_toEndOf="@+id/event_detail_name"
+        app:layout_constraintBottom_toBottomOf="@+id/event_detail_framelayout"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/fav_off" />
-
-    <TextView
-        android:id="@+id/event_detail_tv_date"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/event_detail_tv_date"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/event_detail_border"
-        app:layout_constraintStart_toStartOf="@+id/event_detail_border"
-        app:layout_constraintTop_toBottomOf="@+id/event_detail_desc" />
-
-    <TextView
-        android:id="@+id/event_detail_date"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/event_detail_border"
-        app:layout_constraintStart_toStartOf="@+id/event_detail_border"
-        app:layout_constraintTop_toBottomOf="@+id/event_detail_tv_date" />
-
-    <TextView
-        android:id="@+id/event_detail_tv_organizer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/event_detail_tv_organizer"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/event_detail_border"
-        app:layout_constraintStart_toStartOf="@+id/event_detail_border"
-        app:layout_constraintTop_toBottomOf="@+id/event_detail_date" />
-
-    <TextView
-        android:id="@+id/event_detail_organizer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/event_detail_border"
-        app:layout_constraintStart_toStartOf="@+id/event_detail_border"
-        app:layout_constraintTop_toBottomOf="@+id/event_detail_tv_organizer" />
-
-    <TextView
-        android:id="@+id/event_detail_tv_place"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/event_detail_tv_place"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/event_detail_border"
-        app:layout_constraintStart_toStartOf="@+id/event_detail_border"
-        app:layout_constraintTop_toBottomOf="@+id/event_detail_organizer" />
-
-    <TextView
-        android:id="@+id/event_detail_place"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/event_detail_border"
-        app:layout_constraintStart_toStartOf="@+id/event_detail_border"
-        app:layout_constraintTop_toBottomOf="@+id/event_detail_tv_place" />
-
-    <Button
-        android:id="@+id/event_detail_but_assos"
-        android:layout_width="171dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/chat_message_background"
-        android:text="Association"
-        app:layout_constraintBottom_toBottomOf="@+id/event_detail_border"
-        app:layout_constraintEnd_toEndOf="@+id/event_detail_border" />
-
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/event_detail_chatRoom"
-        app:layout_constraintEnd_toEndOf="@+id/event_detail_border"
-        app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintStart_toStartOf="@+id/event_detail_border"
-        app:layout_constraintTop_toBottomOf="@+id/event_detail_place" />
-
 
     <ImageButton
         android:id="@+id/event_detail_export"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="6dp"
         android:adjustViewBounds="false"
         android:background="@drawable/channel_notclickable_background"
         android:cropToPadding="false"
         android:src="@drawable/ic_calendar"
-        app:layout_constraintBottom_toBottomOf="@+id/event_detail_fav"
+        app:layout_constraintBottom_toBottomOf="@+id/event_detail_framelayout"
         app:layout_constraintStart_toEndOf="@+id/event_detail_fav" />
+
+    <TextView
+        android:id="@+id/event_detail_tv_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="6dp"
+        android:text="@string/event_detail_like"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/event_detail_framelayout"
+        app:layout_constraintStart_toEndOf="@+id/event_detail_export"
+        tools:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/event_detail_tv_numberLikes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="6dp"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/event_detail_framelayout"
+        app:layout_constraintStart_toEndOf="@+id/event_detail_tv_like" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/event_detail_but_assos"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_detail_framelayout">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="384dp"
+            tools:layout_editor_absoluteY="511dp">
+
+            <TextView
+                android:id="@+id/event_detail_tv_desc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/event_detail_tv_desc"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/event_detail_desc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="top|left"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/event_detail_tv_desc" />
+
+            <TextView
+                android:id="@+id/event_detail_tv_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/event_detail_tv_date"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/event_detail_desc" />
+
+            <TextView
+                android:id="@+id/event_detail_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/event_detail_tv_date" />
+
+            <TextView
+                android:id="@+id/event_detail_tv_organizer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/event_detail_tv_organizer"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/event_detail_date" />
+
+            <TextView
+                android:id="@+id/event_detail_organizer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/event_detail_tv_organizer" />
+
+            <TextView
+                android:id="@+id/event_detail_tv_place"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="@string/event_detail_tv_place"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/event_detail_organizer" />
+
+            <TextView
+                android:id="@+id/event_detail_place"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/event_detail_tv_place" />
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="0dp"
+                android:layout_height="300dp"
+                android:layout_marginTop="8dp"
+                android:scaleType="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/event_detail_place"
+                app:layout_constraintVertical_bias="0.0" />
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
+
+    <Button
+        android:id="@+id/event_detail_but_assos"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/chat_message_background"
+        android:text="Association"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/event_detail_chatRoom" />
 
     <Button
         android:id="@+id/event_detail_chatRoom"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/chat_message_background"
         android:text="CHAT ROOM"
-        app:layout_constraintBottom_toBottomOf="@+id/event_detail_border"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/event_detail_but_assos"
-        app:layout_constraintStart_toStartOf="@+id/event_detail_border" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
