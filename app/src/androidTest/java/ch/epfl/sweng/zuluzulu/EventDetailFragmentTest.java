@@ -1,4 +1,4 @@
-/*package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu;
 
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
@@ -35,7 +35,13 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
     public void initFragment() {
         fragment = EventFragment.newInstance(user);
     }
-    /*private void guestGoesToEventDetail() throws InterruptedException {
+
+    @Test
+    public void mainTest() {
+
+    }
+}
+/*    private void guestGoesToEventDetail() throws InterruptedException {
         Utility.goToEvent();
         TimeUnit.SECONDS.sleep(1);
     }
