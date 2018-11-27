@@ -30,11 +30,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -74,6 +78,7 @@ public class EventFragment extends SuperFragment {
 
     private ArrayList<Event> event_all_sorted;
 //    private ArrayList<Event> event_fav_sorted;
+    private List<Event> event_archive;
 
     private EditText event_search_bar;
 
@@ -114,11 +119,18 @@ public class EventFragment extends SuperFragment {
 
         event_all = new ArrayList<>();
         event_fav = new ArrayList<>();
+        event_archive = new ArrayList<>();
         event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
 
         default_sort_option = "name";
 
         fillEventLists(default_sort_option);
+        fillEventArchiveLists(default_sort_option);
+
+        keepOnlyDateBeforeNow();
+
+        updateEventDataBase("events_archive");
+        //updateEventDataBase("events_info");
 
         event_all_sorted = new ArrayList<>();
 //        event_fav_sorted = new ArrayList<>();
@@ -499,5 +511,71 @@ public class EventFragment extends SuperFragment {
                 listview_event.setAdapter(event_adapter);
             }
         });
+    }
+
+    private void fillEventArchiveLists(String sortOption) {
+        FirebaseFirestore.getInstance().collection("events_archive").orderBy(sortOption).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
+                        for (DocumentSnapshot snap : snap_list) {
+                            FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
+                            if (fmap.hasFields(Event.FIELDS)) {
+                                Event event = new Event(fmap);
+                                event_archive.add(event);
+
+                                event_adapter.notifyDataSetChanged();
+                            }
+                        }
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
+                        Log.e("EVENT_LIST", "Error fetching event date\n" + e.getMessage());
+                    }
+                });
+    }
+
+    private void updateEventDataBase(String collectionPath){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(collectionPath).orderBy("name").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots){
+                        for(Event e: event_archive) {
+                            Map<String, Object> docData = new HashMap<>();
+                            docData.put("icon_uri", e.getBannerUri());
+                            docData.put("id", e.getId());
+                            docData.put("likes", e.getLikes());
+                            docData.put("long_desc", e.getLongDesc());
+                            docData.put("name", e.getName());
+                            docData.put("organizer", e.getOrganizer());
+                            docData.put("place", e.getPlace());
+                            docData.put("short_desc", e.getShortDesc());
+                            docData.put("start_date", e.getStartDate());
+                            DatabaseFactory.getDependency().collection(collectionPath).document("event" + e.getId()).set(docData);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //error_message(e);
+                    }
+                });
+    }
+
+    private void keepOnlyDateBeforeNow() {
+        for(Event e: event_all) {
+            if(e.getStartDate().compareTo(new Date()) <= 0) {
+                event_archive.add(e);
+                event_all.remove(e);
+                event_adapter.notifyDataSetChanged();
+            }
+        }
     }
 }
