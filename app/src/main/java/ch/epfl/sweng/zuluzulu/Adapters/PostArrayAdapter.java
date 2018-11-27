@@ -17,6 +17,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
+import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseDocument;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
@@ -32,7 +35,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     private ImageView upButton;
     private ImageView downButton;
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private Database db = DatabaseFactory.getDependency();
 
     public PostArrayAdapter(@NonNull Context context, List<Post> list) {
         super(context, 0, list);
@@ -118,19 +121,19 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
             int nbUps = post.getNbUps() + (up ? 1 : -1);
             List<String> upScipers = post.getUpScipers();
             List<String> downScipers = post.getDownScipers();
-            DocumentReference documentReference = post.isReply() ?
+            DatabaseDocument document = post.isReply() ?
                     db.collection("channels/channel" + post.getOriginalPost().getChannelId() + "/posts/" + post.getOriginalPost().getId() + "/replies").document(post.getId()) :
                     db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
             if (up) {
                 upScipers.add(post.getUserSciper());
-                documentReference.update(
+                document.update(
                         "nbUps", nbUps,
                         "upScipers", upScipers
                 );
                 post.setUpByUser(true);
             } else {
                 downScipers.add(post.getUserSciper());
-                documentReference.update(
+                document.update(
                         "nbUps", nbUps,
                         "downScipers", downScipers
                 );
