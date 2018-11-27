@@ -35,7 +35,7 @@ public class MementoParser implements Parser<List<String>> {
 
         List<String> list = new ArrayList<>();
 
-        list.add(sb.toString());
+        list.add(sb.toString().replaceAll("<.*?>", ""));
 
         return list;
     }
