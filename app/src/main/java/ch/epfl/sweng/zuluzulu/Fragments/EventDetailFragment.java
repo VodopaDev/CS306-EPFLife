@@ -2,8 +2,11 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
@@ -12,6 +15,9 @@ import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,6 +43,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.tequila.HttpUtils;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_ASSOCIATION_DETAIL_FRAGMENT;
 
@@ -47,19 +54,20 @@ public class EventDetailFragment extends SuperFragment {
     private static final String ARG_EVENT = "ARG_EVENT";
     private static final String FAV_CONTENT = "This event is in your favorites";
     private static final String NOT_FAV_CONTENT = "This event isn't in your favorites";
-    MapView mMapView;
+    //MapView mMapView;
     private ImageView event_fav;
     private Button chat_event;
     private Channel channel;
     private Event event;
     private User user;
-    private GoogleMap googleMap;
+    //private GoogleMap googleMap;
 
     private Button chat_room;
     private Channel chat;
 
     private Button assos_but;
     private Association assos;
+    private WebView webview;
 
 
     public static EventDetailFragment newInstance(User user, Event event) {
@@ -143,36 +151,25 @@ public class EventDetailFragment extends SuperFragment {
                 .centerCrop()
                 .into(event_banner);
 
-        //google map integration
-        mMapView = (MapView) view.findViewById(R.id.mapView);
-        mMapView.onCreate(savedInstanceState);
-        mMapView.onResume();
-
-        mMapView.getMapAsync(new OnMapReadyCallback() {
+        webview = (WebView) view.findViewById(R.id.epflMapView);
+        webview.getSettings().setJavaScriptEnabled(false);
+        webview.getSettings().setBuiltInZoomControls(true);
+        webview.getSettings().setSupportZoom(true);
+        webview.setWebViewClient(new WebViewClient(){
             @Override
-            public void onMapReady(GoogleMap mMap) {
-                googleMap = mMap;
-
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                } else {
-                    // For showing a move to my location button
-                    googleMap.setMyLocationEnabled(true);
-                }
-
-                // For dropping a marker at a point on the Map
-                LatLng epfl = new LatLng(46.520537, 6.570930);
-                LatLng co = new LatLng(46.520135, 6.565263);
-                googleMap.addMarker(new MarkerOptions().position(epfl).title("ce").snippet("ce"));
-                googleMap.addMarker(new MarkerOptions().position(co).title("co").snippet("co"));
-
-
-                // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(epfl).zoom(12).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            public boolean shouldOverrideUrlLoading(WebView webView, String url) {
+                webView.loadUrl(url);
+                return true;
             }
+
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                handler.proceed(); // Ignore SSL certificate errors
+            }
+
         });
+        webview.loadUrl(HttpUtils.urlEncode(event.getUrlPlaceAndRoom()));
+
 
         assos_but = view.findViewById(R.id.event_detail_but_assos);
         loadAssos();
@@ -197,25 +194,26 @@ public class EventDetailFragment extends SuperFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mMapView.onResume();
+        //mMapView.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mMapView.onPause();
+       // mMapView.onPause();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mMapView.onDestroy();
+        if (webview != null) webview.destroy();
+        //mMapView.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mMapView.onLowMemory();
+        //mMapView.onLowMemory();
     }
 
     private void setFavButtonBehaviour() {
