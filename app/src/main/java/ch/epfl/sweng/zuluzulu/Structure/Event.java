@@ -179,8 +179,6 @@ public class Event implements Serializable {
 
     public static final class EventBuilder {
         private static final int SHORT_DESC_MAXLENGTH = 100;
-        private static final String DEFAULT_BANNER = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner).toString();
-        private static final String DEFAULT_ICON = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon).toString();
 
         private int id;
         private String name;
@@ -320,8 +318,8 @@ public class Event implements Serializable {
          * @return this
          */
         public EventBuilder setBannerUri(String bannerUri) {
-            if (false == correctUri(bannerUri)) {
-                this.bannerUri = DEFAULT_BANNER;
+            if (!correctUri(bannerUri)) {
+                this.bannerUri = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner;
             } else {
                 this.bannerUri = bannerUri;
             }
@@ -335,10 +333,10 @@ public class Event implements Serializable {
          * @return this
          */
         public EventBuilder setIconUri(String iconUri) {
-            if (!correctUri(iconUri)) {
-                this.iconUri = DEFAULT_ICON;
-            } else {
+            if (correctUri(iconUri)) {
                 this.iconUri = iconUri;
+            } else {
+                this.iconUri = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon;
             }
             return this;
         }
