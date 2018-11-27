@@ -320,7 +320,7 @@ public class Event implements Serializable {
          * @return this
          */
         public EventBuilder setBannerUri(String bannerUri) {
-            if (bannerUri == null || bannerUri.length() < 5) {
+            if (!correctUri()) {
                 this.bannerUri = DEFAULT_BANNER;
             } else {
                 this.bannerUri = bannerUri;
@@ -335,12 +335,21 @@ public class Event implements Serializable {
          * @return this
          */
         public EventBuilder setIconUri(String iconUri) {
-            if (iconUri == null || iconUri.length() < 5) {
+            if (!correctUri()) {
                 this.iconUri = DEFAULT_ICON;
             } else {
                 this.iconUri = iconUri;
             }
             return this;
+        }
+
+        /**
+         * Check if the uri is correct
+         * @param uri uri
+         * @return boolean
+         */
+        private boolean correctUri(String uri){
+            return !(uri == null || uri.length() < 6);
         }
 
         public EventBuilder setUrlPlaceAndRoom(String url_place_and_room) {
