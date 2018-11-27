@@ -328,7 +328,6 @@ public class Event implements Serializable {
          */
         public EventBuilder setIconUri(String iconUri) {
             if (iconUri == null) {
-                System.out.println("null");
                 this.iconUri = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon;
             } else {
                 this.iconUri = iconUri;
