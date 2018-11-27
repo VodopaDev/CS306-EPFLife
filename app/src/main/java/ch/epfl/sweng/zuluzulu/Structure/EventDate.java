@@ -191,7 +191,7 @@ public class EventDate {
     public String getDateTimeUser() {
         StringBuilder sb = new StringBuilder();
 
-        if(!getEndDateString().equals(getStartDateString())) {
+        if(!getEndDateString().equals(getStartDateString()) && endDate.getSeconds() != 59) {
             sb.append("Du ");
         } else {
             sb.append("Le ");
@@ -199,7 +199,7 @@ public class EventDate {
 
         sb.append(dateRemoveZeroHour(startDate));
 
-        if(!getEndDateString().equals(getStartDateString())) {
+        if(!getEndDateString().equals(getStartDateString()) && endDate.getSeconds() != 59) {
             sb.append(" au ");
             sb.append(dateRemoveZeroHour(endDate));
         }
