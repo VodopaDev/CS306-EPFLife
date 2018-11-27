@@ -172,6 +172,8 @@ public class Event implements Serializable {
     }
 
     public static final class EventBuilder {
+        private static final int SHORT_DESC_MAXLENGTH = 100;
+
         private int id;
         private String name;
         private String shortDesc;
@@ -263,7 +265,22 @@ public class Event implements Serializable {
 
 
         public EventBuilder setShortDesc(String shortDesc) {
-            this.shortDesc = shortDesc;
+            /***
+             *
+             * NICO LAISSE CE SETTER IL SERT À LIMITER LA TAILLE DU SHORT DESC
+             *
+             */
+            if(shortDesc == null){
+                throw new IllegalArgumentException();
+            }
+            if(this.shortDesc.length() > SHORT_DESC_MAXLENGTH){
+                String desc = this.shortDesc.substring(0, SHORT_DESC_MAXLENGTH);
+                int last_space = desc.lastIndexOf(" ");
+                // cut at a space
+                this.shortDesc = desc.substring(0, last_space).trim() + "...";
+            } else {
+                this.shortDesc = shortDesc;
+            }
             return this;
         }
 
