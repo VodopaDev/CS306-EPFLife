@@ -133,7 +133,7 @@ public class MementoFragment extends SuperFragment {
 
         Map<String, Object> docData = new HashMap<>();
         docData.put("icon_uri", event.getIconUri());
-        docData.put("banner_uri", event.getIconUri());
+        docData.put("banner_uri", event.getBannerUri());
         docData.put("id", event.getId());
         docData.put("assos_id", event.getAssosId());
         docData.put("channel_id", event.getChannelId());
