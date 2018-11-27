@@ -273,8 +273,8 @@ public class Event implements Serializable {
             if(shortDesc == null){
                 throw new IllegalArgumentException();
             }
-            if(this.shortDesc.length() > SHORT_DESC_MAXLENGTH){
-                String desc = this.shortDesc.substring(0, SHORT_DESC_MAXLENGTH);
+            if(shortDesc.length() > SHORT_DESC_MAXLENGTH){
+                String desc = shortDesc.substring(0, SHORT_DESC_MAXLENGTH);
                 int last_space = desc.lastIndexOf(" ");
                 // cut at a space
                 this.shortDesc = desc.substring(0, last_space).trim() + "...";
