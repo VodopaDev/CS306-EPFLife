@@ -37,7 +37,10 @@ public class UrlHandler extends AsyncTask<String, Void, List<String>> {
             if (null == result) {
                 return null;
             }
+            System.out.println("avant : " + list.size());
+
             list.addAll(result);
+            System.out.println(list.size());
         }
 
         return list;

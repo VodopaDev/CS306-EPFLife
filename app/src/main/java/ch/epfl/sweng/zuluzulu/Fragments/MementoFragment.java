@@ -44,6 +44,7 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
  */
 public class MementoFragment extends SuperFragment {
     final static public String EPFL_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/epfl/events/fr/?format=json";
+    final static public String ENAC_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/enac/events/fr/?format=json";
     final static public String ASSOCIATION_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/associations/events/fr/?format=json";
     private static final String TAG = "MEMENTO_FRAGMENT";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
@@ -91,7 +92,7 @@ public class MementoFragment extends SuperFragment {
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Memento loader");
         UrlHandler urlHandler = new UrlHandler(this::handleMemento, new MementoParser());
-        urlHandler.execute(EPFL_MEMENTO_URL, ASSOCIATION_MEMENTO_URL);
+        urlHandler.execute(ENAC_MEMENTO_URL, EPFL_MEMENTO_URL, ASSOCIATION_MEMENTO_URL);
 
         // Send increment to wait async execution in test
         IdlingResourceFactory.incrementCountingIdlingResource();
@@ -105,8 +106,9 @@ public class MementoFragment extends SuperFragment {
     private void handleMemento(List<String> result) {
 
         if (result != null && !result.isEmpty() && !result.get(0).isEmpty()) {
-            String datas = result.get(0);
-            addEvent(datas);
+            for(int i = 0; i < result.size(); i++) {
+                addEvent(result.get(i));
+            }
         }
 
         addDatabase();
@@ -165,7 +167,7 @@ public class MementoFragment extends SuperFragment {
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject jsonobject = jsonarray.getJSONObject(i);
 
-                this.events.add(createEvent(jsonobject, i));
+                this.events.add(createEvent(jsonobject));
                 eventAdapter.notifyDataSetChanged();
             }
         } catch (Exception e) {
@@ -174,9 +176,9 @@ public class MementoFragment extends SuperFragment {
         }
     }
 
-    private Event createEvent(JSONObject jsonobject, int id) throws JSONException, IllegalArgumentException {
+    private Event createEvent(JSONObject jsonobject) throws JSONException, IllegalArgumentException {
             return new Event.EventBuilder()
-                    .setId(id)
+                    .setId(jsonobject.getString("title").hashCode())
                     .setDate(new EventDate(
                             jsonobject.getString("event_start_date"), jsonobject.getString("event_start_time"),
                             jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")))
