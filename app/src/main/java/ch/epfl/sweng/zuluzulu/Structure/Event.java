@@ -320,7 +320,7 @@ public class Event implements Serializable {
          * @return this
          */
         public EventBuilder setBannerUri(String bannerUri) {
-            if (!correctUri()) {
+            if (!correctUri(bannerUri)) {
                 this.bannerUri = DEFAULT_BANNER;
             } else {
                 this.bannerUri = bannerUri;
@@ -335,7 +335,7 @@ public class Event implements Serializable {
          * @return this
          */
         public EventBuilder setIconUri(String iconUri) {
-            if (!correctUri()) {
+            if (!correctUri(iconUri)) {
                 this.iconUri = DEFAULT_ICON;
             } else {
                 this.iconUri = iconUri;
