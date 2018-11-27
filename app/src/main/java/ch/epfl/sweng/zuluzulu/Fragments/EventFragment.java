@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -325,26 +326,13 @@ public class EventFragment extends SuperFragment {
     private void sortByFromDate() {
         emptySortedEventList();
 
-        Collections.sort(event_all, Event.dateComparator());
-        Collections.sort(event_fav, Event.dateComparator());
+        sortEventLists(Event.dateComparator());
 
-        for (int i = 0; i < event_all.size(); i++) {
-            if (event_all.get(i).getStartDate().compareTo(eventCalendar.getTime()) >= 0) {
-                event_all_sorted.add(event_all.get(i));
-            }
-        }
-        for (int i = 0; i < event_fav.size(); i++) {
-            if (event_fav.get(i).getStartDate().compareTo(eventCalendar.getTime()) >= 0) {
-                event_fav_sorted.add(event_fav.get(i));
-            }
-        }
+        selectEventFrom(event_all, event_all_sorted);
+        selectEventFrom(event_fav, event_fav_sorted);
 
-        if (isFavDisplayed){
-            event_adapter = new EventArrayAdapter(getContext(), event_fav_sorted, mListener, user);
-        }
-        else {
-            event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
-        }
+        if (isFavDisplayed) event_adapter = new EventArrayAdapter(getContext(), event_fav_sorted, mListener, user);
+        else event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
 
         listview_event.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
@@ -352,40 +340,41 @@ public class EventFragment extends SuperFragment {
         dateFrom = eventCalendar.getTime();
     }
 
+    public void selectEventFrom(ArrayList<Event> inputList, ArrayList<Event> sortedList){
+        for (Event event: inputList) {
+            if (event.getStartDate().compareTo(eventCalendar.getTime()) >= 0) {
+                sortedList.add(event);
+            }
+        }
+    }
+
     private void sortByFromAndToDate() {
         emptySortedEventList();
 
-        Collections.sort(event_all, Event.dateComparator());
-        Collections.sort(event_fav, Event.dateComparator());
+        sortEventLists(Event.dateComparator());
 
-        for (int i = 0; i < event_all.size(); i++) {
-            if (event_all.get(i).getStartDate().compareTo(dateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(eventCalendar.getTime()) <= 0) {
-                event_all_sorted.add(event_all.get(i));
-            }
-        }
+        selectEventFromTo(event_all, event_all_sorted);
+        selectEventFromTo(event_fav, event_fav_sorted);
 
-        for (int i = 0; i < event_fav.size(); i++) {
-            if (event_fav.get(i).getStartDate().compareTo(dateFrom) >= 0 && event_all.get(i).getStartDate().compareTo(eventCalendar.getTime()) <= 0) {
-                event_fav_sorted.add(event_fav.get(i));
-            }
-        }
-
-        if (isFavDisplayed){
-            event_adapter = new EventArrayAdapter(getContext(), event_fav_sorted, mListener, user);
-        }
-        else {
-            event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
-        }
+        if (isFavDisplayed) event_adapter = new EventArrayAdapter(getContext(), event_fav_sorted, mListener, user);
+        else event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
 
         listview_event.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
+    }
+
+    public void selectEventFromTo(ArrayList<Event> inputList, ArrayList<Event> sortedList){
+        for (Event event: inputList) {
+            if (event.getStartDate().compareTo(dateFrom) >= 0 && event.getStartDate().compareTo(eventCalendar.getTime()) <= 0) {
+                sortedList.add(event);
+            }
+        }
     }
 
     private void sortWithSearchBar() {
         event_search_bar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -403,32 +392,12 @@ public class EventFragment extends SuperFragment {
 
                 String keyWord = s.toString().toLowerCase();
                 emptySortedEventList();
-                for (Event event : event_all) {
-                    if (event.getName().toLowerCase().contains(keyWord)) {
-                        event_all_sorted.add(event);
-                    } else if (event.getShortDesc().toLowerCase().contains(keyWord)) {
-                        event_all_sorted.add(event);
-                    } else if (event.getLongDesc().toLowerCase().contains((keyWord))) {
-                        event_all_sorted.add(event);
-                    }
-                }
 
-                for (Event event : event_fav) {
-                    if (event.getName().toLowerCase().contains(keyWord)) {
-                        event_fav_sorted.add(event);
-                    } else if (event.getShortDesc().toLowerCase().contains(keyWord)) {
-                        event_fav_sorted.add(event);
-                    } else if (event.getLongDesc().toLowerCase().contains((keyWord))) {
-                        event_fav_sorted.add(event);
-                    }
-                }
+                selectEventWithKeyword(event_all, event_all_sorted, keyWord);
+                selectEventWithKeyword(event_fav, event_fav_sorted, keyWord);
 
-                if (isFavDisplayed){
-                    event_adapter = new EventArrayAdapter(getContext(), event_fav_sorted, mListener, user);
-                }
-                else {
-                    event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
-                }
+                if (isFavDisplayed) event_adapter = new EventArrayAdapter(getContext(), event_fav_sorted, mListener, user);
+                else event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
 
                 listview_event.setAdapter(event_adapter);
                 event_adapter.notifyDataSetChanged();
@@ -439,6 +408,18 @@ public class EventFragment extends SuperFragment {
 
             }
         });
+    }
+
+    public void selectEventWithKeyword(ArrayList<Event> inputList, ArrayList<Event> sortedList, String keyWord){
+        for (Event event: inputList) {
+            if (event.getName().toLowerCase().contains(keyWord)) {
+                sortedList.add(event);
+            } else if (event.getShortDesc().toLowerCase().contains(keyWord)) {
+                sortedList.add(event);
+            } else if (event.getLongDesc().toLowerCase().contains((keyWord))) {
+                sortedList.add(event);
+            }
+        }
     }
 
     private void sortByName() {
@@ -456,18 +437,12 @@ public class EventFragment extends SuperFragment {
                 event_search_bar.getText().clear();
                 event_search_bar.clearFocus();
 
-                Collections.sort(event_all, Event.assoNameComparator());
-                Collections.sort(event_fav, Event.assoNameComparator());
+                sortEventLists(Event.assoNameComparator());
 
-                if (isFavDisplayed){
-                    event_adapter = new EventArrayAdapter(getContext(), event_fav, mListener, user);
-                }
-                else {
-                    event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
-                }
+                if (isFavDisplayed) event_adapter = new EventArrayAdapter(getContext(), event_fav, mListener, user);
+                else event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
 
                 listview_event.setAdapter(event_adapter);
-
                 event_adapter.notifyDataSetChanged();
 
                 checkbox_event_sort_name.setEnabled(false);
@@ -491,18 +466,12 @@ public class EventFragment extends SuperFragment {
                 event_search_bar.getText().clear();
                 event_search_bar.clearFocus();
 
-                Collections.sort(event_all, Event.likeComparator());
-                Collections.sort(event_fav, Event.likeComparator());
+                sortEventLists(Event.likeComparator());
 
-                if (isFavDisplayed){
-                    event_adapter = new EventArrayAdapter(getContext(), event_fav, mListener, user);
-                }
-                else {
-                    event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
-                }
+                if (isFavDisplayed) event_adapter = new EventArrayAdapter(getContext(), event_fav, mListener, user);
+                else event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
 
                 listview_event.setAdapter(event_adapter);
-
                 event_adapter.notifyDataSetChanged();
 
                 checkbox_event_sort_like.setEnabled(false);
@@ -513,7 +482,6 @@ public class EventFragment extends SuperFragment {
 
     private void sortByDate() {
         checkbox_event_sort_date.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
                 checkbox_event_sort_name.setChecked(false);
@@ -527,21 +495,22 @@ public class EventFragment extends SuperFragment {
                 event_search_bar.getText().clear();
                 event_search_bar.clearFocus();
 
-                Collections.sort(event_all, Event.dateComparator());
-                Collections.sort(event_fav, Event.dateComparator());
+                sortEventLists(Event.dateComparator());
 
-                if (isFavDisplayed){
-                    event_adapter = new EventArrayAdapter(getContext(), event_fav, mListener, user);
-                }
-                else {
-                    event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
-                }
+                if (isFavDisplayed) event_adapter = new EventArrayAdapter(getContext(), event_fav, mListener, user);
+                else event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
 
                 listview_event.setAdapter(event_adapter);
+                event_adapter.notifyDataSetChanged();
 
                 checkbox_event_sort_date.setEnabled(false);
                 checkbox_event_sort_date.setChecked(true);
             }
         });
+    }
+
+    public void sortEventLists(Comparator<Event> comparator){
+        Collections.sort(event_all, comparator);
+        Collections.sort(event_fav, comparator);
     }
 }
