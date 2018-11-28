@@ -92,7 +92,6 @@ public class ReplyFragment extends SuperFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reply, container, false);
 
-        ListView postView = view.findViewById(R.id.reply_original_post);
         ListView listView = view.findViewById(R.id.reply_list_view);
         replyText = view.findViewById(R.id.reply_text_edit);
         sendButton = view.findViewById(R.id.reply_send_button);
@@ -100,12 +99,12 @@ public class ReplyFragment extends SuperFragment {
 
         String collectionPath = "channels/channel" + postOriginal.getChannelId() + "/posts/" + postOriginal.getId() + "/replies";
         collectionReference = db.collection(collectionPath);
+
         mockableCollectionReplies = DatabaseFactory.getDependency().collection(collectionPath);
         String collectionPathOriginalPost = "channels/channel" + postOriginal.getChannelId() + "/posts";
         mockableCollectionOriginalPost = DatabaseFactory.getDependency().collection(collectionPathOriginalPost);
 
-        PostArrayAdapter adapterOriginalPost = new PostArrayAdapter(view.getContext(), new ArrayList<>(Arrays.asList(postOriginal)));
-        postView.setAdapter(adapterOriginalPost);
+        replies.add(postOriginal);
         adapter = new PostArrayAdapter(view.getContext(), replies);
         listView.setAdapter(adapter);
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
@@ -182,6 +181,7 @@ public class ReplyFragment extends SuperFragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             replies.clear();
+                            replies.add(postOriginal);
                             for (DocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
