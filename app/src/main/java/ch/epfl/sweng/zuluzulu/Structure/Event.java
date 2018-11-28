@@ -1,5 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import android.net.Uri;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -15,17 +17,16 @@ public class Event implements Serializable {
     public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc", "start_date", "end_date", "likes");
 
     private int id;
+    private int likes;
+    private int channel_id;
+    private int assos_id;
     private String name;
     private String shortDesc;
     private String longDesc;
-
-    private int likes;
     private String organizer;
     private String place;
-
     private String bannerUri;
     private String iconUri;
-
     private String url_place_and_room;
     private String website;
     private String contact;
@@ -34,12 +35,8 @@ public class Event implements Serializable {
 
     private EventDate date;
 
-    private int channel_id;
-    private int assos_id;
 
-    private Event(int id, String name, String shortDesc, String longDesc, EventDate date,
-                  int likes, String organizer, String place, String bannerUri, String iconUri,
-                  String url_place_and_room, String website, String contact, String category, String speaker, int channel_id, int assos_id) {
+    private Event(int id, String name, String shortDesc, String longDesc, EventDate date, int likes, String organizer, String place, String bannerUri, String iconUri, String url_place_and_room, String website, String contact, String category, String speaker, int channel_id, int assos_id) {
         this.id = id;
         this.name = name;
         this.shortDesc = shortDesc;
@@ -176,7 +173,13 @@ public class Event implements Serializable {
         return date.getEndDateString();
     }
 
+    public String getDateTimeUser() {
+        return date.getDateTimeUser();
+    }
+
     public static final class EventBuilder {
+        private static final int SHORT_DESC_MAXLENGTH = 100;
+
         private int id;
         private String name;
         private String shortDesc;
@@ -268,7 +271,22 @@ public class Event implements Serializable {
 
 
         public EventBuilder setShortDesc(String shortDesc) {
-            this.shortDesc = shortDesc;
+            /***
+             *
+             * NICO LAISSE CE SETTER IL SERT À LIMITER LA TAILLE DU SHORT DESC
+             *
+             */
+            if(shortDesc == null){
+                throw new IllegalArgumentException();
+            }
+            if(shortDesc.length() > SHORT_DESC_MAXLENGTH){
+                String desc = shortDesc.substring(0, SHORT_DESC_MAXLENGTH);
+                int last_space = desc.lastIndexOf(" ");
+                // cut at a space
+                this.shortDesc = desc.substring(0, last_space).trim() + "...";
+            } else {
+                this.shortDesc = shortDesc;
+            }
             return this;
         }
 
@@ -300,7 +318,7 @@ public class Event implements Serializable {
          * @return this
          */
         public EventBuilder setBannerUri(String bannerUri) {
-            if (bannerUri == null) {
+            if (!correctUri(bannerUri)) {
                 this.bannerUri = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner;
             } else {
                 this.bannerUri = bannerUri;
@@ -315,13 +333,21 @@ public class Event implements Serializable {
          * @return this
          */
         public EventBuilder setIconUri(String iconUri) {
-            if (iconUri == null) {
-                System.out.println("null");
-                this.iconUri = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon;
-            } else {
+            if (correctUri(iconUri)) {
                 this.iconUri = iconUri;
+            } else {
+                this.iconUri = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon;
             }
             return this;
+        }
+
+        /**
+         * Check if the uri is correct
+         * @param uri uri
+         * @return boolean
+         */
+        private boolean correctUri(String uri){
+            return !(uri == null || uri.length() < 6);
         }
 
         public EventBuilder setUrlPlaceAndRoom(String url_place_and_room) {
