@@ -105,7 +105,7 @@ public class MementoFragment extends SuperFragment {
      */
     private void handleMemento(List<String> result) {
 
-        if (result != null && !result.isEmpty()) {
+        if (result != null) {
             for(int i = 0; i < result.size(); i++) {
                 if(result.get(i) != null && !result.get(i).isEmpty() ) {
                     addEvent(result.get(i));
