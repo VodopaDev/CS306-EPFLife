@@ -85,4 +85,11 @@ public class PostFragmentTest extends TestWithAuthenticatedAndFragment<PostFragm
         TimeUnit.SECONDS.sleep(3);
         onData(instanceOf(Post.class)).atPosition(0).onChildView(withId(R.id.post_down_button)).perform(click());
     }
+
+    @Test
+    public void testUserCanFilterPosts() {
+        onView(withId(R.id.post_filter_time)).perform(click());
+        onView(withId(R.id.post_filter_nbReplies)).perform(click());
+        onView(withId(R.id.post_filter_nbUps)).perform(click());
+    }
 }
