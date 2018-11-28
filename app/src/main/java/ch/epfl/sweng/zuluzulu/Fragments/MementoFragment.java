@@ -44,6 +44,7 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
  */
 public class MementoFragment extends SuperFragment {
     final static public String EPFL_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/epfl/events/fr/?format=json";
+    final static public String ENAC_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/enac/events/fr/?format=json";
     final static public String ASSOCIATION_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/associations/events/fr/?format=json";
     private static final String TAG = "MEMENTO_FRAGMENT";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
@@ -91,7 +92,7 @@ public class MementoFragment extends SuperFragment {
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Memento loader");
         UrlHandler urlHandler = new UrlHandler(this::handleMemento, new MementoParser());
-        urlHandler.execute(EPFL_MEMENTO_URL, ASSOCIATION_MEMENTO_URL);
+        urlHandler.execute(ENAC_MEMENTO_URL, EPFL_MEMENTO_URL, ASSOCIATION_MEMENTO_URL);
 
         // Send increment to wait async execution in test
         IdlingResourceFactory.incrementCountingIdlingResource();
@@ -104,9 +105,12 @@ public class MementoFragment extends SuperFragment {
      */
     private void handleMemento(List<String> result) {
 
-        if (result != null && !result.isEmpty() && !result.get(0).isEmpty()) {
-            String datas = result.get(0);
-            addEvent(datas);
+        if (result != null) {
+            for(int i = 0; i < result.size(); i++) {
+                if(result.get(i) != null && !result.get(i).isEmpty() ) {
+                    addEvent(result.get(i));
+                }
+            }
         }
 
         addDatabase();
@@ -114,12 +118,11 @@ public class MementoFragment extends SuperFragment {
     }
 
     private void addDatabase() {
-        int i = 0;
         for (Event event : events
                 ) {
             //the map for the event
             Map<String, Object> docData = createHashmap(event);
-            if (docData != null && i++ < 5) {
+            if (docData != null ) {
                 DatabaseFactory.getDependency().collection("events_info").document("event" + Integer.toString(event.getId())).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -134,7 +137,7 @@ public class MementoFragment extends SuperFragment {
 
         Map<String, Object> docData = new HashMap<>();
         docData.put("icon_uri", event.getIconUri());
-        docData.put("banner_uri", event.getIconUri());
+        docData.put("banner_uri", event.getBannerUri());
         docData.put("id", event.getId());
         docData.put("assos_id", event.getAssosId());
         docData.put("channel_id", event.getChannelId());
@@ -169,34 +172,34 @@ public class MementoFragment extends SuperFragment {
                 this.events.add(createEvent(jsonobject));
                 eventAdapter.notifyDataSetChanged();
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, "Could not parse json");
         }
     }
 
-    private Event createEvent(JSONObject jsonobject) throws JSONException {
-        return new Event.EventBuilder()
-                .setId(0)
-                .setDate(new EventDate(
-                        jsonobject.getString("event_start_date"), jsonobject.getString("event_start_time"),
-                        jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")))
-                .setUrlPlaceAndRoom(jsonobject.getString("event_url_place_and_room"))
-                .setAssosId(1)
-                .setChannelId(1)
-                .setLikes(0)
-                .setShortDesc(jsonobject.getString("description"))
-                .setName(jsonobject.getString("title"))
-                .setLongDesc(jsonobject.getString("description"))
-                .setOrganizer(jsonobject.getString("event_organizer"))
-                .setPlace(jsonobject.getString("event_place_and_room"))
-                .setBannerUri(jsonobject.getString("event_visual_absolute_url"))
-                .setIconUri(jsonobject.getString("event_visual_absolute_url"))
-                .setWebsite(jsonobject.getString("event_url_link"))
-                .setContact(jsonobject.getString("event_contact"))
-                .setCategory(jsonobject.getString("event_category_fr"))
-                .setSpeaker(jsonobject.getString("event_speaker"))
-                .build();
+    private Event createEvent(JSONObject jsonobject) throws JSONException, IllegalArgumentException {
+            return new Event.EventBuilder()
+                    .setId(jsonobject.getString("title").hashCode())
+                    .setDate(new EventDate(
+                            jsonobject.getString("event_start_date"), jsonobject.getString("event_start_time"),
+                            jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")))
+                    .setUrlPlaceAndRoom(jsonobject.getString("event_url_place_and_room"))
+                    .setAssosId(1)
+                    .setChannelId(1)
+                    .setLikes(0)
+                    .setShortDesc(jsonobject.getString("description"))
+                    .setName(jsonobject.getString("title"))
+                    .setLongDesc(jsonobject.getString("description"))
+                    .setOrganizer(jsonobject.getString("event_organizer"))
+                    .setPlace(jsonobject.getString("event_place_and_room"))
+                    .setBannerUri(jsonobject.getString("event_visual_absolute_url"))
+                    .setIconUri(jsonobject.getString("event_visual_absolute_url"))
+                    .setWebsite(jsonobject.getString("event_url_link"))
+                    .setContact(jsonobject.getString("event_contact"))
+                    .setCategory(jsonobject.getString("event_category_fr"))
+                    .setSpeaker(jsonobject.getString("event_speaker"))
+                    .build();
     }
 
     @Override

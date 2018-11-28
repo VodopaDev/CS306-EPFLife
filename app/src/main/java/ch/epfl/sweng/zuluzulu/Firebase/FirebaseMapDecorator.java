@@ -162,6 +162,9 @@ public class FirebaseMapDecorator {
      * @return true if the map has all required fields (ie: not null), false otherwise
      */
     public boolean hasFields(List<String> fields) {
+        if(map == null){
+            return false;
+        }
         for (String key : fields) {
             if (map.get(key) == null)
                 return false;
