@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -58,6 +59,7 @@ public class ReplyFragment extends SuperFragment {
 
     private EditText replyText;
     private Button sendButton;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private AuthenticatedUser user;
     private Post postOriginal;
@@ -94,6 +96,7 @@ public class ReplyFragment extends SuperFragment {
         ListView listView = view.findViewById(R.id.reply_list_view);
         replyText = view.findViewById(R.id.reply_text_edit);
         sendButton = view.findViewById(R.id.reply_send_button);
+        swipeRefreshLayout = view.findViewById(R.id.swiperefresh_replies);
 
         String collectionPath = "channels/channel" + postOriginal.getChannelId() + "/posts/" + postOriginal.getId() + "/replies";
         collectionReference = db.collection(collectionPath);
@@ -105,6 +108,7 @@ public class ReplyFragment extends SuperFragment {
         postView.setAdapter(adapterOriginalPost);
         adapter = new PostArrayAdapter(view.getContext(), replies);
         listView.setAdapter(adapter);
+        swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
@@ -167,7 +171,7 @@ public class ReplyFragment extends SuperFragment {
     }
 
     /**
-     * Refresh the posts by reading in the database
+     * Refresh the replies by reading in the database
      */
     private void updateReplies() {
         collectionReference
@@ -194,4 +198,11 @@ public class ReplyFragment extends SuperFragment {
                 });
     }
 
+    /**
+     * This function is called when the user swipes down to refresh the list of replies
+     */
+    private void refresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        updateReplies();
+    }
 }
