@@ -10,6 +10,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
 import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -19,17 +20,12 @@ import static org.junit.Assert.assertThat;
 @RunWith(JUnit4.class)
 public class EventTest {
     private static final String NAME1 = "ForumEpfl";
-    private static final String NAME2 = "JuniorEnterprise";
 
     private static final String SHORT_DESC = "Beuverie à Zelig";
     private static final String LONG_DESC = "This is only random bla bla bla";
     private static final String TEST_URI_STRING = "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso1_icon.png?alt=media&token=391a7bfc-1597-4935-9afe-e08ecd734e03";
-    private static final String DEFAULT_BANNER_URI = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner;
-    private static final String DEFAULT_ICON_URI = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon;
     private static final Date START_DATE = new Date(2L);
-    private static final Date START_DATE_1 = new Date(3L);
     private static final Long LIKES_1 = 100L;
-    private static final Long LIKES_2 = 3L;
     private static final String ORGANIZER = "Pascal Martin";
     private static final String PLACE = "CE";
     private static final String CONTACT = "ME";
@@ -37,16 +33,19 @@ public class EventTest {
     private static final String WEBSITE = "BRAZ";
     private static final String CATEGORY = "LES";
     private static final String URL_PLACE = "BRALES";
+    private static final String ID = "1";
+    private static final String ASSOCIATION_ID = "1";
+    private static final String CHANNEL_ID = "1";
 
 
     private Event event0;
-    private Event event1;
 
     private void initWorkingAssociation() {
 
         Map<String, Object> map = new HashMap<>();
-        map.put("id", 1L);
-        map.put("channel_id", 1L);
+        map.put("id", ID);
+        map.put("channel_id", CHANNEL_ID);
+        map.put("association_id", ASSOCIATION_ID);
         map.put("name", NAME1);
         map.put("short_desc", SHORT_DESC);
         map.put("long_desc", LONG_DESC);
@@ -63,35 +62,16 @@ public class EventTest {
         map.put("category", CATEGORY);
         map.put("url_place_and_room", URL_PLACE);
 
-        event0 = new Event.EventBuilder().build(new FirebaseMapDecorator(map));
-    }
-
-    private void initDefaultAssociation() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", 1L);
-        map.put("channel_id", 1L);
-        map.put("name", NAME2);
-        map.put("short_desc", SHORT_DESC);
-        map.put("long_desc", LONG_DESC);
-        map.put("start_date", START_DATE_1);
-        map.put("end_date", START_DATE_1);
-        map.put("likes", LIKES_2);
-        map.put("contact", CONTACT);
-        map.put("speaker", SPEAKER);
-        map.put("website", WEBSITE);
-        map.put("category", CATEGORY);
-        map.put("url_place_and_room", URL_PLACE);
-
-        event1 = new Event.EventBuilder().build(new FirebaseMapDecorator(map));
+        event0 = new Event(new FirebaseMapDecorator(map));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void invalidSnapThrowIllegalArgumentException() {
         Map<String, Object> map = new HashMap<>();
-        map.put("id", 1L);
+        map.put("id", ID);
 
         FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
-        new Event.EventBuilder().build(fmap);
+        new Event(fmap);
     }
 
     @Test
@@ -127,11 +107,8 @@ public class EventTest {
     @Test
     public void uriAreCorrect() {
         initWorkingAssociation();
-        initDefaultAssociation();
         assertEquals(TEST_URI_STRING, event0.getIconUri());
         assertEquals(TEST_URI_STRING, event0.getBannerUri());
-        assertEquals(DEFAULT_ICON_URI, event1.getIconUri());
-        assertEquals(DEFAULT_BANNER_URI, event1.getBannerUri());
     }
 
     @Test
@@ -144,23 +121,20 @@ public class EventTest {
     @Test
     public void comparableToIsCorrect() {
         initWorkingAssociation();
-        initDefaultAssociation();
-        assertEquals(NAME1.compareTo(NAME2),
-                Event.nameComparator().compare(event0, event1));
+        assertEquals(NAME1.compareTo(NAME1),
+                Event.nameComparator().compare(event0, event0));
     }
 
     @Test
     public void dateComparTest() {
         initWorkingAssociation();
-        initDefaultAssociation();
-        assertEquals(START_DATE.compareTo(START_DATE_1), Event.dateComparator().compare(event0, event1));
+        assertEquals(START_DATE.compareTo(START_DATE), Event.dateComparator().compare(event0, event0));
     }
 
     @Test
     public void likesComparTest() {
         initWorkingAssociation();
-        initDefaultAssociation();
-        assertEquals(-1, Event.likeComparator().compare(event0, event1));
+        assertEquals(0, Event.likeComparator().compare(event0, event0));
     }
 
     @Test
@@ -221,8 +195,8 @@ public class EventTest {
 
     @Test
     public void testBuilder() {
-        Event.EventBuilder eb = new Event.EventBuilder()
-                .setId(1)
+        EventBuilder eb = new EventBuilder()
+                .setId("0")
                 .setDate(new EventDate(
                         START_DATE, START_DATE))
                 .setUrlPlaceAndRoom(URL_PLACE)
@@ -238,21 +212,21 @@ public class EventTest {
                 .setName(NAME1)
                 .setCategory(CATEGORY)
                 .setSpeaker(SPEAKER)
-                .setChannelId(0)
-                .setAssosId(0);
+                .setChannelId("0")
+                .setAssosId("0");
 
         Event event0 = eb.build();
 
 
-        assertEquals(1, event0.getId());
+        assertEquals("0", event0.getId());
 
         assertEquals(0, (int) event0.getLikes());
 
         assertEquals(NAME1, event0.getName());
 
-        assertEquals(LONG_DESC, event0.getLongDesc());
+        assertEquals(LONG_DESC, event0.getLongDescription());
 
-        assertEquals(SHORT_DESC, event0.getShortDesc());
+        assertEquals(SHORT_DESC, event0.getShortDescription());
 
         assertEquals(START_DATE, event0.getStartDate());
 
@@ -270,9 +244,9 @@ public class EventTest {
 
         assertEquals(URL_PLACE, event0.getUrlPlaceAndRoom());
 
-        assertEquals(0, event0.getChannelId());
+        assertEquals("0", event0.getChannelId());
 
-        assertEquals(0, event0.getAssosId());
+        assertEquals("0", event0.getAssociationId());
     }
 
 }
