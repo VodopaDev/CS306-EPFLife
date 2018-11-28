@@ -65,7 +65,8 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center_vertical|center_horizontal"
-                app:srcCompat="@drawable/up_white" />
+                app:srcCompat="@drawable/up_white"
+                android:contentDescription="up button" />
 
             <TextView
                 android:id="@+id/post_nb_ups_textview"
@@ -84,7 +85,8 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="center_vertical|center_horizontal"
-                app:srcCompat="@drawable/down_white" />
+                app:srcCompat="@drawable/down_white"
+                android:contentDescription="down button" />
         </LinearLayout>
 
     </LinearLayout>
@@ -106,5 +108,11 @@
             android:text="0 réponse"
             android:textColor="@color/colorWhiteTransparent" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/post_white_line"
+        android:layout_width="fill_parent"
+        android:layout_height="5dp"
+        android:background="@color/white" />
 
 </LinearLayout>

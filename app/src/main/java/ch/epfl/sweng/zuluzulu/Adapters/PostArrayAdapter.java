@@ -75,6 +75,9 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         if (nbResponses == 0 || currentPost.isReply()) {
             view.findViewById(R.id.post_responses_linearlayout).setVisibility(LinearLayout.GONE);
         }
+        if (currentPost.isReply()) {
+            view.findViewById(R.id.post_white_line).setVisibility(View.INVISIBLE);
+        }
 
         setUpUpDownButtons(currentPost, upButton, downButton, nbUpsText);
         updateUpsButtons(currentPost, upButton, downButton);

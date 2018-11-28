@@ -31,8 +31,6 @@
                 android:id="@+id/posts_list_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="5.0sp"
                 app:layout_constraintVertical_bias="1.0" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
