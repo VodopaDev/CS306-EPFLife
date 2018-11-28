@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Adapters.PostArrayAdapter;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
@@ -49,7 +50,8 @@ public class ReplyFragment extends SuperFragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference collectionReference;
-    private DatabaseCollection mockableCollection;
+    private DatabaseCollection mockableCollectionReplies;
+    private DatabaseCollection mockableCollectionOriginalPost;
 
     private List<Post> replies = new ArrayList<>();
     private PostArrayAdapter adapter;
@@ -95,7 +97,9 @@ public class ReplyFragment extends SuperFragment {
 
         String collectionPath = "channels/channel" + postOriginal.getChannelId() + "/posts/" + postOriginal.getId() + "/replies";
         collectionReference = db.collection(collectionPath);
-        mockableCollection = DatabaseFactory.getDependency().collection(collectionPath);
+        mockableCollectionReplies = DatabaseFactory.getDependency().collection(collectionPath);
+        String collectionPathOriginalPost = "channels/channel" + postOriginal.getChannelId() + "/posts";
+        mockableCollectionOriginalPost = DatabaseFactory.getDependency().collection(collectionPathOriginalPost);
 
         PostArrayAdapter adapterOriginalPost = new PostArrayAdapter(view.getContext(), new ArrayList<>(Arrays.asList(postOriginal)));
         postView.setAdapter(adapterOriginalPost);
@@ -152,7 +156,10 @@ public class ReplyFragment extends SuperFragment {
                 data.put("upScipers", new ArrayList<>());
                 data.put("downScipers", new ArrayList<>());
 
-                Utils.addDataToFirebase(data, mockableCollection, TAG);
+                Utils.addDataToFirebase(data, mockableCollectionReplies, TAG);
+
+                int nbResponses = postOriginal.getNbResponses() + 1;
+                mockableCollectionOriginalPost.document(postOriginal.getId()).update("nbResponses", nbResponses);
 
                 updateReplies();
             }
