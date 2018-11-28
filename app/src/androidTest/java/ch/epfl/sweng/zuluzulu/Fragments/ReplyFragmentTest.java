@@ -18,6 +18,7 @@ import ch.epfl.sweng.zuluzulu.Utility;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
@@ -32,11 +33,6 @@ public class ReplyFragmentTest extends TestWithAuthenticatedAndFragment<ReplyFra
     public void initFragment() {
         fragment = ReplyFragment.newInstance(user, Utility.defaultPost());
         DatabaseFactory.setDependency(new FirebaseMock());
-    }
-
-    @Test
-    public void testUserCanSeeOriginalPost() {
-        onView(withId(R.id.reply_original_post)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -55,21 +51,26 @@ public class ReplyFragmentTest extends TestWithAuthenticatedAndFragment<ReplyFra
 
     @Test
     public void testUserCanSendReply() {
-        onView(withId(R.id.reply_text_edit)).perform(ViewActions.typeText("This is a reply test !")).perform(ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.reply_text_edit)).perform(ViewActions.typeText("test")).perform(ViewActions.closeSoftKeyboard());
         onView(withId(R.id.reply_send_button)).check(matches(isEnabled()));
         onView(withId(R.id.reply_send_button)).perform(click());
     }
 
     @Test
+    public void testUserCanSwipeDown() {
+        onView(withId(R.id.reply_list_view)).perform(swipeDown());
+    }
+
+    @Test
     public void testUserCanUpOriginalPost() throws InterruptedException {
         TimeUnit.SECONDS.sleep(3);
-        onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_original_post)).atPosition(0).onChildView(withId(R.id.post_up_button)).check(matches(isDisplayed()));
-        onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_original_post)).atPosition(0).onChildView(withId(R.id.post_up_button)).perform(click());
+        onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_list_view)).atPosition(0).onChildView(withId(R.id.post_up_button)).check(matches(isDisplayed()));
+        onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_list_view)).atPosition(0).onChildView(withId(R.id.post_up_button)).perform(click());
     }
 
     @Test
     public void testUserCanDownOriginalPost() throws InterruptedException {
         TimeUnit.SECONDS.sleep(3);
-        onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_original_post)).atPosition(0).onChildView(withId(R.id.post_down_button)).perform(click());
+        onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_list_view)).atPosition(0).onChildView(withId(R.id.post_down_button)).perform(click());
     }
 }
