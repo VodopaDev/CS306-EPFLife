@@ -83,8 +83,7 @@ public class PostFragment extends SuperChatPostsFragment {
         listView.setAdapter(adapter);
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
-        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
+        anonymous = getActivity().getPreferences(Context.MODE_PRIVATE).getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
         currentFilter = "time";
 
@@ -171,6 +170,9 @@ public class PostFragment extends SuperChatPostsFragment {
         });
     }
 
+    /**
+     * Set up the onClick listeners on the filter buttons
+     */
     private void setUpFilterButtons() {
         filterTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,6 +196,11 @@ public class PostFragment extends SuperChatPostsFragment {
         });
     }
 
+    /**
+     * Update the current filter by the new one and update the list of the posts
+     *
+     * @param newFilter The new filter to apply
+     */
     private void updateFilter(String newFilter) {
         if (!newFilter.equals(currentFilter)) {
             filterTimeButton.setImageResource(newFilter.equals("time") ? R.drawable.time_selected : R.drawable.time_notselected);
