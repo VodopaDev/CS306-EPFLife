@@ -57,6 +57,7 @@ public class ReplyFragment extends SuperFragment {
     private List<Post> replies = new ArrayList<>();
     private PostArrayAdapter adapter;
 
+    private ListView listView;
     private EditText replyText;
     private Button sendButton;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -92,7 +93,7 @@ public class ReplyFragment extends SuperFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reply, container, false);
 
-        ListView listView = view.findViewById(R.id.reply_list_view);
+        listView = view.findViewById(R.id.reply_list_view);
         replyText = view.findViewById(R.id.reply_text_edit);
         sendButton = view.findViewById(R.id.reply_send_button);
         swipeRefreshLayout = view.findViewById(R.id.swiperefresh_replies);
@@ -165,6 +166,7 @@ public class ReplyFragment extends SuperFragment {
                 mockableCollectionOriginalPost.document(postOriginal.getId()).update("nbResponses", nbResponses);
 
                 updateReplies();
+                listView.setSelection(adapter.getCount() - 1);
             }
         });
     }
