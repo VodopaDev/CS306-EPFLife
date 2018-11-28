@@ -191,6 +191,7 @@ public class ReplyFragment extends SuperFragment {
                                 }
                             }
                             adapter.notifyDataSetChanged();
+                            swipeRefreshLayout.setRefreshing(false);
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
