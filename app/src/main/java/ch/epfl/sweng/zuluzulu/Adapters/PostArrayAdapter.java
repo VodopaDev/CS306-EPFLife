@@ -32,6 +32,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     private Post currentPost;
     private TextView timeAgo;
     private TextView nbUpsText;
+    private TextView nbResponsesText;
     private ImageView upButton;
     private ImageView downButton;
 
@@ -58,7 +59,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         upButton = view.findViewById(R.id.post_up_button);
         downButton = view.findViewById(R.id.post_down_button);
         nbUpsText = view.findViewById(R.id.post_nb_ups_textview);
-        TextView nbResponsesText = view.findViewById(R.id.post_nb_responses_textview);
+        nbResponsesText = view.findViewById(R.id.post_nb_responses_textview);
 
         linearLayout.setBackgroundColor(Color.parseColor(currentPost.getColor()));
         message.setText(currentPost.getMessage());
@@ -66,23 +67,26 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         String name = anonymous ? "Anonymous" : currentPost.getSenderName();
         senderName.setText(name);
 
-        setUpTimeAgoField();
-
         nbUpsText.setText("" + currentPost.getNbUps());
 
+        if (currentPost.isReply()) {
+            view.findViewById(R.id.post_white_line).setVisibility(View.INVISIBLE);
+        }
+
+        setUpTimeAgoField();
+        setUpNbResponses(view);
+        setUpUpDownButtons(currentPost, upButton, downButton, nbUpsText);
+        updateUpsButtons(currentPost, upButton, downButton);
+
+        return view;
+    }
+
+    private void setUpNbResponses(View view) {
         int nbResponses = currentPost.getNbResponses();
         nbResponsesText.setText("" + currentPost.getNbResponses());
         if (nbResponses == 0 || currentPost.isReply()) {
             view.findViewById(R.id.post_responses_linearlayout).setVisibility(LinearLayout.GONE);
         }
-        if (currentPost.isReply()) {
-            view.findViewById(R.id.post_white_line).setVisibility(View.INVISIBLE);
-        }
-
-        setUpUpDownButtons(currentPost, upButton, downButton, nbUpsText);
-        updateUpsButtons(currentPost, upButton, downButton);
-
-        return view;
     }
 
     /**
