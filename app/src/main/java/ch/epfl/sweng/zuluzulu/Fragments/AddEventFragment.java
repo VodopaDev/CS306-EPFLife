@@ -23,6 +23,7 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
 import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 
 public class AddEventFragment extends SuperFragment {
@@ -179,25 +180,26 @@ public class AddEventFragment extends SuperFragment {
                     return;
                 }
 
-                Event event = new Event(
-                        FirebaseProxy.getInstance().getNewEventId(),
-                        name,
-                        tit,
-                        desc,
-                        FirebaseProxy.getInstance().getNewChannelId(),
-                        association_map.get(name),
-                        new EventDate(date,date),
-                        0,
-                        org,
-                        pla,
-                        EPFL_LOGO,
-                        EPFL_LOGO,
-                        "EPFL",
-                        "epfl.ch",
-                        "contact",
-                        "no category",
-                        "speaker"
-                );
+                Event event = new EventBuilder().
+                        setId(FirebaseProxy.getInstance().getNewEventId()).
+                        setName(name).
+                        setShortDesc(tit).
+                        setLongDesc(desc).
+                        setChannelId(FirebaseProxy.getInstance().getNewChannelId()).
+                        setAssosId(association_map.get(name)).
+                        setDate(new EventDate(date,date)).
+                        setLikes(0).
+                        setOrganizer(org).
+                        setPlace(pla).
+                        setIconUri(EPFL_LOGO).
+                        setBannerUri(EPFL_LOGO).
+                        setUrlPlaceAndRoom("EPFL").
+                        setWebsite("http://epfl.ch").
+                        setContact("contact@epfl.ch").
+                        setCategory("none").
+                        setSpeaker("speaker").
+                        build();
+
                 FirebaseProxy.getInstance().addEvent(event);
             }
         });
