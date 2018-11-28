@@ -65,6 +65,7 @@ public class FirebaseProxy implements Proxy{
      * Get all associations and apply an OnResult on them
      * @param onResult interface defining apply()
      */
+    @Override
     public void getAllAssociations(OnResult<List<Association>> onResult){
         IdlingResourceFactory.incrementCountingIdlingResource();
         assoCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -83,6 +84,7 @@ public class FirebaseProxy implements Proxy{
      * Get one association from its id and apply an OnResult on them
      * @param onResult interface defining apply()
      */
+    @Override
     public void getAssociationFromId(String id, OnResult<Association> onResult){
         IdlingResourceFactory.incrementCountingIdlingResource();
         assoCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
@@ -98,6 +100,7 @@ public class FirebaseProxy implements Proxy{
      * Get all associations from an ID list and apply an OnResult on them
      * @param onResult interface defining apply()
      */
+    @Override
     public void getAssociationsFromIds(List<String> ids, OnResult<List<Association>> onResult){
         IdlingResourceFactory.incrementCountingIdlingResource();
         List<Association> result = new ArrayList<>();
@@ -122,6 +125,7 @@ public class FirebaseProxy implements Proxy{
         }
     }
 
+    @Override
     public void addAssociation(Association association){
         IdlingResourceFactory.incrementCountingIdlingResource();
         createChannel(association);
@@ -131,6 +135,7 @@ public class FirebaseProxy implements Proxy{
 
     //----- Event related methods -----\\
 
+    @Override
     public void addEvent(Event event){
         IdlingResourceFactory.incrementCountingIdlingResource();
         createChannel(event);
@@ -142,6 +147,7 @@ public class FirebaseProxy implements Proxy{
      * Get all events and apply an OnResult on them
      * @param onResult interface defining apply()
      */
+    @Override
     public void getAllEvents(OnResult<List<Event>> onResult){
         IdlingResourceFactory.incrementCountingIdlingResource();
         eventCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -160,6 +166,7 @@ public class FirebaseProxy implements Proxy{
      * Get one event from its id and apply an OnResult on them
      * @param onResult interface defining apply()
      */
+    @Override
     public void getEventFromId(String id, OnResult<Event> onResult){
         IdlingResourceFactory.incrementCountingIdlingResource();
         eventCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
@@ -175,6 +182,7 @@ public class FirebaseProxy implements Proxy{
      * Get all events from an ID list and apply an OnResult on them
      * @param onResult interface defining apply()
      */
+    @Override
     public void getEventsFromIds(List<String> ids, OnResult<List<Event>> onResult){
         List<Event> result = new ArrayList<>();
         Counter counter = new Counter(ids.size());
@@ -226,6 +234,7 @@ public class FirebaseProxy implements Proxy{
      * Get all events and apply an OnResult on them
      * @param onResult interface defining apply()
      */
+    @Override
     public void getAllChannels(OnResult<List<Channel>> onResult){
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -244,6 +253,7 @@ public class FirebaseProxy implements Proxy{
      * Get one event from its id and apply an OnResult on them
      * @param onResult interface defining apply()
      */
+    @Override
     public void getChannelFromId(String id, OnResult<Channel> onResult){
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
@@ -282,6 +292,7 @@ public class FirebaseProxy implements Proxy{
         }
     }
 
+    @Override
     public void getMessagesFromChannel(String id, OnResult<List<ChatMessage>> onResult){
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(id).collection("messages").get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -296,6 +307,7 @@ public class FirebaseProxy implements Proxy{
         });
     }
 
+    @Override
     public void getPostsFromChannel(String id, OnResult<List<Post>> onResult){
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(id).collection("posts").get().addOnSuccessListener(queryDocumentSnapshots -> {
@@ -310,6 +322,7 @@ public class FirebaseProxy implements Proxy{
         });
     }
 
+    @Override
     public void getRepliesFromPost(String channelId, String postId, OnResult<List<Post>> onResult){
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(channelId).collection("posts")
@@ -326,6 +339,7 @@ public class FirebaseProxy implements Proxy{
         });
     }
 
+    @Override
     public void updateOnNewMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult) {
         channelCollection.document(channelId).collection("messages").addSnapshotListener((queryDocumentSnapshots, e) -> {
             if (e != null)
@@ -344,6 +358,7 @@ public class FirebaseProxy implements Proxy{
         });
     }
 
+    @Override
     public void addPost(Post post){
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(post.getChannelId())
@@ -419,21 +434,31 @@ public class FirebaseProxy implements Proxy{
 
     //----- Generating new id to store -----\\
 
+    @Override
     public String getNewChannelId(){
         return channelCollection.document().getId();
     }
+
+    @Override
     public String getNewEventId(){
         return eventCollection.document().getId();
     }
+    @Override
     public String getNewAssociationId(){
         return assoCollection.document().getId();
     }
+
+    @Override
     public String getNewPostId(String channelId){
         return channelCollection.document(channelId).collection("posts").document().getId();
     }
+
+    @Override
     public String getNewMessageId(String channelId){
         return channelCollection.document(channelId).collection("messages").document().getId();
     }
+
+    @Override
     public String getNewReplyId(String channelId, String originalPostId) {
         return channelCollection.document(channelId).collection("posts").document(originalPostId).collection("replies").getId();
     }
