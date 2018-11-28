@@ -34,7 +34,7 @@ public class Event extends FirebaseStructure {
     private String category;
     private String speaker;
 
-    public Event(String id, String name, String shortDesc, String longDesc, String channelId, String associationId, EventDate date,
+    protected Event(String id, String name, String shortDesc, String longDesc, String channelId, String associationId, EventDate date,
                  int likes, String organizer, String place, String iconUri, String bannerUri,
                  String url_place_and_room, String website, String contact, String category, String speaker) {
         super(id);
