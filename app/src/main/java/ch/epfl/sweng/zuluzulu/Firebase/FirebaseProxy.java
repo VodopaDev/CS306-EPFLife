@@ -314,8 +314,25 @@ public class FirebaseProxy implements Proxy{
             List<Post> result = new ArrayList<>();
             for(DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){
                 FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
-                if(data.hasFields(Post.requiredFields()))
-                    result.add(new Post(data));
+                if(data.hasFields(Post.requiredFields())) {
+
+                    /**
+                     * On devrait faire ça partout
+                     * Capturer les erreurs lors des créations
+                     * et envoyer null ??
+                     *
+                     * Car new Post() peut renvoyer une exception !
+                     *
+                     * Si on se met d'accord sur la facon d'implémenter cela, je suis chaud
+                     * à modifier le reste
+                     */
+                    try {
+                        result.add(new Post(data));
+                    } catch(Exception e){
+                        // not added
+                        // do somethine ?
+                    }
+                }
             }
             onResult.apply(result);
             IdlingResourceFactory.decrementCountingIdlingResource();
