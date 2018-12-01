@@ -18,6 +18,7 @@ import android.widget.EditText;
 
 import com.google.firebase.Timestamp;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -111,7 +112,7 @@ public class WritePostFragment extends SuperFragment {
                     0,
                     1,
                     Collections.singletonList(user.getSciper()),
-                    Collections.EMPTY_LIST
+                    new ArrayList<>()
             );
             FirebaseProxy.getInstance().addPost(post);
             mListener.onFragmentInteraction(OPEN_POST_FRAGMENT, channel);

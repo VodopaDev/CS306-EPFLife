@@ -36,33 +36,38 @@ public class EventDateTest {
         assertThat(date.getEndDate(), is(d));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void setWithNullEndDate(){
+        new EventDate("1111-11-11", "11:11:11", "1111-11-11", "11:11:11").setEndDate(null);
+    }
+
     @Test(expected = AssertionError.class)
     public void getWithNullStartTime() {
-        EventDate date = new EventDate("1111-11-11", "11:11:11", "1111-11-11", null);
+        new EventDate("1111-11-11", "11:11:11", "1111-11-11", null);
     }
 
     @Test(expected = AssertionError.class)
     public void getWithNullEndTime() {
-        EventDate date = new EventDate("1111-11-11", null, "1111-11-11", "11:11:11");
+        new EventDate("1111-11-11", null, "1111-11-11", "11:11:11");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getWithNullDateStart() {
-        EventDate date = new EventDate(null, "11:11:11", "1111-11-11", "11:11:11");
+        new EventDate(null, "11:11:11", "1111-11-11", "11:11:11");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getWithNullDateEnd() {
-        EventDate date = new EventDate("1111-11-11", "11:11:11", null, "11:11:11");
+        new EventDate("1111-11-11", "11:11:11", null, "11:11:11");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void fakeStartDate() {
-        EventDate date = new EventDate("1111-11-11", "11:11:11", "1111-a9-11", "11:11:11");
+        new EventDate("1111-11-11", "11:11:11", "1111-a9-11", "11:11:11");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void fakeEndDate() {
-        EventDate date = new EventDate("1111-99-9a", "11:11:11", "1111-11-11", "11:11:11");
+        new EventDate("1111-99-9a", "11:11:11", "1111-11-11", "11:11:11");
     }
 }

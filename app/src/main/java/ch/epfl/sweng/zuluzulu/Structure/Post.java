@@ -171,11 +171,11 @@ public class Post extends FirebaseStructure{
     }
 
     public boolean upvoteWithUser(String userId){
-        return !downScipers.contains(userId) && upScipers.add(userId);
+        return !isDownByUser(userId) && !isUpByUser(userId) && upScipers.add(userId);
     }
 
     public boolean downvoteWithUser(String userId){
-        return !upScipers.contains(userId) && downScipers.add(userId);
+        return !isDownByUser(userId) && !isUpByUser(userId) && downScipers.add(userId);
     }
 
     public static List<String> requiredFields(){
