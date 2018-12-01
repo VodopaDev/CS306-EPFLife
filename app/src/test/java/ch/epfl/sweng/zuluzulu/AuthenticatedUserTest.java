@@ -28,25 +28,21 @@ public class AuthenticatedUserTest {
     private static final String semester = "BA5";
     private static final String gaspar = "jomeau@epfl.ch";
     private static final String first_name = "nicolas";
-    private final Association mocked_asso = mock(Association.class);
-    private final Event mocked_event = mock(Event.class);
-    private final Channel mocked_channel = mock(Channel.class);
+
+    private final String ASSOCIATION_ID = "1";
+    private final String EVENT_ID = "1";
+    private final String CHANNEL_ID = "1";
     private final String last_name = "jomeau";
     private AuthenticatedUser user;
-    private List<Long> fav_assos;
-    private List<Long> fol_events;
-    private List<Long> fol_chats;
+    private List<String> fav_assos;
+    private List<String> fol_events;
+    private List<String> fol_chats;
 
     @Before
     public void createUser() {
         fav_assos = new ArrayList<>();
         fol_events = new ArrayList<>();
         fol_chats = new ArrayList<>();
-
-        when(mocked_asso.getId()).thenReturn(1L);
-        when(mocked_channel.getId()).thenReturn(1);
-        when(mocked_event.getId()).thenReturn(1L);
-
 
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail(email);
@@ -75,19 +71,19 @@ public class AuthenticatedUserTest {
 
     @Test
     public void followTest() {
-        assertThat(false, equalTo(user.isFollowedAssociation(mocked_asso)));
-        assertThat(false, equalTo(user.isFollowedChannel(mocked_channel)));
-        assertThat(false, equalTo(user.isFollowedEvent(mocked_event)));
+        assertThat(false, equalTo(user.isFollowedAssociation(ASSOCIATION_ID)));
+        assertThat(false, equalTo(user.isFollowedChannel(CHANNEL_ID)));
+        assertThat(false, equalTo(user.isFollowedEvent(EVENT_ID)));
     }
 
     @Test
     public void setList() {
-        user.setFollowedChats(Collections.singletonList(1L));
-        user.setFavAssos(Collections.singletonList(1L));
-        user.setFollowedEvents(Collections.singletonList(1L));
-        assertThat(true, equalTo(user.isFollowedAssociation(mocked_asso)));
-        assertThat(true, equalTo(user.isFollowedChannel(mocked_channel)));
-        assertThat(true, equalTo(user.isFollowedEvent(mocked_event)));
+        user.setFollowedChannels(Collections.singletonList(CHANNEL_ID));
+        user.setFollowedAssociation(Collections.singletonList(ASSOCIATION_ID));
+        user.setFollowedEvents(Collections.singletonList(EVENT_ID));
+        assertThat(true, equalTo(ASSOCIATION_ID));
+        assertThat(true, equalTo(CHANNEL_ID));
+        assertThat(true, equalTo(EVENT_ID));
     }
 
     @Test

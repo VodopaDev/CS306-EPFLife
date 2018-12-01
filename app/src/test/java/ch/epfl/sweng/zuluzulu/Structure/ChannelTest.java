@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.Structure;
 
 import com.google.firebase.firestore.GeoPoint;
 
@@ -14,6 +14,7 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.Utility;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -103,7 +104,7 @@ public class ChannelTest {
         assertEquals(name1, channelGlobal.getName());
         assertEquals(description1, channelGlobal.getShortDescription());
 
-        channelGlobal.setId(id2.intValue());
+        channelGlobal.setId("l");
         channelGlobal.setName(name2);
         channelGlobal.setShortDescription(description2);
 

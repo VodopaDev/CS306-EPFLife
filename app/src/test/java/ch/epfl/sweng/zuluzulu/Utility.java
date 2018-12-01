@@ -2,6 +2,7 @@ package ch.epfl.sweng.zuluzulu;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +21,9 @@ public class Utility {
     private static final String semester = "BA5";
     private static final String firstName = "James";
     private static final String lastName = "Bond";
-    private static final List<Long> favAssos = Arrays.asList(1L, 2L);
-    private static final List<Long> followedEvents = new ArrayList<>();
-    private static final List<Long> followedChats = new ArrayList<>();
+    private static final List<String> favAssos = Arrays.asList("0", "1");
+    private static final List<String> followedEvents = Collections.singletonList("1");
+    private static final List<String> followedChats = new ArrayList<>();
 
     private Utility() {
     }

@@ -53,6 +53,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
 
         name = data.getString("name").trim();
         shortDescription = data.getString("short_description");
+		longDescription = data.getString("long_description");
 
         // Init the main chat id
         channelId = data.getString("channel_id");
@@ -162,6 +163,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
         map.put("banner_uri", bannerUri);
         map.put("upcoming_events", upcomingEvents);
         map.put("channel_id", channelId);
+		map.put("long_description", longDescription);
         return map;
     }
 

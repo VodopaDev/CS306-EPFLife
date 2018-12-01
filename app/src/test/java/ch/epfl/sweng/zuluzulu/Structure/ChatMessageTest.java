@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.Structure;
 
 import org.junit.Before;
 import org.junit.Test;
