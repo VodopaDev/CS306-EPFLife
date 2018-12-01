@@ -15,6 +15,8 @@ import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.User;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -68,22 +70,18 @@ public class AuthenticatedUserTest {
         assertThat(semester, equalTo(user.getSemester()));
         assertThat(gaspar, equalTo(user.getGaspar()));
     }
-
-    @Test
-    public void followTest() {
-        assertThat(false, equalTo(user.isFollowedAssociation(ASSOCIATION_ID)));
-        assertThat(false, equalTo(user.isFollowedChannel(CHANNEL_ID)));
-        assertThat(false, equalTo(user.isFollowedEvent(EVENT_ID)));
-    }
-
+    
     @Test
     public void setList() {
+        assertFalse(user.isFollowedAssociation(ASSOCIATION_ID));
+        assertFalse(user.isFollowedEvent(EVENT_ID));
+        assertFalse(user.isFollowedChannel(CHANNEL_ID));
         user.setFollowedChannels(Collections.singletonList(CHANNEL_ID));
         user.setFollowedAssociation(Collections.singletonList(ASSOCIATION_ID));
         user.setFollowedEvents(Collections.singletonList(EVENT_ID));
-        assertThat(true, equalTo(ASSOCIATION_ID));
-        assertThat(true, equalTo(CHANNEL_ID));
-        assertThat(true, equalTo(EVENT_ID));
+        assertTrue(user.isFollowedAssociation(ASSOCIATION_ID));
+        assertTrue(user.isFollowedEvent(EVENT_ID));
+        assertTrue(user.isFollowedChannel(CHANNEL_ID));
     }
 
     @Test
