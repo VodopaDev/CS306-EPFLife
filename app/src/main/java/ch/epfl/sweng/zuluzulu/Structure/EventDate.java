@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,7 +8,7 @@ import java.util.Date;
 /**
  * represent a date of an event
  */
-public class EventDate {
+public class EventDate implements Serializable {
     private static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     private Date startDate;
