@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.TestingUtility;
 
 import java.util.ArrayList;
 import java.util.Arrays;

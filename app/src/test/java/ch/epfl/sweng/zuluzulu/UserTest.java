@@ -6,6 +6,7 @@ import org.junit.runners.JUnit4;
 
 import java.util.Collections;
 
+import ch.epfl.sweng.zuluzulu.TestingUtility.Utility;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.Guest;
 import ch.epfl.sweng.zuluzulu.User.User;

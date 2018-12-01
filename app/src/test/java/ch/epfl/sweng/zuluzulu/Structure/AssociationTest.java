@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -31,7 +32,6 @@ public class AssociationTest {
 
     private static final String ID2 = "1";
     private static final String NAME2 = "Bgepoly";
-    private static List<Map<String, Object>> EVENT2 = new ArrayList<>();
 
     private static final String CHANNEL_ID = "000";
     private static final String SHORT_DESC = "Representing all students at EPFL";
@@ -53,27 +53,18 @@ public class AssociationTest {
                 LONG_DESC,
                 TEST_URI_STRING,
                 TEST_URI_STRING,
-                Collections.EMPTY_LIST,
+                null,
                 CHANNEL_ID
         );
 
-        HashMap<String,Object> map1 = new HashMap<>();
-        map1.put("id", 200);
-        map1.put("start", new Date(1000));
-        HashMap<String,Object> map2 = new HashMap<>();
-        map2.put("id", 188);
-        map2.put("start", new Date(100));
-        EVENT2.add(map1);
-        EVENT2.add(map2);
-
-        asso1 = new Association(
+        asso2 = new Association(
                 ID2,
                 NAME2,
                 SHORT_DESC,
                 LONG_DESC,
                 null,
                 null,
-                EVENT2,
+                Arrays.asList("100","101"),
                 CHANNEL_ID
         );
     }
@@ -93,7 +84,7 @@ public class AssociationTest {
         map.put("icon_uri", TEST_URI_STRING);
         map.put("banner_uri", TEST_URI_STRING);
         map.put("channel_id", CHANNEL_ID);
-        map.put("upcoming_events", EVENT2);
+        map.put("upcoming_events", Arrays.asList("100","101"));
 
         assertThat(new Association(new FirebaseMapDecorator(map)).getData(), equalTo(map));
     }
@@ -120,8 +111,8 @@ public class AssociationTest {
 
     @Test
     public void closestEventIsCorrect() {
-        assertThat(asso2.getClosestEventId(), equalTo("188"));
-        assertThat(asso1.getClosestEventId(), equalTo(null));
+        assertThat(asso2.getUpcomingEvents(), equalTo(Arrays.asList("100","101")));
+        assertThat(asso1.getUpcomingEvents(), equalTo(Collections.EMPTY_LIST));
     }
 
     @Test
@@ -145,6 +136,11 @@ public class AssociationTest {
     @Test
     public void channelIdIsCorrect() {
         assertThat(asso1.getChannelId(), equalTo(CHANNEL_ID));
+    }
+
+    @Test
+    public void requiredFIeldsAreCorrect(){
+        assertEquals(Arrays.asList("id","name","short_description"), Association.requiredFields());
     }
 
 

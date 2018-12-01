@@ -1,5 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import android.net.Uri;
+
 import com.google.firebase.firestore.GeoPoint;
 
 import org.junit.Before;
@@ -7,61 +9,52 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.User.User;
-import ch.epfl.sweng.zuluzulu.Utility;
+import ch.epfl.sweng.zuluzulu.TestingUtility.Utility;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnit4.class)
 public class ChannelTest {
-
-    private static Map data1 = new HashMap();
-    private static Map data2 = new HashMap();
-    private static Map data3 = new HashMap();
-
-    private static final Long id1 = 1L;
+    private static final String id1 = "1";
     private static final String name1 = "Global";
     private static final String description1 = "Global chat for everyone";
     private static final Map<String, Object> restrictions1 = new HashMap<>();
-    private static final Long id2 = 2L;
+
+    private static final String id2 = "2";
     private static final String name2 = "IN channel";
     private static final String description2 = "Channel just for the IN";
     private static final Map<String, Object> restrictions2 = new HashMap<>();
 
-    private static final Long id3 = 3L;
+    private static final String id3 = "3";
     private static final String name3 = "SAT channel";
     private static final String description3 = "The only chat that matters";
     private static final Map<String, Object> restrictions3 = new HashMap<>();
+
+
+    GeoPoint SATPoint = new GeoPoint(46.520562, 6.567852);
+    GeoPoint nullPoint = new GeoPoint(0, 0);
 
     private Channel channelGlobal;
     private Channel channelIN;
     private Channel channelSAT;
 
-    private AuthenticatedUser userIN;
-    private AuthenticatedUser userSC;
-
-    private GeoPoint SATPoint;
-    private GeoPoint nullPoint;
+    private String section1 = "IN";
+    private String section2 = "SC";
 
     @Before
     public void init() {
-        User.UserBuilder builder = Utility.createTestUserBuilder();
-        builder.setSection("IN");
-        userIN = Utility.createTestCustomUser(builder);
-
-        builder.setSection("SC");
-        userSC = Utility.createTestCustomUser(builder);
-
-        SATPoint = new GeoPoint(46.520562, 6.567852);
-        nullPoint = new GeoPoint(0, 0);
 
         restrictions1.put("section", null);
         restrictions1.put("location", null);
@@ -72,59 +65,68 @@ public class ChannelTest {
         restrictions3.put("section", null);
         restrictions3.put("location", SATPoint);
 
-        data1.put("id", id1);
-        data1.put("name", name1);
-        data1.put("description", description1);
-        data1.put("restrictions", restrictions1);
-
-        data2.put("id", id2);
-        data2.put("name", name2);
-        data2.put("description", description2);
-        data2.put("restrictions", restrictions2);
-
-        data3.put("id", id3);
-        data3.put("name", name3);
-        data3.put("description", description3);
-        data3.put("restrictions", restrictions3);
-
-        channelGlobal = new Channel(new FirebaseMapDecorator(data1));
-        channelIN = new Channel(new FirebaseMapDecorator(data2));
-        channelSAT = new Channel(new FirebaseMapDecorator(data3));
+        channelGlobal = new Channel(
+                id1,
+                name1,
+                description1,
+                restrictions1,
+                null);
+        channelIN = new Channel(
+                id2,
+                name2,
+                description2,
+                restrictions2,
+                "test_uri");
+        channelSAT = new Channel(
+                id3,
+                name3,
+                description3,
+                restrictions3,
+                "test_uri");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testBadMapForConstructor() {
-        Map map = new HashMap();
-        new Channel(new FirebaseMapDecorator(map));
+        new Channel(new FirebaseMapDecorator(Collections.singletonMap("id","100")));
     }
 
     @Test
-    public void testGettersAndSetters() {
+    public void fmapConstructorTest(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id1);
+        map.put("name", name1);
+        map.put("short_description", description1);
+        map.put("restrictions", restrictions1);
+        map.put("icon_uri", "test");
+        Map<String, Object> result =  new Channel(new FirebaseMapDecorator(map)).getData();
+        assertEquals(map, result);
+    }
+
+    @Test
+    public void testGetters() {
         assertEquals(id1, channelGlobal.getId());
         assertEquals(name1, channelGlobal.getName());
         assertEquals(description1, channelGlobal.getShortDescription());
+        assertEquals(Uri.parse("test_uri"), channelIN.getIconUri());
+        assertEquals(Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon), channelGlobal.getIconUri());
 
-        channelGlobal.setId("l");
-        channelGlobal.setName(name2);
-        channelGlobal.setShortDescription(description2);
-
-        assertEquals(id2.intValue(), channelGlobal.getId());
-        assertEquals(name2, channelGlobal.getName());
-        assertEquals(description2, channelGlobal.getShortDescription());
+        assertTrue(channelIN.isAccessible());
+        assertThat(channelGlobal.getDistance(), equalTo(0d));
     }
 
     @Test
     public void testChannelWithSectionRestriction() {
-        assertTrue(channelGlobal.canBeSeenBy(userIN, nullPoint));
-        assertTrue(channelGlobal.canBeSeenBy(userSC, nullPoint));
+        assertTrue(channelGlobal.canBeSeenBy(section1, nullPoint));
+        assertTrue(channelGlobal.canBeSeenBy(section2, nullPoint));
 
-        assertTrue(channelIN.canBeSeenBy(userIN, nullPoint));
-        assertFalse(channelIN.canBeSeenBy(userSC, nullPoint));
+        assertFalse(channelIN.canBeSeenBy(null, nullPoint));
+        assertTrue(channelIN.canBeSeenBy(section1, nullPoint));
+        assertFalse(channelIN.canBeSeenBy(section2, nullPoint));
     }
 
     @Test
     public void testChannelWithDistanceRestriction() {
-        assertTrue(channelSAT.canBeSeenBy(userIN, SATPoint));
-        assertFalse(channelSAT.canBeSeenBy(userIN, nullPoint));
+        assertTrue(channelSAT.canBeSeenBy(section1, SATPoint));
+        assertFalse(channelSAT.canBeSeenBy(section1, nullPoint));
     }
 }

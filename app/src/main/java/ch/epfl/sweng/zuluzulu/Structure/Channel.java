@@ -25,8 +25,16 @@ public class Channel extends FirebaseStructure {
     private Map<String, Object> restrictions;
     private String iconUri;
 
-    private boolean isAccessible;
-    private double distance;
+    private boolean isAccessible = true;
+    private double distance = 0;
+
+    public Channel(String id, String name, String shortDescription, Map<String, Object> restrictions, String iconUri){
+        super(id);
+        this.name = name;
+        this.shortDescription = shortDescription;
+        this.restrictions = restrictions;
+        this.iconUri = iconUri;
+    }
 
     public Channel(FirebaseMapDecorator data) {
         super(data);
@@ -36,8 +44,6 @@ public class Channel extends FirebaseStructure {
         this.name = data.getString("name");
         this.shortDescription = data.getString("short_description");
         this.restrictions = data.getMap("restrictions");
-        this.isAccessible = true;
-        this.distance = 0;
 
         // Init the Icon URI
         this.iconUri = data.getString("icon_uri");
@@ -45,11 +51,11 @@ public class Channel extends FirebaseStructure {
 
     @Override
     public Map<String, Object> getData() {
-        Map<String, Object> map = new HashMap();
+        Map<String, Object> map = new HashMap<>();
         map.put("id", getId());
         map.put("name", name);
         map.put("restrictions", restrictions);
-        map.put("icon_uri", getIconUri().toString());
+        map.put("icon_uri", iconUri);
         map.put("short_description", shortDescription);
         return map;
     }
@@ -64,26 +70,12 @@ public class Channel extends FirebaseStructure {
     }
 
     /**
-     * Setter for the name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
      * Getter for the shortDescription
      *
      * @return the shortDescription
      */
     public String getShortDescription() {
         return shortDescription;
-    }
-
-    /**
-     * Setter for the shortDescription
-     */
-    public void setShortDescription(String shortDescription) {
-        this.shortDescription = shortDescription;
     }
 
     /**
@@ -108,13 +100,13 @@ public class Channel extends FirebaseStructure {
     /**
      * Check whether a user can access to this channel or not
      *
-     * @param user The user who wants to enter the channel
+     * @param userSection The user section
      * @return whether the user can access it or not
      */
-    public boolean canBeSeenBy(AuthenticatedUser user, GeoPoint userLocation) {
+    public boolean canBeSeenBy(String userSection, GeoPoint userLocation) {
         String section = (String) restrictions.get("section");
         GeoPoint channelLocation = (GeoPoint) restrictions.get("location");
-        return hasGoodSection(section, user.getSection()) && hasGoodLocation(channelLocation, userLocation);
+        return hasGoodSection(section, userSection) && hasGoodLocation(channelLocation, userLocation);
     }
 
     private boolean hasGoodSection(String requestSection, String userSection) {

@@ -167,11 +167,15 @@ public class AssociationDetailFragment extends SuperFragment {
      */
     private void loadUpcomingEvent() {
         // Fetch online data of the upcoming event
-        if (asso.getClosestEventId() == null)
+        if (asso.getShortDescription().isEmpty())
             upcoming_event_name.setText("No upcoming event :(");
         else
-            FirebaseProxy.getInstance().getEventFromId(asso.getClosestEventId(), result -> {
-                upcoming_event = result;
+            FirebaseProxy.getInstance().getEventsFromIds(asso.getUpcomingEvents(), result -> {
+                upcoming_event = result.get(0);
+                for(Event event: result){
+                    if(event.getStartDate().before(upcoming_event.getStartDate()))
+                        upcoming_event = event;
+                }
                 upcoming_event_name.setText(upcoming_event.getName());
                 upcoming_event_date.setText(upcoming_event.getStartDate().toString());
                 loadUriIntoImageView(upcoming_event_icon, upcoming_event.getIconUri(), getContext());

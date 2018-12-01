@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.Utility;
 
 import android.location.Location;
 
@@ -9,10 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import java.util.Date;
 
-import static ch.epfl.sweng.zuluzulu.Utility.Utils.distanceBetween;
-import static ch.epfl.sweng.zuluzulu.Utility.Utils.getMillisecondsSince;
-import static ch.epfl.sweng.zuluzulu.Utility.Utils.randomInt;
-import static ch.epfl.sweng.zuluzulu.Utility.Utils.toGeoPoint;
+import static ch.epfl.sweng.zuluzulu.Utility.Utils.*;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 

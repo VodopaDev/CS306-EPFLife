@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -24,11 +25,10 @@ public class Association extends FirebaseStructure implements Comparable<Associa
     private String iconUri;
     private String bannerUri;
 
-    private List<Map<String, Object>> upcomingEvents;
+    private List<String> upcomingEvents;
     private String channelId;
-    private String closestEventId;
 
-    public Association(String id, String name, String short_desc, String long_desc, String icon_uri, String banner_uri, List<Map<String, Object>> events, String channel_id) {
+    public Association(String id, String name, String short_desc, String long_desc, String icon_uri, String banner_uri, List<String> events, String channel_id) {
         super(id);
         this.name = name;
         this.shortDescription = short_desc;
@@ -59,8 +59,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
         channelId = data.getString("channel_id");
 
         // Init the upcoming event
-        upcomingEvents = (List<Map<String, Object>>) data.get("upcoming_events");
-        computeClosestEvent();
+        upcomingEvents = data.getStringList("upcoming_events");
 
         // Init the Icon URI
         iconUri = data.getString("icon_uri");
@@ -90,6 +89,12 @@ public class Association extends FirebaseStructure implements Comparable<Associa
 
     public String getLongDescription(){
         return longDescription;
+    }
+
+    public List<String> getUpcomingEvents(){
+        if(upcomingEvents == null)
+            return new ArrayList<>();
+        return upcomingEvents;
     }
 
     /**
@@ -124,35 +129,6 @@ public class Association extends FirebaseStructure implements Comparable<Associa
                 Uri.parse(bannerUri);
     }
 
-    /**
-     * Return the Association's closest event happening id
-     *
-     * @return
-     */
-    @Nullable
-    public String getClosestEventId() {
-        return closestEventId;
-    }
-
-    /**
-     * Compute the closest event id and store it in the class
-     */
-    private void computeClosestEvent() {
-        if (upcomingEvents == null || upcomingEvents.isEmpty())
-            closestEventId = null;
-        else {
-            String closest = (String) upcomingEvents.get(0).get("id");
-            java.util.Date closest_time = (java.util.Date) upcomingEvents.get(0).get("start");
-            for (int i = 1; i < upcomingEvents.size(); i++) {
-                java.util.Date current = (java.util.Date) upcomingEvents.get(i).get("start");
-                if (current.before(closest_time)) {
-                    closest = (String) upcomingEvents.get(i).get("id");
-                }
-            }
-            closestEventId = closest;
-        }
-    }
-
     @Override
     public Map<String,Object> getData(){
         Map<String, Object> map = new HashMap<>();
@@ -167,6 +143,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
         return map;
     }
 
+    @NonNull
     public static List<String> requiredFields(){
         return Arrays.asList("id", "name", "short_description");
     }

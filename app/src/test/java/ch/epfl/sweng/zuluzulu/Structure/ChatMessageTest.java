@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,62 +20,81 @@ import static org.junit.Assert.assertTrue;
 @RunWith(JUnit4.class)
 public class ChatMessageTest {
 
+    private static final String id1 = "000";
     private static final String senderName1 = "James";
     private static final String sciper1 = "111111";
     private static final String message1 = "James message";
-    private static final Date time = new Date();
+
+    private static final String id2 = "000";
     private static final String senderName2 = "";
     private static final String sciper2 = "222222";
     private static final String message2 = "Bond's message";
-    private static final String userSciper = sciper1;
-    private static Map data1 = new HashMap();
-    private static Map data2 = new HashMap();
+
+    private static final String channelId = "002";
+    private static final Date time = new Date();
+
     private ChatMessage chatMessage1;
     private ChatMessage chatMessage2;
 
     @Before
     public void init() {
-        data1.put("senderName", senderName1);
-        data1.put("sciper", sciper1);
-        data1.put("message", message1);
-        data1.put("time", time);
+        chatMessage1 = new ChatMessage(
+                id1,
+                channelId,
+                message1,
+                time,
+                senderName1,
+                sciper1
+        );
 
-        data2.put("senderName", senderName2);
-        data2.put("sciper", sciper2);
-        data2.put("message", message2);
-        data2.put("time", time);
+        chatMessage2 = new ChatMessage(
+                id2,
+                channelId,
+                message2,
+                time,
+                senderName2,
+                sciper2
+        );
+    }
 
-        chatMessage1 = new ChatMessage(new FirebaseMapDecorator(data1), userSciper);
-        chatMessage2 = new ChatMessage(new FirebaseMapDecorator(data2), userSciper);
+    @Test(expected = IllegalArgumentException.class)
+    public void incorrectMapThrowException(){
+        new ChatMessage(new FirebaseMapDecorator(Collections.singletonMap("id","lol")));
+    }
+
+    @Test
+    public void fmapConstructorMapTest(){
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("id", id1);
+        map.put("channel_id", channelId);
+        map.put("sender_sciper", sciper1);
+        map.put("sender_name", senderName1);
+        map.put("time", time);
+        map.put("message", message1);
+
+        assertEquals(map, new ChatMessage(new FirebaseMapDecorator(map)).getData());
     }
 
     @Test
     public void testGettersAndSetters() {
+        assertEquals(id1, chatMessage1.getId());
+        assertEquals(channelId, chatMessage1.getChannelId());
         assertEquals(senderName1, chatMessage1.getSenderName());
         assertEquals(sciper1, chatMessage1.getSenderSciper());
         assertEquals(message1, chatMessage1.getMessage());
-        assertEquals(time, chatMessage1.getTime());
-
-        chatMessage1.setSenderName(senderName2);
-        chatMessage1.setSenderSciper(sciper2);
-        chatMessage1.setMessage(message2);
-        chatMessage1.setTime(time);
-
-        assertEquals(senderName2, chatMessage1.getSenderName());
-        assertEquals(sciper2, chatMessage1.getSenderSciper());
-        assertEquals(message2, chatMessage1.getMessage());
         assertEquals(time, chatMessage1.getTime());
     }
 
     @Test
     public void testIsOwnMessage() {
-        assertTrue(chatMessage1.isOwnMessage());
-        assertFalse(chatMessage2.isOwnMessage());
+        assertTrue(chatMessage1.isOwnMessage(sciper1));
+        assertFalse(chatMessage2.isOwnMessage(sciper1));
     }
 
     @Test
     public void testIsAnonymous() {
         assertTrue(chatMessage2.isAnonymous());
+        assertFalse(chatMessage1.isAnonymous());
     }
 
 }
