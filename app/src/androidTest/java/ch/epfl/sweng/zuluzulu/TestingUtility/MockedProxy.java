@@ -58,7 +58,7 @@ public class MockedProxy implements Proxy {
     private static final Channel CHANNEL = new Channel("1", "test channel", "description", new HashMap<>(), null);
 
 
-    private Map<String, Association> associationMap;
+    private Map<String, Association> associationMap = new HashMap<>();
     private Map<String, Event> eventMap = new HashMap<>();
     private Map<String, ChannelRepresentation> channelMap = new HashMap<>();
     private Map<String, FirebaseMapDecorator> userMap = new HashMap<>();
