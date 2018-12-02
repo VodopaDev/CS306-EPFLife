@@ -25,7 +25,6 @@ public class ReplyFragmentTest extends TestWithAuthenticatedAndFragment<ReplyFra
     @Override
     public void initFragment() {
         fragment = ReplyFragment.newInstance(user, Utility.defaultPost());
-        DatabaseFactory.setDependency(new FirebaseMock());
     }
 
     @Test

@@ -35,7 +35,6 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
 
     @Override
     public void initFragment() {
-        DatabaseFactory.setDependency(new FirebaseMock());
         fragment = EventFragment.newInstance(user);
     }
 

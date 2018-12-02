@@ -25,7 +25,6 @@ public class WritePostFragmentTest extends TestWithAuthenticatedAndFragment<Writ
     @Override
     public void initFragment() {
         fragment = WritePostFragment.newInstance(user, Utility.defaultChannel());
-        DatabaseFactory.setDependency(new FirebaseMock());
     }
 
     @Test

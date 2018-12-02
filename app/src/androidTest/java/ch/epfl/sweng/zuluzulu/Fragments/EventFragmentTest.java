@@ -9,8 +9,10 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestWithAuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.TestingUtility.MockedProxy;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -32,6 +34,8 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
 
     @Before
     public void init() throws InterruptedException {
+        DatabaseFactory.setDependency(new MockedProxy());
+
         fragment = EventFragment.newInstance(getUser());
         mActivityRule.getActivity().openFragment(fragment);
 

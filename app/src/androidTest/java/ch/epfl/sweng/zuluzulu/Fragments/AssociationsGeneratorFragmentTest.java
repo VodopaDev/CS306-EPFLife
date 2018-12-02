@@ -32,7 +32,6 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
 
     @Override
     public void initFragment() {
-        DatabaseFactory.setDependency(new FirebaseMock());
 
         fragment = MainFragment.newInstance(user);
     }

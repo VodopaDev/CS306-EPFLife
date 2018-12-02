@@ -25,7 +25,6 @@ public class ChatFragmentTest extends TestWithAuthenticatedAndFragment<ChatFragm
     @Override
     public void initFragment() {
         fragment = ChatFragment.newInstance(user, Utility.defaultChannel());
-        DatabaseFactory.setDependency(new FirebaseMock());
     }
 
     @Test
