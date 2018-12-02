@@ -35,26 +35,23 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<ChatMessage> {
         boolean isAnonymous = currentChatMessage.isAnonymous();
 
         boolean mustHideName = isOwnMessage || isAnonymous;
-        int layoutResource = mustHideName ? R.layout.chat_message_noname : R.layout.chat_message;
-        View view = LayoutInflater.from(mContext).inflate(layoutResource, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.chat_message, parent, false);
 
         LinearLayout linearLayout = view.findViewById(R.id.chat_message_linearLayout);
+        LinearLayout messageContent = view.findViewById(R.id.chat_message_content);
         TextView message = view.findViewById(R.id.chat_message_msg);
+        TextView senderName = view.findViewById(R.id.chat_message_senderName);
 
         int backgroundResource = isOwnMessage ? R.drawable.chat_message_background_ownmessage : R.drawable.chat_message_background;
-        linearLayout.setBackgroundResource(backgroundResource);
+        messageContent.setBackgroundResource(backgroundResource);
+        senderName.setText(currentChatMessage.getSenderName());
 
-        /*
         if (isOwnMessage) {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.gravity = Gravity.END;
-            linearLayout.setLayoutParams(params);
+            linearLayout.setGravity(Gravity.END);
         }
-        */
 
-        if (!mustHideName) {
-            TextView senderName = view.findViewById(R.id.chat_message_senderName);
-            senderName.setText(currentChatMessage.getSenderName());
+        if (mustHideName) {
+            senderName.setVisibility(View.GONE);
         }
 
         message.setText(currentChatMessage.getMessage());
