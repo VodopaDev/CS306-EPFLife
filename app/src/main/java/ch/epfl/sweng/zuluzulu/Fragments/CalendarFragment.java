@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Locale;
 
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Utility.Utils;
@@ -121,7 +121,7 @@ public class CalendarFragment extends SuperFragment {
     }
 
     private void fillFollowedEventsList() {
-        FirebaseProxy.getInstance().getAllEvents(result -> {
+        DatabaseFactory.getDependency().getAllEvents(result -> {
             Date date = Timestamp.now().toDate();
             String now = Utils.dateFormat.format(date);
             for(Event event: result) {

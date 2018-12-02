@@ -25,7 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -258,7 +258,7 @@ public class EventDetailFragment extends SuperFragment {
     }
 
     private void loadMainChat() {
-        FirebaseProxy.getInstance().getChannelFromId(event.getChannelId(), result -> {
+        DatabaseFactory.getDependency().getChannelFromId(event.getChannelId(), result -> {
             chat = result;
             chat_room.setText(chat.getName() + "'s chat");
         });
@@ -275,7 +275,7 @@ public class EventDetailFragment extends SuperFragment {
     }
 
     private void loadAssos() {
-        FirebaseProxy.getInstance().getAssociationFromId(event.getAssociationId(), result -> {
+        DatabaseFactory.getDependency().getAssociationFromId(event.getAssociationId(), result -> {
             assos = result;
             assos_but.setText(chat.getName());
         });

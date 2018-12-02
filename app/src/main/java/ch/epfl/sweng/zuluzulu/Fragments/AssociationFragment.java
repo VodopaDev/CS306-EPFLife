@@ -19,7 +19,7 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -127,7 +127,7 @@ public class AssociationFragment extends SuperFragment {
         assosFiltered.clear();
         assosToFilter.clear();
         assosFav.clear();
-        FirebaseProxy.getInstance().getAllAssociations(result -> {
+        DatabaseFactory.getDependency().getAllAssociations(result -> {
             for(Association asso: result){
                 assosAll.add(asso);
                 if(user.isConnected() && ((AuthenticatedUser)user).isFollowedAssociation(asso.getId()))

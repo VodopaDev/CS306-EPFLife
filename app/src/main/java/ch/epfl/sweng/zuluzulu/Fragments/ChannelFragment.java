@@ -18,7 +18,7 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChannelArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -103,7 +103,7 @@ public class ChannelFragment extends SuperFragment {
      * Read data from the database and get the list of the channels
      */
     private void getChannelsFromDatabase() {
-        FirebaseProxy.getInstance().getAllChannels(result -> {
+        DatabaseFactory.getDependency().getAllChannels(result -> {
             listOfChannels.clear();
             for(Channel channel: result) {
                 listOfChannels.add(channel);

@@ -16,7 +16,7 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.PostArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
@@ -81,7 +81,7 @@ public class PostFragment extends SuperChatPostsFragment {
     }
 
     private void loadAllPosts() {
-        FirebaseProxy.getInstance().getPostsFromChannel(channel.getId(), result -> {
+        DatabaseFactory.getDependency().getPostsFromChannel(channel.getId(), result -> {
             posts.clear();
             posts.addAll(result);
             adapter.notifyDataSetChanged();

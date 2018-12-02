@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.PostArrayAdapter;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
@@ -115,7 +115,7 @@ public class ReplyFragment extends SuperFragment {
             @Override
             public void onClick(View v) {
                 Post post = new Post(
-                        FirebaseProxy.getInstance().getNewPostId(postOriginal.getChannelId()),
+                        DatabaseFactory.getDependency().getNewPostId(postOriginal.getChannelId()),
                         postOriginal.getChannelId(),
                         postOriginal.getId(),
                         replyText.getText().toString(),
@@ -128,7 +128,7 @@ public class ReplyFragment extends SuperFragment {
                         Collections.singletonList(user.getSciper()),
                         new ArrayList<>()
                 );
-                FirebaseProxy.getInstance().addReply(post);
+                DatabaseFactory.getDependency().addReply(post);
                 loadReplies();
             }
         });
@@ -139,7 +139,7 @@ public class ReplyFragment extends SuperFragment {
      */
     private void loadReplies() {
         replies.clear();
-        FirebaseProxy.getInstance().getRepliesFromPost(postOriginal.getChannelId(), postOriginal.getId(), result -> {
+        DatabaseFactory.getDependency().getRepliesFromPost(postOriginal.getChannelId(), postOriginal.getId(), result -> {
             Log.d("REPLIES", result.size() + " replies");
             replies.addAll(result);
             Collections.sort(replies, (o1, o2) -> {

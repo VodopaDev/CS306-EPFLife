@@ -24,16 +24,16 @@ import ch.epfl.sweng.zuluzulu.Utility;
 
 public class MockedProxy implements Proxy {
 
-    // TODO put in utils and use this events in EventTests etc
     private static final Event EVENT = Utility.defaultEvent();
     private static final Association ASSOCIATION = Utility.defaultAssociation();
     private static final Channel CHANNEL = Utility.defaultChannel();
     private static final Post POST = Utility.defaultPost();
 
 
-    private Map<String, Association> associationMap;
     private Map<String, Event> eventMap = new HashMap<>();
+    private Map<String, Association> associationMap = new HashMap<>();
     private Map<String, ChannelRepresentation> channelMap = new HashMap<>();
+
     private Map<String, FirebaseMapDecorator> userMap = new HashMap<>();
 
     @Override
@@ -118,8 +118,8 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getAllEvents(OnResult<List<Event>> onResult) {
-
         ArrayList<Event> list = new ArrayList<>();
+        list.add(EVENT);
         list.add(EVENT);
         onResult.apply(list);
     }
@@ -133,7 +133,7 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getChannelsFromIds(List<String> ids, OnResult<List<Channel>> onResult) {
-        if(!ids.isEmpty() && ids.contains("1")){
+        if (!ids.isEmpty() && ids.contains("1")) {
             onResult.apply(Collections.singletonList(CHANNEL));
         } else {
             onResult.apply(new ArrayList<>());
@@ -142,7 +142,7 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getEventsFromIds(List<String> ids, OnResult<List<Event>> onResult) {
-        if(!ids.isEmpty() && ids.contains("1")){
+        if (!ids.isEmpty() && ids.contains("1")) {
             onResult.apply(Collections.singletonList(EVENT));
         } else {
             onResult.apply(new ArrayList<>());
@@ -151,7 +151,7 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getAssociationsFromIds(List<String> ids, OnResult<List<Association>> onResult) {
-        if(!ids.isEmpty() && ids.contains("1")){
+        if (!ids.isEmpty() && ids.contains("1")) {
             onResult.apply(Collections.singletonList(ASSOCIATION));
         } else {
             onResult.apply(new ArrayList<>());
@@ -160,7 +160,7 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getChannelFromId(String id, OnResult<Channel> onResult) {
-        if(id != null && id.equals("1")){
+        if (id != null && id.equals("1")) {
             onResult.apply(CHANNEL);
         } else {
             onResult.apply(null);
@@ -169,7 +169,7 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getEventFromId(String id, OnResult<Event> onResult) {
-        if(id != null && id.equals("1")){
+        if (id != null && id.equals("1")) {
             onResult.apply(EVENT);
         } else {
             onResult.apply(null);
@@ -178,7 +178,7 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getAssociationFromId(String id, OnResult<Association> onResult) {
-        if(id != null && id.equals("1")){
+        if (id != null && id.equals("1")) {
             onResult.apply(ASSOCIATION);
         } else {
             onResult.apply(null);

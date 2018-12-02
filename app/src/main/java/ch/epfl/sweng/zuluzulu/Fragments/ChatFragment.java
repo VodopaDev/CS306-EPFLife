@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageArrayAdapter;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
@@ -84,13 +84,13 @@ public class ChatFragment extends SuperChatPostsFragment {
     private void setUpSendButton() {
         sendButton.setOnClickListener(v -> {
             ChatMessage chatMessage = new ChatMessage(
-                    FirebaseProxy.getInstance().getNewMessageId(channel.getId()),
+                    DatabaseFactory.getDependency().getNewMessageId(channel.getId()),
                     channel.getId(),
                     textEdit.getText().toString(),
                     Timestamp.now().toDate(),
                     anonymous ? "" : user.getFirstNames(),
                     user.getSciper());
-            FirebaseProxy.getInstance().addMessage(chatMessage);
+            DatabaseFactory.getDependency().addMessage(chatMessage);
             textEdit.setText("");
         });
     }
@@ -125,7 +125,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Refresh the chat by reading all the messages in the database
      */
     private void loadInitialMessages() {
-        FirebaseProxy.getInstance().getMessagesFromChannel(channel.getId(), result -> {
+        DatabaseFactory.getDependency().getMessagesFromChannel(channel.getId(), result -> {
             Log.d("TEST", result.size() + " messages");
             messages.clear();
             messages.addAll(result);
@@ -141,7 +141,7 @@ public class ChatFragment extends SuperChatPostsFragment {
     }
 
     private void setUpDataOnChangeListener() {
-        FirebaseProxy.getInstance().updateOnNewMessagesFromChannel(channel.getId(), result -> {
+        DatabaseFactory.getDependency().updateOnNewMessagesFromChannel(channel.getId(), result -> {
             messages.clear();
             messages.addAll(result);
             Collections.sort(messages, (o1, o2) -> {

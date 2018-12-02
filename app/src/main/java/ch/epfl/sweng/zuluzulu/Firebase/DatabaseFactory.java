@@ -1,16 +1,13 @@
 package ch.epfl.sweng.zuluzulu.Firebase;
 
-import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
-import ch.epfl.sweng.zuluzulu.Firebase.Database.FirebaseAdapter;
-
 public class DatabaseFactory {
-    private static Database dependency = new FirebaseAdapter();
+    private static Proxy dependency = DatabaseFactory.getDependency();
 
-    public static Database getDependency() {
+    public static Proxy getDependency() {
         return dependency;
     }
 
-    public static void setDependency(Database dependency) {
+    public static void setDependency(Proxy dependency) {
         DatabaseFactory.dependency = dependency;
     }
 }

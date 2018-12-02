@@ -43,4 +43,6 @@ public interface Proxy {
     void getRepliesFromPost(String channelId, String postId, OnResult<List<Post>> onResult);
 
     void getUserWithIdOrCreateIt(String id, OnResult<FirebaseMapDecorator> onResult);
+
+    void updatePost(Post post);
 }

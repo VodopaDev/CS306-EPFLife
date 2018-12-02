@@ -26,7 +26,8 @@ import java.util.Date;
 
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -166,7 +167,7 @@ public class EventFragment extends SuperFragment {
     }
 
     private void fillEventLists() {
-        FirebaseProxy.getInstance().getAllEvents(result -> {
+        DatabaseFactory.getDependency().getAllEvents(result -> {
             allEvents.clear();
             followedEvents.clear();
             eventsFiltered.clear();
