@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +13,7 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
 import ch.epfl.sweng.zuluzulu.Structure.EventDate;
+import ch.epfl.sweng.zuluzulu.Utility.Utils;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
@@ -193,6 +195,16 @@ public class EventTest {
     public void placeUrlIsCorrect() {
         initWorkingAssociation();
         assertEquals(URL_PLACE, event0.getUrlPlaceAndRoom());
+    }
+
+    @Test
+    public void dateStringAreCorrect(){
+        initWorkingAssociation();
+        String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_PATTERN);
+
+        assertEquals(simpleDateFormat.format(START_DATE), event0.getStartDateString());
+        assertEquals(simpleDateFormat.format(START_DATE), event0.getEndDateString());
     }
 
     @Test
