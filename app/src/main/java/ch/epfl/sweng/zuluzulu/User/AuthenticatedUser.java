@@ -122,7 +122,7 @@ public class AuthenticatedUser extends User {
     }
 
     public List<String> getFollowedChannels(){
-        return followedEvents;
+        return followedChannels;
     }
 
 

@@ -75,8 +75,6 @@ public class Event extends FirebaseStructure {
         likes = data.getInteger("likes");
         organizer = data.getString("organizer");
         place = data.getString("place");
-        iconUri = data.getString("icon_uri");
-        bannerUri = data.getString("banner_uri");
         date = new EventDate(data.getDate("start_date"), data.getDate("end_date"));
 
         url_place_and_room = (data.getString("url_place_and_room"));
@@ -133,6 +131,8 @@ public class Event extends FirebaseStructure {
      * @return the icon Uri
      */
     public Uri getIconUri() {
+        System.out.println(iconUri);
+        System.out.println(Uri.parse(iconUri));
         return iconUri == null ?
                 Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
                 Uri.parse(iconUri);
@@ -162,11 +162,11 @@ public class Event extends FirebaseStructure {
     }
 
     public void increaseLikes() {
-        likes--;
+        likes++;
     }
 
     public void decreaseLikes() {
-        likes++;
+        likes--;
     }
 
     public static List<String> requiredFields() {
