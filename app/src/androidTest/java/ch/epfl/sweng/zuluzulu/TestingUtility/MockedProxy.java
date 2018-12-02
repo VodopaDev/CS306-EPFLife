@@ -3,7 +3,9 @@ package ch.epfl.sweng.zuluzulu.TestingUtility;
 import android.app.Notification;
 import android.util.Pair;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,14 +17,16 @@ import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
+import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 public class MockedProxy implements Proxy {
     private Map<String, Association> associationMap;
-    private Map<String, Event> eventMap;
-    private Map<String, ChannelRepresentation> channelMap;
-    private Map<String, FirebaseMapDecorator> userMap;
+    private Map<String, Event> eventMap = new HashMap<>();
+    private Map<String, ChannelRepresentation> channelMap = new HashMap<>();
+    private Map<String, FirebaseMapDecorator> userMap = new HashMap<>();
 
     @Override
     public String getNewChannelId() {
@@ -93,17 +97,45 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void updateUser(User user) {
-        userMap.put(user.getSciper(), new FirebaseMapDecorator(user.getData()));
+      //  userMap.put(user.getSciper(), new FirebaseMapDecorator(user.getData()));
     }
 
     @Override
     public void getAllChannels(OnResult<List<Channel>> onResult) {
+        Channel channel = new Channel("1", "test channel", "description", new HashMap<>(), null);
 
+        ArrayList<Channel> list = new ArrayList<>();
+        list.add(channel);
+        onResult.apply(list);
     }
 
     @Override
     public void getAllEvents(OnResult<List<Event>> onResult) {
+        EventBuilder eb = new EventBuilder()
+                .setId("0")
+                .setDate(new EventDate(
+                        new Date(2L), new Date(2L)))
+                .setUrlPlaceAndRoom("")
+                .setLikes(0)
+                .setShortDesc("short desc")
+                .setLongDesc("long desc")
+                .setOrganizer("james")
+                .setPlace("MXF 1")
+                .setBannerUri("https://memento.epfl.ch/image/12568/112x112.jpg")
+                .setIconUri("https://memento.epfl.ch/image/12568/112x112.jpg")
+                .setWebsite("http://nccr-marvel.ch/events/marvel-distinguished-lecture-feliciano-giustino")
+                .setContact("goité")
+                .setName("EVENT 1")
+                .setCategory("none")
+                .setSpeaker("bond")
+                .setChannelId("1")
+                .setAssosId("1");
 
+        Event event = eb.build();
+
+        ArrayList<Event> list = new ArrayList<>();
+        list.add(event);
+        onResult.apply(list);
     }
 
     @Override
