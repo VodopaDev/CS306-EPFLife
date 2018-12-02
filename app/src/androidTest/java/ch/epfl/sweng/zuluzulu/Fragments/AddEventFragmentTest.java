@@ -36,7 +36,6 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
 
     @Override
     public void initFragment() {
-
         DatabaseFactory.setDependency(new MockedProxy());
         fragment = EventFragment.newInstance(user);
     }

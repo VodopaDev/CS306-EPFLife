@@ -86,10 +86,12 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
     @Test
     public void sortWithKeywordTest() {
         onView(withId(R.id.event_fragment_search_bar)).perform(typeText("EVENT 1"));
-        onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).onChildView(withId(R.id.card_event_name)).check(matches(withText("EVENT 1")));
-        onView(withId(R.id.event_fragment_search_bar)).perform(clearText());
-        onView(withId(R.id.event_fragment_search_bar)).perform(typeText("EVENT 1"));
-        onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).onChildView(withId(R.id.card_event_name)).check(matches(withText("EVENT 1")));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasDescendant(withText("EVENT 1"))));
+        onView(withId(R.id.event_fragment_search_bar)).perform(typeText("EVENT 2"));
+        onView(withId(R.id.event_fragment_listview)).check(matches(not(hasDescendant(withText("EVENT 1")))));
+
+    //            onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).onChildView(withId(R.id.card_event_name)).check(matches(withText("EVENT 1")));
+    //    onView(withId(R.id.event_fragment_search_bar)).perform(clearText());
     }
 
     @Test
