@@ -1,8 +1,10 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.app.DatePickerDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -20,8 +22,10 @@ import android.widget.ListView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
@@ -68,7 +72,6 @@ public class EventFragment extends SuperFragment {
 
     private EditText event_fragment_from_date;
     private EditText event_fragment_to_date;
-
     private EditText event_search_bar;
 
     private Calendar eventCalendar;
@@ -104,12 +107,28 @@ public class EventFragment extends SuperFragment {
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Events");
         }
 
+<<<<<<< HEAD
         allEvents = new ArrayList<>();
         followedEvents = new ArrayList<>();
         eventsToFilter = new ArrayList<>();
         eventsFiltered = new ArrayList<>();
         event_adapter = new EventArrayAdapter(getContext(), eventsFiltered, mListener, user);
         fillEventLists();
+=======
+        event_all = new ArrayList<>();
+        event_fav = new ArrayList<>();
+        event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
+
+        default_sort_option = "name";
+
+        fillEventLists(default_sort_option);
+
+        isFavDisplayed = false;
+
+        event_all_sorted = new ArrayList<>();
+        event_fav_sorted = new ArrayList<>();
+
+>>>>>>> origin/master
         eventCalendar = Calendar.getInstance();
     }
 
@@ -166,6 +185,7 @@ public class EventFragment extends SuperFragment {
         return view;
     }
 
+<<<<<<< HEAD
     private void fillEventLists() {
         DatabaseFactory.getDependency().getAllEvents(result -> {
             allEvents.clear();
@@ -182,11 +202,45 @@ public class EventFragment extends SuperFragment {
             eventsFiltered.addAll(eventsToFilter);
             event_adapter.notifyDataSetChanged();
         });
+=======
+    private void emptySortedEventList() {
+        event_all_sorted.clear();
+        event_fav_sorted.clear();
+    }
+
+    private void fillEventLists(String sortOption) {
+        FirebaseFirestore.getInstance().collection("events_info").orderBy(sortOption).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
+                        for (DocumentSnapshot snap : snap_list) {
+                            FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
+                            if (fmap.hasFields(Event.FIELDS) && fmap.getDate("start_date").compareTo(new Date(System.currentTimeMillis())) >= 0) {
+                                Event event = new Event.EventBuilder().build(fmap);
+                                event_all.add(event);
+                                if (user.isConnected() && ((AuthenticatedUser) user).isFavEvent(event))
+                                    event_fav.add(event);
+                                event_adapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
+                        Log.e("EVENT_LIST", "Error fetching event date\n" + e.getMessage());
+                    }
+                });
+>>>>>>> origin/master
     }
 
     private void updateListView(Button new_selected, Button new_unselected, ArrayList<Event> data, ListView list) {
         new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         new_unselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
+        if (new_selected == button_event_fav) isFavDisplayed = true;
+        else isFavDisplayed = false;
         event_adapter = new EventArrayAdapter(getContext(), data, mListener, user);
         list.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
@@ -249,6 +303,7 @@ public class EventFragment extends SuperFragment {
         String stringDate = sdf.format(eventCalendar.getTime());
 
         date.setText(stringDate);
+<<<<<<< HEAD
         if (date == event_fragment_from_date)
             sortByFromDate();
         else
@@ -261,11 +316,30 @@ public class EventFragment extends SuperFragment {
             if (event.getStartDate().compareTo(eventCalendar.getTime()) >= 0) {
                 eventsToFilter.add(event);
         }
+=======
+
+        if (date == event_fragment_from_date) sortByFromDate();
+        else sortByFromAndToDate();
+    }
+
+    private void sortByFromDate() {
+        emptySortedEventList();
+
+        sortEventLists(Event.dateComparator());
+
+        selectEventFrom(event_all, event_all_sorted);
+        selectEventFrom(event_fav, event_fav_sorted);
+
+        if (isFavDisplayed) event_adapter = new EventArrayAdapter(getContext(), event_fav_sorted, mListener, user);
+        else event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
+
+>>>>>>> origin/master
         listview_event.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
         dateFrom = eventCalendar.getTime();
     }
 
+<<<<<<< HEAD
     private void sortByFromAndToDate(){
         eventsFiltered.clear();
         for (Event event: eventsToFilter) {
@@ -273,15 +347,47 @@ public class EventFragment extends SuperFragment {
                 eventsToFilter.add(event);
             }
         }
+=======
+    public void selectEventFrom(ArrayList<Event> inputList, ArrayList<Event> sortedList){
+        for (Event event: inputList) {
+            if (event.getStartDate().compareTo(eventCalendar.getTime()) >= 0) {
+                sortedList.add(event);
+            }
+        }
+    }
+
+    private void sortByFromAndToDate() {
+        emptySortedEventList();
+
+        sortEventLists(Event.dateComparator());
+
+        selectEventFromTo(event_all, event_all_sorted);
+        selectEventFromTo(event_fav, event_fav_sorted);
+
+        if (isFavDisplayed) event_adapter = new EventArrayAdapter(getContext(), event_fav_sorted, mListener, user);
+        else event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
+
+>>>>>>> origin/master
         listview_event.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();
     }
 
+<<<<<<< HEAD
     private void setFilterWithSearchBar() {
+=======
+    public void selectEventFromTo(ArrayList<Event> inputList, ArrayList<Event> sortedList){
+        for (Event event: inputList) {
+            if (event.getStartDate().compareTo(dateFrom) >= 0 && event.getStartDate().compareTo(eventCalendar.getTime()) <= 0) {
+                sortedList.add(event);
+            }
+        }
+    }
+
+    private void sortWithSearchBar() {
+>>>>>>> origin/master
         event_search_bar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -298,6 +404,16 @@ public class EventFragment extends SuperFragment {
                 event_fragment_to_date.clearFocus();
 
                 String keyWord = s.toString().toLowerCase();
+<<<<<<< HEAD
+=======
+                emptySortedEventList();
+
+                selectEventWithKeyword(event_all, event_all_sorted, keyWord);
+                selectEventWithKeyword(event_fav, event_fav_sorted, keyWord);
+
+                if (isFavDisplayed) event_adapter = new EventArrayAdapter(getContext(), event_fav_sorted, mListener, user);
+                else event_adapter = new EventArrayAdapter(getContext(), event_all_sorted, mListener, user);
+>>>>>>> origin/master
 
                 eventsFiltered.clear();
                 for (Event event : eventsToFilter) {
@@ -317,6 +433,7 @@ public class EventFragment extends SuperFragment {
         });
     }
 
+<<<<<<< HEAD
     private void setSortByName() {
         checkbox_event_sort_name.setOnClickListener(v -> {
             checkbox_event_sort_like.setChecked(false);
@@ -378,5 +495,108 @@ public class EventFragment extends SuperFragment {
             checkbox_event_sort_date.setEnabled(false);
             checkbox_event_sort_date.setChecked(true);
         });
+=======
+    public void selectEventWithKeyword(ArrayList<Event> inputList, ArrayList<Event> sortedList, String keyWord){
+        for (Event event: inputList) {
+            if (event.getName().toLowerCase().contains(keyWord)) {
+                sortedList.add(event);
+            } else if (event.getShortDesc().toLowerCase().contains(keyWord)) {
+                sortedList.add(event);
+            } else if (event.getLongDesc().toLowerCase().contains((keyWord))) {
+                sortedList.add(event);
+            }
+        }
+    }
+
+    private void sortByName() {
+        sortBy("name");
+    }
+
+    private void sortByLike() {
+        sortBy("like");
+    }
+
+    private void sortByDate() {
+        sortBy("date");
+    }
+
+    private void sortBy(String type) {
+        CheckBox clickedCheckBox = getCheckBoxFor(type);
+        Comparator<Event> comparator = getComparatorFor(type);
+        List<CheckBox> checkBoxes = new ArrayList<>(Arrays.asList(checkbox_event_sort_like, checkbox_event_sort_name, checkbox_event_sort_date));
+        clickedCheckBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (CheckBox box : checkBoxes) {
+                    boolean isClickedBox = box.equals(clickedCheckBox);
+                    box.setChecked(isClickedBox);
+                    box.setEnabled(!isClickedBox);
+                }
+
+                clearTextAndFocus();
+
+                sortEventLists(comparator);
+
+                if (isFavDisplayed) event_adapter = new EventArrayAdapter(getContext(), event_fav, mListener, user);
+                else event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
+
+                listview_event.setAdapter(event_adapter);
+                event_adapter.notifyDataSetChanged();
+
+                clickedCheckBox.setEnabled(false);
+                clickedCheckBox.setChecked(true);
+            }
+        });
+    }
+
+    private void clearTextAndFocus() {
+        event_fragment_from_date.getText().clear();
+        event_fragment_from_date.clearFocus();
+        event_fragment_to_date.getText().clear();
+        event_fragment_to_date.clearFocus();
+        event_search_bar.getText().clear();
+        event_search_bar.clearFocus();
+    }
+
+    private CheckBox getCheckBoxFor(String type) {
+        CheckBox checkBox;
+        switch (type) {
+            case "like":
+                checkBox = checkbox_event_sort_like;
+                break;
+            case "name":
+                checkBox = checkbox_event_sort_name;
+                break;
+            case "date":
+                checkBox = checkbox_event_sort_date;
+                break;
+            default:
+                throw new IllegalArgumentException("The type " + type + " is invalid");
+        }
+        return checkBox;
+    }
+
+    private Comparator<Event> getComparatorFor(String type) {
+        Comparator<Event> comparator;
+        switch (type) {
+            case "like":
+                comparator = Event.likeComparator();
+                break;
+            case "name":
+                comparator = Event.assoNameComparator();
+                break;
+            case "date":
+                comparator = Event.dateComparator();
+                break;
+            default:
+                throw new IllegalArgumentException("The type " + type + " is invalid");
+        }
+        return comparator;
+    }
+
+    public void sortEventLists(Comparator<Event> comparator){
+        Collections.sort(event_all, comparator);
+        Collections.sort(event_fav, comparator);
+>>>>>>> origin/master
     }
 }

@@ -2,6 +2,8 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.net.Uri;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
@@ -13,7 +15,6 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
 
 public class Event extends FirebaseStructure {
-
     private String name;
     private String shortDescription;
     private String longDescription;
@@ -24,15 +25,16 @@ public class Event extends FirebaseStructure {
     private EventDate date;
     private String organizer;
     private String place;
-
     private String bannerUri;
     private String iconUri;
-
     private String url_place_and_room;
     private String website;
     private String contact;
     private String category;
     private String speaker;
+
+    // TODO: make it in the cloud :)
+    private List<String> followers = new ArrayList<>();
 
     protected Event(String id, String name, String shortDesc, String longDesc, String channelId, String associationId, EventDate date,
                  int likes, String organizer, String place, String iconUri, String bannerUri,
@@ -144,16 +146,19 @@ public class Event extends FirebaseStructure {
         return place;
     }
 
+    // TODO: change with followers.size() when it is implemented
     public Integer getLikes() {
         return likes;
     }
 
-    public void increaseLikes() {
+    public boolean increaseLikes(String userId) {
         likes++;
+        return !followers.contains(userId) && followers.add(userId);
     }
 
-    public void decreaseLikes() {
+    public boolean decreaseLikes(String userId) {
         likes--;
+        return !followers.contains(userId) && followers.remove(userId);
     }
 
     public static List<String> requiredFields() {
@@ -224,5 +229,9 @@ public class Event extends FirebaseStructure {
 
     public String getEndDateString() {
         return date.getEndDateString();
+    }
+
+    public String getDateTimeUser() {
+        return date.getDateTimeUser();
     }
 }

@@ -14,6 +14,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
+<<<<<<< HEAD
+=======
+import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseDocument;
+>>>>>>> origin/master
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
@@ -29,10 +34,17 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     private Post currentPost;
     private TextView timeAgo;
     private TextView nbUpsText;
+    private TextView nbResponsesText;
     private ImageView upButton;
     private ImageView downButton;
 
+<<<<<<< HEAD
     public PostArrayAdapter(@NonNull Context context, List<Post> list, User user) {
+=======
+    private Database db = DatabaseFactory.getDependency();
+
+    public PostArrayAdapter(@NonNull Context context, List<Post> list) {
+>>>>>>> origin/master
         super(context, 0, list);
         mContext = context;
         posts = list;
@@ -54,7 +66,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         upButton = view.findViewById(R.id.post_up_button);
         downButton = view.findViewById(R.id.post_down_button);
         nbUpsText = view.findViewById(R.id.post_nb_ups_textview);
-        TextView nbResponsesText = view.findViewById(R.id.post_nb_responses_textview);
+        nbResponsesText = view.findViewById(R.id.post_nb_responses_textview);
 
         linearLayout.setBackgroundColor(Color.parseColor(currentPost.getColor()));
         message.setText(currentPost.getMessage());
@@ -62,20 +74,26 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         String name = anonymous ? "Anonymous" : currentPost.getSenderName();
         senderName.setText(name);
 
-        setUpTimeAgoField();
-
         nbUpsText.setText("" + currentPost.getNbUps());
 
+        if (currentPost.isReply()) {
+            view.findViewById(R.id.post_white_line).setVisibility(View.INVISIBLE);
+        }
+
+        setUpTimeAgoField();
+        setUpNbResponses(view);
+        setUpUpDownButtons(currentPost, upButton, downButton, nbUpsText);
+        updateUpsButtons(currentPost, upButton, downButton);
+
+        return view;
+    }
+
+    private void setUpNbResponses(View view) {
         int nbResponses = currentPost.getNbResponses();
         nbResponsesText.setText("" + currentPost.getNbResponses());
         if (nbResponses == 0 || currentPost.isReply()) {
             view.findViewById(R.id.post_responses_linearlayout).setVisibility(LinearLayout.GONE);
         }
-
-        setUpUpDownButtons(currentPost, upButton, downButton, nbUpsText);
-        updateUpsButtons(currentPost, upButton, downButton);
-
-        return view;
     }
 
     /**
@@ -113,9 +131,35 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     }
 
     private void updateDatabase(boolean up, Post post, TextView nbUpsText) {
+<<<<<<< HEAD
         if(!up && post.downvoteWithUser(user.getSciper()) || up && post.upvoteWithUser(user.getSciper())){
             DatabaseFactory.getDependency().updatePost(post);
             nbUpsText.setText("" + post.getNbUps());
+=======
+        if (!post.isUpByUser() && !post.isDownByUser()) {
+            int nbUps = post.getNbUps() + (up ? 1 : -1);
+            List<String> upScipers = post.getUpScipers();
+            List<String> downScipers = post.getDownScipers();
+            DatabaseDocument document = post.isReply() ?
+                    db.collection("channels/channel" + post.getOriginalPost().getChannelId() + "/posts/" + post.getOriginalPost().getId() + "/replies").document(post.getId()) :
+                    db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
+            if (up) {
+                upScipers.add(post.getUserSciper());
+                document.update(
+                        "nbUps", nbUps,
+                        "upScipers", upScipers
+                );
+                post.setUpByUser(true);
+            } else {
+                downScipers.add(post.getUserSciper());
+                document.update(
+                        "nbUps", nbUps,
+                        "downScipers", downScipers
+                );
+                post.setDownByUser(true);
+            }
+            nbUpsText.setText("" + nbUps);
+>>>>>>> origin/master
         }
     }
 

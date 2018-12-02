@@ -3,12 +3,16 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import java.util.concurrent.TimeUnit;
+
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
@@ -31,8 +35,8 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
         fragment = EventFragment.newInstance(user);
     }
 
-
     @Test
+    @Ignore
     public void authenticatedCanOpenAnEvent(){
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.event_fragment_listview)).atPosition(0).perform(click());
         onView(withId(R.id.event_detail_fav)).check(matches(isDisplayed()));
@@ -50,6 +54,6 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
         onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).atPosition(0).perform(click());
         onView(withId(R.id.event_detail_but_assos)).perform(click());
         Utility.checkFragmentIsOpen(R.id.association_detail_fragment);
+        onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).atPosition(0).perform(click());
     }
-
 }

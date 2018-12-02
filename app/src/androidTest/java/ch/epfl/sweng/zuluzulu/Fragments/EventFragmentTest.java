@@ -18,6 +18,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -85,9 +86,6 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
         onView(withId(R.id.event_fragment_listview)).check(matches(hasDescendant(withText("Fiesta time"))));
         onView(withId(R.id.event_fragment_search_bar)).perform(typeText("EVENT 2"));
         onView(withId(R.id.event_fragment_listview)).check(matches(not(hasDescendant(withText("Fiesta time")))));
-
-    //            onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).onChildView(withId(R.id.card_event_name)).check(matches(withText("EVENT 1")));
-    //    onView(withId(R.id.event_fragment_search_bar)).perform(clearText());
     }
 
     @Test

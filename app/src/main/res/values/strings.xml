@@ -87,5 +87,6 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nav_memento">Memento</string>
+    <string name="like_icon">Like icon</string>
 
 </resources>

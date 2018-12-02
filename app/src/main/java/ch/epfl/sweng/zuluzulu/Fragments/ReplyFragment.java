@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -28,17 +29,17 @@ import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 public class ReplyFragment extends SuperFragment {
-    private static final String TAG = "REPLY_TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_POST = "ARG_POST";
     private static final int REPLY_MAX_LENGTH = 100;
-
     private List<Post> replies = new ArrayList<>();
     private Post postOriginal;
     private PostArrayAdapter adapter;
 
+    private ListView listView;
     private EditText replyText;
     private Button sendButton;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private AuthenticatedUser user;
 
@@ -70,16 +71,15 @@ public class ReplyFragment extends SuperFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reply, container, false);
 
-        ListView postView = view.findViewById(R.id.reply_original_post);
-        ListView listView = view.findViewById(R.id.reply_list_view);
+        listView = view.findViewById(R.id.reply_list_view);
         replyText = view.findViewById(R.id.reply_text_edit);
         sendButton = view.findViewById(R.id.reply_send_button);
+        swipeRefreshLayout = view.findViewById(R.id.swiperefresh_replies);
 
-        PostArrayAdapter adapterOriginalPost = new PostArrayAdapter(view.getContext(), Collections.singletonList(postOriginal), user);
-        postView.setAdapter(adapterOriginalPost);
-
+        replies.add(postOriginal);
         adapter = new PostArrayAdapter(view.getContext(), replies, user);
         listView.setAdapter(adapter);
+        swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
@@ -89,6 +89,7 @@ public class ReplyFragment extends SuperFragment {
         setUpReplyText();
         setUpSendButton();
         loadReplies();
+
         return view;
     }
 
@@ -135,7 +136,7 @@ public class ReplyFragment extends SuperFragment {
     }
 
     /**
-     * Refresh the posts by reading in the database
+     * Refresh the replies by reading in the database
      */
     private void loadReplies() {
         replies.clear();
@@ -152,4 +153,11 @@ public class ReplyFragment extends SuperFragment {
         });
     }
 
+    /**
+     * This function is called when the user swipes down to refresh the list of replies
+     */
+    private void refresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        loadReplies();
+    }
 }
