@@ -107,22 +107,22 @@ public class AuthenticatedUser extends User {
     public boolean addFollowedChannel(String channelId) {
         if(channelId == null || channelId.isEmpty())
             return false;
-        return followedEvents.add(channelId);
+        return followedChannels.add(channelId);
     }
 
     public boolean removeFollowedChannel(String channelId) {
         if(channelId == null || channelId.isEmpty())
             return false;
-        return followedEvents.remove(channelId);
+        return followedChannels.remove(channelId);
     }
 
     public void setFollowedChannels(List<String> channelsIds){
         assert(channelsIds != null);
-        followedEvents = channelsIds;
+        followedChannels = channelsIds;
     }
 
     public List<String> getFollowedChannels(){
-        return followedEvents;
+        return followedChannels;
     }
 
 
