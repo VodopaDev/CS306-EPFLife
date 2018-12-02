@@ -1,11 +1,8 @@
 package ch.epfl.sweng.zuluzulu.TestingUtility;
 
-import android.app.Notification;
 import android.util.Pair;
 
-import java.nio.channels.AsynchronousServerSocketChannel;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,38 +22,40 @@ import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 public class MockedProxy implements Proxy {
+
+    // TODO put in utils and use this events in EventTests etc
     private static final Event EVENT =
             new EventBuilder()
-                .setId("1")
-                .setDate(new EventDate(
-            new Date(2L), new Date(2L)))
-            .setUrlPlaceAndRoom("")
-                .setLikes(0)
-                .setShortDesc("short desc")
-                .setLongDesc("long desc")
-                .setOrganizer("james")
-                .setPlace("MXF 1")
-                .setBannerUri("https://memento.epfl.ch/image/12568/112x112.jpg")
-                .setIconUri("https://memento.epfl.ch/image/12568/112x112.jpg")
-                .setWebsite("http://nccr-marvel.ch/events/marvel-distinguished-lecture-feliciano-giustino")
-                .setContact("goité")
-                .setName("EVENT 1")
-                .setCategory("none")
-                .setSpeaker("bond")
-                .setChannelId("1")
-                .setAssosId("1").build();
+                    .setId("1")
+                    .setDate(new EventDate(
+                            new Date(2L), new Date(2L)))
+                    .setUrlPlaceAndRoom("")
+                    .setLikes(0)
+                    .setShortDesc("short desc")
+                    .setLongDesc("long desc")
+                    .setOrganizer("james")
+                    .setPlace("MXF 1")
+                    .setBannerUri("https://memento.epfl.ch/image/12568/112x112.jpg")
+                    .setIconUri("https://memento.epfl.ch/image/12568/112x112.jpg")
+                    .setWebsite("http://nccr-marvel.ch/events/marvel-distinguished-lecture-feliciano-giustino")
+                    .setContact("goité")
+                    .setName("EVENT 1")
+                    .setCategory("none")
+                    .setSpeaker("bond")
+                    .setChannelId("1")
+                    .setAssosId("1").build();
 
     private static final Association ASSOCIATION = new Association(
-                "1",
-                        "ASSOCIATION 1",
-                        "SHORT DESC",
-                        "LONG DESC",
-                        "http://lauzhack.com/images/favicon.png",
-                        "http://lauzhack.com/images/favicon.png",
-                        Collections.singletonList("1") ,
-                        "1"
-                );
-    private static final Channel CHANNEL =  new Channel("1", "test channel", "description", new HashMap<>(), null);
+            "1",
+            "ASSOCIATION 1",
+            "SHORT DESC",
+            "LONG DESC",
+            "http://lauzhack.com/images/favicon.png",
+            "http://lauzhack.com/images/favicon.png",
+            Collections.singletonList("1"),
+            "1"
+    );
+    private static final Channel CHANNEL = new Channel("1", "test channel", "description", new HashMap<>(), null);
 
 
     private Map<String, Association> associationMap;
@@ -81,21 +80,21 @@ public class MockedProxy implements Proxy {
 
     @Override
     public String getNewPostId(String channelId) {
-        if(!channelMap.containsKey(channelId))
+        if (!channelMap.containsKey(channelId))
             return "0";
         return String.valueOf(channelMap.get(channelId).postMap.size());
     }
 
     @Override
     public String getNewMessageId(String channelId) {
-        if(!channelMap.containsKey(channelId))
+        if (!channelMap.containsKey(channelId))
             return "0";
         return String.valueOf(channelMap.get(channelId).messageMap.size());
     }
 
     @Override
     public String getNewReplyId(String channelId, String originalPostId) {
-        if(!channelMap.containsKey(channelId) || !channelMap.get(channelId).postMap.containsKey(originalPostId))
+        if (!channelMap.containsKey(channelId) || !channelMap.get(channelId).postMap.containsKey(originalPostId))
             return "0";
         return String.valueOf(channelMap.get(channelId).postMap.get(originalPostId).second.size());
     }
@@ -112,28 +111,28 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void addMessage(ChatMessage message) {
-        if(!channelMap.containsKey(message.getChannelId()))
+        if (!channelMap.containsKey(message.getChannelId()))
             return;
         channelMap.get(message.getChannelId()).messageMap.put(message.getId(), message);
     }
 
     @Override
     public void addPost(Post post) {
-        if(!channelMap.containsKey(post.getChannelId()))
+        if (!channelMap.containsKey(post.getChannelId()))
             return;
         channelMap.get(post.getChannelId()).postMap.put(post.getId(), new Pair<>(post, Collections.EMPTY_MAP));
     }
 
     @Override
     public void addReply(Post post) {
-        if(!channelMap.containsKey(post.getChannelId()) || !channelMap.get(post.getChannelId()).postMap.containsKey(post.getId()))
+        if (!channelMap.containsKey(post.getChannelId()) || !channelMap.get(post.getChannelId()).postMap.containsKey(post.getId()))
             return;
         channelMap.get(post.getChannelId()).postMap.get(post.getId()).second.put(post.getId(), post);
     }
 
     @Override
     public void updateUser(User user) {
-      //  userMap.put(user.getSciper(), new FirebaseMapDecorator(user.getData()));
+        //  userMap.put(user.getSciper(), new FirebaseMapDecorator(user.getData()));
     }
 
     @Override
@@ -161,17 +160,29 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getChannelsFromIds(List<String> ids, OnResult<List<Channel>> onResult) {
-
+        if(!ids.isEmpty() && ids.contains("1")){
+            onResult.apply(Collections.singletonList(CHANNEL));
+        } else {
+            onResult.apply(new ArrayList<>());
+        }
     }
 
     @Override
     public void getEventsFromIds(List<String> ids, OnResult<List<Event>> onResult) {
-
+        if(!ids.isEmpty() && ids.contains("1")){
+            onResult.apply(Collections.singletonList(EVENT));
+        } else {
+            onResult.apply(new ArrayList<>());
+        }
     }
 
     @Override
     public void getAssociationsFromIds(List<String> ids, OnResult<List<Association>> onResult) {
-
+        if(!ids.isEmpty() && ids.contains("1")){
+            onResult.apply(Collections.singletonList(ASSOCIATION));
+        } else {
+            onResult.apply(new ArrayList<>());
+        }
     }
 
     @Override
@@ -214,12 +225,12 @@ public class MockedProxy implements Proxy {
 
     }
 
-    private final class ChannelRepresentation{
+    private final class ChannelRepresentation {
         private Channel channel;
         private Map<String, ChatMessage> messageMap;
-        private Map<String, Pair<Post, Map<String,Post>>> postMap;
+        private Map<String, Pair<Post, Map<String, Post>>> postMap;
 
-        private ChannelRepresentation(Channel channel){
+        private ChannelRepresentation(Channel channel) {
             this.channel = channel;
             messageMap = new HashMap<>();
             postMap = new HashMap<>();
