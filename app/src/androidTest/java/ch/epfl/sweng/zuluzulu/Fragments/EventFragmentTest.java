@@ -31,15 +31,13 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
     SuperFragment fragment;
 
     @Before
-    public void init() throws InterruptedException {
+    public void init() {
         DatabaseFactory.setDependency(new MockedProxy());
 
         fragment = EventFragment.newInstance(getUser());
         mActivityRule.getActivity().openFragment(fragment);
 
         onView(withId(R.id.event_fragment_filter_button)).perform(click());
-
-        TimeUnit.SECONDS.sleep(3);
     }
 
     @Test
@@ -69,7 +67,7 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
 
     @Test
     public void thereIsEventInTheListView() {
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasMinimumChildCount(4)));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasMinimumChildCount(1)));
         onView(withId(R.id.event_fragment_listview)).check(matches(hasDescendant(withText("Fiesta time"))
         ));
     }

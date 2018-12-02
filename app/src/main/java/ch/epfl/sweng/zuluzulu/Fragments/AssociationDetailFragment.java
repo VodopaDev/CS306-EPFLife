@@ -172,14 +172,16 @@ public class AssociationDetailFragment extends SuperFragment {
             upcoming_event_name.setText("No upcoming event :(");
         else
             DatabaseFactory.getDependency().getEventsFromIds(asso.getUpcomingEvents(), result -> {
-                upcoming_event = result.get(0);
-                for(Event event: result){
-                    if(event.getStartDate().before(upcoming_event.getStartDate()))
-                        upcoming_event = event;
+                if(result != null && !result.isEmpty()) {
+                    upcoming_event = result.get(0);
+                    for (Event event : result) {
+                        if (event.getStartDate().before(upcoming_event.getStartDate()))
+                            upcoming_event = event;
+                    }
+                    upcoming_event_name.setText(upcoming_event.getName());
+                    upcoming_event_date.setText(upcoming_event.getStartDate().toString());
+                    loadUriIntoImageView(upcoming_event_icon, upcoming_event.getIconUri(), getContext());
                 }
-                upcoming_event_name.setText(upcoming_event.getName());
-                upcoming_event_date.setText(upcoming_event.getStartDate().toString());
-                loadUriIntoImageView(upcoming_event_icon, upcoming_event.getIconUri(), getContext());
             });
     }
 
