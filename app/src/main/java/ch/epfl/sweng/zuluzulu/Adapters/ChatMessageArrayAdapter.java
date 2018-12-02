@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.Adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,9 +32,9 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<ChatMessage> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ChatMessage currentChatMessage = messages.get(position);
         boolean isOwnMessage = currentChatMessage.isOwnMessage();
-        boolean isAnonym = currentChatMessage.isAnonymous();
+        boolean isAnonymous = currentChatMessage.isAnonymous();
 
-        boolean mustHideName = isOwnMessage || isAnonym;
+        boolean mustHideName = isOwnMessage || isAnonymous;
         int layoutResource = mustHideName ? R.layout.chat_message_noname : R.layout.chat_message;
         View view = LayoutInflater.from(mContext).inflate(layoutResource, parent, false);
 
@@ -42,6 +43,14 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<ChatMessage> {
 
         int backgroundResource = isOwnMessage ? R.drawable.chat_message_background_ownmessage : R.drawable.chat_message_background;
         linearLayout.setBackgroundResource(backgroundResource);
+
+        /*
+        if (isOwnMessage) {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.gravity = Gravity.END;
+            linearLayout.setLayoutParams(params);
+        }
+        */
 
         if (!mustHideName) {
             TextView senderName = view.findViewById(R.id.chat_message_senderName);
