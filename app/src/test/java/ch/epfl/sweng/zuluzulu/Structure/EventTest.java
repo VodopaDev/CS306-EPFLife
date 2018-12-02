@@ -126,13 +126,13 @@ public class EventTest {
     }
 
     @Test
-    public void dateComparTest() {
+    public void dateComparatorTest() {
         initWorkingAssociation();
         assertEquals(START_DATE.compareTo(START_DATE), Event.dateComparator().compare(event0, event0));
     }
 
     @Test
-    public void likesComparTest() {
+    public void likesComparatorTest() {
         initWorkingAssociation();
         assertEquals(0, Event.likeComparator().compare(event0, event0));
     }
@@ -193,60 +193,6 @@ public class EventTest {
         assertEquals(URL_PLACE, event0.getUrlPlaceAndRoom());
     }
 
-    @Test
-    public void testBuilder() {
-        EventBuilder eb = new EventBuilder()
-                .setId("0")
-                .setDate(new EventDate(
-                        START_DATE, START_DATE))
-                .setUrlPlaceAndRoom(URL_PLACE)
-                .setLikes(0)
-                .setShortDesc(SHORT_DESC)
-                .setLongDesc(LONG_DESC)
-                .setOrganizer(ORGANIZER)
-                .setPlace(PLACE)
-                .setBannerUri("epfl.ch")
-                .setIconUri("epfl.ch")
-                .setWebsite(WEBSITE)
-                .setContact(CONTACT)
-                .setName(NAME1)
-                .setCategory(CATEGORY)
-                .setSpeaker(SPEAKER)
-                .setChannelId("0")
-                .setAssosId("0");
 
-        Event event0 = eb.build();
-
-
-        assertEquals("0", event0.getId());
-
-        assertEquals(0, (int) event0.getLikes());
-
-        assertEquals(NAME1, event0.getName());
-
-        assertEquals(LONG_DESC, event0.getLongDescription());
-
-        assertEquals(SHORT_DESC, event0.getShortDescription());
-
-        assertEquals(START_DATE, event0.getStartDate());
-
-        assertEquals(ORGANIZER, event0.getOrganizer());
-
-        assertEquals(PLACE, event0.getPlace());
-
-        assertEquals(SPEAKER, event0.getSpeaker());
-
-        assertEquals(CATEGORY, event0.getCategory());
-
-        assertEquals(CONTACT, event0.getContact());
-
-        assertEquals(WEBSITE, event0.getWebsite());
-
-        assertEquals(URL_PLACE, event0.getUrlPlaceAndRoom());
-
-        assertEquals("0", event0.getChannelId());
-
-        assertEquals("0", event0.getAssociationId());
-    }
 
 }

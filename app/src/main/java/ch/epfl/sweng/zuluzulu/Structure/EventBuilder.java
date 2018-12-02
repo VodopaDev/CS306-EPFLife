@@ -61,23 +61,21 @@ public final class EventBuilder {
 
 
     public EventBuilder setId(String id) {
+        if(id == null)
+            throw new IllegalArgumentException();
         this.id = id;
         return this;
     }
 
     public EventBuilder setName(String name) {
-        assert (name != null);
+        if(name == null)
+            throw new IllegalArgumentException();
         this.name = name.trim().replaceAll("\"", "");
         return this;
     }
 
 
     public EventBuilder setShortDesc(String shortDesc) {
-        /***
-         *
-         * NICO LAISSE CE SETTER IL SERT À LIMITER LA TAILLE DU SHORT DESC
-         *
-         */
         if(shortDesc == null){
             throw new IllegalArgumentException();
         }
@@ -93,6 +91,8 @@ public final class EventBuilder {
     }
 
     public EventBuilder setLongDesc(String longDesc) {
+        if(longDesc == null)
+            throw new IllegalArgumentException();
         this.longDesc = longDesc;
         return this;
     }
@@ -120,11 +120,10 @@ public final class EventBuilder {
      * @return this
      */
     public EventBuilder setBannerUri(String bannerUri) {
-        if (!correctUri(bannerUri)) {
+        if (!correctUri(bannerUri))
             this.bannerUri = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner;
-        } else {
+        else
             this.bannerUri = bannerUri;
-        }
         return this;
     }
 
@@ -135,11 +134,10 @@ public final class EventBuilder {
      * @return this
      */
     public EventBuilder setIconUri(String iconUri) {
-        if (correctUri(iconUri)) {
+        if (correctUri(iconUri))
             this.iconUri = iconUri;
-        } else {
+        else
             this.iconUri = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon;
-        }
         return this;
     }
 
@@ -149,7 +147,7 @@ public final class EventBuilder {
      * @return boolean
      */
     private boolean correctUri(String uri){
-        return !(uri == null || uri.length() < 6);
+        return uri != null && uri.length() >= 6;
     }
 
     public EventBuilder setUrlPlaceAndRoom(String url_place_and_room) {
