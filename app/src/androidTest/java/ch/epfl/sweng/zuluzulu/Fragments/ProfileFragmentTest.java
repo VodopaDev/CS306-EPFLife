@@ -4,8 +4,9 @@ import android.support.test.espresso.matcher.ViewMatchers;
 
 import org.junit.Test;
 
-import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -19,6 +20,8 @@ public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragmen
 
     @Override
     public void initFragment() {
+
+        DatabaseFactory.setDependency(new MockedProxy());
         fragment = ProfileFragment.newInstance(user);
     }
 

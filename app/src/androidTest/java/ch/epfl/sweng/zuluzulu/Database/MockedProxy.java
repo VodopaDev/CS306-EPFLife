@@ -1,10 +1,10 @@
-package ch.epfl.sweng.zuluzulu.TestingUtility;
+package ch.epfl.sweng.zuluzulu.Database;
 
+import android.content.Context;
 import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,53 +16,22 @@ import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
-import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
-import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.Utility;
+
+import static ch.epfl.sweng.zuluzulu.Utility.createTestAuthenticated;
 
 public class MockedProxy implements Proxy {
 
-    // TODO put in utils and use this events in EventTests etc
-    private static final Event EVENT =
-            new EventBuilder()
-                    .setId("1")
-                    .setDate(new EventDate(
-                            new Date(2L), new Date(2L)))
-                    .setUrlPlaceAndRoom("")
-                    .setLikes(0)
-                    .setShortDesc("short desc")
-                    .setLongDesc("long desc")
-                    .setOrganizer("james")
-                    .setPlace("MXF 1")
-                    .setBannerUri("https://memento.epfl.ch/image/12568/112x112.jpg")
-                    .setIconUri("https://memento.epfl.ch/image/12568/112x112.jpg")
-                    .setWebsite("http://nccr-marvel.ch/events/marvel-distinguished-lecture-feliciano-giustino")
-                    .setContact("goité")
-                    .setName("EVENT 1")
-                    .setCategory("none")
-                    .setSpeaker("bond")
-                    .setChannelId("1")
-                    .setAssosId("1").build();
+    private static MockedProxy proxy;
 
-    private static final Association ASSOCIATION = new Association(
-            "1",
-            "ASSOCIATION 1",
-            "SHORT DESC",
-            "LONG DESC",
-            "http://lauzhack.com/images/favicon.png",
-            "http://lauzhack.com/images/favicon.png",
-            Collections.singletonList("1"),
-            "1"
-    );
-    private static final Channel CHANNEL = new Channel("1", "test channel", "description", new HashMap<>(), null);
-
-
-    private Map<String, Association> associationMap = new HashMap<>();
-    private Map<String, Event> eventMap = new HashMap<>();
-    private Map<String, ChannelRepresentation> channelMap = new HashMap<>();
-    private Map<String, FirebaseMapDecorator> userMap = new HashMap<>();
-
+    private Map<String, Association> associationMap = Collections.singletonMap("1", Utility.defaultAssociation());
+    private Map<String, Event> eventMap = Collections.singletonMap("1", Utility.defaultEvent());
+    private Map<String, ChannelRepresentation> channelMap = Collections.singletonMap("1", new ChannelRepresentation(Utility.defaultChannel()));
+    private Map<String, AuthenticatedUser> userMap = Collections.singletonMap("1", createTestAuthenticated());
+    
     @Override
     public String getNewChannelId() {
         return String.valueOf(channelMap.size());
@@ -137,104 +106,130 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getAllChannels(OnResult<List<Channel>> onResult) {
-
-        ArrayList<Channel> list = new ArrayList<>();
-        list.add(CHANNEL);
-        onResult.apply(list);
+        ArrayList<Channel> result = new ArrayList<>();
+        for(ChannelRepresentation channel: channelMap.values())
+            result.add(channel.channel);
+        onResult.apply(new ArrayList<>());
     }
 
     @Override
     public void getAllEvents(OnResult<List<Event>> onResult) {
-
-        ArrayList<Event> list = new ArrayList<>();
-        list.add(EVENT);
-        onResult.apply(list);
+        ArrayList<Event> result = new ArrayList<>();
+        for(Event event: eventMap.values())
+            result.add(event);
+        onResult.apply(new ArrayList<>());
     }
 
     @Override
     public void getAllAssociations(OnResult<List<Association>> onResult) {
-        ArrayList<Association> list = new ArrayList<>();
-        list.add(ASSOCIATION);
-        onResult.apply(list);
+        ArrayList<Association> result = new ArrayList<>();
+        for(Association association: associationMap.values())
+            result.add(association);
+        onResult.apply(new ArrayList<>());
     }
 
     @Override
     public void getChannelsFromIds(List<String> ids, OnResult<List<Channel>> onResult) {
-        if(!ids.isEmpty() && ids.contains("1")){
-            onResult.apply(Collections.singletonList(CHANNEL));
-        } else {
-            onResult.apply(new ArrayList<>());
-        }
+        if(ids == null)
+            return;
+
+        ArrayList<Channel> result = new ArrayList<>();
+        for(ChannelRepresentation channel: channelMap.values())
+            if(ids.contains(channel.channel.getId()))
+            result.add(channel.channel);
+        onResult.apply(new ArrayList<>());
     }
 
     @Override
     public void getEventsFromIds(List<String> ids, OnResult<List<Event>> onResult) {
-        if(!ids.isEmpty() && ids.contains("1")){
-            onResult.apply(Collections.singletonList(EVENT));
-        } else {
-            onResult.apply(new ArrayList<>());
-        }
+        if(ids == null)
+            return;
+
+        ArrayList<Event> result = new ArrayList<>();
+        for(Event event: eventMap.values())
+            if(ids.contains(event.getId()))
+                result.add(event);
+        onResult.apply(new ArrayList<>());
     }
 
     @Override
     public void getAssociationsFromIds(List<String> ids, OnResult<List<Association>> onResult) {
-        if(!ids.isEmpty() && ids.contains("1")){
-            onResult.apply(Collections.singletonList(ASSOCIATION));
-        } else {
-            onResult.apply(new ArrayList<>());
-        }
+        if(ids == null)
+            return;
+
+        ArrayList<Association> result = new ArrayList<>();
+        for(Association association: associationMap.values())
+            if(ids.contains(association.getId()))
+                result.add(association);
+        onResult.apply(new ArrayList<>());
     }
 
     @Override
     public void getChannelFromId(String id, OnResult<Channel> onResult) {
-        if(id != null && id.equals("1")){
-            onResult.apply(CHANNEL);
-        } else {
-            onResult.apply(null);
-        }
+        if (id != null && channelMap.containsKey(id))
+            onResult.apply(channelMap.get(id).channel);
     }
 
     @Override
     public void getEventFromId(String id, OnResult<Event> onResult) {
-        if(id != null && id.equals("1")){
-            onResult.apply(EVENT);
-        } else {
-            onResult.apply(null);
-        }
+        if (id != null && eventMap.containsKey(id))
+            onResult.apply(eventMap.get(id));
     }
 
     @Override
     public void getAssociationFromId(String id, OnResult<Association> onResult) {
-        if(id != null && id.equals("1")){
-            onResult.apply(ASSOCIATION);
-        } else {
-            onResult.apply(null);
-        }
+        if (id != null && associationMap.containsKey(id))
+            onResult.apply(associationMap.get(id));
     }
 
     @Override
     public void updateOnNewMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult) {
-
+        // too hard to mock sorry :(
     }
 
     @Override
     public void getMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult) {
-
+        if(channelId != null && channelMap.containsKey(channelId)){
+            ArrayList<ChatMessage> result = new ArrayList<>();
+            for (ChatMessage message: channelMap.get(channelId).messageMap.values())
+                result.add(message);
+            onResult.apply(result);
+        }
     }
 
     @Override
     public void getPostsFromChannel(String channelId, OnResult<List<Post>> onResult) {
-
+        if(channelId != null && channelMap.containsKey(channelId)){
+            ArrayList<Post> result = new ArrayList<>();
+            for (Pair<Post, Map<String,Post>> pair: channelMap.get(channelId).postMap.values())
+                result.add(pair.first);
+            onResult.apply(result);
+        }
     }
 
     @Override
     public void getRepliesFromPost(String channelId, String postId, OnResult<List<Post>> onResult) {
-
+        if(channelId != null && channelMap.containsKey(channelId) && postId != null && channelMap.get(channelId).postMap.containsKey(postId)){
+            ArrayList<Post> result = new ArrayList<>();
+            for (Post post: channelMap.get(channelId).postMap.get(postId).second.values())
+                result.add(post);
+            onResult.apply(result);
+        }
     }
 
     @Override
     public void getUserWithIdOrCreateIt(String id, OnResult<FirebaseMapDecorator> onResult) {
+        if(id != null && userMap.containsKey(id)){
+            Map<String, Object> map = new HashMap<>();
+            map.put("followed_events", userMap.get(id).getFollowedEvents());
+            map.put("followed_associations", userMap.get(id).getFollowedAssociations());
+            map.put("followed_channels", userMap.get(id).getFollowedChannels());
+        }
+    }
 
+    @Override
+    public void updatePost(Post post) {
+        // too hard to mock sorry :(
     }
 
     private final class ChannelRepresentation {

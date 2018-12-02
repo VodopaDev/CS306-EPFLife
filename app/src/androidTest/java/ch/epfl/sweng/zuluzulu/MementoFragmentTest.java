@@ -18,7 +18,6 @@ public class MementoFragmentTest extends TestWithAdminAndFragment<MainFragment> 
 
     @Override
     public void initFragment() {
-        DatabaseFactory.setDependency(new FirebaseMock());
     }
 
     @Test

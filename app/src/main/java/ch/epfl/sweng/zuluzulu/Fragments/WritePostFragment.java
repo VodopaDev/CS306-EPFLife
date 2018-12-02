@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
@@ -101,7 +101,7 @@ public class WritePostFragment extends SuperFragment {
     private void setUpSendButton() {
         sendButton.setOnClickListener(v -> {
             Post post = new Post(
-                    FirebaseProxy.getInstance().getNewPostId(channel.getId()),
+                    DatabaseFactory.getDependency().getNewPostId(channel.getId()),
                     channel.getId(),
                     null,
                     editText.getText().toString(),
@@ -114,7 +114,7 @@ public class WritePostFragment extends SuperFragment {
                     Collections.singletonList(user.getSciper()),
                     new ArrayList<>()
             );
-            FirebaseProxy.getInstance().addPost(post);
+            DatabaseFactory.getDependency().addPost(post);
             mListener.onFragmentInteraction(OPEN_POST_FRAGMENT, channel);
         });
     }

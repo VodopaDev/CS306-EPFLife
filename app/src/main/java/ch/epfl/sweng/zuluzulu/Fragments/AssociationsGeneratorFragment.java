@@ -17,9 +17,8 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.AddAssociationAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.Proxy;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -47,7 +46,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     private static final String EPFL_LOGO = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
 
     private List<String> datas;
-    private Database db = DatabaseFactory.getDependency();
+    private Proxy db = DatabaseFactory.getDependency();
     private List<Association> associations;
     private AddAssociationAdapter adapter;
 
@@ -90,14 +89,14 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                 index++;
 
                 Association association = new Association(
-                        FirebaseProxy.getInstance().getNewAssociationId(), //id
+                        DatabaseFactory.getDependency().getNewAssociationId(), //id
                         data.split(",")[1], // name
                         data.split(",")[2], // short description
                         data.split(",")[2], // long description
                         EPFL_LOGO, // icon uri
                         EPFL_LOGO, // banner_icon
                         new ArrayList<>(), // events
-                        FirebaseProxy.getInstance().getNewChannelId() // channel id
+                        DatabaseFactory.getDependency().getNewChannelId() // channel id
                         );
                 associations.add(association);
             }
@@ -167,7 +166,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             @Override
             public void onClick(int i) {
                 if (checkBound(i)) {
-                    FirebaseProxy.getInstance().addAssociation(associations.get(i));
+                    DatabaseFactory.getDependency().addAssociation(associations.get(i));
                     Snackbar.make(getView(), associations.get(i).getName() + " added", Snackbar.LENGTH_SHORT).show();
                 }
             }

@@ -9,12 +9,12 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestWithAuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -32,6 +32,8 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
 
     @Before
     public void init() throws InterruptedException {
+        DatabaseFactory.setDependency(new MockedProxy());
+
         fragment = EventFragment.newInstance(getUser());
         mActivityRule.getActivity().openFragment(fragment);
 
@@ -68,7 +70,7 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
     @Test
     public void thereIsEventInTheListView() {
         onView(withId(R.id.event_fragment_listview)).check(matches(hasMinimumChildCount(4)));
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasDescendant(withText("ForumEPFL"))
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasDescendant(withText("EVENT 1"))
         ));
     }
 
@@ -81,11 +83,13 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
 
     @Test
     public void sortWithKeywordTest() {
-        onView(withId(R.id.event_fragment_search_bar)).perform(typeText("forum"));
-        onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).onChildView(withId(R.id.card_event_name)).check(matches(withText("ForumEPFL")));
-        onView(withId(R.id.event_fragment_search_bar)).perform(clearText());
-        onView(withId(R.id.event_fragment_search_bar)).perform(typeText("discover"));
-        onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).onChildView(withId(R.id.card_event_name)).check(matches(withText("ForumEPFL")));
+        onView(withId(R.id.event_fragment_search_bar)).perform(typeText("EVENT 1"));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasDescendant(withText("EVENT 1"))));
+        onView(withId(R.id.event_fragment_search_bar)).perform(typeText("EVENT 2"));
+        onView(withId(R.id.event_fragment_listview)).check(matches(not(hasDescendant(withText("EVENT 1")))));
+
+    //            onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).onChildView(withId(R.id.card_event_name)).check(matches(withText("EVENT 1")));
+    //    onView(withId(R.id.event_fragment_search_bar)).perform(clearText());
     }
 
     @Test

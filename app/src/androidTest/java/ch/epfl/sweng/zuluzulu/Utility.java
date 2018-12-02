@@ -219,5 +219,4 @@ public class Utility {
                 .setSpeaker("Nico")
                 .build();
     }
-
 }

@@ -14,7 +14,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -144,7 +145,7 @@ public class AssociationDetailFragment extends SuperFragment {
                     loadFavImage(R.drawable.fav_on);
                     asso_fav.setContentDescription(FAV_CONTENT);
                 }
-                FirebaseProxy.getInstance().updateUser(auth);
+                DatabaseFactory.getDependency().updateUser(auth);
             } else {
                 Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
             }
@@ -170,7 +171,7 @@ public class AssociationDetailFragment extends SuperFragment {
         if (asso.getShortDescription().isEmpty())
             upcoming_event_name.setText("No upcoming event :(");
         else
-            FirebaseProxy.getInstance().getEventsFromIds(asso.getUpcomingEvents(), result -> {
+            DatabaseFactory.getDependency().getEventsFromIds(asso.getUpcomingEvents(), result -> {
                 upcoming_event = result.get(0);
                 for(Event event: result){
                     if(event.getStartDate().before(upcoming_event.getStartDate()))
@@ -191,7 +192,7 @@ public class AssociationDetailFragment extends SuperFragment {
         if (asso.getChannelId() == null)
             main_chat_name.setText("There is no chat :(");
         else
-            FirebaseProxy.getInstance().getChannelFromId(asso.getChannelId(), result -> {
+            DatabaseFactory.getDependency().getChannelFromId(asso.getChannelId(), result -> {
                 main_chat = result;
                 main_chat_name.setText(main_chat.getName());
                 main_chat_desc.setText(main_chat.getShortDescription());

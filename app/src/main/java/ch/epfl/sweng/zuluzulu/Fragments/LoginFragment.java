@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
@@ -160,7 +160,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     }
 
     private void updateUserAndFinishLogin() {
-        FirebaseProxy.getInstance().getUserWithIdOrCreateIt(user.getSciper(), result -> {
+        DatabaseFactory.getDependency().getUserWithIdOrCreateIt(user.getSciper(), result -> {
             List<String> receivedAssociations = result.getStringList("followed_associations");
             List<String> receivedEvents = result.getStringList("followed_events");
             List<String> receivedChannels = result.getStringList("followed_channels");

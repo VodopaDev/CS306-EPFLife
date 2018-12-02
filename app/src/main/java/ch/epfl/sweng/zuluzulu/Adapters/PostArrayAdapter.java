@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.Utility.Utils;
@@ -114,7 +114,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
 
     private void updateDatabase(boolean up, Post post, TextView nbUpsText) {
         if(!up && post.downvoteWithUser(user.getSciper()) || up && post.upvoteWithUser(user.getSciper())){
-            FirebaseProxy.getInstance().updatePost(post);
+            DatabaseFactory.getDependency().updatePost(post);
             nbUpsText.setText("" + post.getNbUps());
         }
     }

@@ -18,7 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.R;
@@ -181,11 +182,11 @@ public class AddEventFragment extends SuperFragment {
                 }
 
                 Event event = new EventBuilder().
-                        setId(FirebaseProxy.getInstance().getNewEventId()).
+                        setId(DatabaseFactory.getDependency().getNewEventId()).
                         setName(name).
                         setShortDesc(tit).
                         setLongDesc(desc).
-                        setChannelId(FirebaseProxy.getInstance().getNewChannelId()).
+                        setChannelId(DatabaseFactory.getDependency().getNewChannelId()).
                         setAssosId(association_map.get(name)).
                         setDate(new EventDate(date,date)).
                         setLikes(0).
@@ -200,7 +201,7 @@ public class AddEventFragment extends SuperFragment {
                         setSpeaker("speaker").
                         build();
 
-                FirebaseProxy.getInstance().addEvent(event);
+                DatabaseFactory.getDependency().addEvent(event);
             }
         });
     }
@@ -347,7 +348,7 @@ public class AddEventFragment extends SuperFragment {
      * on the database.
      */
     private void fillAssociationNames() {
-        FirebaseProxy.getInstance().getAllAssociations(result -> {
+        DatabaseFactory.getDependency().getAllAssociations(result -> {
             for (Association association : result) {
                 association_map.put(association.getName(), association.getId());
                 Log.d("EVENT_CREATOR", "added association " + association.getName());

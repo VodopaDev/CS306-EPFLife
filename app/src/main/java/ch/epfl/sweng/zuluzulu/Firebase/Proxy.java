@@ -1,5 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Firebase;
 
+import android.content.Context;
+
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -43,4 +45,6 @@ public interface Proxy {
     void getRepliesFromPost(String channelId, String postId, OnResult<List<Post>> onResult);
 
     void getUserWithIdOrCreateIt(String id, OnResult<FirebaseMapDecorator> onResult);
+
+    void updatePost(Post post);
 }
