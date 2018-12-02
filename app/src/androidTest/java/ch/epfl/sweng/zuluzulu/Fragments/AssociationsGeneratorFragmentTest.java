@@ -15,6 +15,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import java.io.BufferedReader;
 import java.io.StringReader;
 
+import ch.epfl.sweng.zuluzulu.TestingUtility.MockedProxy;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlReader;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlReaderFactory;
@@ -32,6 +33,7 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
 
     @Override
     public void initFragment() {
+        DatabaseFactory.setDependency(new MockedProxy());
 
         fragment = MainFragment.newInstance(user);
     }

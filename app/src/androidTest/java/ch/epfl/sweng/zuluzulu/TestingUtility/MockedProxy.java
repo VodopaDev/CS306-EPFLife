@@ -120,8 +120,10 @@ public class MockedProxy implements Proxy {
     public void getAllEvents(OnResult<List<Event>> onResult) {
         ArrayList<Event> list = new ArrayList<>();
         list.add(EVENT);
-        System.out.println("TEST");
-        assert(false);
+        list.add(EVENT);
+        list.add(EVENT);
+        list.add(EVENT);
+        list.add(EVENT);
         onResult.apply(list);
     }
 

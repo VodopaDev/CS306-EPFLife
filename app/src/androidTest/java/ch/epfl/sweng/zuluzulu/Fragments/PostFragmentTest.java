@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.zuluzulu.Database.FirebaseMock;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.TestingUtility.MockedProxy;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 import ch.epfl.sweng.zuluzulu.Utility;
 
@@ -25,6 +26,8 @@ public class PostFragmentTest extends TestWithAuthenticatedAndFragment<PostFragm
 
     @Override
     public void initFragment() {
+        DatabaseFactory.setDependency(new MockedProxy());
+
         fragment = PostFragment.newInstance(user, Utility.defaultChannel());
     }
 
