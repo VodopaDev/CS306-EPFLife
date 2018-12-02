@@ -210,6 +210,11 @@ public class MockedProxy implements Proxy {
 
     }
 
+    @Override
+    public void updatePost(Post post) {
+
+    }
+
     private final class ChannelRepresentation {
         private Channel channel;
         private Map<String, ChatMessage> messageMap;
