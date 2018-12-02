@@ -31,7 +31,7 @@ public class MockedProxy implements Proxy {
     private Map<String, Event> eventMap = Collections.singletonMap("1", Utility.defaultEvent());
     private Map<String, ChannelRepresentation> channelMap = Collections.singletonMap("1", new ChannelRepresentation(Utility.defaultChannel()));
     private Map<String, AuthenticatedUser> userMap = Collections.singletonMap("1", createTestAuthenticated());
-    
+
     @Override
     public String getNewChannelId() {
         return String.valueOf(channelMap.size());
