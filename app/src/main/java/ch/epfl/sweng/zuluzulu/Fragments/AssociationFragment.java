@@ -128,16 +128,18 @@ public class AssociationFragment extends SuperFragment {
         assosToFilter.clear();
         assosFav.clear();
         DatabaseFactory.getDependency().getAllAssociations(result -> {
-            for(Association asso: result){
-                assosAll.add(asso);
-                if(user.isConnected() && ((AuthenticatedUser)user).isFollowedAssociation(asso.getId()))
-                    assosFav.add(asso);
+            if(!result.isEmpty()) {
+                for (Association asso : result) {
+                    assosAll.add(asso);
+                    if (user.isConnected() && ((AuthenticatedUser) user).isFollowedAssociation(asso.getId()))
+                        assosFav.add(asso);
+                }
+                Collections.sort(assosAll);
+                Collections.sort(assosFav);
+                assosToFilter = assosAll;
+                assosFiltered.addAll(assosToFilter);
+                assosAdapter.notifyDataSetChanged();
             }
-            Collections.sort(assosAll);
-            Collections.sort(assosFav);
-            assosToFilter = assosAll;
-            assosFiltered.addAll(assosToFilter);
-            assosAdapter.notifyDataSetChanged();
         });
     }
 

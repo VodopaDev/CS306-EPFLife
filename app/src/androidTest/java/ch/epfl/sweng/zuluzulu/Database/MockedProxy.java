@@ -109,23 +109,22 @@ public class MockedProxy implements Proxy {
         ArrayList<Channel> result = new ArrayList<>();
         for(ChannelRepresentation channel: channelMap.values())
             result.add(channel.channel);
-        onResult.apply(new ArrayList<>());
+
+        onResult.apply(result);
     }
 
     @Override
     public void getAllEvents(OnResult<List<Event>> onResult) {
-        ArrayList<Event> result = new ArrayList<>();
-        for(Event event: eventMap.values())
-            result.add(event);
-        onResult.apply(new ArrayList<>());
+        ArrayList<Event> result = new ArrayList<>(eventMap.values());
+
+        onResult.apply(result);
     }
 
     @Override
     public void getAllAssociations(OnResult<List<Association>> onResult) {
-        ArrayList<Association> result = new ArrayList<>();
-        for(Association association: associationMap.values())
-            result.add(association);
-        onResult.apply(new ArrayList<>());
+        ArrayList<Association> result = new ArrayList<>(associationMap.values());
+
+        onResult.apply(result);
     }
 
     @Override
