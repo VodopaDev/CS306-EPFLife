@@ -187,17 +187,29 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getChannelFromId(String id, OnResult<Channel> onResult) {
-
+        if(id != null && id.equals("1")){
+            onResult.apply(CHANNEL);
+        } else {
+            onResult.apply(null);
+        }
     }
 
     @Override
     public void getEventFromId(String id, OnResult<Event> onResult) {
-
+        if(id != null && id.equals("1")){
+            onResult.apply(EVENT);
+        } else {
+            onResult.apply(null);
+        }
     }
 
     @Override
     public void getAssociationFromId(String id, OnResult<Association> onResult) {
-
+        if(id != null && id.equals("1")){
+            onResult.apply(ASSOCIATION);
+        } else {
+            onResult.apply(null);
+        }
     }
 
     @Override
