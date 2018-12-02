@@ -159,13 +159,14 @@ public class EventDetailFragment extends SuperFragment {
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         });
 
+        chat_room = view.findViewById(R.id.event_detail_chatRoom);
+        loadMainChat();
+        setMainChatButtonBehaviour();
+
         assos_but = view.findViewById(R.id.event_detail_but_assos);
         loadAssos();
         setAssosButtonBehavior();
 
-        chat_room = view.findViewById(R.id.event_detail_chatRoom);
-        loadMainChat();
-        setMainChatButtonBehaviour();
 
 
         return view;
@@ -259,8 +260,10 @@ public class EventDetailFragment extends SuperFragment {
 
     private void loadMainChat() {
         DatabaseFactory.getDependency().getChannelFromId(event.getChannelId(), result -> {
-            chat = result;
-            chat_room.setText(chat.getName() + "'s chat");
+            if(result != null) {
+                chat = result;
+                chat_room.setText(chat.getName() + "'s chat");
+            }
         });
     }
 
@@ -276,8 +279,10 @@ public class EventDetailFragment extends SuperFragment {
 
     private void loadAssos() {
         DatabaseFactory.getDependency().getAssociationFromId(event.getAssociationId(), result -> {
-            assos = result;
-            assos_but.setText(chat.getName());
+            if(result != null) {
+                assos = result;
+                assos_but.setText(chat.getName());
+            }
         });
     }
 }

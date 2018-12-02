@@ -108,9 +108,7 @@ public class MementoFragment extends SuperFragment {
 
         if (result != null) {
             for(int i = 0; i < result.size(); i++) {
-                if(result.get(i) != null && !result.get(i).isEmpty() ) {
-                    addEvent(result.get(i));
-                }
+                addEvent(result.get(i));
             }
         }
 
@@ -123,31 +121,6 @@ public class MementoFragment extends SuperFragment {
                 ) {
             DatabaseFactory.getDependency().addEvent(event);
         }
-    }
-
-    private Map<String, Object> createHashmap(Event event) {
-
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("icon_uri", event.getIconUri());
-        docData.put("banner_uri", event.getBannerUri());
-        docData.put("id", event.getId());
-        docData.put("assos_id", event.getAssociationId());
-        docData.put("channel_id", event.getChannelId());
-        docData.put("likes", event.getLikes());
-        docData.put("long_desc", event.getLongDescription());
-        docData.put("name", event.getName());
-        docData.put("organizer", event.getOrganizer());
-        docData.put("place", event.getPlace());
-        docData.put("short_desc", event.getShortDescription());
-        docData.put("category", event.getCategory());
-        docData.put("speaker", event.getSpeaker());
-        docData.put("start_date", event.getStartDate());
-        docData.put("end_date", event.getEndDate());
-        docData.put("contact", event.getContact());
-        docData.put("website", event.getWebsite());
-        docData.put("url_place_and_room", event.getUrlPlaceAndRoom());
-
-        return docData;
     }
 
     private void addEvent(String datas) {

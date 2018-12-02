@@ -68,10 +68,14 @@ public class AssociationFragment extends SuperFragment {
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations");
         }
 
+
         assosAll = new ArrayList<>();
         assosFav = new ArrayList<>();
         assosToFilter = new ArrayList<>();
         assosFiltered = new ArrayList<>();
+
+        assosAdapter = new AssociationArrayAdapter(getContext(), assosFiltered, mListener);
+
         fillAssociationLists();
     }
 
@@ -80,7 +84,6 @@ public class AssociationFragment extends SuperFragment {
         View view = inflater.inflate(R.layout.fragment_association, container, false);
 
         listviewAssos = view.findViewById(R.id.association_fragment_listview);
-        assosAdapter = new AssociationArrayAdapter(getContext(), assosFiltered, mListener);
         listviewAssos.setAdapter(assosAdapter);
 
         Button buttonAssosFav = view.findViewById(R.id.association_fragment_fav_button);
@@ -128,16 +131,18 @@ public class AssociationFragment extends SuperFragment {
         assosToFilter.clear();
         assosFav.clear();
         DatabaseFactory.getDependency().getAllAssociations(result -> {
-            for(Association asso: result){
-                assosAll.add(asso);
-                if(user.isConnected() && ((AuthenticatedUser)user).isFollowedAssociation(asso.getId()))
-                    assosFav.add(asso);
+            if(!result.isEmpty()) {
+                for (Association asso : result) {
+                    assosAll.add(asso);
+                    if (user.isConnected() && ((AuthenticatedUser) user).isFollowedAssociation(asso.getId()))
+                        assosFav.add(asso);
+                }
+                Collections.sort(assosAll);
+                Collections.sort(assosFav);
+                assosToFilter = assosAll;
+                assosFiltered.addAll(assosToFilter);
+                assosAdapter.notifyDataSetChanged();
             }
-            Collections.sort(assosAll);
-            Collections.sort(assosFav);
-            assosToFilter = assosAll;
-            assosFiltered.addAll(assosToFilter);
-            assosAdapter.notifyDataSetChanged();
         });
     }
 

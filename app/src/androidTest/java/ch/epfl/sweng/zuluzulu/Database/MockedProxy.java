@@ -3,6 +3,8 @@ package ch.epfl.sweng.zuluzulu.Database;
 import android.content.Context;
 import android.util.Pair;
 
+import com.google.android.gms.auth.api.Auth;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,15 +24,26 @@ import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility;
 
 import static ch.epfl.sweng.zuluzulu.Utility.createTestAuthenticated;
+import static ch.epfl.sweng.zuluzulu.Utility.defaultPost;
 
 public class MockedProxy implements Proxy {
 
-    private static MockedProxy proxy;
+    private Map<String, Association> associationMap = new HashMap<String, Association>() {{
+        put("1", Utility.defaultAssociation());
+    }};
 
-    private Map<String, Association> associationMap = Collections.singletonMap("1", Utility.defaultAssociation());
-    private Map<String, Event> eventMap = Collections.singletonMap("1", Utility.defaultEvent());
-    private Map<String, ChannelRepresentation> channelMap = Collections.singletonMap("1", new ChannelRepresentation(Utility.defaultChannel()));
-    private Map<String, AuthenticatedUser> userMap = Collections.singletonMap("1", createTestAuthenticated());
+    private Map<String, Event> eventMap =  new HashMap<String, Event>() {{
+        put("1", Utility.defaultEvent());
+    }};
+
+
+    private Map<String, ChannelRepresentation> channelMap = new HashMap<String, ChannelRepresentation>() {{
+        put("1", new ChannelRepresentation(Utility.defaultChannel()));
+    }};
+
+    private Map<String, AuthenticatedUser> userMap = new HashMap<String, AuthenticatedUser>() {{
+        put("1", createTestAuthenticated());
+    }};
 
     @Override
     public String getNewChannelId() {
@@ -109,23 +122,22 @@ public class MockedProxy implements Proxy {
         ArrayList<Channel> result = new ArrayList<>();
         for(ChannelRepresentation channel: channelMap.values())
             result.add(channel.channel);
-        onResult.apply(new ArrayList<>());
+
+        onResult.apply(result);
     }
 
     @Override
     public void getAllEvents(OnResult<List<Event>> onResult) {
-        ArrayList<Event> result = new ArrayList<>();
-        for(Event event: eventMap.values())
-            result.add(event);
-        onResult.apply(new ArrayList<>());
+        ArrayList<Event> result = new ArrayList<>(eventMap.values());
+
+        onResult.apply(result);
     }
 
     @Override
     public void getAllAssociations(OnResult<List<Association>> onResult) {
-        ArrayList<Association> result = new ArrayList<>();
-        for(Association association: associationMap.values())
-            result.add(association);
-        onResult.apply(new ArrayList<>());
+        ArrayList<Association> result = new ArrayList<>(associationMap.values());
+
+        onResult.apply(result);
     }
 
     @Override
@@ -199,10 +211,14 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getPostsFromChannel(String channelId, OnResult<List<Post>> onResult) {
+        //TODO nico il faut ajouter le post dans la liste du channel... mais comment ? ici c'est pas idéal
+
+        addPost(defaultPost());
         if(channelId != null && channelMap.containsKey(channelId)){
             ArrayList<Post> result = new ArrayList<>();
-            for (Pair<Post, Map<String,Post>> pair: channelMap.get(channelId).postMap.values())
+            for (Pair<Post, Map<String,Post>> pair: channelMap.get(channelId).postMap.values()) {
                 result.add(pair.first);
+            }
             onResult.apply(result);
         }
     }

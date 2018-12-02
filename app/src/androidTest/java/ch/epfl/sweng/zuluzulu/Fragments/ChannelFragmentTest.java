@@ -26,7 +26,7 @@ public class ChannelFragmentTest extends TestWithAuthenticatedAndFragment<Channe
 
     @Test
     public void testUserCanClickOnChannels() {
-        onView(ViewMatchers.withId(R.id.channels_list_view)).perform(ViewActions.click());
+        onView(ViewMatchers.withText("Testing channel")).perform(ViewActions.click());
     }
 
     @Test

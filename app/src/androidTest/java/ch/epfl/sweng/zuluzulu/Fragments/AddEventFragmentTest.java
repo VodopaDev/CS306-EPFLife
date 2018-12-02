@@ -2,10 +2,12 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 import android.widget.Spinner;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
@@ -27,11 +29,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertEquals;
 
+@RunWith(AndroidJUnit4.class)
 public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment> {
-
-    @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
 
     @Override
     public void initFragment() {

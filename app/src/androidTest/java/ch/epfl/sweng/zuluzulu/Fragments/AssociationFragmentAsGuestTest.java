@@ -14,6 +14,7 @@ import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithGuestAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
@@ -38,20 +39,13 @@ public class AssociationFragmentAsGuestTest extends TestWithGuestAndFragment<Ass
     @Test
     public void guestCantClickOnFavorites(){
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
-
-        /*
-        onView(withId(R.id.association_fragment_listview))
-                .check(matches(hasChildCount(7)));
-        */
     }
 
-    /*
     @Test
     public void guestMainPageHasSomeAssociations() {
         onView(withId(R.id.association_fragment_listview))
-                .check(matches(hasChildCount(7)));
+                .check(matches(hasChildCount(1)));
     }
-    */
 
     @Test
     public void useTheFilter() {
