@@ -3,7 +3,9 @@ package ch.epfl.sweng.zuluzulu.TestingUtility;
 import android.app.Notification;
 import android.util.Pair;
 
+import java.nio.channels.AsynchronousServerSocketChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +25,40 @@ import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 public class MockedProxy implements Proxy {
+    private static final Event EVENT =
+            new EventBuilder()
+                .setId("1")
+                .setDate(new EventDate(
+            new Date(2L), new Date(2L)))
+            .setUrlPlaceAndRoom("")
+                .setLikes(0)
+                .setShortDesc("short desc")
+                .setLongDesc("long desc")
+                .setOrganizer("james")
+                .setPlace("MXF 1")
+                .setBannerUri("https://memento.epfl.ch/image/12568/112x112.jpg")
+                .setIconUri("https://memento.epfl.ch/image/12568/112x112.jpg")
+                .setWebsite("http://nccr-marvel.ch/events/marvel-distinguished-lecture-feliciano-giustino")
+                .setContact("goité")
+                .setName("EVENT 1")
+                .setCategory("none")
+                .setSpeaker("bond")
+                .setChannelId("1")
+                .setAssosId("1").build();
+
+    private static final Association ASSOCIATION = new Association(
+                "1",
+                        "ASSOCIATION 1",
+                        "SHORT DESC",
+                        "LONG DESC",
+                        "http://lauzhack.com/images/favicon.png",
+                        "http://lauzhack.com/images/favicon.png",
+                        Collections.singletonList("1") ,
+                        "1"
+                );
+    private static final Channel CHANNEL =  new Channel("1", "test channel", "description", new HashMap<>(), null);
+
+
     private Map<String, Association> associationMap;
     private Map<String, Event> eventMap = new HashMap<>();
     private Map<String, ChannelRepresentation> channelMap = new HashMap<>();
@@ -102,45 +138,25 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getAllChannels(OnResult<List<Channel>> onResult) {
-        Channel channel = new Channel("1", "test channel", "description", new HashMap<>(), null);
 
         ArrayList<Channel> list = new ArrayList<>();
-        list.add(channel);
+        list.add(CHANNEL);
         onResult.apply(list);
     }
 
     @Override
     public void getAllEvents(OnResult<List<Event>> onResult) {
-        EventBuilder eb = new EventBuilder()
-                .setId("0")
-                .setDate(new EventDate(
-                        new Date(2L), new Date(2L)))
-                .setUrlPlaceAndRoom("")
-                .setLikes(0)
-                .setShortDesc("short desc")
-                .setLongDesc("long desc")
-                .setOrganizer("james")
-                .setPlace("MXF 1")
-                .setBannerUri("https://memento.epfl.ch/image/12568/112x112.jpg")
-                .setIconUri("https://memento.epfl.ch/image/12568/112x112.jpg")
-                .setWebsite("http://nccr-marvel.ch/events/marvel-distinguished-lecture-feliciano-giustino")
-                .setContact("goité")
-                .setName("EVENT 1")
-                .setCategory("none")
-                .setSpeaker("bond")
-                .setChannelId("1")
-                .setAssosId("1");
-
-        Event event = eb.build();
 
         ArrayList<Event> list = new ArrayList<>();
-        list.add(event);
+        list.add(EVENT);
         onResult.apply(list);
     }
 
     @Override
     public void getAllAssociations(OnResult<List<Association>> onResult) {
-
+        ArrayList<Association> list = new ArrayList<>();
+        list.add(ASSOCIATION);
+        onResult.apply(list);
     }
 
     @Override
