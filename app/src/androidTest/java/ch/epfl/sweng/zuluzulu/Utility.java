@@ -14,6 +14,9 @@ import java.util.Map;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
+import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.Admin;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
@@ -154,47 +157,59 @@ public class Utility {
      * @return a default channel
      */
     public static Channel defaultChannel() {
-        Map<String, Object> data = new HashMap<>();
-        data.put("id", "1");
-        data.put("name", "name");
-        data.put("description", "description");
-        data.put("restrictions", new HashMap<>());
-        FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
-        return new Channel(fmap);
+        return new Channel("1", "test channel", "description", new HashMap<>(), null);
     }
 
     public static Post defaultPost() {
-        Map<String, Object> data = new HashMap<>();
-        data.put("senderName", "James");
-        data.put("message", "message");
-        data.put("time", new Date());
-        data.put("sciper", "000000");
-        data.put("color", "#F0E68C");
-        data.put("nbUps", 0L);
-        data.put("nbResponses", 0L);
-        data.put("upScipers", new ArrayList<>());
-        data.put("downScipers", new ArrayList<>());
-        FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
-        AuthenticatedUser user = createTestAuthenticated();
-        return new Post(fmap, user.getSciper(), defaultChannel().getId(), null);
+
+        return new Post(
+                "1",
+                "1",
+                null,
+                "Message",
+                "James",
+                "000000",
+                new Date(),
+                "#F0E68C",
+                0,
+                0,
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
     }
 
-    public static Association defaultAssociation(){
-        Map<String, Object> event = new HashMap<>();
-        Date far_date = new Date(2018, 11, 28);
-        event.put("id", "1");
-        event.put("start", far_date);
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", "1");
-        map.put("name", "Agepoly");
-        map.put("short_desc", "Association Générale des Etudiants de l'EPFL");
-        map.put("long_desc", "Association Générale des Etudiants de l'EPFL");
-        map.put("icon_uri", "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso1_icon.png?alt=media&token=391a7bfc-1597-4935-9afe-e08ecd734e03");
-        map.put("channel_id", "1");
-        map.put("events", Collections.singletonList(event));
-
-        return new Association(new FirebaseMapDecorator(map));
+    public static Association defaultAssociation() {
+        return new Association(
+                "1",
+                "ASSOCIATION 1",
+                "SHORT DESC",
+                "LONG DESC",
+                "http://lauzhack.com/images/favicon.png",
+                "http://lauzhack.com/images/favicon.png",
+                Collections.singletonList("1"),
+                "1"
+        );
     }
 
+    public static Event defaultEvent() {
+        return new EventBuilder()
+                .setId("1")
+                .setDate(new EventDate(
+                        new Date(2L), new Date(2L)))
+                .setUrlPlaceAndRoom("")
+                .setLikes(0)
+                .setShortDesc("short desc")
+                .setLongDesc("long desc")
+                .setOrganizer("james")
+                .setPlace("MXF 1")
+                .setBannerUri("https://memento.epfl.ch/image/12568/112x112.jpg")
+                .setIconUri("https://memento.epfl.ch/image/12568/112x112.jpg")
+                .setWebsite("http://nccr-marvel.ch/events/marvel-distinguished-lecture-feliciano-giustino")
+                .setContact("goité")
+                .setName("EVENT 1")
+                .setCategory("none")
+                .setSpeaker("bond")
+                .setChannelId("1")
+                .setAssosId("1").build();
+    }
 }

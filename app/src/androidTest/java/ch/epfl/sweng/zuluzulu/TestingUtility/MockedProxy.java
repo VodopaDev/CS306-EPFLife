@@ -20,42 +20,15 @@ import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
 import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.Utility;
 
 public class MockedProxy implements Proxy {
 
     // TODO put in utils and use this events in EventTests etc
-    private static final Event EVENT =
-            new EventBuilder()
-                    .setId("1")
-                    .setDate(new EventDate(
-                            new Date(2L), new Date(2L)))
-                    .setUrlPlaceAndRoom("")
-                    .setLikes(0)
-                    .setShortDesc("short desc")
-                    .setLongDesc("long desc")
-                    .setOrganizer("james")
-                    .setPlace("MXF 1")
-                    .setBannerUri("https://memento.epfl.ch/image/12568/112x112.jpg")
-                    .setIconUri("https://memento.epfl.ch/image/12568/112x112.jpg")
-                    .setWebsite("http://nccr-marvel.ch/events/marvel-distinguished-lecture-feliciano-giustino")
-                    .setContact("goité")
-                    .setName("EVENT 1")
-                    .setCategory("none")
-                    .setSpeaker("bond")
-                    .setChannelId("1")
-                    .setAssosId("1").build();
-
-    private static final Association ASSOCIATION = new Association(
-            "1",
-            "ASSOCIATION 1",
-            "SHORT DESC",
-            "LONG DESC",
-            "http://lauzhack.com/images/favicon.png",
-            "http://lauzhack.com/images/favicon.png",
-            Collections.singletonList("1"),
-            "1"
-    );
-    private static final Channel CHANNEL = new Channel("1", "test channel", "description", new HashMap<>(), null);
+    private static final Event EVENT = Utility.defaultEvent();
+    private static final Association ASSOCIATION = Utility.defaultAssociation();
+    private static final Channel CHANNEL = Utility.defaultChannel();
+    private static final Post POST = Utility.defaultPost();
 
 
     private Map<String, Association> associationMap;
