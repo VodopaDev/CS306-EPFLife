@@ -107,28 +107,12 @@ public class EventFragment extends SuperFragment {
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Events");
         }
 
-<<<<<<< HEAD
         allEvents = new ArrayList<>();
         followedEvents = new ArrayList<>();
         eventsToFilter = new ArrayList<>();
         eventsFiltered = new ArrayList<>();
         event_adapter = new EventArrayAdapter(getContext(), eventsFiltered, mListener, user);
         fillEventLists();
-=======
-        event_all = new ArrayList<>();
-        event_fav = new ArrayList<>();
-        event_adapter = new EventArrayAdapter(getContext(), event_all, mListener, user);
-
-        default_sort_option = "name";
-
-        fillEventLists(default_sort_option);
-
-        isFavDisplayed = false;
-
-        event_all_sorted = new ArrayList<>();
-        event_fav_sorted = new ArrayList<>();
-
->>>>>>> origin/master
         eventCalendar = Calendar.getInstance();
     }
 
@@ -173,9 +157,9 @@ public class EventFragment extends SuperFragment {
         event_filter_constraint_layout = view.findViewById(R.id.even_filter_constraintLayout);
 
         openCloseFilterOption();
-        setSortByName();
-        setSortByLike();
-        setSortByDate();
+        setSortByNameButton();
+        setSortByLikeButton();
+        setSortByDateButton();
         setFilterWithSearchBar();
 
         event_fragment_from_date.setOnClickListener(v -> selectDate(event_fragment_from_date));
@@ -185,7 +169,6 @@ public class EventFragment extends SuperFragment {
         return view;
     }
 
-<<<<<<< HEAD
     private void fillEventLists() {
         DatabaseFactory.getDependency().getAllEvents(result -> {
             allEvents.clear();
@@ -202,45 +185,11 @@ public class EventFragment extends SuperFragment {
             eventsFiltered.addAll(eventsToFilter);
             event_adapter.notifyDataSetChanged();
         });
-=======
-    private void emptySortedEventList() {
-        event_all_sorted.clear();
-        event_fav_sorted.clear();
-    }
-
-    private void fillEventLists(String sortOption) {
-        FirebaseFirestore.getInstance().collection("events_info").orderBy(sortOption).get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        for (DocumentSnapshot snap : snap_list) {
-                            FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
-                            if (fmap.hasFields(Event.FIELDS) && fmap.getDate("start_date").compareTo(new Date(System.currentTimeMillis())) >= 0) {
-                                Event event = new Event.EventBuilder().build(fmap);
-                                event_all.add(event);
-                                if (user.isConnected() && ((AuthenticatedUser) user).isFavEvent(event))
-                                    event_fav.add(event);
-                                event_adapter.notifyDataSetChanged();
-                            }
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
-                        Log.e("EVENT_LIST", "Error fetching event date\n" + e.getMessage());
-                    }
-                });
->>>>>>> origin/master
     }
 
     private void updateListView(Button new_selected, Button new_unselected, ArrayList<Event> data, ListView list) {
         new_selected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         new_unselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
-        if (new_selected == button_event_fav) isFavDisplayed = true;
-        else isFavDisplayed = false;
         event_adapter = new EventArrayAdapter(getContext(), data, mListener, user);
         list.setAdapter(event_adapter);
         event_adapter.notifyDataSetChanged();

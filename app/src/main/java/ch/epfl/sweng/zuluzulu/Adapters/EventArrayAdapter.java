@@ -96,12 +96,14 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
                     if (!user.isFollowedEvent(event.getId())) {
                         event.increaseLikes(user.getSciper());
                         holder.likes.setText(String.valueOf(event.getLikes()));
-                        holder.likes_button.setTextColor(Color.BLUE);
+                        // TODO: find what is this set text color
+                        //holder.likes_button.setTextColor(Color.BLUE);
                         user.addFollowedEvent(event.getId());
                     } else {
                         event.decreaseLikes(user.getSciper());
                         holder.likes.setText(String.valueOf(event.getLikes()));
-                        holder.likes_button.setTextColor(Color.BLACK);
+                        // TODO: find what is this set text color
+                        //holder.likes_button.setTextColor(Color.BLACK);
                         user.removeFollowedEvent(event.getId());
                     }
                 }
