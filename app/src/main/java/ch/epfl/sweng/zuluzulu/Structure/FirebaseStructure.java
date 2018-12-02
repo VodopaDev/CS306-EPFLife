@@ -41,10 +41,6 @@ public abstract class FirebaseStructure implements Serializable {
         return id;
     }
 
-    public void setId(String id){
-        this.id = id;
-    }
-
     /**
      * Returned all the required fields to construct a valid FirebaseStructure
      * @return the list of all required fields

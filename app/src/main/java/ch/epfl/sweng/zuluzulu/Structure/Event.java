@@ -114,13 +114,6 @@ public class Event extends FirebaseStructure {
         return longDescription;
     }
 
-    public void setName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException();
-        }
-        this.name = name.trim().replaceAll("\"", "");
-    }
-
     public String getChannelId(){
         return channelId;
     }
@@ -131,11 +124,7 @@ public class Event extends FirebaseStructure {
      * @return the icon Uri
      */
     public Uri getIconUri() {
-        System.out.println(iconUri);
-        System.out.println(Uri.parse(iconUri));
-        return iconUri == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
-                Uri.parse(iconUri);
+        return Uri.parse(iconUri);
     }
 
     /**
@@ -144,9 +133,7 @@ public class Event extends FirebaseStructure {
      * @return the banner Uri
      */
     public Uri getBannerUri() {
-        return bannerUri == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
-                Uri.parse(bannerUri);
+        return Uri.parse(bannerUri);
     }
 
     public String getOrganizer() {

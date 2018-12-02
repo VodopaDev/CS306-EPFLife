@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +13,7 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
 import ch.epfl.sweng.zuluzulu.Structure.EventDate;
+import ch.epfl.sweng.zuluzulu.Utility.Utils;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
@@ -128,13 +130,13 @@ public class EventTest {
     }
 
     @Test
-    public void dateComparTest() {
+    public void dateComparatorTest() {
         initWorkingAssociation();
         assertEquals(START_DATE.compareTo(START_DATE), Event.dateComparator().compare(event0, event0));
     }
 
     @Test
-    public void likesComparTest() {
+    public void likesComparatorTest() {
         initWorkingAssociation();
         assertEquals(0, Event.likeComparator().compare(event0, event0));
     }
@@ -196,59 +198,42 @@ public class EventTest {
     }
 
     @Test
-    public void testBuilder() {
-        EventBuilder eb = new EventBuilder()
-                .setId("0")
-                .setDate(new EventDate(
-                        START_DATE, START_DATE))
-                .setUrlPlaceAndRoom(URL_PLACE)
-                .setLikes(0)
-                .setShortDesc(SHORT_DESC)
-                .setLongDesc(LONG_DESC)
-                .setOrganizer(ORGANIZER)
-                .setPlace(PLACE)
-                .setBannerUri("epfl.ch")
-                .setIconUri("epfl.ch")
-                .setWebsite(WEBSITE)
-                .setContact(CONTACT)
-                .setName(NAME1)
-                .setCategory(CATEGORY)
-                .setSpeaker(SPEAKER)
-                .setChannelId("0")
-                .setAssosId("0");
+    public void dateStringAreCorrect(){
+        initWorkingAssociation();
+        String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_PATTERN);
 
-        Event event0 = eb.build();
-
-
-        assertEquals("0", event0.getId());
-
-        assertEquals(0, (int) event0.getLikes());
-
-        assertEquals(NAME1, event0.getName());
-
-        assertEquals(LONG_DESC, event0.getLongDescription());
-
-        assertEquals(SHORT_DESC, event0.getShortDescription());
-
-        assertEquals(START_DATE, event0.getStartDate());
-
-        assertEquals(ORGANIZER, event0.getOrganizer());
-
-        assertEquals(PLACE, event0.getPlace());
-
-        assertEquals(SPEAKER, event0.getSpeaker());
-
-        assertEquals(CATEGORY, event0.getCategory());
-
-        assertEquals(CONTACT, event0.getContact());
-
-        assertEquals(WEBSITE, event0.getWebsite());
-
-        assertEquals(URL_PLACE, event0.getUrlPlaceAndRoom());
-
-        assertEquals("0", event0.getChannelId());
-
-        assertEquals("0", event0.getAssociationId());
+        assertEquals(simpleDateFormat.format(START_DATE), event0.getStartDateString());
+        assertEquals(simpleDateFormat.format(START_DATE), event0.getEndDateString());
     }
+
+    @Test
+    public void getDataIsCorrect(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", ID);
+        map.put("channel_id", CHANNEL_ID);
+        map.put("association_id", ASSOCIATION_ID);
+        map.put("name", NAME1);
+        map.put("short_description", SHORT_DESC);
+        map.put("long_description", LONG_DESC);
+        map.put("icon_uri", TEST_URI_STRING);
+        map.put("banner_uri", TEST_URI_STRING);
+        map.put("start_date", START_DATE);
+        map.put("end_date", START_DATE);
+        map.put("likes", LIKES_1);
+        map.put("organizer", ORGANIZER);
+        map.put("place", PLACE);
+        map.put("contact", CONTACT);
+        map.put("speaker", SPEAKER);
+        map.put("website", WEBSITE);
+        map.put("category", CATEGORY);
+        map.put("url_place_and_room", URL_PLACE);
+
+        event0 = new Event(new FirebaseMapDecorator(map));
+        map.put("likes", LIKES_1.intValue());
+        assertEquals(map, event0.getData());
+    }
+
+
 
 }

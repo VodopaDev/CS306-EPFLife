@@ -70,7 +70,7 @@ public class AuthenticatedUserTest {
         assertThat(semester, equalTo(user.getSemester()));
         assertThat(gaspar, equalTo(user.getGaspar()));
     }
-    
+
     @Test
     public void setList() {
         assertFalse(user.isFollowedAssociation(ASSOCIATION_ID));
