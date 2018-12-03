@@ -7,24 +7,20 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.TimeUnit;
-
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestWithAuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
@@ -32,13 +28,13 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
     SuperFragment fragment;
 
     @Before
-    public void init() throws InterruptedException {
+    public void init() {
+        DatabaseFactory.setDependency(new MockedProxy());
+
         fragment = EventFragment.newInstance(getUser());
         mActivityRule.getActivity().openFragment(fragment);
 
         onView(withId(R.id.event_fragment_filter_button)).perform(click());
-
-        TimeUnit.SECONDS.sleep(2);
     }
 
     @Test
@@ -61,14 +57,16 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
     }
 
     @Test
-    public void thereAreTwoEditText() throws InterruptedException {
+    public void thereAreTwoEditText() {
         onView(withId(R.id.event_fragment_from_date)).check(matches(isDisplayed()));
         onView(withId(R.id.event_fragment_to_date)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void eventsArePresentInTheListView() {
+    public void thereIsEventInTheListView() {
         onView(withId(R.id.event_fragment_listview)).check(matches(hasMinimumChildCount(1)));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasDescendant(withText("Fiesta time"))
+        ));
     }
 
     @Test
@@ -80,24 +78,20 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
 
     @Test
     public void sortWithKeywordTest() {
-        onView(withId(R.id.event_fragment_search_bar)).perform(typeText("a"));
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasMinimumChildCount(1)));
-        onView(withId(R.id.event_fragment_search_bar)).perform(clearText());
-        onView(withId(R.id.event_fragment_search_bar)).perform(typeText("discover"));
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasMinimumChildCount(1)));
+        onView(withId(R.id.event_fragment_search_bar)).perform(typeText("Fiesta time"));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasDescendant(withText("Fiesta time"))));
+        onView(withId(R.id.event_fragment_search_bar)).perform(typeText("EVENT 2"));
+        onView(withId(R.id.event_fragment_listview)).check(matches(not(hasDescendant(withText("Fiesta time")))));
     }
 
     @Test
-    public void sortFromDate() {
+    public void sortWithDate() {
         onView(withId(R.id.event_fragment_from_date)).perform(click());
+        onView(withText("OK")).perform(click());
+        onView(withId(R.id.event_fragment_to_date)).perform(click());
         onView(withText("OK")).perform(click());
     }
 
-    @Test
-    public void sortToDateFail() {
-        onView(withId(R.id.event_fragment_to_date)).perform((click()));
-        onView(withId(R.id.event_fragment_to_date)).check(matches(withText("")));
-    }
 
     @Test
     public void sortFromAndToDate() {

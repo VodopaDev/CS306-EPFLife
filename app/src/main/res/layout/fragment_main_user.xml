@@ -31,7 +31,7 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next 3 incoming events"
+        android:text="Next 3 incoming upcomingEvents"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/user_welcome"
         app:layout_constraintEnd_toEndOf="@+id/textView4"

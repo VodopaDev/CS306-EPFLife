@@ -16,23 +16,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.User.UserRole;
 import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
 import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
 import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
@@ -71,7 +66,6 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
      *
      * @return A new instance of fragment LoginFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static LoginFragment newInstance() {
         return new LoginFragment();
     }
@@ -166,35 +160,17 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     }
 
     private void updateUserAndFinishLogin() {
-        final DocumentReference ref = FirebaseFirestore.getInstance()
-                .collection("users_info")
-                .document(user.getSciper());
+        DatabaseFactory.getDependency().getUserWithIdOrCreateIt(user.getSciper(), result -> {
+            List<String> receivedAssociations = result.getStringList("followed_associations");
+            List<String> receivedEvents = result.getStringList("followed_events");
+            List<String> receivedChannels = result.getStringList("followed_channels");
 
-        ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (!documentSnapshot.exists()) {
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("fav_assos", new ArrayList<Integer>());
-                    map.put("followed_events", new ArrayList<Integer>());
-                    map.put("followed_chats", new ArrayList<Integer>());
-                    map.put("fav_event", new ArrayList<Integer>());
-                    ref.set(map);
-                    transfer_main(false);
-                } else {
-                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                    List<Integer> received_assos = fmap.getIntegerList("fav_assos");
-                    List<Integer> received_events = fmap.getIntegerList("followed_events");
-                    List<Integer> received_chats = fmap.getIntegerList("followed_chats");
-                    List<Integer> received_event = fmap.getIntegerList("fav_event");
-
-                    ((AuthenticatedUser) user).setFavAssos(received_assos);
-                    ((AuthenticatedUser) user).setFollowedEvents(received_events);
-                    ((AuthenticatedUser) user).setFollowedChats(received_chats);
-                    ((AuthenticatedUser) user).setFavEvent(received_event);
-                    transfer_main(false);
-                }
-            }
+            for(String role: result.getStringList("roles"))
+                user.addRole(UserRole.valueOf(role));
+            ((AuthenticatedUser) user).setFollowedAssociation(receivedAssociations);
+            ((AuthenticatedUser) user).setFollowedEvents(receivedEvents);
+            ((AuthenticatedUser) user).setFollowedChannels(receivedChannels);
+            transfer_main(false);
         });
     }
 

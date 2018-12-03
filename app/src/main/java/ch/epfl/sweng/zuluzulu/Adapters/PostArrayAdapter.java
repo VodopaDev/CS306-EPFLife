@@ -12,22 +12,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
-import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseDocument;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
+import ch.epfl.sweng.zuluzulu.Utility.Utils;
+import ch.epfl.sweng.zuluzulu.User.User;
 
 public class PostArrayAdapter extends ArrayAdapter<Post> {
 
     private Context mContext;
     private List<Post> posts;
+    private User user;
 
     private Post currentPost;
     private TextView timeAgo;
@@ -36,12 +33,11 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     private ImageView upButton;
     private ImageView downButton;
 
-    private Database db = DatabaseFactory.getDependency();
-
-    public PostArrayAdapter(@NonNull Context context, List<Post> list) {
+    public PostArrayAdapter(@NonNull Context context, List<Post> list, User user) {
         super(context, 0, list);
         mContext = context;
         posts = list;
+        this.user = user;
     }
 
     @NonNull
@@ -124,37 +120,18 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     }
 
     private void updateDatabase(boolean up, Post post, TextView nbUpsText) {
-        if (!post.isUpByUser() && !post.isDownByUser()) {
-            int nbUps = post.getNbUps() + (up ? 1 : -1);
-            List<String> upScipers = post.getUpScipers();
-            List<String> downScipers = post.getDownScipers();
-            DatabaseDocument document = post.isReply() ?
-                    db.collection("channels/channel" + post.getOriginalPost().getChannelId() + "/posts/" + post.getOriginalPost().getId() + "/replies").document(post.getId()) :
-                    db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
-            if (up) {
-                upScipers.add(post.getUserSciper());
-                document.update(
-                        "nbUps", nbUps,
-                        "upScipers", upScipers
-                );
-                post.setUpByUser(true);
-            } else {
-                downScipers.add(post.getUserSciper());
-                document.update(
-                        "nbUps", nbUps,
-                        "downScipers", downScipers
-                );
-                post.setDownByUser(true);
-            }
-            nbUpsText.setText("" + nbUps);
+        if((!up && post.downvoteWithUser(user.getSciper())) || (up && post.upvoteWithUser(user.getSciper()))){
+            DatabaseFactory.getDependency().updatePost(post);
+            nbUpsText.setText("" + post.getNbUps());
         }
     }
 
     private void updateUpsButtons(Post post, ImageView upButton, ImageView downButton) {
-        if (post.isUpByUser()) {
+        if (post.isUpByUser(user.getSciper())) {
             upButton.setImageResource(R.drawable.up_gray);
             downButton.setImageResource(R.drawable.down_transparent);
-        } else if (post.isDownByUser()) {
+        }
+        else if (post.isDownByUser(user.getSciper())) {
             downButton.setImageResource(R.drawable.down_gray);
             upButton.setImageResource(R.drawable.up_transparent);
         }

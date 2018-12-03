@@ -1,18 +1,11 @@
 package ch.epfl.sweng.zuluzulu.User;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-
-import ch.epfl.sweng.zuluzulu.Structure.Association;
-import ch.epfl.sweng.zuluzulu.Structure.Channel;
-import ch.epfl.sweng.zuluzulu.Structure.Event;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
+import java.util.Map;
 
 public class AuthenticatedUser extends User {
-    public static final List<String> fields = Arrays.asList("fav_assos", "followed_events", "followed_chats");
-    private final String firestore_path;
     // Use sciper to check User (and not mail or gaspar)
     private final String sciper;
     private final String gaspar;
@@ -20,120 +13,127 @@ public class AuthenticatedUser extends User {
     private final String section;
     private final String semester;
     // WARNING: can user can have multiples names
-    private final String first_names;
-    private final String last_names;
-    // All followed ids of Associations, Chats and Events
-    private List<Integer> fav_assos;
-    private List<Integer> fav_event;
-    private List<Integer> followed_chats;
-    private List<Integer> followed_events;
-    // TODO add argument to constructor and store liked_event in firebase
-    private Set<Integer> liked_events = new HashSet<>();
+    private final String firstNames;
+    private final String lastNames;
 
-    protected AuthenticatedUser(String sciper, String gaspar, String email, String section, String semester, String first_names, String last_names,
-                                List<Integer> fav_assos, List<Integer> followed_events, List<Integer> followed_chats, List<Integer> fav_event) {
-        firestore_path = "users_info/" + sciper;
+    // All followed ids of Associations, Chats and Events
+    private List<String> followedAssociations;
+    private List<String> followedChannels;
+    private List<String> followedEvents;
+
+    protected AuthenticatedUser(String sciper, String gaspar, String email, String section,
+                                String semester, String firstNames, String lastNames,
+                                List<String> followedAssociations, List<String> followedEvents,
+                                List<String> followedChannels) {
         this.sciper = sciper;
         this.gaspar = gaspar;
         this.email = email;
         this.section = section;
         this.semester = semester;
-        this.first_names = first_names;
-        this.last_names = last_names;
-        this.fav_assos = fav_assos;
-        this.followed_chats = followed_chats;
-        this.followed_events = followed_events;
-        this.fav_event = fav_event;
-
-        // Add role
-        this.addRole(UserRole.USER);
-
-        // TO REMOVE , change with database access
-        if (gaspar.equals("dahn") || sciper.equals("268785") || sciper.equals("270103") || sciper.equals("250482")) {
-            this.addRole(UserRole.ADMIN);
-        }
+        this.firstNames = firstNames;
+        this.lastNames = lastNames;
+        this.followedAssociations = followedAssociations;
+        this.followedChannels = followedChannels;
+        this.followedEvents = followedEvents;
+        addRole(UserRole.USER);
     }
 
-    public boolean isFavAssociation(Association asso) {
-        return fav_assos.contains(asso.getId());
-    }
+    //----- Association related methods -----\\
 
-    public boolean isFavEvent(Event event) {
-        if (fav_event == null)
+    public boolean isFollowedAssociation(String associationId) {
+        if(associationId == null || associationId.isEmpty())
             return false;
-        else
-            return fav_event.contains(event.getId());
+        return followedAssociations.contains(associationId);
     }
 
-    public boolean isFollowedEvent(Event event) {
-        return followed_events.contains(event.getId());
+    public boolean addFollowedAssociation(String associationId) {
+        if(associationId == null || associationId.isEmpty())
+            return false;
+        return followedAssociations.add(associationId);
     }
 
-    public boolean isFollowedChat(Channel channel) {
-        return followed_chats.contains(channel.getId());
+    public boolean removeFavAssociation(String associationId) {
+        if(associationId == null || associationId.isEmpty())
+            return false;
+        return followedAssociations.remove(associationId);
     }
 
-    public void addFavAssociation(Association asso) {
-        fav_assos.add(asso.getId());
-        Utils.addIdToList(firestore_path, "fav_assos", asso.getId());
+    public void setFollowedAssociation(List<String> associationsIds){
+        assert(associationsIds != null);
+        followedAssociations = associationsIds;
     }
 
-    public void removeFavAssociation(Association asso) {
-        fav_assos.remove((Integer) asso.getId());
-        Utils.removeIdFromList(firestore_path, "fav_assos", asso.getId());
+    public List<String> getFollowedAssociations(){
+        return followedAssociations;
     }
 
-    public void addFavEvent(Event event) {
-        fav_event.add(event.getId());
-        Utils.addIdToList(firestore_path, "fav_event", event.getId());
+    //----- Event related methods -----\\
+
+    public boolean isFollowedEvent(String eventId) {
+        if(eventId == null || eventId.isEmpty())
+            return false;
+        return followedEvents.contains(eventId);
     }
 
-    public void removeFavEvent(Event event) {
-        fav_event.remove((Integer) event.getId());
-        Utils.removeIdFromList(firestore_path, "fav_event", event.getId());
+    public boolean addFollowedEvent(String eventId) {
+        if(eventId == null || eventId.isEmpty())
+            return false;
+        return followedEvents.add(eventId);
     }
 
-    public void setFollowedChats(List<Integer> followed_chats) {
-        this.followed_chats = followed_chats;
+    public boolean removeFollowedEvent(String eventId) {
+        if(eventId == null || eventId.isEmpty())
+            return false;
+        return followedEvents.remove(eventId);
     }
 
-    public void setFavAssos(List<Integer> fav_assos) {
-        this.fav_assos = fav_assos;
+    public void setFollowedEvents(List<String> eventsIds){
+        assert(eventsIds != null);
+        followedEvents = eventsIds;
     }
 
-    public void setFavEvent(List<Integer> fav_event) {
-        this.fav_event = fav_event;
+    public List<String> getFollowedEvents(){
+        return followedEvents;
     }
 
+    //----- Channel related methods -----\\
 
-    public void setFollowedEvents(List<Integer> followed_events) {
-        this.followed_events = followed_events;
+    public boolean isFollowedChannel(String channelId) {
+        if(channelId == null || channelId.isEmpty())
+            return false;
+        return followedChannels.contains(channelId);
     }
 
-    public void setLikedEvent(Set<Integer> liked_events) {
-        this.liked_events = liked_events;
+    public boolean addFollowedChannel(String channelId) {
+        if(channelId == null || channelId.isEmpty())
+            return false;
+        return followedChannels.add(channelId);
     }
 
-    public boolean isEventLiked(Integer event) {
-        return liked_events.contains(event);
+    public boolean removeFollowedChannel(String channelId) {
+        if(channelId == null || channelId.isEmpty())
+            return false;
+        return followedChannels.remove(channelId);
     }
 
-    public void likeEvent(Integer event) {
-        this.liked_events.add(event);
+    public void setFollowedChannels(List<String> channelsIds){
+        assert(channelsIds != null);
+        followedChannels = channelsIds;
     }
 
-    public void dislikeEvent(Integer event) {
-        this.liked_events.remove(event);
+    public List<String> getFollowedChannels(){
+        return followedChannels;
     }
+
 
     @Override
     public String getFirstNames() {
-        return first_names;
+        return firstNames;
     }
 
     @Override
     public String getLastNames() {
-        return last_names;
+        return lastNames;
     }
 
     @Override
@@ -166,9 +166,22 @@ public class AuthenticatedUser extends User {
         return true;
     }
 
+    public Map<String, Object> getData(){
+        ArrayList<String> roles = new ArrayList<>();
+        for(UserRole role: this.roles)
+            roles.add(role.name());
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("followed_associations", followedAssociations);
+        map.put("followed_events", followedEvents);
+        map.put("followed_channels", followedChannels);
+        map.put("roles", roles);
+        return map;
+    }
+
     @Override
     public String toString() {
-        return first_names + " " + last_names
+        return firstNames + " " + lastNames
                 + "\nsciper: " + sciper
                 + "\ngaspar: " + gaspar
                 + "\nemail: " + email

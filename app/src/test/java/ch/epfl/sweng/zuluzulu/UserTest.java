@@ -4,8 +4,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.Collections;
+import java.util.ArrayList;
 
+import ch.epfl.sweng.zuluzulu.TestingUtility.Utility;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.Guest;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -46,9 +47,9 @@ public class UserTest {
         builder.setGaspar("admin");
         builder.setFirst_names("admin_first_name");
         builder.setLast_names("admin_last_name");
-        builder.setFollowedChats(Collections.EMPTY_LIST);
-        builder.setFavAssos(Collections.EMPTY_LIST);
-        builder.setFollowedEvents(Collections.EMPTY_LIST);
+        builder.setFollowedChannels(new ArrayList<>());
+        builder.setFollowedAssociations(new ArrayList<>());
+        builder.setFollowedEvents(new ArrayList<>());
 
         AuthenticatedUser user = builder.buildAdmin();
 
@@ -108,9 +109,9 @@ public class UserTest {
         builder.setGaspar("test");
         builder.setFirst_names("first_name");
         builder.setLast_names("last_name");
-        builder.setFollowedChats(Collections.EMPTY_LIST);
-        builder.setFavAssos(Collections.EMPTY_LIST);
-        builder.setFollowedEvents(Collections.EMPTY_LIST);
+        builder.setFollowedChannels(new ArrayList<>());
+        builder.setFollowedAssociations(new ArrayList<>());
+        builder.setFollowedEvents(new ArrayList<>());
 
         User user = builder.build();
         assertFalse(user.isConnected());

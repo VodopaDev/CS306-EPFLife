@@ -13,14 +13,12 @@ import android.view.ViewGroup;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Adapters.AddAssociationAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.Firebase.Proxy;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -29,7 +27,6 @@ import ch.epfl.sweng.zuluzulu.URLTools.AssociationsParser;
 import ch.epfl.sweng.zuluzulu.URLTools.IconParser;
 import ch.epfl.sweng.zuluzulu.URLTools.OnClickRecyclerView;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
-import ch.epfl.sweng.zuluzulu.URLTools.UrlResultListener;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.User.UserRole;
 
@@ -49,7 +46,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     private static final String EPFL_LOGO = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
 
     private List<String> datas;
-    private Database db = DatabaseFactory.getDependency();
+    private Proxy db = DatabaseFactory.getDependency();
     private List<Association> associations;
     private AddAssociationAdapter adapter;
 
@@ -65,8 +62,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             return null;
         }
 
-        AssociationsGeneratorFragment fragment = new AssociationsGeneratorFragment();
-        return fragment;
+        return new AssociationsGeneratorFragment();
     }
 
     /**
@@ -87,59 +83,26 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                 String url = data.split(",")[0];
 
                 int finalIndex = index;
-                UrlHandler urlHandler = new UrlHandler(new UrlResultListener<List<String>>() {
-                    @Override
-                    public void onFinished(List<String> result) {
-                        handleIcon(finalIndex, result);
-                    }
-                }, new IconParser());
-
+                UrlHandler urlHandler = new UrlHandler(result -> handleIcon(finalIndex, result), new IconParser());
                 urlHandler.execute(url);
                 index++;
 
-                Association association = new Association(index, data.split(",")[1], data.split(",")[2], data.split(",")[2], EPFL_LOGO, EPFL_LOGO, new ArrayList<>(), 1, 0);
-
-                this.associations.add(association);
+                Association association = new Association(
+                        DatabaseFactory.getDependency().getNewAssociationId(), //id
+                        data.split(",")[1], // name
+                        data.split(",")[2], // short description
+                        data.split(",")[2], // long description
+                        EPFL_LOGO, // icon uri
+                        EPFL_LOGO, // banner_icon
+                        new ArrayList<>(), // events
+                        DatabaseFactory.getDependency().getNewChannelId() // channel id
+                        );
+                associations.add(association);
             }
         }
 
         adapter.notifyDataSetChanged();
-
         IdlingResourceFactory.decrementCountingIdlingResource();
-    }
-
-    private void addDatabase(int index) {
-        if (index < 0 || index >= this.associations.size()) {
-            return;
-        }
-
-        //creating the channel for the DB
-        Map<String, Object> docDataChannel = new HashMap<>();
-        docDataChannel.put("description", "chat of the association : " + associations.get(index).getName());
-        docDataChannel.put("icon_uri", associations.get(index).getIconUri());
-        docDataChannel.put("id", index + 20);
-        docDataChannel.put("name", associations.get(index).getName());
-
-        Map<String, Object> restrictions = new HashMap<>();
-        restrictions.put("location", null);
-        restrictions.put("section", null);
-
-        docDataChannel.put("restrictions", restrictions);
-        db.collection("channels").document("channel" + Integer.toString(index + 20)).set(docDataChannel);
-
-
-        //put db
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("channel_id", index + 20);
-        docData.put("events", new ArrayList<>());
-        docData.put("icon_uri", associations.get(index).getIconUri());
-        docData.put("banner_uri", EPFL_LOGO);
-        docData.put("name", associations.get(index).getName());
-        docData.put("short_desc", associations.get(index).getShortDesc());
-        docData.put("long_desc", associations.get(index).getLongDesc());
-        docData.put("id", index);
-
-        db.collection("assos_info").document(Integer.toString(index)).set(docData);
     }
 
     /**
@@ -156,8 +119,17 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         }
 
         Association asso = this.associations.get(index);
-        Association newAssociation = new Association(asso.getId(), asso.getName(), asso.getShortDesc(), asso.getLongDesc(), value, asso.getBannerUri(), new ArrayList<>(), asso.getChannelId(), asso.getClosestEventId());
-        this.associations.set(index, newAssociation);
+        Association newAssociation = new Association(
+                asso.getId(), // id
+                asso.getName(), // name
+                asso.getShortDescription(), // short description
+                asso.getLongDescription(), // long description
+                value, // icon uri
+                asso.getBannerUri().toString(), // banner uri
+                new ArrayList<>(), // events
+                asso.getChannelId() // channel id
+                );
+        associations.set(index, newAssociation);
         adapter.notifyDataSetChanged();
 
         IdlingResourceFactory.decrementCountingIdlingResource();
@@ -193,7 +165,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             @Override
             public void onClick(int i) {
                 if (checkBound(i)) {
-                    addDatabase(i);
+                    DatabaseFactory.getDependency().addAssociation(associations.get(i));
                     Snackbar.make(getView(), associations.get(i).getName() + " added", Snackbar.LENGTH_SHORT).show();
                 }
             }
@@ -216,7 +188,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             return null;
         }
 
-        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.associations_generator_recyclerview);
+        RecyclerView mRecyclerView = view.findViewById(R.id.associations_generator_recyclerview);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView

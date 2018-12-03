@@ -2,7 +2,6 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,30 +12,25 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
+
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
+import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 
 public class AddEventFragment extends SuperFragment {
+    private static final String EPFL_LOGO = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
     private static final int[] INDICES = {0, 2, 4, 6, 7, 9, 11};
     //for association name
-    private List<String> association_names = new ArrayList<>();
-    private List<Integer> association_ids = new ArrayList<>();
+    private Map<String, String> association_map = new HashMap<>();
     private Spinner spinner;
     private int numberOfEvents;
 
@@ -186,61 +180,27 @@ public class AddEventFragment extends SuperFragment {
                     return;
                 }
 
-                IdlingResourceFactory.incrementCountingIdlingResource();
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("events_info").orderBy("name").get()
-                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                                numberOfEvents = snap_list.size();
+                Event event = new EventBuilder().
+                        setId(DatabaseFactory.getDependency().getNewEventId()).
+                        setName(name).
+                        setShortDesc(tit).
+                        setLongDesc(desc).
+                        setChannelId(DatabaseFactory.getDependency().getNewChannelId()).
+                        setAssosId(association_map.get(name)).
+                        setDate(new EventDate(date,date)).
+                        setFollowers(new ArrayList<>()).
+                        setOrganizer(org).
+                        setPlace(pla).
+                        setIconUri(EPFL_LOGO).
+                        setBannerUri(EPFL_LOGO).
+                        setUrlPlaceAndRoom("EPFL").
+                        setWebsite("http://epfl.ch").
+                        setContact("contact@epfl.ch").
+                        setCategory("none").
+                        setSpeaker("speaker").
+                        build();
 
-                                int id_channel = 170 + numberOfEvents + 1;
-
-                                //the map for the corresponding channel
-                                Map<String, Object> docDataChannel = new HashMap<>();
-                                docDataChannel.put("description", "chat of the event : " + tit + " from " + name);
-                                docDataChannel.put("icon_uri", "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg");
-                                docDataChannel.put("id", id_channel);
-                                docDataChannel.put("name", name + "'s event");
-
-                                Map<String, Object> restrictions = new HashMap<>();
-                                restrictions.put("location", null);
-                                restrictions.put("section", null);
-
-                                docDataChannel.put("restrictions", restrictions);
-                                db.collection("channels").document("channel" + Integer.toString(id_channel)).set(docDataChannel);
-
-                                //the map for the event
-                                Map<String, Object> docData = new HashMap<>();
-                                docData.put("icon_uri", "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg");
-                                docData.put("id", numberOfEvents + 1);
-                                docData.put("assos_id", association_ids.get(association_names.indexOf(name)));
-                                docData.put("channel_id", id_channel);
-                                docData.put("likes", 0);
-                                docData.put("long_desc", desc);
-                                docData.put("name", name);
-                                docData.put("organizer", org);
-                                docData.put("place", pla);
-                                docData.put("short_desc", tit);
-                                docData.put("start_date", date);
-                                DatabaseFactory.getDependency().collection("events_info").document("event" + Integer.toString(numberOfEvents + 1)).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_FRAGMENT, null);
-                                    }
-                                });
-
-                                IdlingResourceFactory.decrementCountingIdlingResource();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                error_message(e);
-                                IdlingResourceFactory.decrementCountingIdlingResource();
-                            }
-                        });
+                DatabaseFactory.getDependency().addEvent(event);
             }
         });
     }
@@ -344,23 +304,18 @@ public class AddEventFragment extends SuperFragment {
      * @param description , the long description of the event
      * @return if the arguments are valid
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean checkIfValid(String title, String description) {
-        boolean valid = true;
+        if (title.length() > 30)
+            return viewSetError(title_view, "title is too long");
+        if (title.isEmpty())
+            return viewSetError(title_view, "please write a title");
+        if (description.length() > 80)
+            return viewSetError(description_view, "description is too long");
+        if (description.isEmpty())
+            return viewSetError(description_view, "please write a description");
 
-        if (title.length() > 30) {
-            valid = viewSetError(title_view, "title is too long");
-        }
-        if (title.isEmpty()) {
-            valid = viewSetError(title_view, "please write a title");
-        }
-        if (description.length() > 80) {
-            valid = viewSetError(description_view, "description is too long");
-        }
-        if (description.isEmpty()) {
-            valid = viewSetError(description_view, "please write a description");
-        }
-
-        return valid;
+        return true;
     }
 
     /**
@@ -393,34 +348,12 @@ public class AddEventFragment extends SuperFragment {
      * on the database.
      */
     private void fillAssociationNames() {
-        IdlingResourceFactory.incrementCountingIdlingResource();
-        FirebaseFirestore.getInstance().collection("assos_info").orderBy("name").get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        for (DocumentSnapshot snap : snap_list) {
-                            FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
-                            if (data.hasFields(Association.FIELDS)) {
-                                association_names.add((String) data.get("name"));
-                                association_ids.add(data.getInteger("id"));
-                            }
-                        }
-                        setSpinner(spinner, association_names);
-                        IdlingResourceFactory.decrementCountingIdlingResource();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        error_message(e);
-                        IdlingResourceFactory.decrementCountingIdlingResource();
-                    }
-                });
-    }
-
-    private void error_message(Exception e) {
-        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
-        Log.e("ASSO_LIST", "Error fetching association data\n" + e.getMessage());
+        DatabaseFactory.getDependency().getAllAssociations(result -> {
+            for (Association association : result) {
+                association_map.put(association.getName(), association.getId());
+                Log.d("EVENT_CREATOR", "added association " + association.getName());
+            }
+            setSpinner(spinner, new ArrayList<>(association_map.keySet()));
+        });
     }
 }

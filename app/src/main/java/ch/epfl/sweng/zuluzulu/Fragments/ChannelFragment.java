@@ -6,33 +6,24 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChannelArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.GPS;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
+import ch.epfl.sweng.zuluzulu.Utility.Utils;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
@@ -45,9 +36,7 @@ import ch.epfl.sweng.zuluzulu.User.User;
  * create an instance of this fragment.
  */
 public class ChannelFragment extends SuperFragment {
-    private static final String TAG = "CHANNEL_TAG";
     private static final String ARG_USER = "ARG_USER";
-    private static final String CHANNELS_COLLECTION_NAME = "channels";
 
     private View view;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -94,13 +83,10 @@ public class ChannelFragment extends SuperFragment {
         adapter = new ChannelArrayAdapter(view.getContext(), listOfChannels);
         listView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Channel selectedChannel = listOfChannels.get(position);
-                if (selectedChannel.isClickable()) {
-                    mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel);
-                }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Channel selectedChannel = listOfChannels.get(position);
+            if (selectedChannel.isAccessible()) {
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, selectedChannel);
             }
         });
 
@@ -117,32 +103,15 @@ public class ChannelFragment extends SuperFragment {
      * Read data from the database and get the list of the channels
      */
     private void getChannelsFromDatabase() {
-        IdlingResourceFactory.incrementCountingIdlingResource();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(CHANNELS_COLLECTION_NAME).orderBy("id", Query.Direction.ASCENDING).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            listOfChannels.clear();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
-                                if (fmap.hasFields(Channel.FIELDS)) {
-                                    Channel channel = new Channel(fmap);
-                                    if (channel.canBeSeenBy(user, userLocation)) {
-                                        listOfChannels.add(channel);
-                                    }
-                                }
-                            }
-                            adapter.notifyDataSetChanged();
-                            swipeRefreshLayout.setRefreshing(false);
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                        IdlingResourceFactory.decrementCountingIdlingResource();
-                    }
-                });
+        DatabaseFactory.getDependency().getAllChannels(result -> {
+            listOfChannels.clear();
+            for(Channel channel: result) {
+                listOfChannels.add(channel);
+            }
+            adapter.notifyDataSetChanged();
+            adapter.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
+            swipeRefreshLayout.setRefreshing(false);
+        });
     }
 
     /**

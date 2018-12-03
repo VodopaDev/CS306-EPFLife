@@ -42,7 +42,6 @@ public class SettingsFragment extends SuperFragment {
      *
      * @return A new instance of fragment SettingsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
     }

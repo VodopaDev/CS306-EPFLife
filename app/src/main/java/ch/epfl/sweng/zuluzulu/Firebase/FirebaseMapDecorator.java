@@ -16,7 +16,6 @@ public class FirebaseMapDecorator {
 
     // the adapted Map
     private final Map<String, Object> map;
-    private String id;
 
     /**
      * Adapt a map
@@ -34,7 +33,6 @@ public class FirebaseMapDecorator {
      */
     public FirebaseMapDecorator(DocumentSnapshot snap) {
         this.map = snap.getData();
-        this.id = snap.getId();
     }
 
     /**
@@ -44,7 +42,7 @@ public class FirebaseMapDecorator {
      * @return Integer-casted value
      */
     public Integer getInteger(String field) {
-        return ((Long) map.get(field)).intValue();
+        return ((Long) get(field)).intValue();
     }
 
     /**
@@ -54,7 +52,7 @@ public class FirebaseMapDecorator {
      * @return Long-casted value
      */
     public Long getLong(String field) {
-        return (Long) map.get(field);
+        return (Long) get(field);
     }
 
     /**
@@ -64,7 +62,7 @@ public class FirebaseMapDecorator {
      * @return String-casted value
      */
     public String getString(String field) {
-        return (String) map.get(field);
+        return (String) get(field);
     }
 
     /**
@@ -74,7 +72,7 @@ public class FirebaseMapDecorator {
      * @return Date-casted value
      */
     public Date getDate(String field) {
-        return (Date) map.get(field);
+        return (Date) get(field);
     }
 
     /**
@@ -84,7 +82,7 @@ public class FirebaseMapDecorator {
      * @return GeoPoint-casted value
      */
     public GeoPoint getGeoPoint(String field) {
-        return (GeoPoint) map.get(field);
+        return (GeoPoint) get(field);
     }
 
     /**
@@ -94,7 +92,7 @@ public class FirebaseMapDecorator {
      * @return Map-casted value
      */
     public Map<String, Object> getMap(String field) {
-        return (Map<String, Object>) map.get(field);
+        return (Map<String, Object>) get(field);
     }
 
     /**
@@ -104,7 +102,7 @@ public class FirebaseMapDecorator {
      * @return List-casted value
      */
     public List<Object> getList(String field) {
-        return (List<Object>) map.get(field);
+        return (List<Object>) get(field);
     }
 
     /**
@@ -114,7 +112,7 @@ public class FirebaseMapDecorator {
      * @return LongList-casted value
      */
     public List<Long> getLongList(String field) {
-        return (List<Long>) map.get(field);
+        return (List<Long>) get(field);
     }
 
     /**
@@ -124,7 +122,7 @@ public class FirebaseMapDecorator {
      * @return String list casted value
      */
     public List<String> getStringList(String field) {
-        return (List<String>) map.get(field);
+        return (List<String>) get(field);
     }
 
     /**
@@ -152,7 +150,9 @@ public class FirebaseMapDecorator {
      * @return value
      */
     public Object get(String field) {
-        return map.get(field);
+        if(map.containsKey(field))
+            return map.get(field);
+        return null;
     }
 
     /**
@@ -166,18 +166,9 @@ public class FirebaseMapDecorator {
             return false;
         }
         for (String key : fields) {
-            if (map.get(key) == null)
+            if (get(key) == null)
                 return false;
         }
         return true;
-    }
-
-    /**
-     * Get the document id
-     *
-     * @return the document id
-     */
-    public String getId() {
-        return id;
     }
 }
