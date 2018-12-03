@@ -47,7 +47,6 @@ class TaskMock <T> extends Task<T> {
         @NonNull
         @Override
         public com.google.android.gms.tasks.Task<T> addOnSuccessListener(@NonNull OnSuccessListener<? super T> onSuccessListener) {
-       //     onSuccessListener.onSuccess(null);
             return this;
         }
 
