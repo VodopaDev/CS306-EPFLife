@@ -10,6 +10,7 @@
     <!-- TODO: Update blank fragment layout -->
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/panel_association"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:background="@color/colorGrayDarkTransparent">
@@ -41,6 +42,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/panel_user"
         android:layout_width="match_parent"
         android:layout_height="100dp">
 
@@ -70,6 +72,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/panel_event"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         tools:background="@color/colorGrayDarkTransparent">
@@ -101,6 +104,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/panel_channel"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         app:layout_constraintEnd_toEndOf="parent"
