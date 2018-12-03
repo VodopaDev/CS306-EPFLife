@@ -302,7 +302,8 @@ public class EventFragment extends SuperFragment {
                         eventCalendar.set(Calendar.MONTH, monthOfYear);
                         eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                         dateFrom = eventCalendar.getTime();
-                        filterWithDate();
+                        //filterWithDate();
+                        sanitizeDates();
                     }
                 };
 
@@ -340,16 +341,17 @@ public class EventFragment extends SuperFragment {
         event_search_bar.setText("");
         eventsFiltered.clear();
         for(Event event: eventsToFilter){
-            if(event.getStartDate().after(dateFrom) && event.getStartDate().before(dateTo))
+            if(event.getStartDate().after(dateFrom) &&
+                    event.getStartDate().before(dateTo))
                 eventsFiltered.add(event);
         }
     }
 
     private void sanitizeDates(){
         if(dateTo == null)
-            dateTo = new Date(Long.MAX_VALUE);
+            dateTo = new Date(Long.MAX_VALUE-1);
         if(dateFrom == null)
-            dateFrom = new Date(0L);
+            dateFrom = new Date(1L);
 
         if(dateTo.before(dateFrom)){
             Date tempDate = dateFrom;
