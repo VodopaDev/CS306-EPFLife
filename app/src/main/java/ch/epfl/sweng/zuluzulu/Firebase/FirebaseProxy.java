@@ -166,13 +166,15 @@ public class FirebaseProxy implements Proxy {
     public void getAllEvents(OnResult<List<Event>> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         eventCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            List<Event> resultList = new ArrayList<>();
-            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
-                if (fmap.hasFields(Event.requiredFields()))
-                    resultList.add(new Event(fmap));
+            if (queryDocumentSnapshots != null) {
+                List<Event> resultList = new ArrayList<>();
+                for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
+                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
+                    if (fmap.hasFields(Event.requiredFields()))
+                        resultList.add(new Event(fmap));
+                }
+                onResult.apply(resultList);
             }
-            onResult.apply(resultList);
             IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch all events"));
     }
@@ -186,9 +188,11 @@ public class FirebaseProxy implements Proxy {
     public void getEventFromId(String id, OnResult<Event> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         eventCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
-            FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-            if (fmap.hasFields(Event.requiredFields())) {
-                onResult.apply(new Event(fmap));
+            if(documentSnapshot != null) {
+                FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                if (fmap.hasFields(Event.requiredFields())) {
+                    onResult.apply(new Event(fmap));
+                }
             }
             IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the association with id " + id));
@@ -256,13 +260,15 @@ public class FirebaseProxy implements Proxy {
     public void getAllChannels(OnResult<List<Channel>> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            List<Channel> resultList = new ArrayList<>();
-            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
-                if (fmap.hasFields(Channel.requiredFields()))
-                    resultList.add(new Channel(fmap));
+            if (queryDocumentSnapshots != null) {
+                List<Channel> resultList = new ArrayList<>();
+                for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
+                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
+                    if (fmap.hasFields(Channel.requiredFields()))
+                        resultList.add(new Channel(fmap));
+                }
+                onResult.apply(resultList);
             }
-            onResult.apply(resultList);
             IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch all channels"));
     }
@@ -276,9 +282,12 @@ public class FirebaseProxy implements Proxy {
     public void getChannelFromId(String id, OnResult<Channel> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
-            FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-            if (fmap.hasFields(Channel.requiredFields())) {
-                onResult.apply(new Channel(fmap));
+            if (documentSnapshot != null) {
+
+                FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                if (fmap.hasFields(Channel.requiredFields())) {
+                    onResult.apply(new Channel(fmap));
+                }
             }
             IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the channel with id " + id));
@@ -296,14 +305,16 @@ public class FirebaseProxy implements Proxy {
 
         for (String id : ids) {
             channelCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
-                FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                if (fmap.hasFields(Channel.requiredFields()))
-                    result.add(new Channel(fmap));
-                if (counter.increment()) {
-                    onResult.apply(result);
-                    IdlingResourceFactory.decrementCountingIdlingResource();
+                if(documentSnapshot != null) {
+                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+                    if (fmap.hasFields(Channel.requiredFields()))
+                        result.add(new Channel(fmap));
+                    if (counter.increment()) {
+                        onResult.apply(result);
+                        IdlingResourceFactory.decrementCountingIdlingResource();
+                    }
                 }
-            }).addOnFailureListener(e -> {
+                }).addOnFailureListener(e -> {
                 if (counter.increment()) {
                     onResult.apply(result);
                     IdlingResourceFactory.decrementCountingIdlingResource();
@@ -316,13 +327,15 @@ public class FirebaseProxy implements Proxy {
     public void getMessagesFromChannel(String id, OnResult<List<ChatMessage>> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(id).collection("messages").get().addOnSuccessListener(queryDocumentSnapshots -> {
-            List<ChatMessage> result = new ArrayList<>();
-            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
-                if (data.hasFields(ChatMessage.requiredFields()))
-                    result.add(new ChatMessage(data));
+            if(queryDocumentSnapshots != null) {
+                List<ChatMessage> result = new ArrayList<>();
+                for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
+                    FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+                    if (data.hasFields(ChatMessage.requiredFields()))
+                        result.add(new ChatMessage(data));
+                }
+                onResult.apply(result);
             }
-            onResult.apply(result);
             IdlingResourceFactory.decrementCountingIdlingResource();
         });
     }
@@ -331,30 +344,32 @@ public class FirebaseProxy implements Proxy {
     public void getPostsFromChannel(String id, OnResult<List<Post>> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(id).collection("posts").get().addOnSuccessListener(queryDocumentSnapshots -> {
-            List<Post> result = new ArrayList<>();
-            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
-                if (data.hasFields(Post.requiredFields())) {
+            if(queryDocumentSnapshots != null) {
+                List<Post> result = new ArrayList<>();
+                for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
+                    FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+                    if (data.hasFields(Post.requiredFields())) {
 
-                    /**
-                     * On devrait faire ça partout
-                     * Capturer les erreurs lors des créations
-                     * et envoyer null ??
-                     *
-                     * Car new Post() peut renvoyer une exception !
-                     *
-                     * Si on se met d'accord sur la facon d'implémenter cela, je suis chaud
-                     * à modifier le reste
-                     */
-                    try {
-                        result.add(new Post(data));
-                    } catch (Exception e) {
-                        // not added
-                        // do somethine ?
+                        /**
+                         * On devrait faire ça partout
+                         * Capturer les erreurs lors des créations
+                         * et envoyer null ??
+                         *
+                         * Car new Post() peut renvoyer une exception !
+                         *
+                         * Si on se met d'accord sur la facon d'implémenter cela, je suis chaud
+                         * à modifier le reste
+                         */
+                        try {
+                            result.add(new Post(data));
+                        } catch (Exception e) {
+                            // not added
+                            // do somethine ?
+                        }
                     }
                 }
+                onResult.apply(result);
             }
-            onResult.apply(result);
             IdlingResourceFactory.decrementCountingIdlingResource();
         });
     }
@@ -365,13 +380,15 @@ public class FirebaseProxy implements Proxy {
         channelCollection.document(channelId).collection("posts")
                 .document(postId)
                 .collection("replies").get().addOnSuccessListener(queryDocumentSnapshots -> {
-            List<Post> result = new ArrayList<>();
-            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
-                if (data.hasFields(Post.requiredFields()))
-                    result.add(new Post(data));
+            if(queryDocumentSnapshots != null) {
+                List<Post> result = new ArrayList<>();
+                for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
+                    FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+                    if (data.hasFields(Post.requiredFields()))
+                        result.add(new Post(data));
+                }
+                onResult.apply(result);
             }
-            onResult.apply(result);
             IdlingResourceFactory.decrementCountingIdlingResource();
         });
     }
@@ -454,17 +471,19 @@ public class FirebaseProxy implements Proxy {
     public void getUserWithIdOrCreateIt(String id, OnResult<FirebaseMapDecorator> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         userCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
-            if (!documentSnapshot.exists()) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("followed_associations", new ArrayList<String>());
-                map.put("followed_events", new ArrayList<String>());
-                map.put("followed_channels", new ArrayList<String>());
-                map.put("roles", Collections.singletonList("USER"));
-                userCollection.document(id).set(map);
-                onResult.apply(new FirebaseMapDecorator(map));
-            } else {
-                FirebaseMapDecorator data = new FirebaseMapDecorator(documentSnapshot);
-                onResult.apply(data);
+            if (documentSnapshot != null) {
+                if (!documentSnapshot.exists()) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("followed_associations", new ArrayList<String>());
+                    map.put("followed_events", new ArrayList<String>());
+                    map.put("followed_channels", new ArrayList<String>());
+                    map.put("roles", Collections.singletonList("USER"));
+                    userCollection.document(id).set(map);
+                    onResult.apply(new FirebaseMapDecorator(map));
+                } else {
+                    FirebaseMapDecorator data = new FirebaseMapDecorator(documentSnapshot);
+                    onResult.apply(data);
+                }
             }
             IdlingResourceFactory.decrementCountingIdlingResource();
         });
