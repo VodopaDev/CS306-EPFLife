@@ -17,7 +17,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
-import ch.epfl.sweng.zuluzulu.Firebase.Database.FirebaseAdapter;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.FirebaseFactory;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -41,8 +41,8 @@ public class FirebaseProxy implements Proxy {
     private FirebaseProxy(Context appContext) {
 
         FirebaseApp.initializeApp(appContext);
-       // firebaseInstance = FirebaseFirestore.getInstance();
-        firebaseInstance = new FirebaseAdapter();
+
+        firebaseInstance = FirebaseFactory.getDependency();
         userCollection = firebaseInstance.collection("new_user");
         assoCollection = firebaseInstance.collection("new_asso");
         eventCollection = firebaseInstance.collection("new_even");
@@ -373,15 +373,17 @@ public class FirebaseProxy implements Proxy {
             if (e != null)
                 System.err.println("Listen failed: " + e);
             else {
-                IdlingResourceFactory.incrementCountingIdlingResource();
-                List<ChatMessage> result = new ArrayList<>();
-                for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                    FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
-                    if (data.hasFields(ChatMessage.requiredFields()))
-                        result.add(new ChatMessage(data));
+                if(!queryDocumentSnapshots.isEmpty()) {
+                    IdlingResourceFactory.incrementCountingIdlingResource();
+                    List<ChatMessage> result = new ArrayList<>();
+                    for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
+                        FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+                        if (data.hasFields(ChatMessage.requiredFields()))
+                            result.add(new ChatMessage(data));
+                    }
+                    onResult.apply(result);
+                    IdlingResourceFactory.decrementCountingIdlingResource();
                 }
-                onResult.apply(result);
-                IdlingResourceFactory.decrementCountingIdlingResource();
             }
         });
     }

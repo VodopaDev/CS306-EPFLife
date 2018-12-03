@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Map;
@@ -40,5 +41,10 @@ public class CollectionAdapter implements DatabaseCollection {
     @Override
     public String getId() {
         return collection.getId();
+    }
+
+    @Override
+    public void addSnapshotListener(@NonNull EventListener<QuerySnapshot> listener) {
+        collection.addSnapshotListener(listener);
     }
 }

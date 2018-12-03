@@ -18,7 +18,7 @@ class TaskMock <T> extends Task<T> {
 
         @Override
         public boolean isSuccessful() {
-            return true;
+            return false;
         }
 
         @Override

@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Map;
@@ -19,4 +20,5 @@ public interface DatabaseCollection {
 
     String getId();
 
+    void addSnapshotListener(@NonNull EventListener<QuerySnapshot> listener);
 }
