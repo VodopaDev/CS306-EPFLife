@@ -5,8 +5,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
@@ -27,7 +29,7 @@ public class EventTest {
     private static final String LONG_DESC = "This is only random bla bla bla";
     private static final String TEST_URI_STRING = "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso1_icon.png?alt=media&token=391a7bfc-1597-4935-9afe-e08ecd734e03";
     private static final Date START_DATE = new Date(2L);
-    private static final Long LIKES_1 = 100L;
+    private static final List<String> FOLLOWERS = Arrays.asList("100,200");
     private static final String ORGANIZER = "Pascal Martin";
     private static final String PLACE = "CE";
     private static final String CONTACT = "ME";
@@ -55,7 +57,7 @@ public class EventTest {
         map.put("banner_uri", TEST_URI_STRING);
         map.put("start_date", START_DATE);
         map.put("end_date", START_DATE);
-        map.put("likes", LIKES_1);
+        map.put("followers", FOLLOWERS);
         map.put("organizer", ORGANIZER);
         map.put("place", PLACE);
         map.put("contact", CONTACT);
@@ -85,7 +87,7 @@ public class EventTest {
     @Test
     public void likesAreCorrect() {
         initWorkingAssociation();
-        assertEquals(100, event0.getLikes().intValue());
+        assertEquals(FOLLOWERS.size(), event0.getLikes().intValue());
     }
 
     @Test
@@ -223,7 +225,7 @@ public class EventTest {
         map.put("banner_uri", TEST_URI_STRING);
         map.put("start_date", START_DATE);
         map.put("end_date", START_DATE);
-        map.put("likes", LIKES_1);
+        map.put("followers", FOLLOWERS);
         map.put("organizer", ORGANIZER);
         map.put("place", PLACE);
         map.put("contact", CONTACT);
@@ -233,7 +235,6 @@ public class EventTest {
         map.put("url_place_and_room", URL_PLACE);
 
         event0 = new Event(new FirebaseMapDecorator(map));
-        map.put("likes", LIKES_1.intValue());
         assertEquals(map, event0.getData());
     }
 

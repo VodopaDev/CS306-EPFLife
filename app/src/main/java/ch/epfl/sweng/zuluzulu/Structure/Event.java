@@ -155,7 +155,7 @@ public class Event extends FirebaseStructure {
     }
 
     public boolean removeFollower(String userId) {
-        return !followers.contains(userId) && followers.remove(userId);
+        return followers.contains(userId) && followers.remove(userId);
     }
 
     public static List<String> requiredFields() {

@@ -6,7 +6,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.R;
 
@@ -42,7 +45,7 @@ public class EventBuilderTest {
         final String SHORT_DESC = "aaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaaaaaaa aaaaaaaaaaa aaaaaaaaaaaaaa";
         final String LONG_DESC = "This is only random bla bla bla";
         final Date START_DATE = new Date(2L);
-        final int LIKES_1 = 100;
+        List<String> FOLLOWERS_1 = Arrays.asList("200","1052");
         final String ORGANIZER = "Pascal Martin";
         final String PLACE = "CE";
         final String CONTACT = "ME";
@@ -59,7 +62,7 @@ public class EventBuilderTest {
                 .setDate(new EventDate(
                         START_DATE, START_DATE))
                 .setUrlPlaceAndRoom(URL_PLACE)
-                .setLikes(LIKES_1)
+                .setFollowers(FOLLOWERS_1)
                 .setShortDesc(SHORT_DESC)
                 .setLongDesc(LONG_DESC)
                 .setOrganizer(ORGANIZER)
@@ -82,7 +85,7 @@ public class EventBuilderTest {
         final String SHORT_DESC = "Beuverie à Zelig";
         final String LONG_DESC = "This is only random bla bla bla";
         final Date START_DATE = new Date(2L);
-        final int LIKES_1 = 100;
+        List<String> FOLLOWERS_1 = Arrays.asList("200","1052");
         final String ORGANIZER = "Pascal Martin";
         final String PLACE = "CE";
         final String CONTACT = "ME";
@@ -99,7 +102,7 @@ public class EventBuilderTest {
                 .setDate(new EventDate(
                         START_DATE, START_DATE))
                 .setUrlPlaceAndRoom(URL_PLACE)
-                .setLikes(LIKES_1)
+                .setFollowers(FOLLOWERS_1)
                 .setShortDesc(SHORT_DESC)
                 .setLongDesc(LONG_DESC)
                 .setOrganizer(ORGANIZER)
@@ -116,7 +119,7 @@ public class EventBuilderTest {
 
         Event event0 = eb.build();
         assertEquals(ID, event0.getId());
-        assertEquals(LIKES_1, event0.getLikes().intValue());
+        assertEquals(FOLLOWERS_1.size(), event0.getLikes().intValue());
         assertEquals(NAME1, event0.getName());
         assertEquals(LONG_DESC, event0.getLongDescription());
         assertEquals(SHORT_DESC, event0.getShortDescription());
@@ -141,7 +144,7 @@ public class EventBuilderTest {
         final String SHORT_DESC = "aaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaaaaaaa aaaaaaaaaaa aaaaaaaaaaaaaa";
         final String LONG_DESC = "This is only random bla bla bla";
         final Date START_DATE = new Date(2L);
-        final int LIKES_1 = 100;
+        List<String> FOLLOWERS_1 = Arrays.asList("200","1052");
         final String ORGANIZER = "Pascal Martin";
         final String PLACE = "CE";
         final String CONTACT = "ME";
@@ -158,7 +161,7 @@ public class EventBuilderTest {
                 .setDate(new EventDate(
                         START_DATE, START_DATE))
                 .setUrlPlaceAndRoom(URL_PLACE)
-                .setLikes(LIKES_1)
+                .setFollowers(FOLLOWERS_1)
                 .setShortDesc(SHORT_DESC)
                 .setLongDesc(LONG_DESC)
                 .setOrganizer(ORGANIZER)
