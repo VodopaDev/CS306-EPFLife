@@ -9,14 +9,14 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <ImageView
+    <ImageButton
         android:id="@+id/profile_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/ic_profile_240dp"
-        android:tint="@color/colorPrimaryDark"
+        android:background="#00000000"
         app:layout_constraintBottom_toTopOf="@+id/profile_name_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

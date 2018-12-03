@@ -1,10 +1,17 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -23,8 +30,10 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
  */
 public class ProfileFragment extends SuperFragment {
     private static final String PROFILE_TAG = "PROFILE_TAG";
-
+    private static final int CAMERA_CODE = 1234;
+    private static final String PICTURE_TAG = "PICTURE_TAG";
     private User user;
+    private ImageButton pic;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -60,6 +69,14 @@ public class ProfileFragment extends SuperFragment {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_CODE && resultCode == Activity.RESULT_OK) {
+            Bitmap picture = (Bitmap) data.getExtras().get("data");
+            pic.setImageBitmap(picture);
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -85,6 +102,16 @@ public class ProfileFragment extends SuperFragment {
         String username = builder.toString();
 
         user_view.setText(username);
+
+        pic = view.findViewById(R.id.profile_image);
+        pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, CAMERA_CODE);
+            }
+        });
+
 
 
         TextView gaspar = view.findViewById(R.id.profile_gaspar_text);

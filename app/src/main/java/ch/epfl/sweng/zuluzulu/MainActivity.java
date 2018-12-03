@@ -1,7 +1,9 @@
 package ch.epfl.sweng.zuluzulu;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -107,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
         }
     }
+
 
     /**
      * Open fragment and add tag
