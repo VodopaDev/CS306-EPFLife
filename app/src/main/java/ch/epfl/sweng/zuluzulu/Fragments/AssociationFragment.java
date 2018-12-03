@@ -131,7 +131,7 @@ public class AssociationFragment extends SuperFragment {
         assosToFilter.clear();
         assosFav.clear();
         DatabaseFactory.getDependency().getAllAssociations(result -> {
-            if(!result.isEmpty()) {
+            if (!result.isEmpty()) {
                 for (Association asso : result) {
                     assosAll.add(asso);
                     if (user.isConnected() && ((AuthenticatedUser) user).isFollowedAssociation(asso.getId()))

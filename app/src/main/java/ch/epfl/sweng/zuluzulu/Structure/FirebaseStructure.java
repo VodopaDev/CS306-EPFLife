@@ -17,41 +17,46 @@ public abstract class FirebaseStructure implements Serializable {
 
     /**
      * Construct a FirebaseStructure from a FirebaseMap
+     *
      * @param id the ID
      */
-    public FirebaseStructure(String id){
+    public FirebaseStructure(String id) {
         this.id = id;
     }
 
     /**
      * Construct a FirebaseStructure from a FirebaseMap
+     *
      * @param data the data containing the ID
      */
-    public FirebaseStructure(FirebaseMapDecorator data){
-        if(!data.hasFields(requiredFields()))
+    public FirebaseStructure(FirebaseMapDecorator data) {
+        if (!data.hasFields(requiredFields()))
             throw new IllegalArgumentException();
         this.id = data.getString("id");
     }
 
     /**
-     * Return the FirebaseStructure's id
-     * @return the FirebaseStructure's id
+     * Returned all the required fields to construct a valid FirebaseStructure
+     *
+     * @return the list of all required fields
      */
-    public String getId(){
-        return id;
+    public static List<String> requiredFields() {
+        return Collections.singletonList("id");
     }
 
     /**
-     * Returned all the required fields to construct a valid FirebaseStructure
-     * @return the list of all required fields
+     * Return the FirebaseStructure's id
+     *
+     * @return the FirebaseStructure's id
      */
-    public static List<String> requiredFields(){
-        return Collections.singletonList("id");
+    public String getId() {
+        return id;
     }
 
     /**
      * Return a map of all properties of the class.
      * Usable to put data on the FireStore.
+     *
      * @return a map of all fields
      */
     public abstract Map<String, Object> getData();

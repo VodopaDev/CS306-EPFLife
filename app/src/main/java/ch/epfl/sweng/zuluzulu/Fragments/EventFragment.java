@@ -187,14 +187,15 @@ public class EventFragment extends SuperFragment {
 
     /**
      * Set the sorting behaviour of a Checkbox for the displayed list of event
-     * @param checkBox checkbox that will be clicked
+     *
+     * @param checkBox   checkbox that will be clicked
      * @param comparator comparator to use when the checkbox is clicked
      */
-    private void setSortingBehaviourOnCheckbox(CheckBox checkBox, Comparator<Event> comparator){
+    private void setSortingBehaviourOnCheckbox(CheckBox checkBox, Comparator<Event> comparator) {
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkBox.isEnabled()) {
+                if (checkBox.isEnabled()) {
                     selectClickedCheckbox(checkBox);
                     currentComparator = comparator;
                     sortWithCurrentComparator();
@@ -206,7 +207,7 @@ public class EventFragment extends SuperFragment {
     /**
      * Sort the displayed list of event using the currently selected comparator
      */
-    private void sortWithCurrentComparator(){
+    private void sortWithCurrentComparator() {
         Collections.sort(eventsFiltered, currentComparator);
         event_adapter.notifyDataSetChanged();
     }
@@ -223,17 +224,21 @@ public class EventFragment extends SuperFragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
+
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
         });
     }
 
     /**
      * Deselect all checkboxes and then select+disable the currently used checkbox
+     *
      * @param checkBox checkbox to select and disable
      */
-    private void selectClickedCheckbox(CheckBox checkBox){
+    private void selectClickedCheckbox(CheckBox checkBox) {
         checkbox_event_sort_date.setEnabled(true);
         checkbox_event_sort_like.setEnabled(true);
         checkbox_event_sort_name.setEnabled(true);
@@ -246,8 +251,7 @@ public class EventFragment extends SuperFragment {
     }
 
     /**
-     *
-     * @param selectedButton the new selected button
+     * @param selectedButton    the new selected button
      * @param newEventsToFilter the new events to filter
      */
     private void updateListView(Button selectedButton, ArrayList<Event> newEventsToFilter) {
@@ -271,7 +275,7 @@ public class EventFragment extends SuperFragment {
      * Set the toggle of filter options
      * When clicked, display all filtering options. Clicking again hide the interface.
      */
-    public void setToggleFilterVisibilityBehaviour(){
+    public void setToggleFilterVisibilityBehaviour() {
         filter_button.setOnClickListener(v -> {
             if (event_filter_constraint_layout.getVisibility() == View.VISIBLE)
                 event_filter_constraint_layout.setVisibility(View.GONE);
@@ -282,9 +286,10 @@ public class EventFragment extends SuperFragment {
 
     /**
      * Filter the eventsToFilter using a string
+     *
      * @param s substring that must be contained in the name/description of the event
      */
-    private void filterWithText(String s){
+    private void filterWithText(String s) {
         dateFrom = null;
         dateTo = null;
         event_fragment_from_date.clearFocus();
@@ -302,10 +307,11 @@ public class EventFragment extends SuperFragment {
     }
 
     //TODO: it's surely possible to reduce this
+
     /**
      * Set the behaviour of both textfields from and to
      */
-    private void setFilteringWithDate(){
+    private void setFilteringWithDate() {
         event_fragment_from_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -316,12 +322,12 @@ public class EventFragment extends SuperFragment {
                         eventCalendar.set(Calendar.YEAR, year);
                         eventCalendar.set(Calendar.MONTH, monthOfYear);
                         eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        dateFrom = (Date)eventCalendar.getTime().clone();
+                        dateFrom = (Date) eventCalendar.getTime().clone();
                         filterWithDate();
                     }
                 };
 
-                if(getContext() != null)
+                if (getContext() != null)
                     new DatePickerDialog(getContext(), datePicker, eventCalendar
                             .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
                             eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -337,12 +343,12 @@ public class EventFragment extends SuperFragment {
                         eventCalendar.set(Calendar.YEAR, year);
                         eventCalendar.set(Calendar.MONTH, monthOfYear);
                         eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        dateTo = (Date)eventCalendar.getTime().clone();
+                        dateTo = (Date) eventCalendar.getTime().clone();
                         filterWithDate();
                     }
                 };
 
-                if(getContext() != null)
+                if (getContext() != null)
                     new DatePickerDialog(getContext(), datePicker, eventCalendar
                             .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
                             eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -353,13 +359,13 @@ public class EventFragment extends SuperFragment {
     /**
      * Fill the eventsToFilter using dates
      */
-    private void filterWithDate(){
+    private void filterWithDate() {
         sanitizeDates();
         event_search_bar.getText().clear();
         eventsFiltered.clear();
 
-        for(Event event: eventsToFilter){
-            if(event.getStartDate().after(dateFrom) && event.getStartDate().before(dateTo))
+        for (Event event : eventsToFilter) {
+            if (event.getStartDate().after(dateFrom) && event.getStartDate().before(dateTo))
                 eventsFiltered.add(event);
         }
         event_adapter.notifyDataSetChanged();
@@ -368,17 +374,18 @@ public class EventFragment extends SuperFragment {
     /**
      * Sanitize dates if they are null or before/after the minimal/maximal date
      * Also switch the bound dates if the are in the wrong order
+     *
      * @Link minDate
      * @Link maxDate
      */
-    private void sanitizeDates(){
-        if(dateTo == null || dateTo.after(maxDate))
+    private void sanitizeDates() {
+        if (dateTo == null || dateTo.after(maxDate))
             dateTo = maxDate;
-        if(dateFrom == null || dateTo.before(minDate))
+        if (dateFrom == null || dateTo.before(minDate))
             dateFrom = minDate;
 
         // if dateTo is before dateFrom
-        if(dateTo.before(dateFrom)){
+        if (dateTo.before(dateFrom)) {
             Date tempDate = dateFrom;
             dateFrom = dateTo;
             dateTo = tempDate;

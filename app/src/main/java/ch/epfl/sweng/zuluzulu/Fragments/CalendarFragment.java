@@ -21,8 +21,8 @@ import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
-import ch.epfl.sweng.zuluzulu.Utility.Utils;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Utility.Utils;
 
 
 public class CalendarFragment extends SuperFragment {
@@ -124,8 +124,8 @@ public class CalendarFragment extends SuperFragment {
         DatabaseFactory.getDependency().getAllEvents(result -> {
             Date date = Timestamp.now().toDate();
             String now = Utils.dateFormat.format(date);
-            for(Event event: result) {
-                if(user.isFollowedEvent(event.getId())) {
+            for (Event event : result) {
+                if (user.isFollowedEvent(event.getId())) {
                     followedEvents.add(event);
                     if (now.equals(event.getStartDateString()))
                         selectedDayEvents.add(event);

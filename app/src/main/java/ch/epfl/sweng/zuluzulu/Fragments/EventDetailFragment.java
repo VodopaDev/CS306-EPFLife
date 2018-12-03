@@ -168,7 +168,6 @@ public class EventDetailFragment extends SuperFragment {
         setAssosButtonBehavior();
 
 
-
         return view;
     }
 
@@ -237,7 +236,7 @@ public class EventDetailFragment extends SuperFragment {
         intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
 
         intent.putExtra(CalendarContract.Events.TITLE, event.getName());
-        intent.putExtra(CalendarContract.Events.DESCRIPTION,  event.getShortDescription());
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, event.getShortDescription());
         intent.putExtra(CalendarContract.Events.EVENT_LOCATION, "To be precised");
 
         startActivity(intent);
@@ -260,7 +259,7 @@ public class EventDetailFragment extends SuperFragment {
 
     private void loadMainChat() {
         DatabaseFactory.getDependency().getChannelFromId(event.getChannelId(), result -> {
-            if(result != null) {
+            if (result != null) {
                 chat = result;
                 chat_room.setText(chat.getName() + "'s chat");
             }
@@ -279,7 +278,7 @@ public class EventDetailFragment extends SuperFragment {
 
     private void loadAssos() {
         DatabaseFactory.getDependency().getAssociationFromId(event.getAssociationId(), result -> {
-            if(result != null) {
+            if (result != null) {
                 assos = result;
                 assos_but.setText(assos.getName());
             }

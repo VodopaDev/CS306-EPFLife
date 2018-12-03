@@ -27,7 +27,7 @@ public class Channel extends FirebaseStructure {
     private boolean isAccessible = true;
     private double distance = 0;
 
-    public Channel(String id, String name, String shortDescription, Map<String, Object> restrictions, String iconUri){
+    public Channel(String id, String name, String shortDescription, Map<String, Object> restrictions, String iconUri) {
         super(id);
         this.name = name;
         this.shortDescription = shortDescription;
@@ -46,6 +46,10 @@ public class Channel extends FirebaseStructure {
 
         // Init the Icon URI
         this.iconUri = data.getString("icon_uri");
+    }
+
+    public static List<String> requiredFields() {
+        return Arrays.asList("id", "name", "short_description", "restrictions");
     }
 
     @Override
@@ -124,9 +128,5 @@ public class Channel extends FirebaseStructure {
         isAccessible = distance < MAX_DISTANCE_TO_ACCESS_CHANNEL;
 
         return (diff_distance <= MAX_DISTANCE_TO_SEE_CHANNEL);
-    }
-
-    public static List<String> requiredFields(){
-        return Arrays.asList("id", "name", "short_description", "restrictions");
     }
 }

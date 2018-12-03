@@ -192,7 +192,7 @@ public class EventDate implements Serializable {
     public String getDateTimeUser() {
         StringBuilder sb = new StringBuilder();
 
-        if(!getEndDateString().equals(getStartDateString()) && endDate.getSeconds() != 59) {
+        if (!getEndDateString().equals(getStartDateString()) && endDate.getSeconds() != 59) {
             sb.append("Du ");
         } else {
             sb.append("Le ");
@@ -200,7 +200,7 @@ public class EventDate implements Serializable {
 
         sb.append(dateRemoveZeroHour(startDate));
 
-        if(!getEndDateString().equals(getStartDateString()) && endDate.getSeconds() != 59) {
+        if (!getEndDateString().equals(getStartDateString()) && endDate.getSeconds() != 59) {
             sb.append(" au ");
             sb.append(dateRemoveZeroHour(endDate));
         }
@@ -208,8 +208,8 @@ public class EventDate implements Serializable {
         return sb.toString();
     }
 
-    private String dateRemoveZeroHour(Date date){
-        if(startDate.getHours() != 0){
+    private String dateRemoveZeroHour(Date date) {
+        if (startDate.getHours() != 0) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_READ_HOURS);
             return (simpleDateFormat.format(date));
         } else {

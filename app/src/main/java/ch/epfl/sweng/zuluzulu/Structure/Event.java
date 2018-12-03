@@ -34,8 +34,8 @@ public class Event extends FirebaseStructure {
     private List<String> followers;
 
     protected Event(String id, String name, String shortDesc, String longDesc, String channelId, String associationId, EventDate date,
-                 List<String> followers, String organizer, String place, String iconUri, String bannerUri,
-                 String url_place_and_room, String website, String contact, String category, String speaker) {
+                    List<String> followers, String organizer, String place, String iconUri, String bannerUri,
+                    String url_place_and_room, String website, String contact, String category, String speaker) {
         super(id);
         this.name = name;
         this.channelId = channelId;
@@ -99,7 +99,16 @@ public class Event extends FirebaseStructure {
         return (o1, o2) -> o2.getLikes().compareTo(o1.getLikes());
     }
 
-    public String getAssociationId(){return associationId;}
+    public static List<String> requiredFields() {
+        return Arrays.asList(
+                "id", "name", "short_description", "long_description", "category", "icon_uri",
+                "banner_uri", "followers", "channel_id", "association_id", "start_date", "end_date",
+                "place", "organizer", "url_place_and_room", "website", "contact", "speaker");
+    }
+
+    public String getAssociationId() {
+        return associationId;
+    }
 
     public String getName() {
         return name;
@@ -113,7 +122,7 @@ public class Event extends FirebaseStructure {
         return longDescription;
     }
 
-    public String getChannelId(){
+    public String getChannelId() {
         return channelId;
     }
 
@@ -156,15 +165,7 @@ public class Event extends FirebaseStructure {
         return followers.contains(userId) && followers.remove(userId);
     }
 
-    public static List<String> requiredFields() {
-        return Arrays.asList(
-                "id","name","short_description","long_description", "category", "icon_uri",
-                "banner_uri", "followers", "channel_id", "association_id", "start_date", "end_date",
-                "place", "organizer", "url_place_and_room", "website", "contact", "speaker");
-    }
-
-
-    public Map<String,Object> getData() {
+    public Map<String, Object> getData() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", getId());
         map.put("name", name);
@@ -177,7 +178,7 @@ public class Event extends FirebaseStructure {
 
         map.put("followers", followers);
         map.put("channel_id", channelId);
-        map.put("association_id",associationId);
+        map.put("association_id", associationId);
 
         map.put("start_date", date.getStartDate());
         map.put("end_date", date.getEndDate());

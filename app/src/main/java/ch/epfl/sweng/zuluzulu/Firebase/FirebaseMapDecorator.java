@@ -150,7 +150,7 @@ public class FirebaseMapDecorator {
      * @return value
      */
     public Object get(String field) {
-        if(map.containsKey(field))
+        if (map.containsKey(field))
             return map.get(field);
         return null;
     }
@@ -162,7 +162,7 @@ public class FirebaseMapDecorator {
      * @return true if the map has all required fields (ie: not null), false otherwise
      */
     public boolean hasFields(List<String> fields) {
-        if(map == null){
+        if (map == null) {
             return false;
         }
         for (String key : fields) {

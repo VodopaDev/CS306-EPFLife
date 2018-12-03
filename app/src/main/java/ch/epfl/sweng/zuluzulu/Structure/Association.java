@@ -53,7 +53,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
 
         name = data.getString("name").trim();
         shortDescription = data.getString("short_description");
-		longDescription = data.getString("long_description");
+        longDescription = data.getString("long_description");
 
         // Init the main chat id
         channelId = data.getString("channel_id");
@@ -68,6 +68,10 @@ public class Association extends FirebaseStructure implements Comparable<Associa
         bannerUri = data.getString("banner_uri");
     }
 
+    @NonNull
+    public static List<String> requiredFields() {
+        return Arrays.asList("id", "name", "short_description");
+    }
 
     /**
      * Return the Association's name
@@ -87,12 +91,12 @@ public class Association extends FirebaseStructure implements Comparable<Associa
         return shortDescription;
     }
 
-    public String getLongDescription(){
+    public String getLongDescription() {
         return longDescription;
     }
 
-    public List<String> getUpcomingEvents(){
-        if(upcomingEvents == null)
+    public List<String> getUpcomingEvents() {
+        if (upcomingEvents == null)
             return new ArrayList<>();
         return upcomingEvents;
     }
@@ -130,7 +134,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
     }
 
     @Override
-    public Map<String,Object> getData(){
+    public Map<String, Object> getData() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", getId());
         map.put("name", name);
@@ -139,13 +143,8 @@ public class Association extends FirebaseStructure implements Comparable<Associa
         map.put("banner_uri", bannerUri);
         map.put("upcoming_events", upcomingEvents);
         map.put("channel_id", channelId);
-		map.put("long_description", longDescription);
+        map.put("long_description", longDescription);
         return map;
-    }
-
-    @NonNull
-    public static List<String> requiredFields(){
-        return Arrays.asList("id", "name", "short_description");
     }
 
     @Override

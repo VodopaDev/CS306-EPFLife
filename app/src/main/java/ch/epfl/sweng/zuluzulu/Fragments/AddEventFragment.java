@@ -19,10 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-
-import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
 import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 
@@ -187,7 +186,7 @@ public class AddEventFragment extends SuperFragment {
                         setLongDesc(desc).
                         setChannelId(DatabaseFactory.getDependency().getNewChannelId()).
                         setAssosId(association_map.get(name)).
-                        setDate(new EventDate(date,date)).
+                        setDate(new EventDate(date, date)).
                         setFollowers(new ArrayList<>()).
                         setOrganizer(org).
                         setPlace(pla).
