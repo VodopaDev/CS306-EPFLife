@@ -22,6 +22,8 @@ public class Event extends FirebaseStructure {
     private String associationId;
 
     private int likes;
+    private List<String> follower;
+
     private EventDate date;
     private String organizer;
     private String place;

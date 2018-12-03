@@ -281,7 +281,7 @@ public class EventDetailFragment extends SuperFragment {
         DatabaseFactory.getDependency().getAssociationFromId(event.getAssociationId(), result -> {
             if(result != null) {
                 assos = result;
-                assos_but.setText(chat.getName());
+                assos_but.setText(assos.getName());
             }
         });
     }

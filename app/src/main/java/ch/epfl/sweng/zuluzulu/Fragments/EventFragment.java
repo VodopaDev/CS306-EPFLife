@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,8 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.CREATE_EVENT;
  */
 public class EventFragment extends SuperFragment {
     private static final String ARG_USER = "ARG_USER";
+    private final Date minDate = new Date(946724400000L);  // 01/01/2000
+    private final Date maxDate = new Date(1735729200000L); // 01/01/2025
 
     private User user;
 
@@ -247,7 +250,10 @@ public class EventFragment extends SuperFragment {
     private void updateListView(Button selectedButton, ArrayList<Event> newEventsToFilter) {
         event_search_bar.getText().clear();
         event_search_bar.clearFocus();
-        // TODO: remove date from the calendar
+        event_fragment_from_date.getText().clear();
+        event_fragment_to_date.getText().clear();
+        dateTo = null;
+        dateFrom = null;
 
         button_event_all.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
         button_event_fav.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
@@ -277,9 +283,9 @@ public class EventFragment extends SuperFragment {
         dateFrom = null;
         dateTo = null;
         event_fragment_from_date.clearFocus();
-        event_fragment_from_date.setText("");
+        event_fragment_from_date.getText().clear();
         event_fragment_to_date.clearFocus();
-        event_fragment_to_date.setText("");
+        event_fragment_to_date.getText().clear();
         String keyWord = s.toLowerCase();
         eventsFiltered.clear();
         for (Event event : eventsToFilter) {
@@ -301,9 +307,8 @@ public class EventFragment extends SuperFragment {
                         eventCalendar.set(Calendar.YEAR, year);
                         eventCalendar.set(Calendar.MONTH, monthOfYear);
                         eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        dateFrom = eventCalendar.getTime();
-                        //filterWithDate();
-                        sanitizeDates();
+                        dateFrom = (Date)eventCalendar.getTime().clone();
+                        filterWithDate();
                     }
                 };
 
@@ -323,7 +328,7 @@ public class EventFragment extends SuperFragment {
                         eventCalendar.set(Calendar.YEAR, year);
                         eventCalendar.set(Calendar.MONTH, monthOfYear);
                         eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        dateTo = eventCalendar.getTime();
+                        dateTo = (Date)eventCalendar.getTime().clone();
                         filterWithDate();
                     }
                 };
@@ -338,21 +343,23 @@ public class EventFragment extends SuperFragment {
 
     private void filterWithDate(){
         sanitizeDates();
-        event_search_bar.setText("");
+        event_search_bar.getText().clear();
         eventsFiltered.clear();
+
         for(Event event: eventsToFilter){
-            if(event.getStartDate().after(dateFrom) &&
-                    event.getStartDate().before(dateTo))
+            if(event.getStartDate().after(dateFrom) && event.getStartDate().before(dateTo))
                 eventsFiltered.add(event);
         }
+        event_adapter.notifyDataSetChanged();
     }
 
     private void sanitizeDates(){
-        if(dateTo == null)
-            dateTo = new Date(Long.MAX_VALUE-1);
-        if(dateFrom == null)
-            dateFrom = new Date(1L);
+        if(dateTo == null || dateTo.after(maxDate))
+            dateTo = maxDate;
+        if(dateFrom == null || dateTo.before(minDate))
+            dateFrom = minDate;
 
+        // if dateTo is before dateFrom
         if(dateTo.before(dateFrom)){
             Date tempDate = dateFrom;
             dateFrom = dateTo;
@@ -360,7 +367,7 @@ public class EventFragment extends SuperFragment {
         }
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
-        event_fragment_from_date.setText(dateFrom.equals(new Date(0L)) ? "" : sdf.format(dateFrom));
-        event_fragment_to_date.setText(dateTo.equals(new Date(Long.MAX_VALUE)) ? "" : sdf.format(dateTo));
+        event_fragment_from_date.setText(sdf.format(dateFrom));
+        event_fragment_to_date.setText(sdf.format(dateTo));
     }
 }
