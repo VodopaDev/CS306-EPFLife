@@ -29,12 +29,11 @@ import java.util.Locale;
 
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
-
-import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 
 
 public class CalendarFragment extends SuperFragment {
@@ -148,7 +147,7 @@ public class CalendarFragment extends SuperFragment {
                         for (DocumentSnapshot snap : snap_list) {
                             FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
                             if (fmap.hasFields(Event.FIELDS)) {
-                                Event event = new Event(fmap);
+                                Event event = new Event.EventBuilder().build(fmap);
                                 if (user.isFollowedEvent(event)) {
                                     followedEvents.add(event);
                                     Log.d("CALENDAR", "added a new followed event with date " + event.getStartDateString());

@@ -2,30 +2,24 @@ package ch.epfl.sweng.zuluzulu.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility.ImageLoader;
-
-import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT;
-
-//import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 
 
 /**
@@ -92,7 +86,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         holder.name.setText(event.getName());
         holder.short_desc.setText(event.getShortDesc());
         ImageLoader.loadUriIntoImageView(holder.icon, event.getIconUri(), getContext());
-        holder.start_date.setText(event.getStartDateString());
+        holder.start_date.setText(event.getDateTimeUser());
         holder.likes.setText(String.valueOf(event.getLikes()));
         if (user != null) {
             holder.likes_button.setOnClickListener(new View.OnClickListener() {
@@ -101,12 +95,12 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
                     if (!user.isEventLiked(event.getId())) {
                         event.increaseLikes();
                         holder.likes.setText(String.valueOf(event.getLikes()));
-                        holder.likes_button.setTextColor(Color.BLUE);
+                        holder.likes_button.setEnabled(false);
                         user.likeEvent(event.getId());
                     } else {
                         event.decreaseLikes();
                         holder.likes.setText(String.valueOf(event.getLikes()));
-                        holder.likes_button.setTextColor(Color.BLACK);
+                        holder.likes_button.setEnabled(false);
                         user.dislikeEvent(event.getId());
                     }
                 }
@@ -118,7 +112,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         event_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("FRAG_CHANGE","Switching to " + event.getName() + "detailed view");
+                Log.d("FRAG_CHANGE", "Switching to " + event.getName() + "detailed view");
                 mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT, event);
             }
         });
@@ -135,6 +129,6 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         TextView short_desc;
         TextView start_date;
         TextView likes;
-        Button likes_button;
+        ImageButton likes_button;
     }
 }

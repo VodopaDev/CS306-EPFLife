@@ -1,7 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Firebase;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import org.junit.Ignore;
 import org.junit.Test;
 

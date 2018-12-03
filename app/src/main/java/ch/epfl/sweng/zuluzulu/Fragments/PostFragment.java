@@ -15,7 +15,6 @@ import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -46,6 +45,11 @@ public class PostFragment extends SuperChatPostsFragment {
 
     private Button writePostButton;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ImageView filterTimeButton;
+    private ImageView filterRepliesButton;
+    private ImageView filterUpsButton;
+
+    private String currentFilter;
 
     public PostFragment() {
         // Required empty public constructor
@@ -64,6 +68,9 @@ public class PostFragment extends SuperChatPostsFragment {
         postsButton = view.findViewById(R.id.posts_button);
         writePostButton = view.findViewById(R.id.posts_new_post_button);
         swipeRefreshLayout = view.findViewById(R.id.swiperefresh_post);
+        filterTimeButton = view.findViewById(R.id.post_filter_time);
+        filterRepliesButton = view.findViewById(R.id.post_filter_nbReplies);
+        filterUpsButton = view.findViewById(R.id.post_filter_nbUps);
 
         chatButton.setEnabled(true);
         postsButton.setEnabled(false);
@@ -76,12 +83,15 @@ public class PostFragment extends SuperChatPostsFragment {
         listView.setAdapter(adapter);
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
-        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
+        anonymous = getActivity().getPreferences(Context.MODE_PRIVATE).getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
+
+        currentFilter = "time";
 
         updatePosts();
         setUpChatButton();
         setUpNewPostButton();
+        setUpFilterButtons();
+        setUpReplyListener();
 
         return view;
     }
@@ -103,7 +113,7 @@ public class PostFragment extends SuperChatPostsFragment {
      */
     private void updatePosts() {
         collectionReference
-                .orderBy("time", Query.Direction.DESCENDING)
+                .orderBy(currentFilter, Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -114,7 +124,7 @@ public class PostFragment extends SuperChatPostsFragment {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
                                 if (fmap.hasFields(Post.FIELDS)) {
-                                    Post post = new Post(fmap, user.getSciper(), channel.getId());
+                                    Post post = new Post(fmap, user.getSciper(), channel.getId(), null);
                                     posts.add(post);
                                 }
                             }
@@ -145,5 +155,60 @@ public class PostFragment extends SuperChatPostsFragment {
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
         updatePosts();
+    }
+
+    /**
+     * Set up the listener on a post to go to the reply fragment when we click on it
+     */
+    private void setUpReplyListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Post post = posts.get(position);
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_REPLY_FRAGMENT, post);
+            }
+        });
+    }
+
+    /**
+     * Set up the onClick listeners on the filter buttons
+     */
+    private void setUpFilterButtons() {
+        filterTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateFilter("time");
+            }
+        });
+
+        filterRepliesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateFilter("nbResponses");
+            }
+        });
+
+        filterUpsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateFilter("nbUps");
+            }
+        });
+    }
+
+    /**
+     * Update the current filter by the new one and update the list of the posts
+     *
+     * @param newFilter The new filter to apply
+     */
+    private void updateFilter(String newFilter) {
+        if (!newFilter.equals(currentFilter)) {
+            filterTimeButton.setImageResource(newFilter.equals("time") ? R.drawable.time_selected : R.drawable.time_notselected);
+            filterRepliesButton.setImageResource(newFilter.equals("nbResponses") ? R.drawable.replies_selected : R.drawable.replies_notselected);
+            filterUpsButton.setImageResource(newFilter.equals("nbUps") ? R.drawable.up_selected : R.drawable.up_notselected);
+
+            currentFilter = newFilter;
+            updatePosts();
+        }
     }
 }

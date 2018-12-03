@@ -1,15 +1,8 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.graphics.drawable.ColorDrawable;
-import android.support.constraint.ConstraintLayout;
 import android.support.test.espresso.action.ViewActions;
-import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
-import android.widget.EditText;
 
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

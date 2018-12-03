@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UrlHandler extends AsyncTask<String, Void, List<String>> {
@@ -30,10 +31,19 @@ public class UrlHandler extends AsyncTask<String, Void, List<String>> {
 
     @Override
     protected List<String> doInBackground(String... urls) {
-        if (urls.length > 0) {
-            return parseUrl(urls[0]);
-        } else
-            return null;
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 0; i < urls.length; i++) {
+            List<String> result = parseUrl(urls[i]);
+            if (null == result) {
+                return null;
+            }
+            System.out.println("avant : " + list.size());
+
+            list.addAll(result);
+            System.out.println(list.size());
+        }
+
+        return list;
     }
 
     @Override

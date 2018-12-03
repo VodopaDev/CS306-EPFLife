@@ -8,12 +8,16 @@
 
     <include
         android:id="@+id/chat_posts_buttons"
-        layout="@layout/chat_posts_buttons" />
+        layout="@layout/chat_posts_buttons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,8 +32,6 @@
                 android:id="@+id/posts_list_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="5.0sp"
                 app:layout_constraintVertical_bias="1.0" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
@@ -44,5 +46,41 @@
             android:text="New Post" />
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/post_filter_time"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_weight="0.33"
+            android:scaleType="centerInside"
+            android:src="@drawable/time_selected" />
+
+        <ImageView
+            android:id="@+id/post_filter_nbReplies"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_weight="0.33"
+            android:scaleType="centerInside"
+            android:src="@drawable/replies_notselected" />
+
+        <ImageView
+            android:id="@+id/post_filter_nbUps"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_weight="0.33"
+            android:scaleType="centerInside"
+            android:src="@drawable/up_notselected" />
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -1,6 +1,8 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -148,8 +150,17 @@ public class WritePostFragment extends SuperFragment {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int oldColor = Color.parseColor(color.getValue());
                 color = PostColor.getRandomColorButNot(color);
-                layout.setBackgroundColor(Color.parseColor(color.getValue()));
+                int newColor = Color.parseColor(color.getValue());
+                ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), oldColor, newColor);
+                colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animator) {
+                        layout.setBackgroundColor((Integer) animator.getAnimatedValue());
+                    }
+                });
+                colorAnimation.start();
             }
         });
     }
@@ -160,17 +171,20 @@ public class WritePostFragment extends SuperFragment {
     private void setUpTextEditListener() {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int messageLength = s.toString().length();
-                boolean correctFormat = 0 < messageLength && messageLength < POST_MAX_LENGTH;;
+                boolean correctFormat = 0 < messageLength && messageLength < POST_MAX_LENGTH;
+                ;
                 sendButton.setEnabled(correctFormat);
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
     }
 }

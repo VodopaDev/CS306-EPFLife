@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -26,7 +26,6 @@ import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
-import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import static ch.epfl.sweng.zuluzulu.Utility.ImageLoader.loadUriIntoImageView;
 
 public class AssociationDetailFragment extends SuperFragment {
@@ -189,7 +188,7 @@ public class AssociationDetailFragment extends SuperFragment {
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
                     if (fmap.hasFields(Event.FIELDS)) {
-                        upcoming_event = new Event(fmap);
+                        upcoming_event = new Event.EventBuilder().build(fmap);
                         upcoming_event_name.setText(upcoming_event.getName());
                         upcoming_event_date.setText(upcoming_event.getStartDate().toString());
                         loadUriIntoImageView(upcoming_event_icon, upcoming_event.getIconUri(), getContext());

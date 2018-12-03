@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -7,15 +8,14 @@ import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.User.User;
 
 /**
  * Class that represents a post in a view
  */
-public class Post {
+public class Post implements Serializable {
 
     public static final List<String> FIELDS = Arrays.asList("senderName", "sciper", "message", "time", "color", "nbUps", "nbResponses", "upScipers", "downScipers");
+    String id;
     private String senderName;
     private String sciper;
     private String message;
@@ -25,30 +25,31 @@ public class Post {
     private int nbResponses;
     private List<String> upScipers;
     private List<String> downScipers;
-    String id;
-
     private boolean upByUser;
     private boolean downByUser;
 
     private boolean anonymous;
     private int channelId;
     private String userSciper;
+    private Post originalPost;
 
-    public Post(FirebaseMapDecorator data, String userSciper, int channelId) {
+    public Post(FirebaseMapDecorator data, String userSciper, int channelId, Post originalPost) {
+        this.channelId = channelId;
+        this.userSciper = userSciper;
+        this.originalPost = originalPost;
+
         senderName = data.getString("senderName");
         sciper = data.getString("sciper");
         message = data.getString("message");
         time = data.getDate("time");
         color = data.getString("color");
         nbUps = data.getInteger("nbUps");
-        nbResponses = data.getInteger("nbResponses");
+        nbResponses = isReply() ? 0 : data.getInteger("nbResponses");
         upScipers = data.getStringList("upScipers");
         downScipers = data.getStringList("downScipers");
         id = data.getId();
 
         anonymous = senderName.isEmpty();
-        this.channelId = channelId;
-        this.userSciper = userSciper;
 
         upByUser = upScipers.contains(userSciper);
         downByUser = downScipers.contains(userSciper);
@@ -108,14 +109,18 @@ public class Post {
      *
      * @return the number of ups
      */
-    public int getNbUps() { return nbUps; }
+    public int getNbUps() {
+        return nbUps;
+    }
 
     /**
      * Getter for the number of responses
      *
      * @return the number of responses
      */
-    public int getNbResponses() { return nbResponses; }
+    public int getNbResponses() {
+        return nbResponses;
+    }
 
     /**
      * Getter for anonymous
@@ -131,7 +136,9 @@ public class Post {
      *
      * @return whether the user has liked this post or not
      */
-    public boolean isUpByUser() { return upByUser; }
+    public boolean isUpByUser() {
+        return upByUser;
+    }
 
     /**
      * Setter of upByUser
@@ -150,7 +157,9 @@ public class Post {
      *
      * @return whether the user has disliked this post or not
      */
-    public boolean isDownByUser() { return downByUser; }
+    public boolean isDownByUser() {
+        return downByUser;
+    }
 
     /**
      * Setter for downByUser
@@ -169,33 +178,57 @@ public class Post {
      *
      * @return the channelId
      */
-    public int getChannelId() { return channelId; }
+    public int getChannelId() {
+        return channelId;
+    }
 
     /**
      * Getter for the user reading the post
      *
      * @return the user reading the post
      */
-    public String getUserSciper() { return userSciper; }
+    public String getUserSciper() {
+        return userSciper;
+    }
 
     /**
      * Getter for the up scipers
      *
      * @return the up scipers
      */
-    public List<String> getUpScipers() { return new ArrayList<>(Collections.unmodifiableCollection(upScipers)); }
+    public List<String> getUpScipers() {
+        return new ArrayList<>(Collections.unmodifiableCollection(upScipers));
+    }
 
     /**
      * Getter for the down scipers
      *
      * @return the down scipers
      */
-    public List<String> getDownScipers() { return new ArrayList<>(Collections.unmodifiableCollection(downScipers)); }
+    public List<String> getDownScipers() {
+        return new ArrayList<>(Collections.unmodifiableCollection(downScipers));
+    }
 
     /**
      * Getter for the id
      *
      * @return the id
      */
-    public String getId() { return id; }
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Getter for the fact that the post is a reply or not
+     *
+     * @return Whether the post is a reply or not
+     */
+    public boolean isReply() { return originalPost != null; }
+
+    /**
+     * Getter for the original post
+     *
+     * @return The original post
+     */
+    public Post getOriginalPost() { return originalPost; }
 }

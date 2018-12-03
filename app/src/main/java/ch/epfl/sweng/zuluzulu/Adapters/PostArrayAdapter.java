@@ -12,15 +12,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Text;
-
-import java.util.Date;
 import java.util.List;
 
+import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseDocument;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.Structure.Utils;
@@ -33,10 +32,11 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     private Post currentPost;
     private TextView timeAgo;
     private TextView nbUpsText;
+    private TextView nbResponsesText;
     private ImageView upButton;
     private ImageView downButton;
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private Database db = DatabaseFactory.getDependency();
 
     public PostArrayAdapter(@NonNull Context context, List<Post> list) {
         super(context, 0, list);
@@ -59,7 +59,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         upButton = view.findViewById(R.id.post_up_button);
         downButton = view.findViewById(R.id.post_down_button);
         nbUpsText = view.findViewById(R.id.post_nb_ups_textview);
-        TextView nbResponsesText = view.findViewById(R.id.post_nb_responses_textview);
+        nbResponsesText = view.findViewById(R.id.post_nb_responses_textview);
 
         linearLayout.setBackgroundColor(Color.parseColor(currentPost.getColor()));
         message.setText(currentPost.getMessage());
@@ -67,20 +67,26 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         String name = anonymous ? "Anonymous" : currentPost.getSenderName();
         senderName.setText(name);
 
-        setUpTimeAgoField();
-
         nbUpsText.setText("" + currentPost.getNbUps());
 
-        int nbResponses = currentPost.getNbResponses();
-        nbResponsesText.setText("" + currentPost.getNbResponses());
-        if (nbResponses == 0) {
-            view.findViewById(R.id.post_responses_linearlayout).setVisibility(LinearLayout.GONE);
+        if (currentPost.isReply()) {
+            view.findViewById(R.id.post_white_line).setVisibility(View.INVISIBLE);
         }
 
+        setUpTimeAgoField();
+        setUpNbResponses(view);
         setUpUpDownButtons(currentPost, upButton, downButton, nbUpsText);
         updateUpsButtons(currentPost, upButton, downButton);
 
         return view;
+    }
+
+    private void setUpNbResponses(View view) {
+        int nbResponses = currentPost.getNbResponses();
+        nbResponsesText.setText("" + currentPost.getNbResponses());
+        if (nbResponses == 0 || currentPost.isReply()) {
+            view.findViewById(R.id.post_responses_linearlayout).setVisibility(LinearLayout.GONE);
+        }
     }
 
     /**
@@ -90,15 +96,12 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         long differenceInSeconds = Utils.getMillisecondsSince(currentPost.getTime()) / 1000;
         if (differenceInSeconds < 60) {
             timeAgo.setText(differenceInSeconds + "s");
-        }
-        else if (differenceInSeconds < 3600) {
-            timeAgo.setText(differenceInSeconds/60 + "min");
-        }
-        else if (differenceInSeconds < 3600 * 24){
-            timeAgo.setText(differenceInSeconds/3600 + "h");
-        }
-        else {
-            timeAgo.setText(differenceInSeconds/(3600*24) + "d");
+        } else if (differenceInSeconds < 3600) {
+            timeAgo.setText(differenceInSeconds / 60 + "min");
+        } else if (differenceInSeconds < 3600 * 24) {
+            timeAgo.setText(differenceInSeconds / 3600 + "h");
+        } else {
+            timeAgo.setText(differenceInSeconds / (3600 * 24) + "d");
         }
     }
 
@@ -125,18 +128,19 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
             int nbUps = post.getNbUps() + (up ? 1 : -1);
             List<String> upScipers = post.getUpScipers();
             List<String> downScipers = post.getDownScipers();
-            DocumentReference documentReference = db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
+            DatabaseDocument document = post.isReply() ?
+                    db.collection("channels/channel" + post.getOriginalPost().getChannelId() + "/posts/" + post.getOriginalPost().getId() + "/replies").document(post.getId()) :
+                    db.collection("channels/channel" + post.getChannelId() + "/posts").document(post.getId());
             if (up) {
                 upScipers.add(post.getUserSciper());
-                documentReference.update(
+                document.update(
                         "nbUps", nbUps,
                         "upScipers", upScipers
                 );
                 post.setUpByUser(true);
-
             } else {
                 downScipers.add(post.getUserSciper());
-                documentReference.update(
+                document.update(
                         "nbUps", nbUps,
                         "downScipers", downScipers
                 );
@@ -150,8 +154,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         if (post.isUpByUser()) {
             upButton.setImageResource(R.drawable.up_gray);
             downButton.setImageResource(R.drawable.down_transparent);
-        }
-        else if (post.isDownByUser()) {
+        } else if (post.isDownByUser()) {
             downButton.setImageResource(R.drawable.down_gray);
             upButton.setImageResource(R.drawable.up_transparent);
         }
