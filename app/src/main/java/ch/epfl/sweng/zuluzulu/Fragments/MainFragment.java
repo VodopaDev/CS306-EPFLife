@@ -2,30 +2,22 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.Manifest;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -33,7 +25,6 @@ import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.GPS;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
-import ch.epfl.sweng.zuluzulu.Utility.FirebaseUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,6 +39,9 @@ public class MainFragment extends SuperFragment {
     private static final String ARG_USER = "ARG_USER";
 
     private User user;
+    private Comparator<Event> currentComparator;
+
+    private List<Event> all_event;
     private List<Event> upcoming_events;
     private EventArrayAdapter event_adapter;
     private ListView listview_event;
@@ -80,12 +74,16 @@ public class MainFragment extends SuperFragment {
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Home");
             user = (User) getArguments().getSerializable(ARG_USER);
         }
+
+        all_event = new ArrayList<>();
         upcoming_events = new ArrayList<>();
         event_adapter = new EventArrayAdapter(getContext(), upcoming_events, mListener, user);
-        //fillUpcomingEventFromDatabase();
-        FirebaseUtils.fillEventFromDatabase("events_info", "start_date", upcoming_events, event_adapter);
+        currentComparator = Event.dateComparator();
+        fillEventLists();
 
         random_assos = new ArrayList<>();
+        assos_adapter = new AssociationArrayAdapter(getContext(), random_assos, mListener);
+        fillAssociationLists();
 
 
 
@@ -103,6 +101,9 @@ public class MainFragment extends SuperFragment {
             listview_event = view.findViewById(R.id.main_page_list_event);
             listview_event.setAdapter(event_adapter);
 
+            listview_assos = view.findViewById(R.id.main_page_random_assos);
+            listview_assos.setAdapter(assos_adapter);
+
             return view;
         } else {
             View view = inflater.inflate(R.layout.fragment_main, container, false);
@@ -110,34 +111,36 @@ public class MainFragment extends SuperFragment {
             listview_event = view.findViewById(R.id.main_page_list_event);
             listview_event.setAdapter(event_adapter);
 
+            listview_assos = view.findViewById(R.id.main_page_random_assos);
+            listview_assos.setAdapter(assos_adapter);
+
             return view;
         }
 
 
     }
 
-    void fillUpcomingEventFromDatabase() {
-        FirebaseFirestore.getInstance().collection("events_info").orderBy("start_date").get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<DocumentSnapshot> snap_list = queryDocumentSnapshots.getDocuments();
-                        for (DocumentSnapshot snap : snap_list) {
-                            FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
-                            if (fmap.hasFields(Event.FIELDS) && fmap.getDate("start_date").compareTo(new Date(System.currentTimeMillis())) >= 0) {
-                                Event event = new Event.EventBuilder().build(fmap);
-                                upcoming_events.add(event);
-                                event_adapter.notifyDataSetChanged();
-                            }
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Snackbar.make(getView(), "Loading error, check your connection", 5000).show();
-                        Log.e("EVENT_LIST", "Error fetching event date\n" + e.getMessage());
-                    }
-                });
+    private void fillEventLists() {
+        DatabaseFactory.getDependency().getAllEvents(result -> {
+            upcoming_events.clear();
+            Collections.sort(result, currentComparator);
+            result = new ArrayList<>(result.subList(0, 2));
+            upcoming_events.addAll(result);
+            event_adapter.notifyDataSetChanged();
+        });
+    }
+
+    private void sortWithCurrentComparator() {
+        Collections.sort(upcoming_events, currentComparator);
+        event_adapter.notifyDataSetChanged();
+    }
+
+    private void fillAssociationLists() {
+        random_assos.clear();
+        DatabaseFactory.getDependency().getAllAssociations(result -> {
+            int rand = (int)(Math.random() * (result.size()));
+            random_assos.add(result.get(rand));
+            assos_adapter.notifyDataSetChanged();
+        });
     }
 }

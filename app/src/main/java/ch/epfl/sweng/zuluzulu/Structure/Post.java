@@ -1,23 +1,22 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 
 /**
  * Class that represents a post in a view
  */
-public class Post implements Serializable {
+public class Post extends FirebaseStructure {
 
-    public static final List<String> FIELDS = Arrays.asList("senderName", "sciper", "message", "time", "color", "nbUps", "nbResponses", "upScipers", "downScipers");
-    String id;
     private String senderName;
-    private String sciper;
+    private String senderSciper;
     private String message;
     private Date time;
     private String color;
@@ -25,38 +24,46 @@ public class Post implements Serializable {
     private int nbResponses;
     private List<String> upScipers;
     private List<String> downScipers;
-    private boolean upByUser;
-    private boolean downByUser;
+    private String channelId;
+    private String originalPostId;
 
-    private boolean anonymous;
-    private int channelId;
-    private String userSciper;
-    private Post originalPost;
-
-    public Post(FirebaseMapDecorator data, String userSciper, int channelId, Post originalPost) {
+    public Post(String id, String channelId, String originalPostId, String message, String senderName, String senderSciper, Date time, String color, int nbResponses, int nbUps, List<String> upScipers, List<String> downScipers) {
+        super(id);
         this.channelId = channelId;
-        this.userSciper = userSciper;
-        this.originalPost = originalPost;
+        this.originalPostId = originalPostId;
+        this.message = message;
+        this.senderName = senderName;
+        this.senderSciper = senderSciper;
+        this.time = time;
+        this.color = color;
+        this.nbResponses = nbResponses;
 
-        senderName = data.getString("senderName");
-        sciper = data.getString("sciper");
+        assert (nbUps == upScipers.size() - downScipers.size());
+        this.nbUps = nbUps;
+        this.upScipers = upScipers;
+        this.downScipers = downScipers;
+    }
+
+    public Post(FirebaseMapDecorator data) {
+        super(data);
+        if (!data.hasFields(requiredFields()))
+            throw new IllegalArgumentException();
+
+        channelId = data.getString("channel_id");
+        senderName = data.getString("sender_name");
+        senderSciper = data.getString("sender_sciper");
         message = data.getString("message");
         time = data.getDate("time");
         color = data.getString("color");
-        nbUps = data.getInteger("nbUps");
-        nbResponses = isReply() ? 0 : data.getInteger("nbResponses");
-        upScipers = data.getStringList("upScipers");
-        downScipers = data.getStringList("downScipers");
-        id = data.getId();
+        nbUps = data.getInteger("nb_ups");
+        originalPostId = data.getString("original_post_id");
+        nbResponses = data.getInteger("nb_responses");
+        upScipers = data.getStringList("up_scipers");
+        downScipers = data.getStringList("down_scipers");
+    }
 
-        anonymous = senderName.isEmpty();
-
-        upByUser = upScipers.contains(userSciper);
-        downByUser = downScipers.contains(userSciper);
-
-        if (upByUser && downByUser) {
-            throw new IllegalStateException("A post cannot be liked and disliked at the same time");
-        }
+    public static List<String> requiredFields() {
+        return Arrays.asList("sender_name", "sender_sciper", "message", "time", "color", "nb_ups", "nb_responses", "up_scipers", "down_scipers", "id", "channel_id");
     }
 
     /**
@@ -69,12 +76,12 @@ public class Post implements Serializable {
     }
 
     /**
-     * Getter for the sciper
+     * Getter for the senderSciper
      *
-     * @return the sciper
+     * @return the senderSciper
      */
-    public String getSciper() {
-        return sciper;
+    public String getSenderSciper() {
+        return senderSciper;
     }
 
     /**
@@ -128,7 +135,7 @@ public class Post implements Serializable {
      * @return Whether the post is anonymous or not
      */
     public boolean isAnonymous() {
-        return anonymous;
+        return senderName.isEmpty();
     }
 
     /**
@@ -136,20 +143,8 @@ public class Post implements Serializable {
      *
      * @return whether the user has liked this post or not
      */
-    public boolean isUpByUser() {
-        return upByUser;
-    }
-
-    /**
-     * Setter of upByUser
-     *
-     * @param upByUser the new upByUser value
-     */
-    public void setUpByUser(boolean upByUser) {
-        if (downByUser) {
-            throw new IllegalArgumentException("This post is already up by the user");
-        }
-        this.upByUser = upByUser;
+    public boolean isUpByUser(String userID) {
+        return upScipers.contains(userID);
     }
 
     /**
@@ -157,38 +152,12 @@ public class Post implements Serializable {
      *
      * @return whether the user has disliked this post or not
      */
-    public boolean isDownByUser() {
-        return downByUser;
+    public boolean isDownByUser(String userID) {
+        return downScipers.contains(userID);
     }
 
-    /**
-     * Setter for downByUser
-     *
-     * @param downByUser the new downByUser value
-     */
-    public void setDownByUser(boolean downByUser) {
-        if (upByUser) {
-            throw new IllegalArgumentException("This post is already down by the user");
-        }
-        this.downByUser = downByUser;
-    }
-
-    /**
-     * Getter for the channelId of the post
-     *
-     * @return the channelId
-     */
-    public int getChannelId() {
+    public String getChannelId() {
         return channelId;
-    }
-
-    /**
-     * Getter for the user reading the post
-     *
-     * @return the user reading the post
-     */
-    public String getUserSciper() {
-        return userSciper;
     }
 
     /**
@@ -209,13 +178,29 @@ public class Post implements Serializable {
         return new ArrayList<>(Collections.unmodifiableCollection(downScipers));
     }
 
-    /**
-     * Getter for the id
-     *
-     * @return the id
-     */
-    public String getId() {
-        return id;
+    public boolean upvoteWithUser(String userId) {
+        return !isDownByUser(userId) && !isUpByUser(userId) && upScipers.add(userId);
+    }
+
+    public boolean downvoteWithUser(String userId) {
+        return !isDownByUser(userId) && !isUpByUser(userId) && downScipers.add(userId);
+    }
+
+    public Map<String, Object> getData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", getId());
+        map.put("channel_id", channelId);
+        map.put("original_post_id", originalPostId);
+        map.put("sender_name", senderName);
+        map.put("message", message);
+        map.put("time", time);
+        map.put("sender_sciper", senderSciper);
+        map.put("color", color);
+        map.put("nb_ups", nbUps);
+        map.put("nb_responses", nbResponses);
+        map.put("up_scipers", upScipers);
+        map.put("down_scipers", downScipers);
+        return map;
     }
 
     /**
@@ -223,12 +208,16 @@ public class Post implements Serializable {
      *
      * @return Whether the post is a reply or not
      */
-    public boolean isReply() { return originalPost != null; }
+    public boolean isReply() {
+        return originalPostId != null;
+    }
 
     /**
      * Getter for the original post
      *
      * @return The original post
      */
-    public Post getOriginalPost() { return originalPost; }
+    public String getOriginalPostId() {
+        return originalPostId;
+    }
 }

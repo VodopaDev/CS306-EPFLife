@@ -37,52 +37,40 @@
         android:id="@+id/association_fragment_listview"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/assos_fragment_plainText_filter" />
-
-    <CheckBox
-        android:id="@+id/assos_fragment_checkbox_sort_Name"
-        android:layout_width="wrap_content"
-        android:layout_height="34dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/fragment_assos_sort_name"
-        app:layout_constraintBottom_toTopOf="@+id/association_fragment_listview"
-        app:layout_constraintEnd_toStartOf="@+id/assos_fragment_checkbox_sort_date"
-        app:layout_constraintTop_toBottomOf="@+id/buttons_layout" />
-
-    <CheckBox
-        android:id="@+id/assos_fragment_checkbox_sort_date"
-        android:layout_width="wrap_content"
-        android:layout_height="33dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/fragment_assos_sort_id"
-        app:layout_constraintBottom_toTopOf="@+id/association_fragment_listview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttons_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/association_fragment_search_text" />
 
     <EditText
-        android:id="@+id/assos_fragment_plainText_filter"
+        android:id="@+id/association_fragment_search_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toStartOf="@+id/assos_fragment_checkbox_sort_Name"
-        app:layout_constraintHorizontal_bias="0.275"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/search_button"
+        app:layout_constraintTop_toBottomOf="@+id/buttons_layout" />
+
+    <ImageView
+        android:id="@+id/search_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:src="@drawable/search"
+        app:layout_constraintBottom_toTopOf="@+id/association_fragment_listview"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttons_layout" />
 

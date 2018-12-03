@@ -12,13 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -26,6 +22,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT;
 import static ch.epfl.sweng.zuluzulu.Utility.ImageLoader.loadUriIntoImageView;
 
 public class AssociationDetailFragment extends SuperFragment {
@@ -131,45 +128,37 @@ public class AssociationDetailFragment extends SuperFragment {
      * Else it favorites/unfavorites the association
      */
     private void setFavButtonBehaviour() {
-        if (user.isConnected() && ((AuthenticatedUser) user).isFavAssociation(asso))
+        if (user.isConnected() && ((AuthenticatedUser) user).isFollowedAssociation(asso.getId()))
             loadFavImage(R.drawable.fav_on);
         else
             loadFavImage(R.drawable.fav_off);
 
-        asso_fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (user.isConnected()) {
-                    AuthenticatedUser auth = (AuthenticatedUser) user;
-                    if (auth.isFavAssociation(asso)) {
-                        auth.removeFavAssociation(asso);
-                        loadFavImage(R.drawable.fav_off);
-                        asso_fav.setContentDescription(NOT_FAV_CONTENT);
-                    } else {
-                        auth.addFavAssociation(asso);
-                        loadFavImage(R.drawable.fav_on);
-                        asso_fav.setContentDescription(FAV_CONTENT);
-                    }
+        asso_fav.setOnClickListener(v -> {
+            if (user.isConnected()) {
+                AuthenticatedUser auth = (AuthenticatedUser) user;
+                if (auth.isFollowedAssociation(asso.getId())) {
+                    auth.removeFavAssociation(asso.getId());
+                    loadFavImage(R.drawable.fav_off);
+                    asso_fav.setContentDescription(NOT_FAV_CONTENT);
                 } else {
-                    Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
+                    auth.addFollowedAssociation(asso.getId());
+                    loadFavImage(R.drawable.fav_on);
+                    asso_fav.setContentDescription(FAV_CONTENT);
                 }
+                DatabaseFactory.getDependency().updateUser(auth);
+            } else {
+                Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
             }
         });
     }
-
-    // TODO: Remove comment when EventDetailFragment is fixed
 
     /**
      * Set up the upcoming event clicking behaviour to go on the event detailed page
      */
     private void setUpcomingEventButtonBehaviour() {
-        upcoming_event_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (upcoming_event != null) {
-                    //mListener.onFragmentInteraction(EventDetailFragment.TAG, upcoming_event);
-                }
-            }
+        upcoming_event_layout.setOnClickListener(v -> {
+            if (upcoming_event != null)
+                mListener.onFragmentInteraction(OPEN_EVENT_DETAIL_FRAGMENT, upcoming_event);
         });
     }
 
@@ -179,27 +168,21 @@ public class AssociationDetailFragment extends SuperFragment {
      */
     private void loadUpcomingEvent() {
         // Fetch online data of the upcoming event
-        if (asso.getClosestEventId() != 0) {
-            IdlingResourceFactory.incrementCountingIdlingResource();
-            FirebaseFirestore.getInstance()
-                    .document("events_info/event" + asso.getClosestEventId())
-                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                    if (fmap.hasFields(Event.FIELDS)) {
-                        upcoming_event = new Event.EventBuilder().build(fmap);
-                        upcoming_event_name.setText(upcoming_event.getName());
-                        upcoming_event_date.setText(upcoming_event.getStartDate().toString());
-                        loadUriIntoImageView(upcoming_event_icon, upcoming_event.getIconUri(), getContext());
-                    } else
-                        upcoming_event_name.setText("Error loading the event :(");
-                    IdlingResourceFactory.decrementCountingIdlingResource();
+        if (asso.getShortDescription().isEmpty())
+            upcoming_event_name.setText("No upcoming event :(");
+        else
+            DatabaseFactory.getDependency().getEventsFromIds(asso.getUpcomingEvents(), result -> {
+                if (result != null && !result.isEmpty()) {
+                    upcoming_event = result.get(0);
+                    for (Event event : result) {
+                        if (event.getStartDate().before(upcoming_event.getStartDate()))
+                            upcoming_event = event;
+                    }
+                    upcoming_event_name.setText(upcoming_event.getName());
+                    upcoming_event_date.setText(upcoming_event.getStartDate().toString());
+                    loadUriIntoImageView(upcoming_event_icon, upcoming_event.getIconUri(), getContext());
                 }
             });
-        } else {
-            upcoming_event_name.setText("No upcoming event :(");
-        }
     }
 
     /**
@@ -208,38 +191,23 @@ public class AssociationDetailFragment extends SuperFragment {
      */
     private void loadMainChat() {
         // Fetch online data of the main_chat
-        if (asso.getChannelId() != 0) {
-            IdlingResourceFactory.incrementCountingIdlingResource();
-            FirebaseFirestore.getInstance()
-                    .document("channels/channel" + asso.getChannelId())
-                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                    if (fmap.hasFields(Channel.FIELDS)) {
-                        main_chat = new Channel(fmap);
-                        main_chat_name.setText(main_chat.getName());
-                        main_chat_desc.setText(main_chat.getDescription());
-                    } else
-                        main_chat_name.setText("Error loading the chat :(");
-                    IdlingResourceFactory.decrementCountingIdlingResource();
-                }
-            });
-        } else {
+        if (asso.getChannelId() == null)
             main_chat_name.setText("There is no chat :(");
-        }
+        else
+            DatabaseFactory.getDependency().getChannelFromId(asso.getChannelId(), result -> {
+                main_chat = result;
+                main_chat_name.setText(main_chat.getName());
+                main_chat_desc.setText(main_chat.getShortDescription());
+            });
     }
 
     private void setMainChatButtonBehaviour() {
-        main_chat_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (main_chat != null) {
-                    if (user.isConnected())
-                        mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, main_chat);
-                    else
-                        Snackbar.make(getView(), "Login to access chat room", 5000).show();
-                }
+        main_chat_layout.setOnClickListener(v -> {
+            if (main_chat != null) {
+                if (user.isConnected())
+                    mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, main_chat);
+                else
+                    Snackbar.make(getView(), "Login to access chat room", 5000).show();
             }
         });
     }
