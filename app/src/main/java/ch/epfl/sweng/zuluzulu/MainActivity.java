@@ -24,6 +24,7 @@ import java.util.Stack;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AddEventFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.ChangeUserRoleFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AssociationsGeneratorFragment;
@@ -282,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case OPENING_WEBVIEW:
                 openFragmentWithStringData(WebViewFragment.newInstance(), WebViewFragment.URL, (String) data);
                 break;
-            case CREATE_EVENT:
+            case OPEN_CREATE_EVENT:
                 openFragment(AddEventFragment.newInstance());
                 break;
             case SET_TITLE:
@@ -344,6 +345,22 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 openFragment(SettingsFragment.newInstance());
                 selectItem(navigationView.getMenu().findItem(R.id.nav_settings));
                 break;
+
+                // Admin
+            case OPEN_MEMENTO:
+                openFragment(MementoFragment.newInstance(user));
+                break;
+            case OPEN_MANAGE_USER:
+                openFragment(ChangeUserRoleFragment.newInstance(user));
+                break;
+            case OPEN_MANAGE_CHANNEL:
+                //TODO: to add when finished
+                //openFragment(...);
+                break;
+            case OPEN_MANAGE_ASSOCIATION:
+                openFragment(AssociationsGeneratorFragment.newInstance(user));
+                break;
+
             default:
                 // Should never happen
                 throw new AssertionError(tag);
