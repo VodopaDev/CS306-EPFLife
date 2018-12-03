@@ -5,14 +5,24 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.util.Date;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -31,9 +41,11 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
 public class ProfileFragment extends SuperFragment {
     private static final String PROFILE_TAG = "PROFILE_TAG";
     private static final int CAMERA_CODE = 1234;
-    private static final String PICTURE_TAG = "PICTURE_TAG";
+    private static final int CAMERA_PERM_CODE = 250;
+
     private User user;
     private ImageButton pic;
+    private String pathToImage;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -71,7 +83,9 @@ public class ProfileFragment extends SuperFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_CODE && resultCode == Activity.RESULT_OK) {
-            Bitmap picture = (Bitmap) data.getExtras().get("data");
+            BitmapFactory.Options forProfilePic = new BitmapFactory.Options();
+            forProfilePic.inJustDecodeBounds = true;
+            Bitmap picture = BitmapFactory.decodeFile(pathToImage, forProfilePic);
             pic.setImageBitmap(picture);
         }
     }
@@ -107,8 +121,12 @@ public class ProfileFragment extends SuperFragment {
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, CAMERA_CODE);
+                if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERM_CODE);
+                }
+                else{
+                    goToCamera();
+                }
             }
         });
 
@@ -130,4 +148,26 @@ public class ProfileFragment extends SuperFragment {
 
         return view;
     }
+
+    private void goToCamera(){
+        File destination = new File(Environment.getExternalStorageDirectory() + "/DCIM/Camera/", "profile" + new Date().getTime() + ".jpg");
+        Uri uri = Uri.fromFile(destination);
+        pathToImage = destination.getAbsolutePath();
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        startActivityForResult(intent, CAMERA_CODE);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERM_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                goToCamera();
+            } else {
+                Toast.makeText(getActivity(), "permission refused", Toast.LENGTH_SHORT).show();
+            }
+
+        }
 }
