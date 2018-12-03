@@ -141,6 +141,8 @@ public class EventTest {
         assertEquals(0, Event.likeComparator().compare(event0, event0));
     }
 
+    // TODO: change testing
+    /*
     @Test
     public void increaseLikesTest() {
         initWorkingAssociation();
@@ -154,6 +156,7 @@ public class EventTest {
         event0.decreaseLikes();
         assertEquals((LIKES_1.intValue()) - 1, event0.getLikes().intValue());
     }
+    */
 
     @Test
     public void organizerIsCorrect() {
