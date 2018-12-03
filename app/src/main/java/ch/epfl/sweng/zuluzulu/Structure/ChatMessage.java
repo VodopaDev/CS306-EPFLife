@@ -11,7 +11,7 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 /**
  * Class that represents a chat message in a view
  */
-public class ChatMessage extends FirebaseStructure{
+public class ChatMessage extends FirebaseStructure {
     private String senderName;
     private String senderSciper;
     private String message;
@@ -20,7 +20,7 @@ public class ChatMessage extends FirebaseStructure{
 
     public ChatMessage(FirebaseMapDecorator data) {
         super(data);
-        if(!data.hasFields(requiredFields()))
+        if (!data.hasFields(requiredFields()))
             throw new IllegalArgumentException();
 
         senderName = data.getString("sender_name");
@@ -30,13 +30,17 @@ public class ChatMessage extends FirebaseStructure{
         channelId = data.getString("channel_id");
     }
 
-    public ChatMessage(String id, String channelId, String message, Date time, String senderName, String senderSciper){
+    public ChatMessage(String id, String channelId, String message, Date time, String senderName, String senderSciper) {
         super(id);
         this.channelId = channelId;
         this.message = message;
         this.time = time;
         this.senderName = senderName;
         this.senderSciper = senderSciper;
+    }
+
+    public static List<String> requiredFields() {
+        return Arrays.asList("sender_name", "sender_sciper", "message", "time", "id", "channel_id");
     }
 
     /**
@@ -48,7 +52,7 @@ public class ChatMessage extends FirebaseStructure{
         return senderName;
     }
 
-    public String getChannelId(){
+    public String getChannelId() {
         return channelId;
     }
 
@@ -107,9 +111,5 @@ public class ChatMessage extends FirebaseStructure{
         map.put("message", message);
         map.put("time", time);
         return map;
-    }
-
-    public static List<String> requiredFields(){
-        return Arrays.asList("sender_name", "sender_sciper", "message", "time", "id", "channel_id");
     }
 }

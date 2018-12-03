@@ -13,7 +13,7 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 /**
  * Class that represents a post in a view
  */
-public class Post extends FirebaseStructure{
+public class Post extends FirebaseStructure {
 
     private String senderName;
     private String senderSciper;
@@ -27,7 +27,7 @@ public class Post extends FirebaseStructure{
     private String channelId;
     private String originalPostId;
 
-    public Post(String id, String channelId, String originalPostId, String message, String senderName, String senderSciper, Date time, String color,int nbResponses, int nbUps, List<String> upScipers, List<String> downScipers){
+    public Post(String id, String channelId, String originalPostId, String message, String senderName, String senderSciper, Date time, String color, int nbResponses, int nbUps, List<String> upScipers, List<String> downScipers) {
         super(id);
         this.channelId = channelId;
         this.originalPostId = originalPostId;
@@ -38,7 +38,7 @@ public class Post extends FirebaseStructure{
         this.color = color;
         this.nbResponses = nbResponses;
 
-        assert(nbUps == upScipers.size() - downScipers.size());
+        assert (nbUps == upScipers.size() - downScipers.size());
         this.nbUps = nbUps;
         this.upScipers = upScipers;
         this.downScipers = downScipers;
@@ -46,7 +46,7 @@ public class Post extends FirebaseStructure{
 
     public Post(FirebaseMapDecorator data) {
         super(data);
-        if(!data.hasFields(requiredFields()))
+        if (!data.hasFields(requiredFields()))
             throw new IllegalArgumentException();
 
         channelId = data.getString("channel_id");
@@ -60,6 +60,10 @@ public class Post extends FirebaseStructure{
         nbResponses = data.getInteger("nb_responses");
         upScipers = data.getStringList("up_scipers");
         downScipers = data.getStringList("down_scipers");
+    }
+
+    public static List<String> requiredFields() {
+        return Arrays.asList("sender_name", "sender_sciper", "message", "time", "color", "nb_ups", "nb_responses", "up_scipers", "down_scipers", "id", "channel_id");
     }
 
     /**
@@ -139,16 +143,20 @@ public class Post extends FirebaseStructure{
      *
      * @return whether the user has liked this post or not
      */
-    public boolean isUpByUser(String userID) { return upScipers.contains(userID); }
+    public boolean isUpByUser(String userID) {
+        return upScipers.contains(userID);
+    }
 
     /**
      * Getter for downByUser
      *
      * @return whether the user has disliked this post or not
      */
-    public boolean isDownByUser(String userID) { return downScipers.contains(userID); }
+    public boolean isDownByUser(String userID) {
+        return downScipers.contains(userID);
+    }
 
-    public String getChannelId(){
+    public String getChannelId() {
         return channelId;
     }
 
@@ -170,16 +178,12 @@ public class Post extends FirebaseStructure{
         return new ArrayList<>(Collections.unmodifiableCollection(downScipers));
     }
 
-    public boolean upvoteWithUser(String userId){
+    public boolean upvoteWithUser(String userId) {
         return !isDownByUser(userId) && !isUpByUser(userId) && upScipers.add(userId);
     }
 
-    public boolean downvoteWithUser(String userId){
+    public boolean downvoteWithUser(String userId) {
         return !isDownByUser(userId) && !isUpByUser(userId) && downScipers.add(userId);
-    }
-
-    public static List<String> requiredFields(){
-        return Arrays.asList("sender_name", "sender_sciper", "message", "time", "color", "nb_ups", "nb_responses", "up_scipers", "down_scipers", "id", "channel_id");
     }
 
     public Map<String, Object> getData() {
@@ -204,12 +208,16 @@ public class Post extends FirebaseStructure{
      *
      * @return Whether the post is a reply or not
      */
-    public boolean isReply() { return originalPostId != null; }
+    public boolean isReply() {
+        return originalPostId != null;
+    }
 
     /**
      * Getter for the original post
      *
      * @return The original post
      */
-    public String getOriginalPostId() { return originalPostId; }
+    public String getOriginalPostId() {
+        return originalPostId;
+    }
 }
