@@ -117,6 +117,7 @@ public class EventFragment extends SuperFragment {
         fillEventLists();
     }
 
+    // TODO: is it possible to reduce this ?
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event, container, false);
@@ -125,7 +126,7 @@ public class EventFragment extends SuperFragment {
 
         // Add event button displayed only if user is an Admin
         if (user.hasRole(UserRole.ADMIN)) {
-            Button button_event_add = view.findViewById(R.id.event_add_button);
+            ImageButton button_event_add = view.findViewById(R.id.event_add_button);
             button_event_add.setVisibility(View.VISIBLE);
             button_event_add.setOnClickListener(v -> mListener.onFragmentInteraction(CREATE_EVENT, null));
         }
@@ -300,7 +301,6 @@ public class EventFragment extends SuperFragment {
     }
 
     //TODO: it's surely possible to reduce this
-
     /**
      * Set the behaviour of both textfields from and to
      */
