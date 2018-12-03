@@ -30,23 +30,16 @@ import ch.epfl.sweng.zuluzulu.User.User;
 public class FirebaseProxy implements Proxy {
 
     private static FirebaseProxy proxy;
-    private final Database firebaseInstance;
+    private Database firebaseInstance;
 
-    private final DatabaseCollection userCollection;
-    private final DatabaseCollection assoCollection;
-    private final DatabaseCollection eventCollection;
-    private final DatabaseCollection channelCollection;
+    private DatabaseCollection userCollection;
+    private DatabaseCollection assoCollection;
+    private DatabaseCollection eventCollection;
+    private DatabaseCollection channelCollection;
 
 
     private FirebaseProxy(Context appContext) {
-
         FirebaseApp.initializeApp(appContext);
-
-        firebaseInstance = FirebaseFactory.getDependency();
-        userCollection = firebaseInstance.collection("new_user");
-        assoCollection = firebaseInstance.collection("new_asso");
-        eventCollection = firebaseInstance.collection("new_even");
-        channelCollection = firebaseInstance.collection("new_chan");
     }
 
     public static void init(Context appContext) {
@@ -57,8 +50,24 @@ public class FirebaseProxy implements Proxy {
     public static FirebaseProxy getInstance() {
         if (proxy == null)
             throw new IllegalStateException("The FirebaseProxy hasn't been initialized");
-        else
+        else {
+            proxy.create();
             return proxy;
+        }
+    }
+
+    /**
+     * Create the instance
+     * I can't put it in the constructor
+     * because it's called in the mainactivity
+     * and I can't inject from tests because tests are called after launching the main
+     */
+    private void create(){
+        firebaseInstance = FirebaseFactory.getDependency();
+        userCollection = firebaseInstance.collection("new_user");
+        assoCollection = firebaseInstance.collection("new_asso");
+        eventCollection = firebaseInstance.collection("new_even");
+        channelCollection = firebaseInstance.collection("new_chan");
     }
 
     //----- Association related methods -----\\
