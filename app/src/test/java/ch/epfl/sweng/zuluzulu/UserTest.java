@@ -5,7 +5,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import ch.epfl.sweng.zuluzulu.TestingUtility.Utility;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;

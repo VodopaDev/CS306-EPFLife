@@ -18,8 +18,7 @@ public class WebViewFragment extends SuperFragment {
     private String url;
 
     public static WebViewFragment newInstance() {
-        WebViewFragment fragment = new WebViewFragment();
-        return fragment;
+        return new WebViewFragment();
     }
 
     @Override

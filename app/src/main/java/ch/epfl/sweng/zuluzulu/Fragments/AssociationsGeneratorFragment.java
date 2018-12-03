@@ -62,8 +62,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
             return null;
         }
 
-        AssociationsGeneratorFragment fragment = new AssociationsGeneratorFragment();
-        return fragment;
+        return new AssociationsGeneratorFragment();
     }
 
     /**

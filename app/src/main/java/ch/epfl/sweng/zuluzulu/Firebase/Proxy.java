@@ -1,7 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Firebase;
 
-import android.content.Context;
-
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Structure.Association;

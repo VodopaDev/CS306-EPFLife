@@ -13,9 +13,6 @@ import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
-import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
-import ch.epfl.sweng.zuluzulu.Structure.EventDate;
-import ch.epfl.sweng.zuluzulu.Utility.Utils;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;

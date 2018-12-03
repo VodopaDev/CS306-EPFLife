@@ -41,8 +41,7 @@ public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAd
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.add_card_association, parent, false);
 
-        AddAssociationViewHolder vh = new AddAssociationViewHolder(v);
-        return vh;
+        return new AddAssociationViewHolder(v);
     }
 
     @Override

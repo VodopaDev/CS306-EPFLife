@@ -1,9 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Database;
 
-import android.content.Context;
 import android.util.Pair;
-
-import com.google.android.gms.auth.api.Auth;
 
 import java.util.ArrayList;
 import java.util.Collections;

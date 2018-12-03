@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.R;
@@ -305,6 +304,7 @@ public class AddEventFragment extends SuperFragment {
      * @param description , the long description of the event
      * @return if the arguments are valid
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean checkIfValid(String title, String description) {
         if (title.length() > 30)
             return viewSetError(title_view, "title is too long");

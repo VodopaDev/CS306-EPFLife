@@ -2,7 +2,6 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.net.Uri;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.R;
 
 public class Event extends FirebaseStructure {
     private String name;
