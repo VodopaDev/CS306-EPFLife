@@ -21,9 +21,6 @@ public class Event extends FirebaseStructure {
     private String channelId;
     private String associationId;
 
-    private int likes;
-    private List<String> follower;
-
     private EventDate date;
     private String organizer;
     private String place;
@@ -36,10 +33,10 @@ public class Event extends FirebaseStructure {
     private String speaker;
 
     // TODO: make it in the cloud :)
-    private List<String> followers = new ArrayList<>();
+    private List<String> followers;
 
     protected Event(String id, String name, String shortDesc, String longDesc, String channelId, String associationId, EventDate date,
-                 int likes, String organizer, String place, String iconUri, String bannerUri,
+                 List<String> followers, String organizer, String place, String iconUri, String bannerUri,
                  String url_place_and_room, String website, String contact, String category, String speaker) {
         super(id);
         this.name = name;
@@ -48,7 +45,7 @@ public class Event extends FirebaseStructure {
         this.shortDescription = shortDesc;
         this.longDescription = longDesc;
         this.date = date;
-        this.likes = likes;
+        this.followers = new ArrayList<>(followers);
         this.organizer = organizer;
         this.place = place;
         this.bannerUri = bannerUri;
@@ -76,7 +73,7 @@ public class Event extends FirebaseStructure {
         longDescription = data.getString("long_description");
         channelId = data.getString("channel_id");
         associationId = data.getString("association_id");
-        likes = data.getInteger("likes");
+        followers = new ArrayList<>(data.getStringList("followers"));
         organizer = data.getString("organizer");
         place = data.getString("place");
         date = new EventDate(data.getDate("start_date"), data.getDate("end_date"));
@@ -150,23 +147,21 @@ public class Event extends FirebaseStructure {
 
     // TODO: change with followers.size() when it is implemented
     public Integer getLikes() {
-        return likes;
+        return followers.size();
     }
 
-    public boolean increaseLikes(String userId) {
-        likes++;
+    public boolean addFollower(String userId) {
         return !followers.contains(userId) && followers.add(userId);
     }
 
-    public boolean decreaseLikes(String userId) {
-        likes--;
+    public boolean removeFollower(String userId) {
         return !followers.contains(userId) && followers.remove(userId);
     }
 
     public static List<String> requiredFields() {
         return Arrays.asList(
                 "id","name","short_description","long_description", "category", "icon_uri",
-                "banner_uri", "likes", "channel_id", "association_id", "start_date", "end_date",
+                "banner_uri", "followers", "channel_id", "association_id", "start_date", "end_date",
                 "place", "organizer", "url_place_and_room", "website", "contact", "speaker");
     }
 
@@ -182,7 +177,7 @@ public class Event extends FirebaseStructure {
         map.put("icon_uri", iconUri);
         map.put("banner_uri", bannerUri);
 
-        map.put("likes", likes);
+        map.put("followers", followers);
         map.put("channel_id", channelId);
         map.put("association_id",associationId);
 

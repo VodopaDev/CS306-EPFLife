@@ -189,7 +189,7 @@ public class AddEventFragment extends SuperFragment {
                         setChannelId(DatabaseFactory.getDependency().getNewChannelId()).
                         setAssosId(association_map.get(name)).
                         setDate(new EventDate(date,date)).
-                        setLikes(0).
+                        setFollowers(new ArrayList<>()).
                         setOrganizer(org).
                         setPlace(pla).
                         setIconUri(EPFL_LOGO).

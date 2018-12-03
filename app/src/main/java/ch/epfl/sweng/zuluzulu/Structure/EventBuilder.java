@@ -1,5 +1,8 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.epfl.sweng.zuluzulu.R;
 
 public final class EventBuilder {
@@ -9,7 +12,7 @@ public final class EventBuilder {
     private String name;
     private String shortDesc;
     private String longDesc;
-    private int likes;
+    private List<String> followers;
     private String organizer;
     private String place;
     private String bannerUri;
@@ -30,7 +33,7 @@ public final class EventBuilder {
      */
     public EventBuilder() {
         // set Default values
-        this.likes = 0;
+        followers = new ArrayList<>();
     }
 
     /**
@@ -47,7 +50,7 @@ public final class EventBuilder {
                 channel_id,
                 assos_id,
                 date,
-                likes,
+                followers,
                 organizer,
                 place,
                 bannerUri,
@@ -98,8 +101,8 @@ public final class EventBuilder {
     }
 
 
-    public EventBuilder setLikes(int likes) {
-        this.likes = likes;
+    public EventBuilder setFollowers(List<String> followers) {
+        this.followers = new ArrayList<>(followers);
         return this;
     }
 

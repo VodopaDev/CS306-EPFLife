@@ -146,14 +146,14 @@ public class EventTest {
     @Test
     public void increaseLikesTest() {
         initWorkingAssociation();
-        event0.increaseLikes();
+        event0.addFollower();
         assertEquals((LIKES_1.intValue()) + 1, event0.getLikes().intValue());
     }
 
     @Test
     public void decreaseLikesTest() {
         initWorkingAssociation();
-        event0.decreaseLikes();
+        event0.removeFollower();
         assertEquals((LIKES_1.intValue()) - 1, event0.getLikes().intValue());
     }
     */

@@ -23,6 +23,7 @@ import java.util.Map;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.Firebase.ProxyDependency;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -128,7 +129,7 @@ public class MementoFragment extends SuperFragment {
             return;
         }
 
-        JSONArray jsonarray = null;
+        JSONArray jsonarray;
         try {
             jsonarray = new JSONArray(datas);
             for (int i = 0; i < jsonarray.length(); i++) {
@@ -152,8 +153,8 @@ public class MementoFragment extends SuperFragment {
                         jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")))
                 .setUrlPlaceAndRoom(jsonobject.getString("event_url_place_and_room"))
                 .setAssosId("0")
-                .setChannelId("0")
-                .setLikes(0)
+                .setChannelId(DatabaseFactory.getDependency().getNewChannelId())
+                .setFollowers(new ArrayList<>())
                 .setShortDesc(jsonobject.getString("description"))
                 .setName(jsonobject.getString("title"))
                 .setLongDesc(jsonobject.getString("description"))

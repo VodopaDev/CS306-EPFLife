@@ -2,7 +2,6 @@ package ch.epfl.sweng.zuluzulu.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,17 +93,17 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
                 @Override
                 public void onClick(View v) {
                     if (!user.isFollowedEvent(event.getId())) {
-                        event.increaseLikes(user.getSciper());
+                        event.addFollower(user.getSciper());
+                        user.addFollowedEvent(event.getId());
                         holder.likes.setText(String.valueOf(event.getLikes()));
                         // TODO: find what is this set text color
                         //holder.likes_button.setTextColor(Color.BLUE);
-                        user.addFollowedEvent(event.getId());
                     } else {
-                        event.decreaseLikes(user.getSciper());
+                        event.removeFollower(user.getSciper());
+                        user.removeFollowedEvent(event.getId());
                         holder.likes.setText(String.valueOf(event.getLikes()));
                         // TODO: find what is this set text color
                         //holder.likes_button.setTextColor(Color.BLACK);
-                        user.removeFollowedEvent(event.getId());
                     }
                 }
             });
