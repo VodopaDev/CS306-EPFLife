@@ -211,6 +211,9 @@ public class EventFragment extends SuperFragment {
         event_adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Set the behaviour of the search bar to filter events when a string is inputted
+     */
     private void setFilteringWithText() {
         event_search_bar.addTextChangedListener(new TextWatcher() {
             @Override
@@ -296,6 +299,11 @@ public class EventFragment extends SuperFragment {
         }
     }
 
+    //TODO: it's surely possible to reduce this
+
+    /**
+     * Set the behaviour of both textfields from and to
+     */
     private void setFilteringWithDate(){
         event_fragment_from_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -341,6 +349,9 @@ public class EventFragment extends SuperFragment {
         });
     }
 
+    /**
+     * Fill the eventsToFilter using dates
+     */
     private void filterWithDate(){
         sanitizeDates();
         event_search_bar.getText().clear();
@@ -353,6 +364,12 @@ public class EventFragment extends SuperFragment {
         event_adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Sanitize dates if they are null or before/after the minimal/maximal date
+     * Also switch the bound dates if the are in the wrong order
+     * @Link minDate
+     * @Link maxDate
+     */
     private void sanitizeDates(){
         if(dateTo == null || dateTo.after(maxDate))
             dateTo = maxDate;
