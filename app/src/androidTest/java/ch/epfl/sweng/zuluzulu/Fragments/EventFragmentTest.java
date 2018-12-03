@@ -89,16 +89,13 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
     }
 
     @Test
-    public void sortFromDate() {
+    public void sortWithDate() {
         onView(withId(R.id.event_fragment_from_date)).perform(click());
+        onView(withText("OK")).perform(click());
+        onView(withId(R.id.event_fragment_to_date)).perform(click());
         onView(withText("OK")).perform(click());
     }
 
-    @Test
-    public void sortToDateFail() {
-        onView(withId(R.id.event_fragment_to_date)).perform((click()));
-        onView(withId(R.id.event_fragment_to_date)).check(matches(withText("")));
-    }
 
     @Test
     public void sortFromAndToDate() {
