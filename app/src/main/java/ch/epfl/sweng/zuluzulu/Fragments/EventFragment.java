@@ -359,6 +359,6 @@ public class EventFragment extends SuperFragment {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy");
         event_fragment_from_date.setText(dateFrom.equals(new Date(0L)) ? "" : sdf.format(dateFrom));
-        event_fragment_to_date.setText(sdf.format(dateTo.equals(new Date(Long.MAX_VALUE)) ? "" : sdf.format(dateTo)));
+        event_fragment_to_date.setText(dateTo.equals(new Date(Long.MAX_VALUE)) ? "" : sdf.format(dateTo));
     }
 }
