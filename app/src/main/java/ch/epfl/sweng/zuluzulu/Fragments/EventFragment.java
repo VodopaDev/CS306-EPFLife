@@ -263,6 +263,8 @@ public class EventFragment extends SuperFragment {
         button_event_fav.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
         selectedButton.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         eventsToFilter = newEventsToFilter;
+        eventsFiltered.clear();
+        eventsFiltered.addAll(eventsToFilter);
         sortWithCurrentComparator();
     }
 
