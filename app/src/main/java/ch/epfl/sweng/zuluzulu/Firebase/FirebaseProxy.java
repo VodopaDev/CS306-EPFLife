@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.FirebaseAdapter;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -27,18 +30,19 @@ import ch.epfl.sweng.zuluzulu.User.User;
 public class FirebaseProxy implements Proxy {
 
     private static FirebaseProxy proxy;
-    private final FirebaseFirestore firebaseInstance;
+    private final Database firebaseInstance;
 
-    private final CollectionReference userCollection;
-    private final CollectionReference assoCollection;
-    private final CollectionReference eventCollection;
-    private final CollectionReference channelCollection;
+    private final DatabaseCollection userCollection;
+    private final DatabaseCollection assoCollection;
+    private final DatabaseCollection eventCollection;
+    private final DatabaseCollection channelCollection;
 
 
     private FirebaseProxy(Context appContext) {
 
         FirebaseApp.initializeApp(appContext);
-        firebaseInstance = FirebaseFirestore.getInstance();
+       // firebaseInstance = FirebaseFirestore.getInstance();
+        firebaseInstance = new FirebaseAdapter();
         userCollection = firebaseInstance.collection("new_user");
         assoCollection = firebaseInstance.collection("new_asso");
         eventCollection = firebaseInstance.collection("new_even");
