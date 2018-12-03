@@ -36,7 +36,6 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
     }
 
     @Test
-    @Ignore
     public void authenticatedCanOpenAnEvent(){
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.event_fragment_listview)).atPosition(0).perform(click());
         onView(withId(R.id.event_detail_fav)).check(matches(isDisplayed()));
@@ -54,6 +53,5 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
         onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).atPosition(0).perform(click());
         onView(withId(R.id.event_detail_but_assos)).perform(click());
         Utility.checkFragmentIsOpen(R.id.association_detail_fragment);
-        onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).atPosition(0).perform(click());
     }
 }

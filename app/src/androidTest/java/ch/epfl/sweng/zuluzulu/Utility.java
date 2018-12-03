@@ -207,7 +207,7 @@ public class Utility {
                 .setShortDesc("Is this a real event?")
                 .setLongDesc("Of course not, you should check this beautiful description")
                 .setDate(new EventDate(new Date(10000000), new Date(10500000)))
-                .setLikes(0)
+                .setFollowers(new ArrayList<>())
                 .setOrganizer("I'm the organizer")
                 .setPlace("Not at EPFL")
                 .setIconUri(null)
