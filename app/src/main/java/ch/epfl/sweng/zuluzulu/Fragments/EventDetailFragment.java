@@ -152,7 +152,6 @@ public class EventDetailFragment extends SuperFragment {
                 .into(event_banner);
 
         webview = (WebView) view.findViewById(R.id.epflMapView);
-        webview.getSettings().setJavaScriptEnabled(false);
         webview.getSettings().setBuiltInZoomControls(true);
         webview.getSettings().setSupportZoom(true);
         webview.setWebViewClient(new WebViewClient(){
