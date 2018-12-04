@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+<<<<<<< HEAD
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,11 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Adapters.UpcomingEventArrayAdapter;
+=======
+
+import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
+import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
+>>>>>>> d327605a7a137853b10f5db0c8bcc65e22b26836
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -51,6 +57,13 @@ public class MainFragment extends SuperFragment {
     AssociationArrayAdapter assos_adapter;
     private ListView listview_assos;
 
+    private ListView associations_listView;
+    private ListView events_listView;
+    private ArrayList<Association> associations_array;
+    private ArrayList<Event> events_array;
+    private AssociationArrayAdapter associations_adapter;
+    private EventArrayAdapter events_adapter;
+
     public MainFragment() {
     }
 
@@ -75,6 +88,21 @@ public class MainFragment extends SuperFragment {
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Home");
             user = (User) getArguments().getSerializable(ARG_USER);
         }
+<<<<<<< HEAD
+=======
+
+        associations_array = new ArrayList<>();
+        events_array = new ArrayList<>();
+        associations_adapter = new AssociationArrayAdapter(getContext(), associations_array, mListener);
+        events_adapter = new EventArrayAdapter(getContext(), events_array, mListener, user);
+        if (user.isConnected()) {
+            fillConnectedUserAssociationsList();
+            fillConnectedUserEventsList();
+        } else {
+            // TODO
+        }
+    }
+>>>>>>> d327605a7a137853b10f5db0c8bcc65e22b26836
 
         upcoming_events = new ArrayList<>();
         event_adapter = new UpcomingEventArrayAdapter(getContext(), upcoming_events, mListener, user);
@@ -96,6 +124,7 @@ public class MainFragment extends SuperFragment {
             if (!hadPermissions) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS.MY_PERMISSIONS_REQUEST_LOCATION);
             }
+<<<<<<< HEAD
             View view = inflater.inflate(R.layout.fragment_main_user, container, false);
 
             /*listview_event = view.findViewById(R.id.main_page_list_event);
@@ -115,8 +144,15 @@ public class MainFragment extends SuperFragment {
             listview_assos.setAdapter(assos_adapter);
 
             return view;
+=======
+            return createConnectedUserView(inflater, container);
+        } else {
+            return createNotConnectedUserView(inflater, container);
+>>>>>>> d327605a7a137853b10f5db0c8bcc65e22b26836
         }
+    }
 
+<<<<<<< HEAD
 
     }
 
@@ -151,5 +187,47 @@ public class MainFragment extends SuperFragment {
             random_assos.add(result.get(rand));
             assos_adapter.notifyDataSetChanged();
         });
+=======
+    /*
+     * connected user
+     */
+    public View createConnectedUserView(LayoutInflater inflater, ViewGroup container){
+        View view = inflater.inflate(R.layout.fragment_main_user, container, false);
+        associations_listView = view.findViewById(R.id.main_fragment_followed_associations_listview);
+        events_listView = view.findViewById(R.id.main_fragment_followed_events_listview);
+        associations_listView.setAdapter(associations_adapter);
+        events_listView.setAdapter(events_adapter);
+        return view;
+    }
+
+    private void fillConnectedUserAssociationsList() {
+        DatabaseFactory.getDependency().getAllAssociations(result -> {
+            associations_array.clear();
+            for (Association association : result) {
+                if (((AuthenticatedUser) user).isFollowedAssociation(association.getId()))
+                    associations_array.add(association);
+            }
+            associations_adapter.notifyDataSetChanged();
+        });
+    }
+
+    private void fillConnectedUserEventsList() {
+        DatabaseFactory.getDependency().getAllEvents(result -> {
+            events_array.clear();
+            for (Event event : result) {
+                if (((AuthenticatedUser) user).isFollowedEvent(event.getId()))
+                    events_array.add(event);
+            }
+            Collections.sort(events_array, Event.dateComparator());
+            events_adapter.notifyDataSetChanged();
+        });
+    }
+
+    /*
+     * guest user
+     */
+    public View createNotConnectedUserView(LayoutInflater inflater, ViewGroup container){
+        return inflater.inflate(R.layout.fragment_main, container, false);
+>>>>>>> d327605a7a137853b10f5db0c8bcc65e22b26836
     }
 }
