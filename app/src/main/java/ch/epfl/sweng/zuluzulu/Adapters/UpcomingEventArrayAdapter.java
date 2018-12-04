@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -82,7 +83,6 @@ public class UpcomingEventArrayAdapter extends ArrayAdapter<Event>{
         holder.name.setText(event.getName());
         holder.short_desc.setText(event.getShortDescription());
         ImageLoader.loadUriIntoImageView(holder.icon, event.getIconUri(), getContext());
-        holder.start_date.setText(event.getDateTimeUser());
         holder.likes.setText(String.valueOf(event.getLikes()));
 
         event_view.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +92,16 @@ public class UpcomingEventArrayAdapter extends ArrayAdapter<Event>{
                 mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT, event);
             }
         });
+        long nb_hours = (event.getStartDate().getTime() - new Date().getTime())/3600000;
+        long nb_days = nb_hours/24;
+        if(nb_days == 0) {
+            if(nb_hours == 0)
+                holder.start_date.setText("Now");
+            else
+             holder.start_date.setText("In " + nb_hours + " Hours");
+        }
+        else
+            holder.start_date.setText("In " + nb_days + " Days");
 
         return event_view;
     }
