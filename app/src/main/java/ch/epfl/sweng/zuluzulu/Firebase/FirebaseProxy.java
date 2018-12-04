@@ -140,13 +140,13 @@ public class FirebaseProxy implements Proxy {
                     onResult.apply(result);
                     IdlingResourceFactory.decrementCountingIdlingResource();
                 }
-            }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the with id " + id))
-                    .addOnFailureListener(e -> {
-                        if (counter.increment()) {
-                            onResult.apply(result);
-                            IdlingResourceFactory.decrementCountingIdlingResource();
-                        }
-                    });
+            }).addOnFailureListener(e -> {
+                Log.e("PROXY", "cannot fetch from id " + id);
+                if (counter.increment()) {
+                    onResult.apply(result);
+                    IdlingResourceFactory.decrementCountingIdlingResource();
+                }
+            });
         }
     }
 
