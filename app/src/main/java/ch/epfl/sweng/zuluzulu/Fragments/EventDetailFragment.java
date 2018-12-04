@@ -117,6 +117,18 @@ public class EventDetailFragment extends SuperFragment {
         TextView event_place = view.findViewById(R.id.event_detail_place);
         event_place.setText(event.getPlace());
 
+        TextView event_contact = view.findViewById(R.id.event_detail_contact);
+        event_contact.setText(event.getContact());
+
+        TextView event_website = view.findViewById(R.id.event_detail_website);
+        event_website.setText(event.getWebsite());
+
+        TextView event_speaker = view.findViewById(R.id.event_detail_speaker);
+        event_speaker.setText(event.getSpeaker());
+
+        TextView event_category = view.findViewById(R.id.event_detail_category);
+        event_category.setText(event.getCategory());
+
         // Event icon
         ImageView event_icon = view.findViewById(R.id.event_detail_icon);
         Glide.with(getContext())

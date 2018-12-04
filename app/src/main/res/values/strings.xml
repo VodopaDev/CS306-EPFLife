@@ -91,5 +91,6 @@
     <string name="event_detail_speaker">Speaker :</string>
     <string name="event_detail_tv_website">Site internet :</string>
     <string name="event_detail_tv_contact">Contact :</string>
+    <string name="event_detail_tv_category">Type d\'événement :</string>
 
 </resources>
