@@ -14,6 +14,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -42,6 +47,7 @@ public class ProfileFragment extends SuperFragment {
     private static final String PROFILE_TAG = "PROFILE_TAG";
     private static final int CAMERA_CODE = 1234;
     private static final int CAMERA_PERM_CODE = 250;
+    private static final int W_STORAGE_PERM_CODE = 260;
 
     private User user;
     private ImageButton pic;
@@ -83,10 +89,24 @@ public class ProfileFragment extends SuperFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_CODE && resultCode == Activity.RESULT_OK) {
-            BitmapFactory.Options forProfilePic = new BitmapFactory.Options();
-            forProfilePic.inJustDecodeBounds = true;
-            Bitmap picture = BitmapFactory.decodeFile(pathToImage, forProfilePic);
-            pic.setImageBitmap(picture);
+            int width = pic.getWidth();
+            int height = pic.getHeight();
+
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            bmOptions.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(pathToImage, bmOptions);
+            int photoWidth = bmOptions.outWidth;
+            int photoHeight = bmOptions.outHeight;
+
+            int scaling = Math.min(photoWidth/width, photoHeight/height);
+
+            bmOptions.inJustDecodeBounds = false;
+            bmOptions.inSampleSize = scaling;
+            bmOptions.inPurgeable = true;
+
+            Bitmap bitmap = BitmapFactory.decodeFile(pathToImage, bmOptions);
+            pic.setImageBitmap(bitmap);
+
         }
     }
 
@@ -124,6 +144,9 @@ public class ProfileFragment extends SuperFragment {
                 if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_PERM_CODE);
                 }
+                if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(getActivity() , new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
+                }
                 else{
                     goToCamera();
                 }
@@ -150,24 +173,43 @@ public class ProfileFragment extends SuperFragment {
     }
 
     private void goToCamera(){
-        File destination = new File(Environment.getExternalStorageDirectory() + "/DCIM/Camera/", "profile" + new Date().getTime() + ".jpg");
-        Uri uri = Uri.fromFile(destination);
-        pathToImage = destination.getAbsolutePath();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-        startActivityForResult(intent, CAMERA_CODE);
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null){
+            File picture = null;
+            try{
+                picture = creatingFileForImage();
+            } catch(IOException e) {
+                Log.e("creating picture file", "unable to create a file for intent");
+                return;
+            }
+
+            if (picture != null) {
+                Uri photoURI = FileProvider.getUriForFile(getActivity(),
+                        "ch.epfl.sweng.zuluzulu.fileprovider",
+                        picture);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(intent, CAMERA_CODE);
+
+            }
+        }
+    }
+
+    private File creatingFileForImage() throws IOException{
+        long time = new Date().getTime();
+        String imageFileName = "JPEG_" + time + "_";
+        File storageDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File pict = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        pathToImage = pict.getAbsolutePath();
+        return pict;
+
     }
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CAMERA_PERM_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                goToCamera();
-            } else {
-                Toast.makeText(getActivity(), "permission refused", Toast.LENGTH_SHORT).show();
-            }
 
-        }
 }

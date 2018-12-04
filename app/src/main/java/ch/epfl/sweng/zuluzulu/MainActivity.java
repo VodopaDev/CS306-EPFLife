@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,12 +11,14 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.MapsInitializer;
 
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private SuperFragment current_fragment;
     private Stack<SuperFragment> previous_fragments;
     private User user;
+    private static final int W_STORAGE_PERM_CODE = 260;
 
 
     @Override
@@ -375,6 +379,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             }
         }
     }
+
+
 
     /**
      * Return the current fragment
