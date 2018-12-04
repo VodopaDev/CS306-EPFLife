@@ -11,7 +11,6 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-<<<<<<< HEAD
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -19,11 +18,9 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Adapters.UpcomingEventArrayAdapter;
-=======
 
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
->>>>>>> d327605a7a137853b10f5db0c8bcc65e22b26836
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -88,34 +85,31 @@ public class MainFragment extends SuperFragment {
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Home");
             user = (User) getArguments().getSerializable(ARG_USER);
         }
-<<<<<<< HEAD
-=======
+
+        upcoming_events = new ArrayList<>();
+        event_adapter = new UpcomingEventArrayAdapter(getContext(), upcoming_events, mListener, user);
+        currentComparator = Event.dateComparator();
+        random_assos = new ArrayList<>();
+        assos_adapter = new AssociationArrayAdapter(getContext(), random_assos, mListener);
 
         associations_array = new ArrayList<>();
         events_array = new ArrayList<>();
         associations_adapter = new AssociationArrayAdapter(getContext(), associations_array, mListener);
         events_adapter = new EventArrayAdapter(getContext(), events_array, mListener, user);
+
         if (user.isConnected()) {
             fillConnectedUserAssociationsList();
             fillConnectedUserEventsList();
         } else {
-            // TODO
+            fillUpcomingEventLists();
+            fillRandomAssociationLists();
         }
     }
->>>>>>> d327605a7a137853b10f5db0c8bcc65e22b26836
-
-        upcoming_events = new ArrayList<>();
-        event_adapter = new UpcomingEventArrayAdapter(getContext(), upcoming_events, mListener, user);
-        currentComparator = Event.dateComparator();
-        fillUpcomingEventLists();
-
-        random_assos = new ArrayList<>();
-        assos_adapter = new AssociationArrayAdapter(getContext(), random_assos, mListener);
-        fillRandomAssociationLists();
 
 
 
-    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -124,37 +118,14 @@ public class MainFragment extends SuperFragment {
             if (!hadPermissions) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS.MY_PERMISSIONS_REQUEST_LOCATION);
             }
-<<<<<<< HEAD
-            View view = inflater.inflate(R.layout.fragment_main_user, container, false);
-
-            /*listview_event = view.findViewById(R.id.main_page_list_event);
-            listview_event.setAdapter(event_adapter);
-
-            listview_assos = view.findViewById(R.id.main_page_random_assos);
-            listview_assos.setAdapter(assos_adapter);*/
-
-            return view;
-        } else {
-            View view = inflater.inflate(R.layout.fragment_main, container, false);
-
-            listview_event = view.findViewById(R.id.main_page_list_event);
-            listview_event.setAdapter(event_adapter);
-
-            listview_assos = view.findViewById(R.id.main_page_random_assos);
-            listview_assos.setAdapter(assos_adapter);
-
-            return view;
-=======
             return createConnectedUserView(inflater, container);
         } else {
             return createNotConnectedUserView(inflater, container);
->>>>>>> d327605a7a137853b10f5db0c8bcc65e22b26836
         }
     }
 
-<<<<<<< HEAD
 
-    }
+
 
     private void fillUpcomingEventLists() {
         DatabaseFactory.getDependency().getAllEvents(result -> {
@@ -183,11 +154,11 @@ public class MainFragment extends SuperFragment {
     private void fillRandomAssociationLists() {
         random_assos.clear();
         DatabaseFactory.getDependency().getAllAssociations(result -> {
-            int rand = (int)(Math.random() * (result.size()));
+            int rand = (int) (Math.random() * (result.size()));
             random_assos.add(result.get(rand));
             assos_adapter.notifyDataSetChanged();
         });
-=======
+    }
     /*
      * connected user
      */
@@ -227,7 +198,15 @@ public class MainFragment extends SuperFragment {
      * guest user
      */
     public View createNotConnectedUserView(LayoutInflater inflater, ViewGroup container){
-        return inflater.inflate(R.layout.fragment_main, container, false);
->>>>>>> d327605a7a137853b10f5db0c8bcc65e22b26836
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        listview_event = view.findViewById(R.id.main_page_list_event);
+        listview_event.setAdapter(event_adapter);
+
+        listview_assos = view.findViewById(R.id.main_page_random_assos);
+        listview_assos.setAdapter(assos_adapter);
+
+        return view;
+
     }
 }
