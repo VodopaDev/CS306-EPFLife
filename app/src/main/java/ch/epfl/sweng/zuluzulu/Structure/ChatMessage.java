@@ -2,30 +2,45 @@ package ch.epfl.sweng.zuluzulu.Structure;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 
 /**
  * Class that represents a chat message in a view
  */
-public class ChatMessage {
-
-    public static final List<String> FIELDS = Arrays.asList("senderName", "sciper", "message", "time");
+public class ChatMessage extends FirebaseStructure {
     private String senderName;
-    private String sciper;
+    private String senderSciper;
     private String message;
     private Date time;
-    private boolean ownMessage;
-    private boolean anonymous;
+    private String channelId;
 
-    public ChatMessage(FirebaseMapDecorator data, String userSciper) {
-        senderName = data.getString("senderName");
-        sciper = data.getString("sciper");
+    public ChatMessage(FirebaseMapDecorator data) {
+        super(data);
+        if (!data.hasFields(requiredFields()))
+            throw new IllegalArgumentException();
+
+        senderName = data.getString("sender_name");
+        senderSciper = data.getString("sender_sciper");
         message = data.getString("message");
         time = data.getDate("time");
-        ownMessage = sciper.equals(userSciper);
-        anonymous = senderName.isEmpty();
+        channelId = data.getString("channel_id");
+    }
+
+    public ChatMessage(String id, String channelId, String message, Date time, String senderName, String senderSciper) {
+        super(id);
+        this.channelId = channelId;
+        this.message = message;
+        this.time = time;
+        this.senderName = senderName;
+        this.senderSciper = senderSciper;
+    }
+
+    public static List<String> requiredFields() {
+        return Arrays.asList("sender_name", "sender_sciper", "message", "time", "id", "channel_id");
     }
 
     /**
@@ -37,27 +52,17 @@ public class ChatMessage {
         return senderName;
     }
 
-    /**
-     * Setter for the sender name
-     */
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
+    public String getChannelId() {
+        return channelId;
     }
 
     /**
-     * Getter for the sciper
+     * Getter for the senderSciper
      *
-     * @return the sciper
+     * @return the senderSciper
      */
-    public String getSciper() {
-        return sciper;
-    }
-
-    /**
-     * Setter for the sciper
-     */
-    public void setSciper(String sciper) {
-        this.sciper = sciper;
+    public String getSenderSciper() {
+        return senderSciper;
     }
 
     /**
@@ -70,19 +75,12 @@ public class ChatMessage {
     }
 
     /**
-     * Setter for the message
-     */
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    /**
      * Getter for the fact the message is viewed by his owner
      *
      * @return whether the message is viewed by his owner or not
      */
-    public boolean isOwnMessage() {
-        return ownMessage;
+    public boolean isOwnMessage(String sciper) {
+        return sciper.equals(senderSciper);
     }
 
     /**
@@ -95,18 +93,23 @@ public class ChatMessage {
     }
 
     /**
-     * Setter for the creation time
-     */
-    public void setTime(Date time) {
-        this.time = time;
-    }
-
-    /**
-     * Getter for anonym
+     * Getter for anonymous
      *
      * @return Whether the message is anonymous or not
      */
     public boolean isAnonymous() {
-        return anonymous;
+        return senderName.isEmpty();
+    }
+
+    @Override
+    public Map<String, Object> getData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", getId());
+        map.put("channel_id", channelId);
+        map.put("sender_sciper", senderSciper);
+        map.put("sender_name", senderName);
+        map.put("message", message);
+        map.put("time", time);
+        return map;
     }
 }

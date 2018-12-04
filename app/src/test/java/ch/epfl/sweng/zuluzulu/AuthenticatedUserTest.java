@@ -9,16 +9,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Structure.Channel;
-import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.User;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
 public class AuthenticatedUserTest {
@@ -28,25 +25,21 @@ public class AuthenticatedUserTest {
     private static final String semester = "BA5";
     private static final String gaspar = "jomeau@epfl.ch";
     private static final String first_name = "nicolas";
-    private final Association mocked_asso = mock(Association.class);
-    private final Event mocked_event = mock(Event.class);
-    private final Channel mocked_channel = mock(Channel.class);
+
+    private final String ASSOCIATION_ID = "1";
+    private final String EVENT_ID = "1";
+    private final String CHANNEL_ID = "1";
     private final String last_name = "jomeau";
     private AuthenticatedUser user;
-    private List<Integer> fav_assos;
-    private List<Integer> fol_events;
-    private List<Integer> fol_chats;
+    private List<String> fav_assos;
+    private List<String> fol_events;
+    private List<String> fol_chats;
 
     @Before
     public void createUser() {
         fav_assos = new ArrayList<>();
         fol_events = new ArrayList<>();
         fol_chats = new ArrayList<>();
-
-        when(mocked_asso.getId()).thenReturn(1);
-        when(mocked_channel.getId()).thenReturn(1);
-        when(mocked_event.getId()).thenReturn(1);
-
 
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail(email);
@@ -56,8 +49,8 @@ public class AuthenticatedUserTest {
         builder.setGaspar(gaspar);
         builder.setFirst_names(first_name);
         builder.setLast_names(last_name);
-        builder.setFollowedChats(fol_chats);
-        builder.setFavAssos(fav_assos);
+        builder.setFollowedChannels(fol_chats);
+        builder.setFollowedAssociations(fav_assos);
         builder.setFollowedEvents(fol_events);
         user = builder.buildAuthenticatedUser();
     }
@@ -74,20 +67,16 @@ public class AuthenticatedUserTest {
     }
 
     @Test
-    public void followTest() {
-        assertThat(false, equalTo(user.isFavAssociation(mocked_asso)));
-        assertThat(false, equalTo(user.isFollowedChat(mocked_channel)));
-        assertThat(false, equalTo(user.isFollowedEvent(mocked_event)));
-    }
-
-    @Test
     public void setList() {
-        user.setFollowedChats(Collections.singletonList(1));
-        user.setFavAssos(Collections.singletonList(1));
-        user.setFollowedEvents(Collections.singletonList(1));
-        assertThat(true, equalTo(user.isFavAssociation(mocked_asso)));
-        assertThat(true, equalTo(user.isFollowedChat(mocked_channel)));
-        assertThat(true, equalTo(user.isFollowedEvent(mocked_event)));
+        assertFalse(user.isFollowedAssociation(ASSOCIATION_ID));
+        assertFalse(user.isFollowedEvent(EVENT_ID));
+        assertFalse(user.isFollowedChannel(CHANNEL_ID));
+        user.setFollowedChannels(Collections.singletonList(CHANNEL_ID));
+        user.setFollowedAssociation(Collections.singletonList(ASSOCIATION_ID));
+        user.setFollowedEvents(Collections.singletonList(EVENT_ID));
+        assertTrue(user.isFollowedAssociation(ASSOCIATION_ID));
+        assertTrue(user.isFollowedEvent(EVENT_ID));
+        assertTrue(user.isFollowedChannel(CHANNEL_ID));
     }
 
     @Test

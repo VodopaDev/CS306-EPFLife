@@ -1,42 +1,21 @@
-package ch.epfl.sweng.zuluzulu.Structure;
+package ch.epfl.sweng.zuluzulu.Utility;
 
 import android.location.Location;
-import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
 import java.util.Random;
 
-import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
-
 /**
- * Class that contains general useful functions
+ * Interface that contains general useful functions
  */
-public final class Utils {
+public interface Utils {
 
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
-    public static SimpleDateFormat stringToDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
-    private Utils() {
-    }
-
-    public static void addIdToList(String path, String field, Integer id) {
-        FirebaseFirestore.getInstance().document(path).update(field, FieldValue.arrayUnion(id));
-    }
-
-    public static void removeIdFromList(String path, String field, Integer id) {
-        FirebaseFirestore.getInstance().document(path).update(field, FieldValue.arrayRemove(id));
-    }
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+    SimpleDateFormat stringToDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
      * Create a GeoPoint from a Location
@@ -44,7 +23,7 @@ public final class Utils {
      * @param location The location to convert
      * @return The GeoPoint
      */
-    public static GeoPoint toGeoPoint(Location location) {
+    static GeoPoint toGeoPoint(Location location) {
         if (location == null) {
             throw new NullPointerException();
         }
@@ -60,7 +39,7 @@ public final class Utils {
      * @param p2 The second GeoPoint
      * @return The distance between the two GeoPoints in meters
      */
-    public static double distanceBetween(GeoPoint p1, GeoPoint p2) {
+    static double distanceBetween(GeoPoint p1, GeoPoint p2) {
         double lat1 = p1.getLatitude();
         double lat2 = p2.getLatitude();
         double lon1 = p1.getLongitude();
@@ -85,7 +64,7 @@ public final class Utils {
      * @param max the biggest integer you can get
      * @return the random integer
      */
-    public static int randomInt(int min, int max) {
+    static int randomInt(int min, int max) {
         if (max < min) {
             throw new IllegalArgumentException("Max must be bigger than min");
         }
@@ -99,35 +78,12 @@ public final class Utils {
      * @param date the date
      * @return the time passed since the given date
      */
-    public static long getMillisecondsSince(Date date) {
+    static long getMillisecondsSince(Date date) {
         if (date == null) {
             throw new NullPointerException();
         }
         long dateTime = date.getTime();
         long now = Calendar.getInstance().getTimeInMillis();
         return now - dateTime;
-    }
-
-    /**
-     * Add the given data to firebase
-     *
-     * @param data       The map to push on firebase
-     * @param collection The collection reference where you want to push the data
-     * @param TAG        The tag
-     */
-    public static void addDataToFirebase(Map data, DatabaseCollection collection, String TAG) {
-        collection
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference ref) {
-                        Log.d(TAG, "DocumentSnapshot written");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w(TAG, "Error adding document", e);
-            }
-        });
     }
 }

@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,16 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -27,6 +22,7 @@ import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
 import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
@@ -104,10 +100,9 @@ public class MementoFragment extends SuperFragment {
      * @param result Json aray datas
      */
     private void handleMemento(List<String> result) {
-
         if (result != null) {
-            for(int i = 0; i < result.size(); i++) {
-                if(result.get(i) != null && !result.get(i).isEmpty() ) {
+            for (int i = 0; i < result.size(); i++) {
+                if (result.get(i) != null && !result.get(i).isEmpty()) {
                     addEvent(result.get(i));
                 }
             }
@@ -118,44 +113,9 @@ public class MementoFragment extends SuperFragment {
     }
 
     private void addDatabase() {
-        for (Event event : events
-                ) {
-            //the map for the event
-            Map<String, Object> docData = createHashmap(event);
-            if (docData != null ) {
-                DatabaseFactory.getDependency().collection("events_info").document("event" + Integer.toString(event.getId())).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Snackbar.make(getView(), event.getId() + " event added", Snackbar.LENGTH_LONG).show();
-                    }
-                });
-            }
+        for (Event event : events) {
+            DatabaseFactory.getDependency().addEvent(event);
         }
-    }
-
-    private Map<String, Object> createHashmap(Event event) {
-
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("icon_uri", event.getIconUri());
-        docData.put("banner_uri", event.getBannerUri());
-        docData.put("id", event.getId());
-        docData.put("assos_id", event.getAssosId());
-        docData.put("channel_id", event.getChannelId());
-        docData.put("likes", event.getLikes());
-        docData.put("long_desc", event.getLongDesc());
-        docData.put("name", event.getName());
-        docData.put("organizer", event.getOrganizer());
-        docData.put("place", event.getPlace());
-        docData.put("short_desc", event.getShortDesc());
-        docData.put("category", event.getCategory());
-        docData.put("speaker", event.getSpeaker());
-        docData.put("start_date", event.getStartDate());
-        docData.put("end_date", event.getEndDate());
-        docData.put("contact", event.getContact());
-        docData.put("website", event.getWebsite());
-        docData.put("url_place_and_room", event.getUrlPlaceAndRoom());
-
-        return docData;
     }
 
     private void addEvent(String datas) {
@@ -163,7 +123,7 @@ public class MementoFragment extends SuperFragment {
             return;
         }
 
-        JSONArray jsonarray = null;
+        JSONArray jsonarray;
         try {
             jsonarray = new JSONArray(datas);
             for (int i = 0; i < jsonarray.length(); i++) {
@@ -179,27 +139,28 @@ public class MementoFragment extends SuperFragment {
     }
 
     private Event createEvent(JSONObject jsonobject) throws JSONException, IllegalArgumentException {
-            return new Event.EventBuilder()
-                    .setId(jsonobject.getString("title").hashCode())
-                    .setDate(new EventDate(
-                            jsonobject.getString("event_start_date"), jsonobject.getString("event_start_time"),
-                            jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")))
-                    .setUrlPlaceAndRoom(jsonobject.getString("event_url_place_and_room"))
-                    .setAssosId(1)
-                    .setChannelId(1)
-                    .setLikes(0)
-                    .setShortDesc(jsonobject.getString("description"))
-                    .setName(jsonobject.getString("title"))
-                    .setLongDesc(jsonobject.getString("description"))
-                    .setOrganizer(jsonobject.getString("event_organizer"))
-                    .setPlace(jsonobject.getString("event_place_and_room"))
-                    .setBannerUri(jsonobject.getString("event_visual_absolute_url"))
-                    .setIconUri(jsonobject.getString("event_visual_absolute_url"))
-                    .setWebsite(jsonobject.getString("event_url_link"))
-                    .setContact(jsonobject.getString("event_contact"))
-                    .setCategory(jsonobject.getString("event_category_fr"))
-                    .setSpeaker(jsonobject.getString("event_speaker"))
-                    .build();
+        return new EventBuilder()
+                // Use this to avoid collision
+                .setId(Integer.toString(jsonobject.getString("title").hashCode()))
+                .setDate(new EventDate(
+                        jsonobject.getString("event_start_date"), jsonobject.getString("event_start_time"),
+                        jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")))
+                .setUrlPlaceAndRoom(jsonobject.getString("event_url_place_and_room"))
+                .setAssosId("0")
+                .setChannelId(DatabaseFactory.getDependency().getNewChannelId())
+                .setFollowers(new ArrayList<>())
+                .setShortDesc(jsonobject.getString("description"))
+                .setName(jsonobject.getString("title"))
+                .setLongDesc(jsonobject.getString("description"))
+                .setOrganizer(jsonobject.getString("event_organizer"))
+                .setPlace(jsonobject.getString("event_place_and_room"))
+                .setBannerUri(jsonobject.getString("event_visual_absolute_url"))
+                .setIconUri(jsonobject.getString("event_visual_absolute_url"))
+                .setWebsite(jsonobject.getString("event_url_link"))
+                .setContact(jsonobject.getString("event_contact"))
+                .setCategory(jsonobject.getString("event_category_fr"))
+                .setSpeaker(jsonobject.getString("event_speaker"))
+                .build();
     }
 
     @Override

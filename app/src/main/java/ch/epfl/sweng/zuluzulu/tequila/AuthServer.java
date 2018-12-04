@@ -59,9 +59,9 @@ public final class AuthServer {
         builder.setGaspar(profile.gaspar);
         builder.setFirst_names(profile.firstNames);
         builder.setLast_names(profile.lastNames);
-        builder.setFollowedChats(new ArrayList<Integer>());
-        builder.setFavAssos(new ArrayList<Integer>());
-        builder.setFollowedEvents(new ArrayList<Integer>());
+        builder.setFollowedChannels(new ArrayList<>());
+        builder.setFollowedAssociations(new ArrayList<>());
+        builder.setFollowedEvents(new ArrayList<>());
 
         return builder.buildAuthenticatedUser();
     }

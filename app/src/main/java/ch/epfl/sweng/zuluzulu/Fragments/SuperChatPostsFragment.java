@@ -5,11 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -19,17 +15,12 @@ import ch.epfl.sweng.zuluzulu.User.User;
  */
 public abstract class SuperChatPostsFragment extends SuperFragment {
 
-    protected static final String CHANNEL_DOCUMENT_NAME = "channels/channel";
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_CHANNEL = "ARG_CHANNEL";
-    protected FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     protected ListView listView;
     protected Button chatButton;
     protected Button postsButton;
-
-    protected CollectionReference collectionReference;
-    protected DatabaseCollection mockableCollection;
 
     protected AuthenticatedUser user;
     protected Channel channel;
