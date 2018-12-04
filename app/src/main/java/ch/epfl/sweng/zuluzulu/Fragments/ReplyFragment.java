@@ -88,7 +88,7 @@ public class ReplyFragment extends SuperFragment {
 
         setUpReplyText();
         setUpSendButton();
-        loadReplies();
+        loadReplies(false);
 
         return view;
     }
@@ -125,12 +125,13 @@ public class ReplyFragment extends SuperFragment {
                         Timestamp.now().toDate(),
                         postOriginal.getColor(),
                         0,
-                        1,
-                        Collections.singletonList(user.getSciper()),
+                        0,
+                        new ArrayList<>(),
                         new ArrayList<>()
                 );
                 DatabaseFactory.getDependency().addReply(post);
-                loadReplies();
+                loadReplies(true);
+                replyText.getText().clear();
             }
         });
     }
@@ -138,8 +139,9 @@ public class ReplyFragment extends SuperFragment {
     /**
      * Refresh the replies by reading in the database
      */
-    private void loadReplies() {
+    private void loadReplies(boolean newReply) {
         replies.clear();
+        replies.add(postOriginal);
         DatabaseFactory.getDependency().getRepliesFromPost(postOriginal.getChannelId(), postOriginal.getId(), result -> {
             Log.d("REPLIES", result.size() + " replies");
             replies.addAll(result);
@@ -150,6 +152,10 @@ public class ReplyFragment extends SuperFragment {
                     return 1;
             });
             adapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
+            if (newReply) {
+                listView.setSelection(adapter.getCount() - 1);
+            }
         });
     }
 
@@ -158,6 +164,6 @@ public class ReplyFragment extends SuperFragment {
      */
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
-        loadReplies();
+        loadReplies(false);
     }
 }

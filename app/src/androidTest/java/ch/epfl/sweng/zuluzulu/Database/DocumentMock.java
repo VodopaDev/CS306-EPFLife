@@ -4,9 +4,11 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseDocument;
 
 public class DocumentMock implements DatabaseDocument {
@@ -27,5 +29,25 @@ public class DocumentMock implements DatabaseDocument {
     public Task<Void> update(String field, Object value, Object... moreFieldAndValues) {
         Log.d(TAG, field + " -> " + value);
         return new TaskMock<>();
+    }
+
+    @Override
+    public Task<Void> update(Map<String, Object> data) {
+        return new TaskMock<>();
+    }
+
+    @Override
+    public Task<DocumentSnapshot> get() {
+        return new TaskMock<>();
+    }
+
+    @Override
+    public DatabaseCollection collection(String messages) {
+        return new CollectionMock();
+    }
+
+    @Override
+    public String getId() {
+        return "1";
     }
 }

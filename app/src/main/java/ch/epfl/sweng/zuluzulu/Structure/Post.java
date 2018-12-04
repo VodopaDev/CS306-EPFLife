@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.Structure;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -117,7 +118,7 @@ public class Post extends FirebaseStructure {
      * @return the number of ups
      */
     public int getNbUps() {
-        return nbUps;
+        return upScipers.size() - downScipers.size();
     }
 
     /**
@@ -219,5 +220,32 @@ public class Post extends FirebaseStructure {
      */
     public String getOriginalPostId() {
         return originalPostId;
+    }
+
+    /**
+     * Comparator to compare posts with time
+     *
+     * @return Comparator to compare posts with time
+     */
+    public static Comparator<Post> decreasingTimeComparator() {
+        return (o1, o2) -> o2.getTime().compareTo(o1.getTime());
+    }
+
+    /**
+     * Comparator to compare posts with number of ups
+     *
+     * @return Comparator to compare posts with number of ups
+     */
+    public static Comparator<Post> decreasingNbUpsComparator() {
+        return (o1, o2) -> o2.getNbUps() - o1.getNbUps();
+    }
+
+    /**
+     * Comparator to compare posts with number of replies
+     *
+     * @return Comparator to compare posts with number of replies
+     */
+    public static Comparator<Post> decreasingNbRepliesComparator() {
+        return (o1, o2) -> o2.getNbResponses() - o1.getNbResponses();
     }
 }
