@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
@@ -125,6 +126,7 @@ public class MainFragment extends SuperFragment {
                 if (((AuthenticatedUser) user).isFollowedEvent(event.getId()))
                     events_array.add(event);
             }
+            Collections.sort(events_array, Event.dateComparator());
             events_adapter.notifyDataSetChanged();
         });
     }
