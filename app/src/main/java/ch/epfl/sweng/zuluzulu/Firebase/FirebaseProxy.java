@@ -10,12 +10,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
+import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
@@ -429,24 +432,44 @@ public class FirebaseProxy implements Proxy{
         userCollection.document(user.getSciper()).set(user.getData());
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
-    public void getUserWithIdOrCreateIt(String id, OnResult<FirebaseMapDecorator> onResult){
+
+    public void getUserWithIdOrCreateIt(String id, OnResult<Map<String, Object>> onResult){
         IdlingResourceFactory.incrementCountingIdlingResource();
         userCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("sciper", documentSnapshot.getId());
             if (!documentSnapshot.exists()) {
-                Map<String, Object> map = new HashMap<>();
                 map.put("followed_associations", new ArrayList<String>());
                 map.put("followed_events", new ArrayList<String>());
                 map.put("followed_channels", new ArrayList<String>());
-                map.put("roles", Collections.singletonList("USER"));
-                userCollection.document(id).set(map);
-                onResult.apply(new FirebaseMapDecorator(map));
+                map.put("roles", Arrays.asList("USER"));
             } else {
-                FirebaseMapDecorator data = new FirebaseMapDecorator(documentSnapshot);
-                onResult.apply(data);
+                map.putAll(Objects.requireNonNull(documentSnapshot.getData()));
             }
+            onResult.apply(map);
             IdlingResourceFactory.decrementCountingIdlingResource();
         });
 
+    }
+
+    @Override
+    public void getAllUsers(OnResult<List<Map<String, Object>>> onResult) {
+        IdlingResourceFactory.incrementCountingIdlingResource();
+        userCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            List<Map<String, Object>> resultList = new ArrayList<>();
+            for(DocumentSnapshot snap: queryDocumentSnapshots.getDocuments()){
+                Map<String, Object> map = new HashMap<>(snap.getData());
+                map.put("sciper", snap.getId());
+                resultList.add(map);
+            }
+            onResult.apply(resultList);
+            IdlingResourceFactory.decrementCountingIdlingResource();
+        }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch all users"));
+    }
+
+    @Override
+    public void updateUserRole(String sciper, List<String> roles) {
+        userCollection.document(sciper).update("roles", roles);
     }
 
     //----- Generating new id to store -----\\

@@ -89,5 +89,6 @@
     <string name="nav_memento">Memento</string>
     <string name="like_icon">Like icon</string>
     <string name="drawer_admin_panel">Admin Panel</string>
+    <string name="user_role_searchbar_hint">User sciper</string>
 
 </resources>

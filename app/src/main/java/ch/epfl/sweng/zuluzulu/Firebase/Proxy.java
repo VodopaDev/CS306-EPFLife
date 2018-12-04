@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Firebase;
 
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -42,7 +43,9 @@ public interface Proxy {
     void getPostsFromChannel(String channelId, OnResult<List<Post>> onResult);
     void getRepliesFromPost(String channelId, String postId, OnResult<List<Post>> onResult);
 
-    void getUserWithIdOrCreateIt(String id, OnResult<FirebaseMapDecorator> onResult);
+    void getUserWithIdOrCreateIt(String sciper, OnResult<Map<String, Object>> onResult);
+    void getAllUsers(OnResult<List<Map<String, Object>>> onResult);
+    void updateUserRole(String sciper, List<String> roles);
 
     void updatePost(Post post);
 }

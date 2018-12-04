@@ -349,7 +349,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 openFragment(MementoFragment.newInstance(user));
                 break;
             case OPEN_MANAGE_USER:
-                openFragment(ChangeUserRoleFragment.newInstance(user));
+                openFragment(ChangeUserRoleFragment.newInstance());
                 break;
             case OPEN_MANAGE_CHANNEL:
                 //TODO: to add when finished
