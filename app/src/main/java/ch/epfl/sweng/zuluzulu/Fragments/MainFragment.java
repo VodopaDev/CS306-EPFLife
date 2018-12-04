@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -31,6 +32,9 @@ import ch.epfl.sweng.zuluzulu.Structure.GPS;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_ASSOCIATION_DETAIL_FRAGMENT;
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_LOGIN_FRAGMENT;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -53,6 +57,8 @@ public class MainFragment extends SuperFragment {
     List<Association> random_assos;
     AssociationArrayAdapter assos_adapter;
     private ListView listview_assos;
+
+    Button sign_in_button;
 
     private ListView associations_listView;
     private ListView events_listView;
@@ -205,6 +211,15 @@ public class MainFragment extends SuperFragment {
 
         listview_assos = view.findViewById(R.id.main_page_random_assos);
         listview_assos.setAdapter(assos_adapter);
+
+        sign_in_button = view.findViewById(R.id.main_page_button_sign_in);
+
+        sign_in_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onFragmentInteraction(OPEN_LOGIN_FRAGMENT, user);
+            }
+        });
 
         return view;
 

@@ -40,9 +40,9 @@ public class UpcomingEventArrayAdapter extends ArrayAdapter<Event>{
      */
     public UpcomingEventArrayAdapter(Context context, List<Event> data, OnFragmentInteractionListener mListener, User user) {
         super(context, layout_resource_id, data);
-        this.mListener = mListener;
         this.context = context;
         this.data = data;
+        this.mListener = mListener;
         if (user.isConnected()) {
             this.user = (AuthenticatedUser) user;
         } else {
@@ -85,17 +85,20 @@ public class UpcomingEventArrayAdapter extends ArrayAdapter<Event>{
         ImageLoader.loadUriIntoImageView(holder.icon, event.getIconUri(), getContext());
         holder.likes.setText(String.valueOf(event.getLikes()));
 
-        event_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("FRAG_CHANGE", "Switching to " + event.getName() + "detailed view");
-                mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT, event);
-            }
-        });
+        clickOnList(event_view, event);
 
         holder.start_date.setText(event.getDateTimeUser());
 
         return event_view;
+    }
+
+    private void clickOnList(View view, Event event) {
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT, event);
+            }
+        });
     }
 
     /**
@@ -107,6 +110,5 @@ public class UpcomingEventArrayAdapter extends ArrayAdapter<Event>{
         TextView short_desc;
         TextView start_date;
         TextView likes;
-        ImageButton likes_button;
     }
 }
