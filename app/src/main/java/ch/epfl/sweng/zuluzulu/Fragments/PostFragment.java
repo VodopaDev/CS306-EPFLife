@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.PostArrayAdapter;
@@ -39,7 +41,7 @@ public class PostFragment extends SuperChatPostsFragment {
     private ImageView filterRepliesButton;
     private ImageView filterUpsButton;
 
-    private String currentFilter;
+    private Comparator<Post> currentComparator;
 
     public PostFragment() {
         // Required empty public constructor
@@ -63,7 +65,9 @@ public class PostFragment extends SuperChatPostsFragment {
         filterUpsButton = view.findViewById(R.id.post_filter_nbUps);
 
         chatButton.setEnabled(true);
+        chatButton.setBackgroundColor(getResources().getColor(R.color.white));
         postsButton.setEnabled(false);
+        postsButton.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
 
         adapter = new PostArrayAdapter(view.getContext(), posts, user);
         listView.setAdapter(adapter);
@@ -71,7 +75,7 @@ public class PostFragment extends SuperChatPostsFragment {
 
 
         anonymous = getActivity().getPreferences(Context.MODE_PRIVATE).getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
-        currentFilter = "time";
+        currentComparator = Post.decreasingTimeComparator();
 
         loadAllPosts();
         setUpChatButton();
@@ -93,6 +97,7 @@ public class PostFragment extends SuperChatPostsFragment {
         DatabaseFactory.getDependency().getPostsFromChannel(channel.getId(), result -> {
             posts.clear();
             posts.addAll(result);
+            sortPostsWithCurrentComparator();
             adapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);
         });
@@ -133,38 +138,47 @@ public class PostFragment extends SuperChatPostsFragment {
         filterTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateFilter("time");
+                updateFilter(Post.decreasingTimeComparator());
             }
         });
 
         filterRepliesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateFilter("nbResponses");
+                updateFilter(Post.decreasingNbRepliesComparator());
             }
         });
 
         filterUpsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateFilter("nbUps");
+                updateFilter(Post.decreasingNbUpsComparator());
             }
         });
     }
 
     /**
-     * Update the current filter by the new one and update the list of the posts
+     * Update the current comparator by the new one
      *
-     * @param newFilter The new filter to apply
+     * @param newComparator The new comparator to apply
      */
-    private void updateFilter(String newFilter) {
-        if (!newFilter.equals(currentFilter)) {
-            filterTimeButton.setImageResource(newFilter.equals("time") ? R.drawable.time_selected : R.drawable.time_notselected);
-            filterRepliesButton.setImageResource(newFilter.equals("nbResponses") ? R.drawable.replies_selected : R.drawable.replies_notselected);
-            filterUpsButton.setImageResource(newFilter.equals("nbUps") ? R.drawable.up_selected : R.drawable.up_notselected);
+    private void updateFilter(Comparator<Post> newComparator) {
+        if (!newComparator.equals(currentComparator)) {
+            filterTimeButton.setImageResource(newComparator.equals(Post.decreasingTimeComparator()) ? R.drawable.time_selected : R.drawable.time_notselected);
+            filterRepliesButton.setImageResource(newComparator.equals(Post.decreasingNbRepliesComparator()) ? R.drawable.replies_selected : R.drawable.replies_notselected);
+            filterUpsButton.setImageResource(newComparator.equals(Post.decreasingNbUpsComparator()) ? R.drawable.up_selected : R.drawable.up_notselected);
 
-            currentFilter = newFilter;
-            loadAllPosts();
+            currentComparator = newComparator;
+            sortPostsWithCurrentComparator();
         }
+    }
+
+    /**
+     * Sort the posts with the current comparator
+     */
+    private void sortPostsWithCurrentComparator() {
+        Collections.sort(posts, currentComparator);
+        adapter.notifyDataSetChanged();
+        listView.setSelection(0);
     }
 }
