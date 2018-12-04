@@ -13,8 +13,10 @@ import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class MainFragmentAuthentUserTest extends TestWithAuthenticatedUser {
     SuperFragment fragment;
@@ -22,9 +24,7 @@ public class MainFragmentAuthentUserTest extends TestWithAuthenticatedUser {
     @Before
     public void init() {
         DatabaseFactory.setDependency(new MockedProxy());
-        AuthenticatedUser user = getUser();
-        user.addFollowedAssociation()
-        fragment = MainFragment.newInstance(user);
+        fragment = MainFragment.newInstance(getUser());
         mActivityRule.getActivity().openFragment(fragment);
     }
 
@@ -38,5 +38,8 @@ public class MainFragmentAuthentUserTest extends TestWithAuthenticatedUser {
     }
 
     @Test
-    public void
+    public void anElementIspresent(){
+        onView(withId(R.id.main_fragment_followed_associations_listview)).check(matches(hasDescendant(withText("Agepoly"))));
+        onView(withId(R.id.main_fragment_followed_events_listview)).check(matches(hasDescendant(withText("Fiesta time"))));
+    }
 }
