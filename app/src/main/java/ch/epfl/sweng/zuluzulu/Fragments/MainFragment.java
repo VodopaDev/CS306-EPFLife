@@ -11,11 +11,13 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.GPS;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 /**
@@ -64,8 +66,6 @@ public class MainFragment extends SuperFragment {
 
         associations_array = new ArrayList<>();
         events_array = new ArrayList<>();
-        fillAssociationsList();
-        fillEventsList();
     }
 
     @Override
@@ -87,25 +87,26 @@ public class MainFragment extends SuperFragment {
      */
     public View createConnectedUserView(LayoutInflater inflater, ViewGroup container){
         View view = inflater.inflate(R.layout.fragment_main_user, container, false);
+
+        fillAssociationsList();
+//        fillEventsList();
+
         associations_listView = view.findViewById(R.id.main_fragment_followed_associations_listview);
         events_listView = view.findViewById(R.id.main_fragment_followed_events_listview);
 
         return view;
     }
 
-//    private void fillAssociationsList() {
-//        DatabaseFactory.getDependency().getAllAssociations(result -> {
-//            associations_array.clear();
-//            associations_array.addAll(result);
-//            for (Association association : associations_array) {
-//                if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event.getId()))
-//                    followedEvents.add(event);
-//            }
-//            eventsToFilter = allEvents;
-//            eventsFiltered.addAll(eventsToFilter);
-//            sortWithCurrentComparator();
-//        });
-//    }
+    private void fillAssociationsList() {
+        DatabaseFactory.getDependency().getAllAssociations(result -> {
+            associations_array.clear();
+            associations_array.addAll(result);
+            for (Association association : associations_array) {
+                if (((AuthenticatedUser) user).isFollowedAssociation(association.getId()))
+                    associations_array.add(association);
+            }
+        });
+    }
 
     /*
      * guest user
