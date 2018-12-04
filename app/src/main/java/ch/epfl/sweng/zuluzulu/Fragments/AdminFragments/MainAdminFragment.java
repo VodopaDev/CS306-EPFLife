@@ -1,9 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments.AdminFragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +50,7 @@ public class MainAdminFragment extends SuperFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_admin, container, false);
+        View view = inflater.inflate(R.layout.fragment_admin_panel, container, false);
 
         view.findViewById(R.id.panel_association).setOnClickListener(sendTagOnClick(OPEN_MANAGE_ASSOCIATION));
         view.findViewById(R.id.panel_channel).setOnClickListener(sendTagOnClick(OPEN_MANAGE_CHANNEL));

@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.User;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -64,6 +65,19 @@ abstract public class User implements Serializable {
      */
     public void addRole(UserRole role) {
         this.roles.add(role);
+    }
+
+    public List<String> getRoles(){
+        List<String> result = new ArrayList<>();
+        for(UserRole role: roles)
+            result.add(role.name());
+        return result;
+    }
+
+    public void setRoles(List<String> roles){
+        this.roles.clear();
+        for(String role: roles)
+            this.roles.add(UserRole.valueOf(role));
     }
 
     public abstract boolean isConnected();

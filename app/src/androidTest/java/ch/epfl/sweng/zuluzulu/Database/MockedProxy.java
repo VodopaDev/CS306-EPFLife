@@ -231,13 +231,59 @@ public class MockedProxy implements Proxy {
     }
 
     @Override
-    public void getUserWithIdOrCreateIt(String id, OnResult<FirebaseMapDecorator> onResult) {
-        if(id != null && userMap.containsKey(id)){
-            Map<String, Object> map = new HashMap<>();
-            map.put("followed_events", userMap.get(id).getFollowedEvents());
-            map.put("followed_associations", userMap.get(id).getFollowedAssociations());
-            map.put("followed_channels", userMap.get(id).getFollowedChannels());
+    public void getUserWithIdOrCreateIt(String sciper, OnResult<Map<String, Object>> onResult) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("sciper",sciper);
+        if(sciper != null && userMap.containsKey(sciper)) {
+            map.put("followed_events", userMap.get(sciper).getFollowedEvents());
+            map.put("followed_associations", userMap.get(sciper).getFollowedAssociations());
+            map.put("followed_channels", userMap.get(sciper).getFollowedChannels());
+            map.put("roles", userMap.get(sciper).getRoles());
+            onResult.apply(map);
         }
+        else if(sciper != null && !userMap.containsKey(sciper)){
+            User.UserBuilder b = new User.UserBuilder();
+            b.setEmail(sciper + "@epfl.ch");
+            b.setFirst_names("Je suis un test");
+            b.setLast_names("dotCom");
+            b.setFollowedAssociations(new ArrayList<>());
+            b.setFollowedChannels(new ArrayList<>());
+            b.setFollowedEvents(new ArrayList<>());
+            b.setGaspar(sciper);
+            b.setSciper(sciper);
+            b.setSection("IN"); // TOUS EN IN!!!!
+            b.setSemester("BA5");
+            AuthenticatedUser user = b.buildAuthenticatedUser();
+            if(user != null){
+                userMap.put(sciper, user);
+                map.put("followed_events", new ArrayList<>());
+                map.put("followed_associations", new ArrayList<>());
+                map.put("followed_channels", new ArrayList<>());
+                map.put("roles", new ArrayList<>(Collections.singletonList("USER")));
+                onResult.apply(map);
+            }
+        }
+    }
+
+    @Override
+    public void getAllUsers(OnResult<List<Map<String, Object>>> onResult) {
+        List<Map<String, Object>> result = new ArrayList<>();
+        for(AuthenticatedUser user: userMap.values()){
+            Map<String,Object> map = new HashMap<>();
+            map.put("sciper", user.getSciper());
+            map.put("roles", user.getRoles());
+            map.put("followed_events", user.getFollowedEvents());
+            map.put("followed_associations", user.getFollowedAssociations());
+            map.put("followed_channels", user.getFollowedChannels());
+            result.add(map);
+        }
+        onResult.apply(result);
+    }
+
+    @Override
+    public void updateUserRole(String sciper, List<String> roles) {
+        if(userMap.containsKey(sciper))
+            userMap.get(sciper).setRoles(roles);
     }
 
     @Override
