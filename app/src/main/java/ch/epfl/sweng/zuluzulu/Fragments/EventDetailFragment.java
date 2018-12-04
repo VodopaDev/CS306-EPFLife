@@ -125,6 +125,7 @@ public class EventDetailFragment extends SuperFragment {
         TextView event_website = view.findViewById(R.id.event_detail_website);
         event_website.setText(event.getWebsite());
 
+
         TextView event_speaker = view.findViewById(R.id.event_detail_speaker);
         event_speaker.setText(event.getSpeaker());
 
