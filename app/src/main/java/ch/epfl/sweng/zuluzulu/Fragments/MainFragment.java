@@ -62,10 +62,8 @@ public class MainFragment extends SuperFragment {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS.MY_PERMISSIONS_REQUEST_LOCATION);
             }
             return createConnectedUserView(inflater, container);
-//            return inflater.inflate(R.layout.fragment_main_user, container, false);
         } else {
             return createNotConnectedUserView(inflater, container);
-//            return inflater.inflate(R.layout.fragment_main, container, false);
         }
 
     }
