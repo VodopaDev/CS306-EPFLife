@@ -81,8 +81,6 @@ public class EventFragment extends SuperFragment {
     private ImageButton filter_button;
     private ConstraintLayout event_filter_constraint_layout;
 
-    private Button archive;
-
     public EventFragment() {
         // Required empty public constructor
     }
