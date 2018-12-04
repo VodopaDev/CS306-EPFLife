@@ -64,25 +64,6 @@
 
             </FrameLayout>
 
-            <TextView
-                android:id="@+id/event_detail_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:ellipsize="end"
-                android:gravity="center_horizontal|start"
-                android:maxLines="2"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                android:typeface="sans"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/event_detail_framelayout" />
-
             <ImageView
                 android:id="@+id/event_detail_fav"
                 android:layout_width="30dp"
