@@ -118,8 +118,8 @@ public class ProfileFragment extends SuperFragment {
             System.out.println("here");
 
             // to change
-            int targetW = 250;
-            int targetH = 250;
+            int targetW = pic.getHeight();
+            int targetH = pic.getWidth();
 
             // Get the dimensions of the bitmap
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
