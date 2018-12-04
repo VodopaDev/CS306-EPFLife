@@ -24,8 +24,8 @@ import java.util.Stack;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AddEventFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AdminPanelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.ChangeUserRoleFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.MainAdminFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AssociationsGeneratorFragment;
@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 fragment = ChannelFragment.newInstance(user);
                 break;
             case R.id.nav_admin_panel:
-                fragment = MainAdminFragment.newInstance();
+                fragment = AdminPanelFragment.newInstance();
                 break;
             default:
                 fragment = MainFragment.newInstance(user);

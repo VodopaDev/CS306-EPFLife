@@ -18,23 +18,23 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_MEMENTO;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MainAdminFragment#newInstance} factory method to
+ * Use the {@link AdminPanelFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainAdminFragment extends SuperFragment {
+public class AdminPanelFragment extends SuperFragment {
 
-    public MainAdminFragment() {
+    public AdminPanelFragment() {
         // Required empty public constructor
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     * @return A new instance of fragment MainAdminFragment.
+     * @return A new instance of fragment AdminPanelFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MainAdminFragment newInstance() {
-        MainAdminFragment fragment = new MainAdminFragment();
+    public static AdminPanelFragment newInstance() {
+        AdminPanelFragment fragment = new AdminPanelFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;

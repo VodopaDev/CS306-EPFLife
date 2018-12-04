@@ -29,43 +29,4 @@ public class MenuAsAdminTest extends TestWithAdminAndFragment<MainFragment> {
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_admin_panel));
         onView(withId(R.id.panel_channel)).check(matches(isDisplayed()));
     }
-
-
-    @Test
-    public void testCanOpenMemento(){
-        testCanOpenAdminPanel();
-        onView(withId(R.id.panel_memento)).perform(ViewActions.click());
-        Utility.checkFragmentIsOpen(R.id.memento_list_view);
-    }
-
-    /*
-    @Test
-    public void testCanOpenAssociationGenerator(){
-        testCanOpenAdminPanel();
-        onView(withId(R.id.panel_association)).perform(ViewActions.click());
-        Utility.checkFragmentIsOpen(R.id.associations_generator_fragment);
-    }
-    */
-
-    @Test
-    public void testCanOpenUserRole(){
-        testCanOpenAdminPanel();
-        onView(withId(R.id.panel_user)).perform(ViewActions.click());
-        Utility.checkFragmentIsOpen(R.id.user_role_searchbar);
-    }
-
-    @Test
-    public void testCanOpenCreateEvent(){
-        testCanOpenAdminPanel();
-        onView(withId(R.id.panel_create_event)).perform(ViewActions.click());
-        Utility.checkFragmentIsOpen(R.id.spinner_day);
-    }
-
-    //TODO: change when manage channel does something
-    @Test
-    public void testCanOpenManageChannel(){
-        testCanOpenAdminPanel();
-        onView(withId(R.id.panel_channel)).perform(ViewActions.click());
-        Utility.checkFragmentIsOpen(R.id.panel_channel);
-    }
 }
