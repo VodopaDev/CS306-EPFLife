@@ -8,13 +8,13 @@ import android.view.View;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 
-import ch.epfl.sweng.zuluzulu.Database.FirebaseMock;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
 
+import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlReader;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlReaderFactory;
@@ -32,7 +32,7 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
 
     @Override
     public void initFragment() {
-        DatabaseFactory.setDependency(new FirebaseMock());
+        DatabaseFactory.setDependency(new MockedProxy());
 
         fragment = MainFragment.newInstance(user);
     }

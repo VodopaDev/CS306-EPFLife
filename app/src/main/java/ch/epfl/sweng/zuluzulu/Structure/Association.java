@@ -1,11 +1,12 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,31 +17,26 @@ import ch.epfl.sweng.zuluzulu.R;
  * A simple class describing an Association
  * Has diverse getters and some functions to create views
  */
-public class Association implements Serializable {
-    public final static List<String> FIELDS = Arrays.asList("id", "name", "short_desc", "long_desc");
-
-    private int id;
+public class Association extends FirebaseStructure implements Comparable<Association> {
     private String name;
-    private String short_desc;
-    private String long_desc;
+    private String shortDescription;
+    private String longDescription;
 
-    private String icon_uri;
-    private String banner_uri;
+    private String iconUri;
+    private String bannerUri;
 
-    private List<Map<String, Object>> events;
-    private int channel_id;
-    private int closest_event_id;
+    private List<String> upcomingEvents;
+    private String channelId;
 
-    public Association(int id, String name, String short_desc, String long_desc, String icon_uri, String banner_uri, List<Map<String, Object>> events, int channel_id, int closest_event_id) {
-        this.id = id;
+    public Association(String id, String name, String short_desc, String long_desc, String icon_uri, String banner_uri, List<String> events, String channel_id) {
+        super(id);
         this.name = name;
-        this.short_desc = short_desc;
-        this.long_desc = long_desc;
-        this.icon_uri = icon_uri;
-        this.banner_uri = banner_uri;
-        this.events = events;
-        this.channel_id = channel_id;
-        this.closest_event_id = closest_event_id;
+        this.shortDescription = short_desc;
+        this.longDescription = long_desc;
+        this.iconUri = icon_uri;
+        this.bannerUri = banner_uri;
+        this.upcomingEvents = events;
+        this.channelId = channel_id;
     }
 
     /**
@@ -50,63 +46,31 @@ public class Association implements Serializable {
      * @throws IllegalArgumentException if the map isn't an Association's map
      */
     public Association(FirebaseMapDecorator data) {
-        if (!data.hasFields(FIELDS)) {
+        super(data);
+        if (!data.hasFields(requiredFields())) {
             throw new IllegalArgumentException();
         }
 
-        id = data.getInteger("id");
-        name = data.getString("name");
-        short_desc = data.getString("short_desc");
-        long_desc = data.getString("long_desc");
+        name = data.getString("name").trim();
+        shortDescription = data.getString("short_description");
+        longDescription = data.getString("long_description");
 
         // Init the main chat id
-        channel_id = data.get("channel_id") == null ?
-                0 :
-                data.getInteger("channel_id");
+        channelId = data.getString("channel_id");
 
         // Init the upcoming event
-        events = data.get("events") == null ?
-                Collections.EMPTY_LIST :
-                (List<Map<String, Object>>) data.get("events");
-        computeClosestEvent();
+        upcomingEvents = data.getStringList("upcoming_events");
 
         // Init the Icon URI
-        String icon_str = data.getString("icon_uri");
-        Uri uri = icon_str == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
-                Uri.parse(icon_str);
-        icon_uri = uri == null ? null : uri.toString();
-
+        iconUri = data.getString("icon_uri");
 
         // Init the Banner URI
-        String banner_str = data.getString("banner_uri");
-        uri = banner_str == null ?
-                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
-                Uri.parse(banner_str);
-        banner_uri = uri == null ? null : uri.toString();
+        bannerUri = data.getString("banner_uri");
     }
 
-    /**
-     * Return a Comparator for two Associations using their names
-     *
-     * @return compareTo of two Associations names
-     */
-    public static Comparator<Association> getComparator() {
-        return new Comparator<Association>() {
-            @Override
-            public int compare(Association o1, Association o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        };
-    }
-
-    /**
-     * Return the Association's id
-     *
-     * @return the id
-     */
-    public int getId() {
-        return id;
+    @NonNull
+    public static List<String> requiredFields() {
+        return Arrays.asList("id", "name", "short_description");
     }
 
     /**
@@ -123,17 +87,18 @@ public class Association implements Serializable {
      *
      * @return the short description
      */
-    public String getShortDesc() {
-        return short_desc;
+    public String getShortDescription() {
+        return shortDescription;
     }
 
-    /**
-     * Return the Association's long description
-     *
-     * @return the long description
-     */
-    public String getLongDesc() {
-        return long_desc;
+    public String getLongDescription() {
+        return longDescription;
+    }
+
+    public List<String> getUpcomingEvents() {
+        if (upcomingEvents == null)
+            return new ArrayList<>();
+        return upcomingEvents;
     }
 
     /**
@@ -141,8 +106,9 @@ public class Association implements Serializable {
      *
      * @return
      */
-    public int getChannelId() {
-        return channel_id;
+    @Nullable
+    public String getChannelId() {
+        return channelId;
     }
 
     /**
@@ -150,36 +116,10 @@ public class Association implements Serializable {
      *
      * @return the icon Uri
      */
-    public String getIconUri() {
-        return icon_uri;
-    }
-
-    /**
-     * Return the Association's closest event happening id
-     *
-     * @return
-     */
-    public int getClosestEventId() {
-        return closest_event_id;
-    }
-
-    /**
-     * Compute the closest event id and store it in the class
-     */
-    private void computeClosestEvent() {
-        if (events.isEmpty())
-            closest_event_id = 0;
-        else {
-            int closest = ((Long) events.get(0).get("id")).intValue();
-            java.util.Date closest_time = (java.util.Date) events.get(0).get("start");
-            for (int i = 1; i < events.size(); i++) {
-                java.util.Date current = (java.util.Date) events.get(i).get("start");
-                if (current.before(closest_time)) {
-                    closest = ((Long) events.get(i).get("id")).intValue();
-                }
-            }
-            closest_event_id = closest;
-        }
+    public Uri getIconUri() {
+        return iconUri == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon) :
+                Uri.parse(iconUri);
     }
 
     /**
@@ -187,7 +127,29 @@ public class Association implements Serializable {
      *
      * @return the banner Uri
      */
-    public String getBannerUri() {
-        return banner_uri;
+    public Uri getBannerUri() {
+        return bannerUri == null ?
+                Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_banner) :
+                Uri.parse(bannerUri);
     }
+
+    @Override
+    public Map<String, Object> getData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", getId());
+        map.put("name", name);
+        map.put("short_description", shortDescription);
+        map.put("icon_uri", iconUri);
+        map.put("banner_uri", bannerUri);
+        map.put("upcoming_events", upcomingEvents);
+        map.put("channel_id", channelId);
+        map.put("long_description", longDescription);
+        return map;
+    }
+
+    @Override
+    public int compareTo(@NonNull Association o) {
+        return name.compareTo(o.getName());
+    }
+
 }

@@ -15,46 +15,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Adapters.PostArrayAdapter;
-import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
-import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 public class ReplyFragment extends SuperFragment {
-
-    public static final List<String> FIELDS = Arrays.asList("senderName", "sciper", "message", "time", "color", "nbUps", "upScipers", "downScipers");
-    private static final String TAG = "REPLY_TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_POST = "ARG_POST";
     private static final int REPLY_MAX_LENGTH = 100;
-
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference collectionReference;
-    private DatabaseCollection mockableCollectionReplies;
-    private DatabaseCollection mockableCollectionOriginalPost;
-
     private List<Post> replies = new ArrayList<>();
+    private Post postOriginal;
     private PostArrayAdapter adapter;
 
     private ListView listView;
@@ -63,7 +42,6 @@ public class ReplyFragment extends SuperFragment {
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private AuthenticatedUser user;
-    private Post postOriginal;
 
     private boolean anonymous;
 
@@ -98,15 +76,8 @@ public class ReplyFragment extends SuperFragment {
         sendButton = view.findViewById(R.id.reply_send_button);
         swipeRefreshLayout = view.findViewById(R.id.swiperefresh_replies);
 
-        String collectionPath = "channels/channel" + postOriginal.getChannelId() + "/posts/" + postOriginal.getId() + "/replies";
-        collectionReference = db.collection(collectionPath);
-
-        mockableCollectionReplies = DatabaseFactory.getDependency().collection(collectionPath);
-        String collectionPathOriginalPost = "channels/channel" + postOriginal.getChannelId() + "/posts";
-        mockableCollectionOriginalPost = DatabaseFactory.getDependency().collection(collectionPathOriginalPost);
-
         replies.add(postOriginal);
-        adapter = new PostArrayAdapter(view.getContext(), replies);
+        adapter = new PostArrayAdapter(view.getContext(), replies, user);
         listView.setAdapter(adapter);
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
@@ -117,7 +88,7 @@ public class ReplyFragment extends SuperFragment {
 
         setUpReplyText();
         setUpSendButton();
-        updateReplies();
+        loadReplies();
 
         return view;
     }
@@ -144,29 +115,22 @@ public class ReplyFragment extends SuperFragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String senderName = anonymous ? "" : user.getFirstNames();
-                String message = replyText.getText().toString();
-                Timestamp time = Timestamp.now();
-                String sciper = user.getSciper();
-                replyText.setText("");
-
-                Map<String, Object> data = new HashMap();
-                data.put("senderName", senderName);
-                data.put("message", message);
-                data.put("time", time);
-                data.put("sciper", sciper);
-                data.put("color", postOriginal.getColor());
-                data.put("nbUps", 0);
-                data.put("upScipers", new ArrayList<>());
-                data.put("downScipers", new ArrayList<>());
-
-                Utils.addDataToFirebase(data, mockableCollectionReplies, TAG);
-
-                int nbResponses = postOriginal.getNbResponses() + 1;
-                mockableCollectionOriginalPost.document(postOriginal.getId()).update("nbResponses", nbResponses);
-
-                updateReplies();
-                listView.setSelection(adapter.getCount() - 1);
+                Post post = new Post(
+                        DatabaseFactory.getDependency().getNewPostId(postOriginal.getChannelId()),
+                        postOriginal.getChannelId(),
+                        postOriginal.getId(),
+                        replyText.getText().toString(),
+                        anonymous ? "" : user.getFirstNames(),
+                        user.getSciper(),
+                        Timestamp.now().toDate(),
+                        postOriginal.getColor(),
+                        0,
+                        1,
+                        Collections.singletonList(user.getSciper()),
+                        new ArrayList<>()
+                );
+                DatabaseFactory.getDependency().addReply(post);
+                loadReplies();
             }
         });
     }
@@ -174,31 +138,19 @@ public class ReplyFragment extends SuperFragment {
     /**
      * Refresh the replies by reading in the database
      */
-    private void updateReplies() {
-        collectionReference
-                .orderBy("time", Query.Direction.ASCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            replies.clear();
-                            replies.add(postOriginal);
-                            for (DocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
-                                if (fmap.hasFields(FIELDS)) {
-                                    Post reply = new Post(fmap, user.getSciper(), postOriginal.getChannelId(), postOriginal);
-                                    replies.add(reply);
-                                }
-                            }
-                            adapter.notifyDataSetChanged();
-                            swipeRefreshLayout.setRefreshing(false);
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
+    private void loadReplies() {
+        replies.clear();
+        DatabaseFactory.getDependency().getRepliesFromPost(postOriginal.getChannelId(), postOriginal.getId(), result -> {
+            Log.d("REPLIES", result.size() + " replies");
+            replies.addAll(result);
+            Collections.sort(replies, (o1, o2) -> {
+                if (o1.getTime().before(o2.getTime()))
+                    return -1;
+                else
+                    return 1;
+            });
+            adapter.notifyDataSetChanged();
+        });
     }
 
     /**
@@ -206,6 +158,6 @@ public class ReplyFragment extends SuperFragment {
      */
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
-        updateReplies();
+        loadReplies();
     }
 }

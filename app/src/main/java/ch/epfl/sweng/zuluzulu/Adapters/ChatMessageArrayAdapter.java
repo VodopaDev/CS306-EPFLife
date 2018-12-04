@@ -15,23 +15,26 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
+import ch.epfl.sweng.zuluzulu.User.User;
 
 public class ChatMessageArrayAdapter extends ArrayAdapter<ChatMessage> {
 
     private Context mContext;
     private List<ChatMessage> messages;
+    private User user;
 
-    public ChatMessageArrayAdapter(@NonNull Context context, List<ChatMessage> list) {
+    public ChatMessageArrayAdapter(@NonNull Context context, List<ChatMessage> list, User user) {
         super(context, 0, list);
         mContext = context;
         messages = list;
+        this.user = user;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ChatMessage currentChatMessage = messages.get(position);
-        boolean isOwnMessage = currentChatMessage.isOwnMessage();
+        boolean isOwnMessage = currentChatMessage.isOwnMessage(user.getSciper());
         boolean isAnonymous = currentChatMessage.isAnonymous();
 
         boolean mustHideName = isOwnMessage || isAnonymous;

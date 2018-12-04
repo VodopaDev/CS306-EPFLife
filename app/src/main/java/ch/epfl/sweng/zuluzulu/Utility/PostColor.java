@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
-
 public enum PostColor {
 
     RED("#FF0000"),

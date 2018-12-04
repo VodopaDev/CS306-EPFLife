@@ -8,7 +8,7 @@ import com.google.firebase.firestore.DocumentReference;
 import java.util.Map;
 
 public interface DatabaseCollection {
-    public DatabaseDocument document(String documentPath);
+    DatabaseDocument document(String documentPath);
 
-    public Task<DocumentReference> add(@NonNull Map<String, Object> data);
+    Task<DocumentReference> add(@NonNull Map<String, Object> data);
 }

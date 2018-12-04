@@ -34,7 +34,7 @@ class TaskMock <T> extends Task<T> {
 
         @Nullable
         @Override
-        public <X extends Throwable> T getResult(@NonNull Class<X> aClass) throws X {
+        public <X extends Throwable> T getResult(@NonNull Class<X> aClass) {
             throw new UnsupportedOperationException();
         }
 
