@@ -23,11 +23,15 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -46,13 +50,15 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
 public class ProfileFragment extends SuperFragment {
     private static final String PROFILE_TAG = "PROFILE_TAG";
     private static final int CAMERA_CODE = 1234;
-    private static final int CAMERA_PERM_CODE = 250;
     private static final int W_STORAGE_PERM_CODE = 260;
 
     private User user;
     private ImageButton pic;
 
-    private String mCurrentPhotoPath;
+    private String pathToImage;
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
+    private StorageReference pictureRef;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -82,62 +88,15 @@ public class ProfileFragment extends SuperFragment {
         if (getArguments() != null) {
             this.user = (User) getArguments().getSerializable(PROFILE_TAG);
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, user.getFirstNames() + "'s Profile");
+            storage = FirebaseStorage.getInstance();
+            storageRef = storage.getReference();
+            pictureRef = storageRef.child("images/" + user.getSciper() + ".jpg");
+
         } else {
             throw new AssertionError("No argument");
         }
     }
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        File storageDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                user.getSciper(),  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-
-    /**
-     * receives the result of the camera activity
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAMERA_CODE && resultCode == Activity.RESULT_OK) {
-            //gets the thumbnail
-        //    Bundle extras = data.getExtras();
-       ///     Bitmap imageBitmap = (Bitmap) extras.get("data");
-        //    pic.setImageBitmap(imageBitmap);
-
-            System.out.println("here");
-
-            // to change
-            int targetH = pic.getHeight();
-
-            // Get the dimensions of the bitmap
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            bmOptions.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-            int photoH = bmOptions.outHeight;
-
-            // Determine how much to scale down the image
-            int scaleFactor = photoH/targetH;
-
-            // Decode the image file into a Bitmap sized to fill the View
-            bmOptions.inJustDecodeBounds = false;
-            bmOptions.inSampleSize = scaleFactor;
-            bmOptions.inPurgeable = true;
-
-            Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-            pic.setImageBitmap(bitmap);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -177,8 +136,7 @@ public class ProfileFragment extends SuperFragment {
                 }
             }
         });
-
-
+        getBitmapFromStorage();
 
         TextView gaspar = view.findViewById(R.id.profile_gaspar_text);
         gaspar.setText(user.getGaspar());
@@ -209,52 +167,114 @@ public class ProfileFragment extends SuperFragment {
         return storage_read && storage_write;
     }
 
+    private Bitmap getBitmapFromStorage(){
+        final long ONE_MEGABYTE = 1024 * 1024;
+        pictureRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                // Data for "images/island.jpg" is returns, use this as needed
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                pic.setImageBitmap(bitmap);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getContext(), "Unsuccessful load", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        return null;
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        File directory = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                user.getSciper(),  /* prefix */
+                ".jpg",         /* suffix */
+                directory      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        pathToImage = image.getAbsolutePath();
+        return image;
+    }
+
+
     /**
      * generates an intent for the camera with the right uri and file
      */
     private void goToCamera(){
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
             // Create the File where the photo should go
-            File photoFile = null;
+            File picture = null;
             try {
-                photoFile = createImageFile();
+                picture = createImageFile();
             } catch (IOException ex) {
-                // Error occurred while creating the File
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(getActivity(),
-                        "ch.epfl.sweng.zuluzulu.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, CAMERA_CODE);
-            }
-        }
-
-
-
-
-
-
-            //code that generates teh URI and the file to save
-            /*File picture = null;
-            try{
-                picture = creatingFileForImage();
-            } catch(IOException e) {
                 Log.e("creating picture file", "unable to create a file for intent");
                 return;
             }
-
+            // Continue only if the File was successfully created
             if (picture != null) {
-                Uri photoURI = FileProvider.getUriForFile(getActivity(),
+                Uri uri = FileProvider.getUriForFile(getActivity(),
                         "ch.epfl.sweng.zuluzulu.fileprovider",
                         picture);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(intent, CAMERA_CODE);
+            }
+        }
 
-            }*/
+    }
+
+    /**
+     * receives the result of the camera activity
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_CODE && resultCode == Activity.RESULT_OK) {
+
+            System.out.println("here");
+
+            // to change
+            int targetH = pic.getHeight();
+
+            // Get the dimensions of the bitmap
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            bmOptions.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(pathToImage, bmOptions);
+            int photoH = bmOptions.outHeight;
+
+            // Determine how much to scale down the image
+            int scaling = photoH/targetH;
+
+            // Decode the image file into a Bitmap sized to fill the View
+            bmOptions.inJustDecodeBounds = false;
+            bmOptions.inSampleSize = scaling;
+            bmOptions.inPurgeable = true;
+
+            Bitmap bitmap = BitmapFactory.decodeFile(pathToImage, bmOptions);
+            pic.setImageBitmap(bitmap);
+
+
+            Uri file = Uri.fromFile(new File(pathToImage));
+            UploadTask uploadTask = pictureRef.putFile(file);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Toast.makeText(getContext(), "Unsuccessful upload", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(getContext(), "Successful upload", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
 
