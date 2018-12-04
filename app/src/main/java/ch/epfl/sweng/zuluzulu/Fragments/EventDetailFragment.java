@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -26,17 +27,12 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -108,13 +104,6 @@ public class EventDetailFragment extends SuperFragment {
         event_fav = view.findViewById(R.id.event_detail_fav);
         setFavButtonBehaviour();
 
-
-        /*event_fav.setContentDescription(NOT_FAV_CONTENT);
-        if (user.isConnected() && ((AuthenticatedUser)user).isFavEvent(event)) {
-            loadFavImage(R.drawable.fav_on);
-            event_fav.setContentDescription(FAV_CONTENT);
-        }*/
-
         view.findViewById(R.id.event_detail_export).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,7 +115,7 @@ public class EventDetailFragment extends SuperFragment {
         event_like.setText("" + event.getLikes());
 
         TextView event_desc = view.findViewById(R.id.event_detail_desc);
-        event_desc.setText(event.getLongDesc());
+        event_desc.setText(event.getLongDescription());
 
         TextView event_date = view.findViewById(R.id.event_detail_date);
         event_date.setText("" + event.getStartDateString());
@@ -151,32 +140,20 @@ public class EventDetailFragment extends SuperFragment {
                 .centerCrop()
                 .into(event_banner);
 
+
         webview = (WebView) view.findViewById(R.id.epflMapView);
-        webview.getSettings().setBuiltInZoomControls(true);
-        webview.getSettings().setSupportZoom(true);
-        webview.setWebViewClient(new WebViewClient(){
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView webView, String url) {
-                webView.loadUrl(url);
-                return true;
-            }
-
-            @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                handler.proceed(); // Ignore SSL certificate errors
-            }
-
-        });
+        WebSettings webSettings = webview.getSettings();
+        webSettings.setJavaScriptEnabled(true);
         webview.loadUrl(HttpUtils.urlEncode(event.getUrlPlaceAndRoom()));
 
-
-        assos_but = view.findViewById(R.id.event_detail_but_assos);
-        loadAssos();
-        setAssosButtonBehavior();
 
         chat_room = view.findViewById(R.id.event_detail_chatRoom);
         loadMainChat();
         setMainChatButtonBehaviour();
+
+        assos_but = view.findViewById(R.id.event_detail_but_assos);
+        loadAssos();
+        setAssosButtonBehavior();
 
 
         return view;
@@ -216,28 +193,25 @@ public class EventDetailFragment extends SuperFragment {
     }
 
     private void setFavButtonBehaviour() {
-        if (user.isConnected() && ((AuthenticatedUser) user).isFavEvent(event))
+        if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event.getId()))
             loadFavImage(R.drawable.fav_on);
         else
             loadFavImage(R.drawable.fav_off);
 
-        event_fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (user.isConnected()) {
-                    AuthenticatedUser auth = (AuthenticatedUser) user;
-                    if (auth.isFavEvent(event)) {
-                        auth.removeFavEvent(event);
-                        loadFavImage(R.drawable.fav_off);
-                        event_fav.setContentDescription(NOT_FAV_CONTENT);
-                    } else {
-                        auth.addFavEvent(event);
-                        loadFavImage(R.drawable.fav_on);
-                        event_fav.setContentDescription(FAV_CONTENT);
-                    }
+        event_fav.setOnClickListener(v -> {
+            if (user.isConnected()) {
+                AuthenticatedUser auth = (AuthenticatedUser) user;
+                if (auth.isFollowedEvent(event.getId())) {
+                    auth.removeFollowedChannel(event.getId());
+                    loadFavImage(R.drawable.fav_off);
+                    event_fav.setContentDescription(NOT_FAV_CONTENT);
                 } else {
-                    Snackbar.make(getView(), "Login to access your favorite event", 5000).show();
+                    auth.addFollowedEvent(event.getId());
+                    loadFavImage(R.drawable.fav_on);
+                    event_fav.setContentDescription(FAV_CONTENT);
                 }
+            } else {
+                Snackbar.make(getView(), "Login to access your favorite event", 5000).show();
             }
         });
     }
@@ -251,11 +225,10 @@ public class EventDetailFragment extends SuperFragment {
         intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
 
         intent.putExtra(CalendarContract.Events.TITLE, event.getName());
-        intent.putExtra(CalendarContract.Events.DESCRIPTION, event.getShortDesc());
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, event.getShortDescription());
         intent.putExtra(CalendarContract.Events.EVENT_LOCATION, "To be precised");
 
         startActivity(intent);
-
     }
 
     private void setMainChatButtonBehaviour() {
@@ -274,26 +247,12 @@ public class EventDetailFragment extends SuperFragment {
     }
 
     private void loadMainChat() {
-        // Fetch online data of the main_chat
-        if (event.getChannelId() != 0) {
-            IdlingResourceFactory.incrementCountingIdlingResource();
-            FirebaseFirestore.getInstance()
-                    .document("channels/channel" + event.getChannelId())
-                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                    if (fmap.hasFields(Channel.FIELDS)) {
-                        chat = new Channel(fmap);
-                        chat_room.setText(chat.getName() + " Chat");
-                    } else
-                        chat_room.setText("Error loading the chat :(");
-                    IdlingResourceFactory.decrementCountingIdlingResource();
-                }
-            });
-        } else {
-            chat_room.setText("There is no chat :(");
-        }
+        DatabaseFactory.getDependency().getChannelFromId(event.getChannelId(), result -> {
+            if (result != null) {
+                chat = result;
+                chat_room.setText(chat.getName() + "'s chat");
+            }
+        });
     }
 
     public void setAssosButtonBehavior() {
@@ -307,28 +266,12 @@ public class EventDetailFragment extends SuperFragment {
     }
 
     private void loadAssos() {
-        // Fetch online data of the main_chat
-        if (event.getAssosId() != 0) {
-            IdlingResourceFactory.incrementCountingIdlingResource();
-            FirebaseFirestore.getInstance()
-                    .document("assos_info/" + event.getAssosId())
-                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
-                    if (fmap.hasFields(Association.FIELDS)) {
-                        assos = new Association(fmap);
-                        assos_but.setText(assos.getName());
-                    } else
-                        assos_but.setText("Error loading the association :(");
-                    IdlingResourceFactory.decrementCountingIdlingResource();
-                }
-            });
-        } else {
-            assos_but.setText("There is no association :(");
-        }
+        DatabaseFactory.getDependency().getAssociationFromId(event.getAssociationId(), result -> {
+            if (result != null) {
+                assos = result;
+                assos_but.setText(assos.getName());
+            }
+        });
     }
-
-
 }
 

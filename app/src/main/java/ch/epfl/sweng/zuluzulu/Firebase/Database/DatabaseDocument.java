@@ -3,11 +3,20 @@ package ch.epfl.sweng.zuluzulu.Firebase.Database;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Map;
 
 public interface DatabaseDocument {
-    public Task<Void> set(@NonNull Map<String, Object> data);
+    Task<Void> set(@NonNull Map<String, Object> data);
 
-    public Task<Void> update(String field, Object value, Object... moreFieldAndValues);
+    Task<Void> update(String field, Object value, Object... moreFieldAndValues);
+
+    Task<Void> update(Map<String, Object> data);
+
+    Task<DocumentSnapshot> get();
+
+    DatabaseCollection collection(String messages);
+
+    String getId();
 }

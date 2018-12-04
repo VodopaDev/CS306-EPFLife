@@ -5,15 +5,19 @@ import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.rule.ActivityTestRule;
 import android.view.Gravity;
 
+import com.google.firebase.Timestamp;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
+import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.Admin;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
@@ -141,9 +145,9 @@ public class Utility {
         builder.setSemester("BA5");
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
-        builder.setFavAssos(Collections.singletonList(2));
-        builder.setFollowedEvents(Arrays.asList(1, 2,3));
-        builder.setFollowedChats(new ArrayList<>());
+        builder.setFollowedAssociations(Collections.singletonList("1"));
+        builder.setFollowedEvents(Arrays.asList("1", "2", "3"));
+        builder.setFollowedChannels(Collections.singletonList("1"));
 
         return builder;
     }
@@ -154,47 +158,68 @@ public class Utility {
      * @return a default channel
      */
     public static Channel defaultChannel() {
-        Map<String, Object> data = new HashMap<>();
-        data.put("id", 1L);
-        data.put("name", "name");
-        data.put("description", "description");
-        data.put("restrictions", new HashMap<>());
-        FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
-        return new Channel(fmap);
+        return new Channel(
+                "1",
+                "Testing channel",
+                "The name is self explaining",
+                Collections.EMPTY_MAP,
+                null
+        );
     }
 
     public static Post defaultPost() {
-        Map<String, Object> data = new HashMap<>();
-        data.put("senderName", "James");
-        data.put("message", "message");
-        data.put("time", new Date());
-        data.put("sciper", "000000");
-        data.put("color", "#F0E68C");
-        data.put("nbUps", 0L);
-        data.put("nbResponses", 0L);
-        data.put("upScipers", new ArrayList<>());
-        data.put("downScipers", new ArrayList<>());
-        FirebaseMapDecorator fmap = new FirebaseMapDecorator(data);
-        AuthenticatedUser user = createTestAuthenticated();
-        return new Post(fmap, user.getSciper(), defaultChannel().getId(), null);
+        return new Post(
+                "1",
+                "1",
+                null,
+                "mon message ne sert à rien",
+                "Nico",
+                "270103",
+                Timestamp.now().toDate(),
+                "#F0E68C",
+                0,
+                0,
+                Collections.EMPTY_LIST,
+                Collections.EMPTY_LIST
+        );
     }
 
     public static Association defaultAssociation(){
-        Map<String, Object> event = new HashMap<>();
-        Date far_date = new Date(2018, 11, 28);
-        event.put("id", 3L);
-        event.put("start", far_date);
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", 2L);
-        map.put("name", "Agepoly");
-        map.put("short_desc", "Association Générale des Etudiants de l'EPFL");
-        map.put("long_desc", "Association Générale des Etudiants de l'EPFL");
-        map.put("icon_uri", "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso1_icon.png?alt=media&token=391a7bfc-1597-4935-9afe-e08ecd734e03");
-        map.put("channel_id", 5L);
-        map.put("events", Collections.singletonList(event));
-
-        return new Association(new FirebaseMapDecorator(map));
+        return new Association(
+                "1",
+                "Agepoly",
+                "Small description",
+                "A bit longer description without a lot of details",
+                null,
+                null,
+                Collections.singletonList("1"),
+                "1"
+        );
     }
 
+    public static Event defaultEvent(){
+        return new EventBuilder()
+                .setId("1")
+                .setName("Fiesta time")
+                .setChannelId("1")
+                .setAssosId("1")
+                .setShortDesc("Is this a real event?")
+                .setLongDesc("Of course not, you should check this beautiful description")
+                .setDate(new EventDate(new Date(10000000), new Date(10500000)))
+                .setFollowers(new ArrayList<>())
+                .setOrganizer("I'm the organizer")
+                .setPlace("Not at EPFL")
+                .setIconUri(null)
+                .setBannerUri(null)
+                .setUrlPlaceAndRoom("myplace")
+                .setWebsite("www.fakefiesta.com")
+                .setContact("Nico")
+                .setCategory("no category")
+                .setSpeaker("Nico")
+                .build();
+    }
+
+    public static ChatMessage defaultMessage() {
+        return new ChatMessage("1", "1", "message", new Date(), "sender", "111111");
+    }
 }

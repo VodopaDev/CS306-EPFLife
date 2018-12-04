@@ -10,8 +10,9 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithGuestAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -26,6 +27,8 @@ public class SettingsFragmentTest extends TestWithGuestAndFragment<SettingsFragm
 
     @Override
     public void initFragment() {
+        DatabaseFactory.setDependency(new MockedProxy());
+
         fragment = SettingsFragment.newInstance();
     }
 
@@ -49,7 +52,7 @@ public class SettingsFragmentTest extends TestWithGuestAndFragment<SettingsFragm
     }
 
     @Test
-    public void testClickOnAnonymous() throws InterruptedException {
+    public void testClickOnAnonymous() {
         SharedPreferences preferences = getMainActivity().getPreferences(Context.MODE_PRIVATE);
         boolean anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 

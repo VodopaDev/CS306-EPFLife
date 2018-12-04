@@ -7,7 +7,9 @@ import android.support.annotation.Nullable;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 class TaskMock <T> extends Task<T> {
@@ -34,7 +36,7 @@ class TaskMock <T> extends Task<T> {
 
         @Nullable
         @Override
-        public <X extends Throwable> T getResult(@NonNull Class<X> aClass) throws X {
+        public <X extends Throwable> T getResult(@NonNull Class<X> aClass) {
             throw new UnsupportedOperationException();
         }
 
@@ -47,7 +49,6 @@ class TaskMock <T> extends Task<T> {
         @NonNull
         @Override
         public com.google.android.gms.tasks.Task<T> addOnSuccessListener(@NonNull OnSuccessListener<? super T> onSuccessListener) {
-            onSuccessListener.onSuccess(null);
             return this;
         }
 

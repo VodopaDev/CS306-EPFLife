@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,8 +8,10 @@ import java.util.Date;
 /**
  * represent a date of an event
  */
-public class EventDate {
+public class EventDate implements Serializable {
     private static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    private static final String DATE_TIME_READ_HOURS = "yyyy-MM-dd HH:mm";
+    private static final String DATE_TIME_READ_NO_HOURS = "yyyy-MM-dd";
 
     private Date startDate;
     private Date endDate;
@@ -184,5 +187,34 @@ public class EventDate {
             throw new IllegalArgumentException();
         }
         this.endDate = endDate;
+    }
+
+    public String getDateTimeUser() {
+        StringBuilder sb = new StringBuilder();
+
+        if (!getEndDateString().equals(getStartDateString()) && endDate.getSeconds() != 59) {
+            sb.append("Du ");
+        } else {
+            sb.append("Le ");
+        }
+
+        sb.append(dateRemoveZeroHour(startDate));
+
+        if (!getEndDateString().equals(getStartDateString()) && endDate.getSeconds() != 59) {
+            sb.append(" au ");
+            sb.append(dateRemoveZeroHour(endDate));
+        }
+
+        return sb.toString();
+    }
+
+    private String dateRemoveZeroHour(Date date) {
+        if (startDate.getHours() != 0) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_READ_HOURS);
+            return (simpleDateFormat.format(date));
+        } else {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_READ_NO_HOURS);
+            return (simpleDateFormat.format(date));
+        }
     }
 }

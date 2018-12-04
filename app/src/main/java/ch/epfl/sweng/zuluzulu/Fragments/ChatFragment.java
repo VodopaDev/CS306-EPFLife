@@ -13,42 +13,27 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageArrayAdapter;
-import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
-import ch.epfl.sweng.zuluzulu.Structure.Utils;
 import ch.epfl.sweng.zuluzulu.User.User;
+
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_POST_FRAGMENT;
 
 /**
  * A {@link SuperChatPostsFragment} subclass.
  * This fragment is used to display the chat and to write in it
  */
 public class ChatFragment extends SuperChatPostsFragment {
-
-    private static final String TAG = "CHAT_TAG";
     private static final int MAX_MESSAGE_LENGTH = 100;
-    private static final String MESSAGES_COLLECTION_NAME = "messages";
-
     private Button sendButton;
     private EditText textEdit;
 
@@ -74,20 +59,19 @@ public class ChatFragment extends SuperChatPostsFragment {
         postsButton = view.findViewById(R.id.posts_button);
 
         chatButton.setEnabled(false);
+        chatButton.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
         postsButton.setEnabled(true);
-
-        String collectionPath = CHANNEL_DOCUMENT_NAME + channel.getId() + "/" + MESSAGES_COLLECTION_NAME;
-        collectionReference = db.collection(collectionPath);
-        mockableCollection = DatabaseFactory.getDependency().collection(collectionPath);
+        postsButton.setBackgroundColor(getResources().getColor(R.color.white));
 
         sendButton.setEnabled(false);
 
-        adapter = new ChatMessageArrayAdapter(view.getContext(), messages);
+        adapter = new ChatMessageArrayAdapter(view.getContext(), messages, user);
         listView.setAdapter(adapter);
 
         SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
+        loadInitialMessages();
         setUpDataOnChangeListener();
         setUpSendButton();
         setUpEditText();
@@ -100,23 +84,16 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Add an onClick listener on the button to send the message to the database
      */
     private void setUpSendButton() {
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String senderName = anonymous ? "" : user.getFirstNames();
-                String message = textEdit.getText().toString();
-                Timestamp time = Timestamp.now();
-                String sciper = user.getSciper();
-                textEdit.setText("");
-
-                Map<String, Object> data = new HashMap<>();
-                data.put("senderName", senderName);
-                data.put("message", message);
-                data.put("time", time);
-                data.put("sciper", sciper);
-
-                Utils.addDataToFirebase(data, mockableCollection, TAG);
-            }
+        sendButton.setOnClickListener(v -> {
+            ChatMessage chatMessage = new ChatMessage(
+                    DatabaseFactory.getDependency().getNewMessageId(channel.getId()),
+                    channel.getId(),
+                    textEdit.getText().toString(),
+                    Timestamp.now().toDate(),
+                    anonymous ? "" : user.getFirstNames(),
+                    user.getSciper());
+            DatabaseFactory.getDependency().addMessage(chatMessage);
+            textEdit.getText().clear();
         });
     }
 
@@ -124,12 +101,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Add an onClick listener on the button to switch to the posts fragment
      */
     private void setUpPostsButton() {
-        postsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onFragmentInteraction(CommunicationTag.OPEN_POST_FRAGMENT, channel);
-            }
-        });
+        postsButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_POST_FRAGMENT, channel));
     }
 
     /**
@@ -156,44 +128,34 @@ public class ChatFragment extends SuperChatPostsFragment {
     /**
      * Refresh the chat by reading all the messages in the database
      */
-    private void updateChat() {
-        collectionReference
-                .orderBy("time", Query.Direction.ASCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            messages.clear();
-                            for (DocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                FirebaseMapDecorator fmap = new FirebaseMapDecorator(document);
-                                if (fmap.hasFields(ChatMessage.FIELDS)) {
-                                    ChatMessage message = new ChatMessage(fmap, user.getSciper());
-                                    messages.add(message);
-                                }
-                            }
-                            adapter.notifyDataSetChanged();
-                            listView.setSelection(adapter.getCount() - 1);
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
+    private void loadInitialMessages() {
+        DatabaseFactory.getDependency().getMessagesFromChannel(channel.getId(), result -> {
+            Log.d("TEST", result.size() + " messages");
+            messages.clear();
+            messages.addAll(result);
+            Collections.sort(messages, (o1, o2) -> {
+                if (o1.getTime().before(o2.getTime()))
+                    return -1;
+                else
+                    return 1;
+            });
+            adapter.notifyDataSetChanged();
+            listView.setSelection(adapter.getCount() - 1);
+        });
     }
 
     private void setUpDataOnChangeListener() {
-        collectionReference
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w("Chat or post", "Listen failed.", e);
-                            return;
-                        }
-
-                        updateChat();
-                    }
-                });
+        DatabaseFactory.getDependency().updateOnNewMessagesFromChannel(channel.getId(), result -> {
+            messages.clear();
+            messages.addAll(result);
+            Collections.sort(messages, (o1, o2) -> {
+                if (o1.getTime().before(o2.getTime()))
+                    return -1;
+                else
+                    return 1;
+            });
+            adapter.notifyDataSetChanged();
+            listView.setSelection(adapter.getCount() - 1);
+        });
     }
 }

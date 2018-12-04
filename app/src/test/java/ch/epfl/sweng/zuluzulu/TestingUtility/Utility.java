@@ -1,7 +1,8 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.TestingUtility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +21,9 @@ public class Utility {
     private static final String semester = "BA5";
     private static final String firstName = "James";
     private static final String lastName = "Bond";
-    private static final List<Integer> favAssos = Arrays.asList(1, 2);
-    private static final List<Integer> followedEvents = new ArrayList<>();
-    private static final List<Integer> followedChats = new ArrayList<>();
+    private static final List<String> favAssos = Arrays.asList("0", "1");
+    private static final List<String> followedEvents = Collections.singletonList("1");
+    private static final List<String> followedChats = new ArrayList<>();
 
     private Utility() {
     }
@@ -41,9 +42,9 @@ public class Utility {
         builder.setSemester(semester);
         builder.setFirst_names(firstName);
         builder.setLast_names(lastName);
-        builder.setFavAssos(favAssos);
+        builder.setFollowedAssociations(favAssos);
         builder.setFollowedEvents(followedEvents);
-        builder.setFollowedChats(followedChats);
+        builder.setFollowedChannels(followedChats);
 
         return builder;
     }

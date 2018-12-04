@@ -22,7 +22,7 @@ public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAd
     private final List<Association> associationList;
     private final Context context;
     private final SparseBooleanArray checked;
-    private final OnClickRecyclerView lisetner;
+    private final OnClickRecyclerView listener;
 
     public AddAssociationAdapter(Context context, List<Association> associationList, OnClickRecyclerView listener) {
         if (context == null || associationList == null) {
@@ -31,7 +31,7 @@ public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAd
         this.associationList = associationList;
         this.context = context;
         this.checked = new SparseBooleanArray();
-        this.lisetner = listener;
+        this.listener = listener;
     }
 
     @NonNull
@@ -41,8 +41,7 @@ public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAd
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.add_card_association, parent, false);
 
-        AddAssociationViewHolder vh = new AddAssociationViewHolder(v);
-        return vh;
+        return new AddAssociationViewHolder(v);
     }
 
     @Override
@@ -53,7 +52,7 @@ public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAd
             return;
         }
         holder.name.setText(associationList.get(position).getName());
-        holder.short_desc.setText(associationList.get(position).getShortDesc());
+        holder.short_desc.setText(associationList.get(position).getShortDescription());
         ImageLoader.loadUriIntoImageView(holder.icon, associationList.get(position).getIconUri(), context);
 
         holder.add_button.setEnabled(this.checked.get(position, true));
@@ -62,7 +61,7 @@ public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAd
             public void onClick(View view) {
                 holder.add_button.setEnabled(false);
                 checked.put(holder.getAdapterPosition(), false);
-                lisetner.onClick(holder.getAdapterPosition());
+                listener.onClick(holder.getAdapterPosition());
             }
         });
     }

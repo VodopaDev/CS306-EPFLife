@@ -7,12 +7,14 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithGuestAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
@@ -21,6 +23,8 @@ public class AssociationFragmentAsGuestTest extends TestWithGuestAndFragment<Ass
 
     @Override
     public void initFragment() {
+        DatabaseFactory.setDependency(new MockedProxy());
+
         fragment = AssociationFragment.newInstance(user);
     }
 
@@ -28,31 +32,23 @@ public class AssociationFragmentAsGuestTest extends TestWithGuestAndFragment<Ass
     public void hasAllButtons() {
         onView(ViewMatchers.withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
         onView(withId(R.id.association_fragment_all_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.assos_fragment_checkbox_sort_Name)).check(matches(isDisplayed()));
-        onView(withId(R.id.assos_fragment_checkbox_sort_date)).check(matches(isDisplayed()));
+        onView(withId(R.id.search_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.association_fragment_search_text)).check(matches(isDisplayed()));
     }
 
     @Test
     public void guestCantClickOnFavorites(){
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
-
-        /*
-        onView(withId(R.id.association_fragment_listview))
-                .check(matches(hasChildCount(7)));
-        */
     }
 
-    /*
     @Test
     public void guestMainPageHasSomeAssociations() {
         onView(withId(R.id.association_fragment_listview))
-                .check(matches(hasChildCount(7)));
+                .check(matches(hasChildCount(1)));
     }
-    */
 
     @Test
-    public void listAlternateSortOption() {
-        onView(withId(R.id.assos_fragment_checkbox_sort_date)).perform(ViewActions.click());
-        onView(withId(R.id.assos_fragment_checkbox_sort_Name)).perform(ViewActions.click());
+    public void useTheFilter() {
+        onView(withId(R.id.association_fragment_search_text)).perform(ViewActions.typeText("Agepoly"));
     }
 }

@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,16 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -27,6 +22,7 @@ import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
 import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 import ch.epfl.sweng.zuluzulu.URLTools.MementoParser;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlHandler;
@@ -44,6 +40,7 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
  */
 public class MementoFragment extends SuperFragment {
     final static public String EPFL_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/epfl/events/fr/?format=json";
+    final static public String ENAC_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/enac/events/fr/?format=json";
     final static public String ASSOCIATION_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/associations/events/fr/?format=json";
     private static final String TAG = "MEMENTO_FRAGMENT";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
@@ -91,7 +88,7 @@ public class MementoFragment extends SuperFragment {
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Memento loader");
         UrlHandler urlHandler = new UrlHandler(this::handleMemento, new MementoParser());
-        urlHandler.execute(EPFL_MEMENTO_URL, ASSOCIATION_MEMENTO_URL);
+        urlHandler.execute(ENAC_MEMENTO_URL, EPFL_MEMENTO_URL, ASSOCIATION_MEMENTO_URL);
 
         // Send increment to wait async execution in test
         IdlingResourceFactory.incrementCountingIdlingResource();
@@ -103,10 +100,12 @@ public class MementoFragment extends SuperFragment {
      * @param result Json aray datas
      */
     private void handleMemento(List<String> result) {
-
-        if (result != null && !result.isEmpty() && !result.get(0).isEmpty()) {
-            String datas = result.get(0);
-            addEvent(datas);
+        if (result != null) {
+            for (int i = 0; i < result.size(); i++) {
+                if (result.get(i) != null && !result.get(i).isEmpty()) {
+                    addEvent(result.get(i));
+                }
+            }
         }
 
         addDatabase();
@@ -114,45 +113,9 @@ public class MementoFragment extends SuperFragment {
     }
 
     private void addDatabase() {
-        int i = 0;
-        for (Event event : events
-                ) {
-            //the map for the event
-            Map<String, Object> docData = createHashmap(event);
-            if (docData != null && i++ < 5) {
-                DatabaseFactory.getDependency().collection("events_info").document("event" + Integer.toString(event.getId())).set(docData).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Snackbar.make(getView(), event.getId() + " event added", Snackbar.LENGTH_LONG).show();
-                    }
-                });
-            }
+        for (Event event : events) {
+            DatabaseFactory.getDependency().addEvent(event);
         }
-    }
-
-    private Map<String, Object> createHashmap(Event event) {
-
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("icon_uri", event.getIconUri());
-        docData.put("banner_uri", event.getIconUri());
-        docData.put("id", event.getId());
-        docData.put("assos_id", event.getAssosId());
-        docData.put("channel_id", event.getChannelId());
-        docData.put("likes", event.getLikes());
-        docData.put("long_desc", event.getLongDesc());
-        docData.put("name", event.getName());
-        docData.put("organizer", event.getOrganizer());
-        docData.put("place", event.getPlace());
-        docData.put("short_desc", event.getShortDesc());
-        docData.put("category", event.getCategory());
-        docData.put("speaker", event.getSpeaker());
-        docData.put("start_date", event.getStartDate());
-        docData.put("end_date", event.getEndDate());
-        docData.put("contact", event.getContact());
-        docData.put("website", event.getWebsite());
-        docData.put("url_place_and_room", event.getUrlPlaceAndRoom());
-
-        return docData;
     }
 
     private void addEvent(String datas) {
@@ -160,7 +123,7 @@ public class MementoFragment extends SuperFragment {
             return;
         }
 
-        JSONArray jsonarray = null;
+        JSONArray jsonarray;
         try {
             jsonarray = new JSONArray(datas);
             for (int i = 0; i < jsonarray.length(); i++) {
@@ -169,22 +132,23 @@ public class MementoFragment extends SuperFragment {
                 this.events.add(createEvent(jsonobject));
                 eventAdapter.notifyDataSetChanged();
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Log.d(TAG, "Could not parse json");
         }
     }
 
-    private Event createEvent(JSONObject jsonobject) throws JSONException {
-        return new Event.EventBuilder()
-                .setId(0)
+    private Event createEvent(JSONObject jsonobject) throws JSONException, IllegalArgumentException {
+        return new EventBuilder()
+                // Use this to avoid collision
+                .setId(Integer.toString(jsonobject.getString("title").hashCode()))
                 .setDate(new EventDate(
                         jsonobject.getString("event_start_date"), jsonobject.getString("event_start_time"),
                         jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")))
                 .setUrlPlaceAndRoom(jsonobject.getString("event_url_place_and_room"))
-                .setAssosId(1)
-                .setChannelId(1)
-                .setLikes(0)
+                .setAssosId("0")
+                .setChannelId(DatabaseFactory.getDependency().getNewChannelId())
+                .setFollowers(new ArrayList<>())
                 .setShortDesc(jsonobject.getString("description"))
                 .setName(jsonobject.getString("title"))
                 .setLongDesc(jsonobject.getString("description"))
