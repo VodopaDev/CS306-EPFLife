@@ -12,6 +12,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
@@ -42,7 +43,7 @@ public class MainFragment extends SuperFragment {
     private User user;
     private Comparator<Event> currentComparator;
 
-    private List<Event> all_event;
+    private List<Event> actual_events;
     private List<Event> upcoming_events;
     private UpcomingEventArrayAdapter event_adapter;
     private ListView listview_event;
@@ -76,7 +77,7 @@ public class MainFragment extends SuperFragment {
             user = (User) getArguments().getSerializable(ARG_USER);
         }
 
-        all_event = new ArrayList<>();
+        actual_events = new ArrayList<>();
         upcoming_events = new ArrayList<>();
         event_adapter = new UpcomingEventArrayAdapter(getContext(), upcoming_events, mListener, user);
         currentComparator = Event.dateComparator();
@@ -124,8 +125,17 @@ public class MainFragment extends SuperFragment {
     private void fillEventLists() {
         DatabaseFactory.getDependency().getAllEvents(result -> {
             upcoming_events.clear();
+            List<Event> temp = new ArrayList<>(result);
+            for(Event e: temp) {
+                if(e.getStartDate().compareTo(new Date()) <= 0) {
+                    result.remove(e);
+                }
+            }
             Collections.sort(result, currentComparator);
-            result = new ArrayList<>(result.subList(0, 2));
+            if(result.size() > 2) {
+                result = new ArrayList<>(result.subList(0, 2));
+            }
+
             upcoming_events.addAll(result);
             event_adapter.notifyDataSetChanged();
         });
