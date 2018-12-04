@@ -25,6 +25,7 @@
         android:layout_marginTop="4dp"
         android:textColor="@color/black"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/linearLayout3"
         app:layout_constraintStart_toEndOf="@+id/card_event_image"
         app:layout_constraintTop_toTopOf="parent" />
