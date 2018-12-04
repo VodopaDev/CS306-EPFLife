@@ -23,7 +23,7 @@ import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility.ImageLoader;
 
 public class UpcomingEventArrayAdapter extends ArrayAdapter<Event>{
-    private static final int layout_resource_id = R.layout.card_upcoming_event;
+    private static final int id_corresp_layout = R.layout.card_upcoming_event;
 
     private final Context context;
     private final List<Event> data;
@@ -39,15 +39,17 @@ public class UpcomingEventArrayAdapter extends ArrayAdapter<Event>{
      * @param data    List of events to view
      */
     public UpcomingEventArrayAdapter(Context context, List<Event> data, OnFragmentInteractionListener mListener, User user) {
-        super(context, layout_resource_id, data);
+        super(context, id_corresp_layout, data);
         this.context = context;
-        this.data = data;
-        this.mListener = mListener;
+
         if (user.isConnected()) {
             this.user = (AuthenticatedUser) user;
         } else {
             this.user = null;
         }
+
+        this.data = data;
+        this.mListener = mListener;
 
     }
 
@@ -68,7 +70,7 @@ public class UpcomingEventArrayAdapter extends ArrayAdapter<Event>{
 
         if (event_view == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            event_view = inflater.inflate(layout_resource_id, parent, false);
+            event_view = inflater.inflate(id_corresp_layout, parent, false);
 
             holder.name = event_view.findViewById(R.id.card_event_name);
             holder.short_desc = event_view.findViewById(R.id.card_event_desc);

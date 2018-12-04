@@ -196,28 +196,36 @@ public class EventDate implements Serializable {
         long nb_days = nb_hours/24;
 
         if(nb_days <= 30) {
-            if (nb_days <= 0) {
-                if (nb_hours <= 0)
-                    sb.append("Now");
-                else
-                    sb.append("In " + nb_hours + " Hours");
-            } else
-                sb.append("In " + nb_days + " Days");
+            printTimeRemaining(nb_days, nb_hours, sb);
         } else {
-            if (!getEndDateString().equals(getStartDateString()) && endDate.getSeconds() != 59) {
-                sb.append("Du ");
-            } else {
-                sb.append("Le ");
-            }
-
-            sb.append(dateRemoveZeroHour(startDate));
-
-            if (!getEndDateString().equals(getStartDateString()) && endDate.getSeconds() != 59) {
-                sb.append(" au ");
-                sb.append(dateRemoveZeroHour(endDate));
-            }
+            printDateStart(sb);
         }
         return sb.toString();
+    }
+
+    private void printTimeRemaining(long nb_days, long nb_hours, StringBuilder sb) {
+        if (nb_days <= 0) {
+            if (nb_hours <= 0)
+                sb.append("Now");
+            else
+                sb.append("In " + nb_hours + " Hours");
+        } else
+            sb.append("In " + nb_days + " Days");
+    }
+
+    private void printDateStart(StringBuilder sb) {
+        if (!getEndDateString().equals(getStartDateString()) && endDate.getSeconds() != 59) {
+            sb.append("Du ");
+        } else {
+            sb.append("Le ");
+        }
+
+        sb.append(dateRemoveZeroHour(startDate));
+
+        if (!getEndDateString().equals(getStartDateString()) && endDate.getSeconds() != 59) {
+            sb.append(" au ");
+            sb.append(dateRemoveZeroHour(endDate));
+        }
     }
 
     private String dateRemoveZeroHour(Date date) {
