@@ -51,7 +51,8 @@ public class ProfileFragment extends SuperFragment {
 
     private User user;
     private ImageButton pic;
-    private String pathToImage;
+
+    private String mCurrentPhotoPath;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -86,6 +87,20 @@ public class ProfileFragment extends SuperFragment {
         }
     }
 
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        File storageDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                user.getSciper(),  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
     /**
      * receives the result of the camera activity
      * @param requestCode
@@ -96,29 +111,33 @@ public class ProfileFragment extends SuperFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_CODE && resultCode == Activity.RESULT_OK) {
             //gets the thumbnail
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            pic.setImageBitmap(imageBitmap);
+        //    Bundle extras = data.getExtras();
+       ///     Bitmap imageBitmap = (Bitmap) extras.get("data");
+        //    pic.setImageBitmap(imageBitmap);
 
-            //uncomment this when able to save the image
-            /*int width = pic.getWidth();
-            int height = pic.getHeight();
+            System.out.println("here");
 
+            // to change
+            int targetW = 100;
+            int targetH = 100;
+
+            // Get the dimensions of the bitmap
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
             bmOptions.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(pathToImage, bmOptions);
-            int photoWidth = bmOptions.outWidth;
-            int photoHeight = bmOptions.outHeight;
+            BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+            int photoW = bmOptions.outWidth;
+            int photoH = bmOptions.outHeight;
 
-            int scaling = Math.min(photoWidth/width, photoHeight/height);
+            // Determine how much to scale down the image
+            int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
 
+            // Decode the image file into a Bitmap sized to fill the View
             bmOptions.inJustDecodeBounds = false;
-            bmOptions.inSampleSize = scaling;
+            bmOptions.inSampleSize = scaleFactor;
             bmOptions.inPurgeable = true;
 
-            Bitmap bitmap = BitmapFactory.decodeFile(pathToImage, bmOptions);
-            pic.setImageBitmap(bitmap);*/
-
+            Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+            pic.setImageBitmap(bitmap);
         }
     }
 
@@ -196,9 +215,30 @@ public class ProfileFragment extends SuperFragment {
      * generates an intent for the camera with the right uri and file
      */
     private void goToCamera(){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null){
-            startActivityForResult(intent, CAMERA_CODE);
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(getActivity(),
+                        "ch.epfl.sweng.zuluzulu.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, CAMERA_CODE);
+            }
+        }
+
+
+
+
+
 
             //code that generates teh URI and the file to save
             /*File picture = null;
@@ -217,28 +257,6 @@ public class ProfileFragment extends SuperFragment {
                 startActivityForResult(intent, CAMERA_CODE);
 
             }*/
-        }
-    }
-
-    /**
-     * generates a File for the picture
-     * @return
-     * @throws IOException
-     */
-    private File creatingFileForImage() throws IOException{
-        long time = new Date().getTime();
-        String imageFileName = "JPEG_" + time + "_";
-        File storageDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File pict = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        pathToImage = pict.getAbsolutePath();
-        return pict;
-
     }
 
 
