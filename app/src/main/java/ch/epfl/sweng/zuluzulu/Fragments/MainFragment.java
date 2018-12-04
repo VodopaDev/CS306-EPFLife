@@ -16,6 +16,7 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
+import ch.epfl.sweng.zuluzulu.Adapters.UpcomingEventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -43,7 +44,7 @@ public class MainFragment extends SuperFragment {
 
     private List<Event> all_event;
     private List<Event> upcoming_events;
-    private EventArrayAdapter event_adapter;
+    private UpcomingEventArrayAdapter event_adapter;
     private ListView listview_event;
 
     List<Association> random_assos;
@@ -77,7 +78,7 @@ public class MainFragment extends SuperFragment {
 
         all_event = new ArrayList<>();
         upcoming_events = new ArrayList<>();
-        event_adapter = new EventArrayAdapter(getContext(), upcoming_events, mListener, user);
+        event_adapter = new UpcomingEventArrayAdapter(getContext(), upcoming_events, mListener, user);
         currentComparator = Event.dateComparator();
         fillEventLists();
 
