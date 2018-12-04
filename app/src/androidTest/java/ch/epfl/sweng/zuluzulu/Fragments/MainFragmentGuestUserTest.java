@@ -23,7 +23,8 @@ public class MainFragmentGuestUserTest extends TestWithGuestAndFragment<MainFrag
 
     @Test
     public void elementsArePresent(){
-        onView(withText("welcome")).check(matches(isDisplayed()));
-
+        onView(withId(R.id.main_fragment_text_to)).check(matches(isDisplayed()));
+        onView(withId(R.id.main_fragment_text_welcome)).check(matches(isDisplayed()));
+        onView(withId(R.id.main_fragment_guest_image)).check(matches(isDisplayed()));
     }
 }
