@@ -14,6 +14,7 @@ import java.util.Date;
 
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
 import ch.epfl.sweng.zuluzulu.Structure.EventDate;
@@ -216,5 +217,9 @@ public class Utility {
                 .setCategory("no category")
                 .setSpeaker("Nico")
                 .build();
+    }
+
+    public static ChatMessage defaultMessage() {
+        return new ChatMessage("1", "1", "message", new Date(), "sender", "111111");
     }
 }
