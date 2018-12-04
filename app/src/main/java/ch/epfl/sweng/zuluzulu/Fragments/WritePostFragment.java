@@ -110,8 +110,8 @@ public class WritePostFragment extends SuperFragment {
                     Timestamp.now().toDate(),
                     color.getValue(),
                     0,
-                    1,
-                    Collections.singletonList(user.getSciper()),
+                    0,
+                    new ArrayList<>(),
                     new ArrayList<>()
             );
             DatabaseFactory.getDependency().addPost(post);
