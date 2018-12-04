@@ -23,9 +23,9 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.GPS;
-import ch.epfl.sweng.zuluzulu.Utility.Utils;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.Utility.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -105,7 +105,7 @@ public class ChannelFragment extends SuperFragment {
     private void getChannelsFromDatabase() {
         DatabaseFactory.getDependency().getAllChannels(result -> {
             listOfChannels.clear();
-            for(Channel channel: result) {
+            for (Channel channel : result) {
                 listOfChannels.add(channel);
             }
             adapter.notifyDataSetChanged();

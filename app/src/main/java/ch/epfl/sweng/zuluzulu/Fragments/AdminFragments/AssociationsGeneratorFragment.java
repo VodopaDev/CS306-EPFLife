@@ -97,7 +97,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                         EPFL_LOGO, // banner_icon
                         new ArrayList<>(), // events
                         DatabaseFactory.getDependency().getNewChannelId() // channel id
-                        );
+                );
                 associations.add(association);
             }
         }
@@ -129,7 +129,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                 asso.getBannerUri().toString(), // banner uri
                 new ArrayList<>(), // events
                 asso.getChannelId() // channel id
-                );
+        );
         associations.set(index, newAssociation);
         adapter.notifyDataSetChanged();
 

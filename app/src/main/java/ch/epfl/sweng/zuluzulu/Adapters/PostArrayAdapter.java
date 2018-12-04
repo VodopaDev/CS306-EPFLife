@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,8 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
-import ch.epfl.sweng.zuluzulu.Utility.Utils;
 import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.Utility.Utils;
 
 public class PostArrayAdapter extends ArrayAdapter<Post> {
 
@@ -120,7 +121,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     }
 
     private void updateDatabase(boolean up, Post post, TextView nbUpsText) {
-        if((!up && post.downvoteWithUser(user.getSciper())) || (up && post.upvoteWithUser(user.getSciper()))){
+        if ((!up && post.downvoteWithUser(user.getSciper())) || (up && post.upvoteWithUser(user.getSciper()))) {
             DatabaseFactory.getDependency().updatePost(post);
             nbUpsText.setText("" + post.getNbUps());
         }
@@ -130,8 +131,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
         if (post.isUpByUser(user.getSciper())) {
             upButton.setImageResource(R.drawable.up_gray);
             downButton.setImageResource(R.drawable.down_transparent);
-        }
-        else if (post.isDownByUser(user.getSciper())) {
+        } else if (post.isDownByUser(user.getSciper())) {
             downButton.setImageResource(R.drawable.down_gray);
             upButton.setImageResource(R.drawable.up_transparent);
         }

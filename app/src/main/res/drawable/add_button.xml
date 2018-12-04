@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/ic_cloud_done_green" android:state_enabled="false" /> <!-- enabled -->
-    <item android:drawable="@drawable/ic_add_circle_red" /> <!-- default -->
+    <!-- enabled -->
+    <!-- default -->
+    <item android:state_enabled="false" android:drawable="@drawable/ic_cloud_done_green" />
+    <item android:drawable="@drawable/ic_add_circle_red" />
 </selector>

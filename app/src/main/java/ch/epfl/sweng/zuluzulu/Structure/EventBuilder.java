@@ -64,14 +64,14 @@ public final class EventBuilder {
 
 
     public EventBuilder setId(String id) {
-        if(id == null)
+        if (id == null)
             throw new IllegalArgumentException();
         this.id = id;
         return this;
     }
 
     public EventBuilder setName(String name) {
-        if(name == null)
+        if (name == null)
             throw new IllegalArgumentException();
         this.name = name.trim().replaceAll("\"", "");
         return this;
@@ -79,10 +79,10 @@ public final class EventBuilder {
 
 
     public EventBuilder setShortDesc(String shortDesc) {
-        if(shortDesc == null){
+        if (shortDesc == null) {
             throw new IllegalArgumentException();
         }
-        if(shortDesc.length() > SHORT_DESC_MAXLENGTH){
+        if (shortDesc.length() > SHORT_DESC_MAXLENGTH) {
             String desc = shortDesc.substring(0, SHORT_DESC_MAXLENGTH);
             int last_space = desc.lastIndexOf(" ");
             // cut at a space
@@ -94,7 +94,7 @@ public final class EventBuilder {
     }
 
     public EventBuilder setLongDesc(String longDesc) {
-        if(longDesc == null)
+        if (longDesc == null)
             throw new IllegalArgumentException();
         this.longDesc = longDesc;
         return this;
@@ -146,10 +146,11 @@ public final class EventBuilder {
 
     /**
      * Check if the uri is correct
+     *
      * @param uri uri
      * @return boolean
      */
-    private boolean correctUri(String uri){
+    private boolean correctUri(String uri) {
         return uri != null && uri.length() >= 6;
     }
 

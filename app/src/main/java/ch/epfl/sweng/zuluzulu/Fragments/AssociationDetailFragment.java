@@ -21,6 +21,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
+
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT;
 import static ch.epfl.sweng.zuluzulu.Utility.ImageLoader.loadUriIntoImageView;
 
@@ -171,7 +172,7 @@ public class AssociationDetailFragment extends SuperFragment {
             upcoming_event_name.setText("No upcoming event :(");
         else
             DatabaseFactory.getDependency().getEventsFromIds(asso.getUpcomingEvents(), result -> {
-                if(result != null && !result.isEmpty()) {
+                if (result != null && !result.isEmpty()) {
                     upcoming_event = result.get(0);
                     for (Event event : result) {
                         if (event.getStartDate().before(upcoming_event.getStartDate()))

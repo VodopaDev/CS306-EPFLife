@@ -59,7 +59,9 @@ public class ChatFragment extends SuperChatPostsFragment {
         postsButton = view.findViewById(R.id.posts_button);
 
         chatButton.setEnabled(false);
+        chatButton.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
         postsButton.setEnabled(true);
+        postsButton.setBackgroundColor(getResources().getColor(R.color.white));
 
         sendButton.setEnabled(false);
 
@@ -91,7 +93,7 @@ public class ChatFragment extends SuperChatPostsFragment {
                     anonymous ? "" : user.getFirstNames(),
                     user.getSciper());
             DatabaseFactory.getDependency().addMessage(chatMessage);
-            textEdit.setText("");
+            textEdit.getText().clear();
         });
     }
 
@@ -108,7 +110,8 @@ public class ChatFragment extends SuperChatPostsFragment {
     private void setUpEditText() {
         textEdit.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence text, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence text, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence text, int start, int before, int count) {
@@ -117,7 +120,8 @@ public class ChatFragment extends SuperChatPostsFragment {
             }
 
             @Override
-            public void afterTextChanged(Editable text) {}
+            public void afterTextChanged(Editable text) {
+            }
         });
     }
 

@@ -113,6 +113,7 @@ abstract public class User implements Serializable {
 
         /**
          * Set the sciper
+         *
          * @param sciper User sciper number
          */
         public void setSciper(String sciper) {
@@ -121,6 +122,7 @@ abstract public class User implements Serializable {
 
         /**
          * User gaspar - username
+         *
          * @param gaspar gaspar
          */
         public void setGaspar(String gaspar) {
@@ -129,6 +131,7 @@ abstract public class User implements Serializable {
 
         /**
          * User email
+         *
          * @param email email
          */
         public void setEmail(String email) {

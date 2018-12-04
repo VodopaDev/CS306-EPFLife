@@ -2,22 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/chat_message_linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginTop="5dp"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/chat_message_senderName"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/chat_message_content"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:textSize="15sp"
-        android:textStyle="bold" />
+        android:background="@drawable/chat_message_background"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/chat_message_msg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:textSize="12sp" />
+        <TextView
+            android:id="@+id/chat_message_senderName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="Name"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/chat_message_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:maxWidth="300dp"
+            android:text="Message random un peu long pour voir comment il se display sur le layout du chat message"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -164,7 +164,6 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
             List<String> receivedAssociations = (List<String>)result.get("followed_associations");
             List<String> receivedEvents = (List<String>)result.get("followed_events");
             List<String> receivedChannels = (List<String>)result.get("followed_channels");
-
             for(String role: (List<String>)result.get("roles"))
                 user.addRole(UserRole.valueOf(role));
             ((AuthenticatedUser) user).setFollowedAssociation(receivedAssociations);
