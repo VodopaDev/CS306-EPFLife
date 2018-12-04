@@ -118,18 +118,16 @@ public class ProfileFragment extends SuperFragment {
             System.out.println("here");
 
             // to change
-            int targetW = pic.getHeight();
-            int targetH = pic.getWidth();
+            int targetH = pic.getHeight();
 
             // Get the dimensions of the bitmap
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
             bmOptions.inJustDecodeBounds = true;
             BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-            int photoW = bmOptions.outWidth;
             int photoH = bmOptions.outHeight;
 
             // Determine how much to scale down the image
-            int scaleFactor = photoW/targetW;
+            int scaleFactor = photoH/targetH;
 
             // Decode the image file into a Bitmap sized to fill the View
             bmOptions.inJustDecodeBounds = false;
