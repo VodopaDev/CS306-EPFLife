@@ -10,6 +10,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
+import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -38,6 +40,8 @@ public class MainFragment extends SuperFragment {
     private ListView events_listView;
     private ArrayList<Association> associations_array;
     private ArrayList<Event> events_array;
+    private AssociationArrayAdapter associations_adapter;
+    private EventArrayAdapter events_adapter;
 
     public MainFragment() {
     }
@@ -66,6 +70,14 @@ public class MainFragment extends SuperFragment {
 
         associations_array = new ArrayList<>();
         events_array = new ArrayList<>();
+        associations_adapter = new AssociationArrayAdapter(getContext(), associations_array, mListener);
+        events_adapter = new EventArrayAdapter(getContext(), events_array, mListener, user);
+        if (user.isConnected()) {
+            fillConnectedUserAssociationsList();
+            fillConnectedUserEventsList();
+        } else {
+            // TODO
+        }
     }
 
     @Override
@@ -87,12 +99,12 @@ public class MainFragment extends SuperFragment {
      */
     public View createConnectedUserView(LayoutInflater inflater, ViewGroup container){
         View view = inflater.inflate(R.layout.fragment_main_user, container, false);
-
-        fillConnectedUserAssociationsList();
-        fillConnectedUserEventsList();
-
         associations_listView = view.findViewById(R.id.main_fragment_followed_associations_listview);
         events_listView = view.findViewById(R.id.main_fragment_followed_events_listview);
+        associations_listView.setAdapter(associations_adapter);
+        events_listView.setAdapter(events_adapter);
+//        associations_adapter.notifyDataSetChanged();
+//        events_adapter.notifyDataSetChanged();
 
         return view;
     }
@@ -105,6 +117,7 @@ public class MainFragment extends SuperFragment {
                 if (((AuthenticatedUser) user).isFollowedAssociation(association.getId()))
                     associations_array.add(association);
             }
+            associations_adapter.notifyDataSetChanged();
         });
     }
 
@@ -116,6 +129,7 @@ public class MainFragment extends SuperFragment {
                 if (((AuthenticatedUser) user).isFollowedAssociation(event.getId()))
                     events_array.add(event);
             }
+            events_adapter.notifyDataSetChanged();
         });
     }
 
