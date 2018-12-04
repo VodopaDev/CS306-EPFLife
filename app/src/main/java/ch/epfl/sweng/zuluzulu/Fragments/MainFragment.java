@@ -43,7 +43,6 @@ public class MainFragment extends SuperFragment {
     private User user;
     private Comparator<Event> currentComparator;
 
-    private List<Event> actual_events;
     private List<Event> upcoming_events;
     private UpcomingEventArrayAdapter event_adapter;
     private ListView listview_event;
@@ -77,15 +76,14 @@ public class MainFragment extends SuperFragment {
             user = (User) getArguments().getSerializable(ARG_USER);
         }
 
-        actual_events = new ArrayList<>();
         upcoming_events = new ArrayList<>();
         event_adapter = new UpcomingEventArrayAdapter(getContext(), upcoming_events, mListener, user);
         currentComparator = Event.dateComparator();
-        fillEventLists();
+        fillUpcomingEventLists();
 
         random_assos = new ArrayList<>();
         assos_adapter = new AssociationArrayAdapter(getContext(), random_assos, mListener);
-        fillAssociationLists();
+        fillRandomAssociationLists();
 
 
 
@@ -122,7 +120,7 @@ public class MainFragment extends SuperFragment {
 
     }
 
-    private void fillEventLists() {
+    private void fillUpcomingEventLists() {
         DatabaseFactory.getDependency().getAllEvents(result -> {
             upcoming_events.clear();
             List<Event> temp = new ArrayList<>(result);
@@ -146,7 +144,7 @@ public class MainFragment extends SuperFragment {
         event_adapter.notifyDataSetChanged();
     }
 
-    private void fillAssociationLists() {
+    private void fillRandomAssociationLists() {
         random_assos.clear();
         DatabaseFactory.getDependency().getAllAssociations(result -> {
             int rand = (int)(Math.random() * (result.size()));

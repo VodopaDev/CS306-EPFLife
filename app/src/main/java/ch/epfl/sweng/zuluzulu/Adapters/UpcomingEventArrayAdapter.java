@@ -92,16 +92,8 @@ public class UpcomingEventArrayAdapter extends ArrayAdapter<Event>{
                 mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT, event);
             }
         });
-        long nb_hours = (event.getStartDate().getTime() - new Date().getTime())/3600000;
-        long nb_days = nb_hours/24;
-        if(nb_days == 0) {
-            if(nb_hours == 0)
-                holder.start_date.setText("Now");
-            else
-             holder.start_date.setText("In " + nb_hours + " Hours");
-        }
-        else
-            holder.start_date.setText("In " + nb_days + " Days");
+
+        holder.start_date.setText(event.getDateTimeUser());
 
         return event_view;
     }
