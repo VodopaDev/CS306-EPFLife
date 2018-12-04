@@ -117,7 +117,7 @@ public class Post extends FirebaseStructure {
      * @return the number of ups
      */
     public int getNbUps() {
-        return nbUps;
+        return upScipers.size() - downScipers.size();
     }
 
     /**

@@ -125,8 +125,8 @@ public class ReplyFragment extends SuperFragment {
                         Timestamp.now().toDate(),
                         postOriginal.getColor(),
                         0,
-                        1,
-                        Collections.singletonList(user.getSciper()),
+                        0,
+                        new ArrayList<>(),
                         new ArrayList<>()
                 );
                 DatabaseFactory.getDependency().addReply(post);
@@ -140,6 +140,7 @@ public class ReplyFragment extends SuperFragment {
      */
     private void loadReplies() {
         replies.clear();
+        replies.add(postOriginal);
         DatabaseFactory.getDependency().getRepliesFromPost(postOriginal.getChannelId(), postOriginal.getId(), result -> {
             Log.d("REPLIES", result.size() + " replies");
             replies.addAll(result);
