@@ -103,14 +103,13 @@ public class EventDetailFragment extends SuperFragment {
         });
 
         TextView event_like = view.findViewById(R.id.event_detail_tv_numberLikes);
-        event_like.setText("" + event.getLikes());
+        event_like.setText(event.getLikes());
 
         TextView event_desc = view.findViewById(R.id.event_detail_desc);
         event_desc.setText(event.getLongDescription());
 
         TextView event_date = view.findViewById(R.id.event_detail_date);
-        event_date.setText("" + event.getStartDateString());
-
+        event_date.setText(event.getDateTimeUser());
 
         TextView event_organizer = view.findViewById(R.id.event_detail_organizer);
         event_organizer.setText(event.getOrganizer());
