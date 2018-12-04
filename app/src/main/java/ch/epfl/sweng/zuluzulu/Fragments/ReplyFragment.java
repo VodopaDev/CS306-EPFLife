@@ -151,6 +151,7 @@ public class ReplyFragment extends SuperFragment {
                     return 1;
             });
             adapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
         });
     }
 
