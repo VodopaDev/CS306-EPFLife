@@ -88,8 +88,8 @@ public class MainFragment extends SuperFragment {
     public View createConnectedUserView(LayoutInflater inflater, ViewGroup container){
         View view = inflater.inflate(R.layout.fragment_main_user, container, false);
 
-        fillAssociationsList();
-//        fillEventsList();
+        fillConnectedUserAssociationsList();
+        fillConnectedUserEventsList();
 
         associations_listView = view.findViewById(R.id.main_fragment_followed_associations_listview);
         events_listView = view.findViewById(R.id.main_fragment_followed_events_listview);
@@ -97,13 +97,24 @@ public class MainFragment extends SuperFragment {
         return view;
     }
 
-    private void fillAssociationsList() {
+    private void fillConnectedUserAssociationsList() {
         DatabaseFactory.getDependency().getAllAssociations(result -> {
             associations_array.clear();
             associations_array.addAll(result);
             for (Association association : associations_array) {
                 if (((AuthenticatedUser) user).isFollowedAssociation(association.getId()))
                     associations_array.add(association);
+            }
+        });
+    }
+
+    private void fillConnectedUserEventsList() {
+        DatabaseFactory.getDependency().getAllEvents(result -> {
+            events_array.clear();
+            events_array.addAll(result);
+            for (Event event : events_array) {
+                if (((AuthenticatedUser) user).isFollowedAssociation(event.getId()))
+                    events_array.add(event);
             }
         });
     }
