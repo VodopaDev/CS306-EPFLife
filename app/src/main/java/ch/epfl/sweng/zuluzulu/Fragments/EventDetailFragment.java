@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -129,6 +130,14 @@ public class EventDetailFragment extends SuperFragment {
         event_category.setText(event.getCategory());
 
         WebView myWebView = (WebView) view.findViewById(R.id.webview);
+        myWebView.setWebViewClient(new WebViewClient() {
+            public boolean shouldOverrideUrlLoading(WebView view, String url){
+                // do your handling codes here, which url is the requested url
+                // probably you need to open that url rather than redirect:
+                view.loadUrl(url);
+                return false; // then it is not handled by default action
+            }
+        });
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         myWebView.loadUrl(event.getUrlPlaceAndRoom());
