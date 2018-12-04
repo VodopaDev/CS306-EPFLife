@@ -33,7 +33,7 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/main_fragment_favorite_associations_listview"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <ListView
