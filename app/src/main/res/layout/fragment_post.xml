@@ -51,34 +51,42 @@
         android:id="@+id/post_fragment_liner_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
+        android:background="#7be3dede"
+        android:divider="@drawable/divider"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:showDividers="middle"
+        android:weightSum="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/post_filter_time"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="0.33"
-            android:scaleType="centerInside"
             android:src="@drawable/time_selected" />
 
         <ImageView
             android:id="@+id/post_filter_nbReplies"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="0.33"
-            android:scaleType="centerInside"
             android:src="@drawable/replies_notselected" />
 
         <ImageView
             android:id="@+id/post_filter_nbUps"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="0.33"
-            android:scaleType="centerInside"
             android:src="@drawable/up_notselected" />
 
     </LinearLayout>
