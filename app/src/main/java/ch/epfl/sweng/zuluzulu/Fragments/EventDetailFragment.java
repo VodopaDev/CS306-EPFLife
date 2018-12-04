@@ -12,6 +12,8 @@ import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,7 +44,7 @@ public class EventDetailFragment extends SuperFragment {
     private static final String ARG_EVENT = "ARG_EVENT";
     private static final String FAV_CONTENT = "This event is in your favorites";
     private static final String NOT_FAV_CONTENT = "This event isn't in your favorites";
-    MapView mMapView;
+
     private ImageView event_fav;
     private Button chat_event;
     private Channel channel;
@@ -129,6 +131,11 @@ public class EventDetailFragment extends SuperFragment {
         TextView event_category = view.findViewById(R.id.event_detail_category);
         event_category.setText(event.getCategory());
 
+        WebView myWebView = (WebView) view.findViewById(R.id.webview);
+        WebSettings webSettings = myWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        myWebView.loadUrl(event.getUrlPlaceAndRoom());
+
         // Event icon
         ImageView event_icon = view.findViewById(R.id.event_detail_icon);
         Glide.with(getContext())
@@ -141,34 +148,6 @@ public class EventDetailFragment extends SuperFragment {
                 .load(event.getBannerUri())
                 .centerCrop()
                 .into(event_banner);
-
-        //google map integration
-        mMapView = view.findViewById(R.id.mapView);
-        mMapView.onCreate(savedInstanceState);
-        mMapView.onResume();
-
-        mMapView.getMapAsync(mMap -> {
-            googleMap = mMap;
-
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            } else {
-                // For showing a move to my location button
-                googleMap.setMyLocationEnabled(true);
-            }
-
-            // For dropping a marker at a point on the Map
-            LatLng epfl = new LatLng(46.520537, 6.570930);
-            LatLng co = new LatLng(46.520135, 6.565263);
-            googleMap.addMarker(new MarkerOptions().position(epfl).title("ce").snippet("ce"));
-            googleMap.addMarker(new MarkerOptions().position(co).title("co").snippet("co"));
-
-
-            // For zooming automatically to the location of the marker
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(epfl).zoom(12).build();
-            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        });
 
         chat_room = view.findViewById(R.id.event_detail_chatRoom);
         loadMainChat();
@@ -187,31 +166,6 @@ public class EventDetailFragment extends SuperFragment {
                 .load(drawable)
                 .centerCrop()
                 .into(event_fav);
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mMapView.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mMapView.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mMapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mMapView.onLowMemory();
     }
 
     private void setFavButtonBehaviour() {
