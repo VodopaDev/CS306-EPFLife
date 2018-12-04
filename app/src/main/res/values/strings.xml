@@ -43,6 +43,9 @@
     <string name="fragment_event_like_button">Like</string>
     <string name="fragment_event_search_bar_text">Search</string>
 
+    <!-- Main related -->
+    <string name="main_fragment_text_favorite_associations">Favorite associations</string>
+    <string name="main_fragment_text_favorite_events">Favorite events</string>
 
     <!-- Chat related -->
     <string name="chat_send">Send</string>
