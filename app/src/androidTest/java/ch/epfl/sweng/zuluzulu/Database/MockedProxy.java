@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Database;
 
+import android.support.test.runner.AndroidJUnit4;
 import android.util.Pair;
 
 import java.util.ArrayList;
@@ -16,10 +17,13 @@ import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
+import ch.epfl.sweng.zuluzulu.User.Admin;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility;
 
+import static ch.epfl.sweng.zuluzulu.Utility.createFilledUserBuilder;
+import static ch.epfl.sweng.zuluzulu.Utility.createTestAdmin;
 import static ch.epfl.sweng.zuluzulu.Utility.createTestAuthenticated;
 import static ch.epfl.sweng.zuluzulu.Utility.defaultPost;
 
@@ -39,8 +43,9 @@ public class MockedProxy implements Proxy {
     }};
 
     private Map<String, AuthenticatedUser> userMap = new HashMap<String, AuthenticatedUser>() {{
+        put("2", createFilledUserBuilder().setSciper("2").buildAdmin());
         put("1", createTestAuthenticated());
-    }};
+        }};
 
     @Override
     public String getNewChannelId() {
