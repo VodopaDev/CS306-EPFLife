@@ -36,6 +36,7 @@ public class AuthenticatedUser extends User {
         this.followedChannels = followedChannels;
         this.followedEvents = followedEvents;
         addRole(UserRole.USER);
+        addRole(UserRole.ADMIN);
     }
 
     //----- Association related methods -----\\

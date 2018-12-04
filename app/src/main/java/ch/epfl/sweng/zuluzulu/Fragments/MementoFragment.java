@@ -154,7 +154,7 @@ public class MementoFragment extends SuperFragment {
                 .setLongDesc(jsonobject.getString("description"))
                 .setOrganizer(jsonobject.getString("event_organizer"))
                 .setPlace(jsonobject.getString("event_place_and_room"))
-                .setBannerUri(jsonobject.getString("event_visual_absolute_url"))
+                .setBannerUri(null)
                 .setIconUri(jsonobject.getString("event_visual_absolute_url"))
                 .setWebsite(jsonobject.getString("event_url_link"))
                 .setContact(jsonobject.getString("event_contact"))

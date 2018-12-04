@@ -103,7 +103,7 @@ public class EventDetailFragment extends SuperFragment {
         });
 
         TextView event_like = view.findViewById(R.id.event_detail_tv_numberLikes);
-        event_like.setText(event.getLikes());
+        event_like.setText(Integer.toString(event.getLikes()));
 
         TextView event_desc = view.findViewById(R.id.event_detail_desc);
         event_desc.setText(event.getLongDescription());
