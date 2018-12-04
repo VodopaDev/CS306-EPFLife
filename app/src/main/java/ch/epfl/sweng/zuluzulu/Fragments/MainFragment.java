@@ -65,7 +65,6 @@ public class MainFragment extends SuperFragment {
         } else {
             return createNotConnectedUserView(inflater, container);
         }
-
     }
 
     public View createConnectedUserView(LayoutInflater inflater, ViewGroup container){
@@ -73,6 +72,7 @@ public class MainFragment extends SuperFragment {
     }
 
     public View createNotConnectedUserView(LayoutInflater inflater, ViewGroup container){
+
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 }
