@@ -65,7 +65,9 @@ public class PostFragment extends SuperChatPostsFragment {
         filterUpsButton = view.findViewById(R.id.post_filter_nbUps);
 
         chatButton.setEnabled(true);
+        chatButton.setBackgroundColor(getResources().getColor(R.color.white));
         postsButton.setEnabled(false);
+        postsButton.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
 
         adapter = new PostArrayAdapter(view.getContext(), posts, user);
         listView.setAdapter(adapter);

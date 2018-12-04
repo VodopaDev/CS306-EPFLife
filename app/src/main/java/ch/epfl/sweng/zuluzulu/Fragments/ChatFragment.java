@@ -59,7 +59,9 @@ public class ChatFragment extends SuperChatPostsFragment {
         postsButton = view.findViewById(R.id.posts_button);
 
         chatButton.setEnabled(false);
+        chatButton.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
         postsButton.setEnabled(true);
+        postsButton.setBackgroundColor(getResources().getColor(R.color.white));
 
         sendButton.setEnabled(false);
 

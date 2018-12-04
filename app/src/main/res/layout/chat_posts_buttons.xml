@@ -3,7 +3,9 @@
     android:id="@+id/chat_posts_buttons"
     android:layout_width="match_parent"
     android:layout_height="40dp"
+    android:divider="@drawable/divider"
     android:orientation="horizontal"
+    android:showDividers="middle"
     android:weightSum="1"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -23,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="0.5"
+        android:background="@color/colorGrayDarkTransparent"
         android:text="@string/posts" />
 
 </LinearLayout>
