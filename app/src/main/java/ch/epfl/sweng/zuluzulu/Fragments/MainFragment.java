@@ -64,6 +64,8 @@ public class MainFragment extends SuperFragment {
 
         associations_array = new ArrayList<>();
         events_array = new ArrayList<>();
+        fillAssociationsList();
+        fillEventsList();
     }
 
     @Override
@@ -80,16 +82,35 @@ public class MainFragment extends SuperFragment {
         }
     }
 
+    /*
+     * connected user
+     */
     public View createConnectedUserView(LayoutInflater inflater, ViewGroup container){
         View view = inflater.inflate(R.layout.fragment_main_user, container, false);
-        associations_listView = view.findViewById(R.id.main_fragment_favorite_associations_listview);
-        events_listView = view.findViewById(R.id.main_fragment_favorite_events_listview);
+        associations_listView = view.findViewById(R.id.main_fragment_followed_associations_listview);
+        events_listView = view.findViewById(R.id.main_fragment_followed_events_listview);
 
         return view;
     }
 
-    public View createNotConnectedUserView(LayoutInflater inflater, ViewGroup container){
+//    private void fillAssociationsList() {
+//        DatabaseFactory.getDependency().getAllAssociations(result -> {
+//            associations_array.clear();
+//            associations_array.addAll(result);
+//            for (Association association : associations_array) {
+//                if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event.getId()))
+//                    followedEvents.add(event);
+//            }
+//            eventsToFilter = allEvents;
+//            eventsFiltered.addAll(eventsToFilter);
+//            sortWithCurrentComparator();
+//        });
+//    }
 
+    /*
+     * guest user
+     */
+    public View createNotConnectedUserView(LayoutInflater inflater, ViewGroup container){
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 }
