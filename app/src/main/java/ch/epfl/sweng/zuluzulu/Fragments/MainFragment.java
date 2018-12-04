@@ -6,10 +6,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Association;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.GPS;
 import ch.epfl.sweng.zuluzulu.User.User;
 
@@ -26,6 +31,11 @@ public class MainFragment extends SuperFragment {
     private static final String ARG_USER = "ARG_USER";
 
     private User user;
+
+    private ListView associations_listView;
+    private ListView events_listView;
+    private ArrayList<Association> associations_array;
+    private ArrayList<Event> events_array;
 
     public MainFragment() {
     }
@@ -51,6 +61,9 @@ public class MainFragment extends SuperFragment {
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Home");
             user = (User) getArguments().getSerializable(ARG_USER);
         }
+
+        associations_array = new ArrayList<>();
+        events_array = new ArrayList<>();
     }
 
     @Override
@@ -68,7 +81,11 @@ public class MainFragment extends SuperFragment {
     }
 
     public View createConnectedUserView(LayoutInflater inflater, ViewGroup container){
-        return inflater.inflate(R.layout.fragment_main_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_main_user, container, false);
+        associations_listView = view.findViewById(R.id.main_fragment_favorite_associations_listview);
+        events_listView = view.findViewById(R.id.main_fragment_favorite_events_listview);
+
+        return view;
     }
 
     public View createNotConnectedUserView(LayoutInflater inflater, ViewGroup container){
