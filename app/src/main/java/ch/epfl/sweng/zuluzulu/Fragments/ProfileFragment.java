@@ -86,10 +86,22 @@ public class ProfileFragment extends SuperFragment {
         }
     }
 
+    /**
+     * receives the result of the camera activity
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_CODE && resultCode == Activity.RESULT_OK) {
-            int width = pic.getWidth();
+            //gets the thumbnail
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            pic.setImageBitmap(imageBitmap);
+
+            //uncomment this when able to save the image
+            /*int width = pic.getWidth();
             int height = pic.getHeight();
 
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -105,7 +117,7 @@ public class ProfileFragment extends SuperFragment {
             bmOptions.inPurgeable = true;
 
             Bitmap bitmap = BitmapFactory.decodeFile(pathToImage, bmOptions);
-            pic.setImageBitmap(bitmap);
+            pic.setImageBitmap(bitmap);*/
 
         }
     }
@@ -172,10 +184,16 @@ public class ProfileFragment extends SuperFragment {
         return view;
     }
 
+    /**
+     * generates an intent for the camera with the right uri and file
+     */
     private void goToCamera(){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getActivity().getPackageManager()) != null){
-            File picture = null;
+            startActivityForResult(intent, CAMERA_CODE);
+
+            //code that generates teh URI and the file to save
+            /*File picture = null;
             try{
                 picture = creatingFileForImage();
             } catch(IOException e) {
@@ -190,10 +208,15 @@ public class ProfileFragment extends SuperFragment {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(intent, CAMERA_CODE);
 
-            }
+            }*/
         }
     }
 
+    /**
+     * generates a File for the picture
+     * @return
+     * @throws IOException
+     */
     private File creatingFileForImage() throws IOException{
         long time = new Date().getTime();
         String imageFileName = "JPEG_" + time + "_";
