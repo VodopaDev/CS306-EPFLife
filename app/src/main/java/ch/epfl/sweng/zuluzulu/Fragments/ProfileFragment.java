@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -56,9 +57,11 @@ public class ProfileFragment extends SuperFragment {
     private ImageButton pic;
 
     private String pathToImage;
+    private String pathToTemp;
     private FirebaseStorage storage;
     private StorageReference storageRef;
     private StorageReference pictureRef;
+    private byte[] imageBytes;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -136,8 +139,10 @@ public class ProfileFragment extends SuperFragment {
                 }
             }
         });
-        getBitmapFromStorage();
 
+        if(askPermissions()) {
+            setBitmapFromStorage();
+        }
         TextView gaspar = view.findViewById(R.id.profile_gaspar_text);
         gaspar.setText(user.getGaspar());
 
@@ -155,6 +160,10 @@ public class ProfileFragment extends SuperFragment {
         return view;
     }
 
+    /**
+     * ask permissions for the different resources we use
+     * @return if the permissions are granted
+     */
     private boolean askPermissions(){
         boolean storage_write = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         boolean storage_read = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
@@ -167,24 +176,40 @@ public class ProfileFragment extends SuperFragment {
         return storage_read && storage_write;
     }
 
-    private Bitmap getBitmapFromStorage(){
-        final long ONE_MEGABYTE = 1024 * 1024;
-        pictureRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                // Data for "images/island.jpg" is returns, use this as needed
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                pic.setImageBitmap(bitmap);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getContext(), "Unsuccessful load", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        return null;
+    /**
+     * download the file from firebase and set it into the imagebutton
+     */
+    private void setBitmapFromStorage(){
+        File localFile = null;
+        try{
+        localFile = File.createTempFile("images", "jpg");
+        } catch (IOException e) {
+            Log.e("creating temp file", "unable to create a temporary file for intent");
+        }
+        if(localFile != null)
+        {
+            pathToTemp = localFile.getAbsolutePath();
+            pictureRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // Local temp file has been created
+                    setRescaledImage(pathToTemp);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                    Toast.makeText(getContext(), "Unsuccessful load", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
+
+    /**
+     * create the file in which we will put the image
+     * @return the file
+     * @throws IOException if creation fails
+     */
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -203,6 +228,7 @@ public class ProfileFragment extends SuperFragment {
 
     /**
      * generates an intent for the camera with the right uri and file
+     * so that the camera saves the file in the SD and on the firebaseStorage
      */
     private void goToCamera(){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -229,7 +255,30 @@ public class ProfileFragment extends SuperFragment {
     }
 
     /**
-     * receives the result of the camera activity
+     * helper method that takes a path to a file and scale it to make it fit inside the imagebutton
+     * @param path the path to the file to rescale
+     */
+    private void setRescaledImage(String path){
+        int targetH = pic.getHeight();
+
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, bmOptions);
+
+        int photoH = bmOptions.outHeight;
+
+        int scaling = photoH/targetH;
+
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaling;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
+        pic.setImageBitmap(bitmap);
+    }
+
+    /**
+     * receives the result of the camera activity, set the picture, and upload it to the storage
      * @param requestCode
      * @param resultCode
      * @param data
@@ -240,26 +289,8 @@ public class ProfileFragment extends SuperFragment {
 
             System.out.println("here");
 
-            // to change
-            int targetH = pic.getHeight();
-
-            // Get the dimensions of the bitmap
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            bmOptions.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(pathToImage, bmOptions);
-            int photoH = bmOptions.outHeight;
-
-            // Determine how much to scale down the image
-            int scaling = photoH/targetH;
-
-            // Decode the image file into a Bitmap sized to fill the View
-            bmOptions.inJustDecodeBounds = false;
-            bmOptions.inSampleSize = scaling;
-            bmOptions.inPurgeable = true;
-
-            Bitmap bitmap = BitmapFactory.decodeFile(pathToImage, bmOptions);
-            pic.setImageBitmap(bitmap);
-
+            //scale the image and put it in the imagebutton
+            setRescaledImage(pathToImage);
 
             Uri file = Uri.fromFile(new File(pathToImage));
             UploadTask uploadTask = pictureRef.putFile(file);
