@@ -177,5 +177,6 @@ public class PostFragment extends SuperChatPostsFragment {
     private void sortPostsWithCurrentComparator() {
         Collections.sort(posts, currentComparator);
         adapter.notifyDataSetChanged();
+        listView.setSelection(0);
     }
 }

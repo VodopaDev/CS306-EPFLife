@@ -91,7 +91,7 @@ public class ChatFragment extends SuperChatPostsFragment {
                     anonymous ? "" : user.getFirstNames(),
                     user.getSciper());
             DatabaseFactory.getDependency().addMessage(chatMessage);
-            textEdit.setText("");
+            textEdit.getText().clear();
         });
     }
 
