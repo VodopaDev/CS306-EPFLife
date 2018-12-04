@@ -89,10 +89,6 @@ public class EventDetailFragment extends SuperFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_detail, container, false);
 
-        // Event name
-        TextView event_name = view.findViewById(R.id.event_detail_name);
-        event_name.setText(event.getName());
-
         // Favorite button
         event_fav = view.findViewById(R.id.event_detail_fav);
         setFavButtonBehaviour();
