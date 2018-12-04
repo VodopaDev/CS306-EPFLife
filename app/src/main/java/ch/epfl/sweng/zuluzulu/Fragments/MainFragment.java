@@ -61,12 +61,20 @@ public class MainFragment extends SuperFragment {
             if (!hadPermissions) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS.MY_PERMISSIONS_REQUEST_LOCATION);
             }
-            return inflater.inflate(R.layout.fragment_main_user, container, false);
+            return createConnectedUserView(inflater, container);
+//            return inflater.inflate(R.layout.fragment_main_user, container, false);
         } else {
-            return inflater.inflate(R.layout.fragment_main, container, false);
+            return createNotConnectedUserView(inflater, container);
+//            return inflater.inflate(R.layout.fragment_main, container, false);
         }
 
     }
 
+    public View createConnectedUserView(LayoutInflater inflater, ViewGroup container){
+        return inflater.inflate(R.layout.fragment_main_user, container, false);
+    }
 
+    public View createNotConnectedUserView(LayoutInflater inflater, ViewGroup container){
+        return inflater.inflate(R.layout.fragment_main, container, false);
+    }
 }
