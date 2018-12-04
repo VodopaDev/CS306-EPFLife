@@ -98,11 +98,11 @@ public class MainFragment extends SuperFragment {
             }
             View view = inflater.inflate(R.layout.fragment_main_user, container, false);
 
-            listview_event = view.findViewById(R.id.main_page_list_event);
+            /*listview_event = view.findViewById(R.id.main_page_list_event);
             listview_event.setAdapter(event_adapter);
 
             listview_assos = view.findViewById(R.id.main_page_random_assos);
-            listview_assos.setAdapter(assos_adapter);
+            listview_assos.setAdapter(assos_adapter);*/
 
             return view;
         } else {
