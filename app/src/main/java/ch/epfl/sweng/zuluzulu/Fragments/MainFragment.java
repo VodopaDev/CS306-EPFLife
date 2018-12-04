@@ -70,12 +70,12 @@ public class MainFragment extends SuperFragment {
         }
 
         associations_array = new ArrayList<>();
-//        events_array = new ArrayList<>();
+        events_array = new ArrayList<>();
         associations_adapter = new AssociationArrayAdapter(getContext(), associations_array, mListener);
-//        events_adapter = new EventArrayAdapter(getContext(), events_array, mListener, user);
+        events_adapter = new EventArrayAdapter(getContext(), events_array, mListener, user);
         if (user.isConnected()) {
             fillConnectedUserAssociationsList();
-//            fillConnectedUserEventsList();
+            fillConnectedUserEventsList();
         } else {
             // TODO
         }
@@ -101,36 +101,33 @@ public class MainFragment extends SuperFragment {
     public View createConnectedUserView(LayoutInflater inflater, ViewGroup container){
         View view = inflater.inflate(R.layout.fragment_main_user, container, false);
         associations_listView = view.findViewById(R.id.main_fragment_followed_associations_listview);
-//        events_listView = view.findViewById(R.id.main_fragment_followed_events_listview);
+        events_listView = view.findViewById(R.id.main_fragment_followed_events_listview);
         associations_listView.setAdapter(associations_adapter);
-//        events_listView.setAdapter(events_adapter);
+        events_listView.setAdapter(events_adapter);
         return view;
     }
 
     private void fillConnectedUserAssociationsList() {
         DatabaseFactory.getDependency().getAllAssociations(result -> {
             associations_array.clear();
-            associations_array.addAll(result);
-            for (Association association : associations_array) {
-                Log.d("! ASSOCIATION TEST !", String.valueOf(((AuthenticatedUser) user).isFollowedAssociation(association.getId())));
-                if (user.isConnected() && ((AuthenticatedUser) user).isFollowedAssociation(association.getId()))
+            for (Association association : result) {
+                if (((AuthenticatedUser) user).isFollowedAssociation(association.getId()))
                     associations_array.add(association);
             }
             associations_adapter.notifyDataSetChanged();
         });
     }
 
-//    private void fillConnectedUserEventsList() {
-//        DatabaseFactory.getDependency().getAllEvents(result -> {
-//            events_array.clear();
-//            events_array.addAll(result);
-//            for (Event event : events_array) {
-//                if (((AuthenticatedUser) user).isFollowedEvent(event.getId()))
-//                    events_array.add(event);
-//            }
-//            events_adapter.notifyDataSetChanged();
-//        });
-//    }
+    private void fillConnectedUserEventsList() {
+        DatabaseFactory.getDependency().getAllEvents(result -> {
+            events_array.clear();
+            for (Event event : result) {
+                if (((AuthenticatedUser) user).isFollowedEvent(event.getId()))
+                    events_array.add(event);
+            }
+            events_adapter.notifyDataSetChanged();
+        });
+    }
 
     /*
      * guest user
