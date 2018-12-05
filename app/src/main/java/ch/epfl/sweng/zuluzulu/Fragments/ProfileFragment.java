@@ -199,7 +199,7 @@ public class ProfileFragment extends SuperFragment {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
                     // Handle any errors
-                    Toast.makeText(getContext(), "Unsuccessful load", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Unsuccessful load", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -297,12 +297,12 @@ public class ProfileFragment extends SuperFragment {
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    Toast.makeText(getContext(), "Unsuccessful upload", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Unsuccessful upload", Toast.LENGTH_SHORT).show();
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getContext(), "Successful upload", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Successful upload", Toast.LENGTH_SHORT).show();
                 }
             });
         }
