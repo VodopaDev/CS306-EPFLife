@@ -192,6 +192,28 @@ public class EventDate implements Serializable {
     public String getDateTimeUser() {
         StringBuilder sb = new StringBuilder();
 
+        long nb_hours = (getStartDate().getTime() - new Date().getTime())/3600000;
+        long nb_days = nb_hours/24;
+
+        if(nb_days <= 30) {
+            printTimeRemaining(nb_days, nb_hours, sb);
+        } else {
+            printDateStart(sb);
+        }
+        return sb.toString();
+    }
+
+    private void printTimeRemaining(long nb_days, long nb_hours, StringBuilder sb) {
+        if (nb_days <= 0) {
+            if (nb_hours <= 0)
+                sb.append("Now");
+            else
+                sb.append("In " + nb_hours + " Hours");
+        } else
+            sb.append("In " + nb_days + " Days");
+    }
+
+    private void printDateStart(StringBuilder sb) {
         if (!getEndDateString().equals(getStartDateString()) && endDate.getSeconds() != 59) {
             sb.append("Du ");
         } else {
@@ -204,8 +226,6 @@ public class EventDate implements Serializable {
             sb.append(" au ");
             sb.append(dateRemoveZeroHour(endDate));
         }
-
-        return sb.toString();
     }
 
     private String dateRemoveZeroHour(Date date) {
