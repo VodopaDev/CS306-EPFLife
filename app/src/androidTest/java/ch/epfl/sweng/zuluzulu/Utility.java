@@ -213,7 +213,7 @@ public class Utility {
                 .setIconUri(null)
                 .setBannerUri(null)
                 .setUrlPlaceAndRoom("myplace")
-                .setWebsite("www.fakefiesta.com")
+                .setWebsite("https://www.epfl.ch")
                 .setContact("Nico")
                 .setCategory("no category")
                 .setSpeaker("Nico")

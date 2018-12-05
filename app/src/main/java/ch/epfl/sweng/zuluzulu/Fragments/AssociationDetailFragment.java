@@ -195,9 +195,11 @@ public class AssociationDetailFragment extends SuperFragment {
             main_chat_name.setText("There is no chat :(");
         else
             DatabaseFactory.getDependency().getChannelFromId(asso.getChannelId(), result -> {
-                main_chat = result;
-                main_chat_name.setText(main_chat.getName());
-                main_chat_desc.setText(main_chat.getShortDescription());
+                if(result != null) {
+                    main_chat = result;
+                    main_chat_name.setText(main_chat.getName());
+                    main_chat_desc.setText(main_chat.getShortDescription());
+                }
             });
     }
 
