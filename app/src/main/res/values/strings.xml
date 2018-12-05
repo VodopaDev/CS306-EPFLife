@@ -76,7 +76,7 @@
     <string name="event_detail_like">Likes:</string>
     <string name="event_detail_tv_desc">Description:</string>
     <string name="event_detail_tv_date">Date:</string>
-    <string name="event_detail_tv_organizer">Organizer:</string>
+    <string name="event_detail_tv_organizer">Organisateur :</string>
     <string name="event_detail_tv_place">Place:</string>
 
 
@@ -91,7 +91,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nav_memento">Memento</string>
     <string name="like_icon">Like icon</string>
-  
+    <string name="event_detail_speaker">Speaker :</string>
+    <string name="event_detail_tv_website">Site internet :</string>
+    <string name="event_detail_tv_contact">Contact :</string>
+    <string name="event_detail_tv_category">Type d\'événement :</string>
+    <string name="event_detail_tv_plan">Plan :</string>
+
     <string name="drawer_admin_panel">Admin Panel</string>
     <string name="user_role_searchbar_hint">User sciper</string>
     <string name="main_page_upcoming_event">Upcoming Events</string>
