@@ -91,7 +91,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nav_memento">Memento</string>
     <string name="like_icon">Like icon</string>
+  
     <string name="drawer_admin_panel">Admin Panel</string>
     <string name="user_role_searchbar_hint">User sciper</string>
+    <string name="main_page_upcoming_event">Upcoming Events</string>
+    <string name="main_page_random_assos">Random Association</string>
 
 </resources>

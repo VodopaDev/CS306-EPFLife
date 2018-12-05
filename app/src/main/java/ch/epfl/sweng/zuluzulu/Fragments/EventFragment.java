@@ -28,6 +28,7 @@ import java.util.Date;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -66,6 +67,7 @@ public class EventFragment extends SuperFragment {
     private CheckBox checkbox_event_sort_name;
     private CheckBox checkbox_event_sort_date;
     private CheckBox checkbox_event_sort_like;
+
     private Comparator<Event> currentComparator;
 
     private EditText event_search_bar;
