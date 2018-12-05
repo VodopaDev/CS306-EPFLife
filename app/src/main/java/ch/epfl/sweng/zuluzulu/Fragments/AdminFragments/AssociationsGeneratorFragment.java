@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments.AdminFragments;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -44,7 +45,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     // The URL we will connect to
     final static public String EPFL_URL = "https://associations.epfl.ch/page-16300-fr-html/";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
-    private static final String EPFL_LOGO = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
+    private static final String EPFL_LOGO = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon).toString();
 
     private List<String> datas;
     private Proxy db = DatabaseFactory.getDependency();

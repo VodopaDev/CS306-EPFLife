@@ -38,6 +38,7 @@ public class AboutZuluzuluFragmentTest {
         Intent resultData = new Intent();
         Instrumentation.ActivityResult result =
                 new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+
         intending(anyIntent()).respondWith(result);
 
         onView(withId(R.id.send_mail)).perform(click());
