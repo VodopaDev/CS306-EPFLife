@@ -226,6 +226,36 @@ public class MockedProxy implements Proxy {
     }
 
     @Override
+    public void addChannelToUserFollowedChannels(Channel channel, AuthenticatedUser user) {
+        // TODO: Change if the implementation is changed.
+    }
+
+    @Override
+    public void addEventToUserFollowedEvents(Event event, AuthenticatedUser user) {
+        // TODO: Change if the implementation is changed.
+    }
+
+    @Override
+    public void addAssociationToUserFollowedAssociations(Association association, AuthenticatedUser user) {
+        // TODO: Change if the implementation is changed.
+    }
+
+    @Override
+    public void removeChannelFromUserFollowedChannels(Channel channel, AuthenticatedUser user) {
+        // TODO: Change if the implementation is changed.
+    }
+
+    @Override
+    public void removeEventFromUserFollowedEvents(Event event, AuthenticatedUser user) {
+        // TODO: Change if the implementation is changed.
+    }
+
+    @Override
+    public void removeAssociationFromUserFollowedAssociations(Association association, AuthenticatedUser user) {
+        // TODO: Change if the implementation is changed.
+    }
+
+    @Override
     public void getRepliesFromPost(String channelId, String postId, OnResult<List<Post>> onResult) {
         if(channelId != null && channelMap.containsKey(channelId) && postId != null && channelMap.get(channelId).postMap.containsKey(postId)){
             ArrayList<Post> result = new ArrayList<>();
