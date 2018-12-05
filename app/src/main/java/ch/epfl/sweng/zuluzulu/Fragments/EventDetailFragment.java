@@ -1,14 +1,10 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
@@ -35,6 +26,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.Utility.Utils;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_ASSOCIATION_DETAIL_FRAGMENT;
 
@@ -43,21 +35,17 @@ public class EventDetailFragment extends SuperFragment {
     public static final String TAG = "EVENT_DETAIL__TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_EVENT = "ARG_EVENT";
-    private static final String FAV_CONTENT = "This event is in your favorites";
-    private static final String NOT_FAV_CONTENT = "This event isn't in your favorites";
 
     private ImageView event_fav;
-    private Button chat_event;
-    private Channel channel;
     private Event event;
     private User user;
     private GoogleMap googleMap;
 
-    private Button chat_room;
-    private Channel chat;
+    private Button channelButton;
+    private Channel channel;
 
-    private Button assos_but;
-    private Association assos;
+    private Button associationButton;
+    private Association association;
 
 
     public static EventDetailFragment newInstance(User user, Event event) {
@@ -84,6 +72,8 @@ public class EventDetailFragment extends SuperFragment {
             event = (Event) getArguments().getSerializable(ARG_EVENT);
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, event.getName());
         }
+        loadAssociation();
+        loadChannel();
     }
 
     @Override
@@ -94,12 +84,7 @@ public class EventDetailFragment extends SuperFragment {
         event_fav = view.findViewById(R.id.event_detail_fav);
         setFavButtonBehaviour();
 
-        view.findViewById(R.id.event_detail_export).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                exportEventToCalendar();
-            }
-        });
+        view.findViewById(R.id.event_detail_export).setOnClickListener(v -> exportEventToCalendar());
 
         TextView event_like = view.findViewById(R.id.event_detail_tv_numberLikes);
         event_like.setText(Integer.toString(event.getLikes()));
@@ -155,13 +140,10 @@ public class EventDetailFragment extends SuperFragment {
                 .centerCrop()
                 .into(event_banner);
 
-        chat_room = view.findViewById(R.id.event_detail_chatRoom);
-        loadMainChat();
-        setMainChatButtonBehaviour();
-
-        assos_but = view.findViewById(R.id.event_detail_but_assos);
-        loadAssos();
-        setAssosButtonBehavior();
+        channelButton = view.findViewById(R.id.event_detail_chatRoom);
+        associationButton = view.findViewById(R.id.event_detail_but_assos);
+        loadChannel();
+        loadAssociation();
 
 
         return view;
@@ -184,75 +166,70 @@ public class EventDetailFragment extends SuperFragment {
             if (user.isConnected()) {
                 AuthenticatedUser auth = (AuthenticatedUser) user;
                 if (auth.isFollowedEvent(event.getId())) {
-                    auth.removeFollowedChannel(event.getId());
+                    auth.removeFollowedEvent(event.getId());
+                    auth.removeFollowedChannel(event.getChannelId());
+                    DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event, auth);
+                    DatabaseFactory.getDependency().removeChannelFromUserFollowedChannels(channel, auth);
                     loadFavImage(R.drawable.fav_off);
-                    event_fav.setContentDescription(NOT_FAV_CONTENT);
                 } else {
                     auth.addFollowedEvent(event.getId());
+                    auth.addFollowedChannel(event.getChannelId());
+                    DatabaseFactory.getDependency().addEventToUserFollowedEvents(event, auth);
+                    DatabaseFactory.getDependency().addChannelToUserFollowedChannels(channel, auth);
                     loadFavImage(R.drawable.fav_on);
-                    event_fav.setContentDescription(FAV_CONTENT);
                 }
             } else {
-                Snackbar.make(getView(), "Login to access your favorite event", 5000).show();
+                Utils.showConnectSnackbar(getView());
             }
         });
     }
 
+    /**
+     * Launch an Intent to open the Phone calendar app and register the event
+     */
     private void exportEventToCalendar() {
         Intent intent = new Intent(Intent.ACTION_INSERT);
         intent.setType("vnd.android.cursor.item/event");
 
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, event.getStartDate().getTime());
-        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.getStartDate().getTime() + 3600 * 2);
-        intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.getEndDate().getTime());
+        intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, false);
 
         intent.putExtra(CalendarContract.Events.TITLE, event.getName());
-        intent.putExtra(CalendarContract.Events.DESCRIPTION, event.getShortDescription());
-        intent.putExtra(CalendarContract.Events.EVENT_LOCATION, "To be precised");
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, event.getLongDescription());
+        intent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.getPlace());
+        intent.putExtra(CalendarContract.Events.ORGANIZER, event.getOrganizer());
 
         startActivity(intent);
     }
 
-    private void setMainChatButtonBehaviour() {
-        chat_room.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (chat != null) {
-                    if (user.isConnected())
-                        mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, chat);
-                    else
-                        Snackbar.make(getView(), "Login to access chat room", 5000).show();
-                }
+    private void setChannelButtonBehaviour() {
+        channelButton.setOnClickListener(v -> {
+            if (user.isConnected())
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, channel);
+            else
+                Utils.showConnectSnackbar(getView());
             }
+        );
+    }
+    private void setAssociationButtonBehavior() {
+        associationButton.setOnClickListener(v -> {
+            mListener.onFragmentInteraction(OPEN_ASSOCIATION_DETAIL_FRAGMENT, association);
         });
     }
 
-    private void loadMainChat() {
+    private void loadChannel() {
         DatabaseFactory.getDependency().getChannelFromId(event.getChannelId(), result -> {
-            if (result != null) {
-                chat = result;
-                chat_room.setText(chat.getName() + "'s chat");
-            }
+            channel = result;
+            channelButton.setText(channel.getName() + "'s chat");
+            setChannelButtonBehaviour();
         });
     }
-
-    public void setAssosButtonBehavior() {
-        assos_but.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (assos != null)
-                    mListener.onFragmentInteraction(OPEN_ASSOCIATION_DETAIL_FRAGMENT, assos);
-            }
-        });
-    }
-
-    private void loadAssos() {
+    private void loadAssociation() {
         DatabaseFactory.getDependency().getAssociationFromId(event.getAssociationId(), result -> {
-            if (result != null) {
-                assos = result;
-                assos_but.setText(assos.getName());
-            }
+            association = result;
+            associationButton.setText(association.getName());
+            setAssociationButtonBehavior();
         });
     }
 }
