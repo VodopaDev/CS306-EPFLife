@@ -188,6 +188,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/event_fragment_from_date" />
+
     </android.support.constraint.ConstraintLayout>
 
     <ImageButton

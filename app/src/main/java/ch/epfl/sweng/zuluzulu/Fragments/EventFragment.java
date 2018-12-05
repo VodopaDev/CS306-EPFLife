@@ -28,6 +28,7 @@ import java.util.Date;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -35,7 +36,7 @@ import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.User.UserRole;
 
-import static ch.epfl.sweng.zuluzulu.CommunicationTag.CREATE_EVENT;
+import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_CREATE_EVENT;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,6 +67,7 @@ public class EventFragment extends SuperFragment {
     private CheckBox checkbox_event_sort_name;
     private CheckBox checkbox_event_sort_date;
     private CheckBox checkbox_event_sort_like;
+
     private Comparator<Event> currentComparator;
 
     private EditText event_search_bar;
@@ -127,7 +129,7 @@ public class EventFragment extends SuperFragment {
         if (user.hasRole(UserRole.ADMIN)) {
             ImageButton button_event_add = view.findViewById(R.id.event_add_button);
             button_event_add.setVisibility(View.VISIBLE);
-            button_event_add.setOnClickListener(v -> mListener.onFragmentInteraction(CREATE_EVENT, null));
+            button_event_add.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_CREATE_EVENT, null));
         }
 
         // Main buttons to switch between the all events or only followed events
