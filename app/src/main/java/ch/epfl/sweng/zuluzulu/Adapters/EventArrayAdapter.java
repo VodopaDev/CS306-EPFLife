@@ -96,16 +96,16 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
                     if (!user.isFollowedEvent(event.getId())) {
                         event.addFollower(user.getSciper());
                         user.addFollowedEvent(event.getId());
-                        DatabaseFactory.getDependency().addEventToUserFollowedEvents(event.getId(), user.getSciper());
-                        holder.likes.setText(String.valueOf(event.getLikes()));
+                        user.addFollowedChannel(event.getChannelId());
+                        DatabaseFactory.getDependency().addEventToUserFollowedEvents(event, user);
                     } else {
                         event.removeFollower(user.getSciper());
                         user.removeFollowedEvent(event.getId());
+                        user.removeFollowedChannel(event.getChannelId());
                         holder.likes.setText(String.valueOf(event.getLikes()));
-                        DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event.getId(), user.getSciper());
-                        // TODO: find what is this set text color
-                        //holder.likes_button.setTextColor(Color.BLACK);
+                        DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event, user);
                     }
+                    holder.likes.setText(String.valueOf(event.getLikes()));
                 }
             });
         } else {

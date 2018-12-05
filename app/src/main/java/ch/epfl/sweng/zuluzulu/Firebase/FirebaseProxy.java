@@ -385,12 +385,14 @@ public class FirebaseProxy implements Proxy {
     @Override
     public void addEventToUserFollowedEvents(Event event, AuthenticatedUser user) {
         userCollection.document(user.getSciper()).update("followed_events", FieldValue.arrayUnion(event.getId()));
+        userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayUnion(event.getChannelId()));
         eventCollection.document(event.getId()).update("followers", FieldValue.arrayUnion(user.getSciper()));
     }
 
     @Override
     public void addAssociationToUserFollowedAssociations(Association association, AuthenticatedUser user) {
         userCollection.document(user.getSciper()).update("followed_associations", FieldValue.arrayUnion(association.getId()));
+        userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayUnion(association.getChannelId()));
     }
 
     @Override
@@ -401,12 +403,14 @@ public class FirebaseProxy implements Proxy {
     @Override
     public void removeEventFromUserFollowedEvents(Event event, AuthenticatedUser user) {
         userCollection.document(user.getSciper()).update("followed_events", FieldValue.arrayRemove(event.getId()));
+        userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayRemove(event.getChannelId()));
         eventCollection.document(event.getId()).update("followers", FieldValue.arrayRemove(user.getSciper()));
     }
 
     @Override
     public void removeAssociationFromUserFollowedAssociations(Association association, AuthenticatedUser user) {
         userCollection.document(user.getSciper()).update("followed_associations", FieldValue.arrayRemove(association.getId()));
+        userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayRemove(association.getChannelId()));
     }
 
     @Override

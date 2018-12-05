@@ -1,6 +1,8 @@
 package ch.epfl.sweng.zuluzulu.Utility;
 
 import android.location.Location;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import com.google.firebase.firestore.GeoPoint;
 
@@ -85,5 +87,9 @@ public interface Utils {
         long dateTime = date.getTime();
         long now = Calendar.getInstance().getTimeInMillis();
         return now - dateTime;
+    }
+
+    static void showConnectSnackbar(View container){
+        Snackbar.make(container, "Login to access more features ⭐", 5000).show();
     }
 }
