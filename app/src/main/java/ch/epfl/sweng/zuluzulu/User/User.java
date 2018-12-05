@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.User;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -66,6 +67,19 @@ abstract public class User implements Serializable {
         this.roles.add(role);
     }
 
+    public List<String> getRoles(){
+        List<String> result = new ArrayList<>();
+        for(UserRole role: roles)
+            result.add(role.name());
+        return result;
+    }
+
+    public void setRoles(List<String> roles){
+        this.roles.clear();
+        for(String role: roles)
+            this.roles.add(UserRole.valueOf(role));
+    }
+
     public abstract boolean isConnected();
 
     /**
@@ -102,8 +116,9 @@ abstract public class User implements Serializable {
          *
          * @param sciper User sciper number
          */
-        public void setSciper(String sciper) {
+        public UserBuilder setSciper(String sciper) {
             this.sciper = sciper;
+            return this;
         }
 
         /**
@@ -111,8 +126,9 @@ abstract public class User implements Serializable {
          *
          * @param gaspar gaspar
          */
-        public void setGaspar(String gaspar) {
+        public UserBuilder setGaspar(String gaspar) {
             this.gaspar = gaspar;
+            return this;
         }
 
         /**
@@ -120,10 +136,11 @@ abstract public class User implements Serializable {
          *
          * @param email email
          */
-        public void setEmail(String email) {
+        public UserBuilder setEmail(String email) {
             if (email.contains("@")) {
                 this.email = email;
             }
+            return this;
         }
 
         /**
@@ -131,8 +148,9 @@ abstract public class User implements Serializable {
          *
          * @param section section
          */
-        public void setSection(String section) {
+        public UserBuilder setSection(String section) {
             this.section = section;
+            return this;
         }
 
         /**
@@ -140,8 +158,9 @@ abstract public class User implements Serializable {
          *
          * @param semester semester
          */
-        public void setSemester(String semester) {
+        public UserBuilder setSemester(String semester) {
             this.semester = semester;
+            return this;
         }
 
         /**
@@ -149,8 +168,9 @@ abstract public class User implements Serializable {
          *
          * @param last_names last names
          */
-        public void setLast_names(String last_names) {
+        public UserBuilder setLast_names(String last_names) {
             this.last_names = last_names;
+            return this;
         }
 
         /**
@@ -158,20 +178,24 @@ abstract public class User implements Serializable {
          *
          * @param first_names last names
          */
-        public void setFirst_names(String first_names) {
+        public UserBuilder setFirst_names(String first_names) {
             this.first_names = first_names;
+            return this;
         }
 
-        public void setFollowedAssociations(List<String> followedAssociations) {
+        public UserBuilder setFollowedAssociations(List<String> followedAssociations) {
             this.followedAssociations = followedAssociations;
+            return this;
         }
 
-        public void setFollowedChannels(List<String> followedChannels) {
+        public UserBuilder setFollowedChannels(List<String> followedChannels) {
             this.followedChannels = followedChannels;
+            return this;
         }
 
-        public void setFollowedEvents(List<String> followedEvents) {
+        public UserBuilder setFollowedEvents(List<String> followedEvents) {
             this.followedEvents = followedEvents;
+            return this;
         }
 
         /**

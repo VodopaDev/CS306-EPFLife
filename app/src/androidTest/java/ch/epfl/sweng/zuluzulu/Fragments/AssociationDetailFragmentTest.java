@@ -20,7 +20,6 @@ public class AssociationDetailFragmentTest extends TestWithAuthenticatedAndFragm
     @Override
     public void initFragment() {
         DatabaseFactory.setDependency(new MockedProxy());
-
         fragment = AssociationFragment.newInstance(user);
     }
 

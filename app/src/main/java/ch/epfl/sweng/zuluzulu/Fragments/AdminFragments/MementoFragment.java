@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu.Fragments;
+package ch.epfl.sweng.zuluzulu.Fragments.AdminFragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +18,7 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -154,7 +155,7 @@ public class MementoFragment extends SuperFragment {
                 .setLongDesc(jsonobject.getString("description"))
                 .setOrganizer(jsonobject.getString("event_organizer"))
                 .setPlace(jsonobject.getString("event_place_and_room"))
-                .setBannerUri(jsonobject.getString("event_visual_absolute_url"))
+                .setBannerUri(null)
                 .setIconUri(jsonobject.getString("event_visual_absolute_url"))
                 .setWebsite(jsonobject.getString("event_url_link"))
                 .setContact(jsonobject.getString("event_contact"))

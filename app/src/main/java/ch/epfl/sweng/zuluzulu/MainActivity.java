@@ -1,19 +1,24 @@
 package ch.epfl.sweng.zuluzulu;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.MapsInitializer;
 
@@ -23,10 +28,12 @@ import java.util.Stack;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.AddEventFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AddEventFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AdminPanelFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.ChangeUserRoleFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.CalendarFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
@@ -34,7 +41,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.MementoFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.MementoFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.PostFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ReplyFragment;
@@ -60,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private SuperFragment current_fragment;
     private Stack<SuperFragment> previous_fragments;
     private User user;
+    private static final int W_STORAGE_PERM_CODE = 260;
 
 
     @Override
@@ -100,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
         }
     }
+
 
     /**
      * Open fragment and add tag
@@ -235,11 +244,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case R.id.nav_chat:
                 fragment = ChannelFragment.newInstance(user);
                 break;
-            case R.id.nav_associations_generator:
-                fragment = AssociationsGeneratorFragment.newInstance(user);
-                break;
-            case R.id.nav_memento_admin:
-                fragment = MementoFragment.newInstance(user);
+            case R.id.nav_admin_panel:
+                fragment = AdminPanelFragment.newInstance();
                 break;
             default:
                 fragment = MainFragment.newInstance(user);
@@ -282,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case OPENING_WEBVIEW:
                 openFragmentWithStringData(WebViewFragment.newInstance(), WebViewFragment.URL, (String) data);
                 break;
-            case CREATE_EVENT:
+            case OPEN_CREATE_EVENT:
                 openFragment(AddEventFragment.newInstance());
                 break;
             case SET_TITLE:
@@ -344,6 +350,22 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 openFragment(SettingsFragment.newInstance());
                 selectItem(navigationView.getMenu().findItem(R.id.nav_settings));
                 break;
+
+                // Admin
+            case OPEN_MEMENTO:
+                openFragment(MementoFragment.newInstance(user));
+                break;
+            case OPEN_MANAGE_USER:
+                openFragment(ChangeUserRoleFragment.newInstance());
+                break;
+            case OPEN_MANAGE_CHANNEL:
+                //TODO: to add when finished
+                //openFragment(...);
+                break;
+            case OPEN_MANAGE_ASSOCIATION:
+                openFragment(AssociationsGeneratorFragment.newInstance(user));
+                break;
+
             default:
                 // Should never happen
                 throw new AssertionError(tag);
@@ -372,6 +394,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             }
         }
     }
+
+
 
     /**
      * Return the current fragment

@@ -50,7 +50,7 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
         goToAddEvent();
         onView(withId(R.id.create_event_button)).perform(click());
 
-        onView(withId(R.id.add_event_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.add_event_fragment)).check(matches(isDisplayed()));
     }
 
     /**
@@ -63,7 +63,7 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
         onView(withId(R.id.long_desc_text)).perform(replaceText("Okay I am now writing a whole story about the life of this test. So once upon a time, a test was created, it was supposed to be super useful and everyone was happy, until they started it, and it failed. And then started hours and hours of debugging" +
                 " continuously until it passed. That was the story, thank you")).perform(closeSoftKeyboard());
         onView(withId(R.id.create_event_button)).perform(click());
-        onView(withId(R.id.add_event_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.add_event_fragment)).check(matches(isDisplayed()));
     }
 
     /**
