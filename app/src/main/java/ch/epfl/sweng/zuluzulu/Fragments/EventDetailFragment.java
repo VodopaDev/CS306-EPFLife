@@ -87,7 +87,7 @@ public class EventDetailFragment extends SuperFragment {
         view.findViewById(R.id.event_detail_export).setOnClickListener(v -> exportEventToCalendar());
 
         TextView event_like = view.findViewById(R.id.event_detail_tv_numberLikes);
-        event_like.setText(Integer.toString(event.getLikes()));
+        event_like.setText(String.valueOf(event.getLikes()));
 
         TextView event_desc = view.findViewById(R.id.event_detail_desc);
         event_desc.setText(event.getLongDescription());
@@ -221,7 +221,8 @@ public class EventDetailFragment extends SuperFragment {
     private void loadChannel() {
         DatabaseFactory.getDependency().getChannelFromId(event.getChannelId(), result -> {
             channel = result;
-            channelButton.setText(channel.getName() + "'s chat");
+            String str = "Chat room";
+            channelButton.setText(str);
             setChannelButtonBehaviour();
         });
     }
