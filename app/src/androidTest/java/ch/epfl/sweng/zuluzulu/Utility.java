@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -136,9 +137,9 @@ public class Utility {
      *
      * @return UserBuilder
      */
-    private static User.UserBuilder createFilledUserBuilder() {
+    public static User.UserBuilder createFilledUserBuilder() {
         User.UserBuilder builder = new User.UserBuilder();
-        builder.setSciper("123456");
+        builder.setSciper("1");
         builder.setGaspar("gaspar");
         builder.setEmail("test@epfl.ch");
         builder.setSection("IN");
@@ -162,7 +163,7 @@ public class Utility {
                 "1",
                 "Testing channel",
                 "The name is self explaining",
-                Collections.EMPTY_MAP,
+                new HashMap<>(),
                 null
         );
     }
@@ -174,13 +175,13 @@ public class Utility {
                 null,
                 "mon message ne sert à rien",
                 "Nico",
-                "270103",
+                "1",
                 Timestamp.now().toDate(),
                 "#F0E68C",
                 0,
                 0,
-                Collections.EMPTY_LIST,
-                Collections.EMPTY_LIST
+                new ArrayList<>(),
+                new ArrayList<>()
         );
     }
 
