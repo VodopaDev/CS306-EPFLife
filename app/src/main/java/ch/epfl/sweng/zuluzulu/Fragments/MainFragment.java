@@ -135,20 +135,22 @@ public class MainFragment extends SuperFragment {
 
     private void fillUpcomingEventLists() {
         DatabaseFactory.getDependency().getAllEvents(result -> {
-            upcoming_events.clear();
-            List<Event> temp = new ArrayList<>(result);
-            for(Event e: temp) {
-                if(e.getStartDate().compareTo(new Date()) <= 0) {
-                    result.remove(e);
+            if(result != null) {
+                upcoming_events.clear();
+                List<Event> temp = new ArrayList<>(result);
+                for (Event e : temp) {
+                    if (e.getStartDate().compareTo(new Date()) <= 0) {
+                        result.remove(e);
+                    }
                 }
-            }
-            Collections.sort(result, currentComparator);
-            if(result.size() > 2) {
-                result = new ArrayList<>(result.subList(0, 2));
-            }
+                Collections.sort(result, currentComparator);
+                if (result.size() > 2) {
+                    result = new ArrayList<>(result.subList(0, 2));
+                }
 
-            upcoming_events.addAll(result);
-            event_adapter.notifyDataSetChanged();
+                upcoming_events.addAll(result);
+                event_adapter.notifyDataSetChanged();
+            }
         });
     }
 
@@ -160,9 +162,11 @@ public class MainFragment extends SuperFragment {
     private void fillRandomAssociationLists() {
         random_assos.clear();
         DatabaseFactory.getDependency().getAllAssociations(result -> {
-            int rand = (int) (Math.random() * (result.size()));
-            random_assos.add(result.get(rand));
-            assos_adapter.notifyDataSetChanged();
+            if(result != null && !result.isEmpty()) {
+                int rand = (int) (Math.random() * (result.size()));
+                random_assos.add(result.get(rand));
+                assos_adapter.notifyDataSetChanged();
+            }
         });
     }
     /*
@@ -179,24 +183,29 @@ public class MainFragment extends SuperFragment {
 
     private void fillConnectedUserAssociationsList() {
         DatabaseFactory.getDependency().getAllAssociations(result -> {
-            associations_array.clear();
-            for (Association association : result) {
-                if (((AuthenticatedUser) user).isFollowedAssociation(association.getId()))
-                    associations_array.add(association);
+            if (result != null) {
+                associations_array.clear();
+                for (Association association : result) {
+                    if (((AuthenticatedUser) user).isFollowedAssociation(association.getId()))
+                        associations_array.add(association);
+                }
+                associations_adapter.notifyDataSetChanged();
             }
-            associations_adapter.notifyDataSetChanged();
         });
+
     }
 
     private void fillConnectedUserEventsList() {
         DatabaseFactory.getDependency().getAllEvents(result -> {
-            events_array.clear();
-            for (Event event : result) {
-                if (((AuthenticatedUser) user).isFollowedEvent(event.getId()))
-                    events_array.add(event);
+            if(result != null) {
+                events_array.clear();
+                for (Event event : result) {
+                    if (((AuthenticatedUser) user).isFollowedEvent(event.getId()))
+                        events_array.add(event);
+                }
+                Collections.sort(events_array, Event.dateComparator());
+                events_adapter.notifyDataSetChanged();
             }
-            Collections.sort(events_array, Event.dateComparator());
-            events_adapter.notifyDataSetChanged();
         });
     }
 
