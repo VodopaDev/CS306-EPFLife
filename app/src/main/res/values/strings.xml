@@ -101,5 +101,7 @@
     <string name="user_role_searchbar_hint">User sciper</string>
     <string name="main_page_upcoming_event">Upcoming Events</string>
     <string name="main_page_random_assos">Random Association</string>
+    <string name="no_association">No Association</string>
+    <string name="no_chat">No Chat</string>
 
 </resources>

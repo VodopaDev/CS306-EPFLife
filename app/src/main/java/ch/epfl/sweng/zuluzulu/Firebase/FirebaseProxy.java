@@ -113,7 +113,8 @@ public class FirebaseProxy implements Proxy {
                 object = creator.apply(fmap);
             } catch (Exception ignored) {
             }
-            onResult.apply(object);
+            if(object != null)
+                onResult.apply(object);
             IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the with id " + id));
     }
@@ -139,7 +140,8 @@ public class FirebaseProxy implements Proxy {
                     object = creator.apply(fmap);
                 } catch (Exception ignored) {
                 }
-                result.add(object);
+                if(object != null)
+                    result.add(object);
                 if (counter.increment()) {
                     onResult.apply(result);
                     IdlingResourceFactory.decrementCountingIdlingResource();
