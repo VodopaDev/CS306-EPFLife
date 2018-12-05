@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -95,13 +96,13 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
                     if (!user.isFollowedEvent(event.getId())) {
                         event.addFollower(user.getSciper());
                         user.addFollowedEvent(event.getId());
+                        DatabaseFactory.getDependency().addEventToUserFollowedEvents(event.getId(), user.getSciper());
                         holder.likes.setText(String.valueOf(event.getLikes()));
-                        // TODO: find what is this set text color
-                        //holder.likes_button.setTextColor(Color.BLUE);
                     } else {
                         event.removeFollower(user.getSciper());
                         user.removeFollowedEvent(event.getId());
                         holder.likes.setText(String.valueOf(event.getLikes()));
+                        DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event.getId(), user.getSciper());
                         // TODO: find what is this set text color
                         //holder.likes_button.setTextColor(Color.BLACK);
                     }
