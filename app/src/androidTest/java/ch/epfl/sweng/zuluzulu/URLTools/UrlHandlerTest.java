@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.Utility;
 

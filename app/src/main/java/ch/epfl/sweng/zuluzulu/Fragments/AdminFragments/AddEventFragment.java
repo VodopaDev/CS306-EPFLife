@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu.Fragments;
+package ch.epfl.sweng.zuluzulu.Fragments.AdminFragments;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
