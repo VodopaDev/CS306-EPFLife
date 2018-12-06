@@ -28,7 +28,7 @@ public class FirebaseProxyTest {
     FirebaseProxy proxy;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         FirebaseFactory.setDependency(new FirebaseMock());
 
         proxy = FirebaseProxy.getInstance();

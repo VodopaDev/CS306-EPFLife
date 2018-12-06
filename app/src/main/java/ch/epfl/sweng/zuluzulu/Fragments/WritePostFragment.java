@@ -104,7 +104,7 @@ public class WritePostFragment extends SuperFragment {
                     DatabaseFactory.getDependency().getNewPostId(channel.getId()),
                     channel.getId(),
                     null,
-                    editText.getText().toString(),
+                    editText.getText().toString().trim().replaceAll("([\\n\\r]+\\s*)*$", ""),
                     anonymous ? "" : user.getFirstNames(),
                     user.getSciper(),
                     Timestamp.now().toDate(),

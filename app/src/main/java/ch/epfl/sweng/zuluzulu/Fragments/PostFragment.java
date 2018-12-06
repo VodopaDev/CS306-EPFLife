@@ -65,9 +65,9 @@ public class PostFragment extends SuperChatPostsFragment {
         filterUpsButton = view.findViewById(R.id.post_filter_nbUps);
 
         chatButton.setEnabled(true);
-        chatButton.setBackgroundColor(getResources().getColor(R.color.white));
+        chatButton.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
         postsButton.setEnabled(false);
-        postsButton.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
+        postsButton.setBackgroundColor(getResources().getColor(R.color.white));
 
         adapter = new PostArrayAdapter(view.getContext(), posts, user);
         listView.setAdapter(adapter);
@@ -93,6 +93,9 @@ public class PostFragment extends SuperChatPostsFragment {
         chatButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_CHAT_FRAGMENT, channel));
     }
 
+    /**
+     * Load the posts from the database and notify the adapter of the changes
+     */
     private void loadAllPosts() {
         DatabaseFactory.getDependency().getPostsFromChannel(channel.getId(), result -> {
             posts.clear();
