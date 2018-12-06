@@ -133,14 +133,7 @@ public class ChatFragment extends SuperChatPostsFragment {
             Log.d("TEST", result.size() + " messages");
             messages.clear();
             messages.addAll(result);
-            Collections.sort(messages, (o1, o2) -> {
-                if (o1.getTime().before(o2.getTime()))
-                    return -1;
-                else
-                    return 1;
-            });
-            adapter.notifyDataSetChanged();
-            listView.setSelection(adapter.getCount() - 1);
+            sortMessages();
         });
     }
 
@@ -151,14 +144,21 @@ public class ChatFragment extends SuperChatPostsFragment {
         DatabaseFactory.getDependency().updateOnNewMessagesFromChannel(channel.getId(), result -> {
             messages.clear();
             messages.addAll(result);
-            Collections.sort(messages, (o1, o2) -> {
-                if (o1.getTime().before(o2.getTime()))
-                    return -1;
-                else
-                    return 1;
-            });
-            adapter.notifyDataSetChanged();
-            listView.setSelection(adapter.getCount() - 1);
+            sortMessages();
         });
+    }
+
+    /**
+     * Sort the list of messages by time and notify adapter
+     */
+    private void sortMessages() {
+        Collections.sort(messages, (o1, o2) -> {
+            if (o1.getTime().before(o2.getTime()))
+                return -1;
+            else
+                return 1;
+        });
+        adapter.notifyDataSetChanged();
+        listView.setSelection(adapter.getCount() - 1);
     }
 }
