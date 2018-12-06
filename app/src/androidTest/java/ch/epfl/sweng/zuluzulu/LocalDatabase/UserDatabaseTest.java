@@ -17,7 +17,7 @@ public class UserDatabaseTest {
     @Test
     public void TestAll(){
         UserDatabase db = new UserDatabase(mActivityRule.getActivity().getApplicationContext());
-        assert(db.put(Utility.createTestAuthenticated()) >= 0);
+        db.put(Utility.createTestAuthenticated());
         db.getUser();
         assert(db.delete(Utility.createTestAuthenticated()) >= 0);
     }
