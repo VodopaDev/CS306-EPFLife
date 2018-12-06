@@ -28,6 +28,7 @@ import ch.epfl.sweng.zuluzulu.Adapters.PostArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -47,10 +48,11 @@ public class ReplyFragment extends SuperChatPostsFragment {
         // Required empty public constructor
     }
 
-    public static ReplyFragment newInstance(User user, Post postOriginal) {
+    public static ReplyFragment newInstance(User user, Channel channel, Post postOriginal) {
         ReplyFragment fragment = new ReplyFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);
+        args.putSerializable(ARG_CHANNEL, channel);
         args.putSerializable(ARG_POST, postOriginal);
         fragment.setArguments(args);
         return fragment;
@@ -60,7 +62,6 @@ public class ReplyFragment extends SuperChatPostsFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
             postOriginal = (Post) getArguments().getSerializable(ARG_POST);
         }
     }

@@ -13,7 +13,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -133,7 +135,8 @@ public class PostFragment extends SuperChatPostsFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Post post = (Post) messages.get(position);
-                mListener.onFragmentInteraction(CommunicationTag.OPEN_REPLY_FRAGMENT, post);
+                List<Object> data = Arrays.asList(channel, post);
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_REPLY_FRAGMENT, data);
             }
         });
     }

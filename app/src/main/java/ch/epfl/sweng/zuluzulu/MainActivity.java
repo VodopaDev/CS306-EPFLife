@@ -21,10 +21,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.maps.MapsInitializer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
@@ -51,7 +51,6 @@ import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.WritePostFragment;
-import ch.epfl.sweng.zuluzulu.LocalDatabase.UserDatabase;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -89,7 +88,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        createUser();
+        // Initialize to guestUser
+        this.user = new User.UserBuilder().buildGuestUser();
 
         navigationView = initNavigationView();
         initDrawerContent();
@@ -108,17 +108,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             }
 
             selectItem(navigationView.getMenu().findItem(R.id.nav_main), true);
-        }
-    }
-
-    private void createUser() {
-        UserDatabase userDatabase = new UserDatabase(getApplicationContext());
-        AuthenticatedUser local_user = userDatabase.getUser();
-        if(local_user != null){
-            this.user = local_user;
-        } else {
-            // Initialize to guestUser
-            this.user = new User.UserBuilder().buildGuestUser();
         }
     }
 
@@ -246,13 +235,10 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 fragment = ProfileFragment.newInstance(((AuthenticatedUser) user).getData());
                 break;
             case R.id.nav_logout:
-                UserDatabase userDatabase = new UserDatabase(getApplicationContext());
-                userDatabase.delete((AuthenticatedUser) this.user);
+                this.user = new User.UserBuilder().buildGuestUser();
 
                 android.webkit.CookieManager.getInstance().removeAllCookie();
                 GPS.stop();
-
-                this.user = new User.UserBuilder().buildGuestUser();
 
                 updateMenuItems();
                 fragment = MainFragment.newInstance(user);
@@ -297,12 +283,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case SET_USER:
                 Map<Integer, Object> received = (HashMap<Integer, Object>) data;
                 this.user = (User) received.get(0);
-
-                if(this.user != null && this.user.isConnected()) {
-                    UserDatabase userDatabase = new UserDatabase(getApplicationContext());
-                    userDatabase.put((AuthenticatedUser) this.user);
-                }
-
                 updateMenuItems();
                 break;
             case OPENING_WEBVIEW:
@@ -323,8 +303,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 openFragment(PostFragment.newInstance(user, channel));
                 break;
             case OPEN_REPLY_FRAGMENT:
-                Post post = (Post) data;
-                openFragment(ReplyFragment.newInstance(user, post));
+                List<Object> receivedData = (List<Object>) data;
+                openFragment(ReplyFragment.newInstance(user, (Channel) receivedData.get(0), (Post) receivedData.get(1)));
                 break;
             case OPEN_WRITE_POST_FRAGMENT:
                 channel = (Channel) data;
