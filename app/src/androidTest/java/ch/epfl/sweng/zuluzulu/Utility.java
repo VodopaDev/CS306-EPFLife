@@ -147,7 +147,7 @@ public class Utility {
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
         builder.setFollowedAssociations(Collections.singletonList("1"));
-        builder.setFollowedEvents(Arrays.asList("1", "2", "3"));
+        builder.setFollowedEvents(Collections.singletonList("1"));
         builder.setFollowedChannels(Collections.singletonList("1"));
 
         return builder;
@@ -207,7 +207,7 @@ public class Utility {
                 .setShortDesc("Is this a real event?")
                 .setLongDesc("Of course not, you should check this beautiful description")
                 .setDate(new EventDate(new Date(10000000), new Date(10500000)))
-                .setFollowers(new ArrayList<>())
+                .setFollowers(Collections.singletonList("1"))
                 .setOrganizer("I'm the organizer")
                 .setPlace("Not at EPFL")
                 .setIconUri(null)
