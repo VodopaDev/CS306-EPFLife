@@ -95,7 +95,6 @@ public class ProfileFragment extends SuperFragment {
         ProfileFragment profileFragment = new ProfileFragment();
         profileFragment.setArguments(bundle);
 
-        Log.d("newInstance", (String) userData.get("sciper"));
         return profileFragment;
     }
 
@@ -104,7 +103,6 @@ public class ProfileFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             userData = (Map<String, Object>) getArguments().getSerializable(PROFILE_TAG);
-            Log.d("create", (String) userData.get("sciper"));
             firstName = (String) userData.get("first_name");
             lastName = (String) userData.get("last_name");
             sciper = (String) userData.get("sciper");
