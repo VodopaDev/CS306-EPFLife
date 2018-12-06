@@ -63,10 +63,10 @@
                         android:layout_height="30dp"
                         android:layout_gravity="bottom|start"
                         android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:background="@drawable/channel_notclickable_background"
-                        android:src="@drawable/ic_calendar"
-                        android:layout_marginLeft="8dp" />
+                        android:src="@drawable/ic_calendar" />
 
                     <TextView
                         android:id="@+id/event_detail_tv_like"
@@ -309,7 +309,7 @@
                         android:id="@+id/webview"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
-                    
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -317,7 +317,6 @@
         </LinearLayout>
 
     </ScrollView>
-
 
     <LinearLayout
         android:id="@+id/linearLayout4"

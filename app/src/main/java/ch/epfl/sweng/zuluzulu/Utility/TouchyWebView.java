@@ -20,7 +20,7 @@ public class TouchyWebView extends WebView {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event){
+    public boolean onTouchEvent(MotionEvent event) {
         requestDisallowInterceptTouchEvent(true);
         return super.onTouchEvent(event);
     }
