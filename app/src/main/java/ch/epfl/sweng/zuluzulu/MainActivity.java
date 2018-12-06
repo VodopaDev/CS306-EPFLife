@@ -236,13 +236,13 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 fragment = ProfileFragment.newInstance(user);
                 break;
             case R.id.nav_logout:
-                this.user = new User.UserBuilder().buildGuestUser();
-
                 UserDatabase userDatabase = new UserDatabase(getApplicationContext());
                 userDatabase.delete((AuthenticatedUser) this.user);
 
                 android.webkit.CookieManager.getInstance().removeAllCookie();
                 GPS.stop();
+
+                this.user = new User.UserBuilder().buildGuestUser();
 
                 updateMenuItems();
                 fragment = MainFragment.newInstance(user);
