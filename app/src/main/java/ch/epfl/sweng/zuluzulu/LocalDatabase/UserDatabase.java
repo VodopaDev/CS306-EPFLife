@@ -101,7 +101,7 @@ public class UserDatabase {
                     .setFollowedChannels(new ArrayList<>())
                     .buildAuthenticatedUser();
 
-            if(user != null) {
+            if(user != null && user.getSciper().length() >= 5) {
                 list.add(user);
             }
 

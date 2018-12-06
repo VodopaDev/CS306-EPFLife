@@ -43,7 +43,7 @@ public class UserTest {
         builder.setEmail("admin@epfl.ch");
         builder.setSection("IN");
         builder.setSemester("BA5");
-        builder.setSciper("121212");
+        builder.setSciper("0");
         builder.setGaspar("admin");
         builder.setFirst_names("admin_first_name");
         builder.setLast_names("admin_last_name");
@@ -105,7 +105,7 @@ public class UserTest {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("fake_mail");
         builder.setSection("section");
-        builder.setSciper("1212");
+        builder.setSciper("0");
         builder.setGaspar("test");
         builder.setFirst_names("first_name");
         builder.setLast_names("last_name");
