@@ -436,11 +436,6 @@ public class FirebaseProxy implements Proxy {
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
-    @Override
-    public void updateUser(User user) {
-
-    }
-
     public void updatePost(Post post) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(post.getChannelId())
@@ -478,13 +473,19 @@ public class FirebaseProxy implements Proxy {
                 map.put("followed_events", new ArrayList<String>());
                 map.put("followed_channels", new ArrayList<String>());
                 map.put("roles", Arrays.asList("USER"));
+                map.put("first_name", "");
+                map.put("last_name", "");
+                map.put("section", "");
+                map.put("semester", "");
+                map.put("gaspar", "");
+                map.put("email", "");
+                map.put("sciper", "");
             } else {
                 map.putAll(Objects.requireNonNull(documentSnapshot.getData()));
             }
             onResult.apply(map);
             IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot set user " + id));
-
     }
 
     @Override

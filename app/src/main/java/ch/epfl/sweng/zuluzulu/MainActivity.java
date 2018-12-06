@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 fragment = SettingsFragment.newInstance();
                 break;
             case R.id.nav_profile:
-                fragment = ProfileFragment.newInstance(user);
+                fragment = ProfileFragment.newInstance(((AuthenticatedUser) user).getData());
                 break;
             case R.id.nav_logout:
                 this.user = new User.UserBuilder().buildGuestUser();
@@ -335,7 +335,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 openFragment(EventDetailFragment.newInstance(user, event));
                 break;
             case OPEN_CHANNEL_FRAGMENT:
-                openFragment(ChannelFragment.newInstance(user));
+                User visitedUser = data == null ? user : (User) data;
+                openFragment(ChannelFragment.newInstance(visitedUser));
                 selectItem(navigationView.getMenu().findItem(R.id.nav_chat));
                 break;
             case OPEN_LOGIN_FRAGMENT:
@@ -343,7 +344,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 selectItem(navigationView.getMenu().findItem(R.id.nav_login));
                 break;
             case OPEN_PROFILE_FRAGMENT:
-                openFragment(ProfileFragment.newInstance(user));
+                Map<String, Object> profileData = data == null ? ((AuthenticatedUser) user).getData() : (Map<String, Object>) data;
+                openFragment(ProfileFragment.newInstance(profileData));
                 selectItem(navigationView.getMenu().findItem(R.id.nav_profile));
                 break;
             case OPEN_SETTINGS_FRAGMENT:

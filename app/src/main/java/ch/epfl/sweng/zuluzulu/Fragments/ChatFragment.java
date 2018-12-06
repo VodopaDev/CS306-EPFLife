@@ -1,15 +1,19 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -18,8 +22,10 @@ import com.google.firebase.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageArrayAdapter;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -76,6 +82,7 @@ public class ChatFragment extends SuperChatPostsFragment {
         setUpSendButton();
         setUpEditText();
         setUpPostsButton();
+        setUpMessageClickListener();
 
         return view;
     }
@@ -160,5 +167,38 @@ public class ChatFragment extends SuperChatPostsFragment {
         });
         adapter.notifyDataSetChanged();
         listView.setSelection(adapter.getCount() - 1);
+    }
+
+    private void setUpMessageClickListener() {
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                ChatMessage chatMessage = messages.get(position);
+                if (!chatMessage.isAnonymous()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                    AlertDialog dlg = builder.setTitle("Visiter le profil de " + chatMessage.getSenderName() + " ?")
+                            .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    String visitedSciper = chatMessage.getSenderSciper();
+                                    DatabaseFactory.getDependency().getUserWithIdOrCreateIt(visitedSciper, result -> {
+                                        mListener.onFragmentInteraction(CommunicationTag.OPEN_PROFILE_FRAGMENT, result);
+                                    });
+                                }
+                            })
+                            .setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            })
+                            .create();
+                    dlg.setCanceledOnTouchOutside(true);
+                    dlg.show();
+                }
+                return true;
+            }
+        });
     }
 }

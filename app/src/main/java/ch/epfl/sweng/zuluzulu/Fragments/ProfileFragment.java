@@ -33,6 +33,10 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -53,7 +57,16 @@ public class ProfileFragment extends SuperFragment {
     private static final int CAMERA_CODE = 1234;
     private static final int W_STORAGE_PERM_CODE = 260;
 
-    private User user;
+    private Map<String, Object> userData;
+    private String firstName;
+    private String lastName;
+    private String sciper;
+    private String section;
+    private String semester;
+    private String gaspar;
+    private String email;
+    private List<String> roles;
+
     private ImageButton pic;
 
     private String pathToImage;
@@ -71,12 +84,12 @@ public class ProfileFragment extends SuperFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param user User
+     * @param userData User data
      * @return A new instance of fragment ProfileFragment.
      */
-    public static ProfileFragment newInstance(User user) {
+    public static ProfileFragment newInstance(Map<String, Object> userData) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(PROFILE_TAG, user);
+        bundle.putSerializable(PROFILE_TAG, (HashMap) userData);
 
         // Transmit data
         ProfileFragment profileFragment = new ProfileFragment();
@@ -89,11 +102,19 @@ public class ProfileFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.user = (User) getArguments().getSerializable(PROFILE_TAG);
-            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, user.getFirstNames() + "'s Profile");
+            userData = (Map<String, Object>) getArguments().getSerializable(PROFILE_TAG);
+            firstName = (String) userData.get("first_name");
+            lastName = (String) userData.get("last_name");
+            sciper = (String) userData.get("sciper");
+            section = (String) userData.get("section");
+            semester = (String) userData.get("semester");
+            gaspar = (String) userData.get("gaspar");
+            email = (String) userData.get("email");
+            roles = (List<String>) userData.get("roles");
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, firstName + "'s Profile");
             storage = FirebaseStorage.getInstance();
             storageRef = storage.getReference();
-            pictureRef = storageRef.child("images/" + user.getSciper() + ".jpg");
+            pictureRef = storageRef.child("images/" + sciper + ".jpg");
 
         } else {
             throw new AssertionError("No argument");
@@ -112,15 +133,16 @@ public class ProfileFragment extends SuperFragment {
         TextView user_view = view.findViewById(R.id.profile_name_text);
 
         StringBuilder builder = new StringBuilder();
-        if (user.getFirstNames() != null && user.getFirstNames().length() > 1) {
-            builder.append(user.getFirstNames().substring(0, 1).toUpperCase());
-            builder.append(user.getFirstNames().substring(1));
+        if (firstName != null && firstName.length() > 1) {
+            builder.append(firstName.substring(0, 1).toUpperCase());
+            builder.append(firstName.substring(1));
         }
-        if (user.getLastNames() != null && user.getLastNames().length() > 1) {
-            builder.append(" ").append(user.getLastNames().substring(0, 1).toUpperCase());
-            builder.append(user.getLastNames().substring(1));
+        if (lastName != null && lastName.length() > 1) {
+            builder.append(" ").append(lastName.substring(0, 1).toUpperCase());
+            builder.append(lastName.substring(1));
         }
-        if (user.hasRole(UserRole.ADMIN)) {
+
+        if (roles.contains(UserRole.ADMIN.name())) {
             builder.append(" - ADMIN");
         }
 
@@ -143,19 +165,19 @@ public class ProfileFragment extends SuperFragment {
         if(askPermissions()) {
             setBitmapFromStorage();
         }
-        TextView gaspar = view.findViewById(R.id.profile_gaspar_text);
-        gaspar.setText(user.getGaspar());
+        TextView gasparView = view.findViewById(R.id.profile_gaspar_text);
+        gasparView.setText(gaspar);
 
 
-        TextView email = view.findViewById(R.id.profile_email_edit);
-        email.setText(user.getEmail());
+        TextView emailView = view.findViewById(R.id.profile_email_edit);
+        emailView.setText(email);
 
 
-        TextView sciper = view.findViewById(R.id.profile_sciper_edit);
-        sciper.setText(user.getSciper());
+        TextView sciperView = view.findViewById(R.id.profile_sciper_edit);
+        sciperView.setText(sciper);
 
         TextView unit = view.findViewById(R.id.profile_unit_edit);
-        unit.setText(new StringBuilder().append(user.getSection()).append("-").append(user.getSemester()));
+        unit.setText(new StringBuilder().append(section).append("-").append(semester));
 
         return view;
     }
@@ -215,7 +237,7 @@ public class ProfileFragment extends SuperFragment {
         // Create an image file name
         File directory = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                user.getSciper(),  /* prefix */
+                sciper,  /* prefix */
                 ".jpg",         /* suffix */
                 directory      /* directory */
         );

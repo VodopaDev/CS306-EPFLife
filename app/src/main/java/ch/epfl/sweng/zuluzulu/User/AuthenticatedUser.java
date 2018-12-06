@@ -175,6 +175,13 @@ public class AuthenticatedUser extends User {
         map.put("followed_events", followedEvents);
         map.put("followed_channels", followedChannels);
         map.put("roles", roles);
+        map.put("first_name", firstNames);
+        map.put("last_name", lastNames);
+        map.put("section", section);
+        map.put("semester", semester);
+        map.put("gaspar", gaspar);
+        map.put("email", email);
+        map.put("sciper", sciper);
         return map;
     }
 
