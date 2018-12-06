@@ -33,7 +33,6 @@ public class UserDatabase {
         // Gets the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(UserDatabaseContract.FeedEntry.COLUMN_NAME_SCIPER, user.getSciper());
         values.put(UserDatabaseContract.FeedEntry.COLUMN_NAME_GASPAR, user.getGaspar());
@@ -44,9 +43,8 @@ public class UserDatabase {
         values.put(UserDatabaseContract.FeedEntry.COLUMN_NAME_LAST_NAME, user.getLastNames());
 
         // Insert the new row, returning the primary key value of the new row
-        long newRowId = db.insert(UserDatabaseContract.FeedEntry.TABLE_NAME, null, values);
 
-        return newRowId;
+        return db.insert(UserDatabaseContract.FeedEntry.TABLE_NAME, null, values);
     }
 
     /**
