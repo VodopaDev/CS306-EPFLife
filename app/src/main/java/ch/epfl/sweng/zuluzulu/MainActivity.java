@@ -20,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.maps.MapsInitializer;
 
 import java.util.HashMap;
@@ -49,6 +50,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.WritePostFragment;
+import ch.epfl.sweng.zuluzulu.LocalDatabase.UserDatabase;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -86,8 +88,16 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        // Initialize to guestUser
-        this.user = new User.UserBuilder().buildGuestUser();
+        UserDatabase userDatabase = new UserDatabase(getApplicationContext());
+        AuthenticatedUser local_user = userDatabase.getUser();
+        if(local_user != null){
+            System.out.println("FIND");
+            this.user = local_user;
+        } else {
+            System.out.println("NOT FIND");
+            // Initialize to guestUser
+            this.user = new User.UserBuilder().buildGuestUser();
+        }
 
         navigationView = initNavigationView();
         initDrawerContent();
@@ -98,13 +108,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (redirectURIwithCode != null) {
             openFragmentWithStringData(LoginFragment.newInstance(), LoginFragment.TAG, redirectURIwithCode);
         } else {
-            // Look if there is a user object set
-            User user = (User) i.getSerializableExtra("user");
-            if (user != null) {
-                this.user = user;
-                updateMenuItems();
-            }
-
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
         }
     }
@@ -235,6 +238,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case R.id.nav_logout:
                 this.user = new User.UserBuilder().buildGuestUser();
 
+                UserDatabase userDatabase = new UserDatabase(getApplicationContext());
+                userDatabase.delete((AuthenticatedUser) this.user);
+
                 android.webkit.CookieManager.getInstance().removeAllCookie();
                 GPS.stop();
 
@@ -283,6 +289,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case SET_USER:
                 Map<Integer, Object> received = (HashMap<Integer, Object>) data;
                 this.user = (User) received.get(0);
+
+                if(this.user != null && this.user.isConnected()) {
+                    UserDatabase userDatabase = new UserDatabase(getApplicationContext());
+                    userDatabase.put((AuthenticatedUser) this.user);
+                }
+
                 updateMenuItems();
                 break;
             case OPENING_WEBVIEW:
