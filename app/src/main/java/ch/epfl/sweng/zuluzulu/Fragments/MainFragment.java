@@ -148,6 +148,8 @@ public class MainFragment extends SuperFragment {
             if (result != null && !result.isEmpty()) {
                 int rand = (int) (Math.random() * (result.size()));
                 random_assos.add(result.get(rand));
+                rand = (int) (Math.random() * (result.size()));
+                random_assos.add(result.get(rand));
                 assos_adapter.notifyDataSetChanged();
             }
         });

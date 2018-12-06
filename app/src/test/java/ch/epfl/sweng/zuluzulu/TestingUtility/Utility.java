@@ -14,7 +14,7 @@ import ch.epfl.sweng.zuluzulu.User.User;
 
 public class Utility {
 
-    private static final String sciper = "123456";
+    private static final String sciper = "0";
     private static final String gaspar = "gaspar";
     private static final String email = "test@epfl.ch";
     private static final String section = "IN";

@@ -43,8 +43,8 @@ public class MockedProxy implements Proxy {
     }};
 
     private Map<String, AuthenticatedUser> userMap = new HashMap<String, AuthenticatedUser>() {{
-        put("2", createFilledUserBuilder().setSciper("2").buildAdmin());
-        put("1", createTestAuthenticated());
+        put("1", createFilledUserBuilder().setSciper("1").buildAdmin());
+        put("0", createTestAuthenticated());
     }};
 
     @Override

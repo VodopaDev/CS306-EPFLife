@@ -140,7 +140,7 @@ public class Utility {
      */
     public static User.UserBuilder createFilledUserBuilder() {
         User.UserBuilder builder = new User.UserBuilder();
-        builder.setSciper("1");
+        builder.setSciper("0");
         builder.setGaspar("gaspar");
         builder.setEmail("test@epfl.ch");
         builder.setSection("IN");
