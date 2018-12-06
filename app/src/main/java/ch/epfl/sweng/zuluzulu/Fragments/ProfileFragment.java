@@ -142,7 +142,7 @@ public class ProfileFragment extends SuperFragment {
             builder.append(lastName.substring(1));
         }
 
-        if (roles.contains(UserRole.ADMIN.name())) {
+        if (roles.contains(UserRole.ADMIN.toString())) {
             builder.append(" - ADMIN");
         }
 
