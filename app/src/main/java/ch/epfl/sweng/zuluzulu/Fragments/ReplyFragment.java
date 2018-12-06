@@ -1,16 +1,19 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -22,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.PostArrayAdapter;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
@@ -88,6 +92,7 @@ public class ReplyFragment extends SuperFragment {
 
         setUpReplyText();
         setUpSendButton();
+        setUpReplyClickListener();
         loadReplies(false);
 
         return view;
@@ -171,5 +176,34 @@ public class ReplyFragment extends SuperFragment {
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
         loadReplies(false);
+    }
+
+    /**
+     * Set up long click listener on the messages
+     */
+    private void setUpReplyClickListener() {
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Post post = replies.get(position);
+                if (!post.isAnonymous() && !post.isOwnPost(user.getSciper())) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                    AlertDialog dlg = builder.setTitle("Visiter le profil de " + post.getSenderName() + " ?")
+                            .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    DatabaseFactory.getDependency().getUserWithIdOrCreateIt(post.getSenderSciper(), result -> {
+                                        mListener.onFragmentInteraction(CommunicationTag.OPEN_PROFILE_FRAGMENT, result);
+                                    });
+                                }
+                            })
+                            .create();
+                    dlg.setCanceledOnTouchOutside(true);
+                    dlg.show();
+                }
+                return true;
+            }
+        });
     }
 }

@@ -1,9 +1,11 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.User;
 
@@ -82,6 +85,7 @@ public class PostFragment extends SuperChatPostsFragment {
         setUpNewPostButton();
         setUpFilterButtons();
         setUpReplyListener();
+        setUpPostClickListener();
 
         return view;
     }
@@ -183,5 +187,34 @@ public class PostFragment extends SuperChatPostsFragment {
         Collections.sort(posts, currentComparator);
         adapter.notifyDataSetChanged();
         listView.setSelection(0);
+    }
+
+    /**
+     * Set up long click listener on the messages
+     */
+    private void setUpPostClickListener() {
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Post post = posts.get(position);
+                if (!post.isAnonymous() && !post.isOwnPost(user.getSciper())) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                    AlertDialog dlg = builder.setTitle("Visiter le profil de " + post.getSenderName() + " ?")
+                            .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    DatabaseFactory.getDependency().getUserWithIdOrCreateIt(post.getSenderSciper(), result -> {
+                                        mListener.onFragmentInteraction(CommunicationTag.OPEN_PROFILE_FRAGMENT, result);
+                                    });
+                                }
+                            })
+                            .create();
+                    dlg.setCanceledOnTouchOutside(true);
+                    dlg.show();
+                }
+                return true;
+            }
+        });
     }
 }

@@ -248,4 +248,15 @@ public class Post extends FirebaseStructure {
     public static Comparator<Post> decreasingNbRepliesComparator() {
         return (o1, o2) -> o2.getNbResponses() - o1.getNbResponses();
     }
+
+    /**
+     * Check whether the post has been written by the reader or not
+     *
+     * @param readerSciper The sciper of the reader
+     *
+     * @return Whether the post has been written by the reader or not
+     */
+    public boolean isOwnPost(String readerSciper) {
+        return senderSciper.equals(readerSciper);
+    }
 }
