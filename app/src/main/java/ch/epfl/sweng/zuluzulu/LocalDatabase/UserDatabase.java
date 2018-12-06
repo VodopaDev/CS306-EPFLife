@@ -67,15 +67,7 @@ public class UserDatabase {
                 UserDatabaseContract.FeedEntry.COLUMN_NAME_LAST_NAME
         };
 
-        Cursor cursor = db.query(
-                UserDatabaseContract.FeedEntry.TABLE_NAME,   // The table to query
-                projection,             // The array of columns to return (pass null to get all)
-                null,              // The columns for the WHERE clause
-                null,          // The values for the WHERE clause
-                null,                   // don't group the rows
-                null,                   // don't filter by row groups
-                null               // The sort order
-        );
+        Cursor cursor = db.query(UserDatabaseContract.FeedEntry.TABLE_NAME, projection,null, null, null, null, null);
 
         List<AuthenticatedUser> list = new ArrayList<>();
         while(cursor.moveToNext()) {
