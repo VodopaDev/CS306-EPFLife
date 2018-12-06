@@ -10,7 +10,6 @@ import android.provider.BaseColumns;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
