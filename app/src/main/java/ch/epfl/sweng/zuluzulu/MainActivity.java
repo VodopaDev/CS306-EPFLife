@@ -18,6 +18,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -322,8 +323,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 openFragment(PostFragment.newInstance(user, channel));
                 break;
             case OPEN_REPLY_FRAGMENT:
-                List<Object> receivedData = (List<Object>) data;
-                openFragment(ReplyFragment.newInstance(user, (Channel) receivedData.get(0), (Post) receivedData.get(1)));
+                Pair receivedData = (Pair<Channel, Post>) data;
+                openFragment(ReplyFragment.newInstance(user, (Channel) receivedData.first, (Post) receivedData.second));
                 break;
             case OPEN_WRITE_POST_FRAGMENT:
                 channel = (Channel) data;

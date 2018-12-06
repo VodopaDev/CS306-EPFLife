@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,7 +136,7 @@ public class PostFragment extends SuperChatPostsFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Post post = (Post) messages.get(position);
-                List<Object> data = Arrays.asList(channel, post);
+                Pair data = new Pair(channel, post);
                 mListener.onFragmentInteraction(CommunicationTag.OPEN_REPLY_FRAGMENT, data);
             }
         });
