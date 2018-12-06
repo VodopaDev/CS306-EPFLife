@@ -21,6 +21,7 @@ import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,9 +31,11 @@ import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
+import ch.epfl.sweng.zuluzulu.Structure.SuperMessage;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_POST_FRAGMENT;
+import static ch.epfl.sweng.zuluzulu.Structure.SuperMessage.decreasingTimeComparator;
 
 /**
  * A {@link SuperChatPostsFragment} subclass.
@@ -43,7 +46,6 @@ public class ChatFragment extends SuperChatPostsFragment {
     private Button sendButton;
     private EditText textEdit;
 
-    private List<ChatMessage> messages = new ArrayList<>();
     private ChatMessageArrayAdapter adapter;
 
     public ChatFragment() {
@@ -82,7 +84,7 @@ public class ChatFragment extends SuperChatPostsFragment {
         setUpSendButton();
         setUpEditText();
         setUpPostsButton();
-        setUpMessageClickListener();
+        setUpProfileListener();
 
         return view;
     }
@@ -159,42 +161,8 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Sort the list of messages by time and notify adapter
      */
     private void sortMessages() {
-        Collections.sort(messages, (o1, o2) -> {
-            if (o1.getTime().before(o2.getTime()))
-                return -1;
-            else
-                return 1;
-        });
+        Collections.sort(messages, (Comparator<SuperMessage>) decreasingTimeComparator());
         adapter.notifyDataSetChanged();
         listView.setSelection(adapter.getCount() - 1);
-    }
-
-    /**
-     * Set up long click listener on the messages
-     */
-    private void setUpMessageClickListener() {
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                ChatMessage chatMessage = messages.get(position);
-                if (!chatMessage.isAnonymous() && !chatMessage.isOwnMessage(user.getSciper())) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-                    AlertDialog dlg = builder.setTitle("Visiter le profil de " + chatMessage.getSenderName() + " ?")
-                            .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    DatabaseFactory.getDependency().getUserWithIdOrCreateIt(chatMessage.getSenderSciper(), result -> {
-                                        mListener.onFragmentInteraction(CommunicationTag.OPEN_PROFILE_FRAGMENT, result);
-                                    });
-                                }
-                            })
-                            .create();
-                    dlg.setCanceledOnTouchOutside(true);
-                    dlg.show();
-                }
-                return true;
-            }
-        });
     }
 }

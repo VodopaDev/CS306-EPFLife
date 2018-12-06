@@ -32,22 +32,16 @@ import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
-public class ReplyFragment extends SuperFragment {
-    private static final String ARG_USER = "ARG_USER";
-    private static final String ARG_POST = "ARG_POST";
+public class ReplyFragment extends SuperChatPostsFragment {
+
     private static final int REPLY_MAX_LENGTH = 100;
-    private List<Post> replies = new ArrayList<>();
+
     private Post postOriginal;
     private PostArrayAdapter adapter;
 
-    private ListView listView;
     private EditText replyText;
     private Button sendButton;
     private SwipeRefreshLayout swipeRefreshLayout;
-
-    private AuthenticatedUser user;
-
-    private boolean anonymous;
 
     public ReplyFragment() {
         // Required empty public constructor
@@ -80,8 +74,8 @@ public class ReplyFragment extends SuperFragment {
         sendButton = view.findViewById(R.id.reply_send_button);
         swipeRefreshLayout = view.findViewById(R.id.swiperefresh_replies);
 
-        replies.add(postOriginal);
-        adapter = new PostArrayAdapter(view.getContext(), replies, user);
+        messages.add(postOriginal);
+        adapter = new PostArrayAdapter(view.getContext(), messages, user);
         listView.setAdapter(adapter);
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
@@ -92,7 +86,7 @@ public class ReplyFragment extends SuperFragment {
 
         setUpReplyText();
         setUpSendButton();
-        setUpReplyClickListener();
+        setUpProfileListener();
         loadReplies(false);
 
         return view;
@@ -151,12 +145,12 @@ public class ReplyFragment extends SuperFragment {
      * Refresh the replies by reading in the database
      */
     private void loadReplies(boolean newReply) {
-        replies.clear();
-        replies.add(postOriginal);
+        messages.clear();
+        messages.add(postOriginal);
         DatabaseFactory.getDependency().getRepliesFromPost(postOriginal.getChannelId(), postOriginal.getId(), result -> {
             Log.d("REPLIES", result.size() + " replies");
-            replies.addAll(result);
-            Collections.sort(replies, (o1, o2) -> {
+            messages.addAll(result);
+            Collections.sort(messages, (o1, o2) -> {
                 if (o1.getTime().before(o2.getTime()))
                     return -1;
                 else
@@ -176,34 +170,5 @@ public class ReplyFragment extends SuperFragment {
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
         loadReplies(false);
-    }
-
-    /**
-     * Set up long click listener on the messages
-     */
-    private void setUpReplyClickListener() {
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Post post = replies.get(position);
-                if (!post.isAnonymous() && !post.isOwnPost(user.getSciper())) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-                    AlertDialog dlg = builder.setTitle("Visiter le profil de " + post.getSenderName() + " ?")
-                            .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    DatabaseFactory.getDependency().getUserWithIdOrCreateIt(post.getSenderSciper(), result -> {
-                                        mListener.onFragmentInteraction(CommunicationTag.OPEN_PROFILE_FRAGMENT, result);
-                                    });
-                                }
-                            })
-                            .create();
-                    dlg.setCanceledOnTouchOutside(true);
-                    dlg.show();
-                }
-                return true;
-            }
-        });
     }
 }

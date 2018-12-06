@@ -25,6 +25,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
+import ch.epfl.sweng.zuluzulu.Structure.SuperMessage;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_CHAT_FRAGMENT;
@@ -35,7 +36,6 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_WRITE_POST_FRAGMENT;
  * This fragment is used to display the posts
  */
 public class PostFragment extends SuperChatPostsFragment {
-    private List<Post> posts = new ArrayList<>();
     private PostArrayAdapter adapter;
 
     private Button writePostButton;
@@ -72,20 +72,20 @@ public class PostFragment extends SuperChatPostsFragment {
         postsButton.setEnabled(false);
         postsButton.setBackgroundColor(getResources().getColor(R.color.white));
 
-        adapter = new PostArrayAdapter(view.getContext(), posts, user);
+        adapter = new PostArrayAdapter(view.getContext(), messages, user);
         listView.setAdapter(adapter);
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
 
         anonymous = getActivity().getPreferences(Context.MODE_PRIVATE).getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
-        currentComparator = Post.decreasingTimeComparator();
+        currentComparator = (Comparator<Post>) Post.decreasingTimeComparator();
 
         loadAllPosts();
         setUpChatButton();
         setUpNewPostButton();
         setUpFilterButtons();
         setUpReplyListener();
-        setUpPostClickListener();
+        setUpProfileListener();
 
         return view;
     }
@@ -102,8 +102,8 @@ public class PostFragment extends SuperChatPostsFragment {
      */
     private void loadAllPosts() {
         DatabaseFactory.getDependency().getPostsFromChannel(channel.getId(), result -> {
-            posts.clear();
-            posts.addAll(result);
+            messages.clear();
+            messages.addAll(result);
             sortPostsWithCurrentComparator();
             adapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);
@@ -132,7 +132,7 @@ public class PostFragment extends SuperChatPostsFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Post post = posts.get(position);
+                Post post = (Post) messages.get(position);
                 mListener.onFragmentInteraction(CommunicationTag.OPEN_REPLY_FRAGMENT, post);
             }
         });
@@ -145,7 +145,7 @@ public class PostFragment extends SuperChatPostsFragment {
         filterTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateFilter(Post.decreasingTimeComparator());
+                updateFilter((Comparator<Post>) Post.decreasingTimeComparator());
             }
         });
 
@@ -184,37 +184,8 @@ public class PostFragment extends SuperChatPostsFragment {
      * Sort the posts with the current comparator
      */
     private void sortPostsWithCurrentComparator() {
-        Collections.sort(posts, currentComparator);
+        Collections.sort((List<Post>)(List<?>) messages, currentComparator);
         adapter.notifyDataSetChanged();
         listView.setSelection(0);
-    }
-
-    /**
-     * Set up long click listener on the messages
-     */
-    private void setUpPostClickListener() {
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Post post = posts.get(position);
-                if (!post.isAnonymous() && !post.isOwnPost(user.getSciper())) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-                    AlertDialog dlg = builder.setTitle("Visiter le profil de " + post.getSenderName() + " ?")
-                            .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    DatabaseFactory.getDependency().getUserWithIdOrCreateIt(post.getSenderSciper(), result -> {
-                                        mListener.onFragmentInteraction(CommunicationTag.OPEN_PROFILE_FRAGMENT, result);
-                                    });
-                                }
-                            })
-                            .create();
-                    dlg.setCanceledOnTouchOutside(true);
-                    dlg.show();
-                }
-                return true;
-            }
-        });
     }
 }
