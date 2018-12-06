@@ -9,6 +9,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -22,6 +25,8 @@ public class MenuAsGuestTest {
 
     @Before
     public void openDrawer() {
+        DatabaseFactory.setDependency(new MockedProxy());
+
         // Open the menu
         Utility.openMenu();
     }
