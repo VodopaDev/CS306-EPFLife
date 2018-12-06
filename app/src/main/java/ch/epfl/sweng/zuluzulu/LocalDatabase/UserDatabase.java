@@ -96,10 +96,10 @@ public class UserDatabase {
     }
 
     private AuthenticatedUser createUser(Cursor cursor) {
-        String semester = cursor.getString(
-                cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_SEMESTER));
-        String sciper = cursor.getString(
-                cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_SCIPER));
+        String semester = cursor.getString(cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_SEMESTER));
+
+        String sciper = cursor.getString(cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_SCIPER));
+
         String section = cursor.getString(
                 cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_SECTION));
         String gaspar = cursor.getString(
@@ -110,9 +110,8 @@ public class UserDatabase {
                 cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_FIRST_NAME));
         String email = cursor.getString(
                 cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_EMAIL));
-        System.out.println(email);
-        User.UserBuilder builder = new User.UserBuilder();
-        return builder
+
+        return new User.UserBuilder()
                 .setEmail(email)
                 .setFirst_names(first_name)
                 .setLast_names(last_name)
