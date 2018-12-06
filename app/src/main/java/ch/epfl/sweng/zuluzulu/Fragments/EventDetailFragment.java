@@ -129,7 +129,7 @@ public class EventDetailFragment extends SuperFragment {
         TextView event_category = view.findViewById(R.id.event_detail_category);
         event_category.setText(event.getCategory());
 
-        WebView myWebView = (WebView) view.findViewById(R.id.webview);
+        WebView myWebView = view.findViewById(R.id.webview);
         myWebView.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url){
                 // do your handling codes here, which url is the requested url

@@ -93,6 +93,9 @@ public class ReplyFragment extends SuperFragment {
         return view;
     }
 
+    /**
+     * Set up the listener on the text edit field
+     */
     private void setUpReplyText() {
         replyText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -111,6 +114,9 @@ public class ReplyFragment extends SuperFragment {
         });
     }
 
+    /**
+     * Set up the listener on the send button
+     */
     private void setUpSendButton() {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,7 +125,7 @@ public class ReplyFragment extends SuperFragment {
                         DatabaseFactory.getDependency().getNewPostId(postOriginal.getChannelId()),
                         postOriginal.getChannelId(),
                         postOriginal.getId(),
-                        replyText.getText().toString(),
+                        replyText.getText().toString().trim().replaceAll("([\\n\\r]+\\s*)*$", ""),
                         anonymous ? "" : user.getFirstNames(),
                         user.getSciper(),
                         Timestamp.now().toDate(),
