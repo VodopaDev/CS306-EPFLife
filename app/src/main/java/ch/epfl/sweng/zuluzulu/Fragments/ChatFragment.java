@@ -174,15 +174,14 @@ public class ChatFragment extends SuperChatPostsFragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 ChatMessage chatMessage = messages.get(position);
-                if (!chatMessage.isAnonymous()) {
+                if (!chatMessage.isAnonymous() && !chatMessage.isOwnMessage(user.getSciper())) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
                     AlertDialog dlg = builder.setTitle("Visiter le profil de " + chatMessage.getSenderName() + " ?")
                             .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    String visitedSciper = chatMessage.getSenderSciper();
-                                    DatabaseFactory.getDependency().getUserWithIdOrCreateIt(visitedSciper, result -> {
+                                    DatabaseFactory.getDependency().getUserWithIdOrCreateIt(chatMessage.getSenderSciper(), result -> {
                                         mListener.onFragmentInteraction(CommunicationTag.OPEN_PROFILE_FRAGMENT, result);
                                     });
                                 }
