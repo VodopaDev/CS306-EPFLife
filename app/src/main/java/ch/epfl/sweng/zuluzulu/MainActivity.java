@@ -51,6 +51,7 @@ import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.WritePostFragment;
+import ch.epfl.sweng.zuluzulu.LocalDatabase.UserDatabase;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -88,8 +89,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        // Initialize to guestUser
-        this.user = new User.UserBuilder().buildGuestUser();
+        createUser();
 
         navigationView = initNavigationView();
         initDrawerContent();
@@ -198,6 +198,16 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         return user.isConnected();
     }
 
+    private void createUser() {
+        UserDatabase userDatabase = new UserDatabase(getApplicationContext());
+        AuthenticatedUser localUser = userDatabase.getUser();
+        if (localUser != null) {
+            user = localUser;
+        } else {
+            user = new User.UserBuilder().buildGuestUser();
+        }
+    }
+
     /**
      * Create a new fragment and replace it in the activity
      *
@@ -235,10 +245,13 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 fragment = ProfileFragment.newInstance(((AuthenticatedUser) user).getData());
                 break;
             case R.id.nav_logout:
-                this.user = new User.UserBuilder().buildGuestUser();
+                UserDatabase userDatabase = new UserDatabase(getApplicationContext());
+                userDatabase.delete((AuthenticatedUser) user);
 
                 android.webkit.CookieManager.getInstance().removeAllCookie();
                 GPS.stop();
+
+                user = new User.UserBuilder().buildGuestUser();
 
                 updateMenuItems();
                 fragment = MainFragment.newInstance(user);
@@ -283,6 +296,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case SET_USER:
                 Map<Integer, Object> received = (HashMap<Integer, Object>) data;
                 this.user = (User) received.get(0);
+
+                if (user != null && user.isConnected()) {
+                    UserDatabase userDatabase = new UserDatabase(getApplicationContext());
+                    userDatabase.put((AuthenticatedUser) user);
+                }
+
                 updateMenuItems();
                 break;
             case OPENING_WEBVIEW:
