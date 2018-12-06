@@ -88,7 +88,7 @@ public class ChatFragment extends SuperChatPostsFragment {
             ChatMessage chatMessage = new ChatMessage(
                     DatabaseFactory.getDependency().getNewMessageId(channel.getId()),
                     channel.getId(),
-                    textEdit.getText().toString(),
+                    textEdit.getText().toString().trim().replaceAll("([\\n\\r]+\\s*)*$", ""),
                     Timestamp.now().toDate(),
                     anonymous ? "" : user.getFirstNames(),
                     user.getSciper());
