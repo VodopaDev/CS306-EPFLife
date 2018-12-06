@@ -5,7 +5,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseQuery;
 
-public class QueryMock implements DatabaseQuery{
+public class QueryMock implements DatabaseQuery {
     @Override
     public DatabaseQuery orderBy(String field) {
         return this;

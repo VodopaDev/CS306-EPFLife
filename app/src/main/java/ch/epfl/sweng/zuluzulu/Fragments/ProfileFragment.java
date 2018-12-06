@@ -162,7 +162,7 @@ public class ProfileFragment extends SuperFragment {
             }
         });
 
-        if(askPermissions()) {
+        if (askPermissions()) {
             setBitmapFromStorage();
         }
         TextView gasparView = view.findViewById(R.id.profile_gaspar_text);
@@ -184,15 +184,16 @@ public class ProfileFragment extends SuperFragment {
 
     /**
      * ask permissions for the different resources we use
+     *
      * @return if the permissions are granted
      */
-    private boolean askPermissions(){
+    private boolean askPermissions() {
         boolean storage_write = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         boolean storage_read = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         if (!storage_write) {
-            ActivityCompat.requestPermissions(getActivity() , new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
         } else if (!storage_read) {
-            ActivityCompat.requestPermissions(getActivity() , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
         }
 
         return storage_read && storage_write;
@@ -201,15 +202,14 @@ public class ProfileFragment extends SuperFragment {
     /**
      * download the file from firebase and set it into the imagebutton
      */
-    private void setBitmapFromStorage(){
+    private void setBitmapFromStorage() {
         File localFile = null;
-        try{
-        localFile = File.createTempFile("images", "jpg");
+        try {
+            localFile = File.createTempFile("images", "jpg");
         } catch (IOException e) {
             Log.e("creating temp file", "unable to create a temporary file for intent");
         }
-        if(localFile != null)
-        {
+        if (localFile != null) {
             pathToTemp = localFile.getAbsolutePath();
             pictureRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
@@ -229,6 +229,7 @@ public class ProfileFragment extends SuperFragment {
 
     /**
      * create the file in which we will put the image
+     *
      * @return the file
      * @throws IOException if creation fails
      */
@@ -252,7 +253,7 @@ public class ProfileFragment extends SuperFragment {
      * generates an intent for the camera with the right uri and file
      * so that the camera saves the file in the SD and on the firebaseStorage
      */
-    private void goToCamera(){
+    private void goToCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -278,9 +279,10 @@ public class ProfileFragment extends SuperFragment {
 
     /**
      * helper method that takes a path to a file and scale it to make it fit inside the imagebutton
+     *
      * @param path the path to the file to rescale
      */
-    private void setRescaledImage(String path){
+    private void setRescaledImage(String path) {
         int targetH = pic.getHeight();
 
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -289,7 +291,7 @@ public class ProfileFragment extends SuperFragment {
 
         int photoH = bmOptions.outHeight;
 
-        int scaling = photoH/targetH;
+        int scaling = photoH / targetH;
 
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaling;
@@ -301,6 +303,7 @@ public class ProfileFragment extends SuperFragment {
 
     /**
      * receives the result of the camera activity, set the picture, and upload it to the storage
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -329,7 +332,6 @@ public class ProfileFragment extends SuperFragment {
             });
         }
     }
-
 
 
 }

@@ -88,7 +88,7 @@ public class PostTest {
     }
 
     @Test
-    public void fmapConstructorTest(){
+    public void fmapConstructorTest() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", id1);
         map.put("channel_id", channelId);
@@ -121,7 +121,7 @@ public class PostTest {
     }
 
     @Test
-    public void upvoteDownvote(){
+    public void upvoteDownvote() {
         assertTrue(post1.isUpByUser(currentUserId));
         assertFalse(post1.upvoteWithUser(currentUserId));
         assertFalse(post1.downvoteWithUser(currentUserId));

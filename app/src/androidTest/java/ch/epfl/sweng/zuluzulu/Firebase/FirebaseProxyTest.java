@@ -36,19 +36,22 @@ public class FirebaseProxyTest {
 
     @Test
     public void getAllAssociations() {
-        proxy.getAllAssociations(x -> {});
+        proxy.getAllAssociations(x -> {
+        });
     }
 
     @Test
     public void getAssociationFromId() {
-        proxy.getAssociationFromId("1", x -> {});
+        proxy.getAssociationFromId("1", x -> {
+        });
     }
 
     @Test
     public void getAssociationsFromIds() {
         ArrayList<String> list = new ArrayList();
         list.add("1");
-        proxy.getAssociationsFromIds(list, x -> {});
+        proxy.getAssociationsFromIds(list, x -> {
+        });
     }
 
     @Test
@@ -63,56 +66,66 @@ public class FirebaseProxyTest {
 
     @Test
     public void getAllEvents() {
-        proxy.getAllEvents(x -> {});
+        proxy.getAllEvents(x -> {
+        });
     }
 
     @Test
     public void getEventFromId() {
-        proxy.getEventFromId("1", x -> {});
+        proxy.getEventFromId("1", x -> {
+        });
     }
 
     @Test
     public void getEventsFromIds() {
         ArrayList<String> list = new ArrayList();
         list.add("1");
-        proxy.getEventsFromIds(list, x -> {});
+        proxy.getEventsFromIds(list, x -> {
+        });
     }
 
     @Test
     public void getAllChannels() {
-        proxy.getAllChannels(x -> {});
+        proxy.getAllChannels(x -> {
+        });
     }
 
     @Test
     public void getChannelFromId() {
-        proxy.getChannelFromId("1", x -> {});
+        proxy.getChannelFromId("1", x -> {
+        });
     }
 
     @Test
     public void getChannelsFromIds() {
         ArrayList<String> list = new ArrayList();
         list.add("1");
-        proxy.getChannelsFromIds(list, x -> {});
+        proxy.getChannelsFromIds(list, x -> {
+        });
     }
 
     @Test
     public void getMessagesFromChannel() {
-        proxy.getMessagesFromChannel("1", x -> {});
+        proxy.getMessagesFromChannel("1", x -> {
+        });
     }
 
     @Test
     public void getPostsFromChannel() {
-        proxy.getPostsFromChannel("1", x -> {});
+        proxy.getPostsFromChannel("1", x -> {
+        });
     }
 
     @Test
     public void getRepliesFromPost() {
-        proxy.getRepliesFromPost("1", "1", x -> {});
+        proxy.getRepliesFromPost("1", "1", x -> {
+        });
     }
 
     @Test
     public void updateOnNewMessagesFromChannel() {
-        proxy.updateOnNewMessagesFromChannel("1", x -> {});
+        proxy.updateOnNewMessagesFromChannel("1", x -> {
+        });
     }
 
     @Test
@@ -147,7 +160,8 @@ public class FirebaseProxyTest {
 
     @Test
     public void getUserWithIdOrCreateIt() {
-        proxy.getUserWithIdOrCreateIt("1", x -> {});
+        proxy.getUserWithIdOrCreateIt("1", x -> {
+        });
     }
 
     @Test

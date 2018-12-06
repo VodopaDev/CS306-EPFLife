@@ -16,7 +16,7 @@ public class AssociationsParserTest {
     AssociationsParser parser;
 
     @Before
-    public void init(){
+    public void init() {
         this.parser = new AssociationsParser();
     }
 

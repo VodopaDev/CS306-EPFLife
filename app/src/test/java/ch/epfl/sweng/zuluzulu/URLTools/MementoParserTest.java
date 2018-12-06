@@ -17,7 +17,7 @@ public class MementoParserTest {
     MementoParser parser;
 
     @Before
-    public void init(){
+    public void init() {
         this.parser = new MementoParser();
     }
 

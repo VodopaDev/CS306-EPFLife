@@ -353,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 selectItem(navigationView.getMenu().findItem(R.id.nav_settings));
                 break;
 
-                // Admin
+            // Admin
             case OPEN_MEMENTO:
                 openFragment(MementoFragment.newInstance(user));
                 break;
@@ -396,7 +396,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             }
         }
     }
-
 
 
     /**

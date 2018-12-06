@@ -192,10 +192,10 @@ public class EventDate implements Serializable {
     public String getDateTimeUser() {
         StringBuilder sb = new StringBuilder();
 
-        long nb_hours = (getStartDate().getTime() - new Date().getTime())/3600000;
-        long nb_days = nb_hours/24;
+        long nb_hours = (getStartDate().getTime() - new Date().getTime()) / 3600000;
+        long nb_days = nb_hours / 24;
 
-        if(nb_days <= 30) {
+        if (nb_days <= 30) {
             printTimeRemaining(nb_days, nb_hours, sb);
         } else {
             printDateStart(sb);

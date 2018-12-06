@@ -70,7 +70,7 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
     }
 
     @Test
-    public void sortEventWithTheThreeSimpleSort()  {
+    public void sortEventWithTheThreeSimpleSort() {
         onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
         onView(withId(R.id.event_fragment_checkbox_sort_like)).perform(ViewActions.click());
         onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());

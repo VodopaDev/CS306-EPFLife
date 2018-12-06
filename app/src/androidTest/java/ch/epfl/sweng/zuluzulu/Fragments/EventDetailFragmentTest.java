@@ -31,12 +31,12 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
     }
 
     @Test
-    public void authenticatedCanOpenAnEvent(){
+    public void authenticatedCanOpenAnEvent() {
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.event_fragment_listview)).atPosition(0).perform(click());
         onView(withId(R.id.event_detail_fav)).check(matches(isDisplayed()));
     }
 
-   @Test
+    @Test
     public void authenticatedCanOpenTheChatOfAnEvent() {
         onData(anything()).inAdapterView(withId(R.id.event_fragment_listview)).atPosition(0).perform(click());
         onView(withId(R.id.event_detail_chatRoom)).perform(click());

@@ -184,7 +184,7 @@ public class PostFragment extends SuperChatPostsFragment {
      * Sort the posts with the current comparator
      */
     private void sortPostsWithCurrentComparator() {
-        Collections.sort((List<Post>)(List<?>) messages, currentComparator);
+        Collections.sort((List<Post>) (List<?>) messages, currentComparator);
         adapter.notifyDataSetChanged();
         listView.setSelection(0);
     }

@@ -22,7 +22,7 @@ import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility.ImageLoader;
 
-public class UpcomingEventArrayAdapter extends ArrayAdapter<Event>{
+public class UpcomingEventArrayAdapter extends ArrayAdapter<Event> {
     private static final int id_corresp_layout = R.layout.card_upcoming_event;
 
     private final Context context;

@@ -19,8 +19,7 @@ import static org.junit.Assert.assertTrue;
 public class MainActivityAsUserTest extends TestWithAuthenticatedAndFragment<MainFragment> {
 
     @Override
-    public void initFragment()
-    {
+    public void initFragment() {
         DatabaseFactory.setDependency(new MockedProxy());
 
         fragment = MainFragment.newInstance(user);

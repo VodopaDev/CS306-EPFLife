@@ -68,16 +68,16 @@ abstract public class User implements Serializable {
         this.roles.add(role);
     }
 
-    public List<String> getRoles(){
+    public List<String> getRoles() {
         List<String> result = new ArrayList<>();
-        for(UserRole role: roles)
+        for (UserRole role : roles)
             result.add(role.name());
         return result;
     }
 
-    public void setRoles(List<String> roles){
+    public void setRoles(List<String> roles) {
         this.roles.clear();
-        for(String role: roles)
+        for (String role : roles)
             this.roles.add(UserRole.valueOf(role));
     }
 

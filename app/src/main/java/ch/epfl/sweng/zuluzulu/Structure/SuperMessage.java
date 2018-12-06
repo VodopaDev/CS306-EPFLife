@@ -35,15 +35,25 @@ public abstract class SuperMessage extends FirebaseStructure {
         return senderSciper.equals(readerSciper);
     }
 
-    public String getMessage() { return message; }
+    public String getMessage() {
+        return message;
+    }
 
-    public String getSenderName() { return senderName; }
+    public String getSenderName() {
+        return senderName;
+    }
 
-    public String getSenderSciper() { return senderSciper; }
+    public String getSenderSciper() {
+        return senderSciper;
+    }
 
-    public Date getTime() { return time; }
+    public Date getTime() {
+        return time;
+    }
 
-    public String getChannelId() { return channelId; }
+    public String getChannelId() {
+        return channelId;
+    }
 
     /**
      * Comparator to compare messages with time
