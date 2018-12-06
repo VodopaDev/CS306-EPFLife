@@ -115,7 +115,7 @@ public class MockedProxy implements Proxy {
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(AuthenticatedUser user) {
         //  userMap.put(user.getSciper(), new FirebaseMapDecorator(user.getData()));
     }
 
