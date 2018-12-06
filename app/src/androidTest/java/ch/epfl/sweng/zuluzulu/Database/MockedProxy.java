@@ -115,8 +115,8 @@ public class MockedProxy implements Proxy {
     }
 
     @Override
-    public void updateUser(User user) {
-        //  userMap.put(user.getSciper(), new FirebaseMapDecorator(user.getData()));
+    public void updateUser(AuthenticatedUser user) {
+        userMap.put(user.getSciper(), user);
     }
 
     @Override
@@ -130,6 +130,13 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getAllEvents(OnResult<List<Event>> onResult) {
+        ArrayList<Event> result = new ArrayList<>(eventMap.values());
+
+        onResult.apply(result);
+    }
+
+    @Override
+    public void getEventsFromToday(OnResult<List<Event>> onResult, int limit) {
         ArrayList<Event> result = new ArrayList<>(eventMap.values());
 
         onResult.apply(result);

@@ -8,6 +8,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 public interface Proxy {
@@ -34,11 +35,13 @@ public interface Proxy {
 
     void addReply(Post post);
 
-    void updateUser(User user);
+    void updateUser(AuthenticatedUser user);
 
     void getAllChannels(OnResult<List<Channel>> onResult);
 
     void getAllEvents(OnResult<List<Event>> onResult);
+
+    void getEventsFromToday(OnResult<List<Event>> onResult, int limit);
 
     void getAllAssociations(OnResult<List<Association>> onResult);
 

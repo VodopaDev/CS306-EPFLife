@@ -11,6 +11,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseDocument;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseQuery;
 
 public class CollectionMock implements DatabaseCollection {
     @Override
@@ -40,4 +41,9 @@ public class CollectionMock implements DatabaseCollection {
 
     @Override
     public void addSnapshotListener(@NonNull EventListener<QuerySnapshot> listener) {}
+
+    @Override
+    public DatabaseQuery whereGreaterThan(String field, Object value) {
+        return new QueryMock();
+    }
 }

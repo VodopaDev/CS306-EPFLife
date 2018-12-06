@@ -113,7 +113,7 @@ public class EventFragment extends SuperFragment {
         eventsToFilter = allEvents;
         eventsFiltered = new ArrayList<>();
         event_adapter = new EventArrayAdapter(getContext(), eventsFiltered, mListener, user);
-        currentComparator = Event.nameComparator();
+        currentComparator = Event.dateComparator();
         eventCalendar = Calendar.getInstance();
         fillEventLists();
     }
@@ -146,7 +146,7 @@ public class EventFragment extends SuperFragment {
         checkbox_event_sort_name = view.findViewById(R.id.event_fragment_checkBox_sort_name);
         checkbox_event_sort_date = view.findViewById(R.id.event_fragment_checkBox_sort_date);
         checkbox_event_sort_like = view.findViewById(R.id.event_fragment_checkbox_sort_like);
-        selectClickedCheckbox(checkbox_event_sort_name);
+        selectClickedCheckbox(checkbox_event_sort_date);
 
         event_fragment_from_date = view.findViewById(R.id.event_fragment_from_date);
         event_fragment_to_date = view.findViewById(R.id.event_fragment_to_date);
