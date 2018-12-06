@@ -169,6 +169,9 @@ public class ChatFragment extends SuperChatPostsFragment {
         listView.setSelection(adapter.getCount() - 1);
     }
 
+    /**
+     * Set up long click listener on the messages
+     */
     private void setUpMessageClickListener() {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
