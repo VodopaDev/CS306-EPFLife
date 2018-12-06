@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 fragment = SettingsFragment.newInstance();
                 break;
             case R.id.nav_profile:
-                fragment = ProfileFragment.newInstance(((AuthenticatedUser) user).getData());
+                fragment = ProfileFragment.newInstance(((AuthenticatedUser) user).getData(), true);
                 break;
             case R.id.nav_logout:
                 UserDatabase userDatabase = new UserDatabase(getApplicationContext());
@@ -365,7 +365,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case OPEN_PROFILE_FRAGMENT:
                 Map<String, Object> profileData = data == null ? ((AuthenticatedUser) user).getData() : (Map<String, Object>) data;
-                openFragment(ProfileFragment.newInstance(profileData));
+                boolean profileOwner = profileData.get("sciper").equals(user.getSciper());
+                openFragment(ProfileFragment.newInstance(profileData, profileOwner));
                 selectItem(navigationView.getMenu().findItem(R.id.nav_profile), false);
                 break;
             case OPEN_SETTINGS_FRAGMENT:
@@ -416,7 +417,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             }
         }
     }
-
 
     /**
      * Return the current fragment

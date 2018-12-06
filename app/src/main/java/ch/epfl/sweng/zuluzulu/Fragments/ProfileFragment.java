@@ -53,7 +53,8 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends SuperFragment {
-    private static final String PROFILE_TAG = "PROFILE_TAG";
+    private static final String USER_DATA_TAG = "USER_DATA_TAG";
+    private static final String OWNER_TAG = "OWNER_TAG";
     private static final int CAMERA_CODE = 1234;
     private static final int W_STORAGE_PERM_CODE = 260;
 
@@ -66,6 +67,8 @@ public class ProfileFragment extends SuperFragment {
     private String gaspar;
     private String email;
     private List<String> roles;
+
+    private boolean profileOwner;
 
     private ImageButton pic;
 
@@ -87,9 +90,10 @@ public class ProfileFragment extends SuperFragment {
      * @param userData User data
      * @return A new instance of fragment ProfileFragment.
      */
-    public static ProfileFragment newInstance(Map<String, Object> userData) {
+    public static ProfileFragment newInstance(Map<String, Object> userData, boolean profileOwner) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(PROFILE_TAG, (HashMap) userData);
+        bundle.putBoolean(OWNER_TAG, profileOwner);
+        bundle.putSerializable(USER_DATA_TAG, (HashMap) userData);
 
         // Transmit data
         ProfileFragment profileFragment = new ProfileFragment();
@@ -102,7 +106,8 @@ public class ProfileFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            userData = (Map<String, Object>) getArguments().getSerializable(PROFILE_TAG);
+            userData = (Map<String, Object>) getArguments().getSerializable(USER_DATA_TAG);
+            profileOwner = (Boolean) getArguments().get(OWNER_TAG);
             firstName = (String) userData.get("first_name");
             lastName = (String) userData.get("last_name");
             sciper = (String) userData.get("sciper");
@@ -150,13 +155,11 @@ public class ProfileFragment extends SuperFragment {
 
         user_view.setText(username);
 
-        askPermissions();
-
         pic = view.findViewById(R.id.profile_image);
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (askPermissions()) {
+                if (profileOwner && askPermissions()) {
                     goToCamera();
                 }
             }
@@ -168,10 +171,8 @@ public class ProfileFragment extends SuperFragment {
         TextView gasparView = view.findViewById(R.id.profile_gaspar_text);
         gasparView.setText(gaspar);
 
-
         TextView emailView = view.findViewById(R.id.profile_email_edit);
         emailView.setText(email);
-
 
         TextView sciperView = view.findViewById(R.id.profile_sciper_edit);
         sciperView.setText(sciper);
