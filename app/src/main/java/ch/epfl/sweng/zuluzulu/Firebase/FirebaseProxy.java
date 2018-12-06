@@ -226,11 +226,7 @@ public class FirebaseProxy implements Proxy {
      */
     @Override
     public void getAllEvents(OnResult<List<Event>> onResult) {
-        getAll(eventCollection, onResult, fmap -> {
-            if (fmap.hasFields(Event.requiredFields()))
-                return new Event(fmap);
-            return null;
-        });
+        getEventsFromToday(onResult, 200);
     }
 
     /**
