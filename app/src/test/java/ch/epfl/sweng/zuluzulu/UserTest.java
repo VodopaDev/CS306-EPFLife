@@ -74,7 +74,7 @@ public class UserTest {
         assertEquals(user.getEmail(), "test@epfl.ch");
         assertEquals(user.getSection(), "IN");
         assertEquals(user.getSemester(), "BA5");
-        assertEquals(user.getSciper(), "123456");
+        assertEquals(user.getSciper(), "0");
         assertEquals(user.getGaspar(), "gaspar");
         assertEquals(user.getFirstNames(), "James");
         assertEquals(user.getLastNames(), "Bond");
@@ -127,7 +127,7 @@ public class UserTest {
         User user = Utility.createTestUser();
 
         String expected = "James Bond"
-                + "\nsciper: 123456"
+                + "\nsciper: 0"
                 + "\ngaspar: gaspar"
                 + "\nemail: test@epfl.ch"
                 + "\nsection: IN"
