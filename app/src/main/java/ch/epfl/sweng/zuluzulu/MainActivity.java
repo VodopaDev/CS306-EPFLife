@@ -108,6 +108,13 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (redirectURIwithCode != null) {
             openFragmentWithStringData(LoginFragment.newInstance(), LoginFragment.TAG, redirectURIwithCode);
         } else {
+            // Look if there is a user object set
+            User user = (User) i.getSerializableExtra("user");
+            if (user != null) {
+                this.user = user;
+                updateMenuItems();
+            }
+
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
         }
     }
