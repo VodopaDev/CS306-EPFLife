@@ -61,17 +61,6 @@ public abstract class SuperMessage extends FirebaseStructure {
      * @return Comparator to compare messages with time
      */
     public static Comparator<? extends SuperMessage> decreasingTimeComparator() {
-        return new Comparator<SuperMessage>() {
-            @Override
-            public int compare(SuperMessage o1, SuperMessage o2) {
-                if (o1.getTime() == null) {
-                    System.out.println("o1 null");
-                }
-                if (o2.getTime() == null) {
-                    System.out.println("o2 null");
-                }
-                return o2.getTime().compareTo(o1.getTime());
-            }
-        };
+        return (Comparator<SuperMessage>) (o1, o2) -> o2.getTime().compareTo(o1.getTime());
     }
 }
