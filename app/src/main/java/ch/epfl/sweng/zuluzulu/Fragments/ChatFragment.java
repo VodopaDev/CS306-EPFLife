@@ -144,6 +144,9 @@ public class ChatFragment extends SuperChatPostsFragment {
         });
     }
 
+    /**
+     * Set up the listener on database changes to update the list of messages
+     */
     private void setUpDataOnChangeListener() {
         DatabaseFactory.getDependency().updateOnNewMessagesFromChannel(channel.getId(), result -> {
             messages.clear();

@@ -93,6 +93,9 @@ public class PostFragment extends SuperChatPostsFragment {
         chatButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_CHAT_FRAGMENT, channel));
     }
 
+    /**
+     * Load the posts from the database and notify the adapter of the changes
+     */
     private void loadAllPosts() {
         DatabaseFactory.getDependency().getPostsFromChannel(channel.getId(), result -> {
             posts.clear();
