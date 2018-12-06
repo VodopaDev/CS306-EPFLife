@@ -186,12 +186,6 @@ public class ChatFragment extends SuperChatPostsFragment {
                                     });
                                 }
                             })
-                            .setNegativeButton("Non", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            })
                             .create();
                     dlg.setCanceledOnTouchOutside(true);
                     dlg.show();
