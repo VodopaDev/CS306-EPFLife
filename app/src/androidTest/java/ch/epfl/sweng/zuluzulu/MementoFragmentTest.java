@@ -5,6 +5,8 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.StringReader;
 
+import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.MementoFragment;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
@@ -16,6 +18,7 @@ public class MementoFragmentTest extends TestWithAdminAndFragment<MainFragment> 
 
     @Override
     public void initFragment() {
+        DatabaseFactory.setDependency(new MockedProxy());
     }
 
     @Test

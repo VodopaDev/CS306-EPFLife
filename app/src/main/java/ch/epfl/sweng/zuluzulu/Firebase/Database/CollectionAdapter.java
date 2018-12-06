@@ -47,4 +47,9 @@ public class CollectionAdapter implements DatabaseCollection {
     public void addSnapshotListener(@NonNull EventListener<QuerySnapshot> listener) {
         collection.addSnapshotListener(listener);
     }
+
+    @Override
+    public DatabaseQuery whereGreaterThan(String field, Object value) {
+        return new QueryAdapter(collection.whereGreaterThan(field, value));
+    }
 }

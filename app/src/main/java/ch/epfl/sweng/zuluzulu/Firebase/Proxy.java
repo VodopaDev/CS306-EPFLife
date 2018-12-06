@@ -41,6 +41,8 @@ public interface Proxy {
 
     void getAllEvents(OnResult<List<Event>> onResult);
 
+    void getEventsFromToday(OnResult<List<Event>> onResult, int limit);
+
     void getAllAssociations(OnResult<List<Association>> onResult);
 
     void getChannelsFromIds(List<String> ids, OnResult<List<Channel>> onResult);

@@ -5,6 +5,8 @@ import android.support.test.rule.ActivityTestRule;
 import org.junit.Before;
 import org.junit.Rule;
 
+import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 
 /**
@@ -24,6 +26,8 @@ public abstract class TestWithAuthenticatedUser {
 
     @Before
     public void setUpLogin() {
+        DatabaseFactory.setDependency(new MockedProxy());
+
         this.user = Utility.createTestAuthenticated();
         Utility.addUserToMainIntent(mActivityRule, this.user);
     }
