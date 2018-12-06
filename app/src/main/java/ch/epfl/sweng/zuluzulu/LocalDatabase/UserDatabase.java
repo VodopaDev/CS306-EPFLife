@@ -16,10 +16,19 @@ import ch.epfl.sweng.zuluzulu.User.User;
 public class UserDatabase {
     private final UserDatabaseHelper mDbHelper;
 
+    /**
+     * Create the user database
+     * @param context Activity context
+     */
     public UserDatabase(Context context){
         this.mDbHelper = new UserDatabaseHelper(context);
     }
 
+    /**
+     * put the user to the local databaes
+     * @param user user
+     * @return -1 id error, otherwise the row
+     */
     public long put(AuthenticatedUser user){
         // Gets the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
@@ -37,11 +46,13 @@ public class UserDatabase {
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(UserDatabaseContract.FeedEntry.TABLE_NAME, null, values);
 
-        System.out.println("addded " + newRowId);
-
         return newRowId;
     }
 
+    /**
+     * return the user if in database, null otherwise
+     * @return User or null
+     */
     public AuthenticatedUser getUser() {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
@@ -68,37 +79,7 @@ public class UserDatabase {
 
         List<AuthenticatedUser> list = new ArrayList<>();
         while(cursor.moveToNext()) {
-            System.out.println("HERE");
-            long itemId = cursor.getLong(
-                    cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry._ID));
-            String semester = cursor.getString(
-                    cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_SEMESTER));
-            String sciper = cursor.getString(
-                    cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_SCIPER));
-            String section = cursor.getString(
-                    cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_SECTION));
-            String gaspar = cursor.getString(
-                    cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_GASPAR));
-            String last_name = cursor.getString(
-                    cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_LAST_NAME));
-            String first_name = cursor.getString(
-                    cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_FIRST_NAME));
-            String email = cursor.getString(
-                    cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_EMAIL));
-            System.out.println(email);
-            User.UserBuilder builder = new User.UserBuilder();
-            AuthenticatedUser user = builder
-                    .setEmail(email)
-                    .setFirst_names(first_name)
-                    .setLast_names(last_name)
-                    .setSciper(sciper)
-                    .setSection(section)
-                    .setSemester(semester)
-                    .setGaspar(gaspar)
-                    .setFollowedAssociations(new ArrayList<>())
-                    .setFollowedEvents(new ArrayList<>())
-                    .setFollowedChannels(new ArrayList<>())
-                    .buildAuthenticatedUser();
+            AuthenticatedUser user = createUser(cursor);
 
             if(user != null && user.getSciper().length() >= 5) {
                 list.add(user);
@@ -114,6 +95,42 @@ public class UserDatabase {
         return null;
     }
 
+    private AuthenticatedUser createUser(Cursor cursor) {
+        String semester = cursor.getString(
+                cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_SEMESTER));
+        String sciper = cursor.getString(
+                cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_SCIPER));
+        String section = cursor.getString(
+                cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_SECTION));
+        String gaspar = cursor.getString(
+                cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_GASPAR));
+        String last_name = cursor.getString(
+                cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_LAST_NAME));
+        String first_name = cursor.getString(
+                cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_FIRST_NAME));
+        String email = cursor.getString(
+                cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_EMAIL));
+        System.out.println(email);
+        User.UserBuilder builder = new User.UserBuilder();
+        return builder
+                .setEmail(email)
+                .setFirst_names(first_name)
+                .setLast_names(last_name)
+                .setSciper(sciper)
+                .setSection(section)
+                .setSemester(semester)
+                .setGaspar(gaspar)
+                .setFollowedAssociations(new ArrayList<>())
+                .setFollowedEvents(new ArrayList<>())
+                .setFollowedChannels(new ArrayList<>())
+                .buildAuthenticatedUser();
+    }
+
+    /**
+     * Delete the user from the database
+     * @param user User
+     * @return row on success, or -1
+     */
     public int delete(AuthenticatedUser user){
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 

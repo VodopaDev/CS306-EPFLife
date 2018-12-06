@@ -8,9 +8,6 @@ import org.junit.Test;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.Utility;
 
-import static com.google.common.base.CharMatcher.isNot;
-import static org.junit.Assert.*;
-
 public class UserDatabaseTest {
 
     @Rule
