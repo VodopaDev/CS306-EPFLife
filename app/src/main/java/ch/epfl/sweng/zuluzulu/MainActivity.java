@@ -88,16 +88,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        UserDatabase userDatabase = new UserDatabase(getApplicationContext());
-        AuthenticatedUser local_user = userDatabase.getUser();
-        if(local_user != null){
-            System.out.println("FIND");
-            this.user = local_user;
-        } else {
-            System.out.println("NOT FIND");
-            // Initialize to guestUser
-            this.user = new User.UserBuilder().buildGuestUser();
-        }
+        createUser();
 
         navigationView = initNavigationView();
         initDrawerContent();
@@ -116,6 +107,17 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             }
 
             selectItem(navigationView.getMenu().findItem(R.id.nav_main));
+        }
+    }
+
+    private void createUser() {
+        UserDatabase userDatabase = new UserDatabase(getApplicationContext());
+        AuthenticatedUser local_user = userDatabase.getUser();
+        if(local_user != null){
+            this.user = local_user;
+        } else {
+            // Initialize to guestUser
+            this.user = new User.UserBuilder().buildGuestUser();
         }
     }
 

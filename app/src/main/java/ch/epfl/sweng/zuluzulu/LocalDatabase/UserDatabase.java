@@ -37,7 +37,7 @@ public class UserDatabase {
         values.put(UserDatabaseContract.FeedEntry.COLUMN_NAME_SCIPER, user.getSciper());
         values.put(UserDatabaseContract.FeedEntry.COLUMN_NAME_GASPAR, user.getGaspar());
         values.put(UserDatabaseContract.FeedEntry.COLUMN_NAME_SECTION, user.getSection());
-        values.put(UserDatabaseContract.FeedEntry.COLUMN_NAME_SEMESTER, user.getSection());
+        values.put(UserDatabaseContract.FeedEntry.COLUMN_NAME_SEMESTER, user.getSemester());
         values.put(UserDatabaseContract.FeedEntry.COLUMN_NAME_FIRST_NAME, user.getFirstNames());
         values.put(UserDatabaseContract.FeedEntry.COLUMN_NAME_EMAIL, user.getEmail());
         values.put(UserDatabaseContract.FeedEntry.COLUMN_NAME_LAST_NAME, user.getLastNames());
