@@ -21,4 +21,6 @@ public interface DatabaseCollection {
     String getId();
 
     void addSnapshotListener(@NonNull EventListener<QuerySnapshot> listener);
+
+    DatabaseQuery whereGreaterThan(String field, Object value);
 }

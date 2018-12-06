@@ -134,24 +134,12 @@ public class MainFragment extends SuperFragment {
 
 
     private void fillUpcomingEventLists() {
-        DatabaseFactory.getDependency().getAllEvents(result -> {
+        DatabaseFactory.getDependency().getEventsFromToday(result -> {
             if(result != null) {
-                upcoming_events.clear();
-                List<Event> temp = new ArrayList<>(result);
-                for (Event e : temp) {
-                    if (e.getStartDate().compareTo(new Date()) <= 0) {
-                        result.remove(e);
-                    }
-                }
-                Collections.sort(result, currentComparator);
-                if (result.size() > 2) {
-                    result = new ArrayList<>(result.subList(0, 2));
-                }
-
                 upcoming_events.addAll(result);
                 event_adapter.notifyDataSetChanged();
             }
-        });
+        }, 3);
     }
 
     private void sortWithCurrentComparator() {

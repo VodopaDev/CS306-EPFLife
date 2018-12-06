@@ -82,7 +82,7 @@ public class EventDetailFragment extends SuperFragment {
         event_like.setText(String.valueOf(event.getLikes()));
 
         // Favorite button
-        event_like_button = view.findViewById(R.id.event_detail_like);
+        event_like_button = view.findViewById(R.id.event_detail_like_button);
         setLikeButtonBehaviour();
 
         TextView event_desc = view.findViewById(R.id.event_detail_desc);
@@ -127,8 +127,8 @@ public class EventDetailFragment extends SuperFragment {
         ImageLoader.loadUriIntoImageView(view.findViewById(R.id.event_detail_icon), event.getIconUri(), getContext());
         ImageLoader.loadUriIntoImageView(view.findViewById(R.id.event_detail_banner), event.getBannerUri(), getContext());
 
-        channelButton = view.findViewById(R.id.event_detail_channel);
-        associationButton = view.findViewById(R.id.event_detail_association);
+        channelButton = view.findViewById(R.id.event_detail_chatRoom);
+        associationButton = view.findViewById(R.id.event_detail_but_assos);
         loadChannel();
         loadAssociation();
 
@@ -148,12 +148,14 @@ public class EventDetailFragment extends SuperFragment {
                 if (auth.isFollowedEvent(event.getId())) {
                     auth.removeFollowedEvent(event.getId());
                     auth.removeFollowedChannel(event.getChannelId());
+                    event.removeFollower(user.getSciper());
                     DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event, auth);
                     DatabaseFactory.getDependency().removeChannelFromUserFollowedChannels(channel, auth);
                     event_like_button.setBackgroundResource(R.drawable.ic_like_24dp);
                 } else {
                     auth.addFollowedEvent(event.getId());
                     auth.addFollowedChannel(event.getChannelId());
+                    event.addFollower(user.getSciper());
                     DatabaseFactory.getDependency().addEventToUserFollowedEvents(event, auth);
                     DatabaseFactory.getDependency().addChannelToUserFollowedChannels(channel, auth);
                     event_like_button.setBackgroundResource(R.drawable.ic_like_already_24dp);
