@@ -6,21 +6,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/main_fragment_followed_associations_text"
+    <LinearLayout
+        android:id="@+id/divider_associations"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/main_fragment_text_favorite_associations"
-        android:textSize="26sp"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp"
         app:layout_constraintBottom_toTopOf="@+id/main_fragment_followed_associations_listview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/main_fragment_followed_associations_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/main_fragment_text_favorite_associations"
+            android:textColor="@color/white"
+            android:textSize="26sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="67dp" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/main_fragment_followed_associations_listview"
@@ -30,26 +38,35 @@
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/main_fragment_followed_events_text"
+        app:layout_constraintBottom_toTopOf="@+id/divider_events"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_fragment_followed_associations_text" />
+        app:layout_constraintTop_toBottomOf="@+id/divider_associations" />
 
-    <TextView
-        android:id="@+id/main_fragment_followed_events_text"
+    <LinearLayout
+        android:id="@+id/divider_events"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/main_fragment_text_favorite_events"
-        android:textSize="26sp"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp"
         app:layout_constraintBottom_toTopOf="@+id/main_fragment_followed_events_listview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_fragment_followed_associations_listview" />
+        app:layout_constraintTop_toBottomOf="@+id/main_fragment_followed_associations_listview">
+
+        <TextView
+            android:id="@+id/main_fragment_followed_events_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/main_fragment_text_favorite_events"
+            android:textColor="@color/white"
+            android:textSize="26sp"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="351dp" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/main_fragment_followed_events_listview"
@@ -62,6 +79,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_fragment_followed_events_text" />
+        app:layout_constraintTop_toBottomOf="@+id/divider_events" />
 
 </android.support.constraint.ConstraintLayout>
