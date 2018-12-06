@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/event_detail_but_assos"
+        app:layout_constraintBottom_toTopOf="@+id/event_detail_association"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -381,7 +381,7 @@
 
 
     <Button
-        android:id="@+id/event_detail_but_assos"
+        android:id="@+id/event_detail_association"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -393,10 +393,10 @@
         android:text="@string/no_association"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/event_detail_chatRoom" />
+        app:layout_constraintStart_toEndOf="@+id/event_detail_channel" />
 
     <Button
-        android:id="@+id/event_detail_chatRoom"
+        android:id="@+id/event_detail_channel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -407,7 +407,7 @@
         android:background="@drawable/chat_message_background"
         android:text="@string/no_chat"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/event_detail_but_assos"
+        app:layout_constraintEnd_toStartOf="@+id/event_detail_association"
         app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

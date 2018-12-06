@@ -26,6 +26,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.Utility.ImageLoader;
 import ch.epfl.sweng.zuluzulu.Utility.Utils;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_ASSOCIATION_DETAIL_FRAGMENT;
@@ -39,7 +40,6 @@ public class EventDetailFragment extends SuperFragment {
     private ImageView event_fav;
     private Event event;
     private User user;
-    private GoogleMap googleMap;
 
     private Button channelButton;
     private Channel channel;
@@ -72,8 +72,6 @@ public class EventDetailFragment extends SuperFragment {
             event = (Event) getArguments().getSerializable(ARG_EVENT);
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, event.getName());
         }
-        loadAssociation();
-        loadChannel();
     }
 
     @Override
@@ -127,21 +125,12 @@ public class EventDetailFragment extends SuperFragment {
         webSettings.setJavaScriptEnabled(true);
         myWebView.loadUrl(event.getUrlPlaceAndRoom());
 
-        // Event icon
-        ImageView event_icon = view.findViewById(R.id.event_detail_icon);
-        Glide.with(getContext())
-                .load(event.getIconUri())
-                .centerCrop()
-                .into(event_icon);
+        // load event icon and banner
+        ImageLoader.loadUriIntoImageView(view.findViewById(R.id.event_detail_icon), event.getIconUri(), getContext());
+        ImageLoader.loadUriIntoImageView(view.findViewById(R.id.event_detail_banner), event.getBannerUri(), getContext());
 
-        ImageView event_banner = view.findViewById(R.id.event_detail_banner);
-        Glide.with(getContext())
-                .load(event.getBannerUri())
-                .centerCrop()
-                .into(event_banner);
-
-        channelButton = view.findViewById(R.id.event_detail_chatRoom);
-        associationButton = view.findViewById(R.id.event_detail_but_assos);
+        channelButton = view.findViewById(R.id.event_detail_channel);
+        associationButton = view.findViewById(R.id.event_detail_association);
         loadChannel();
         loadAssociation();
 
