@@ -59,9 +59,9 @@ public class ChatFragment extends SuperChatPostsFragment {
         postsButton = view.findViewById(R.id.posts_button);
 
         chatButton.setEnabled(false);
-        chatButton.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
+        chatButton.setBackgroundColor(getResources().getColor(R.color.white));
         postsButton.setEnabled(true);
-        postsButton.setBackgroundColor(getResources().getColor(R.color.white));
+        postsButton.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
 
         sendButton.setEnabled(false);
 
@@ -88,7 +88,7 @@ public class ChatFragment extends SuperChatPostsFragment {
             ChatMessage chatMessage = new ChatMessage(
                     DatabaseFactory.getDependency().getNewMessageId(channel.getId()),
                     channel.getId(),
-                    textEdit.getText().toString(),
+                    textEdit.getText().toString().trim().replaceAll("([\\n\\r]+\\s*)*$", ""),
                     Timestamp.now().toDate(),
                     anonymous ? "" : user.getFirstNames(),
                     user.getSciper());
@@ -144,6 +144,9 @@ public class ChatFragment extends SuperChatPostsFragment {
         });
     }
 
+    /**
+     * Set up the listener on database changes to update the list of messages
+     */
     private void setUpDataOnChangeListener() {
         DatabaseFactory.getDependency().updateOnNewMessagesFromChannel(channel.getId(), result -> {
             messages.clear();

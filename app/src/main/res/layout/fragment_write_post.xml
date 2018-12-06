@@ -17,13 +17,13 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="Send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/write_post_textEdit"
-        app:layout_constraintVertical_bias="0.039" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/write_post_textEdit"
@@ -35,8 +35,14 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:fadeScrollbars="false"
         android:gravity="top"
         android:hint="Send a post to all people in this channel. Good vibes only."
+        android:inputType="textMultiLine"
+        android:maxLines="6"
+        android:minLines="1"
+        android:scrollbars="vertical"
+        android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textColorHint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
