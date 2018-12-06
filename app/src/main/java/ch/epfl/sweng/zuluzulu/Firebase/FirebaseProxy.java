@@ -457,11 +457,6 @@ public class FirebaseProxy implements Proxy {
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
-    @Override
-    public void updateUser(User user) {
-
-    }
-
     public void updatePost(Post post) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(post.getChannelId())
@@ -483,6 +478,7 @@ public class FirebaseProxy implements Proxy {
 
     //----- User related methods -----\\
 
+    @Override
     public void updateUser(AuthenticatedUser user) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         userCollection.document(user.getSciper()).set(user.getData());
