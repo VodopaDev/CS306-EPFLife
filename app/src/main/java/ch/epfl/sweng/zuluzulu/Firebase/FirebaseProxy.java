@@ -10,6 +10,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -230,6 +231,30 @@ public class FirebaseProxy implements Proxy {
                 return new Event(fmap);
             return null;
         });
+    }
+
+    /**
+     * Get Events from today ordered by date.
+     *
+     * @param onResult interface defining apply()
+     */
+    @Override
+    public void getEventsFromToday(OnResult<List<Event>> onResult, int limit) {
+        IdlingResourceFactory.incrementCountingIdlingResource();
+
+
+        eventCollection.whereGreaterThan("end_date", new Date()).orderBy("end_date").limit(limit).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            List<Event> resultList = new ArrayList<>();
+            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
+                FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
+                try {
+                    Event event = new Event(fmap);
+                    resultList.add(event);
+                } catch (Exception ignored) {}
+            }
+            onResult.apply(resultList);
+            IdlingResourceFactory.decrementCountingIdlingResource();
+        }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch all"));
     }
 
     /**
