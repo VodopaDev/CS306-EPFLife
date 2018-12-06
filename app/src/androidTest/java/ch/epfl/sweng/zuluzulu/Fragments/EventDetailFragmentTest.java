@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.support.test.espresso.action.ViewActions;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
@@ -10,7 +9,6 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 
-import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 import ch.epfl.sweng.zuluzulu.Utility;
@@ -18,6 +16,7 @@ import ch.epfl.sweng.zuluzulu.Utility;
 import static android.support.test.espresso.Espresso.*;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static junit.framework.TestCase.assertTrue;
@@ -41,17 +40,18 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
 
     @Test
     public void canFollowAndUnfollow(){
-        assertFalse(user.isFollowedEvent("1"));
-        onView(withId(R.id.event_detail_fav)).perform(ViewActions.click());
         assertTrue(user.isFollowedEvent("1"));
-        onView(withId(R.id.event_detail_fav)).perform(ViewActions.click());
+        onView(withId(R.id.event_detail_like))
+                .check(matches(isClickable()))
+                .perform(ViewActions.click());
         assertFalse(user.isFollowedEvent("1"));
+        onView(withId(R.id.event_detail_like)).perform(ViewActions.click());
+        assertTrue(user.isFollowedEvent("1"));
     }
 
     @Test
     public void canExportEvent(){
         onView(withId(R.id.event_detail_export)).perform(ViewActions.click());
-        // TODO: mock the intent
     }
 
     @Test

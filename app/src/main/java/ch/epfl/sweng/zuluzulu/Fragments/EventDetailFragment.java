@@ -12,11 +12,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.google.android.gms.maps.GoogleMap;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
@@ -37,7 +33,8 @@ public class EventDetailFragment extends SuperFragment {
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_EVENT = "ARG_EVENT";
 
-    private ImageView event_fav;
+    private TextView event_like;
+    private Button event_like_button;
     private Event event;
     private User user;
 
@@ -78,14 +75,15 @@ public class EventDetailFragment extends SuperFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_detail, container, false);
 
-        // Favorite button
-        event_fav = view.findViewById(R.id.event_detail_fav);
-        setFavButtonBehaviour();
 
         view.findViewById(R.id.event_detail_export).setOnClickListener(v -> exportEventToCalendar());
 
-        TextView event_like = view.findViewById(R.id.event_detail_tv_numberLikes);
+        event_like = view.findViewById(R.id.event_detail_tv_numberLikes);
         event_like.setText(String.valueOf(event.getLikes()));
+
+        // Favorite button
+        event_like_button = view.findViewById(R.id.event_detail_like);
+        setLikeButtonBehaviour();
 
         TextView event_desc = view.findViewById(R.id.event_detail_desc);
         event_desc.setText(event.getLongDescription());
@@ -138,20 +136,13 @@ public class EventDetailFragment extends SuperFragment {
         return view;
     }
 
-    private void loadFavImage(int drawable) {
-        Glide.with(getContext())
-                .load(drawable)
-                .centerCrop()
-                .into(event_fav);
-    }
-
-    private void setFavButtonBehaviour() {
+    private void setLikeButtonBehaviour() {
         if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event.getId()))
-            loadFavImage(R.drawable.fav_on);
+            event_like_button.setBackgroundResource(R.drawable.ic_like_already_24dp);
         else
-            loadFavImage(R.drawable.fav_off);
+            event_like_button.setBackgroundResource(R.drawable.ic_like_24dp);
 
-        event_fav.setOnClickListener(v -> {
+        event_like_button.setOnClickListener(v -> {
             if (user.isConnected()) {
                 AuthenticatedUser auth = (AuthenticatedUser) user;
                 if (auth.isFollowedEvent(event.getId())) {
@@ -159,14 +150,15 @@ public class EventDetailFragment extends SuperFragment {
                     auth.removeFollowedChannel(event.getChannelId());
                     DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event, auth);
                     DatabaseFactory.getDependency().removeChannelFromUserFollowedChannels(channel, auth);
-                    loadFavImage(R.drawable.fav_off);
+                    event_like_button.setBackgroundResource(R.drawable.ic_like_24dp);
                 } else {
                     auth.addFollowedEvent(event.getId());
                     auth.addFollowedChannel(event.getChannelId());
                     DatabaseFactory.getDependency().addEventToUserFollowedEvents(event, auth);
                     DatabaseFactory.getDependency().addChannelToUserFollowedChannels(channel, auth);
-                    loadFavImage(R.drawable.fav_on);
+                    event_like_button.setBackgroundResource(R.drawable.ic_like_already_24dp);
                 }
+                event_like.setText(String.valueOf(event.getLikes()));
             } else {
                 Utils.showConnectSnackbar(getView());
             }
