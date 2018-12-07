@@ -1,8 +1,11 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import com.google.firebase.Timestamp;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -204,11 +207,30 @@ public class EventDate implements Serializable {
     }
 
     private void printTimeRemaining(long nb_days, long nb_hours, StringBuilder sb) {
+        long nb_hours_end = (getEndDate().getTime() - new Date().getTime())/3600000;
+        long nb_days_end = nb_hours_end/24;
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(Timestamp.now().toDate());
+        int dayActu = calendar.get(Calendar.DAY_OF_MONTH);
+
+        calendar.setTime(getStartDate());
+        int dayOfEvent = calendar.get(Calendar.DAY_OF_MONTH);
+        int hourOfEvent = calendar.get(Calendar.HOUR_OF_DAY);
+        int minuteOfDay = calendar.get(Calendar.MINUTE);
+
         if (nb_days <= 0) {
-            if (nb_hours <= 0)
+            if(nb_hours_end <= 0)
+                sb.append("Terminated");
+            else if(nb_hours <= 0)
                 sb.append("Now");
-            else
-                sb.append("In " + nb_hours + " Hours");
+            else {
+                if(dayActu - dayOfEvent == 0)
+                    sb.append("Today at " + hourOfEvent + "h" + minuteOfDay + " (in " + nb_hours + " Hours)");
+                else
+                    sb.append("Tomorrow at " + hourOfEvent + "h" + minuteOfDay + " (in " + nb_hours + " Hours)");
+            }
         } else
             sb.append("In " + nb_days + " Days");
     }
