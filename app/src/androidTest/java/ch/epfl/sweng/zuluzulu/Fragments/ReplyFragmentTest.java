@@ -10,9 +10,11 @@ import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 import ch.epfl.sweng.zuluzulu.Utility;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
@@ -20,6 +22,9 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.endsWith;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.not;
 
 @RunWith(AndroidJUnit4.class)
@@ -73,4 +78,15 @@ public class ReplyFragmentTest extends TestWithAuthenticatedAndFragment<ReplyFra
         onData(instanceOf(Post.class)).inAdapterView(withId(R.id.reply_list_view)).atPosition(0).onChildView(withId(R.id.post_down_button)).perform(click());
     }
     */
+
+    @Test
+    public void testUserCanReachOtherProfile(){
+        onView(withId(R.id.reply_list_view)).check(matches(isDisplayed()));
+
+        onData(instanceOf(Post.class)).atPosition(0).check(matches(isDisplayed()));
+        onData(instanceOf(Post.class)).atPosition(0).perform(ViewActions.longClick());
+        onView(withText(endsWith("?"))).check(matches(isDisplayed()));
+        onView(withText("Oui")).perform(click());
+        Utility.checkFragmentIsOpen(R.id.profile_fragment);
+    }
 }

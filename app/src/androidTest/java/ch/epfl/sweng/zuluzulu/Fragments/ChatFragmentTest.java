@@ -15,6 +15,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
+import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 import ch.epfl.sweng.zuluzulu.Utility;
 
@@ -73,5 +74,16 @@ public class ChatFragmentTest extends TestWithAuthenticatedAndFragment<ChatFragm
     public void testUserCanSendMessage() {
         onView(withId(R.id.chat_message_edit)).perform(ViewActions.typeText("test")).perform(ViewActions.closeSoftKeyboard());
         onView(withId(R.id.chat_send_button)).perform(ViewActions.click());
+    }
+
+    @Test
+    public void testUserCanReachOtherProfile(){
+        onView(withId(R.id.chat_list_view)).check(matches(isDisplayed()));
+
+        onData(instanceOf(ChatMessage.class)).atPosition(0).check(matches(isDisplayed()));
+        onData(instanceOf(ChatMessage.class)).atPosition(0).perform(ViewActions.longClick());
+        onView(withText(endsWith("?"))).check(matches(isDisplayed()));
+        onView(withText("Oui")).perform(click());
+        Utility.checkFragmentIsOpen(R.id.profile_fragment);
     }
 }
