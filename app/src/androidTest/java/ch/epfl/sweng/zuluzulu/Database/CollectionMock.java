@@ -52,4 +52,9 @@ public class CollectionMock implements DatabaseCollection {
         return new QueryMock();
     }
 
+    @Override
+    public DatabaseQuery orderBy(String field) {
+        return new QueryMock();
+    }
+
 }

@@ -57,4 +57,9 @@ public class CollectionAdapter implements DatabaseCollection {
     public DatabaseQuery whereEqualTo(String field, Object value) {
         return new QueryAdapter(collection.whereEqualTo(field, value));
     }
+
+    @Override
+    public DatabaseQuery orderBy(String field) {
+        return new QueryAdapter(collection.orderBy(field));
+    }
 }

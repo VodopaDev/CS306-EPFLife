@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -25,7 +26,7 @@ public class AssociationDetailFragmentTest extends TestWithAuthenticatedAndFragm
 
     @Test
     public void notFollowedAssociationTest() {
-        onView(withText("Favorites")).perform(ViewActions.click());
+        onView(withText(R.string.fragment_event_button_fav)).perform(ViewActions.click());
         onView(withText("ForumEPFL")).check(doesNotExist());
     }
 }

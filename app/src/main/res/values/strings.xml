@@ -43,8 +43,8 @@
     <string name="fragment_event_search_bar_text">Recherche</string>
 
     <!-- Main related -->
-    <string name="main_fragment_text_favorite_associations">Associations que vous suivez</string>
-    <string name="main_fragment_text_favorite_events">Événements que vous suivez</string>
+    <string name="main_fragment_text_favorite_associations">Associations suivis</string>
+    <string name="main_fragment_text_favorite_events">Événements suivis</string>
 
     <!-- Chat related -->
     <string name="chat_send">Envoyer</string>

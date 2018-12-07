@@ -26,4 +26,6 @@ public interface DatabaseCollection {
     DatabaseQuery whereGreaterThan(String field, Object value);
 
     DatabaseQuery whereEqualTo(String field, Object value);
+
+    DatabaseQuery orderBy(String field);
 }
