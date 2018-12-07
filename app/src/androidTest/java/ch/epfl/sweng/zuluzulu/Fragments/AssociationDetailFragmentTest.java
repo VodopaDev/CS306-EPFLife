@@ -10,23 +10,30 @@ import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
+import ch.epfl.sweng.zuluzulu.Utility;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class AssociationDetailFragmentTest extends TestWithAuthenticatedAndFragment<AssociationFragment> {
+public class AssociationDetailFragmentTest extends TestWithAuthenticatedAndFragment<AssociationDetailFragment> {
 
     @Override
     public void initFragment() {
         DatabaseFactory.setDependency(new MockedProxy());
-        fragment = AssociationFragment.newInstance(user);
+        fragment = AssociationDetailFragment.newInstance(user, Utility.defaultAssociation());
     }
 
     @Test
     public void notFollowedAssociationTest() {
-        onView(withText(R.string.fragment_event_button_fav)).perform(ViewActions.click());
-        onView(withText("ForumEPFL")).check(doesNotExist());
+        onView(withId(R.id.association_detail_fav)).perform(ViewActions.click());
+        onView(withId(R.id.association_detail_fav)).perform(ViewActions.click());
+    }
+
+    @Test
+    public void tchatTest(){
+        onView(withId(R.id.association_detail_chat_name)).perform(ViewActions.click());
     }
 }

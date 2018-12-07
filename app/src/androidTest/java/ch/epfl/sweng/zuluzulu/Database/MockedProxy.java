@@ -223,7 +223,6 @@ public class MockedProxy implements Proxy {
     @Override
     public void getPostsFromChannel(String channelId, OnResult<List<Post>> onResult) {
         //TODO nico il faut ajouter le post dans la liste du channel... mais comment ? ici c'est pas idéal
-
         addPost(defaultPost());
         if(channelId != null && channelMap.containsKey(channelId)){
             ArrayList<Post> result = new ArrayList<>();
