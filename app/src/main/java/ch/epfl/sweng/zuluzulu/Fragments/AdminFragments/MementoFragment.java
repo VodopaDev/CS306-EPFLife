@@ -89,7 +89,7 @@ public class MementoFragment extends SuperFragment {
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Memento loader");
         UrlHandler urlHandler = new UrlHandler(this::handleMemento, new MementoParser());
-        urlHandler.execute(ENAC_MEMENTO_URL, EPFL_MEMENTO_URL, ASSOCIATION_MEMENTO_URL);
+        urlHandler.execute(ASSOCIATION_MEMENTO_URL);
 
         // Send increment to wait async execution in test
         IdlingResourceFactory.incrementCountingIdlingResource();
