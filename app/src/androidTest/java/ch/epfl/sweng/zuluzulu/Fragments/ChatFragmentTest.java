@@ -74,17 +74,4 @@ public class ChatFragmentTest extends TestWithAuthenticatedAndFragment<ChatFragm
         onView(withId(R.id.chat_message_edit)).perform(ViewActions.typeText("test")).perform(ViewActions.closeSoftKeyboard());
         onView(withId(R.id.chat_send_button)).perform(ViewActions.click());
     }
-
-    /*
-    @Test
-    public void testUserCanReachOtherProfile(){
-        onView(withId(R.id.chat_list_view)).check(matches(isDisplayed()));
-
-        onData(instanceOf(ChatMessage.class)).atPosition(0).check(matches(isDisplayed()));
-        onData(instanceOf(ChatMessage.class)).atPosition(0).perform(ViewActions.longClick());
-        onView(withText(endsWith("?"))).check(matches(isDisplayed()));
-        onView(withText("Oui")).perform(click());
-        Utility.checkFragmentIsOpen(R.id.profile_fragment);
-    }
-    */
 }
