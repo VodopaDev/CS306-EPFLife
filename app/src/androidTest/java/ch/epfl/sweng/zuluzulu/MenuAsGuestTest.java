@@ -11,6 +11,8 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
+import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithGuestAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -18,16 +20,18 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class MenuAsGuestTest {
-    @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+public class MenuAsGuestTest extends TestWithGuestAndFragment<MainFragment> {
+
+    @Override
+    public void initFragment() {
+        DatabaseFactory.setDependency(new MockedProxy());
+        fragment = MainFragment.newInstance(user);
+    }
 
     @Before
-    public void openDrawer() {
-        DatabaseFactory.setDependency(new MockedProxy());
-
-        // Open the menu
+    @Override
+    public void init() {
+        super.init();
         Utility.openMenu();
     }
 
@@ -41,10 +45,7 @@ public class MenuAsGuestTest {
 
     @Test
     public void testGuestCanOpenMainFragment() {
-        onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_main));
-
-
+        onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_main));
         Utility.checkFragmentIsOpen(R.id.main_fragment);
     }
 

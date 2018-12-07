@@ -24,7 +24,6 @@ import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Utility.Utils;
 
 
 public class CalendarFragment extends SuperFragment {
@@ -72,7 +71,7 @@ public class CalendarFragment extends SuperFragment {
         followedEvents = new ArrayList<>();
         selectedDayEvents = new ArrayList<>();
         eventAdapter = new EventArrayAdapter(getContext(), selectedDayEvents, mListener, user);
-        Pair<Date, Date> pair = getCurrentDayAndNextDay(Timestamp.now().toDate());
+        Pair<Date, Date> pair = getStartAndEndOfTheDay(Timestamp.now().toDate());
         today = pair.first;
         tomorrow = pair.second;
     }
@@ -99,7 +98,7 @@ public class CalendarFragment extends SuperFragment {
         calendarView.setCalendarListener(new CalendarListener() {
             @Override
             public void onDateSelected(Date date) {
-                Pair<Date, Date> pair = getCurrentDayAndNextDay(date);
+                Pair<Date, Date> pair = getStartAndEndOfTheDay(date);
                 selectedDayEvents.clear();
                 for (Event event : followedEvents) {
                     if (isCurrentlyGoing(event, pair.first, pair.second))
@@ -116,7 +115,7 @@ public class CalendarFragment extends SuperFragment {
         });
         //Set the day decorator
         calendarView.setDecorators(Collections.singletonList(dayView -> {
-            Pair<Date, Date> pair = getCurrentDayAndNextDay(dayView.getDate());
+            Pair<Date, Date> pair = getStartAndEndOfTheDay(dayView.getDate());
             for (Event event : followedEvents) {
                 if (isCurrentlyGoing(event, pair.first, pair.second))
                     dayView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
@@ -149,7 +148,7 @@ public class CalendarFragment extends SuperFragment {
                 (event.getStartDate().before(start) && event.getEndDate().after(end));
     }
 
-    private Pair<Date,Date> getCurrentDayAndNextDay(Date date){
+    private Pair<Date,Date> getStartAndEndOfTheDay(Date date){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH), 0, 0, 1);

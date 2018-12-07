@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Database;
 
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 import android.util.Pair;
 
 import java.util.ArrayList;
@@ -31,16 +32,16 @@ import static ch.epfl.sweng.zuluzulu.Utility.defaultPost;
 public class MockedProxy implements Proxy {
 
     private Map<String, Association> associationMap = new HashMap<String, Association>() {{
-        put("1", Utility.defaultAssociation());
+        put("0", Utility.defaultAssociation());
     }};
 
     private Map<String, Event> eventMap =  new HashMap<String, Event>() {{
-        put("1", Utility.defaultEvent());
+        put("0", Utility.defaultEvent());
     }};
 
 
     private Map<String, ChannelRepresentation> channelMap = new HashMap<String, ChannelRepresentation>() {{
-        put("1", new ChannelRepresentation(Utility.defaultChannel()));
+        put("0", new ChannelRepresentation(Utility.defaultChannel()));
     }};
 
     private Map<String, AuthenticatedUser> userMap = new HashMap<String, AuthenticatedUser>() {{
@@ -155,10 +156,11 @@ public class MockedProxy implements Proxy {
         if(ids == null)
             return;
 
+        Log.d("GET_CHAN", "");
         ArrayList<Channel> result = new ArrayList<>();
         for(ChannelRepresentation channel: channelMap.values())
             if(ids.contains(channel.channel.getId()))
-            result.add(channel.channel);
+                result.add(channel.channel);
         onResult.apply(new ArrayList<>());
     }
 

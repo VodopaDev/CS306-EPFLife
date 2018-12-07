@@ -46,7 +46,7 @@ public class ChangeUserRoleFragmentAsAdminTest extends TestWithAdminAndFragment 
     }
 
     @Test
-    public void canChangeRoleOf123456(){
+    public void canChangeRoleOf0(){
         onData(anything()).inAdapterView(withId(R.id.user_role_list)).atPosition(0).onChildView(withId(R.id.card_user_role_is_admin))
                 .perform(ViewActions.click())
                 .check(matches(isChecked()))

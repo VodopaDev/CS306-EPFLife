@@ -40,14 +40,14 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
 
     @Test
     public void canFollowAndUnfollow(){
-        assertTrue(user.isFollowedEvent("1"));
+        assertTrue(user.isFollowedEvent("0"));
         onView(withId(R.id.event_detail_like_button)).perform(ViewActions.click());
-        assertFalse(user.isFollowedEvent("1"));
+        assertFalse(user.isFollowedEvent("0"));
         onView(withId(R.id.event_detail_like_button)).perform(ViewActions.click());
-        assertTrue(user.isFollowedEvent("1"));
+        assertTrue(user.isFollowedEvent("0"));
     }
 
-	// TODO: need to "mock" the intent
+	// TODO: need to mock the intent
 	/*
     @Test
     public void canExportEvent(){
