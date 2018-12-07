@@ -48,11 +48,12 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
     }
 
 	// TODO: need to "mock" the intent
-	@Ignored
+	/*
     @Test
     public void canExportEvent(){
         onView(withId(R.id.event_detail_export)).perform(ViewActions.click());
     }
+	*/
 
     @Test
     public void canAccessChannel(){
