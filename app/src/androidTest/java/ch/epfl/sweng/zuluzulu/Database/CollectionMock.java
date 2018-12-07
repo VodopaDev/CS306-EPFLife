@@ -46,4 +46,10 @@ public class CollectionMock implements DatabaseCollection {
     public DatabaseQuery whereGreaterThan(String field, Object value) {
         return new QueryMock();
     }
+
+    @Override
+    public DatabaseQuery whereEqualTo(String field, Object value) {
+        return new QueryMock();
+    }
+
 }

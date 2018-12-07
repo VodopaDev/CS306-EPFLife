@@ -7,6 +7,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Date;
 import java.util.Map;
 
 public interface DatabaseCollection {
@@ -23,4 +24,6 @@ public interface DatabaseCollection {
     void addSnapshotListener(@NonNull EventListener<QuerySnapshot> listener);
 
     DatabaseQuery whereGreaterThan(String field, Object value);
+
+    DatabaseQuery whereEqualTo(String field, Object value);
 }
