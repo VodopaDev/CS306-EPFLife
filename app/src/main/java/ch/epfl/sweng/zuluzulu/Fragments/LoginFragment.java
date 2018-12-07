@@ -90,7 +90,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
             finishLogin();
         }
 
-        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Login");
+        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, R.string.action_sign_in);
     }
 
     @Override
