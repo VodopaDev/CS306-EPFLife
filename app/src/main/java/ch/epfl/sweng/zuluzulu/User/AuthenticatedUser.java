@@ -166,7 +166,7 @@ public class AuthenticatedUser extends User {
     }
 
     public Map<String, Object> getData() {
-        ArrayList<String> roles = new ArrayList<>();
+        List<String> roles = new ArrayList<>();
         for (UserRole role : this.roles)
             roles.add(role.name());
 

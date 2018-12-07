@@ -33,7 +33,6 @@ public class MenuAsGuestTest {
 
     @Test
     public void testGuestUserDoesNotSeeEveryOption() {
-        onView(withText("Friends")).check(doesNotExist());
         onView(withText("Chat")).check(doesNotExist());
         onView(withText("Logout")).check(doesNotExist());
         onView(withText("Profile")).check(doesNotExist());
