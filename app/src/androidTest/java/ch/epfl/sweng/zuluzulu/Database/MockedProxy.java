@@ -25,6 +25,7 @@ import ch.epfl.sweng.zuluzulu.Utility;
 import static ch.epfl.sweng.zuluzulu.Utility.createFilledUserBuilder;
 import static ch.epfl.sweng.zuluzulu.Utility.createTestAdmin;
 import static ch.epfl.sweng.zuluzulu.Utility.createTestAuthenticated;
+import static ch.epfl.sweng.zuluzulu.Utility.defaultMessage;
 import static ch.epfl.sweng.zuluzulu.Utility.defaultPost;
 
 public class MockedProxy implements Proxy {
@@ -210,6 +211,7 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult) {
+        addMessage(defaultMessage());
         if(channelId != null && channelMap.containsKey(channelId)){
             ArrayList<ChatMessage> result = new ArrayList<>();
             for (ChatMessage message: channelMap.get(channelId).messageMap.values())

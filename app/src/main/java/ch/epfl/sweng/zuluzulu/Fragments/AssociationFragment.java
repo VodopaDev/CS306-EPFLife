@@ -65,7 +65,7 @@ public class AssociationFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
-            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Associations");
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, getResources().getString(R.string.drawer_associations));
         }
 
 
