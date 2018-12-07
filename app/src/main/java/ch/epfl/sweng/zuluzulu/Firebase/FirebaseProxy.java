@@ -18,6 +18,7 @@ import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseQuery;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.FirebaseFactory;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.MainActivity;
@@ -74,15 +75,14 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * Get all objects T from database
-     *
-     * @param collection from the collection
-     * @param onResult   Called on result
-     * @param creator    Create the object
-     * @param <T>        The object
+     * @param query from the collection
+     * @param onResult Called on result
+     * @param creator Create the object
+     * @param <T> The object
      */
-    private <T> void getAll(DatabaseCollection collection, OnResult<List<T>> onResult, mapToObject<T> creator) {
+    private <T> void getAll(DatabaseQuery query, OnResult<List<T>> onResult, mapToObject<T> creator) {
         IdlingResourceFactory.incrementCountingIdlingResource();
-        collection.get().addOnSuccessListener(queryDocumentSnapshots -> {
+        query.get().addOnSuccessListener(queryDocumentSnapshots -> {
             List<T> resultList = new ArrayList<>();
             for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
                 FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
@@ -168,7 +168,7 @@ public class FirebaseProxy implements Proxy {
      */
     @Override
     public void getAllAssociations(OnResult<List<Association>> onResult) {
-        getAll(assoCollection, onResult, fmap -> {
+        getAll(assoCollection.orderBy("name"), onResult, fmap -> {
             if (fmap.hasFields(Association.requiredFields()))
                 return new Association(fmap);
             return null;
@@ -239,22 +239,11 @@ public class FirebaseProxy implements Proxy {
      */
     @Override
     public void getEventsFromToday(OnResult<List<Event>> onResult, int limit) {
-        IdlingResourceFactory.incrementCountingIdlingResource();
-
-
-        eventCollection.whereGreaterThan("end_date", new Date()).orderBy("end_date").limit(limit).get().addOnSuccessListener(queryDocumentSnapshots -> {
-            List<Event> resultList = new ArrayList<>();
-            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                FirebaseMapDecorator fmap = new FirebaseMapDecorator(snap);
-                try {
-                    Event event = new Event(fmap);
-                    resultList.add(event);
-                } catch (Exception ignored) {
-                }
-            }
-            onResult.apply(resultList);
-            IdlingResourceFactory.decrementCountingIdlingResource();
-        }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch all"));
+        getAll(eventCollection.whereGreaterThan("end_date", new Date()).orderBy("end_date").limit(limit), onResult, fmap -> {
+            if (fmap.hasFields(Event.requiredFields()))
+                return new Event(fmap);
+            return null;
+        });
     }
 
     /**
@@ -319,7 +308,7 @@ public class FirebaseProxy implements Proxy {
      */
     @Override
     public void getAllChannels(OnResult<List<Channel>> onResult) {
-        getAll(channelCollection, onResult, fmap -> {
+        getAll(channelCollection.orderBy("id"), onResult, fmap -> {
             if (fmap.hasFields(Channel.requiredFields()))
                 return new Channel(fmap);
             return null;

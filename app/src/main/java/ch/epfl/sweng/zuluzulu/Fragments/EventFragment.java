@@ -105,7 +105,7 @@ public class EventFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
-            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Events");
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, getResources().getString(R.string.drawer_events));
         }
 
         allEvents = new ArrayList<>();

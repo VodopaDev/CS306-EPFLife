@@ -147,9 +147,9 @@ public class Utility {
         builder.setSemester("BA5");
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
-        builder.setFollowedAssociations(Collections.singletonList("1"));
-        builder.setFollowedEvents(Arrays.asList("1", "2", "3"));
-        builder.setFollowedChannels(Collections.singletonList("1"));
+        builder.setFollowedAssociations(new ArrayList<>(Arrays.asList("1", "2")));
+        builder.setFollowedEvents(new ArrayList<>(Arrays.asList("1", "2", "3")));
+        builder.setFollowedChannels(new ArrayList<>(Arrays.asList("1", "2")));
 
         return builder;
     }

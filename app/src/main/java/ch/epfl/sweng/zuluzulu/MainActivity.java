@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AddEventFragment;
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         navigationView = initNavigationView();
         initDrawerContent();
+
 
         Intent i = getIntent();
 
