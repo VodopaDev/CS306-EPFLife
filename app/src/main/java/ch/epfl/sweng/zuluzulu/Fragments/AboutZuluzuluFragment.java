@@ -40,7 +40,7 @@ public class AboutZuluzuluFragment extends SuperFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "About ZuluZulu");
+        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, getResources().getString(R.string.drawer_about_us));
     }
 
     @Override
