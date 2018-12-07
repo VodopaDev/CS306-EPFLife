@@ -36,6 +36,7 @@ import ch.epfl.sweng.zuluzulu.User.User;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_POST_FRAGMENT;
 import static ch.epfl.sweng.zuluzulu.Structure.SuperMessage.decreasingTimeComparator;
+import static ch.epfl.sweng.zuluzulu.Structure.SuperMessage.increasingTimeComparator;
 
 /**
  * A {@link SuperChatPostsFragment} subclass.
@@ -160,7 +161,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Sort the list of messages by time and notify adapter
      */
     private void sortMessages() {
-        Collections.sort(messages, (Comparator<SuperMessage>) decreasingTimeComparator());
+        Collections.sort(messages, (Comparator<SuperMessage>) increasingTimeComparator());
         adapter.notifyDataSetChanged();
         listView.setSelection(adapter.getCount() - 1);
     }
