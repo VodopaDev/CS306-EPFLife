@@ -1,94 +1,88 @@
 <resources>
     <string name="app_name">EPFLife</string>
     <string name="menu">Menu</string>
-
     <!-- Strings related to login -->
-    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in">Connexion</string>
 
     <!-- Drawer items names -->
-    <string name="drawer_main">Home</string>
+    <string name="drawer_main">Accueil</string>
     <string name="drawer_associations">Associations</string>
     <string name="drawer_chats">Chats</string>
-    <string name="drawer_settings">Settings</string>
+    <string name="drawer_settings">Paramètres</string>
 
-    <string name="drawer_events">Events</string>
-    <string name="drawer_profile">Profile</string>
-    <string name="drawer_logout">Logout</string>
-    <string name="drawer_login">Login</string>
-    <string name="drawer_about_us">About us</string>
+    <string name="drawer_events">Événements</string>
+    <string name="drawer_profile">Profil</string>
+    <string name="drawer_logout">Déconnexion</string>
+    <string name="drawer_login">Connexion</string>
+    <string name="drawer_about_us">À propos</string>
 
-    <string name="version">Version:</string>
-    <string name="author">Developed by:</string>
-    <string name="contact">Contact:</string>
-    <string name="support">Support:</string>
+    <string name="version">Version :</string>
+    <string name="author">Créée par :</string>
+    <string name="contact">Contact :</string>
+    <string name="support">Support :</string>
     <string name="Group">ZuluZulu</string>
     <string name="numVersion">Alpha</string>
-    <string name="drawer_associations_generator">Fill the associations</string>
+    <string name="drawer_associations_generator">Ajouter des associations</string>
 
     <string name="contactEmail">zuluzulu@epfl.ch</string>
     <string name="supportEmail">EPFLife@epfl.ch</string>
 
     <!-- AssociationFragment related -->
-    <string name="fragment_assos_button_all">All</string>
-    <string name="fragment_assos_button_fav">Favorites</string>
+    <string name="fragment_assos_button_all">Tout voir</string>
+    <string name="fragment_assos_button_fav">Favoris</string>
     <string name="card_association_image_description">Association\'s icon</string>
 
     <!-- Event related -->
-    <string name="fragment_event_button_all">All</string>
-    <string name="fragment_event_button_fav">Favorites</string>
+    <string name="fragment_event_button_all">Tout voir</string>
+    <string name="fragment_event_button_fav">Favoris</string>
     <string name="fragment_event_checkbox_sort_likes">Like</string>
-    <string name="fragment_event_checkbox_sort_name">Name</string>
+    <string name="fragment_event_checkbox_sort_name">Nom</string>
     <string name="fragment_event_checkbox_sort_date">Date</string>
-    <string name="card_event_image_description">Picture</string>
+    <string name="card_event_image_description">Photo</string>
     <string name="fragment_event_like_button">Like</string>
-    <string name="fragment_event_search_bar_text">Search</string>
+    <string name="fragment_event_search_bar_text">Recherche</string>
 
     <!-- Main related -->
-    <string name="main_fragment_text_favorite_associations">Followed associations</string>
-    <string name="main_fragment_text_favorite_events">Followed events</string>
+    <string name="main_fragment_text_favorite_associations">Associations que vous suivez</string>
+    <string name="main_fragment_text_favorite_events">Événements que vous suivez</string>
 
     <!-- Chat related -->
-    <string name="chat_send">Send</string>
+    <string name="chat_send">Envoyer</string>
     <string name="chat_message">Message</string>
 
     <!-- Settings related -->
     <string name="settings_dark_mode">Dark Theme</string>
-    <string name="settings_notifications">Receive notifications</string>
-    <string name="settings_clear_cache">Clear cache</string>
-    <string name="settings_clear_cache_button">Clear</string>
+    <string name="settings_notifications">Recevoir les notifications</string>
+    <string name="settings_clear_cache">Supprimer le cache</string>
+    <string name="settings_clear_cache_button">Supprimer</string>
 
     <!-- Profile related -->
     <string name="profile_gaspar">Gaspar</string>
     <string name="profile_email">Email</string>
     <string name="profile_sciper">Sciper</string>
-    <string name="association_detail_fav_button">Click to set association in favorites (or not)</string>
-
-
+    <string name="association_detail_fav_button">Cliquez pour ajouter l\'association au favoris</string>
     <!-- Main fragment related -->
 
     <!-- ABOUT ZUZULULU fragment -->
-    <string name="send_mail_button">SEND US AN EMAIL !</string>
+    <string name="send_mail_button">Nous envoyer un émail !</string>
     <string name="profile_unit">Section</string>
     <string name="posts">Posts</string>
     <string name="chat">Chat</string>
-    <string name="channel_icon">Channel icon</string>
-    <string name="anonymity">Anonymity</string>
+    <string name="channel_icon">Icon du channel</string>
+    <string name="anonymity">Annonymat</string>
     <string name="event_detail_like">Likes:</string>
-    <string name="event_detail_tv_desc">Description:</string>
+    <string name="event_detail_tv_desc">Description :</string>
     <string name="event_detail_tv_date">Date:</string>
     <string name="event_detail_tv_organizer">Organisateur :</string>
-    <string name="event_detail_tv_place">Place:</string>
+    <string name="event_detail_tv_place">Lieux :</string>
 
 
-    <string name="drawer_calendar">Calendar</string>
+    <string name="drawer_calendar">Calendrier</string>
     <string name="fragment_assos_sort_id">ID</string>
-    <string name="fragment_assos_sort_name">Name</string>
+    <string name="fragment_assos_sort_name">Nom</string>
 
-    <string name="icon_button_go">Load icons</string>
-    <string name="no_association_found">No association</string>
-    <string name="generator_association_name">Name of the association</string>
+    <string name="generator_association_name">Nom de l\'association</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nav_memento">Memento</string>
     <string name="like_icon">Like icon</string>
     <string name="event_detail_speaker">Speaker :</string>
@@ -97,9 +91,8 @@
     <string name="event_detail_tv_category">Type d\'événement :</string>
     <string name="event_detail_tv_plan">Plan :</string>
 
-    <string name="drawer_admin_panel">Admin Panel</string>
+    <string name="drawer_admin_panel">Accès administrateur</string>
     <string name="user_role_searchbar_hint">User sciper</string>
-    <string name="main_page_upcoming_event">Upcoming Events</string>
-    <string name="main_page_random_assos">Random Association</string>
-
+    <string name="main_page_upcoming_event">Prochains événements</string>
+    <string name="main_page_random_assos">Association à découvrir</string>
 </resources>
