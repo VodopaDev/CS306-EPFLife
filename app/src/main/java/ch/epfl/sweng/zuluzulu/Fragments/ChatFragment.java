@@ -139,7 +139,6 @@ public class ChatFragment extends SuperChatPostsFragment {
      */
     private void loadInitialMessages() {
         DatabaseFactory.getDependency().getMessagesFromChannel(channel.getId(), result -> {
-            Log.d("TEST", result.size() + " messages");
             messages.clear();
             messages.addAll(result);
             sortMessages();
