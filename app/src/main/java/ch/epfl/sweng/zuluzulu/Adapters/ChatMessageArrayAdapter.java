@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.R;
@@ -45,6 +47,16 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<SuperMessage> {
         LinearLayout messageContent = view.findViewById(R.id.chat_message_content);
         TextView message = view.findViewById(R.id.chat_message_msg);
         TextView senderName = view.findViewById(R.id.chat_message_senderName);
+        TextView timeView = view.findViewById(R.id.chat_message_time);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentChatMessage.getTime());
+        Date beginofday =
+        int day = calendar.get(Calendar.)
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        String time = hour + ":" + minute;
+        timeView.setText(time);
 
         int backgroundResource = isOwnMessage ? R.drawable.chat_message_background_ownmessage : R.drawable.chat_message_background;
         messageContent.setBackgroundResource(backgroundResource);
