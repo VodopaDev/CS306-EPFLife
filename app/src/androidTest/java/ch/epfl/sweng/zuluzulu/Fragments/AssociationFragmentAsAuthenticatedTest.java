@@ -18,8 +18,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class AssociationFragmentAsAuthenticatedTest extends TestWithAuthenticatedAndFragment<AssociationFragment> {
 
     @Override
-    public void initFragment()
-    {
+    public void initFragment() {
         DatabaseFactory.setDependency(new MockedProxy());
 
         fragment = AssociationFragment.newInstance(user);

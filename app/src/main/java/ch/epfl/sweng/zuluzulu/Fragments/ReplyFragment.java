@@ -1,16 +1,19 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -22,37 +25,34 @@ import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.PostArrayAdapter;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
-public class ReplyFragment extends SuperFragment {
-    private static final String ARG_USER = "ARG_USER";
-    private static final String ARG_POST = "ARG_POST";
+public class ReplyFragment extends SuperChatPostsFragment {
+
     private static final int REPLY_MAX_LENGTH = 100;
-    private List<Post> replies = new ArrayList<>();
+
     private Post postOriginal;
     private PostArrayAdapter adapter;
 
-    private ListView listView;
     private EditText replyText;
     private Button sendButton;
     private SwipeRefreshLayout swipeRefreshLayout;
-
-    private AuthenticatedUser user;
-
-    private boolean anonymous;
 
     public ReplyFragment() {
         // Required empty public constructor
     }
 
-    public static ReplyFragment newInstance(User user, Post postOriginal) {
+    public static ReplyFragment newInstance(User user, Channel channel, Post postOriginal) {
         ReplyFragment fragment = new ReplyFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);
+        args.putSerializable(ARG_CHANNEL, channel);
         args.putSerializable(ARG_POST, postOriginal);
         fragment.setArguments(args);
         return fragment;
@@ -62,7 +62,6 @@ public class ReplyFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
             postOriginal = (Post) getArguments().getSerializable(ARG_POST);
         }
     }
@@ -76,8 +75,8 @@ public class ReplyFragment extends SuperFragment {
         sendButton = view.findViewById(R.id.reply_send_button);
         swipeRefreshLayout = view.findViewById(R.id.swiperefresh_replies);
 
-        replies.add(postOriginal);
-        adapter = new PostArrayAdapter(view.getContext(), replies, user);
+        messages.add(postOriginal);
+        adapter = new PostArrayAdapter(view.getContext(), messages, user);
         listView.setAdapter(adapter);
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
@@ -88,6 +87,7 @@ public class ReplyFragment extends SuperFragment {
 
         setUpReplyText();
         setUpSendButton();
+        setUpProfileListener();
         loadReplies(false);
 
         return view;
@@ -146,12 +146,12 @@ public class ReplyFragment extends SuperFragment {
      * Refresh the replies by reading in the database
      */
     private void loadReplies(boolean newReply) {
-        replies.clear();
-        replies.add(postOriginal);
+        messages.clear();
+        messages.add(postOriginal);
         DatabaseFactory.getDependency().getRepliesFromPost(postOriginal.getChannelId(), postOriginal.getId(), result -> {
             Log.d("REPLIES", result.size() + " replies");
-            replies.addAll(result);
-            Collections.sort(replies, (o1, o2) -> {
+            messages.addAll(result);
+            Collections.sort(messages, (o1, o2) -> {
                 if (o1.getTime().before(o2.getTime()))
                     return -1;
                 else

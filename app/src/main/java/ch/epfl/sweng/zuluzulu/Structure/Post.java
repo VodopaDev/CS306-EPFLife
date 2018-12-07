@@ -14,28 +14,18 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 /**
  * Class that represents a post in a view
  */
-public class Post extends FirebaseStructure {
+public class Post extends SuperMessage {
 
-    private String senderName;
-    private String senderSciper;
-    private String message;
-    private Date time;
     private String color;
     private int nbUps;
     private int nbResponses;
     private List<String> upScipers;
     private List<String> downScipers;
-    private String channelId;
     private String originalPostId;
 
     public Post(String id, String channelId, String originalPostId, String message, String senderName, String senderSciper, Date time, String color, int nbResponses, int nbUps, List<String> upScipers, List<String> downScipers) {
-        super(id);
-        this.channelId = channelId;
+        super(id, channelId, message, senderName, senderSciper, time);
         this.originalPostId = originalPostId;
-        this.message = message;
-        this.senderName = senderName;
-        this.senderSciper = senderSciper;
-        this.time = time;
         this.color = color;
         this.nbResponses = nbResponses;
 
@@ -68,42 +58,6 @@ public class Post extends FirebaseStructure {
     }
 
     /**
-     * Getter for the sender name
-     *
-     * @return the sender name
-     */
-    public String getSenderName() {
-        return senderName;
-    }
-
-    /**
-     * Getter for the senderSciper
-     *
-     * @return the senderSciper
-     */
-    public String getSenderSciper() {
-        return senderSciper;
-    }
-
-    /**
-     * Getter for the message
-     *
-     * @return the message
-     */
-    public String getMessage() {
-        return message;
-    }
-
-    /**
-     * Getter for post creation time
-     *
-     * @return the creation time
-     */
-    public Date getTime() {
-        return time;
-    }
-
-    /**
      * Getter for the color
      *
      * @return the color
@@ -131,15 +85,6 @@ public class Post extends FirebaseStructure {
     }
 
     /**
-     * Getter for anonymous
-     *
-     * @return Whether the post is anonymous or not
-     */
-    public boolean isAnonymous() {
-        return senderName.isEmpty();
-    }
-
-    /**
      * Getter for upByUser
      *
      * @return whether the user has liked this post or not
@@ -155,10 +100,6 @@ public class Post extends FirebaseStructure {
      */
     public boolean isDownByUser(String userID) {
         return downScipers.contains(userID);
-    }
-
-    public String getChannelId() {
-        return channelId;
     }
 
     /**
@@ -220,15 +161,6 @@ public class Post extends FirebaseStructure {
      */
     public String getOriginalPostId() {
         return originalPostId;
-    }
-
-    /**
-     * Comparator to compare posts with time
-     *
-     * @return Comparator to compare posts with time
-     */
-    public static Comparator<Post> decreasingTimeComparator() {
-        return (o1, o2) -> o2.getTime().compareTo(o1.getTime());
     }
 
     /**

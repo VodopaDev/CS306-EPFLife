@@ -39,7 +39,7 @@ public abstract class TestWithUserAndFragment<U extends User, F extends SuperFra
         mActivityRule.getActivity().openFragment(fragment);
     }
 
-    public MainActivity getMainActivity(){
+    public MainActivity getMainActivity() {
         return mActivityRule.getActivity();
     }
 

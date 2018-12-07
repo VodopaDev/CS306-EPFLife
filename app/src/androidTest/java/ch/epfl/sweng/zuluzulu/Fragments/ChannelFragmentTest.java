@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
+
 import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.R;
@@ -25,7 +26,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 
 @RunWith(AndroidJUnit4.class)
 public class ChannelFragmentTest extends TestWithAuthenticatedAndFragment<ChannelFragment> {
-    
+
     @Override
     public void initFragment() {
         DatabaseFactory.setDependency(new MockedProxy());

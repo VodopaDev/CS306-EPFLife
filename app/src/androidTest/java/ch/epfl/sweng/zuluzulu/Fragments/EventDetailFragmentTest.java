@@ -35,7 +35,7 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
         onView(withId(R.id.event_detail_fav)).perform(click());
     }
 
-   @Test
+    @Test
     public void authenticatedCanOpenTheChatOfAnEvent() {
         onView(withId(R.id.event_detail_chatRoom)).perform(click());
         Utility.checkFragmentIsOpen(R.id.chat_fragment);

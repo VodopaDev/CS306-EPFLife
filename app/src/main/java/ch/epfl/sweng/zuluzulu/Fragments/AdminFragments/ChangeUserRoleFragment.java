@@ -37,7 +37,8 @@ public class ChangeUserRoleFragment extends SuperFragment {
 
     private TextView searchBar;
 
-    public ChangeUserRoleFragment() {}
+    public ChangeUserRoleFragment() {
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -73,14 +74,15 @@ public class ChangeUserRoleFragment extends SuperFragment {
         userRoleListview.setAdapter(adapter);
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 filteredUsers.clear();
-                for(Map<String, Object> map: allUsers){
-                    String sciper = (String)map.get("sciper");
-                    if(sciper != null && sciper.contains(s))
+                for (Map<String, Object> map : allUsers) {
+                    String sciper = (String) map.get("sciper");
+                    if (sciper != null && sciper.contains(s))
                         filteredUsers.add(map);
                 }
                 adapter = new UserRoleArrayAdapter(getContext(), filteredUsers, mListener);
@@ -88,7 +90,8 @@ public class ChangeUserRoleFragment extends SuperFragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         return view;
@@ -101,7 +104,7 @@ public class ChangeUserRoleFragment extends SuperFragment {
             allUsers.addAll(result);
             Collections.sort(allUsers, ((o1, o2) -> {
                 assert (o1.containsKey("sciper") && o2.containsKey("sciper"));
-                return Integer.parseInt((String)o1.get("sciper")) - Integer.parseInt((String) o2.get("sciper"));
+                return Integer.parseInt((String) o1.get("sciper")) - Integer.parseInt((String) o2.get("sciper"));
             }));
             filteredUsers.addAll(allUsers);
             adapter.notifyDataSetChanged();
