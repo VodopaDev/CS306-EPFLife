@@ -218,21 +218,21 @@ public class EventDate implements Serializable {
         calendar.setTime(getStartDate());
         int dayOfEvent = calendar.get(Calendar.DAY_OF_MONTH);
         int hourOfEvent = calendar.get(Calendar.HOUR_OF_DAY);
-        int minuteOfDay = calendar.get(Calendar.MINUTE);
+        String minuteOfDay = String.format("%02d", calendar.get(Calendar.MINUTE));
 
         if (nb_days <= 0) {
             if(nb_hours_end <= 0)
-                sb.append("Terminated");
+                sb.append("Terminé");
             else if(nb_hours <= 0)
-                sb.append("Now");
+                sb.append("Maintenant");
             else {
                 if(dayActu - dayOfEvent == 0)
-                    sb.append("Today at " + hourOfEvent + "h" + minuteOfDay + " (in " + nb_hours + " Hours)");
+                    sb.append("Aujourd'hui à " + hourOfEvent + "h" + minuteOfDay + " (dans " + nb_hours + " heures)");
                 else
-                    sb.append("Tomorrow at " + hourOfEvent + "h" + minuteOfDay + " (in " + nb_hours + " Hours)");
+                    sb.append("Demain à " + hourOfEvent + "h" + minuteOfDay + " (dans " + nb_hours + " heures)");
             }
         } else
-            sb.append("In " + nb_days + " Days");
+            sb.append("Dans " + nb_days + " jours");
     }
 
     private void printDateStart(StringBuilder sb) {
