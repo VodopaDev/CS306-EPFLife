@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.Adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,14 +50,17 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<SuperMessage> {
         TextView senderName = view.findViewById(R.id.chat_message_senderName);
         TextView timeView = view.findViewById(R.id.chat_message_time);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentChatMessage.getTime());
-        Date beginofday =
-        int day = calendar.get(Calendar.)
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        String time = hour + ":" + minute;
-        timeView.setText(time);
+        boolean sameDay = DateUtils.isToday(currentChatMessage.getTime().getTime());
+        if (sameDay) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(currentChatMessage.getTime());
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
+            String time = hour + ":" + minute;
+            timeView.setText(time);
+        } else {
+            timeView.setVisibility(View.GONE);
+        }
 
         int backgroundResource = isOwnMessage ? R.drawable.chat_message_background_ownmessage : R.drawable.chat_message_background;
         messageContent.setBackgroundResource(backgroundResource);

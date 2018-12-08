@@ -52,7 +52,8 @@
                 android:layout_weight="0.2"
                 android:inputType="time"
                 android:text="12:00"
-                android:textColor="@color/colorGrayDarkTransparent" />
+                android:textColor="@color/colorGrayDarkTransparent"
+                android:textSize="12sp" />
 
         </LinearLayout>
 
