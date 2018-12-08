@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Database;
 
-import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 import android.util.Pair;
 
@@ -10,24 +9,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
 import ch.epfl.sweng.zuluzulu.Firebase.Proxy;
-import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
-import ch.epfl.sweng.zuluzulu.User.Admin;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility;
 
 import static ch.epfl.sweng.zuluzulu.Utility.createFilledUserBuilder;
-import static ch.epfl.sweng.zuluzulu.Utility.createTestAdmin;
 import static ch.epfl.sweng.zuluzulu.Utility.createTestAuthenticated;
-import static ch.epfl.sweng.zuluzulu.Utility.defaultMessage;
 import static ch.epfl.sweng.zuluzulu.Utility.defaultPost;
 
 public class MockedProxy implements Proxy {
@@ -42,7 +36,11 @@ public class MockedProxy implements Proxy {
 
 
     private Map<String, ChannelRepresentation> channelMap = new HashMap<String, ChannelRepresentation>() {{
-        put("0", new ChannelRepresentation(Utility.defaultChannel()));
+        ChannelRepresentation rep = new ChannelRepresentation(Utility.defaultChannel());
+        rep.messageMap.put("0", Utility.defaultMessage0());
+        rep.messageMap.put("1", Utility.defaultMessage1());
+        rep.postMap.put("0", new Pair<>(defaultPost(), new HashMap<>()));
+        put("0", rep);
     }};
 
     private Map<String, AuthenticatedUser> userMap = new HashMap<String, AuthenticatedUser>() {{
@@ -214,7 +212,6 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult) {
-        addMessage(defaultMessage());
         if(channelId != null && channelMap.containsKey(channelId)) {
             ArrayList<ChatMessage> result = new ArrayList<>();
             for (ChatMessage message : channelMap.get(channelId).messageMap.values())
@@ -226,7 +223,6 @@ public class MockedProxy implements Proxy {
     @Override
     public void getPostsFromChannel(String channelId, OnResult<List<Post>> onResult) {
         //TODO nico il faut ajouter le post dans la liste du channel... mais comment ? ici c'est pas idéal
-        addPost(defaultPost());
         if (channelId != null && channelMap.containsKey(channelId)) {
             ArrayList<Post> result = new ArrayList<>();
             for (Pair<Post, Map<String, Post>> pair : channelMap.get(channelId).postMap.values()) {

@@ -221,7 +221,11 @@ public class Utility {
                 .build();
     }
 
-    public static ChatMessage defaultMessage() {
-        return new ChatMessage("0", "0", "message", new Date(), "sender", "210");
+    public static ChatMessage defaultMessage0() {
+        return new ChatMessage("0", "0", "message?", new Date(2000), "auth", "0");
+    }
+
+    public static ChatMessage defaultMessage1() {
+        return new ChatMessage("1", "0", "message!", new Date(20000), "admin", "1");
     }
 }
