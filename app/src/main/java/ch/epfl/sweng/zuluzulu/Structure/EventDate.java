@@ -12,9 +12,9 @@ import java.util.Date;
  * represent a date of an event
  */
 public class EventDate implements Serializable {
-    private static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
-    private static final String DATE_TIME_READ_HOURS = "yyyy-MM-dd HH:mm";
-    private static final String DATE_TIME_READ_NO_HOURS = "yyyy-MM-dd";
+    private static final String DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm:ss";
+    private static final String DATE_TIME_READ_HOURS = "dd.MM.yyyy HH:mm";
+    private static final String DATE_TIME_READ_NO_HOURS = "dd.MM.yyyy";
 
     private Date startDate;
     private Date endDate;
@@ -224,7 +224,7 @@ public class EventDate implements Serializable {
             if(nb_hours_end <= 0)
                 sb.append("Terminé");
             else if(nb_hours <= 0)
-                sb.append("Maintenant");
+                sb.append("Maintenant - " + dateRemoveZeroHour(getEndDate()));
             else {
                 if(dayActu - dayOfEvent == 0)
                     sb.append("Aujourd'hui à " + hourOfEvent + "h" + minuteOfDay + " (dans " + nb_hours + " heures)");
