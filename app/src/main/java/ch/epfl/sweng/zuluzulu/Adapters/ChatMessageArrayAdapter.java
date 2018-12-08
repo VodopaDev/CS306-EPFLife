@@ -15,15 +15,16 @@ import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
+import ch.epfl.sweng.zuluzulu.Structure.SuperMessage;
 import ch.epfl.sweng.zuluzulu.User.User;
 
-public class ChatMessageArrayAdapter extends ArrayAdapter<ChatMessage> {
+public class ChatMessageArrayAdapter extends ArrayAdapter<SuperMessage> {
 
     private Context mContext;
-    private List<ChatMessage> messages;
+    private List<SuperMessage> messages;
     private User user;
 
-    public ChatMessageArrayAdapter(@NonNull Context context, List<ChatMessage> list, User user) {
+    public ChatMessageArrayAdapter(@NonNull Context context, List<SuperMessage> list, User user) {
         super(context, 0, list);
         mContext = context;
         messages = list;
@@ -33,7 +34,7 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<ChatMessage> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ChatMessage currentChatMessage = messages.get(position);
+        ChatMessage currentChatMessage = (ChatMessage) messages.get(position);
         boolean isOwnMessage = currentChatMessage.isOwnMessage(user.getSciper());
         boolean isAnonymous = currentChatMessage.isAnonymous();
 

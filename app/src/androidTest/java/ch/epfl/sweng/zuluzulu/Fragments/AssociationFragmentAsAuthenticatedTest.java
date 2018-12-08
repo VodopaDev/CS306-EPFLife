@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -17,8 +18,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class AssociationFragmentAsAuthenticatedTest extends TestWithAuthenticatedAndFragment<AssociationFragment> {
 
     @Override
-    public void initFragment()
-    {
+    public void initFragment() {
         DatabaseFactory.setDependency(new MockedProxy());
 
         fragment = AssociationFragment.newInstance(user);
@@ -26,8 +26,8 @@ public class AssociationFragmentAsAuthenticatedTest extends TestWithAuthenticate
 
     @Test
     public void authenticatedCanClickOnFavorites() {
-        onView(withText("Favorites")).perform(ViewActions.click());
-        onView(withText("All")).perform(ViewActions.click());
+        onView(withText(R.string.fragment_assos_button_fav)).perform(ViewActions.click());
+        onView(withText(R.string.fragment_assos_button_all)).perform(ViewActions.click());
 
         /*
         onView(withId(R.id.association_fragment_listview))

@@ -41,9 +41,10 @@ public class Utility {
 
     /**
      * Create a guest user
+     *
      * @return Return a Guest
      */
-    public static Guest createTestGuest(){
+    public static Guest createTestGuest() {
         return (new User.UserBuilder()).buildGuestUser();
     }
 
@@ -58,7 +59,7 @@ public class Utility {
         assert (user != null);
         assert (user.isConnected());
 
-        return (AuthenticatedUser)user;
+        return (AuthenticatedUser) user;
     }
 
     /**
@@ -72,7 +73,7 @@ public class Utility {
         assert (user != null);
         assert (user.hasRole(UserRole.ADMIN));
 
-        return (Admin)user;
+        return (Admin) user;
     }
 
     /**
@@ -146,9 +147,9 @@ public class Utility {
         builder.setSemester("BA5");
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
-        builder.setFollowedAssociations(Collections.singletonList("1"));
-        builder.setFollowedEvents(Arrays.asList("1", "2", "3"));
-        builder.setFollowedChannels(Collections.singletonList("1"));
+        builder.setFollowedAssociations(new ArrayList<>(Arrays.asList("1", "2")));
+        builder.setFollowedEvents(new ArrayList<>(Arrays.asList("1", "2", "3")));
+        builder.setFollowedChannels(new ArrayList<>(Arrays.asList("1", "2")));
 
         return builder;
     }
@@ -185,7 +186,7 @@ public class Utility {
         );
     }
 
-    public static Association defaultAssociation(){
+    public static Association defaultAssociation() {
         return new Association(
                 "1",
                 "Agepoly",
@@ -198,7 +199,7 @@ public class Utility {
         );
     }
 
-    public static Event defaultEvent(){
+    public static Event defaultEvent() {
         return new EventBuilder()
                 .setId("1")
                 .setName("Fiesta time")

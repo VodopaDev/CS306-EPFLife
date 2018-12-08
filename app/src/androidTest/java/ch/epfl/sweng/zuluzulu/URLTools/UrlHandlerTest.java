@@ -149,7 +149,7 @@ public class UrlHandlerTest {
     private Void handler(List<String> result) {
         // Do any logic. Here we want result not to be null
         succes = false;
-        if(result != null && !result.isEmpty()){
+        if (result != null && !result.isEmpty()) {
             succes = result.get(0).toLowerCase().contains("lauzhack");
         }
 

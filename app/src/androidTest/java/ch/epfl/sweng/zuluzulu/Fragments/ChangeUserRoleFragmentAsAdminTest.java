@@ -37,7 +37,7 @@ public class ChangeUserRoleFragmentAsAdminTest extends TestWithAdminAndFragment 
     }
 
     @Test
-    public void filteringIsPossible(){
+    public void filteringIsPossible() {
         onView(withId(R.id.user_role_list)).check(matches(hasChildCount(2)));
         onView(withId(R.id.user_role_searchbar)).perform(ViewActions.typeText("1265"));
         onView(withId(R.id.user_role_list)).check(matches(hasChildCount(0)));
@@ -46,7 +46,7 @@ public class ChangeUserRoleFragmentAsAdminTest extends TestWithAdminAndFragment 
     }
 
     @Test
-    public void canChangeRoleOf123456(){
+    public void canChangeRoleOf123456() {
         onData(anything()).inAdapterView(withId(R.id.user_role_list)).atPosition(0).onChildView(withId(R.id.card_user_role_is_admin))
                 .perform(ViewActions.click())
                 .check(matches(isChecked()))

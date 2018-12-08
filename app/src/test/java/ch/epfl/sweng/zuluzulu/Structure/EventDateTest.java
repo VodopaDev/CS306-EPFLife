@@ -37,7 +37,7 @@ public class EventDateTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void setWithNullEndDate(){
+    public void setWithNullEndDate() {
         new EventDate("1111-11-11", "11:11:11", "1111-11-11", "11:11:11").setEndDate(null);
     }
 
