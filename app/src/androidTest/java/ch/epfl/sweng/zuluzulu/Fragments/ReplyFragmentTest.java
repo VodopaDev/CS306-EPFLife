@@ -84,7 +84,6 @@ public class ReplyFragmentTest extends TestWithAuthenticatedAndFragment<ReplyFra
     public void testUserCanReachOtherProfileThroughReply(){
         onView(withId(R.id.reply_list_view)).check(matches(isDisplayed()));
 
-        onData(instanceOf(Post.class)).atPosition(0).check(matches(isDisplayed()));
         onData(instanceOf(Post.class)).atPosition(0).perform(ViewActions.longClick());
         onView(withText(startsWith(SuperChatPostsFragment.VISIT_PROFILE_STRING))).check(matches(isDisplayed()));
         onView(withText("Oui")).perform(click());
