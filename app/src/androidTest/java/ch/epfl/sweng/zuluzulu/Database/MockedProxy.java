@@ -162,7 +162,7 @@ public class MockedProxy implements Proxy {
         for(String id: ids)
             if(channelMap.containsKey(id))
                 result.add(channelMap.get(id).channel);
-        onResult.apply(new ArrayList<>());
+        onResult.apply(result);
     }
 
     @Override

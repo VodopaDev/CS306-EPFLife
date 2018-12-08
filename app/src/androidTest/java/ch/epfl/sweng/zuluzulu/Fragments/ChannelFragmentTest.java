@@ -49,11 +49,4 @@ public class ChannelFragmentTest extends TestWithAuthenticatedAndFragment<Channe
     public void testUserCanSwipeUp() {
         onView(withId(R.id.channels_list_view)).perform(ViewActions.swipeDown());
     }
-
-    @Test
-    public void testUserCanOpenChannel() throws InterruptedException {
-        onData(instanceOf(Channel.class)).atPosition(0).check(matches(isDisplayed()));
-        onData(instanceOf(Channel.class)).atPosition(0).perform(click());
-        onView(withId(R.id.chat_list_view)).check(matches(isDisplayed()));
-    }
 }
