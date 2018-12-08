@@ -176,7 +176,7 @@ public class Utility {
                 null,
                 "mon message ne sert à rien",
                 "Nico",
-                "0",
+                "1",
                 Timestamp.now().toDate(),
                 "#F0E68C",
                 0,
