@@ -22,6 +22,7 @@ import ch.epfl.sweng.zuluzulu.Utility;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
@@ -30,6 +31,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.StringStartsWith.startsWith;
 
 @RunWith(AndroidJUnit4.class)
 public class ChatFragmentTest extends TestWithAuthenticatedAndFragment<ChatFragment> {
@@ -79,11 +81,18 @@ public class ChatFragmentTest extends TestWithAuthenticatedAndFragment<ChatFragm
     @Test
     public void testUserCanReachOtherProfile(){
         onView(withId(R.id.chat_list_view)).check(matches(isDisplayed()));
-
-        onData(instanceOf(ChatMessage.class)).atPosition(0).check(matches(isDisplayed()));
-        onData(instanceOf(ChatMessage.class)).atPosition(0).perform(ViewActions.longClick());
-        onView(withText(endsWith("?"))).check(matches(isDisplayed()));
+        onData(instanceOf(ChatMessage.class)).atPosition(1).check(matches(isDisplayed()));
+        onData(instanceOf(ChatMessage.class)).atPosition(1).perform(ViewActions.longClick());
+        onView(withText(startsWith(SuperChatPostsFragment.VISIT_PROFILE_STRING))).check(matches(isDisplayed()));
         onView(withText("Oui")).perform(click());
         Utility.checkFragmentIsOpen(R.id.profile_fragment);
+    }
+
+    @Test
+    public void testUserCannotReachOwnProfile(){
+        onView(withId(R.id.chat_list_view)).check(matches(isDisplayed()));
+        onData(instanceOf(ChatMessage.class)).atPosition(0).check(matches(isDisplayed()));
+        onData(instanceOf(ChatMessage.class)).atPosition(0).perform(ViewActions.longClick());
+        onView(withText(startsWith(SuperChatPostsFragment.VISIT_PROFILE_STRING))).check(doesNotExist());
     }
 }
