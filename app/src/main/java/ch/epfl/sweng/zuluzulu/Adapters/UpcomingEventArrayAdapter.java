@@ -82,7 +82,11 @@ public class UpcomingEventArrayAdapter extends ArrayAdapter<Event> {
         }
 
         final Event event = data.get(position);
-        holder.name.setText(event.getName());
+        String nameToPrint = event.getName().length() <= 25 ? event.getName() : event.getName().substring(0, 23) + "...";
+        holder.name.setText(nameToPrint);
+
+        //String descToPrint = event.getShortDescription().length() <= 80 ?
+        //        event.getShortDescription() : event.getShortDescription().substring(0, 80) + "...";
         holder.short_desc.setText(event.getShortDescription());
         ImageLoader.loadUriIntoImageView(holder.icon, event.getIconUri(), getContext());
         holder.likes.setText(String.valueOf(event.getLikes()));
