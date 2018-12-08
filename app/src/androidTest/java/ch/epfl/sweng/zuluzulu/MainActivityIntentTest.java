@@ -8,6 +8,10 @@ import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.LocalDatabase.UserDatabase;
+import ch.epfl.sweng.zuluzulu.LocalDatabase.UserDatabaseContract;
+import ch.epfl.sweng.zuluzulu.LocalDatabase.UserDatabaseHelper;
+import ch.epfl.sweng.zuluzulu.User.User;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -37,16 +41,5 @@ public class MainActivityIntentTest {
         mActivityRule.launchActivity(intent);
 
         Utility.checkFragmentIsOpen(R.id.login_fragment);
-    }
-
-    /**
-     * Check if it goes to the main
-     */
-    @Test
-    public void onCreateGoesToMain() {
-        Intent i = new Intent();
-        mActivityRule.launchActivity(i);
-
-        onView(withId(R.id.main_fragment)).check(matches(isDisplayed()));
     }
 }

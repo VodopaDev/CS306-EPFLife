@@ -107,8 +107,9 @@ public class Channel extends FirebaseStructure {
      * @return whether the user can access it or not
      */
     public boolean canBeSeenBy(String userSection, GeoPoint userLocation) {
-        String section = (String) restrictions.get("section");
-        GeoPoint channelLocation = (GeoPoint) restrictions.get("location");
+
+        String section = restrictions.containsKey("section") ? (String) restrictions.get("section"): null;
+        GeoPoint channelLocation = restrictions.containsKey("location") ? (GeoPoint) restrictions.get("location"): null;
         return hasGoodSection(section, userSection) && hasGoodLocation(channelLocation, userLocation);
     }
 

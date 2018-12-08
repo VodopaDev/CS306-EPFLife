@@ -150,7 +150,7 @@ public class FirebaseProxyTest {
 
     @Test
     public void addMessage() {
-        proxy.addMessage(Utility.defaultMessage());
+        proxy.addMessage(Utility.defaultMessage0());
     }
 
     @Test

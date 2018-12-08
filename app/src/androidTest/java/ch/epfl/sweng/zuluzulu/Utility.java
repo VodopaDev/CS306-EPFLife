@@ -147,9 +147,9 @@ public class Utility {
         builder.setSemester("BA5");
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
-        builder.setFollowedAssociations(new ArrayList<>(Arrays.asList("1", "2")));
-        builder.setFollowedEvents(new ArrayList<>(Arrays.asList("1", "2", "3")));
-        builder.setFollowedChannels(new ArrayList<>(Arrays.asList("1", "2")));
+        builder.setFollowedAssociations(Collections.singletonList("0"));
+        builder.setFollowedEvents(Collections.singletonList("0"));
+        builder.setFollowedChannels(Collections.singletonList("0"));
 
         return builder;
     }
@@ -161,7 +161,7 @@ public class Utility {
      */
     public static Channel defaultChannel() {
         return new Channel(
-                "1",
+                "0",
                 "Testing channel",
                 "The name is self explaining",
                 new HashMap<>(),
@@ -171,8 +171,8 @@ public class Utility {
 
     public static Post defaultPost() {
         return new Post(
-                "1",
-                "1",
+                "0",
+                "0",
                 null,
                 "mon message ne sert à rien",
                 "Nico",
@@ -188,27 +188,27 @@ public class Utility {
 
     public static Association defaultAssociation() {
         return new Association(
-                "1",
+                "0",
                 "Agepoly",
                 "Small description",
                 "A bit longer description without a lot of details",
                 null,
                 null,
-                Collections.singletonList("1"),
-                "1"
+                Collections.singletonList("0"),
+                "0"
         );
     }
 
     public static Event defaultEvent() {
         return new EventBuilder()
-                .setId("1")
+                .setId("0")
                 .setName("Fiesta time")
-                .setChannelId("1")
-                .setAssosId("1")
+                .setChannelId("0")
+                .setAssosId("0")
                 .setShortDesc("Is this a real event?")
                 .setLongDesc("Of course not, you should check this beautiful description")
                 .setDate(new EventDate(new Date(10000000), new Date(10500000)))
-                .setFollowers(new ArrayList<>())
+                .setFollowers(Collections.singletonList("0"))
                 .setOrganizer("I'm the organizer")
                 .setPlace("Not at EPFL")
                 .setIconUri(null)
@@ -221,7 +221,11 @@ public class Utility {
                 .build();
     }
 
-    public static ChatMessage defaultMessage() {
-        return new ChatMessage("1", "1", "message", new Date(), "sender", "111111");
+    public static ChatMessage defaultMessage0() {
+        return new ChatMessage("0", "0", "message?", new Date(2000), "auth", "0");
+    }
+
+    public static ChatMessage defaultMessage1() {
+        return new ChatMessage("1", "0", "message!", new Date(20000), "admin", "1");
     }
 }

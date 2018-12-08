@@ -93,6 +93,9 @@
 
     <string name="drawer_admin_panel">Accès administrateur</string>
     <string name="user_role_searchbar_hint">User sciper</string>
-    <string name="main_page_upcoming_event">Prochains événements</string>
-    <string name="main_page_random_assos">Association à découvrir</string>
+    <string name="main_page_upcoming_event">Événements à venir</string>
+    <string name="main_page_random_assos">Quelques associations</string>
+    <string name="no_association">Pas d\'association</string>
+    <string name="no_chat">Pas de chat</string>
+
 </resources>
