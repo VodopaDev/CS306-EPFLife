@@ -70,6 +70,12 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<SuperMessage> {
         return view;
     }
 
+    /**
+     * Set up the correct time field on each message
+     *
+     * @param timeView The view to set up
+     * @param time The time of the message
+     */
     private void setUpTimeView(TextView timeView, Date time) {
         boolean sameDay = DateUtils.isToday(time.getTime());
         if (sameDay) {
