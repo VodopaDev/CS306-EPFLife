@@ -7,7 +7,7 @@ import ch.epfl.sweng.zuluzulu.Utility;
 public abstract class TestWithAdminAndFragment<F extends SuperFragment> extends TestWithUserAndFragment<Admin, F> {
 
     @Override
-    public void initUser(){
+    public void initUser() {
         user = Utility.createTestAdmin();
     }
 

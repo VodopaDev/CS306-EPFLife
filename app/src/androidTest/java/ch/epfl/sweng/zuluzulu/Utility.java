@@ -41,9 +41,10 @@ public class Utility {
 
     /**
      * Create a guest user
+     *
      * @return Return a Guest
      */
-    public static Guest createTestGuest(){
+    public static Guest createTestGuest() {
         return (new User.UserBuilder()).buildGuestUser();
     }
 
@@ -58,7 +59,7 @@ public class Utility {
         assert (user != null);
         assert (user.isConnected());
 
-        return (AuthenticatedUser)user;
+        return (AuthenticatedUser) user;
     }
 
     /**
@@ -72,7 +73,7 @@ public class Utility {
         assert (user != null);
         assert (user.hasRole(UserRole.ADMIN));
 
-        return (Admin)user;
+        return (Admin) user;
     }
 
     /**
@@ -185,7 +186,7 @@ public class Utility {
         );
     }
 
-    public static Association defaultAssociation(){
+    public static Association defaultAssociation() {
         return new Association(
                 "0",
                 "Agepoly",
@@ -198,7 +199,7 @@ public class Utility {
         );
     }
 
-    public static Event defaultEvent(){
+    public static Event defaultEvent() {
         return new EventBuilder()
                 .setId("0")
                 .setName("Fiesta time")

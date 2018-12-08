@@ -84,18 +84,18 @@ public class ChannelTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testBadMapForConstructor() {
-        new Channel(new FirebaseMapDecorator(Collections.singletonMap("id","100")));
+        new Channel(new FirebaseMapDecorator(Collections.singletonMap("id", "100")));
     }
 
     @Test
-    public void fmapConstructorTest(){
+    public void fmapConstructorTest() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", id1);
         map.put("name", name1);
         map.put("short_description", description1);
         map.put("restrictions", restrictions1);
         map.put("icon_uri", "test");
-        Map<String, Object> result =  new Channel(new FirebaseMapDecorator(map)).getData();
+        Map<String, Object> result = new Channel(new FirebaseMapDecorator(map)).getData();
         assertEquals(map, result);
     }
 

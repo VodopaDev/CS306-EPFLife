@@ -37,7 +37,7 @@ public class ChangeUserRoleFragmentAsAdminTest extends TestWithAdminAndFragment 
     }
 
     @Test
-    public void filteringIsPossible(){
+    public void filteringIsPossible() {
         onView(withId(R.id.user_role_list)).check(matches(hasChildCount(2)));
         onView(withId(R.id.user_role_searchbar)).perform(ViewActions.typeText("1265"));
         onView(withId(R.id.user_role_list)).check(matches(hasChildCount(0)));

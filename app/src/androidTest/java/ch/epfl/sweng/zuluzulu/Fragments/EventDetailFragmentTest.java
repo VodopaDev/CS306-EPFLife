@@ -1,5 +1,8 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.app.Activity;
+import android.app.Instrumentation;
+import android.content.Intent;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -16,6 +19,8 @@ import ch.epfl.sweng.zuluzulu.Utility;
 import static android.support.test.espresso.Espresso.*;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.anyIntent;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -47,13 +52,13 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
         assertTrue(user.isFollowedEvent("0"));
     }
 
-	// TODO: need to mock the intent
-	/*
     @Test
     public void canExportEvent(){
+        Intent resultData = new Intent();
+        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+        intending(anyIntent()).respondWith(result);
         onView(withId(R.id.event_detail_export)).perform(ViewActions.click());
     }
-	*/
 
     @Test
     public void canAccessChannel(){

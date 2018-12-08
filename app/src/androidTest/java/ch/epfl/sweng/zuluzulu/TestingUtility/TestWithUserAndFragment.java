@@ -40,11 +40,6 @@ public abstract class TestWithUserAndFragment<U extends User, F extends SuperFra
         mActivityRule.getActivity().openFragment(fragment);
     }
 
-    @After
-    public void clearLocalCache(){
-        
-    }
-
     public MainActivity getMainActivity(){
         return mActivityRule.getActivity();
     }

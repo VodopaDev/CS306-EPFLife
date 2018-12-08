@@ -37,10 +37,9 @@ public class MenuAsGuestTest extends TestWithGuestAndFragment<MainFragment> {
 
     @Test
     public void testGuestUserDoesNotSeeEveryOption() {
-        onView(withText("Friends")).check(doesNotExist());
-        onView(withText("Chat")).check(doesNotExist());
-        onView(withText("Logout")).check(doesNotExist());
-        onView(withText("Profile")).check(doesNotExist());
+        onView(withText(R.string.drawer_chats)).check(doesNotExist());
+        onView(withText(R.string.drawer_logout)).check(doesNotExist());
+        onView(withText(R.string.drawer_profile)).check(doesNotExist());
     }
 
     @Test

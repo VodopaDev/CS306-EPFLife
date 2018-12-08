@@ -18,7 +18,7 @@ public class DocumentMock implements DatabaseDocument {
     public Task<Void> set(@NonNull Map<String, Object> data) {
 
         // Just print instead of pushing to firebase
-        for(String key : data.keySet()) {
+        for (String key : data.keySet()) {
             Log.d(TAG, key);
         }
 

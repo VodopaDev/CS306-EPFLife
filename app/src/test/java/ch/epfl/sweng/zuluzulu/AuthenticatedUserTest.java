@@ -87,12 +87,12 @@ public class AuthenticatedUserTest {
     @Test
     public void correctString() {
         assertThat(first_name + " " + last_name
-                + "\nsciper: " + sciper
-                + "\ngaspar: " + gaspar
-                + "\nemail: " + email
-                + "\nsection: " + section
-                + "\nsemester: " + semester
-        , equalTo(user.toString()));
+                        + "\nsciper: " + sciper
+                        + "\ngaspar: " + gaspar
+                        + "\nemail: " + email
+                        + "\nsection: " + section
+                        + "\nsemester: " + semester
+                , equalTo(user.toString()));
 
     }
 }

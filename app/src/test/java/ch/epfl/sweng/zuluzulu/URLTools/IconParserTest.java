@@ -16,7 +16,7 @@ public class IconParserTest {
     IconParser parser;
 
     @Before
-    public void init(){
+    public void init() {
         this.parser = new IconParser();
     }
 

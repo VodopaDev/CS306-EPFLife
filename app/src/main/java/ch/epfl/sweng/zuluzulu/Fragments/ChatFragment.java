@@ -1,15 +1,19 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -17,16 +21,21 @@ import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageArrayAdapter;
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
+import ch.epfl.sweng.zuluzulu.Structure.SuperMessage;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_POST_FRAGMENT;
+import static ch.epfl.sweng.zuluzulu.Structure.SuperMessage.decreasingTimeComparator;
 
 /**
  * A {@link SuperChatPostsFragment} subclass.
@@ -37,7 +46,6 @@ public class ChatFragment extends SuperChatPostsFragment {
     private Button sendButton;
     private EditText textEdit;
 
-    private List<ChatMessage> messages = new ArrayList<>();
     private ChatMessageArrayAdapter adapter;
 
     public ChatFragment() {
@@ -76,6 +84,7 @@ public class ChatFragment extends SuperChatPostsFragment {
         setUpSendButton();
         setUpEditText();
         setUpPostsButton();
+        setUpProfileListener();
 
         return view;
     }
@@ -133,14 +142,7 @@ public class ChatFragment extends SuperChatPostsFragment {
             Log.d("TEST", result.size() + " messages");
             messages.clear();
             messages.addAll(result);
-            Collections.sort(messages, (o1, o2) -> {
-                if (o1.getTime().before(o2.getTime()))
-                    return -1;
-                else
-                    return 1;
-            });
-            adapter.notifyDataSetChanged();
-            listView.setSelection(adapter.getCount() - 1);
+            sortMessages();
         });
     }
 
@@ -151,14 +153,16 @@ public class ChatFragment extends SuperChatPostsFragment {
         DatabaseFactory.getDependency().updateOnNewMessagesFromChannel(channel.getId(), result -> {
             messages.clear();
             messages.addAll(result);
-            Collections.sort(messages, (o1, o2) -> {
-                if (o1.getTime().before(o2.getTime()))
-                    return -1;
-                else
-                    return 1;
-            });
-            adapter.notifyDataSetChanged();
-            listView.setSelection(adapter.getCount() - 1);
+            sortMessages();
         });
+    }
+
+    /**
+     * Sort the list of messages by time and notify adapter
+     */
+    private void sortMessages() {
+        Collections.sort(messages, (Comparator<SuperMessage>) decreasingTimeComparator());
+        adapter.notifyDataSetChanged();
+        listView.setSelection(adapter.getCount() - 1);
     }
 }

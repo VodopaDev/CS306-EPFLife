@@ -30,6 +30,7 @@ public class AdminPanelFragment extends SuperFragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
+     *
      * @return A new instance of fragment AdminPanelFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -60,7 +61,7 @@ public class AdminPanelFragment extends SuperFragment {
         return view;
     }
 
-    private View.OnClickListener sendTagOnClick(CommunicationTag tag){
+    private View.OnClickListener sendTagOnClick(CommunicationTag tag) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {

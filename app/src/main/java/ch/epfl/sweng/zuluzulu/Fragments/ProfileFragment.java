@@ -33,6 +33,10 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -49,11 +53,23 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends SuperFragment {
-    private static final String PROFILE_TAG = "PROFILE_TAG";
+    private static final String USER_DATA_TAG = "USER_DATA_TAG";
+    private static final String OWNER_TAG = "OWNER_TAG";
     private static final int CAMERA_CODE = 1234;
     private static final int W_STORAGE_PERM_CODE = 260;
 
-    private User user;
+    private Map<String, Object> userData;
+    private String firstName;
+    private String lastName;
+    private String sciper;
+    private String section;
+    private String semester;
+    private String gaspar;
+    private String email;
+    private List<String> roles;
+
+    private boolean profileOwner;
+
     private ImageButton pic;
 
     private String pathToImage;
@@ -71,12 +87,13 @@ public class ProfileFragment extends SuperFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param user User
+     * @param userData User data
      * @return A new instance of fragment ProfileFragment.
      */
-    public static ProfileFragment newInstance(User user) {
+    public static ProfileFragment newInstance(Map<String, Object> userData, boolean profileOwner) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(PROFILE_TAG, user);
+        bundle.putBoolean(OWNER_TAG, profileOwner);
+        bundle.putSerializable(USER_DATA_TAG, (HashMap) userData);
 
         // Transmit data
         ProfileFragment profileFragment = new ProfileFragment();
@@ -89,11 +106,20 @@ public class ProfileFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.user = (User) getArguments().getSerializable(PROFILE_TAG);
-            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, user.getFirstNames() + "'s Profile");
+            userData = (Map<String, Object>) getArguments().getSerializable(USER_DATA_TAG);
+            profileOwner = (Boolean) getArguments().get(OWNER_TAG);
+            firstName = (String) userData.get("first_name");
+            lastName = (String) userData.get("last_name");
+            sciper = (String) userData.get("sciper");
+            section = (String) userData.get("section");
+            semester = (String) userData.get("semester");
+            gaspar = (String) userData.get("gaspar");
+            email = (String) userData.get("email");
+            roles = (List<String>) userData.get("roles");
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, firstName + "'s Profile");
             storage = FirebaseStorage.getInstance();
             storageRef = storage.getReference();
-            pictureRef = storageRef.child("images/" + user.getSciper() + ".jpg");
+            pictureRef = storageRef.child("images/" + sciper + ".jpg");
 
         } else {
             throw new AssertionError("No argument");
@@ -112,15 +138,16 @@ public class ProfileFragment extends SuperFragment {
         TextView user_view = view.findViewById(R.id.profile_name_text);
 
         StringBuilder builder = new StringBuilder();
-        if (user.getFirstNames() != null && user.getFirstNames().length() > 1) {
-            builder.append(user.getFirstNames().substring(0, 1).toUpperCase());
-            builder.append(user.getFirstNames().substring(1));
+        if (firstName != null && firstName.length() > 1) {
+            builder.append(firstName.substring(0, 1).toUpperCase());
+            builder.append(firstName.substring(1));
         }
-        if (user.getLastNames() != null && user.getLastNames().length() > 1) {
-            builder.append(" ").append(user.getLastNames().substring(0, 1).toUpperCase());
-            builder.append(user.getLastNames().substring(1));
+        if (lastName != null && lastName.length() > 1) {
+            builder.append(" ").append(lastName.substring(0, 1).toUpperCase());
+            builder.append(lastName.substring(1));
         }
-        if (user.hasRole(UserRole.ADMIN)) {
+
+        if (roles.contains(UserRole.ADMIN.toString())) {
             builder.append(" - ADMIN");
         }
 
@@ -128,49 +155,46 @@ public class ProfileFragment extends SuperFragment {
 
         user_view.setText(username);
 
-        askPermissions();
-
         pic = view.findViewById(R.id.profile_image);
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (askPermissions()) {
+                if (profileOwner && askPermissions()) {
                     goToCamera();
                 }
             }
         });
 
-        if(askPermissions()) {
+        if (askPermissions()) {
             setBitmapFromStorage();
         }
-        TextView gaspar = view.findViewById(R.id.profile_gaspar_text);
-        gaspar.setText(user.getGaspar());
+        TextView gasparView = view.findViewById(R.id.profile_gaspar_text);
+        gasparView.setText(gaspar);
 
+        TextView emailView = view.findViewById(R.id.profile_email_edit);
+        emailView.setText(email);
 
-        TextView email = view.findViewById(R.id.profile_email_edit);
-        email.setText(user.getEmail());
-
-
-        TextView sciper = view.findViewById(R.id.profile_sciper_edit);
-        sciper.setText(user.getSciper());
+        TextView sciperView = view.findViewById(R.id.profile_sciper_edit);
+        sciperView.setText(sciper);
 
         TextView unit = view.findViewById(R.id.profile_unit_edit);
-        unit.setText(new StringBuilder().append(user.getSection()).append("-").append(user.getSemester()));
+        unit.setText(new StringBuilder().append(section).append("-").append(semester));
 
         return view;
     }
 
     /**
      * ask permissions for the different resources we use
+     *
      * @return if the permissions are granted
      */
-    private boolean askPermissions(){
+    private boolean askPermissions() {
         boolean storage_write = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         boolean storage_read = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         if (!storage_write) {
-            ActivityCompat.requestPermissions(getActivity() , new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
         } else if (!storage_read) {
-            ActivityCompat.requestPermissions(getActivity() , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
         }
 
         return storage_read && storage_write;
@@ -179,15 +203,14 @@ public class ProfileFragment extends SuperFragment {
     /**
      * download the file from firebase and set it into the imagebutton
      */
-    private void setBitmapFromStorage(){
+    private void setBitmapFromStorage() {
         File localFile = null;
-        try{
-        localFile = File.createTempFile("images", "jpg");
+        try {
+            localFile = File.createTempFile("images", "jpg");
         } catch (IOException e) {
             Log.e("creating temp file", "unable to create a temporary file for intent");
         }
-        if(localFile != null)
-        {
+        if (localFile != null) {
             pathToTemp = localFile.getAbsolutePath();
             pictureRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
@@ -207,6 +230,7 @@ public class ProfileFragment extends SuperFragment {
 
     /**
      * create the file in which we will put the image
+     *
      * @return the file
      * @throws IOException if creation fails
      */
@@ -215,7 +239,7 @@ public class ProfileFragment extends SuperFragment {
         // Create an image file name
         File directory = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                user.getSciper(),  /* prefix */
+                sciper,  /* prefix */
                 ".jpg",         /* suffix */
                 directory      /* directory */
         );
@@ -230,7 +254,7 @@ public class ProfileFragment extends SuperFragment {
      * generates an intent for the camera with the right uri and file
      * so that the camera saves the file in the SD and on the firebaseStorage
      */
-    private void goToCamera(){
+    private void goToCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -256,9 +280,10 @@ public class ProfileFragment extends SuperFragment {
 
     /**
      * helper method that takes a path to a file and scale it to make it fit inside the imagebutton
+     *
      * @param path the path to the file to rescale
      */
-    private void setRescaledImage(String path){
+    private void setRescaledImage(String path) {
         int targetH = pic.getHeight();
 
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -267,7 +292,7 @@ public class ProfileFragment extends SuperFragment {
 
         int photoH = bmOptions.outHeight;
 
-        int scaling = photoH/targetH;
+        int scaling = photoH / targetH;
 
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaling;
@@ -279,6 +304,7 @@ public class ProfileFragment extends SuperFragment {
 
     /**
      * receives the result of the camera activity, set the picture, and upload it to the storage
+     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -307,7 +333,6 @@ public class ProfileFragment extends SuperFragment {
             });
         }
     }
-
 
 
 }

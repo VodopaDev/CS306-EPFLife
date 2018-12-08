@@ -32,7 +32,7 @@ public class AdminPanelFragmentAsAdminTest extends TestWithAdminAndFragment {
     }
 
     @Test
-    public void canOpenMementoFragment(){
+    public void canOpenMementoFragment() {
         UrlReader reader = new UrlReader() {
             @Override
             public BufferedReader read(String name) {
@@ -53,7 +53,8 @@ public class AdminPanelFragmentAsAdminTest extends TestWithAdminAndFragment {
                         "        \"event_url_link\": \"\"," +
                         "        \"event_url_place_and_room\": \"https://plan.epfl.ch/?room=PO094.0\",\n" +
                         "        \"event_category_fr\": \"Divers\",\n" + "\"event_speaker\": \"Roda Fawaz\"\n" + "    }]"));
-            }};
+            }
+        };
         // Change the factory
         UrlReaderFactory.setDependency(reader);
         onView(withId(R.id.panel_memento)).perform(ViewActions.click());
@@ -61,7 +62,7 @@ public class AdminPanelFragmentAsAdminTest extends TestWithAdminAndFragment {
     }
 
     @Test
-    public void canOpenAssociationGeneratorFragment(){
+    public void canOpenAssociationGeneratorFragment() {
         changeFactory("&#8211; <a href=\"http://example.com\">Other</a> (Other)<br />\n"
                 + "&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />\n"
                 + "<link rel=\"icon\" type=\"image/png\" href=\"images/favicon.png\" sizes=\"16x16\">");
@@ -71,19 +72,19 @@ public class AdminPanelFragmentAsAdminTest extends TestWithAdminAndFragment {
     }
 
     @Test
-    public void canOpenChannelManagerFragment(){
+    public void canOpenChannelManagerFragment() {
         onView(withId(R.id.panel_channel)).perform(ViewActions.click());
         Utility.checkFragmentIsOpen(R.id.admin_panel_fragment);
     }
 
     @Test
-    public void canOpenUserRoleFragment(){
+    public void canOpenUserRoleFragment() {
         onView(withId(R.id.panel_user)).perform(ViewActions.click());
         Utility.checkFragmentIsOpen(R.id.user_role_fragment);
     }
 
     @Test
-    public void canOpenAddEventFragment(){
+    public void canOpenAddEventFragment() {
         onView(withId(R.id.panel_create_event)).perform(ViewActions.click());
         Utility.checkFragmentIsOpen(R.id.add_event_fragment);
     }

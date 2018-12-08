@@ -113,9 +113,6 @@ public class MainFragment extends SuperFragment {
     }
 
 
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -131,11 +128,9 @@ public class MainFragment extends SuperFragment {
     }
 
 
-
-
     private void fillUpcomingEventLists() {
         DatabaseFactory.getDependency().getEventsFromToday(result -> {
-            if(result != null) {
+            if (result != null) {
                 upcoming_events.addAll(result);
                 event_adapter.notifyDataSetChanged();
             }
@@ -150,7 +145,7 @@ public class MainFragment extends SuperFragment {
     private void fillRandomAssociationLists() {
         random_assos.clear();
         DatabaseFactory.getDependency().getAllAssociations(result -> {
-            if(result != null && !result.isEmpty()) {
+            if (result != null && !result.isEmpty()) {
                 int rand = (int) (Math.random() * (result.size()));
                 random_assos.add(result.get(rand));
                 rand = (int) (Math.random() * (result.size()));
@@ -159,10 +154,11 @@ public class MainFragment extends SuperFragment {
             }
         });
     }
+
     /*
      * connected user
      */
-    public View createConnectedUserView(LayoutInflater inflater, ViewGroup container){
+    public View createConnectedUserView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_main_user, container, false);
         associations_listView = view.findViewById(R.id.main_fragment_followed_associations_listview);
         events_listView = view.findViewById(R.id.main_fragment_followed_events_listview);
@@ -187,7 +183,7 @@ public class MainFragment extends SuperFragment {
 
     private void fillConnectedUserEventsList() {
         DatabaseFactory.getDependency().getAllEvents(result -> {
-            if(result != null) {
+            if (result != null) {
                 events_array.clear();
                 for (Event event : result) {
                     if (((AuthenticatedUser) user).isFollowedEvent(event.getId()))
@@ -202,7 +198,7 @@ public class MainFragment extends SuperFragment {
     /*
      * guest user
      */
-    public View createNotConnectedUserView(LayoutInflater inflater, ViewGroup container){
+    public View createNotConnectedUserView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         listview_event = view.findViewById(R.id.main_page_list_event);
