@@ -159,9 +159,9 @@ public class MockedProxy implements Proxy {
 
         Log.d("GET_CHAN", "");
         ArrayList<Channel> result = new ArrayList<>();
-        for(ChannelRepresentation channel: channelMap.values())
-            if(ids.contains(channel.channel.getId()))
-                result.add(channel.channel);
+        for(String id: ids)
+            if(channelMap.containsKey(id))
+                result.add(channelMap.get(id).channel);
         onResult.apply(new ArrayList<>());
     }
 
