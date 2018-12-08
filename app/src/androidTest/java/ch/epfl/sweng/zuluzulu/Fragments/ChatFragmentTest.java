@@ -79,7 +79,7 @@ public class ChatFragmentTest extends TestWithAuthenticatedAndFragment<ChatFragm
     }
 
     @Test
-    public void testUserCanReachOtherProfile(){
+    public void testUserCanReachOtherProfileThroughChatMessage(){
         onView(withId(R.id.chat_list_view)).check(matches(isDisplayed()));
         onData(instanceOf(ChatMessage.class)).atPosition(1).check(matches(isDisplayed()));
         onData(instanceOf(ChatMessage.class)).atPosition(1).perform(ViewActions.longClick());

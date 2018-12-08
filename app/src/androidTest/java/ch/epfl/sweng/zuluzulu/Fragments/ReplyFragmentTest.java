@@ -81,7 +81,7 @@ public class ReplyFragmentTest extends TestWithAuthenticatedAndFragment<ReplyFra
     */
 
     @Test
-    public void testUserCanReachOtherProfile(){
+    public void testUserCanReachOtherProfileThroughReply(){
         onView(withId(R.id.reply_list_view)).check(matches(isDisplayed()));
 
         onData(instanceOf(Post.class)).atPosition(0).check(matches(isDisplayed()));
