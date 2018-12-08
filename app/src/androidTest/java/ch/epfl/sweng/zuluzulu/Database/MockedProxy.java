@@ -1,6 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Database;
 
-import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 import android.util.Pair;
 
 import java.util.ArrayList;
@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
 import ch.epfl.sweng.zuluzulu.Firebase.Proxy;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -17,30 +16,32 @@ import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
-import ch.epfl.sweng.zuluzulu.User.Admin;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility;
 
+import static ch.epfl.sweng.zuluzulu.Utility.addUserToMainIntent;
 import static ch.epfl.sweng.zuluzulu.Utility.createFilledUserBuilder;
-import static ch.epfl.sweng.zuluzulu.Utility.createTestAdmin;
 import static ch.epfl.sweng.zuluzulu.Utility.createTestAuthenticated;
-import static ch.epfl.sweng.zuluzulu.Utility.defaultMessage;
 import static ch.epfl.sweng.zuluzulu.Utility.defaultPost;
 
 public class MockedProxy implements Proxy {
 
     private Map<String, Association> associationMap = new HashMap<String, Association>() {{
-        put("1", Utility.defaultAssociation());
+        put("0", Utility.defaultAssociation());
     }};
 
-    private Map<String, Event> eventMap = new HashMap<String, Event>() {{
-        put("1", Utility.defaultEvent());
+    private Map<String, Event> eventMap =  new HashMap<String, Event>() {{
+        put("0", Utility.defaultEvent());
     }};
 
 
     private Map<String, ChannelRepresentation> channelMap = new HashMap<String, ChannelRepresentation>() {{
-        put("1", new ChannelRepresentation(Utility.defaultChannel()));
+        ChannelRepresentation rep = new ChannelRepresentation(Utility.defaultChannel());
+        rep.messageMap.put("0", Utility.defaultMessage0());
+        rep.messageMap.put("1", Utility.defaultMessage1());
+        rep.postMap.put("0", new Pair<>(defaultPost(), new HashMap<>()));
+        put("0", rep);
     }};
 
     private Map<String, AuthenticatedUser> userMap = new HashMap<String, AuthenticatedUser>() {{
@@ -155,11 +156,12 @@ public class MockedProxy implements Proxy {
         if (ids == null)
             return;
 
+        Log.d("GET_CHAN", "");
         ArrayList<Channel> result = new ArrayList<>();
-        for (ChannelRepresentation channel : channelMap.values())
-            if (ids.contains(channel.channel.getId()))
-                result.add(channel.channel);
-        onResult.apply(new ArrayList<>());
+        for(String id: ids)
+            if(channelMap.containsKey(id))
+                result.add(channelMap.get(id).channel);
+        onResult.apply(result);
     }
 
     @Override
@@ -211,7 +213,6 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult) {
-        addMessage(defaultMessage());
         if(channelId != null && channelMap.containsKey(channelId)) {
             ArrayList<ChatMessage> result = new ArrayList<>();
             for (ChatMessage message : channelMap.get(channelId).messageMap.values())
@@ -223,7 +224,6 @@ public class MockedProxy implements Proxy {
     @Override
     public void getPostsFromChannel(String channelId, OnResult<List<Post>> onResult) {
         //TODO nico il faut ajouter le post dans la liste du channel... mais comment ? ici c'est pas idéal
-        addPost(defaultPost());
         if (channelId != null && channelMap.containsKey(channelId)) {
             ArrayList<Post> result = new ArrayList<>();
             for (Pair<Post, Map<String, Post>> pair : channelMap.get(channelId).postMap.values()) {
@@ -231,6 +231,36 @@ public class MockedProxy implements Proxy {
             }
             onResult.apply(result);
         }
+    }
+
+    @Override
+    public void addChannelToUserFollowedChannels(Channel channel, AuthenticatedUser user) {
+        // TODO: Change if the implementation is changed.
+    }
+
+    @Override
+    public void addEventToUserFollowedEvents(Event event, AuthenticatedUser user) {
+        // TODO: Change if the implementation is changed.
+    }
+
+    @Override
+    public void addAssociationToUserFollowedAssociations(Association association, AuthenticatedUser user) {
+        // TODO: Change if the implementation is changed.
+    }
+
+    @Override
+    public void removeChannelFromUserFollowedChannels(Channel channel, AuthenticatedUser user) {
+        // TODO: Change if the implementation is changed.
+    }
+
+    @Override
+    public void removeEventFromUserFollowedEvents(Event event, AuthenticatedUser user) {
+        // TODO: Change if the implementation is changed.
+    }
+
+    @Override
+    public void removeAssociationFromUserFollowedAssociations(Association association, AuthenticatedUser user) {
+        // TODO: Change if the implementation is changed.
     }
 
     @Override

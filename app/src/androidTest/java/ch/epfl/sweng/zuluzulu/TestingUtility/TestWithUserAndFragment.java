@@ -4,6 +4,7 @@ import android.support.test.espresso.IdlingRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
@@ -39,7 +40,7 @@ public abstract class TestWithUserAndFragment<U extends User, F extends SuperFra
         mActivityRule.getActivity().openFragment(fragment);
     }
 
-    public MainActivity getMainActivity() {
+    public MainActivity getMainActivity(){
         return mActivityRule.getActivity();
     }
 

@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -116,7 +117,8 @@ public class FirebaseProxy implements Proxy {
                 object = creator.apply(fmap);
             } catch (Exception ignored) {
             }
-            onResult.apply(object);
+            if(object != null)
+                onResult.apply(object);
             IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the with id " + id));
     }
@@ -143,7 +145,8 @@ public class FirebaseProxy implements Proxy {
                     object = creator.apply(fmap);
                 } catch (Exception ignored) {
                 }
-                result.add(object);
+                if(object != null)
+                    result.add(object);
                 if (counter.increment()) {
                     onResult.apply(result);
                     IdlingResourceFactory.decrementCountingIdlingResource();
@@ -388,6 +391,42 @@ public class FirebaseProxy implements Proxy {
             onResult.apply(result);
             IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot get PostsFromChannel " + id));
+    }
+
+    @Override
+    public void addChannelToUserFollowedChannels(Channel channel, AuthenticatedUser user) {
+        userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayUnion(channel.getId()));
+    }
+
+    @Override
+    public void addEventToUserFollowedEvents(Event event, AuthenticatedUser user) {
+        userCollection.document(user.getSciper()).update("followed_events", FieldValue.arrayUnion(event.getId()));
+        userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayUnion(event.getChannelId()));
+        eventCollection.document(event.getId()).update("followers", FieldValue.arrayUnion(user.getSciper()));
+    }
+
+    @Override
+    public void addAssociationToUserFollowedAssociations(Association association, AuthenticatedUser user) {
+        userCollection.document(user.getSciper()).update("followed_associations", FieldValue.arrayUnion(association.getId()));
+        userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayUnion(association.getChannelId()));
+    }
+
+    @Override
+    public void removeChannelFromUserFollowedChannels(Channel channel, AuthenticatedUser user) {
+        userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayRemove(channel.getId()));
+    }
+
+    @Override
+    public void removeEventFromUserFollowedEvents(Event event, AuthenticatedUser user) {
+        userCollection.document(user.getSciper()).update("followed_events", FieldValue.arrayRemove(event.getId()));
+        userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayRemove(event.getChannelId()));
+        eventCollection.document(event.getId()).update("followers", FieldValue.arrayRemove(user.getSciper()));
+    }
+
+    @Override
+    public void removeAssociationFromUserFollowedAssociations(Association association, AuthenticatedUser user) {
+        userCollection.document(user.getSciper()).update("followed_associations", FieldValue.arrayRemove(association.getId()));
+        userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayRemove(association.getChannelId()));
     }
 
     @Override

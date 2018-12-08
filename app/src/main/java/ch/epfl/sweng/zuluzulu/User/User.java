@@ -185,17 +185,17 @@ abstract public class User implements Serializable {
         }
 
         public UserBuilder setFollowedAssociations(List<String> followedAssociations) {
-            this.followedAssociations = followedAssociations;
+            this.followedAssociations = new ArrayList<>(followedAssociations);
             return this;
         }
 
         public UserBuilder setFollowedChannels(List<String> followedChannels) {
-            this.followedChannels = followedChannels;
+            this.followedChannels = new ArrayList<>(followedChannels);
             return this;
         }
 
         public UserBuilder setFollowedEvents(List<String> followedEvents) {
-            this.followedEvents = followedEvents;
+            this.followedEvents = new ArrayList<>(followedEvents);
             return this;
         }
 

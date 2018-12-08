@@ -149,7 +149,10 @@ public class EventFragment extends SuperFragment {
         selectClickedCheckbox(checkbox_event_sort_date);
 
         event_fragment_from_date = view.findViewById(R.id.event_fragment_from_date);
+        event_fragment_from_date.setOnClickListener(dateOnClick(true));
         event_fragment_to_date = view.findViewById(R.id.event_fragment_to_date);
+        event_fragment_to_date.setOnClickListener(dateOnClick(false));
+
 
         event_search_bar = view.findViewById(R.id.event_fragment_search_bar);
 
@@ -158,7 +161,6 @@ public class EventFragment extends SuperFragment {
 
         // All method the set the behaviour of the checkboxes, date selecting and name/description matching
         setFilteringWithText();
-        setFilteringWithDate();
         setToggleFilterVisibilityBehaviour();
         setSortingBehaviourOnCheckbox(checkbox_event_sort_date, Event.dateComparator());
         setSortingBehaviourOnCheckbox(checkbox_event_sort_like, Event.likeComparator());
@@ -308,54 +310,24 @@ public class EventFragment extends SuperFragment {
         }
     }
 
-    //TODO: it's surely possible to reduce this
+    private View.OnClickListener dateOnClick(boolean startDate){
+        return v -> {
+            DatePickerDialog.OnDateSetListener datePicker = (view, year, monthOfYear, dayOfMonth) -> {
+                eventCalendar.set(Calendar.YEAR, year);
+                eventCalendar.set(Calendar.MONTH, monthOfYear);
+                eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                if(startDate)
+                    dateFrom = (Date) eventCalendar.getTime().clone();
+                else
+                    dateTo = (Date) eventCalendar.getTime().clone();
+                filterWithDate();
+            };
 
-    /**
-     * Set the behaviour of both textfields from and to
-     */
-    private void setFilteringWithDate() {
-        event_fragment_from_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog.OnDateSetListener datePicker = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                          int dayOfMonth) {
-                        eventCalendar.set(Calendar.YEAR, year);
-                        eventCalendar.set(Calendar.MONTH, monthOfYear);
-                        eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        dateFrom = (Date) eventCalendar.getTime().clone();
-                        filterWithDate();
-                    }
-                };
-
-                if (getContext() != null)
-                    new DatePickerDialog(getContext(), datePicker, eventCalendar
-                            .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
-                            eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-        event_fragment_to_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog.OnDateSetListener datePicker = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                          int dayOfMonth) {
-                        eventCalendar.set(Calendar.YEAR, year);
-                        eventCalendar.set(Calendar.MONTH, monthOfYear);
-                        eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        dateTo = (Date) eventCalendar.getTime().clone();
-                        filterWithDate();
-                    }
-                };
-
-                if (getContext() != null)
-                    new DatePickerDialog(getContext(), datePicker, eventCalendar
-                            .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
-                            eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
+            if (getContext() != null)
+                new DatePickerDialog(getContext(), datePicker, eventCalendar
+                        .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
+                        eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        };
     }
 
     /**
