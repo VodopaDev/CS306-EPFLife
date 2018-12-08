@@ -4,14 +4,17 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 
+import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 import ch.epfl.sweng.zuluzulu.Utility;
@@ -31,6 +34,10 @@ import static org.junit.Assert.assertFalse;
 
 @RunWith(AndroidJUnit4.class)
 public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<EventDetailFragment> {
+
+    @Rule
+    public final IntentsTestRule<MainActivity> mActivityRule =
+            new IntentsTestRule<>(MainActivity.class);
 
     @Override
     public void initFragment() {
