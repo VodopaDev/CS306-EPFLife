@@ -162,7 +162,6 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     }
 
     private void updateUserAndFinishLogin() {
-        DatabaseFactory.getDependency().updateUser((AuthenticatedUser) user);
         DatabaseFactory.getDependency().getUserWithIdOrCreateIt(user.getSciper(), result -> {
             List<String> receivedAssociations = (List<String>) result.get("followed_associations");
             List<String> receivedEvents = (List<String>) result.get("followed_events");
@@ -172,6 +171,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
             ((AuthenticatedUser) user).setFollowedAssociation(receivedAssociations);
             ((AuthenticatedUser) user).setFollowedEvents(receivedEvents);
             ((AuthenticatedUser) user).setFollowedChannels(receivedChannels);
+            DatabaseFactory.getDependency().updateUser((AuthenticatedUser) user);
             transfer_main(false);
         });
     }
