@@ -50,18 +50,6 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<SuperMessage> {
         TextView senderName = view.findViewById(R.id.chat_message_senderName);
         TextView timeView = view.findViewById(R.id.chat_message_time);
 
-        boolean sameDay = DateUtils.isToday(currentChatMessage.getTime().getTime());
-        if (sameDay) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(currentChatMessage.getTime());
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            int minute = calendar.get(Calendar.MINUTE);
-            String time = hour + ":" + minute;
-            timeView.setText(time);
-        } else {
-            timeView.setVisibility(View.GONE);
-        }
-
         int backgroundResource = isOwnMessage ? R.drawable.chat_message_background_ownmessage : R.drawable.chat_message_background;
         messageContent.setBackgroundResource(backgroundResource);
         senderName.setText(currentChatMessage.getSenderName());
@@ -76,6 +64,22 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<SuperMessage> {
 
         message.setText(currentChatMessage.getMessage());
 
+        Date time = currentChatMessage.getTime();
+        setUpTimeView(timeView, time);
+
         return view;
+    }
+
+    private void setUpTimeView(TextView timeView, Date time) {
+        boolean sameDay = DateUtils.isToday(time.getTime());
+        if (sameDay) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(time);
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
+            timeView.setText(hour + ":" + minute);
+        } else {
+            timeView.setVisibility(View.GONE);
+        }
     }
 }
