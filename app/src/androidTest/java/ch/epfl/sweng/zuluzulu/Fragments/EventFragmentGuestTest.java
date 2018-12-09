@@ -42,11 +42,11 @@ public class EventFragmentGuestTest extends TestWithGuestAndFragment<EventFragme
     @Test
     public void clickOnDisableCheckbox(){
         onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(click());
+        onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(click());
     }
 
     @Test
     public void clickOnEnableCheckbox() {
         onView(withId(R.id.event_fragment_checkbox_sort_like)).perform(click());
-
     }
 }

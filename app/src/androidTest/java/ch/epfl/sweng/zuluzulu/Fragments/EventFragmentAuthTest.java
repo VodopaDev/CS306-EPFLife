@@ -1,11 +1,17 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.Date;
 
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
@@ -22,6 +28,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
+import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
@@ -116,11 +124,49 @@ public class EventFragmentAuthTest extends TestWithAuthenticatedAndFragment<Even
     }
 
     @Test
-    public void sortFromAndToDate() {
+    public void datepickerOutOfBandDateSanitazition() {
         onView(withId(R.id.event_fragment_from_date)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(1990, 01, 01));
         onView(withText("OK")).perform(click());
-        onView(withId(R.id.event_fragment_to_date)).perform((click()));
+        onView(withId(R.id.event_fragment_from_date)).check(matches(withText("01/01/00")));
+        onView(withId(R.id.event_fragment_to_date)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2030, 01, 01));
         onView(withText("OK")).perform(click());
+        onView(withId(R.id.event_fragment_to_date)).check(matches(withText("01/01/25")));
+    }
+
+    @Test
+    public void toDateLowerThanFromDate() {
+        onView(withId(R.id.event_fragment_from_date)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2018, 01, 01));
+        onView(withText("OK")).perform(click());
+        onView(withId(R.id.event_fragment_to_date)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2017, 01, 01));
+        onView(withText("OK")).perform(click());
+        onView(withId(R.id.event_fragment_from_date)).check(matches(withText("01/01/17")));
+        onView(withId(R.id.event_fragment_to_date)).check(matches(withText("01/01/18")));
+    }
+
+    @Test
+    public void filterWithDateAddAnEventInEventFilteredList(){
+        onView(withId(R.id.event_fragment_from_date)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2017, 01, 01));
+        onView(withText("OK")).perform(click());
+        onView(withId(R.id.event_fragment_to_date)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2019, 01, 01));
+        onView(withText("OK")).perform(click());
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasMinimumChildCount(1)));
+    }
+
+    @Test
+    public void filterWithDateDontAddAnEventInEventFilteredList(){
+        onView(withId(R.id.event_fragment_from_date)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2001, 01, 01));
+        onView(withText("OK")).perform(click());
+        onView(withId(R.id.event_fragment_to_date)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2002, 01, 01));
+        onView(withText("OK")).perform(click());
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(0)));
     }
 
     @Test

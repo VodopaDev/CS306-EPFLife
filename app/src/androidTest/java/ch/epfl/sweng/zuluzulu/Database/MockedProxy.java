@@ -34,7 +34,7 @@ public class MockedProxy implements Proxy {
 
     private Map<String, Event> eventMap =  new HashMap<String, Event>() {{
         put("0", Utility.defaultEvent());
-        put("1", Utility.currentTimeEvent());
+//        put("1", Utility.currentTimeEvent());
     }};
 
 
