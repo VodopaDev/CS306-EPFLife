@@ -1,5 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Firebase;
 
+import android.support.test.espresso.IdlingRegistry;
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.Before;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 
 import ch.epfl.sweng.zuluzulu.Database.FirebaseMock;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.FirebaseFactory;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.Utility;
 
@@ -24,6 +26,7 @@ public class FirebaseProxyTest {
 
     @Before
     public void setUp() {
+        IdlingRegistry.getInstance().register(IdlingResourceFactory.getCountingIdlingResource());
         FirebaseFactory.setDependency(new FirebaseMock());
         proxy = FirebaseProxy.getInstance();
     }

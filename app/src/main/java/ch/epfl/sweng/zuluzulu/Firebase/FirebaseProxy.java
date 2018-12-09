@@ -73,10 +73,11 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * Get all objects T from database
-     * @param query from the collection
+     *
+     * @param query    from the collection
      * @param onResult Called on result
-     * @param creator Create the object
-     * @param <T> The object
+     * @param creator  Create the object
+     * @param <T>      The object
      */
     private <T> void getAll(DatabaseQuery query, OnResult<List<T>> onResult, mapToObject<T> creator) {
         IdlingResourceFactory.incrementCountingIdlingResource();
@@ -113,7 +114,7 @@ public class FirebaseProxy implements Proxy {
                 object = creator.apply(fmap);
             } catch (Exception ignored) {
             }
-            if(object != null)
+            if (object != null)
                 onResult.apply(object);
             IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the with id " + id));
@@ -140,7 +141,7 @@ public class FirebaseProxy implements Proxy {
                     object = creator.apply(fmap);
                 } catch (Exception ignored) {
                 }
-                if(object != null)
+                if (object != null)
                     result.add(object);
                 if (counter.increment()) {
                     onResult.apply(result);
