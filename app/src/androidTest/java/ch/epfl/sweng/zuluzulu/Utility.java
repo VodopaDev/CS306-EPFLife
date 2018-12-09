@@ -41,9 +41,10 @@ public class Utility {
 
     /**
      * Create a guest user
+     *
      * @return Return a Guest
      */
-    public static Guest createTestGuest(){
+    public static Guest createTestGuest() {
         return (new User.UserBuilder()).buildGuestUser();
     }
 
@@ -58,7 +59,7 @@ public class Utility {
         assert (user != null);
         assert (user.isConnected());
 
-        return (AuthenticatedUser)user;
+        return (AuthenticatedUser) user;
     }
 
     /**
@@ -72,7 +73,7 @@ public class Utility {
         assert (user != null);
         assert (user.hasRole(UserRole.ADMIN));
 
-        return (Admin)user;
+        return (Admin) user;
     }
 
     /**
@@ -139,16 +140,16 @@ public class Utility {
      */
     public static User.UserBuilder createFilledUserBuilder() {
         User.UserBuilder builder = new User.UserBuilder();
-        builder.setSciper("1");
+        builder.setSciper("0");
         builder.setGaspar("gaspar");
         builder.setEmail("test@epfl.ch");
         builder.setSection("IN");
         builder.setSemester("BA5");
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
-        builder.setFollowedAssociations(Collections.singletonList("1"));
-        builder.setFollowedEvents(Arrays.asList("1", "2", "3"));
-        builder.setFollowedChannels(Collections.singletonList("1"));
+        builder.setFollowedAssociations(Collections.singletonList("0"));
+        builder.setFollowedEvents(Collections.singletonList("0"));
+        builder.setFollowedChannels(Collections.singletonList("0"));
 
         return builder;
     }
@@ -160,7 +161,7 @@ public class Utility {
      */
     public static Channel defaultChannel() {
         return new Channel(
-                "1",
+                "0",
                 "Testing channel",
                 "The name is self explaining",
                 new HashMap<>(),
@@ -170,44 +171,43 @@ public class Utility {
 
     public static Post defaultPost() {
         return new Post(
-                "1",
-                "1",
+                "0",
+                "0",
                 null,
                 "mon message ne sert à rien",
                 "Nico",
                 "1",
                 Timestamp.now().toDate(),
                 "#F0E68C",
-                0,
-                0,
+                new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>()
         );
     }
 
-    public static Association defaultAssociation(){
+    public static Association defaultAssociation() {
         return new Association(
-                "1",
+                "0",
                 "Agepoly",
                 "Small description",
                 "A bit longer description without a lot of details",
                 null,
                 null,
-                Collections.singletonList("1"),
-                "1"
+                Collections.singletonList("0"),
+                "0"
         );
     }
 
-    public static Event defaultEvent(){
+    public static Event defaultEvent() {
         return new EventBuilder()
-                .setId("1")
+                .setId("0")
                 .setName("Fiesta time")
-                .setChannelId("1")
-                .setAssosId("1")
+                .setChannelId("0")
+                .setAssosId("0")
                 .setShortDesc("Is this a real event?")
                 .setLongDesc("Of course not, you should check this beautiful description")
                 .setDate(new EventDate(new Date(10000000), new Date(10500000)))
-                .setFollowers(new ArrayList<>())
+                .setFollowers(Collections.singletonList("0"))
                 .setOrganizer("I'm the organizer")
                 .setPlace("Not at EPFL")
                 .setIconUri(null)
@@ -220,7 +220,11 @@ public class Utility {
                 .build();
     }
 
-    public static ChatMessage defaultMessage() {
-        return new ChatMessage("1", "1", "message", new Date(), "sender", "111111");
+    public static ChatMessage defaultMessage0() {
+        return new ChatMessage("0", "0", "message?", new Date(2000), "auth", "0");
+    }
+
+    public static ChatMessage defaultMessage1() {
+        return new ChatMessage("1", "0", "message!", new Date(20000), "admin", "1");
     }
 }

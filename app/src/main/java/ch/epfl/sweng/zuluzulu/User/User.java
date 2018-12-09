@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.User;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -67,16 +68,16 @@ abstract public class User implements Serializable {
         this.roles.add(role);
     }
 
-    public List<String> getRoles(){
+    public List<String> getRoles() {
         List<String> result = new ArrayList<>();
-        for(UserRole role: roles)
+        for (UserRole role : roles)
             result.add(role.name());
         return result;
     }
 
-    public void setRoles(List<String> roles){
+    public void setRoles(List<String> roles) {
         this.roles.clear();
-        for(String role: roles)
+        for (String role : roles)
             this.roles.add(UserRole.valueOf(role));
     }
 
@@ -184,17 +185,17 @@ abstract public class User implements Serializable {
         }
 
         public UserBuilder setFollowedAssociations(List<String> followedAssociations) {
-            this.followedAssociations = followedAssociations;
+            this.followedAssociations = new ArrayList<>(followedAssociations);
             return this;
         }
 
         public UserBuilder setFollowedChannels(List<String> followedChannels) {
-            this.followedChannels = followedChannels;
+            this.followedChannels = new ArrayList<>(followedChannels);
             return this;
         }
 
         public UserBuilder setFollowedEvents(List<String> followedEvents) {
-            this.followedEvents = followedEvents;
+            this.followedEvents = new ArrayList<>(followedEvents);
             return this;
         }
 
@@ -262,6 +263,5 @@ abstract public class User implements Serializable {
                     && this.followedChannels != null
                     && this.followedEvents != null;
         }
-
     }
 }

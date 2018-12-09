@@ -105,7 +105,7 @@ public class EventFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = (User) getArguments().getSerializable(ARG_USER);
-            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Events");
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, getResources().getString(R.string.drawer_events));
         }
 
         allEvents = new ArrayList<>();
@@ -113,7 +113,7 @@ public class EventFragment extends SuperFragment {
         eventsToFilter = allEvents;
         eventsFiltered = new ArrayList<>();
         event_adapter = new EventArrayAdapter(getContext(), eventsFiltered, mListener, user);
-        currentComparator = Event.nameComparator();
+        currentComparator = Event.dateComparator();
         eventCalendar = Calendar.getInstance();
         fillEventLists();
     }
@@ -146,10 +146,13 @@ public class EventFragment extends SuperFragment {
         checkbox_event_sort_name = view.findViewById(R.id.event_fragment_checkBox_sort_name);
         checkbox_event_sort_date = view.findViewById(R.id.event_fragment_checkBox_sort_date);
         checkbox_event_sort_like = view.findViewById(R.id.event_fragment_checkbox_sort_like);
-        selectClickedCheckbox(checkbox_event_sort_name);
+        selectClickedCheckbox(checkbox_event_sort_date);
 
         event_fragment_from_date = view.findViewById(R.id.event_fragment_from_date);
+        event_fragment_from_date.setOnClickListener(dateOnClick(true));
         event_fragment_to_date = view.findViewById(R.id.event_fragment_to_date);
+        event_fragment_to_date.setOnClickListener(dateOnClick(false));
+
 
         event_search_bar = view.findViewById(R.id.event_fragment_search_bar);
 
@@ -158,7 +161,6 @@ public class EventFragment extends SuperFragment {
 
         // All method the set the behaviour of the checkboxes, date selecting and name/description matching
         setFilteringWithText();
-        setFilteringWithDate();
         setToggleFilterVisibilityBehaviour();
         setSortingBehaviourOnCheckbox(checkbox_event_sort_date, Event.dateComparator());
         setSortingBehaviourOnCheckbox(checkbox_event_sort_like, Event.likeComparator());
@@ -177,10 +179,6 @@ public class EventFragment extends SuperFragment {
             followedEvents.clear();
             eventsFiltered.clear();
             allEvents.addAll(result);
-            for (Event event : allEvents) {
-                if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event.getId()))
-                    followedEvents.add(event);
-            }
             eventsToFilter = allEvents;
             eventsFiltered.addAll(eventsToFilter);
             sortWithCurrentComparator();
@@ -194,14 +192,11 @@ public class EventFragment extends SuperFragment {
      * @param comparator comparator to use when the checkbox is clicked
      */
     private void setSortingBehaviourOnCheckbox(CheckBox checkBox, Comparator<Event> comparator) {
-        checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkBox.isEnabled()) {
-                    selectClickedCheckbox(checkBox);
-                    currentComparator = comparator;
-                    sortWithCurrentComparator();
-                }
+        checkBox.setOnClickListener(v -> {
+            if (checkBox.isEnabled()) {
+                selectClickedCheckbox(checkBox);
+                currentComparator = comparator;
+                sortWithCurrentComparator();
             }
         });
     }
@@ -264,6 +259,11 @@ public class EventFragment extends SuperFragment {
         dateTo = null;
         dateFrom = null;
 
+        followedEvents.clear();
+        for(Event event: allEvents)
+            if(((AuthenticatedUser)user).isFollowedEvent(event.getId()))
+                followedEvents.add(event);
+
         button_event_all.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
         button_event_fav.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
         selectedButton.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
@@ -308,54 +308,24 @@ public class EventFragment extends SuperFragment {
         }
     }
 
-    //TODO: it's surely possible to reduce this
+    private View.OnClickListener dateOnClick(boolean startDate){
+        return v -> {
+            DatePickerDialog.OnDateSetListener datePicker = (view, year, monthOfYear, dayOfMonth) -> {
+                eventCalendar.set(Calendar.YEAR, year);
+                eventCalendar.set(Calendar.MONTH, monthOfYear);
+                eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                if(startDate)
+                    dateFrom = (Date) eventCalendar.getTime().clone();
+                else
+                    dateTo = (Date) eventCalendar.getTime().clone();
+                filterWithDate();
+            };
 
-    /**
-     * Set the behaviour of both textfields from and to
-     */
-    private void setFilteringWithDate() {
-        event_fragment_from_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog.OnDateSetListener datePicker = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                          int dayOfMonth) {
-                        eventCalendar.set(Calendar.YEAR, year);
-                        eventCalendar.set(Calendar.MONTH, monthOfYear);
-                        eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        dateFrom = (Date) eventCalendar.getTime().clone();
-                        filterWithDate();
-                    }
-                };
-
-                if (getContext() != null)
-                    new DatePickerDialog(getContext(), datePicker, eventCalendar
-                            .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
-                            eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-        event_fragment_to_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog.OnDateSetListener datePicker = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                          int dayOfMonth) {
-                        eventCalendar.set(Calendar.YEAR, year);
-                        eventCalendar.set(Calendar.MONTH, monthOfYear);
-                        eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        dateTo = (Date) eventCalendar.getTime().clone();
-                        filterWithDate();
-                    }
-                };
-
-                if (getContext() != null)
-                    new DatePickerDialog(getContext(), datePicker, eventCalendar
-                            .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
-                            eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
+            if (getContext() != null)
+                new DatePickerDialog(getContext(), datePicker, eventCalendar
+                        .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
+                        eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        };
     }
 
     /**

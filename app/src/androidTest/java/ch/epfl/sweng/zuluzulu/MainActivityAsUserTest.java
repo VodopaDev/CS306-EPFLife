@@ -2,6 +2,8 @@ package ch.epfl.sweng.zuluzulu;
 
 import org.junit.Test;
 
+import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 
@@ -18,6 +20,8 @@ public class MainActivityAsUserTest extends TestWithAuthenticatedAndFragment<Mai
 
     @Override
     public void initFragment() {
+        DatabaseFactory.setDependency(new MockedProxy());
+
         fragment = MainFragment.newInstance(user);
     }
 

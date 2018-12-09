@@ -8,6 +8,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithGuestAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -22,7 +23,12 @@ public class MainFragmentGuestUserTest extends TestWithGuestAndFragment<MainFrag
     }
 
     @Test
-    public void theTextsAreDisplayed(){
+    public void clickOnEvent() {
+        onView(withText("Fiesta time")).perform(click());
+    }
+
+    @Test
+    public void theTextsAreDisplayed() {
 //        onView(withId(R.id.main_fragment_text_to)).check(matches(isDisplayed()));
 //        onView(withId(R.id.main_fragment_text_welcome)).check(matches(isDisplayed()));
 //        onView(withId(R.id.main_fragment_guest_image)).check(matches(isDisplayed()));

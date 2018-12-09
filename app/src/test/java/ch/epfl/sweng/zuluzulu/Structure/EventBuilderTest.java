@@ -19,32 +19,58 @@ import static org.junit.Assert.assertTrue;
 public class EventBuilderTest {
 
     @Test(expected = IllegalArgumentException.class)
-    public void nullIdThrowsException(){
+    public void nullIdThrowsException() {
         new EventBuilder().setId(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void nullNameThrowsException(){
+    public void nullNameThrowsException() {
         new EventBuilder().setName(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void nullShortDescriptionThrowsException(){
+    public void nullShortDescriptionThrowsException() {
         new EventBuilder().setShortDesc(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void nullLongDescThrowsException(){
+    public void nullLongDescThrowsException() {
         new EventBuilder().setLongDesc(null);
+
+    }
+    @Test(expected = AssertionError.class)
+    public void nullSpeaker() {
+        new EventBuilder().setSpeaker(null);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void nullDate() {
+        new EventBuilder().setDate(null);
+    }
+    @Test(expected = AssertionError.class)
+    public void nullCategory() {
+        new EventBuilder().setCategory(null);
+    }
+    @Test(expected = AssertionError.class)
+    public void nullContact() {
+        new EventBuilder().setContact(null);
+    }
+    @Test(expected = AssertionError.class)
+    public void nullWebsite() {
+        new EventBuilder().setWebsite(null);
+    }
+    @Test(expected = AssertionError.class)
+    public void nullUrlPlace() {
+        new EventBuilder().setUrlPlaceAndRoom(null);
     }
 
     @Test
-    public void longShortDescIsTrimmed(){
+    public void longShortDescIsTrimmed() {
         final String NAME1 = "ForumEpfl";
         final String SHORT_DESC = "aaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaaaaaaa aaaaaaaaaaa aaaaaaaaaaaaaa";
         final String LONG_DESC = "This is only random bla bla bla";
         final Date START_DATE = new Date(2L);
-        List<String> FOLLOWERS_1 = Arrays.asList("200","1052");
+        List<String> FOLLOWERS_1 = Arrays.asList("200", "1052");
         final String ORGANIZER = "Pascal Martin";
         final String PLACE = "CE";
         final String CONTACT = "ME";
@@ -84,7 +110,7 @@ public class EventBuilderTest {
         final String SHORT_DESC = "Beuverie à Zelig";
         final String LONG_DESC = "This is only random bla bla bla";
         final Date START_DATE = new Date(2L);
-        List<String> FOLLOWERS_1 = Arrays.asList("200","1052");
+        List<String> FOLLOWERS_1 = Arrays.asList("200", "1052");
         final String ORGANIZER = "Pascal Martin";
         final String PLACE = "CE";
         final String CONTACT = "ME";
@@ -137,13 +163,13 @@ public class EventBuilderTest {
     }
 
     @Test
-    public void nonConformUriAreChangedToDefaultUri(){
+    public void nonConformUriAreChangedToDefaultUri() {
         final String DEFAULT_URI = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon;
         final String NAME1 = "ForumEpfl";
         final String SHORT_DESC = "aaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaa aaaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaaaaaaa aaaaaaaaaaa aaaaaaaaaaaaaa";
         final String LONG_DESC = "This is only random bla bla bla";
         final Date START_DATE = new Date(2L);
-        List<String> FOLLOWERS_1 = Arrays.asList("200","1052");
+        List<String> FOLLOWERS_1 = Arrays.asList("200", "1052");
         final String ORGANIZER = "Pascal Martin";
         final String PLACE = "CE";
         final String CONTACT = "ME";

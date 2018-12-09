@@ -19,7 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(JUnit4.class)
 public class AuthenticatedUserTest {
-    private static final String sciper = "000001";
+    private static final String sciper = "0";
     private static final String email = "nico@epfl.ch";
     private static final String section = "IN";
     private static final String semester = "BA5";
@@ -87,12 +87,12 @@ public class AuthenticatedUserTest {
     @Test
     public void correctString() {
         assertThat(first_name + " " + last_name
-                + "\nsciper: " + sciper
-                + "\ngaspar: " + gaspar
-                + "\nemail: " + email
-                + "\nsection: " + section
-                + "\nsemester: " + semester
-        , equalTo(user.toString()));
+                        + "\nsciper: " + sciper
+                        + "\ngaspar: " + gaspar
+                        + "\nemail: " + email
+                        + "\nsection: " + section
+                        + "\nsemester: " + semester
+                , equalTo(user.toString()));
 
     }
 }

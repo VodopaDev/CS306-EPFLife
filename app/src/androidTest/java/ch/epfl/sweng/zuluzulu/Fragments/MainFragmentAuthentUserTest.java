@@ -26,7 +26,7 @@ public class MainFragmentAuthentUserTest extends TestWithAuthenticatedUser {
     }
 
     @Test
-    public void elementsArePresent(){
+    public void elementsArePresent() {
         onView(withId(R.id.main_fragment_followed_associations_text)).check(matches(isDisplayed()));
         onView(withId(R.id.main_fragment_followed_events_text)).check(matches(isDisplayed()));
         onView(withId(R.id.main_fragment_followed_associations_listview)).check(matches(isDisplayed()));
@@ -34,7 +34,7 @@ public class MainFragmentAuthentUserTest extends TestWithAuthenticatedUser {
     }
 
     @Test
-    public void anElementIspresent(){
+    public void anElementIspresent() {
         onView(withId(R.id.main_fragment_followed_associations_listview)).check(matches(hasDescendant(withText("Agepoly"))));
         onView(withId(R.id.main_fragment_followed_events_listview)).check(matches(hasDescendant(withText("Fiesta time"))));
     }

@@ -1,9 +1,12 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +14,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -21,7 +26,9 @@ import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
+import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
+import ch.epfl.sweng.zuluzulu.Structure.SuperMessage;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_CHAT_FRAGMENT;
@@ -32,7 +39,6 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_WRITE_POST_FRAGMENT;
  * This fragment is used to display the posts
  */
 public class PostFragment extends SuperChatPostsFragment {
-    private List<Post> posts = new ArrayList<>();
     private PostArrayAdapter adapter;
 
     private Button writePostButton;
@@ -65,23 +71,24 @@ public class PostFragment extends SuperChatPostsFragment {
         filterUpsButton = view.findViewById(R.id.post_filter_nbUps);
 
         chatButton.setEnabled(true);
-        chatButton.setBackgroundColor(getResources().getColor(R.color.white));
+        chatButton.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
         postsButton.setEnabled(false);
-        postsButton.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
+        postsButton.setBackgroundColor(getResources().getColor(R.color.white));
 
-        adapter = new PostArrayAdapter(view.getContext(), posts, user);
+        adapter = new PostArrayAdapter(view.getContext(), messages, user);
         listView.setAdapter(adapter);
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
 
         anonymous = getActivity().getPreferences(Context.MODE_PRIVATE).getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
-        currentComparator = Post.decreasingTimeComparator();
+        currentComparator = (Comparator<Post>) Post.decreasingTimeComparator();
 
         loadAllPosts();
         setUpChatButton();
         setUpNewPostButton();
         setUpFilterButtons();
         setUpReplyListener();
+        setUpProfileListener();
 
         return view;
     }
@@ -93,10 +100,13 @@ public class PostFragment extends SuperChatPostsFragment {
         chatButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_CHAT_FRAGMENT, channel));
     }
 
+    /**
+     * Load the posts from the database and notify the adapter of the changes
+     */
     private void loadAllPosts() {
         DatabaseFactory.getDependency().getPostsFromChannel(channel.getId(), result -> {
-            posts.clear();
-            posts.addAll(result);
+            messages.clear();
+            messages.addAll(result);
             sortPostsWithCurrentComparator();
             adapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);
@@ -125,8 +135,9 @@ public class PostFragment extends SuperChatPostsFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Post post = posts.get(position);
-                mListener.onFragmentInteraction(CommunicationTag.OPEN_REPLY_FRAGMENT, post);
+                Post post = (Post) messages.get(position);
+                Pair data = new Pair(channel, post);
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_REPLY_FRAGMENT, data);
             }
         });
     }
@@ -138,7 +149,7 @@ public class PostFragment extends SuperChatPostsFragment {
         filterTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateFilter(Post.decreasingTimeComparator());
+                updateFilter((Comparator<Post>) Post.decreasingTimeComparator());
             }
         });
 
@@ -177,7 +188,7 @@ public class PostFragment extends SuperChatPostsFragment {
      * Sort the posts with the current comparator
      */
     private void sortPostsWithCurrentComparator() {
-        Collections.sort(posts, currentComparator);
+        Collections.sort((List<Post>) (List<?>) messages, currentComparator);
         adapter.notifyDataSetChanged();
         listView.setSelection(0);
     }

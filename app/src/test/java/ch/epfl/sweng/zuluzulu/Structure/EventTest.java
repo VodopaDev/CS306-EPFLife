@@ -200,7 +200,7 @@ public class EventTest {
     }
 
     @Test
-    public void dateStringAreCorrect(){
+    public void dateStringAreCorrect() {
         initWorkingAssociation();
         String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_PATTERN);
@@ -210,7 +210,7 @@ public class EventTest {
     }
 
     @Test
-    public void getDataIsCorrect(){
+    public void getDataIsCorrect() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", ID);
         map.put("channel_id", CHANNEL_ID);
@@ -234,7 +234,6 @@ public class EventTest {
         event0 = new Event(new FirebaseMapDecorator(map));
         assertEquals(map, event0.getData());
     }
-
 
 
 }

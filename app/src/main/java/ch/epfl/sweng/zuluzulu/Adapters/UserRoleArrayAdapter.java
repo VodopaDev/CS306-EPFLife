@@ -35,7 +35,7 @@ public class UserRoleArrayAdapter extends ArrayAdapter<Map<String, Object>> {
     private static final int layout_resource_id = R.layout.card_user_role;
 
     private final Context context;
-    private final List<Map<String,Object>> data;
+    private final List<Map<String, Object>> data;
     private final OnFragmentInteractionListener mListener;
 
     /**
@@ -44,7 +44,7 @@ public class UserRoleArrayAdapter extends ArrayAdapter<Map<String, Object>> {
      * @param context Context of the Fragment
      * @param data    List of Associations to view
      */
-    public UserRoleArrayAdapter(Context context, List<Map<String,Object>> data, OnFragmentInteractionListener mListener) {
+    public UserRoleArrayAdapter(Context context, List<Map<String, Object>> data, OnFragmentInteractionListener mListener) {
         super(context, layout_resource_id, data);
         this.mListener = mListener;
         this.context = context;
@@ -74,20 +74,19 @@ public class UserRoleArrayAdapter extends ArrayAdapter<Map<String, Object>> {
         }
 
         final Map<String, Object> map = data.get(position);
-        holder.sciper.setText((String)map.get("sciper"));
+        holder.sciper.setText((String) map.get("sciper"));
 
-        Set<String> roles = Sets.newHashSet((List < String >)map.get("roles"));
-        if(roles.contains(UserRole.ADMIN.toString()))
+        Set<String> roles = Sets.newHashSet((List<String>) map.get("roles"));
+        if (roles.contains(UserRole.ADMIN.toString()))
             holder.adminCheckbox.setChecked(true);
 
         holder.adminCheckbox.setOnClickListener(v -> {
-            if(holder.adminCheckbox.isChecked()){
+            if (holder.adminCheckbox.isChecked()) {
                 roles.add("ADMIN");
-                DatabaseFactory.getDependency().updateUserRole((String)map.get("sciper"), new ArrayList<>(roles));
-            }
-            else{
+                DatabaseFactory.getDependency().updateUserRole((String) map.get("sciper"), new ArrayList<>(roles));
+            } else {
                 roles.remove("ADMIN");
-                DatabaseFactory.getDependency().updateUserRole((String)map.get("sciper"), new ArrayList<>(roles));
+                DatabaseFactory.getDependency().updateUserRole((String) map.get("sciper"), new ArrayList<>(roles));
             }
             holder.adminCheckbox.clearFocus();
         });

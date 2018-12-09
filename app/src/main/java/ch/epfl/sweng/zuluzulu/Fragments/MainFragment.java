@@ -113,9 +113,6 @@ public class MainFragment extends SuperFragment {
     }
 
 
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -131,25 +128,13 @@ public class MainFragment extends SuperFragment {
     }
 
 
-
-
     private void fillUpcomingEventLists() {
-        DatabaseFactory.getDependency().getAllEvents(result -> {
-            upcoming_events.clear();
-            List<Event> temp = new ArrayList<>(result);
-            for(Event e: temp) {
-                if(e.getStartDate().compareTo(new Date()) <= 0) {
-                    result.remove(e);
-                }
+        DatabaseFactory.getDependency().getEventsFromToday(result -> {
+            if (result != null) {
+                upcoming_events.addAll(result);
+                event_adapter.notifyDataSetChanged();
             }
-            Collections.sort(result, currentComparator);
-            if(result.size() > 2) {
-                result = new ArrayList<>(result.subList(0, 2));
-            }
-
-            upcoming_events.addAll(result);
-            event_adapter.notifyDataSetChanged();
-        });
+        }, 3);
     }
 
     private void sortWithCurrentComparator() {
@@ -160,15 +145,20 @@ public class MainFragment extends SuperFragment {
     private void fillRandomAssociationLists() {
         random_assos.clear();
         DatabaseFactory.getDependency().getAllAssociations(result -> {
-            int rand = (int) (Math.random() * (result.size()));
-            random_assos.add(result.get(rand));
-            assos_adapter.notifyDataSetChanged();
+            if (result != null && !result.isEmpty()) {
+                int rand = (int) (Math.random() * (result.size()));
+                random_assos.add(result.get(rand));
+                rand = (int) (Math.random() * (result.size()));
+                random_assos.add(result.get(rand));
+                assos_adapter.notifyDataSetChanged();
+            }
         });
     }
+
     /*
      * connected user
      */
-    public View createConnectedUserView(LayoutInflater inflater, ViewGroup container){
+    public View createConnectedUserView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_main_user, container, false);
         associations_listView = view.findViewById(R.id.main_fragment_followed_associations_listview);
         events_listView = view.findViewById(R.id.main_fragment_followed_events_listview);
@@ -179,31 +169,36 @@ public class MainFragment extends SuperFragment {
 
     private void fillConnectedUserAssociationsList() {
         DatabaseFactory.getDependency().getAllAssociations(result -> {
-            associations_array.clear();
-            for (Association association : result) {
-                if (((AuthenticatedUser) user).isFollowedAssociation(association.getId()))
-                    associations_array.add(association);
+            if (result != null) {
+                associations_array.clear();
+                for (Association association : result) {
+                    if (((AuthenticatedUser) user).isFollowedAssociation(association.getId()))
+                        associations_array.add(association);
+                }
+                associations_adapter.notifyDataSetChanged();
             }
-            associations_adapter.notifyDataSetChanged();
         });
+
     }
 
     private void fillConnectedUserEventsList() {
         DatabaseFactory.getDependency().getAllEvents(result -> {
-            events_array.clear();
-            for (Event event : result) {
-                if (((AuthenticatedUser) user).isFollowedEvent(event.getId()))
-                    events_array.add(event);
+            if (result != null) {
+                events_array.clear();
+                for (Event event : result) {
+                    if (((AuthenticatedUser) user).isFollowedEvent(event.getId()))
+                        events_array.add(event);
+                }
+                Collections.sort(events_array, Event.dateComparator());
+                events_adapter.notifyDataSetChanged();
             }
-            Collections.sort(events_array, Event.dateComparator());
-            events_adapter.notifyDataSetChanged();
         });
     }
 
     /*
      * guest user
      */
-    public View createNotConnectedUserView(LayoutInflater inflater, ViewGroup container){
+    public View createNotConnectedUserView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         listview_event = view.findViewById(R.id.main_page_list_event);

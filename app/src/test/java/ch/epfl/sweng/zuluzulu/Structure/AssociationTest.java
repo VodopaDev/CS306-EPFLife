@@ -60,7 +60,7 @@ public class AssociationTest {
                 LONG_DESC,
                 null,
                 null,
-                Arrays.asList("100","101"),
+                Arrays.asList("100", "101"),
                 CHANNEL_ID
         );
     }
@@ -71,16 +71,16 @@ public class AssociationTest {
     }
 
     @Test
-    public void fmapConstructorTest(){
+    public void fmapConstructorTest() {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("id",ID1);
+        map.put("id", ID1);
         map.put("name", NAME1);
         map.put("short_description", SHORT_DESC);
         map.put("long_description", LONG_DESC);
         map.put("icon_uri", TEST_URI_STRING);
         map.put("banner_uri", TEST_URI_STRING);
         map.put("channel_id", CHANNEL_ID);
-        map.put("upcoming_events", Arrays.asList("100","101"));
+        map.put("upcoming_events", Arrays.asList("100", "101"));
 
         assertThat(new Association(new FirebaseMapDecorator(map)).getData(), equalTo(map));
     }
@@ -107,7 +107,7 @@ public class AssociationTest {
 
     @Test
     public void closestEventIsCorrect() {
-        assertThat(asso2.getUpcomingEvents(), equalTo(Arrays.asList("100","101")));
+        assertThat(asso2.getUpcomingEvents(), equalTo(Arrays.asList("100", "101")));
         assertThat(asso1.getUpcomingEvents(), equalTo(Collections.EMPTY_LIST));
     }
 
@@ -135,8 +135,8 @@ public class AssociationTest {
     }
 
     @Test
-    public void requiredFIeldsAreCorrect(){
-        assertEquals(Arrays.asList("id","name","short_description"), Association.requiredFields());
+    public void requiredFIeldsAreCorrect() {
+        assertEquals(Arrays.asList("id", "name", "short_description"), Association.requiredFields());
     }
 
 

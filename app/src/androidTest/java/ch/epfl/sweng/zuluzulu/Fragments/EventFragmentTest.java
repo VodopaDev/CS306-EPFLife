@@ -11,29 +11,35 @@ import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestWithAuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
-public class EventFragmentTest extends TestWithAuthenticatedUser {
-    SuperFragment fragment;
+public class EventFragmentTest extends TestWithAuthenticatedAndFragment<EventFragment> {
 
-    @Before
-    public void init() {
+    @Override
+    public void initFragment() {
         DatabaseFactory.setDependency(new MockedProxy());
+        fragment = EventFragment.newInstance(user);
+    }
 
-        fragment = EventFragment.newInstance(getUser());
-        mActivityRule.getActivity().openFragment(fragment);
-
+    @Override
+    @Before
+    public void init(){
+        super.init();
         onView(withId(R.id.event_fragment_filter_button)).perform(click());
     }
 
@@ -70,7 +76,7 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
     }
 
     @Test
-    public void sortEventWithTheThreeSimpleSort()  {
+    public void sortEventWithTheThreeSimpleSort() {
         onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(ViewActions.click());
         onView(withId(R.id.event_fragment_checkbox_sort_like)).perform(ViewActions.click());
         onView(withId(R.id.event_fragment_checkBox_sort_name)).perform(ViewActions.click());
@@ -102,8 +108,41 @@ public class EventFragmentTest extends TestWithAuthenticatedUser {
     }
 
     @Test
+    public void authenticatedCanClickFavorite(){
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
+        onView(withId(R.id.event_fragment_fav_button)).perform(click());
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
+    }
+
+    @Test
+    public void authenticatedCanUnfollowAndFollowAnEvent(){
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
+        onData(anything())
+                .inAdapterView(withId(R.id.event_fragment_listview))
+                .atPosition(0)
+                .onChildView(withId(R.id.card_event_like_button))
+                .perform(click());
+        onView(withId(R.id.event_fragment_fav_button)).perform(click());
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(0)));
+        onView(withId(R.id.event_fragment_all_button)).perform(click());
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
+        onData(anything())
+                .inAdapterView(withId(R.id.event_fragment_listview))
+                .atPosition(0)
+                .onChildView(withId(R.id.card_event_like_button))
+                .perform(click());
+        onView(withId(R.id.event_fragment_fav_button)).perform(click());
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
+    }
+
+    @Test
     public void optionPanelIsDisplayed() {
         onView(withId(R.id.even_filter_constraintLayout)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void clickOnEvent() {
+        onView(withText("Fiesta time")).perform(click());
     }
 
     @Test

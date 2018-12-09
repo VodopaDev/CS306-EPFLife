@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +17,14 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
+import ch.epfl.sweng.zuluzulu.Structure.SuperMessage;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility.Utils;
 
-public class PostArrayAdapter extends ArrayAdapter<Post> {
+public class PostArrayAdapter extends ArrayAdapter<SuperMessage> {
 
     private Context mContext;
-    private List<Post> posts;
+    private List<SuperMessage> posts;
     private User user;
 
     private Post currentPost;
@@ -34,7 +34,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     private ImageView upButton;
     private ImageView downButton;
 
-    public PostArrayAdapter(@NonNull Context context, List<Post> list, User user) {
+    public PostArrayAdapter(@NonNull Context context, List<SuperMessage> list, User user) {
         super(context, 0, list);
         mContext = context;
         posts = list;
@@ -44,7 +44,7 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        currentPost = posts.get(position);
+        currentPost = (Post) posts.get(position);
         boolean anonymous = currentPost.isAnonymous();
 
         View view = LayoutInflater.from(mContext).inflate(R.layout.post, parent, false);
@@ -79,8 +79,8 @@ public class PostArrayAdapter extends ArrayAdapter<Post> {
     }
 
     private void setUpNbResponses(View view) {
-        int nbResponses = currentPost.getNbResponses();
-        nbResponsesText.setText("" + currentPost.getNbResponses());
+        int nbResponses = currentPost.getNbReplies();
+        nbResponsesText.setText("" + currentPost.getNbReplies());
         if (nbResponses == 0 || currentPost.isReply()) {
             view.findViewById(R.id.post_responses_linearlayout).setVisibility(LinearLayout.GONE);
         }

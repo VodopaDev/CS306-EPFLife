@@ -5,6 +5,8 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
@@ -36,6 +38,8 @@ public class MainActivityListenerTest extends TestWithAdminAndFragment<MainFragm
 
     @Override
     public void initFragment() {
+        DatabaseFactory.setDependency(new MockedProxy());
+
         fragment = MainFragment.newInstance(user);
     }
 
@@ -57,7 +61,7 @@ public class MainActivityListenerTest extends TestWithAdminAndFragment<MainFragm
                 getMainActivity().onFragmentInteraction(OPEN_ABOUT_US_FRAGMENT, user);
                 assertTrue(getMainActivity().getCurrentFragment() instanceof AboutZuluzuluFragment);
 
-                getMainActivity().onFragmentInteraction(OPEN_PROFILE_FRAGMENT, user);
+                getMainActivity().onFragmentInteraction(OPEN_PROFILE_FRAGMENT, user.getData());
                 assertTrue(getMainActivity().getCurrentFragment() instanceof ProfileFragment);
 
                 getMainActivity().onFragmentInteraction(OPEN_CHAT_FRAGMENT, Utility.defaultChannel());
