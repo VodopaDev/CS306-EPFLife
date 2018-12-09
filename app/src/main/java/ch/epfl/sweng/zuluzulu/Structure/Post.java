@@ -6,8 +6,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 
@@ -17,22 +19,19 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 public class Post extends SuperMessage {
 
     private String color;
-    private int nbUps;
-    private int nbResponses;
-    private List<String> upScipers;
-    private List<String> downScipers;
+    private Set<String> replies;
+    private Set<String> upScipers;
+    private Set<String> downScipers;
     private String originalPostId;
 
-    public Post(String id, String channelId, String originalPostId, String message, String senderName, String senderSciper, Date time, String color, int nbResponses, int nbUps, List<String> upScipers, List<String> downScipers) {
+    public Post(String id, String channelId, String originalPostId, String message, String senderName, String senderSciper, Date time, String color, List<String> replies, List<String> upScipers, List<String> downScipers) {
         super(id, channelId, message, senderName, senderSciper, time);
         this.originalPostId = originalPostId;
         this.color = color;
-        this.nbResponses = nbResponses;
 
-        assert (nbUps == upScipers.size() - downScipers.size());
-        this.nbUps = nbUps;
-        this.upScipers = upScipers;
-        this.downScipers = downScipers;
+        this.replies = new HashSet<>(replies);
+        this.upScipers = new HashSet<>(upScipers);
+        this.downScipers = new HashSet<>(downScipers);
     }
 
     public Post(FirebaseMapDecorator data) {
@@ -46,15 +45,14 @@ public class Post extends SuperMessage {
         message = data.getString("message");
         time = data.getDate("time");
         color = data.getString("color");
-        nbUps = data.getInteger("nb_ups");
         originalPostId = data.getString("original_post_id");
-        nbResponses = data.getInteger("nb_responses");
-        upScipers = data.getStringList("up_scipers");
-        downScipers = data.getStringList("down_scipers");
+        replies = new HashSet<>(data.getStringList("replies"));
+        upScipers = new HashSet<>(data.getStringList("up_scipers"));
+        downScipers = new HashSet<>(data.getStringList("down_scipers"));
     }
 
     public static List<String> requiredFields() {
-        return Arrays.asList("sender_name", "sender_sciper", "message", "time", "color", "nb_ups", "nb_responses", "up_scipers", "down_scipers", "id", "channel_id");
+        return Arrays.asList("sender_name", "sender_sciper", "message", "time", "color", "replies", "up_scipers", "down_scipers", "id", "channel_id");
     }
 
     /**
@@ -80,8 +78,19 @@ public class Post extends SuperMessage {
      *
      * @return the number of responses
      */
-    public int getNbResponses() {
-        return nbResponses;
+    public int getNbReplies() {
+        return replies.size();
+    }
+
+    /**
+     *
+     */
+    public List<String> getReplies(){
+        return new ArrayList<>(replies);
+    }
+
+    public boolean addReply(String replyId){
+        return originalPostId == null && replies.add(replyId);
     }
 
     /**
@@ -102,30 +111,12 @@ public class Post extends SuperMessage {
         return downScipers.contains(userID);
     }
 
-    /**
-     * Getter for the up scipers
-     *
-     * @return the up scipers
-     */
-    public List<String> getUpScipers() {
-        return new ArrayList<>(Collections.unmodifiableCollection(upScipers));
-    }
-
-    /**
-     * Getter for the down scipers
-     *
-     * @return the down scipers
-     */
-    public List<String> getDownScipers() {
-        return new ArrayList<>(Collections.unmodifiableCollection(downScipers));
-    }
-
     public boolean upvoteWithUser(String userId) {
-        return !isDownByUser(userId) && !isUpByUser(userId) && upScipers.add(userId);
+        return !isDownByUser(userId) && upScipers.add(userId);
     }
 
     public boolean downvoteWithUser(String userId) {
-        return !isDownByUser(userId) && !isUpByUser(userId) && downScipers.add(userId);
+        return !isUpByUser(userId) && downScipers.add(userId);
     }
 
     public Map<String, Object> getData() {
@@ -138,10 +129,9 @@ public class Post extends SuperMessage {
         map.put("time", time);
         map.put("sender_sciper", senderSciper);
         map.put("color", color);
-        map.put("nb_ups", nbUps);
-        map.put("nb_responses", nbResponses);
-        map.put("up_scipers", upScipers);
-        map.put("down_scipers", downScipers);
+        map.put("replies", new ArrayList<>(replies));
+        map.put("up_scipers", new ArrayList<>(upScipers));
+        map.put("down_scipers", new ArrayList<>(downScipers));
         return map;
     }
 
@@ -178,6 +168,6 @@ public class Post extends SuperMessage {
      * @return Comparator to compare posts with number of replies
      */
     public static Comparator<Post> decreasingNbRepliesComparator() {
-        return (o1, o2) -> o2.getNbResponses() - o1.getNbResponses();
+        return (o1, o2) -> o2.getNbReplies() - o1.getNbReplies();
     }
 }
