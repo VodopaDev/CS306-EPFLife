@@ -37,7 +37,7 @@ public class DocumentMock implements DatabaseDocument {
     }
 
     @Override
-    public Task<DocumentSnapshot> get() {
+    public Task<DocumentSnapshot> getAndAddOnSuccessListener() {
         return new TaskMock<>();
     }
 

@@ -31,5 +31,4 @@ public class UserDatabaseContract {
         public static final String COLUMN_NAME_SEMESTER = "semestre";
         public static final String COLUMN_NAME_EMAIL = "email";
     }
-
 }

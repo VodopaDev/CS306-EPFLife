@@ -44,7 +44,7 @@ public class DocumentAdapterTest {
 
     @Test
     public void get() {
-        assertNotNull(db.get());
+        assertNotNull(db.getAndAddOnSuccessListener());
     }
 
     @Test

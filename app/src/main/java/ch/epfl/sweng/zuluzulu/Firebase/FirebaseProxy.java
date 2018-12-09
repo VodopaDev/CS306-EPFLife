@@ -10,7 +10,6 @@ import com.google.firebase.firestore.FieldValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,14 +21,12 @@ import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseQuery;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.FirebaseFactory;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
-import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.User.User;
 
 public class FirebaseProxy implements Proxy {
 
@@ -110,8 +107,7 @@ public class FirebaseProxy implements Proxy {
      */
     private <T> void getObjectById(DatabaseCollection collection, String id, OnResult<T> onResult, mapToObject<T> creator) {
         IdlingResourceFactory.incrementCountingIdlingResource();
-        collection.document(id).get().addOnSuccessListener(documentSnapshot -> {
-            FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+        collection.document(id).getAndAddOnSuccessListener(fmap -> {
             T object = null;
             try {
                 object = creator.apply(fmap);
@@ -138,8 +134,7 @@ public class FirebaseProxy implements Proxy {
         Counter counter = new Counter(ids.size());
 
         for (String id : ids) {
-            collection.document(id).get().addOnSuccessListener(documentSnapshot -> {
-                FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+            collection.document(id).getAndAddOnSuccessListener(fmap -> {
                 T object = null;
                 try {
                     object = creator.apply(fmap);
@@ -358,7 +353,7 @@ public class FirebaseProxy implements Proxy {
             }
             onResult.apply(result);
             IdlingResourceFactory.decrementCountingIdlingResource();
-        }).addOnFailureListener(onFailureWithErrorMessage("Cannot get MessagesFromChannel " + id));
+        }).addOnFailureListener(onFailureWithErrorMessage("Cannot getAndAddOnSuccessListener MessagesFromChannel " + id));
     }
 
     @Override
@@ -390,7 +385,7 @@ public class FirebaseProxy implements Proxy {
             }
             onResult.apply(result);
             IdlingResourceFactory.decrementCountingIdlingResource();
-        }).addOnFailureListener(onFailureWithErrorMessage("Cannot get PostsFromChannel " + id));
+        }).addOnFailureListener(onFailureWithErrorMessage("Cannot getAndAddOnSuccessListener PostsFromChannel " + id));
     }
 
     @Override
@@ -443,7 +438,7 @@ public class FirebaseProxy implements Proxy {
             }
             onResult.apply(result);
             IdlingResourceFactory.decrementCountingIdlingResource();
-        }).addOnFailureListener(onFailureWithErrorMessage("Cannot get Replies from Post  " + postId));
+        }).addOnFailureListener(onFailureWithErrorMessage("Cannot getAndAddOnSuccessListener Replies from Post  " + postId));
     }
 
     @Override
@@ -519,10 +514,9 @@ public class FirebaseProxy implements Proxy {
 
     public void getUserWithIdOrCreateIt(String id, OnResult<Map<String, Object>> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
-        userCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
+        userCollection.document(id).getAndAddOnSuccessListener(fmap -> {
             Map<String, Object> map = new HashMap<>();
-            map.put("sciper", documentSnapshot.getId());
-            if (!documentSnapshot.exists()) {
+            if (fmap == null) {
                 map.put("followed_associations", new ArrayList<String>());
                 map.put("followed_events", new ArrayList<String>());
                 map.put("followed_channels", new ArrayList<String>());
@@ -535,7 +529,7 @@ public class FirebaseProxy implements Proxy {
                 map.put("email", "");
                 map.put("sciper", "");
             } else {
-                map.putAll(Objects.requireNonNull(documentSnapshot.getData()));
+                map.putAll(Objects.requireNonNull(fmap.getMap()));
             }
             onResult.apply(map);
             IdlingResourceFactory.decrementCountingIdlingResource();

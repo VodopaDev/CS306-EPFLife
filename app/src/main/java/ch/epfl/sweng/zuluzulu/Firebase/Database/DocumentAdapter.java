@@ -8,6 +8,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+
 public class DocumentAdapter implements DatabaseDocument {
     private final DocumentReference document;
 
@@ -31,8 +33,16 @@ public class DocumentAdapter implements DatabaseDocument {
     }
 
     @Override
-    public Task<DocumentSnapshot> get() {
-        return document.get();
+    public Task<DocumentSnapshot> getAndAddOnSuccessListener(OperationWithFirebaseMap listener) {
+        Task<DocumentSnapshot> task = document.get();
+        task.addOnSuccessListener(documentSnapshot -> {
+            if(documentSnapshot.exists()) {
+                listener.apply(new FirebaseMapDecorator(documentSnapshot));
+            } else {
+                listener.apply(null);
+            }
+        });
+        return task;
     }
 
     @Override

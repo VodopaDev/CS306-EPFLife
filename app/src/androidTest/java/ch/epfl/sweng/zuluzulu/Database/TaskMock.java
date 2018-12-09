@@ -8,9 +8,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
+import static org.mockito.Mockito.mock;
 
 class TaskMock<T> extends Task<T> {
     @Override
@@ -49,6 +51,7 @@ class TaskMock<T> extends Task<T> {
     @NonNull
     @Override
     public com.google.android.gms.tasks.Task<T> addOnSuccessListener(@NonNull OnSuccessListener<? super T> onSuccessListener) {
+        DocumentSnapshot snap = mock(DocumentSnapshot.class);
         return this;
     }
 
