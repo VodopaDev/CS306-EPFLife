@@ -10,6 +10,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,13 +73,13 @@ public class CollectionMock implements DatabaseCollection {
         map.put("sender_name", "");
         map.put("sender_sciper", "");
         map.put("message", "");
-        map.put("time", "");
+        map.put("time", new Date());
         map.put("restrictions", "");
         map.put("color", "");
-        map.put("nb_ups", "");
-        map.put("nb_responses", "");
-        map.put("up_scipers", "");
-        map.put("down_scipers", "");
+        map.put("nb_ups", 1L);
+        map.put("nb_responses", 1L);
+        map.put("up_scipers", new ArrayList<String>());
+        map.put("down_scipers", new ArrayList<String>());
 
 
         FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);

@@ -29,6 +29,7 @@ public class FirebaseProxyTest {
         IdlingRegistry.getInstance().register(IdlingResourceFactory.getCountingIdlingResource());
         FirebaseFactory.setDependency(new FirebaseMock());
         proxy = FirebaseProxy.getInstance();
+        Utility.openMenu();
     }
 
     @Test
