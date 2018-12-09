@@ -5,10 +5,17 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 
 public class CollectionAdapter implements DatabaseCollection {
 
@@ -34,8 +41,19 @@ public class CollectionAdapter implements DatabaseCollection {
     }
 
     @Override
-    public Task<QuerySnapshot> get() {
-        return collection.get();
+    public Task<QuerySnapshot> getAndAddOnSuccessListener(OperationWithFirebaseMapList listener) {
+        Task<QuerySnapshot> task =  collection.get();
+
+        task.addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<FirebaseMapDecorator> list = new ArrayList<>();
+                    for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
+                        list.add(new FirebaseMapDecorator(snap));
+                    }
+                    listener.applyList(list);
+                }
+            );
+
+        return task;
     }
 
     @Override

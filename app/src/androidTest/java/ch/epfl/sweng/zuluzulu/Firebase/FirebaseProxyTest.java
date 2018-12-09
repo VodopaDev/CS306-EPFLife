@@ -25,7 +25,7 @@ public class FirebaseProxyTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    FirebaseProxy proxy;
+    private FirebaseProxy proxy;
 
     @Before
     public void setUp() {

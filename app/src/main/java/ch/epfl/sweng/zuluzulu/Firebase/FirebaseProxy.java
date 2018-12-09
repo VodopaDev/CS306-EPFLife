@@ -344,12 +344,11 @@ public class FirebaseProxy implements Proxy {
     @Override
     public void getMessagesFromChannel(String id, OnResult<List<ChatMessage>> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
-        channelCollection.document(id).collection("messages").get().addOnSuccessListener(queryDocumentSnapshots -> {
+        channelCollection.document(id).collection("messages").getAndAddOnSuccessListener(fmapList -> {
             List<ChatMessage> result = new ArrayList<>();
-            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
-                if (data.hasFields(ChatMessage.requiredFields()))
-                    result.add(new ChatMessage(data));
+            for (FirebaseMapDecorator fmap : fmapList) {
+                if (fmap.hasFields(ChatMessage.requiredFields()))
+                    result.add(new ChatMessage(fmap));
             }
             onResult.apply(result);
             IdlingResourceFactory.decrementCountingIdlingResource();
@@ -359,10 +358,9 @@ public class FirebaseProxy implements Proxy {
     @Override
     public void getPostsFromChannel(String id, OnResult<List<Post>> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
-        channelCollection.document(id).collection("posts").get().addOnSuccessListener(queryDocumentSnapshots -> {
+        channelCollection.document(id).collection("posts").getAndAddOnSuccessListener(fmapList -> {
             List<Post> result = new ArrayList<>();
-            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+            for (FirebaseMapDecorator data : fmapList) {
                 if (data.hasFields(Post.requiredFields())) {
 
                     /**
@@ -374,6 +372,7 @@ public class FirebaseProxy implements Proxy {
                      *
                      * Si on se met d'accord sur la facon d'implémenter cela, je suis chaud
                      * à modifier le reste
+                     * //TODO
                      */
                     try {
                         result.add(new Post(data));
@@ -429,10 +428,9 @@ public class FirebaseProxy implements Proxy {
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(channelId).collection("posts")
                 .document(postId)
-                .collection("replies").get().addOnSuccessListener(queryDocumentSnapshots -> {
+                .collection("replies").getAndAddOnSuccessListener(fmapList -> {
             List<Post> result = new ArrayList<>();
-            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+            for (FirebaseMapDecorator data : fmapList) {
                 if (data.hasFields(Post.requiredFields()))
                     result.add(new Post(data));
             }
@@ -539,11 +537,10 @@ public class FirebaseProxy implements Proxy {
     @Override
     public void getAllUsers(OnResult<List<Map<String, Object>>> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
-        userCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
+        userCollection.getAndAddOnSuccessListener(fmapList -> {
             List<Map<String, Object>> resultList = new ArrayList<>();
-            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                Map<String, Object> map = new HashMap<>(snap.getData());
-                map.put("sciper", snap.getId());
+            for (FirebaseMapDecorator snap : fmapList) {
+                Map<String, Object> map = new HashMap<>(snap.getMap());
                 resultList.add(map);
             }
             onResult.apply(resultList);
