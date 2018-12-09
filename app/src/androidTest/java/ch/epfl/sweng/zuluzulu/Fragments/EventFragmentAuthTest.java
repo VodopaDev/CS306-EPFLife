@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
-public class EventFragmentTest extends TestWithAuthenticatedAndFragment<EventFragment> {
+public class EventFragmentAuthTest extends TestWithAuthenticatedAndFragment<EventFragment> {
 
     @Override
     public void initFragment() {

@@ -9,14 +9,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
-import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithGuestAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -24,12 +20,16 @@ import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.anyIntent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-public class AboutZuluzuluFragmentTest extends TestWithGuestAndFragment<AboutZuluzuluFragment> {
+public class AboutZuluzuluFragmentTest {
 
-    @Override
-    public void initFragment() {
-        DatabaseFactory.setDependency(new MockedProxy());
-        fragment = AboutZuluzuluFragment.newInstance();
+    @Rule
+    public final IntentsTestRule<MainActivity> mActivityRule =
+            new IntentsTestRule<>(MainActivity.class);
+
+    @Before
+    public void init() {
+        SuperFragment fragment = AboutZuluzuluFragment.newInstance();
+        mActivityRule.getActivity().openFragment(fragment);
     }
 
     @Test
