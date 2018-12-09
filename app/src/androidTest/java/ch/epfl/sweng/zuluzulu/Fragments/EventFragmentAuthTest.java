@@ -83,11 +83,28 @@ public class EventFragmentAuthTest extends TestWithAuthenticatedAndFragment<Even
     }
 
     @Test
-    public void sortWithKeywordTest() {
+    public void sortWithKeywordNoResultTest(){
+        onView(withId(R.id.event_fragment_search_bar)).perform(typeText("random test that produces no result"));
+        onView(withId(R.id.event_fragment_listview)).check(matches(not(hasDescendant(withText("Fiesta time")))));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(0)));
+    }
+
+    @Test
+    public void sortWithKeywordNameTest() {
         onView(withId(R.id.event_fragment_search_bar)).perform(typeText("Fiesta time"));
         onView(withId(R.id.event_fragment_listview)).check(matches(hasDescendant(withText("Fiesta time"))));
-        onView(withId(R.id.event_fragment_search_bar)).perform(typeText("EVENT 2"));
-        onView(withId(R.id.event_fragment_listview)).check(matches(not(hasDescendant(withText("Fiesta time")))));
+    }
+
+    @Test
+    public void sortWithKeywordShortDescTest() {
+        onView(withId(R.id.event_fragment_search_bar)).perform(typeText("Is this a real event"));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasDescendant(withText("Fiesta time"))));
+    }
+
+    @Test
+    public void sortWithKeywordDescTest() {
+        onView(withId(R.id.event_fragment_search_bar)).perform(typeText("Of course not, you should check this beautiful description"));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasDescendant(withText("Fiesta time"))));
     }
 
     @Test
@@ -97,7 +114,6 @@ public class EventFragmentAuthTest extends TestWithAuthenticatedAndFragment<Even
         onView(withId(R.id.event_fragment_to_date)).perform(click());
         onView(withText("OK")).perform(click());
     }
-
 
     @Test
     public void sortFromAndToDate() {
