@@ -141,6 +141,11 @@ public class EventFragmentTest extends TestWithAuthenticatedAndFragment<EventFra
     }
 
     @Test
+    public void clickOnEvent() {
+        onView(withText("Fiesta time")).perform(click());
+    }
+
+    @Test
     public void optionPanelIsNotDisplayed() {
         onView(withId(R.id.event_fragment_filter_button)).perform(click());
         onView(withId(R.id.even_filter_constraintLayout)).check(matches(not(isDisplayed())));

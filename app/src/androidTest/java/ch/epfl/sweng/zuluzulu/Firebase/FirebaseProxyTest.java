@@ -117,6 +117,36 @@ public class FirebaseProxyTest {
     }
 
     @Test
+    public void addChannelToUserFollowedChannels() {
+        proxy.addChannelToUserFollowedChannels(Utility.defaultChannel(), Utility.createTestAuthenticated());
+    }
+
+    @Test
+    public void addEventToUserFollowedEvents() {
+        proxy.addEventToUserFollowedEvents(Utility.defaultEvent(), Utility.createTestAuthenticated());
+    }
+
+    @Test
+    public void addAssociationToUserFollowedAssociations() {
+        proxy.addAssociationToUserFollowedAssociations(Utility.defaultAssociation(), Utility.createTestAuthenticated());
+    }
+
+    @Test
+    public void removeChannelFromUserFollowedChannels() {
+        proxy.getPostsFromChannel("id", x -> {});
+    }
+
+    @Test
+    public void removeEventFromUserFollowedEvents() {
+        proxy.removeEventFromUserFollowedEvents(Utility.defaultEvent(), Utility.createTestAuthenticated());
+    }
+
+    @Test
+    public void removeAssociationFromUserFollowedAssociations() {
+        proxy.removeAssociationFromUserFollowedAssociations(Utility.defaultAssociation(), Utility.createTestAuthenticated());
+    }
+
+    @Test
     public void getRepliesFromPost() {
         proxy.getRepliesFromPost("1", "1", x -> {
         });
@@ -159,10 +189,22 @@ public class FirebaseProxyTest {
     }
 
     @Test
+    public void getAllUsers() {
+        proxy.getAllUsers( x -> {});
+    }
+
+    @Test
+    public void updateUserRole() {
+        proxy.updateUserRole( "0", new ArrayList<>());
+    }
+
+    @Test
     public void getUserWithIdOrCreateIt() {
         proxy.getUserWithIdOrCreateIt("1", x -> {
         });
     }
+
+
 
     @Test
     public void getNewChannelId() {
