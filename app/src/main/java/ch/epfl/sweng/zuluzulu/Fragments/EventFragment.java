@@ -179,10 +179,6 @@ public class EventFragment extends SuperFragment {
             followedEvents.clear();
             eventsFiltered.clear();
             allEvents.addAll(result);
-            for (Event event : allEvents) {
-                if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event.getId()))
-                    followedEvents.add(event);
-            }
             eventsToFilter = allEvents;
             eventsFiltered.addAll(eventsToFilter);
             sortWithCurrentComparator();
@@ -196,14 +192,11 @@ public class EventFragment extends SuperFragment {
      * @param comparator comparator to use when the checkbox is clicked
      */
     private void setSortingBehaviourOnCheckbox(CheckBox checkBox, Comparator<Event> comparator) {
-        checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkBox.isEnabled()) {
-                    selectClickedCheckbox(checkBox);
-                    currentComparator = comparator;
-                    sortWithCurrentComparator();
-                }
+        checkBox.setOnClickListener(v -> {
+            if (checkBox.isEnabled()) {
+                selectClickedCheckbox(checkBox);
+                currentComparator = comparator;
+                sortWithCurrentComparator();
             }
         });
     }
@@ -265,6 +258,11 @@ public class EventFragment extends SuperFragment {
         event_fragment_to_date.getText().clear();
         dateTo = null;
         dateFrom = null;
+
+        followedEvents.clear();
+        for(Event event: allEvents)
+            if(((AuthenticatedUser)user).isFollowedEvent(event.getId()))
+                followedEvents.add(event);
 
         button_event_all.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
         button_event_fav.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));

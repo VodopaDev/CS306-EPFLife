@@ -480,6 +480,10 @@ public class FirebaseProxy implements Proxy {
                 .collection("replies")
                 .document(post.getId())
                 .set(post.getData());
+        channelCollection.document(post.getChannelId())
+                .collection("posts")
+                .document(post.getOriginalPostId())
+                .update("replies", FieldValue.arrayUnion(post.getId()));
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
@@ -583,7 +587,7 @@ public class FirebaseProxy implements Proxy {
 
     @Override
     public String getNewReplyId(String channelId, String originalPostId) {
-        return channelCollection.document(channelId).collection("posts").document(originalPostId).collection("replies").getId();
+        return channelCollection.document(channelId).collection("posts").document(originalPostId).collection("replies").document().getId();
     }
 
     /**

@@ -109,8 +109,7 @@ public class WritePostFragment extends SuperFragment {
                     user.getSciper(),
                     Timestamp.now().toDate(),
                     color.getValue(),
-                    0,
-                    0,
+                    new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>()
             );
