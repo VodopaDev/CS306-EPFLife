@@ -121,8 +121,9 @@ public class ReplyFragment extends SuperChatPostsFragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String newId = DatabaseFactory.getDependency().getNewReplyId(postOriginal.getChannelId(), postOriginal.getId());
                 Post post = new Post(
-                        DatabaseFactory.getDependency().getNewPostId(postOriginal.getChannelId()),
+                        newId,
                         postOriginal.getChannelId(),
                         postOriginal.getId(),
                         replyText.getText().toString().trim().replaceAll("([\\n\\r]+\\s*)*$", ""),
@@ -130,11 +131,11 @@ public class ReplyFragment extends SuperChatPostsFragment {
                         user.getSciper(),
                         Timestamp.now().toDate(),
                         postOriginal.getColor(),
-                        0,
-                        0,
+                        new ArrayList<>(),
                         new ArrayList<>(),
                         new ArrayList<>()
                 );
+                postOriginal.addReply(newId);
                 DatabaseFactory.getDependency().addReply(post);
                 loadReplies(true);
                 replyText.getText().clear();
