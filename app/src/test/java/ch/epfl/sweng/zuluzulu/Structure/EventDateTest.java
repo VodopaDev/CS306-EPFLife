@@ -52,6 +52,16 @@ public class EventDateTest {
         assertThat(date.getDateTimeUser(), instanceOf(String.class));
     }
 
+    @Test
+    public void getDateTimeLaterDifferentEnd() {
+        Date d = new Date();
+        d.setYear(d.getYear()+1);
+        Date e = new Date();
+        e.setYear(e.getYear()+2);
+        EventDate date = new EventDate(d, e);
+        assertThat(date.getDateTimeUser(), instanceOf(String.class));
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void setWithNullEndDate() {
         new EventDate("1111-11-11", "11:11:11", "1111-11-11", "11:11:11").setEndDate(null);
