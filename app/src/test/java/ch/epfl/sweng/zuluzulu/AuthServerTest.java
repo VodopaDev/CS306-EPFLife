@@ -32,6 +32,6 @@ public class AuthServerTest {
         } catch (IOException e) {
             return;
         }
-        throw new Exception("could get a user from a non valid token?");
+        throw new Exception("could getAndAddOnSuccessListener a user from a non valid token?");
     }
 }

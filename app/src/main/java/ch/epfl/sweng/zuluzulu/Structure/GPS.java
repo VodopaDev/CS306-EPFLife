@@ -85,7 +85,7 @@ public final class GPS {
                     Toast.makeText(mcontext, "Please activate your GPS to have access to all features", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Log.e("Location manager", "Cannot get location manager");
+                Log.e("Location manager", "Cannot getAndAddOnSuccessListener location manager");
             }
         }
         return true;

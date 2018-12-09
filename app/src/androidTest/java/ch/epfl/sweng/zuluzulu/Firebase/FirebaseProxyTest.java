@@ -1,6 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Firebase;
 
-import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.espresso.IdlingRegistry;
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.Before;
@@ -8,14 +8,11 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
 
 import ch.epfl.sweng.zuluzulu.Database.FirebaseMock;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.FirebaseFactory;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.MainActivity;
-import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Utility;
 
 import static org.junit.Assert.*;
@@ -25,12 +22,12 @@ public class FirebaseProxyTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    FirebaseProxy proxy;
+    private FirebaseProxy proxy;
 
     @Before
     public void setUp() {
         FirebaseFactory.setDependency(new FirebaseMock());
-
+        IdlingRegistry.getInstance().register(IdlingResourceFactory.getCountingIdlingResource());
         proxy = FirebaseProxy.getInstance();
     }
 
@@ -133,7 +130,7 @@ public class FirebaseProxyTest {
 
     @Test
     public void removeChannelFromUserFollowedChannels() {
-        proxy.getPostsFromChannel("id", x -> {});
+        proxy.removeChannelFromUserFollowedChannels(Utility.defaultChannel(), Utility.createTestAuthenticated());
     }
 
     @Test
@@ -203,8 +200,6 @@ public class FirebaseProxyTest {
         proxy.getUserWithIdOrCreateIt("1", x -> {
         });
     }
-
-
 
     @Test
     public void getNewChannelId() {
