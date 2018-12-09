@@ -56,6 +56,7 @@ public class EventDateTest {
     public void getDateTimeLaterDifferentEnd() {
         Date d = new Date();
         d.setYear(d.getYear()+1);
+        d.setHours(0);
         Date e = new Date();
         e.setYear(e.getYear()+2);
         EventDate date = new EventDate(d, e);

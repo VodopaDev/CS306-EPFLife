@@ -63,4 +63,9 @@ public class CollectionAdapterTest {
     public void whereGreaterThan() {
         assertNotNull(db.whereGreaterThan("field", "val"));
     }
+
+    @Test
+    public void listenet() {
+        db.addSnapshotListener((x, y) -> {});
+    }
 }
