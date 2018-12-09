@@ -56,11 +56,20 @@ public abstract class SuperMessage extends FirebaseStructure {
     }
 
     /**
-     * Comparator to compare messages with time
+     * Comparator to compare messages with decreasing time
      *
-     * @return Comparator to compare messages with time
+     * @return Comparator to compare messages with decreasing time
      */
     public static Comparator<? extends SuperMessage> decreasingTimeComparator() {
         return (Comparator<SuperMessage>) (o1, o2) -> o2.getTime().compareTo(o1.getTime());
+    }
+
+    /**
+     * Comparator to compare messages with increasing time
+     *
+     * @return Comparator to compare messages with increasing time
+     */
+    public static Comparator<? extends SuperMessage> increasingTimeComparator() {
+        return (Comparator<SuperMessage>) (o1, o2) -> o1.getTime().compareTo(o2.getTime());
     }
 }

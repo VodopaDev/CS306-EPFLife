@@ -30,6 +30,8 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
     protected static final String ARG_CHANNEL = "ARG_CHANNEL";
     protected static final String ARG_POST = "ARG_POST";
 
+    public static final String VISIT_PROFILE_STRING = "Visiter le profile de ";
+
     protected List<SuperMessage> messages = new ArrayList<>();
 
     protected ListView listView;
@@ -81,7 +83,7 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
                 if (!message.isAnonymous() && !message.isOwnMessage(user.getSciper())) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-                    AlertDialog dlg = builder.setTitle("Visiter le profil de " + message.getSenderName() + " ?")
+                    AlertDialog dlg = builder.setTitle(VISIT_PROFILE_STRING + message.getSenderName() + " ?")
                             .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {

@@ -26,6 +26,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.core.StringStartsWith.startsWith;
 
 @RunWith(AndroidJUnit4.class)
 public class ReplyFragmentTest extends TestWithAuthenticatedAndFragment<ReplyFragment> {
@@ -80,12 +81,11 @@ public class ReplyFragmentTest extends TestWithAuthenticatedAndFragment<ReplyFra
     */
 
     @Test
-    public void testUserCanReachOtherProfile(){
+    public void testUserCanReachOtherProfileThroughReply(){
         onView(withId(R.id.reply_list_view)).check(matches(isDisplayed()));
 
-        onData(instanceOf(Post.class)).atPosition(0).check(matches(isDisplayed()));
         onData(instanceOf(Post.class)).atPosition(0).perform(ViewActions.longClick());
-        onView(withText(endsWith("?"))).check(matches(isDisplayed()));
+        onView(withText(startsWith(SuperChatPostsFragment.VISIT_PROFILE_STRING))).check(matches(isDisplayed()));
         onView(withText("Oui")).perform(click());
         Utility.checkFragmentIsOpen(R.id.profile_fragment);
     }
