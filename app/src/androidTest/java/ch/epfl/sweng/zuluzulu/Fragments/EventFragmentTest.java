@@ -115,7 +115,7 @@ public class EventFragmentTest extends TestWithAuthenticatedAndFragment<EventFra
     }
 
     @Test
-    public void authenticatedCanUnfollowAnEvent(){
+    public void authenticatedCanUnfollowAndFollowAnEvent(){
         onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
         onData(anything())
                 .inAdapterView(withId(R.id.event_fragment_listview))

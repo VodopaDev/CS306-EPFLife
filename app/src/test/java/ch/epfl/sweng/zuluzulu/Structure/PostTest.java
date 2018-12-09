@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.Structure.Post;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -144,7 +143,7 @@ public class PostTest {
         assertEquals(time, post1.getTime());
         assertEquals(color1, post1.getColor());
         assertEquals(nbUps1, post1.getNbUps());
-        assertEquals(nbResponses1, post1.getNbResponses());
+        assertEquals(nbResponses1, post1.getNbReplies());
         assertEquals(channelId, post1.getChannelId());
         assertEquals(upScipers1, post1.getUpScipers());
         assertEquals(downScipers1, post1.getDownScipers());
