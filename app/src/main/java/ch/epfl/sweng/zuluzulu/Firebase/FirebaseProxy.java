@@ -442,23 +442,15 @@ public class FirebaseProxy implements Proxy {
 
     @Override
     public void updateOnNewMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult) {
-        channelCollection.document(channelId).collection("messages").addSnapshotListener((queryDocumentSnapshots, e) -> {
-            if (e != null)
-                System.err.println("Listen failed: " + e);
-            else {
-                if (!queryDocumentSnapshots.isEmpty()) {
-                    IdlingResourceFactory.incrementCountingIdlingResource();
+        channelCollection.document(channelId).collection("messages").addSnapshotListener(fmapList -> {
                     List<ChatMessage> result = new ArrayList<>();
-                    for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                        FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+                    for (FirebaseMapDecorator data : fmapList) {
                         if (data.hasFields(ChatMessage.requiredFields()))
                             result.add(new ChatMessage(data));
                     }
                     onResult.apply(result);
-                    IdlingResourceFactory.decrementCountingIdlingResource();
                 }
-            }
-        });
+        );
     }
 
     @Override

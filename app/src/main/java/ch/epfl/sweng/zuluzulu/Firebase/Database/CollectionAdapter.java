@@ -16,6 +16,7 @@ import java.util.Map;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
+import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 
 public class CollectionAdapter implements DatabaseCollection {
 
@@ -62,8 +63,26 @@ public class CollectionAdapter implements DatabaseCollection {
     }
 
     @Override
-    public void addSnapshotListener(@NonNull EventListener<QuerySnapshot> listener) {
-        collection.addSnapshotListener(listener);
+    public void addSnapshotListener(OperationWithFirebaseMapList listener) {
+        collection.addSnapshotListener((queryDocumentSnapshots, e) -> {
+                    if (e != null || queryDocumentSnapshots == null)
+                        System.err.println("Listen failed: " + e);
+                    else {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            IdlingResourceFactory.incrementCountingIdlingResource();
+
+                            List<FirebaseMapDecorator> list = new ArrayList<>();
+                            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
+                                list.add(new FirebaseMapDecorator(snap));
+                            }
+                            listener.applyList(list);
+
+                            IdlingResourceFactory.decrementCountingIdlingResource();
+                        }
+                    }
+                }
+
+        );
     }
 
     @Override

@@ -23,7 +23,7 @@ public interface DatabaseCollection {
 
     String getId();
 
-    void addSnapshotListener(@NonNull EventListener<QuerySnapshot> listener);
+    void addSnapshotListener(OperationWithFirebaseMapList listener);
 
     DatabaseQuery whereGreaterThan(String field, Object value);
 

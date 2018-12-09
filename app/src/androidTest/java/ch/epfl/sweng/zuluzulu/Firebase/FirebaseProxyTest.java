@@ -26,10 +26,9 @@ public class FirebaseProxyTest {
 
     @Before
     public void setUp() {
-        IdlingRegistry.getInstance().register(IdlingResourceFactory.getCountingIdlingResource());
         FirebaseFactory.setDependency(new FirebaseMock());
+        IdlingRegistry.getInstance().register(IdlingResourceFactory.getCountingIdlingResource());
         proxy = FirebaseProxy.getInstance();
-        Utility.openMenu();
     }
 
     @Test
@@ -131,7 +130,7 @@ public class FirebaseProxyTest {
 
     @Test
     public void removeChannelFromUserFollowedChannels() {
-        proxy.getPostsFromChannel("id", x -> {});
+        proxy.removeChannelFromUserFollowedChannels(Utility.defaultChannel(), Utility.createTestAuthenticated());
     }
 
     @Test

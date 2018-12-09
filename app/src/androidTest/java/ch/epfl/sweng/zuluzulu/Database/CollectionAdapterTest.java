@@ -66,6 +66,6 @@ public class CollectionAdapterTest {
 
     @Test
     public void listenet() {
-        db.addSnapshotListener((x, y) -> {});
+        db.addSnapshotListener((x) -> {});
     }
 }

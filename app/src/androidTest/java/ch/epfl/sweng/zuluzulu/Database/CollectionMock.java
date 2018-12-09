@@ -23,24 +23,10 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 
 public class CollectionMock implements DatabaseCollection {
-    @Override
-    public DatabaseDocument document(String documentPath) {
-        return new DocumentMock();
-    }
+    private Map<String, Object> map;
 
-    @Override
-    public DatabaseDocument document() {
-        return new DocumentMock();
-    }
-
-    @Override
-    public Task<DocumentReference> add(@NonNull Map<String, Object> data) {
-        return new TaskMock<DocumentReference>();
-    }
-
-    @Override
-    public Task<QuerySnapshot> getAndAddOnSuccessListener(OperationWithFirebaseMapList listener) {
-        HashMap<String, Object> map = new HashMap<>();
+    CollectionMock(){
+        map = new HashMap<>();
         map.put("id", "");
         map.put("name", "");
         map.put("short_description", "");
@@ -80,8 +66,25 @@ public class CollectionMock implements DatabaseCollection {
         map.put("nb_responses", 1L);
         map.put("up_scipers", new ArrayList<String>());
         map.put("down_scipers", new ArrayList<String>());
+    }
 
+    @Override
+    public DatabaseDocument document(String documentPath) {
+        return new DocumentMock();
+    }
 
+    @Override
+    public DatabaseDocument document() {
+        return new DocumentMock();
+    }
+
+    @Override
+    public Task<DocumentReference> add(@NonNull Map<String, Object> data) {
+        return new TaskMock<DocumentReference>();
+    }
+
+    @Override
+    public Task<QuerySnapshot> getAndAddOnSuccessListener(OperationWithFirebaseMapList listener) {
         FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
         List<FirebaseMapDecorator> list = new ArrayList<>();
         list.add(fmap);
@@ -96,7 +99,11 @@ public class CollectionMock implements DatabaseCollection {
     }
 
     @Override
-    public void addSnapshotListener(@NonNull EventListener<QuerySnapshot> listener) {
+    public void addSnapshotListener(OperationWithFirebaseMapList listener) {
+        FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
+        List<FirebaseMapDecorator> list = new ArrayList<>();
+        list.add(fmap);
+        listener.applyList(list);
     }
 
     @Override
