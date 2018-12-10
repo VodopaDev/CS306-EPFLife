@@ -31,7 +31,7 @@ public class Channel extends FirebaseStructure {
         super(id);
         this.name = name;
         this.shortDescription = shortDescription;
-        this.restrictions = restrictions;
+        this.restrictions = new HashMap<>(restrictions);
         this.iconUri = iconUri;
     }
 
@@ -92,10 +92,18 @@ public class Channel extends FirebaseStructure {
                 Uri.parse(iconUri);
     }
 
+    /**
+     * Return if the channel is accessible
+     * @return if the channel is accessible
+     */
     public boolean isAccessible() {
         return isAccessible;
     }
 
+    /**
+     * Return the distance
+     * @return the distance
+     */
     public double getDistance() {
         return distance;
     }
@@ -113,6 +121,12 @@ public class Channel extends FirebaseStructure {
         return hasGoodSection(section, userSection) && hasGoodLocation(channelLocation, userLocation);
     }
 
+    /**
+     * Check if a user has the correct section to see a channel
+     * @param requestSection expected section
+     * @param userSection user's section
+     * @return true if requestSection and userSection are the same or if there is no requestSection, false otherwise
+     */
     private boolean hasGoodSection(String requestSection, String userSection) {
         if (requestSection == null)
             return true;
@@ -120,6 +134,12 @@ public class Channel extends FirebaseStructure {
         return requestSection.equals(userSection);
     }
 
+    /**
+     * Check if a user has the correct location to see a channel
+     * @param requestedLocation expected location
+     * @param userLocation user's location
+     * @return true if requestedLocation and userLocation are the same or if there is no requestedLocation, false otherwise
+     */
     private boolean hasGoodLocation(GeoPoint requestedLocation, GeoPoint userLocation) {
         if (requestedLocation == null || userLocation == null)
             return true;

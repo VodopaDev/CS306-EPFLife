@@ -186,6 +186,9 @@ public class EventDetailFragment extends SuperFragment {
         startActivity(intent);
     }
 
+    /**
+     * Set up the channel button to redirect to the event's channel when clicked
+     */
     private void setChannelButtonBehaviour() {
         channelButton.setOnClickListener(v -> {
             if (user.isConnected())
@@ -195,12 +198,19 @@ public class EventDetailFragment extends SuperFragment {
             }
         );
     }
+
+    /**
+     * Set up the association button to redirect to the event's association when clicked
+     */
     private void setAssociationButtonBehavior() {
         associationButton.setOnClickListener(v -> {
             mListener.onFragmentInteraction(OPEN_ASSOCIATION_DETAIL_FRAGMENT, association);
         });
     }
 
+    /**
+     * Load the event's channel and set up the channel button if such a channel exists
+     */
     private void loadChannel() {
         DatabaseFactory.getDependency().getChannelFromId(event.getChannelId(), result -> {
             channel = result;
@@ -209,6 +219,10 @@ public class EventDetailFragment extends SuperFragment {
             setChannelButtonBehaviour();
         });
     }
+
+    /**
+     * Load the event's association and set up the association button if such an association exists
+     */
     private void loadAssociation() {
         DatabaseFactory.getDependency().getAssociationFromId(event.getAssociationId(), result -> {
             association = result;

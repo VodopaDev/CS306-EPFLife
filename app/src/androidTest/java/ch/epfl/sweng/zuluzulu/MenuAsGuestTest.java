@@ -1,11 +1,9 @@
 package ch.epfl.sweng.zuluzulu;
 
 import android.support.test.espresso.contrib.NavigationViewActions;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

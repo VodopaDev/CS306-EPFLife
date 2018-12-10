@@ -11,7 +11,6 @@ import java.io.StringReader;
 
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AdminPanelFragment;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;

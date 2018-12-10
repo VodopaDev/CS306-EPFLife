@@ -11,8 +11,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
@@ -21,6 +19,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.Utility.ImageLoader;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT;
 import static ch.epfl.sweng.zuluzulu.Utility.ImageLoader.loadUriIntoImageView;
@@ -115,13 +114,6 @@ public class AssociationDetailFragment extends SuperFragment {
         return view;
     }
 
-    private void loadFavImage(int drawable) {
-        Glide.with(getContext())
-                .load(drawable)
-                .centerCrop()
-                .into(asso_fav);
-    }
-
     /**
      * Set up the favorite button behaviour
      * If the user isn't authenticated, stay the same
@@ -129,20 +121,20 @@ public class AssociationDetailFragment extends SuperFragment {
      */
     private void setFavButtonBehaviour() {
         if (user.isConnected() && ((AuthenticatedUser) user).isFollowedAssociation(asso.getId()))
-            loadFavImage(R.drawable.fav_on);
+            ImageLoader.loadDrawableIntoImageView(asso_fav, R.drawable.fav_on, getContext());
         else
-            loadFavImage(R.drawable.fav_off);
+            ImageLoader.loadDrawableIntoImageView(asso_fav, R.drawable.fav_off, getContext());
 
         asso_fav.setOnClickListener(v -> {
             if (user.isConnected()) {
                 AuthenticatedUser auth = (AuthenticatedUser) user;
                 if (auth.isFollowedAssociation(asso.getId())) {
                     auth.removeFavAssociation(asso.getId());
-                    loadFavImage(R.drawable.fav_off);
+                    ImageLoader.loadDrawableIntoImageView(asso_fav, R.drawable.fav_off, getContext());
                     asso_fav.setContentDescription(NOT_FAV_CONTENT);
                 } else {
                     auth.addFollowedAssociation(asso.getId());
-                    loadFavImage(R.drawable.fav_on);
+                    ImageLoader.loadDrawableIntoImageView(asso_fav, R.drawable.fav_on, getContext());
                     asso_fav.setContentDescription(FAV_CONTENT);
                 }
 
@@ -204,6 +196,9 @@ public class AssociationDetailFragment extends SuperFragment {
             });
     }
 
+    /**
+     * Set up the Chat button behaviour to redirect to the chat page
+     */
     private void setMainChatButtonBehaviour() {
         main_chat_layout.setOnClickListener(v -> {
             if (main_chat != null) {

@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -48,8 +47,8 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_CREATE_EVENT;
  */
 public class EventFragment extends SuperFragment {
     private static final String ARG_USER = "ARG_USER";
-    private final Date minDate = new Date(946724400000L);  // 01/01/2000
-    private final Date maxDate = new Date(1735729200000L); // 01/01/2025
+    private final Date MIN_DATE = new Date(946724400000L);  // 01/01/2000
+    private final Date MAX_DATE = new Date(1735729200000L); // 01/01/2025
 
     private User user;
 
@@ -288,7 +287,6 @@ public class EventFragment extends SuperFragment {
 
     /**
      * Filter the eventsToFilter using a string
-     *
      * @param s substring that must be contained in the name/description of the event
      */
     private void filterWithText(String s) {
@@ -308,6 +306,11 @@ public class EventFragment extends SuperFragment {
         }
     }
 
+    /**
+     * Return an OnClickListener for a button that opens a DatePickedDialog when clicked
+     * @param startDate if it is the lower or upper bound date to be selected
+     * @return the OnClickListener that prompt a DatePicker on click
+     */
     private View.OnClickListener dateOnClick(boolean startDate){
         return v -> {
             DatePickerDialog.OnDateSetListener datePicker = (view, year, monthOfYear, dayOfMonth) -> {
@@ -346,15 +349,12 @@ public class EventFragment extends SuperFragment {
     /**
      * Sanitize dates if they are null or before/after the minimal/maximal date
      * Also switch the bound dates if the are in the wrong order
-     *
-     * @Link minDate
-     * @Link maxDate
      */
     private void sanitizeDates() {
-        if (dateTo == null || dateTo.after(maxDate))
-            dateTo = maxDate;
-        if (dateFrom == null || dateFrom.before(minDate))
-            dateFrom = minDate;
+        if (dateTo == null || dateTo.after(MAX_DATE))
+            dateTo = MAX_DATE;
+        if (dateFrom == null || dateFrom.before(MIN_DATE))
+            dateFrom = MIN_DATE;
 
         // if dateTo is before dateFrom
         if (dateTo.before(dateFrom)) {

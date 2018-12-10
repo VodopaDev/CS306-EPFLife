@@ -31,7 +31,6 @@ import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 public class FirebaseProxy implements Proxy {
 
     private static FirebaseProxy proxy;
-    private Database firebaseInstance;
 
     private DatabaseCollection userCollection;
     private DatabaseCollection assoCollection;
@@ -64,7 +63,7 @@ public class FirebaseProxy implements Proxy {
      * and I can't inject from tests because tests are called after launching the main
      */
     private void create() {
-        firebaseInstance = FirebaseFactory.getDependency();
+        Database firebaseInstance = FirebaseFactory.getDependency();
         userCollection = firebaseInstance.collection("new_user");
         assoCollection = firebaseInstance.collection("new_asso");
         eventCollection = firebaseInstance.collection("new_even");
@@ -364,7 +363,7 @@ public class FirebaseProxy implements Proxy {
             for (FirebaseMapDecorator data : fmapList) {
                 if (data.hasFields(Post.requiredFields())) {
 
-                    /**
+                    /*
                      * On devrait faire ça partout
                      * Capturer les erreurs lors des créations
                      * et envoyer null ??

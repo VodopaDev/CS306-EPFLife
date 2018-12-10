@@ -12,6 +12,12 @@ import com.bumptech.glide.load.model.LazyHeaders;
 
 public interface ImageLoader {
 
+    /**
+     * Load an Uri in an image view
+     * @param container the image view
+     * @param uri the uri to load
+     * @param context context to use
+     */
     static void loadUriIntoImageView(ImageView container, Uri uri, Context context) {
         if (context == null) {
             Log.e("GLIDE", "Can't load an Uri in an ImageView with a null Context");
@@ -32,5 +38,23 @@ public interface ImageLoader {
                     .fitCenter()
                     .into(container);
         }
+    }
+
+    /**
+     * Load a drawable in an image view
+     * @param container the image view
+     * @param drawable the drawable to load
+     * @param context context to use
+     */
+    static void loadDrawableIntoImageView(ImageView container, int drawable, Context context){
+        if(context == null){
+            Log.e("GLIDE", "Can't load a drawable in an ImageView with a null Context");
+            return;
+        }
+
+        Glide.with(context)
+                .load(drawable)
+                .fitCenter()
+                .into(container);
     }
 }

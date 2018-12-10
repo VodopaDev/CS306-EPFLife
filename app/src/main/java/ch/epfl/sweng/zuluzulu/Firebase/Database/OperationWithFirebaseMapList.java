@@ -5,5 +5,5 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 
 public interface OperationWithFirebaseMapList {
-    public void applyList(List<FirebaseMapDecorator> list);
+    void applyList(List<FirebaseMapDecorator> list);
 }

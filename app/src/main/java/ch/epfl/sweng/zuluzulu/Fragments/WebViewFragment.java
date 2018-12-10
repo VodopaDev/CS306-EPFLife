@@ -14,7 +14,6 @@ import ch.epfl.sweng.zuluzulu.R;
 
 public class WebViewFragment extends SuperFragment {
     public static final String URL = "url";
-    private WebView webview;
     private String url;
 
     public static WebViewFragment newInstance() {
@@ -32,7 +31,7 @@ public class WebViewFragment extends SuperFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_webview, container, false);
-        webview = view.findViewById(R.id.webview);
+        WebView webview = view.findViewById(R.id.webview);
         webview.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView wView, String url) {
