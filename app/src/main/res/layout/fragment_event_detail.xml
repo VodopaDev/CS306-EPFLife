@@ -42,9 +42,9 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_gravity="bottom|start"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
                         android:background="@android:color/white"
                         android:contentDescription="@string/card_event_image_description" />
 
@@ -53,9 +53,9 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="bottom|start"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
                         android:background="@drawable/channel_notclickable_background"
                         android:src="@drawable/ic_calendar" />
 
@@ -64,9 +64,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|start"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
                         android:text="@string/event_detail_like"
                         android:textColor="@android:color/white" />
 
@@ -75,9 +75,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|start"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
                         android:inputType="number"
                         android:text="0"
                         android:textColor="@android:color/white" />
@@ -95,11 +95,11 @@
                     android:id="@+id/event_detail_tv_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/event_detail_tv_desc"
                     android:textStyle="bold" />
 
@@ -118,11 +118,11 @@
                     android:id="@+id/event_detail_tv_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/event_detail_tv_date"
                     android:textStyle="bold" />
 
@@ -130,22 +130,22 @@
                     android:id="@+id/event_detail_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="Date de l'énènement" />
 
                 <TextView
                     android:id="@+id/event_detail_tv_organizer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/event_detail_tv_organizer"
                     android:textStyle="bold" />
 
@@ -153,22 +153,22 @@
                     android:id="@+id/event_detail_organizer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="Organisateur de l'énènement" />
 
                 <TextView
                     android:id="@+id/event_detail_tv_speaker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/event_detail_speaker"
                     android:textStyle="bold" />
 
@@ -176,22 +176,22 @@
                     android:id="@+id/event_detail_speaker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="Speaker de l'évenement" />
 
                 <TextView
                     android:id="@+id/event_detail_tv_place"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/event_detail_tv_place"
                     android:textStyle="bold" />
 
@@ -199,22 +199,22 @@
                     android:id="@+id/event_detail_place"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="Place de l'évènement" />
 
                 <TextView
                     android:id="@+id/event_detail_tv_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/event_detail_tv_category"
                     android:textStyle="bold" />
 
@@ -222,22 +222,22 @@
                     android:id="@+id/event_detail_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="Type de l'évènement" />
 
                 <TextView
                     android:id="@+id/event_detail_tv_contact"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/event_detail_tv_contact"
                     android:textStyle="bold" />
 
@@ -245,22 +245,22 @@
                     android:id="@+id/event_detail_contact"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="Contact pour l'évènement" />
 
                 <TextView
                     android:id="@+id/event_detail_tv_website"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/event_detail_tv_website"
                     android:textStyle="bold" />
 
@@ -268,11 +268,11 @@
                     android:id="@+id/event_detail_website"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:autoLink="web"
                     android:text="Site de l'évènement" />
 
@@ -281,11 +281,11 @@
                     android:id="@+id/event_detail_tv_plan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/event_detail_tv_plan"
                     android:textStyle="bold" />
 
@@ -293,8 +293,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical">
 
                     <ch.epfl.sweng.zuluzulu.Utility.TouchyWebView
@@ -329,8 +329,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="0.5"
             android:text="@string/no_association" />
 
@@ -349,8 +349,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="0.5"
             android:text="@string/no_chat" />
 

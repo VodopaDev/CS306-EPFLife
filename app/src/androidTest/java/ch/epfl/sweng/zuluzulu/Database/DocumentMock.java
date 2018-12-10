@@ -16,6 +16,7 @@ import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseDocument;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.OperationWithFirebaseMap;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
+import ch.epfl.sweng.zuluzulu.Utility;
 
 public class DocumentMock implements DatabaseDocument {
     private static final String TAG = "DocumentMock";
@@ -44,37 +45,7 @@ public class DocumentMock implements DatabaseDocument {
 
     @Override
     public Task<DocumentSnapshot> getAndAddOnSuccessListener(OperationWithFirebaseMap listener) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("id", "");
-        map.put("name", "");
-        map.put("short_description", "");
-        map.put("long_description", "");
-        map.put("category", "");
-        map.put("icon_uri", "");
-        map.put("banner_uri", "");
-        map.put("followers", "");
-        map.put("channel_id", "");
-        map.put("association_id", "");
-        map.put("start_date", "");
-        map.put("end_date", "");
-        map.put("place", "");
-        map.put("organizer", "");
-        map.put("url_place_and_room", "");
-        map.put("website", "");
-        map.put("contact", "");
-        map.put("speaker", "");
-        map.put("followed_associations", new ArrayList<String>());
-        map.put("followed_events", new ArrayList<String>());
-        map.put("followed_channels", new ArrayList<String>());
-        map.put("roles", Arrays.asList("USER"));
-        map.put("first_name", "");
-        map.put("last_name", "");
-        map.put("section", "");
-        map.put("semester", "");
-        map.put("gaspar", "");
-        map.put("email", "");
-        map.put("sciper", "");
-
+        Map<String, Object> map = Utility.createMapWithAll();
 
         FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
         listener.apply(fmap);
