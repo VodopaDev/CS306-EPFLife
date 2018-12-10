@@ -353,7 +353,7 @@ public class EventFragment extends SuperFragment {
     private void sanitizeDates() {
         if (dateTo == null || dateTo.after(maxDate))
             dateTo = maxDate;
-        if (dateFrom == null || dateTo.before(minDate))
+        if (dateFrom == null || dateFrom.before(minDate))
             dateFrom = minDate;
 
         // if dateTo is before dateFrom
