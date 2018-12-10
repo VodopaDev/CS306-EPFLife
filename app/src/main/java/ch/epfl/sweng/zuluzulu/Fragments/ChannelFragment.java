@@ -15,6 +15,7 @@ import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChannelArrayAdapter;
@@ -39,7 +40,7 @@ import ch.epfl.sweng.zuluzulu.Utility.Utils;
 public class ChannelFragment extends SuperFragment {
     private static final String ARG_USER = "ARG_USER";
     // TODO: fill with all the globals channels
-    private static final List<String> GLOBAL_CHANNEL_IDS = Arrays.asList();
+    private static final List<String> GLOBAL_CHANNEL_IDS = Collections.emptyList();
 
     private View view;
     private SwipeRefreshLayout swipeRefreshLayout;

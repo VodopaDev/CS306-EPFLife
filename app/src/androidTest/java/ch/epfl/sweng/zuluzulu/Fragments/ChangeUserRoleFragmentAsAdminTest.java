@@ -6,12 +6,8 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-import java.util.Map;
-
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.Firebase.OnResult;
 import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.ChangeUserRoleFragment;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
@@ -23,9 +19,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.anything;
-import static org.junit.Assert.assertFalse;
 
 @RunWith(AndroidJUnit4.class)
 public class ChangeUserRoleFragmentAsAdminTest extends TestWithAdminAndFragment {

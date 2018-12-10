@@ -8,7 +8,6 @@ import android.view.Gravity;
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -206,7 +205,7 @@ public class Utility {
                 .setAssosId("0")
                 .setShortDesc("Is this a real event?")
                 .setLongDesc("Of course not, you should check this beautiful description")
-                .setDate(new EventDate(new Date(1514764800000l), new Date(1517443200000l)))
+                .setDate(new EventDate(new Date(1514764800000L), new Date(1517443200000L)))
                 .setFollowers(Collections.singletonList("0"))
                 .setOrganizer("I'm the organizer")
                 .setPlace("Not at EPFL")

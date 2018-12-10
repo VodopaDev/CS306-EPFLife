@@ -3,7 +3,6 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.Manifest;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +12,8 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
-import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Adapters.UpcomingEventArrayAdapter;
 
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
@@ -32,7 +28,6 @@ import ch.epfl.sweng.zuluzulu.Structure.GPS;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 
-import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_ASSOCIATION_DETAIL_FRAGMENT;
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_LOGIN_FRAGMENT;
 
 /**
@@ -52,16 +47,12 @@ public class MainFragment extends SuperFragment {
 
     private List<Event> upcoming_events;
     private UpcomingEventArrayAdapter event_adapter;
-    private ListView listview_event;
 
     List<Association> random_assos;
     AssociationArrayAdapter assos_adapter;
-    private ListView listview_assos;
 
     Button sign_in_button;
 
-    private ListView associations_listView;
-    private ListView events_listView;
     private ArrayList<Association> associations_array;
     private ArrayList<Event> events_array;
     private AssociationArrayAdapter associations_adapter;
@@ -163,8 +154,8 @@ public class MainFragment extends SuperFragment {
      */
     public View createConnectedUserView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_main_user, container, false);
-        associations_listView = view.findViewById(R.id.main_fragment_followed_associations_listview);
-        events_listView = view.findViewById(R.id.main_fragment_followed_events_listview);
+        ListView associations_listView = view.findViewById(R.id.main_fragment_followed_associations_listview);
+        ListView events_listView = view.findViewById(R.id.main_fragment_followed_events_listview);
         associations_listView.setAdapter(associations_adapter);
         events_listView.setAdapter(events_adapter);
         return view;
@@ -213,10 +204,10 @@ public class MainFragment extends SuperFragment {
     public View createNotConnectedUserView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        listview_event = view.findViewById(R.id.main_page_list_event);
+        ListView listview_event = view.findViewById(R.id.main_page_list_event);
         listview_event.setAdapter(event_adapter);
 
-        listview_assos = view.findViewById(R.id.main_page_random_assos);
+        ListView listview_assos = view.findViewById(R.id.main_page_random_assos);
         listview_assos.setAdapter(assos_adapter);
 
         sign_in_button = view.findViewById(R.id.main_page_button_sign_in);

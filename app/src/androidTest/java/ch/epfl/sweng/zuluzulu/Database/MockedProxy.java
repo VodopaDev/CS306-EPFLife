@@ -20,10 +20,8 @@ import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility;
 
-import static ch.epfl.sweng.zuluzulu.Utility.addUserToMainIntent;
 import static ch.epfl.sweng.zuluzulu.Utility.createFilledUserBuilder;
 import static ch.epfl.sweng.zuluzulu.Utility.createTestAuthenticated;
-import static ch.epfl.sweng.zuluzulu.Utility.defaultMessage0;
 import static ch.epfl.sweng.zuluzulu.Utility.defaultPost;
 
 public class MockedProxy implements Proxy {
@@ -217,8 +215,7 @@ public class MockedProxy implements Proxy {
     public void getMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult) {
         if(channelId != null && channelMap.containsKey(channelId)) {
             ArrayList<ChatMessage> result = new ArrayList<>();
-            for (ChatMessage message : channelMap.get(channelId).messageMap.values())
-                result.add(message);
+            result.addAll(channelMap.get(channelId).messageMap.values());
             onResult.apply(result);
         }
     }

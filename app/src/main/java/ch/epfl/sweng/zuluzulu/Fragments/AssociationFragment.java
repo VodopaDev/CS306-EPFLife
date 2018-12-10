@@ -45,7 +45,6 @@ public class AssociationFragment extends SuperFragment {
     private List<Association> assosFiltered;
     private AssociationArrayAdapter assosAdapter;
 
-    private ListView listviewAssos;
     private TextView plainTextFilter;
 
     public AssociationFragment() {
@@ -83,7 +82,7 @@ public class AssociationFragment extends SuperFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_association, container, false);
 
-        listviewAssos = view.findViewById(R.id.association_fragment_listview);
+        ListView listviewAssos = view.findViewById(R.id.association_fragment_listview);
         listviewAssos.setAdapter(assosAdapter);
 
         Button buttonAssosFav = view.findViewById(R.id.association_fragment_fav_button);

@@ -22,7 +22,7 @@ public class DocumentAdapterTest {
     private DocumentAdapter db;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         FirebaseFactory.setDependency(new FirebaseMock());
         db = new DocumentAdapter(FirebaseFirestore.getInstance().collection("co").document("do"));
     }

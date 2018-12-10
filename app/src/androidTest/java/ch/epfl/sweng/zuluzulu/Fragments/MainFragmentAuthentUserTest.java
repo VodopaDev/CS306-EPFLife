@@ -1,12 +1,10 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.TestWithAuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;

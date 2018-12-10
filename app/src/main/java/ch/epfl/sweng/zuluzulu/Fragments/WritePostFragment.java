@@ -19,7 +19,6 @@ import android.widget.EditText;
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;

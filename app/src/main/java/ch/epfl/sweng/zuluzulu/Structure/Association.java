@@ -104,7 +104,7 @@ public class Association extends FirebaseStructure implements Comparable<Associa
     /**
      * Return the Association's main chat id
      *
-     * @return
+     * @return the Association's main chat id
      */
     @Nullable
     public String getChannelId() {

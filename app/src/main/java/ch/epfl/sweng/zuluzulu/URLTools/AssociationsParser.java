@@ -57,14 +57,9 @@ public class AssociationsParser implements Parser<List<String>> {
         String clean_description = description.replaceAll("<.*?>", "");
 
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(url).append(',');
-        sb.append(name).append(',');
-        sb.append(clean_description);
-
-
         // remplace html unicode to char
-        String result = sb.toString()
+        String sb = url + ',' + name + ',' + clean_description;
+        String result = sb
                 .replaceAll("&#8217;", "'").replaceAll("&#8211;", "-")
                 .replaceAll("&gt;", ">").replaceAll("&amp;", "&");
 
