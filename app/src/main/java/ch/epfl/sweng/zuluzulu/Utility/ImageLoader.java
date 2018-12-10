@@ -14,9 +14,10 @@ public interface ImageLoader {
 
     /**
      * Load an Uri in an image view
+     *
      * @param container the image view
-     * @param uri the uri to load
-     * @param context context to use
+     * @param uri       the uri to load
+     * @param context   context to use
      */
     static void loadUriIntoImageView(ImageView container, Uri uri, Context context) {
         if (context == null) {
@@ -42,12 +43,13 @@ public interface ImageLoader {
 
     /**
      * Load a drawable in an image view
+     *
      * @param container the image view
-     * @param drawable the drawable to load
-     * @param context context to use
+     * @param drawable  the drawable to load
+     * @param context   context to use
      */
-    static void loadDrawableIntoImageView(ImageView container, int drawable, Context context){
-        if(context == null){
+    static void loadDrawableIntoImageView(ImageView container, int drawable, Context context) {
+        if (context == null) {
             Log.e("GLIDE", "Can't load a drawable in an ImageView with a null Context");
             return;
         }

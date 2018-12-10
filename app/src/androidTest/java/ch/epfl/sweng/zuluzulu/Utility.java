@@ -251,8 +251,8 @@ public class Utility {
         return new ChatMessage("1", "0", "message!", new Date(20000), "admin", "1");
     }
 
-    public static Map<String,Object> createMapWithAll() {
-        HashMap<String, Object> map =  new HashMap<>();
+    public static Map<String, Object> createMapWithAll() {
+        HashMap<String, Object> map = new HashMap<>();
         map.put("id", "");
         map.put("name", "");
         map.put("short_description", "");

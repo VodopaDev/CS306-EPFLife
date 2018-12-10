@@ -35,7 +35,7 @@ public class FirebaseMapDecorator {
         this.map = snap.getData();
     }
 
-    public Map<String, Object> getMap(){
+    public Map<String, Object> getMap() {
         return this.map;
     }
 
