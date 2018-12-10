@@ -103,7 +103,7 @@ public class ChannelFragment extends SuperFragment {
     }
 
     /**
-     * Read data from the database and get the list of the channels
+     * Read data from the database and getAndAddOnSuccessListener the list of the channels
      */
     private void getChannelsFromDatabase() {
         List<String> ids = new ArrayList<>();

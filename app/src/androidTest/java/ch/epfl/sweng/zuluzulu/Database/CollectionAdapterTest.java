@@ -41,7 +41,7 @@ public class CollectionAdapterTest {
 
     @Test
     public void get() {
-        assertNotNull(db.get());
+        assertNotNull(db.getAndAddOnSuccessListener(x -> {}));
     }
 
     @Test
@@ -66,6 +66,6 @@ public class CollectionAdapterTest {
 
     @Test
     public void listenet() {
-        db.addSnapshotListener((x, y) -> {});
+        db.addSnapshotListener((x) -> {});
     }
 }
