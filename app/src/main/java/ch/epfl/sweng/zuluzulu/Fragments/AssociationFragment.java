@@ -125,6 +125,9 @@ public class AssociationFragment extends SuperFragment {
         return view;
     }
 
+    /**
+     * Fill the all and followed association list from the database
+     */
     private void fillAssociationLists() {
         assosAll.clear();
         assosFiltered.clear();
@@ -146,6 +149,12 @@ public class AssociationFragment extends SuperFragment {
         });
     }
 
+    /**
+     * Select the new list of associations to filter and change the buttons appearance accordingly
+     * @param newSelected new button to be selected
+     * @param newUnselected new button to unselect
+     * @param newToFilter new association list to filter
+     */
     private void updateListView(Button newSelected, Button newUnselected, List<Association> newToFilter) {
         newSelected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         newUnselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));

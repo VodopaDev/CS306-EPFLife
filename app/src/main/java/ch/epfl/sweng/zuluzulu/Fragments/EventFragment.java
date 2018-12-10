@@ -288,7 +288,6 @@ public class EventFragment extends SuperFragment {
 
     /**
      * Filter the eventsToFilter using a string
-     *
      * @param s substring that must be contained in the name/description of the event
      */
     private void filterWithText(String s) {
@@ -308,6 +307,11 @@ public class EventFragment extends SuperFragment {
         }
     }
 
+    /**
+     * Return an OnClickListener for a button that opens a DatePickedDialog when clicked
+     * @param startDate if it is the lower or upper bound date to be selected
+     * @return the OnClickListener that prompt a DatePicker on click
+     */
     private View.OnClickListener dateOnClick(boolean startDate){
         return v -> {
             DatePickerDialog.OnDateSetListener datePicker = (view, year, monthOfYear, dayOfMonth) -> {

@@ -127,6 +127,9 @@ public class CalendarFragment extends SuperFragment {
         return view;
     }
 
+    /**
+     * Fill the event list from the database
+     */
     private void fillFollowedEventsList() {
         DatabaseFactory.getDependency().getEventsFromIds(user.getFollowedEvents(), result -> {
             for (Event event : result) {
@@ -142,12 +145,25 @@ public class CalendarFragment extends SuperFragment {
         });
     }
 
+    /**
+     * Return if an event is going on between two dates
+     * @param event event to check
+     * @param start lower_bound date
+     * @param end upper_bound date
+     * @return true if an event is going on between the two dates
+     */
     private boolean isCurrentlyGoing(Event event, Date start, Date end){
+        assert(start.before(end));
         return (event.getStartDate().after(start) && event.getStartDate().before(end)) ||
                 (event.getEndDate().after(start) && event.getStartDate().before(end)) ||
                 (event.getStartDate().before(start) && event.getEndDate().after(end));
     }
 
+    /**
+     * Return the start and end of a day of a date
+     * @param date date
+     * @return the beginning and ending of the day in a pair
+     */
     private Pair<Date,Date> getStartAndEndOfTheDay(Date date){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);

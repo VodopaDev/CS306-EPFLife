@@ -85,6 +85,11 @@ public class UserDatabase {
         return null;
     }
 
+    /**
+     * Create a user in the local database using a cursor
+     * @param cursor cursor containing the user's data
+     * @return the newly created user
+     */
     private AuthenticatedUser createUser(Cursor cursor) {
         String semester = cursor.getString(cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_SEMESTER));
 

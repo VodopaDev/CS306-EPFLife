@@ -115,6 +115,10 @@ public class AssociationDetailFragment extends SuperFragment {
         return view;
     }
 
+    /**
+     * Load a drawable id to the fav icon
+     * @param drawable id of the drawable
+     */
     private void loadFavImage(int drawable) {
         Glide.with(getContext())
                 .load(drawable)
@@ -204,6 +208,9 @@ public class AssociationDetailFragment extends SuperFragment {
             });
     }
 
+    /**
+     * Set up the Chat button behaviour to redirect to the chat page
+     */
     private void setMainChatButtonBehaviour() {
         main_chat_layout.setOnClickListener(v -> {
             if (main_chat != null) {

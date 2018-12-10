@@ -7,8 +7,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
 
@@ -31,7 +33,7 @@ public class Event extends FirebaseStructure {
     private String speaker;
 
     // TODO: make it in the cloud :)
-    private List<String> followers;
+    private Set<String> followers;
 
     protected Event(String id, String name, String shortDesc, String longDesc, String channelId, String associationId, EventDate date,
                     List<String> followers, String organizer, String place, String iconUri, String bannerUri,
@@ -43,7 +45,7 @@ public class Event extends FirebaseStructure {
         this.shortDescription = shortDesc;
         this.longDescription = longDesc;
         this.date = date;
-        this.followers = new ArrayList<>(followers);
+        this.followers = new HashSet<>(followers);
         this.organizer = organizer;
         this.place = place;
         this.bannerUri = bannerUri;
@@ -71,7 +73,7 @@ public class Event extends FirebaseStructure {
         longDescription = data.getString("long_description");
         channelId = data.getString("channel_id");
         associationId = data.getString("association_id");
-        followers = new ArrayList<>(data.getStringList("followers"));
+        followers = new HashSet<>(data.getStringList("followers"));
         organizer = data.getString("organizer");
         place = data.getString("place");
         date = new EventDate(data.getDate("start_date"), data.getDate("end_date"));
@@ -86,15 +88,26 @@ public class Event extends FirebaseStructure {
         bannerUri = data.getString("banner_uri");
     }
 
-
+    /**
+     * Return a name-increasing comparator
+     * @return name-increasing comparator
+     */
     public static Comparator<Event> nameComparator() {
         return (o1, o2) -> o1.getName().compareTo(o2.getName());
     }
 
+    /**
+     * Return a date-increasing comparator
+     * @return date-increasing comparator
+     */
     public static Comparator<Event> dateComparator() {
         return (o1, o2) -> o1.date.getStartDate().compareTo(o2.date.getStartDate());
     }
 
+    /**
+     * Return a like-increasing comparator
+     * @return like-increasing comparator
+     */
     public static Comparator<Event> likeComparator() {
         return (o1, o2) -> o2.getLikes().compareTo(o1.getLikes());
     }
@@ -106,29 +119,48 @@ public class Event extends FirebaseStructure {
                 "place", "organizer", "url_place_and_room", "website", "contact", "speaker");
     }
 
+    /**
+     * Return the event's association id
+     * @return event's association id
+     */
     public String getAssociationId() {
         return associationId;
     }
 
+    /**
+     * Return the event's name
+     * @return event's name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Return the event's short description
+     * @return event's short description
+     */
     public String getShortDescription() {
         return shortDescription;
     }
 
+    /**
+     * Return the event's long description
+     * @return event's long description
+     */
     public String getLongDescription() {
         return longDescription;
     }
 
+    /**
+     * Return the event's channel id
+     * @return event's channel id
+     */
     public String getChannelId() {
         return channelId;
     }
 
     /**
      * Return the Association's icon Uri
-     *
      * @return the icon Uri
      */
     public Uri getIconUri() {
@@ -137,32 +169,52 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the Association's banner Uri
-     *
      * @return the banner Uri
      */
     public Uri getBannerUri() {
         return Uri.parse(bannerUri);
     }
 
+    /**
+     * Return the event's organizer
+     * @return event's organizer
+     */
     public String getOrganizer() {
         return organizer;
     }
 
+    /**
+     * Return the event's place
+     * @return event's place
+     */
     public String getPlace() {
         return place;
     }
 
-    // TODO: change with followers.size() when it is implemented
+    /**
+     * Return the event's likes
+     * @return event's likes
+     */
     public Integer getLikes() {
         return followers.size();
     }
 
+    /**
+     * Add a user to the event followers
+     * @param userId user to add to followers
+     * @return true if the user wasn't already in the event's followers
+     */
     public boolean addFollower(String userId) {
-        return !followers.contains(userId) && followers.add(userId);
+        return followers.add(userId);
     }
 
+    /**
+     * Remove a user from the event followers
+     * @param userId user to remove from followers
+     * @return true if the user was already in the event's followers
+     */
     public boolean removeFollower(String userId) {
-        return followers.contains(userId) && followers.remove(userId);
+        return followers.remove(userId);
     }
 
     public Map<String, Object> getData() {
@@ -176,7 +228,7 @@ public class Event extends FirebaseStructure {
         map.put("icon_uri", iconUri);
         map.put("banner_uri", bannerUri);
 
-        map.put("followers", followers);
+        map.put("followers", new ArrayList<>(followers));
         map.put("channel_id", channelId);
         map.put("association_id", associationId);
 
@@ -191,38 +243,74 @@ public class Event extends FirebaseStructure {
         return map;
     }
 
+    /**
+     * Return the event's url_place_and_room
+     * @return event's url_place_and_room
+     */
     public String getUrlPlaceAndRoom() {
         return url_place_and_room;
     }
 
+    /**
+     * Return the event's website
+     * @return event's website
+     */
     public String getWebsite() {
         return website;
     }
 
+    /**
+     * Return the event's contact
+     * @return event's contact
+     */
     public String getContact() {
         return contact;
     }
 
+    /**
+     * Return the event's category
+     * @return event's category
+     */
     public String getCategory() {
         return category;
     }
 
+    /**
+     * Return the event's speaker
+     * @return event's speaker
+     */
     public String getSpeaker() {
         return speaker;
     }
 
+    /**
+     * Return the event's starting date
+     * @return event's starting date
+     */
     public Date getStartDate() {
         return date.getStartDate();
     }
 
+    /**
+     * Return the event's ending date
+     * @return event's ending date
+     */
     public Date getEndDate() {
         return date.getEndDate();
     }
 
+    /**
+     * Return the event's starting date as a string
+     * @return event's starting date as a string
+     */
     public String getStartDateString() {
         return date.getStartDateString();
     }
 
+    /**
+     * Return the event's ending date as a string
+     * @return event's ending date as a string
+     */
     public String getEndDateString() {
         return date.getEndDateString();
     }

@@ -155,8 +155,11 @@ public class MainFragment extends SuperFragment {
         });
     }
 
-    /*
-     * connected user
+    /**
+     * Return a view visible by an authenticated user
+     * @param inflater
+     * @param container
+     * @return
      */
     public View createConnectedUserView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_main_user, container, false);
@@ -167,6 +170,9 @@ public class MainFragment extends SuperFragment {
         return view;
     }
 
+    /**
+     * Fill the association_array with user's followed associations
+     */
     private void fillConnectedUserAssociationsList() {
         DatabaseFactory.getDependency().getAllAssociations(result -> {
             if (result != null) {
@@ -181,6 +187,9 @@ public class MainFragment extends SuperFragment {
 
     }
 
+    /**
+     * Fill the event_array with user's followed events
+     */
     private void fillConnectedUserEventsList() {
         DatabaseFactory.getDependency().getAllEvents(result -> {
             if (result != null) {
@@ -195,8 +204,11 @@ public class MainFragment extends SuperFragment {
         });
     }
 
-    /*
-     * guest user
+    /**
+     * Create a view visible by a guest
+     * @param inflater
+     * @param container
+     * @return the guest's view
      */
     public View createNotConnectedUserView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
