@@ -41,7 +41,7 @@ public class EventDateTest {
     public void getDateTime() {
         Date d = new Date();
         EventDate date = new EventDate(d, d);
-        assertThat(date.getDateTimeUser(), instanceOf(String.class));
+        assertThat(date.getDateTimeUser(false), instanceOf(String.class));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class EventDateTest {
         Date d = new Date();
         d.setYear(d.getYear()+1);
         EventDate date = new EventDate(d, d);
-        assertThat(date.getDateTimeUser(), instanceOf(String.class));
+        assertThat(date.getDateTimeUser(false), instanceOf(String.class));
     }
 
     @Test
@@ -60,7 +60,7 @@ public class EventDateTest {
         Date e = new Date();
         e.setYear(e.getYear()+2);
         EventDate date = new EventDate(d, e);
-        assertThat(date.getDateTimeUser(), instanceOf(String.class));
+        assertThat(date.getDateTimeUser(false), instanceOf(String.class));
     }
 
     @Test(expected = IllegalArgumentException.class)
