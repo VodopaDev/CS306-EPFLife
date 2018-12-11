@@ -58,7 +58,6 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     private OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
     private String code;
     private User user;
-    private String codeRequestUrl;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -113,7 +112,8 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
             }
         });
 
-        attemptLogin();
+        String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
+        webview.loadUrl(codeRequestUrl);
 
         return view;
     }
@@ -169,15 +169,6 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         });
     }
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid username, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
-    private void attemptLogin() {
-        codeRequestUrl = AuthClient.createCodeRequestUrl(config);
-        webview.loadUrl(codeRequestUrl);
-    }
 
     /**
      * Shows the progress UI and hides the login form.
