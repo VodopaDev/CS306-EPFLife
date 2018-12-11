@@ -38,12 +38,14 @@
                 android:layout_gravity="bottom|start"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
+                android:background="@android:color/white"
                 android:clickable="false"
                 android:contentDescription="@string/card_association_image_description" />
 
             <Space
-                android:layout_width="10dp"
-                android:layout_height="wrap_content" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
             <ImageButton
                 android:id="@+id/association_detail_fav"
@@ -72,9 +74,8 @@
         <TextView
             android:id="@+id/association_detail_desc"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:inputType="textMultiLine"
             android:lineSpacingExtra="4sp"
             android:text="@string/description_de_l_association_tr_s_tr_s_tr_s_longue_description_de_l_association_d_ailleurs_pour_meubler_un_peu_j_cris_directement_ce_qui_me_passe_par_la_t_te_sans_du_tout_r_fl_chir_ce_que_j_cris_je_suis_en_shs_je_me_fais_chier_en_plein_cours_sur_la_m_moire_alors_je_passe_mon_temps_sur_ce_projet_parce_que_c_est_quand_m_me_plus_int_ressant_que_savoir_si_mon_hypocampe_enregistre_bien_ou_pas_enfin_bref_tout_a_pour_faire_une_magnifique_description_de_l_association_qui_n_existait_pas_avant_a_c_est_fou_c_est_une_app_sur_les_associations_mais_on_a_pas_de_description_correcte_d_une_association_affich_e_dans_ce_fragment_juste_2_pauvres_bouttons_dont_1_qui_marche_pas_j_ai_la_flemme_de_continuer_crire_alors_je_vais_remplir_par_des_copi_s_coll_s_description_de_l_association_tr_s_tr_s_tr_s_longue_description_de_l_association_d_ailleurs_pour_meubler_un_peu_j_cris_directement_ce_qui_me_passe_par_la_t_te_sans_du_tout_r_fl_chir_ce_que_j_cris_je_suis_en_shs_je_me_fais_chier_en_plein_cours_sur_la_m_moire_alors_je_passe_mon_temps_sur_ce_projet_parce_que_c_est_quand_m_me_plus_int_ressant_que_savoir_si_mon_hypocampe_enregistre_bien_ou_pas_enfin_bref_tout_a_pour_faire_une_magnifique_description_de_l_association_qui_n_existait_pas_avant_a_c_est_fou_c_est_une_app_sur_les_associations_mais_on_a_pas_de_description_correcte_d_une_association_affich_e_dans_ce_fragment_juste_2_pauvres_bouttons_dont_1_qui_marche_pas_j_ai_la_flemme_de_continuer_crire_alors_je_vais_remplir_par_des_copi_s_coll_s_description_de_l_association_tr_s_tr_s_tr_s_longue_description_de_l_association_d_ailleurs_pour_meubler_un_peu_j_cris_directement_ce_qui_me_passe_par_la_t_te_sans_du_tout_r_fl_chir_ce_que_j_cris_je_suis_en_shs_je_me_fais_chier_en_plein_cours_sur_la_m_moire_alors_je_passe_mon_temps_sur_ce_projet_parce_que_c_est_quand_m_me_plus_int_ressant_que_savoir_si_mon_hypocampe_enregistre_bien_ou_pas_enfin_bref_tout_a_pour_faire_une_magnifique_description_de_l_association_qui_n_existait_pas_avant_a_c_est_fou_c_est_une_app_sur_les_associations_mais_on_a_pas_de_description_correcte_d_une_association_affich_e_dans_ce_fragment_juste_2_pauvres_bouttons_dont_1_qui_marche_pas_j_ai_la_flemme_de_continuer_crire_alors_je_vais_remplir_par_des_copi_s_coll_s_description_de_l_association_tr_s_tr_s_tr_s_longue_description_de_l_association_d_ailleurs_pour_meubler_un_peu_j_cris_directement_ce_qui_me_passe_par_la_t_te_sans_du_tout_r_fl_chir_ce_que_j_cris_je_suis_en_shs_je_me_fais_chier_en_plein_cours_sur_la_m_moire_alors_je_passe_mon_temps_sur_ce_projet_parce_que_c_est_quand_m_me_plus_int_ressant_que_savoir_si_mon_hypocampe_enregistre_bien_ou_pas_enfin_bref_tout_a_pour_faire_une_magnifique_description_de_l_association_qui_n_existait_pas_avant_a_c_est_fou_c_est_une_app_sur_les_associations_mais_on_a_pas_de_description_correcte_d_une_association_affich_e_dans_ce_fragment_juste_2_pauvres_bouttons_dont_1_qui_marche_pas_j_ai_la_flemme_de_continuer_crire_alors_je_vais_remplir_par_des_copi_s_coll_s" />
 
@@ -95,14 +96,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="Evènements" />
+            android:text="@string/ev_nements" />
 
         <Button
             android:id="@+id/association_detail_chat_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:text="Chat" />
+            android:text="@string/chat" />
 
     </LinearLayout>
 
