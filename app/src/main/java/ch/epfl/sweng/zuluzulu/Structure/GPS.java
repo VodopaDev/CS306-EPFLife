@@ -59,7 +59,7 @@ public final class GPS {
     public static boolean start(Context context) {
         mcontext = context;
         if (ContextCompat.checkSelfPermission(mcontext, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(mcontext, "Permission to GPS not granted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mcontext, "Permission au GPS non donnée", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             locationManager = (LocationManager) mcontext.getSystemService(LOCATION_SERVICE);
@@ -82,7 +82,7 @@ public final class GPS {
                 }
                 isActivated = isGPSEnabled || isNetworkEnabled;
                 if (!isActivated) {
-                    Toast.makeText(mcontext, "Please activate your GPS to have access to all features", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mcontext, "Active le GPS pour avoir accès à toutes les options", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Log.e("Location manager", "Cannot getAndAddOnSuccessListener location manager");
