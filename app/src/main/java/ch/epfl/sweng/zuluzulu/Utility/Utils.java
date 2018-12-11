@@ -89,7 +89,7 @@ public interface Utils {
         return now - dateTime;
     }
 
-    static void showConnectSnackbar(View container){
+    static void showConnectSnackbar(View container) {
         Snackbar.make(container, "Login to access more features ⭐", 5000).show();
     }
 }

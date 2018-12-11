@@ -55,6 +55,24 @@ public class Post extends SuperMessage {
     }
 
     /**
+     * Comparator to compare posts with number of ups
+     *
+     * @return Comparator to compare posts with number of ups
+     */
+    public static Comparator<Post> decreasingNbUpsComparator() {
+        return (o1, o2) -> o2.getNbUps() - o1.getNbUps();
+    }
+
+    /**
+     * Comparator to compare posts with number of replies
+     *
+     * @return Comparator to compare posts with number of replies
+     */
+    public static Comparator<Post> decreasingNbRepliesComparator() {
+        return (o1, o2) -> o2.getNbReplies() - o1.getNbReplies();
+    }
+
+    /**
      * Getter for the color
      *
      * @return the color
@@ -84,11 +102,11 @@ public class Post extends SuperMessage {
     /**
      *
      */
-    public List<String> getReplies(){
+    public List<String> getReplies() {
         return new ArrayList<>(replies);
     }
 
-    public boolean addReply(String replyId){
+    public boolean addReply(String replyId) {
         return originalPostId == null && replies.add(replyId);
     }
 
@@ -150,23 +168,5 @@ public class Post extends SuperMessage {
      */
     public String getOriginalPostId() {
         return originalPostId;
-    }
-
-    /**
-     * Comparator to compare posts with number of ups
-     *
-     * @return Comparator to compare posts with number of ups
-     */
-    public static Comparator<Post> decreasingNbUpsComparator() {
-        return (o1, o2) -> o2.getNbUps() - o1.getNbUps();
-    }
-
-    /**
-     * Comparator to compare posts with number of replies
-     *
-     * @return Comparator to compare posts with number of replies
-     */
-    public static Comparator<Post> decreasingNbRepliesComparator() {
-        return (o1, o2) -> o2.getNbReplies() - o1.getNbReplies();
     }
 }

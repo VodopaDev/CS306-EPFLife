@@ -191,11 +191,11 @@ public class EventDetailFragment extends SuperFragment {
      */
     private void setChannelButtonBehaviour() {
         channelButton.setOnClickListener(v -> {
-            if (user.isConnected())
-                mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, channel);
-            else
-                Utils.showConnectSnackbar(getView());
-            }
+                    if (user.isConnected())
+                        mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, channel);
+                    else
+                        Utils.showConnectSnackbar(getView());
+                }
         );
     }
 

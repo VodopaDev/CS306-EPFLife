@@ -54,11 +54,11 @@
             android:layout_height="match_parent"
             android:layout_weight="0.8"
             android:ems="10"
+            android:fadeScrollbars="false"
             android:hint="@string/chat_message"
             android:inputType="textMultiLine"
             android:minLines="1"
-            android:scrollbars="vertical"
-            android:fadeScrollbars="false"/>
+            android:scrollbars="vertical" />
 
         <Button
             android:id="@+id/chat_send_button"

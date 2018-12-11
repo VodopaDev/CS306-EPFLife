@@ -27,7 +27,6 @@ import java.util.Date;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -259,8 +258,8 @@ public class EventFragment extends SuperFragment {
         dateFrom = null;
 
         followedEvents.clear();
-        for(Event event: allEvents)
-            if(((AuthenticatedUser)user).isFollowedEvent(event.getId()))
+        for (Event event : allEvents)
+            if (((AuthenticatedUser) user).isFollowedEvent(event.getId()))
                 followedEvents.add(event);
 
         button_event_all.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
@@ -287,6 +286,7 @@ public class EventFragment extends SuperFragment {
 
     /**
      * Filter the eventsToFilter using a string
+     *
      * @param s substring that must be contained in the name/description of the event
      */
     private void filterWithText(String s) {
@@ -308,16 +308,17 @@ public class EventFragment extends SuperFragment {
 
     /**
      * Return an OnClickListener for a button that opens a DatePickedDialog when clicked
+     *
      * @param startDate if it is the lower or upper bound date to be selected
      * @return the OnClickListener that prompt a DatePicker on click
      */
-    private View.OnClickListener dateOnClick(boolean startDate){
+    private View.OnClickListener dateOnClick(boolean startDate) {
         return v -> {
             DatePickerDialog.OnDateSetListener datePicker = (view, year, monthOfYear, dayOfMonth) -> {
                 eventCalendar.set(Calendar.YEAR, year);
                 eventCalendar.set(Calendar.MONTH, monthOfYear);
                 eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                if(startDate)
+                if (startDate)
                     dateFrom = (Date) eventCalendar.getTime().clone();
                 else
                     dateTo = (Date) eventCalendar.getTime().clone();
