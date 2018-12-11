@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 
 import java.io.IOException;
@@ -25,6 +28,7 @@ import java.util.Map;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
@@ -50,13 +54,13 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     private View mProgressView;
     private View mLoginFormView;
 
+    private WebView webview;
+
     private String redirectURICode;
     private OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
     private String code;
     private User user;
     private String codeRequestUrl;
-
-    private boolean codeUrlRequestWorks = false;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -83,14 +87,6 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        try {
-            redirectURICode = this.getArguments().getString(TAG);
-        } catch (NullPointerException e) {
-            redirectURICode = null;
-        }
-        if (redirectURICode != null) {
-            finishLogin();
-        }
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, getResources().getString(R.string.action_sign_in));
     }
@@ -101,20 +97,25 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        Button mSignInButton = view.findViewById(R.id.sign_in_button);
-        mSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
 
         mLoginFormView = view.findViewById(R.id.login_form);
         mProgressView = view.findViewById(R.id.login_progress);
+        webview = view.findViewById(R.id.webview);
+        webview.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView wView, String url) {
+                if (url.contains("code=")) {
+                    redirectURICode = url;
+                    showProgress(true);
+                    webview.setVisibility(View.INVISIBLE);
+                    finishLogin();
+                    return true;
+                }
+                return false;
+            }
+        });
 
-        if (codeUrlRequestWorks) {
-            showProgress(true);
-        }
+        attemptLogin();
 
         return view;
     }
@@ -123,21 +124,15 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
      * Is executed once the session is active
      * Log in the main activity
      */
-    private void transfer_main(boolean isWebView) {
+    private void transfer_main() {
         // Pass the user to the activity
-
-        if (isWebView) {
-            mListener.onFragmentInteraction(CommunicationTag.OPENING_WEBVIEW, codeRequestUrl);
-        } else {
             Map<Integer, Object> toTransfer = new HashMap<Integer, Object>();
             toTransfer.put(0, user);
             toTransfer.put(1, code);
             toTransfer.put(2, config);
             mListener.onFragmentInteraction(CommunicationTag.SET_USER, toTransfer);
             mListener.onFragmentInteraction(CommunicationTag.OPEN_MAIN_FRAGMENT, null);
-        }
-
-        showProgress(false);
+            showProgress(false);
     }
 
     private void finishLogin() {
@@ -156,7 +151,6 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
             return;
         }
 
-        codeUrlRequestWorks = true;
 
         updateUserAndFinishLogin();
     }
@@ -172,7 +166,8 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
             ((AuthenticatedUser) user).setFollowedEvents(receivedEvents);
             ((AuthenticatedUser) user).setFollowedChannels(receivedChannels);
             DatabaseFactory.getDependency().updateUser((AuthenticatedUser) user);
-            transfer_main(false);
+            transfer_main();
+            showProgress(false);
         });
     }
 
@@ -182,9 +177,8 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        showProgress(true);
         codeRequestUrl = AuthClient.createCodeRequestUrl(config);
-        transfer_main(true);
+        webview.loadUrl(codeRequestUrl);
     }
 
     /**
