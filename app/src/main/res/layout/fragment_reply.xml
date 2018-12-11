@@ -52,7 +52,7 @@
             android:hint="Reply"
             android:inputType="textMultiLine"
             android:minLines="1"
-            android:maxLines="4"
+            android:maxLines="12"
             android:scrollbars="vertical"
             android:fadeScrollbars="false"/>
 
