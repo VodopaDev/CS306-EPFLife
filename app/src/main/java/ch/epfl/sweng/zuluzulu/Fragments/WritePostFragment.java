@@ -19,7 +19,6 @@ import android.widget.EditText;
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
@@ -109,8 +108,7 @@ public class WritePostFragment extends SuperFragment {
                     user.getSciper(),
                     Timestamp.now().toDate(),
                     color.getValue(),
-                    0,
-                    0,
+                    new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>()
             );

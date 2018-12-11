@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu;
 
-import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.NavigationViewActions;
 
 import org.junit.Test;

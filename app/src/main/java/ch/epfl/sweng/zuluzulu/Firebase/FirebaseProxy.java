@@ -6,10 +6,10 @@ import android.util.Log;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,19 +21,16 @@ import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseQuery;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.FirebaseFactory;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
-import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.User.User;
 
 public class FirebaseProxy implements Proxy {
 
     private static FirebaseProxy proxy;
-    private Database firebaseInstance;
 
     private DatabaseCollection userCollection;
     private DatabaseCollection assoCollection;
@@ -66,7 +63,7 @@ public class FirebaseProxy implements Proxy {
      * and I can't inject from tests because tests are called after launching the main
      */
     private void create() {
-        firebaseInstance = FirebaseFactory.getDependency();
+        Database firebaseInstance = FirebaseFactory.getDependency();
         userCollection = firebaseInstance.collection("new_user");
         assoCollection = firebaseInstance.collection("new_asso");
         eventCollection = firebaseInstance.collection("new_even");
@@ -75,10 +72,11 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * Get all objects T from database
-     * @param query from the collection
+     *
+     * @param query    from the collection
      * @param onResult Called on result
-     * @param creator Create the object
-     * @param <T> The object
+     * @param creator  Create the object
+     * @param <T>      The object
      */
     private <T> void getAll(DatabaseQuery query, OnResult<List<T>> onResult, mapToObject<T> creator) {
         IdlingResourceFactory.incrementCountingIdlingResource();
@@ -109,14 +107,14 @@ public class FirebaseProxy implements Proxy {
      */
     private <T> void getObjectById(DatabaseCollection collection, String id, OnResult<T> onResult, mapToObject<T> creator) {
         IdlingResourceFactory.incrementCountingIdlingResource();
-        collection.document(id).get().addOnSuccessListener(documentSnapshot -> {
-            FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+        collection.document(id).getAndAddOnSuccessListener(fmap -> {
             T object = null;
             try {
                 object = creator.apply(fmap);
             } catch (Exception ignored) {
             }
-            onResult.apply(object);
+            if (object != null)
+                onResult.apply(object);
             IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch the with id " + id));
     }
@@ -136,14 +134,14 @@ public class FirebaseProxy implements Proxy {
         Counter counter = new Counter(ids.size());
 
         for (String id : ids) {
-            collection.document(id).get().addOnSuccessListener(documentSnapshot -> {
-                FirebaseMapDecorator fmap = new FirebaseMapDecorator(documentSnapshot);
+            collection.document(id).getAndAddOnSuccessListener(fmap -> {
                 T object = null;
                 try {
                     object = creator.apply(fmap);
                 } catch (Exception ignored) {
                 }
-                result.add(object);
+                if (object != null)
+                    result.add(object);
                 if (counter.increment()) {
                     onResult.apply(result);
                     IdlingResourceFactory.decrementCountingIdlingResource();
@@ -346,28 +344,26 @@ public class FirebaseProxy implements Proxy {
     @Override
     public void getMessagesFromChannel(String id, OnResult<List<ChatMessage>> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
-        channelCollection.document(id).collection("messages").get().addOnSuccessListener(queryDocumentSnapshots -> {
+        channelCollection.document(id).collection("messages").getAndAddOnSuccessListener(fmapList -> {
             List<ChatMessage> result = new ArrayList<>();
-            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
-                if (data.hasFields(ChatMessage.requiredFields()))
-                    result.add(new ChatMessage(data));
+            for (FirebaseMapDecorator fmap : fmapList) {
+                if (fmap.hasFields(ChatMessage.requiredFields()))
+                    result.add(new ChatMessage(fmap));
             }
             onResult.apply(result);
             IdlingResourceFactory.decrementCountingIdlingResource();
-        }).addOnFailureListener(onFailureWithErrorMessage("Cannot get MessagesFromChannel " + id));
+        }).addOnFailureListener(onFailureWithErrorMessage("Cannot getAndAddOnSuccessListener MessagesFromChannel " + id));
     }
 
     @Override
     public void getPostsFromChannel(String id, OnResult<List<Post>> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
-        channelCollection.document(id).collection("posts").get().addOnSuccessListener(queryDocumentSnapshots -> {
+        channelCollection.document(id).collection("posts").getAndAddOnSuccessListener(fmapList -> {
             List<Post> result = new ArrayList<>();
-            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+            for (FirebaseMapDecorator data : fmapList) {
                 if (data.hasFields(Post.requiredFields())) {
 
-                    /**
+                    /*
                      * On devrait faire ça partout
                      * Capturer les erreurs lors des créations
                      * et envoyer null ??
@@ -376,6 +372,7 @@ public class FirebaseProxy implements Proxy {
                      *
                      * Si on se met d'accord sur la facon d'implémenter cela, je suis chaud
                      * à modifier le reste
+                     * //TODO
                      */
                     try {
                         result.add(new Post(data));
@@ -387,7 +384,43 @@ public class FirebaseProxy implements Proxy {
             }
             onResult.apply(result);
             IdlingResourceFactory.decrementCountingIdlingResource();
-        }).addOnFailureListener(onFailureWithErrorMessage("Cannot get PostsFromChannel " + id));
+        }).addOnFailureListener(onFailureWithErrorMessage("Cannot getAndAddOnSuccessListener PostsFromChannel " + id));
+    }
+
+    @Override
+    public void addChannelToUserFollowedChannels(Channel channel, AuthenticatedUser user) {
+        userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayUnion(channel.getId()));
+    }
+
+    @Override
+    public void addEventToUserFollowedEvents(Event event, AuthenticatedUser user) {
+        userCollection.document(user.getSciper()).update("followed_events", FieldValue.arrayUnion(event.getId()));
+        userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayUnion(event.getChannelId()));
+        eventCollection.document(event.getId()).update("followers", FieldValue.arrayUnion(user.getSciper()));
+    }
+
+    @Override
+    public void addAssociationToUserFollowedAssociations(Association association, AuthenticatedUser user) {
+        userCollection.document(user.getSciper()).update("followed_associations", FieldValue.arrayUnion(association.getId()));
+        userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayUnion(association.getChannelId()));
+    }
+
+    @Override
+    public void removeChannelFromUserFollowedChannels(Channel channel, AuthenticatedUser user) {
+        userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayRemove(channel.getId()));
+    }
+
+    @Override
+    public void removeEventFromUserFollowedEvents(Event event, AuthenticatedUser user) {
+        userCollection.document(user.getSciper()).update("followed_events", FieldValue.arrayRemove(event.getId()));
+        userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayRemove(event.getChannelId()));
+        eventCollection.document(event.getId()).update("followers", FieldValue.arrayRemove(user.getSciper()));
+    }
+
+    @Override
+    public void removeAssociationFromUserFollowedAssociations(Association association, AuthenticatedUser user) {
+        userCollection.document(user.getSciper()).update("followed_associations", FieldValue.arrayRemove(association.getId()));
+        userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayRemove(association.getChannelId()));
     }
 
     @Override
@@ -395,37 +428,28 @@ public class FirebaseProxy implements Proxy {
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(channelId).collection("posts")
                 .document(postId)
-                .collection("replies").get().addOnSuccessListener(queryDocumentSnapshots -> {
+                .collection("replies").getAndAddOnSuccessListener(fmapList -> {
             List<Post> result = new ArrayList<>();
-            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+            for (FirebaseMapDecorator data : fmapList) {
                 if (data.hasFields(Post.requiredFields()))
                     result.add(new Post(data));
             }
             onResult.apply(result);
             IdlingResourceFactory.decrementCountingIdlingResource();
-        }).addOnFailureListener(onFailureWithErrorMessage("Cannot get Replies from Post  " + postId));
+        }).addOnFailureListener(onFailureWithErrorMessage("Cannot getAndAddOnSuccessListener Replies from Post  " + postId));
     }
 
     @Override
     public void updateOnNewMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult) {
-        channelCollection.document(channelId).collection("messages").addSnapshotListener((queryDocumentSnapshots, e) -> {
-            if (e != null)
-                System.err.println("Listen failed: " + e);
-            else {
-                if (!queryDocumentSnapshots.isEmpty()) {
-                    IdlingResourceFactory.incrementCountingIdlingResource();
+        channelCollection.document(channelId).collection("messages").addSnapshotListener(fmapList -> {
                     List<ChatMessage> result = new ArrayList<>();
-                    for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                        FirebaseMapDecorator data = new FirebaseMapDecorator(snap);
+                    for (FirebaseMapDecorator data : fmapList) {
                         if (data.hasFields(ChatMessage.requiredFields()))
                             result.add(new ChatMessage(data));
                     }
                     onResult.apply(result);
-                    IdlingResourceFactory.decrementCountingIdlingResource();
                 }
-            }
-        });
+        );
     }
 
     @Override
@@ -447,6 +471,10 @@ public class FirebaseProxy implements Proxy {
                 .collection("replies")
                 .document(post.getId())
                 .set(post.getData());
+        channelCollection.document(post.getChannelId())
+                .collection("posts")
+                .document(post.getOriginalPostId())
+                .update("replies", FieldValue.arrayUnion(post.getId()));
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
@@ -480,10 +508,9 @@ public class FirebaseProxy implements Proxy {
 
     public void getUserWithIdOrCreateIt(String id, OnResult<Map<String, Object>> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
-        userCollection.document(id).get().addOnSuccessListener(documentSnapshot -> {
+        userCollection.document(id).getAndAddOnSuccessListener(fmap -> {
             Map<String, Object> map = new HashMap<>();
-            map.put("sciper", documentSnapshot.getId());
-            if (!documentSnapshot.exists()) {
+            if (fmap == null) {
                 map.put("followed_associations", new ArrayList<String>());
                 map.put("followed_events", new ArrayList<String>());
                 map.put("followed_channels", new ArrayList<String>());
@@ -496,7 +523,7 @@ public class FirebaseProxy implements Proxy {
                 map.put("email", "");
                 map.put("sciper", "");
             } else {
-                map.putAll(Objects.requireNonNull(documentSnapshot.getData()));
+                map.putAll(Objects.requireNonNull(fmap.getMap()));
             }
             onResult.apply(map);
             IdlingResourceFactory.decrementCountingIdlingResource();
@@ -506,11 +533,10 @@ public class FirebaseProxy implements Proxy {
     @Override
     public void getAllUsers(OnResult<List<Map<String, Object>>> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
-        userCollection.get().addOnSuccessListener(queryDocumentSnapshots -> {
+        userCollection.getAndAddOnSuccessListener(fmapList -> {
             List<Map<String, Object>> resultList = new ArrayList<>();
-            for (DocumentSnapshot snap : queryDocumentSnapshots.getDocuments()) {
-                Map<String, Object> map = new HashMap<>(snap.getData());
-                map.put("sciper", snap.getId());
+            for (FirebaseMapDecorator snap : fmapList) {
+                Map<String, Object> map = new HashMap<>(snap.getMap());
                 resultList.add(map);
             }
             onResult.apply(resultList);
@@ -552,7 +578,7 @@ public class FirebaseProxy implements Proxy {
 
     @Override
     public String getNewReplyId(String channelId, String originalPostId) {
-        return channelCollection.document(channelId).collection("posts").document(originalPostId).collection("replies").getId();
+        return channelCollection.document(channelId).collection("posts").document(originalPostId).collection("replies").document().getId();
     }
 
     /**

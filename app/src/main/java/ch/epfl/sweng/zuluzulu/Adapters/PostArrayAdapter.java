@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,8 +79,8 @@ public class PostArrayAdapter extends ArrayAdapter<SuperMessage> {
     }
 
     private void setUpNbResponses(View view) {
-        int nbResponses = currentPost.getNbResponses();
-        nbResponsesText.setText("" + currentPost.getNbResponses());
+        int nbResponses = currentPost.getNbReplies();
+        nbResponsesText.setText("" + currentPost.getNbReplies());
         if (nbResponses == 0 || currentPost.isReply()) {
             view.findViewById(R.id.post_responses_linearlayout).setVisibility(LinearLayout.GONE);
         }

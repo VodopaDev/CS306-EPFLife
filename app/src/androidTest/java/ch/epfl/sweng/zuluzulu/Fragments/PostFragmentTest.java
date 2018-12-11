@@ -11,7 +11,6 @@ import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 import ch.epfl.sweng.zuluzulu.Utility;
@@ -25,9 +24,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.anything;
-import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.StringStartsWith.startsWith;
 
 @RunWith(AndroidJUnit4.class)
 public class PostFragmentTest extends TestWithAuthenticatedAndFragment<PostFragment> {
@@ -101,12 +100,12 @@ public class PostFragmentTest extends TestWithAuthenticatedAndFragment<PostFragm
     }
 
     @Test
-    public void testUserCanReachOtherProfile(){
+    public void testUserCanReachOtherProfileThroughPost(){
         onView(withId(R.id.posts_list_view)).check(matches(isDisplayed()));
-
+        onView(withId(R.id.posts_new_post_button)).check(matches(isDisplayed()));
         onData(instanceOf(Post.class)).atPosition(0).check(matches(isDisplayed()));
         onData(instanceOf(Post.class)).atPosition(0).perform(ViewActions.longClick());
-        onView(withText(endsWith("?"))).check(matches(isDisplayed()));
+        onView(withText(startsWith(SuperChatPostsFragment.VISIT_PROFILE_STRING))).check(matches(isDisplayed()));
         onView(withText("Oui")).perform(click());
         Utility.checkFragmentIsOpen(R.id.profile_fragment);
     }

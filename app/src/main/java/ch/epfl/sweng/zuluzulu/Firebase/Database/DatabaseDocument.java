@@ -14,7 +14,7 @@ public interface DatabaseDocument {
 
     Task<Void> update(Map<String, Object> data);
 
-    Task<DocumentSnapshot> get();
+    Task<DocumentSnapshot> getAndAddOnSuccessListener(OperationWithFirebaseMap listener);
 
     DatabaseCollection collection(String messages);
 

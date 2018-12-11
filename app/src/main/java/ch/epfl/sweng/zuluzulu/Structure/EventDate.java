@@ -152,7 +152,7 @@ public class EventDate implements Serializable {
     }
 
     /**
-     * get End date as string
+     * getAndAddOnSuccessListener End date as string
      *
      * @return string
      */
@@ -172,7 +172,7 @@ public class EventDate implements Serializable {
     }
 
     /**
-     * get end date
+     * getAndAddOnSuccessListener end date
      *
      * @return Date
      */

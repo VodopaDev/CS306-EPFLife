@@ -11,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
@@ -162,7 +160,6 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     }
 
     private void updateUserAndFinishLogin() {
-        DatabaseFactory.getDependency().updateUser((AuthenticatedUser) user);
         DatabaseFactory.getDependency().getUserWithIdOrCreateIt(user.getSciper(), result -> {
             List<String> receivedAssociations = (List<String>) result.get("followed_associations");
             List<String> receivedEvents = (List<String>) result.get("followed_events");
@@ -172,6 +169,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
             ((AuthenticatedUser) user).setFollowedAssociation(receivedAssociations);
             ((AuthenticatedUser) user).setFollowedEvents(receivedEvents);
             ((AuthenticatedUser) user).setFollowedChannels(receivedChannels);
+            DatabaseFactory.getDependency().updateUser((AuthenticatedUser) user);
             transfer_main(false);
         });
     }

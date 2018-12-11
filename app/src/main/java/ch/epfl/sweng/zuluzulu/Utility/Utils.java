@@ -1,6 +1,8 @@
 package ch.epfl.sweng.zuluzulu.Utility;
 
 import android.location.Location;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import com.google.firebase.firestore.GeoPoint;
 
@@ -60,8 +62,8 @@ public interface Utils {
     /**
      * Return a random integer in the range [min, max]
      *
-     * @param min the smallest integer you can get
-     * @param max the biggest integer you can get
+     * @param min the smallest integer you can getAndAddOnSuccessListener
+     * @param max the biggest integer you can getAndAddOnSuccessListener
      * @return the random integer
      */
     static int randomInt(int min, int max) {
@@ -85,5 +87,9 @@ public interface Utils {
         long dateTime = date.getTime();
         long now = Calendar.getInstance().getTimeInMillis();
         return now - dateTime;
+    }
+
+    static void showConnectSnackbar(View container) {
+        Snackbar.make(container, "Login to access more features ⭐", 5000).show();
     }
 }

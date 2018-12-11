@@ -4,7 +4,6 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -16,7 +15,6 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
-import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.Structure.SuperMessage;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -26,10 +24,10 @@ import ch.epfl.sweng.zuluzulu.User.User;
  */
 public abstract class SuperChatPostsFragment extends SuperFragment {
 
+    public static final String VISIT_PROFILE_STRING = "Visiter le profile de ";
     protected static final String ARG_USER = "ARG_USER";
     protected static final String ARG_CHANNEL = "ARG_CHANNEL";
     protected static final String ARG_POST = "ARG_POST";
-
     protected List<SuperMessage> messages = new ArrayList<>();
 
     protected ListView listView;
@@ -81,7 +79,7 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
                 if (!message.isAnonymous() && !message.isOwnMessage(user.getSciper())) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-                    AlertDialog dlg = builder.setTitle("Visiter le profil de " + message.getSenderName() + " ?")
+                    AlertDialog dlg = builder.setTitle(VISIT_PROFILE_STRING + message.getSenderName() + " ?")
                             .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {

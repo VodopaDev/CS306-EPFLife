@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -28,7 +27,6 @@ import java.util.Date;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -48,8 +46,8 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_CREATE_EVENT;
  */
 public class EventFragment extends SuperFragment {
     private static final String ARG_USER = "ARG_USER";
-    private final Date minDate = new Date(946724400000L);  // 01/01/2000
-    private final Date maxDate = new Date(1735729200000L); // 01/01/2025
+    private final Date MIN_DATE = new Date(946724400000L);  // 01/01/2000
+    private final Date MAX_DATE = new Date(1735729200000L); // 01/01/2025
 
     private User user;
 
@@ -149,7 +147,10 @@ public class EventFragment extends SuperFragment {
         selectClickedCheckbox(checkbox_event_sort_date);
 
         event_fragment_from_date = view.findViewById(R.id.event_fragment_from_date);
+        event_fragment_from_date.setOnClickListener(dateOnClick(true));
         event_fragment_to_date = view.findViewById(R.id.event_fragment_to_date);
+        event_fragment_to_date.setOnClickListener(dateOnClick(false));
+
 
         event_search_bar = view.findViewById(R.id.event_fragment_search_bar);
 
@@ -158,7 +159,6 @@ public class EventFragment extends SuperFragment {
 
         // All method the set the behaviour of the checkboxes, date selecting and name/description matching
         setFilteringWithText();
-        setFilteringWithDate();
         setToggleFilterVisibilityBehaviour();
         setSortingBehaviourOnCheckbox(checkbox_event_sort_date, Event.dateComparator());
         setSortingBehaviourOnCheckbox(checkbox_event_sort_like, Event.likeComparator());
@@ -177,10 +177,6 @@ public class EventFragment extends SuperFragment {
             followedEvents.clear();
             eventsFiltered.clear();
             allEvents.addAll(result);
-            for (Event event : allEvents) {
-                if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event.getId()))
-                    followedEvents.add(event);
-            }
             eventsToFilter = allEvents;
             eventsFiltered.addAll(eventsToFilter);
             sortWithCurrentComparator();
@@ -194,14 +190,11 @@ public class EventFragment extends SuperFragment {
      * @param comparator comparator to use when the checkbox is clicked
      */
     private void setSortingBehaviourOnCheckbox(CheckBox checkBox, Comparator<Event> comparator) {
-        checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkBox.isEnabled()) {
-                    selectClickedCheckbox(checkBox);
-                    currentComparator = comparator;
-                    sortWithCurrentComparator();
-                }
+        checkBox.setOnClickListener(v -> {
+            if (checkBox.isEnabled()) {
+                selectClickedCheckbox(checkBox);
+                currentComparator = comparator;
+                sortWithCurrentComparator();
             }
         });
     }
@@ -264,6 +257,11 @@ public class EventFragment extends SuperFragment {
         dateTo = null;
         dateFrom = null;
 
+        followedEvents.clear();
+        for (Event event : allEvents)
+            if (((AuthenticatedUser) user).isFollowedEvent(event.getId()))
+                followedEvents.add(event);
+
         button_event_all.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
         button_event_fav.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
         selectedButton.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
@@ -308,54 +306,30 @@ public class EventFragment extends SuperFragment {
         }
     }
 
-    //TODO: it's surely possible to reduce this
-
     /**
-     * Set the behaviour of both textfields from and to
+     * Return an OnClickListener for a button that opens a DatePickedDialog when clicked
+     *
+     * @param startDate if it is the lower or upper bound date to be selected
+     * @return the OnClickListener that prompt a DatePicker on click
      */
-    private void setFilteringWithDate() {
-        event_fragment_from_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog.OnDateSetListener datePicker = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                          int dayOfMonth) {
-                        eventCalendar.set(Calendar.YEAR, year);
-                        eventCalendar.set(Calendar.MONTH, monthOfYear);
-                        eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        dateFrom = (Date) eventCalendar.getTime().clone();
-                        filterWithDate();
-                    }
-                };
+    private View.OnClickListener dateOnClick(boolean startDate) {
+        return v -> {
+            DatePickerDialog.OnDateSetListener datePicker = (view, year, monthOfYear, dayOfMonth) -> {
+                eventCalendar.set(Calendar.YEAR, year);
+                eventCalendar.set(Calendar.MONTH, monthOfYear);
+                eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                if (startDate)
+                    dateFrom = (Date) eventCalendar.getTime().clone();
+                else
+                    dateTo = (Date) eventCalendar.getTime().clone();
+                filterWithDate();
+            };
 
-                if (getContext() != null)
-                    new DatePickerDialog(getContext(), datePicker, eventCalendar
-                            .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
-                            eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-        event_fragment_to_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog.OnDateSetListener datePicker = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                          int dayOfMonth) {
-                        eventCalendar.set(Calendar.YEAR, year);
-                        eventCalendar.set(Calendar.MONTH, monthOfYear);
-                        eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        dateTo = (Date) eventCalendar.getTime().clone();
-                        filterWithDate();
-                    }
-                };
-
-                if (getContext() != null)
-                    new DatePickerDialog(getContext(), datePicker, eventCalendar
-                            .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
-                            eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
+            if (getContext() != null)
+                new DatePickerDialog(getContext(), datePicker, eventCalendar
+                        .get(Calendar.YEAR), eventCalendar.get(Calendar.MONTH),
+                        eventCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        };
     }
 
     /**
@@ -376,15 +350,12 @@ public class EventFragment extends SuperFragment {
     /**
      * Sanitize dates if they are null or before/after the minimal/maximal date
      * Also switch the bound dates if the are in the wrong order
-     *
-     * @Link minDate
-     * @Link maxDate
      */
     private void sanitizeDates() {
-        if (dateTo == null || dateTo.after(maxDate))
-            dateTo = maxDate;
-        if (dateFrom == null || dateTo.before(minDate))
-            dateFrom = minDate;
+        if (dateTo == null || dateTo.after(MAX_DATE))
+            dateTo = MAX_DATE;
+        if (dateFrom == null || dateFrom.before(MIN_DATE))
+            dateFrom = MIN_DATE;
 
         // if dateTo is before dateFrom
         if (dateTo.before(dateFrom)) {

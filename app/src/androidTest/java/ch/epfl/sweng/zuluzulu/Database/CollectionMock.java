@@ -4,16 +4,30 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseDocument;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseQuery;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.OperationWithFirebaseMapList;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
+import ch.epfl.sweng.zuluzulu.Utility;
 
 public class CollectionMock implements DatabaseCollection {
+    private Map<String, Object> map;
+
+    CollectionMock(){
+        map = Utility.createMapWithAll();
+    }
+
     @Override
     public DatabaseDocument document(String documentPath) {
         return new DocumentMock();
@@ -30,7 +44,12 @@ public class CollectionMock implements DatabaseCollection {
     }
 
     @Override
-    public Task<QuerySnapshot> get() {
+    public Task<QuerySnapshot> getAndAddOnSuccessListener(OperationWithFirebaseMapList listener) {
+        FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
+        List<FirebaseMapDecorator> list = new ArrayList<>();
+        list.add(fmap);
+        listener.applyList(list);
+        IdlingResourceFactory.incrementCountingIdlingResource();
         return new TaskMock<>();
     }
 
@@ -40,7 +59,11 @@ public class CollectionMock implements DatabaseCollection {
     }
 
     @Override
-    public void addSnapshotListener(@NonNull EventListener<QuerySnapshot> listener) {
+    public void addSnapshotListener(OperationWithFirebaseMapList listener) {
+        FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
+        List<FirebaseMapDecorator> list = new ArrayList<>();
+        list.add(fmap);
+        listener.applyList(list);
     }
 
     @Override

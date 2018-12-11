@@ -14,6 +14,7 @@ import android.widget.ListView;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChannelArrayAdapter;
@@ -37,6 +38,8 @@ import ch.epfl.sweng.zuluzulu.Utility.Utils;
  */
 public class ChannelFragment extends SuperFragment {
     private static final String ARG_USER = "ARG_USER";
+    // TODO: fill with all the globals channels
+    private static final List<String> GLOBAL_CHANNEL_IDS = Collections.emptyList();
 
     private View view;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -100,14 +103,16 @@ public class ChannelFragment extends SuperFragment {
     }
 
     /**
-     * Read data from the database and get the list of the channels
+     * Read data from the database and getAndAddOnSuccessListener the list of the channels
      */
     private void getChannelsFromDatabase() {
-        DatabaseFactory.getDependency().getAllChannels(result -> {
+        List<String> ids = new ArrayList<>();
+        ids.addAll(user.getFollowedChannels());
+        ids.addAll(GLOBAL_CHANNEL_IDS);
+
+        DatabaseFactory.getDependency().getChannelsFromIds(ids, result -> {
             listOfChannels.clear();
-            for (Channel channel : result) {
-                listOfChannels.add(channel);
-            }
+            listOfChannels.addAll(result);
             adapter.notifyDataSetChanged();
             adapter.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
             swipeRefreshLayout.setRefreshing(false);

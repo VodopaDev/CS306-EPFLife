@@ -1,6 +1,8 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +24,15 @@ import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.Utility.Utils;
 
 
 public class CalendarFragment extends SuperFragment {
 
     private static final String ARG_USER = "ARG_USER";
     private AuthenticatedUser user;
+
+    private Date today;
+    private Date tomorrow;
 
     private List<Event> followedEvents;
     private List<Event> selectedDayEvents;
@@ -67,6 +71,9 @@ public class CalendarFragment extends SuperFragment {
         followedEvents = new ArrayList<>();
         selectedDayEvents = new ArrayList<>();
         eventAdapter = new EventArrayAdapter(getContext(), selectedDayEvents, mListener, user);
+        Pair<Date, Date> pair = getStartAndEndOfTheDay(Timestamp.now().toDate());
+        today = pair.first;
+        tomorrow = pair.second;
     }
 
     @Override
@@ -91,9 +98,10 @@ public class CalendarFragment extends SuperFragment {
         calendarView.setCalendarListener(new CalendarListener() {
             @Override
             public void onDateSelected(Date date) {
+                Pair<Date, Date> pair = getStartAndEndOfTheDay(date);
                 selectedDayEvents.clear();
                 for (Event event : followedEvents) {
-                    if (event.getStartDateString().equals(Utils.dateFormat.format(date)))
+                    if (isCurrentlyGoing(event, pair.first, pair.second))
                         selectedDayEvents.add(event);
                 }
                 eventAdapter.notifyDataSetChanged();
@@ -107,10 +115,9 @@ public class CalendarFragment extends SuperFragment {
         });
         //Set the day decorator
         calendarView.setDecorators(Collections.singletonList(dayView -> {
-            Date dayDate = dayView.getDate();
+            Pair<Date, Date> pair = getStartAndEndOfTheDay(dayView.getDate());
             for (Event event : followedEvents) {
-                if (event.getStartDateString().equals(Utils.dateFormat.format(dayDate))
-                        && user.isFollowedEvent(event.getId()))
+                if (isCurrentlyGoing(event, pair.first, pair.second))
                     dayView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight));
             }
         }));
@@ -120,22 +127,53 @@ public class CalendarFragment extends SuperFragment {
         return view;
     }
 
+    /**
+     * Fill the event list from the database
+     */
     private void fillFollowedEventsList() {
-        DatabaseFactory.getDependency().getAllEvents(result -> {
-            Date date = Timestamp.now().toDate();
-            String now = Utils.dateFormat.format(date);
+        DatabaseFactory.getDependency().getEventsFromIds(user.getFollowedEvents(), result -> {
             for (Event event : result) {
-                if (user.isFollowedEvent(event.getId())) {
-                    followedEvents.add(event);
-                    if (now.equals(event.getStartDateString()))
-                        selectedDayEvents.add(event);
-                }
+                followedEvents.add(event);
+                if (isCurrentlyGoing(event, today, tomorrow))
+                    selectedDayEvents.add(event);
             }
 
             eventAdapter.notifyDataSetChanged();
             if (getContext() != null)
                 calendarView.refreshCalendar(calendar);
-            calendarView.markDayAsSelectedDay(date);
+            calendarView.markDayAsSelectedDay(today);
         });
+    }
+
+    /**
+     * Return if an event is going on between two dates
+     *
+     * @param event event to check
+     * @param start lower_bound date
+     * @param end   upper_bound date
+     * @return true if an event is going on between the two dates
+     */
+    private boolean isCurrentlyGoing(Event event, Date start, Date end) {
+        assert (start.before(end));
+        return (event.getStartDate().after(start) && event.getStartDate().before(end)) ||
+                (event.getEndDate().after(start) && event.getStartDate().before(end)) ||
+                (event.getStartDate().before(start) && event.getEndDate().after(end));
+    }
+
+    /**
+     * Return the start and end of a day of a date
+     *
+     * @param date date
+     * @return the beginning and ending of the day in a pair
+     */
+    private Pair<Date, Date> getStartAndEndOfTheDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 0, 0, 1);
+        Date start = calendar.getTime();
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
+        Date end = calendar.getTime();
+        Log.d("TODAY and TOMORROW", start.toString() + "   " + end.toString());
+        return new Pair<>(start, end);
     }
 }

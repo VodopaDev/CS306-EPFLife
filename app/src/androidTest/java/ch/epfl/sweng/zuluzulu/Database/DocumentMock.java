@@ -6,10 +6,17 @@ import android.util.Log;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseDocument;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.OperationWithFirebaseMap;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
+import ch.epfl.sweng.zuluzulu.Utility;
 
 public class DocumentMock implements DatabaseDocument {
     private static final String TAG = "DocumentMock";
@@ -37,9 +44,15 @@ public class DocumentMock implements DatabaseDocument {
     }
 
     @Override
-    public Task<DocumentSnapshot> get() {
+    public Task<DocumentSnapshot> getAndAddOnSuccessListener(OperationWithFirebaseMap listener) {
+        Map<String, Object> map = Utility.createMapWithAll();
+
+        FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
+        listener.apply(fmap);
+        IdlingResourceFactory.incrementCountingIdlingResource();
         return new TaskMock<>();
     }
+
 
     @Override
     public DatabaseCollection collection(String messages) {

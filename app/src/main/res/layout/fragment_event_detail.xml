@@ -48,15 +48,6 @@
                         android:background="@android:color/white"
                         android:contentDescription="@string/card_event_image_description" />
 
-                    <ImageView
-                        android:id="@+id/event_detail_fav"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="bottom|start"
-                        android:layout_marginBottom="8dp"
-                        android:contentDescription="@string/card_event_image_description"
-                        app:srcCompat="@drawable/fav_off" />
-
                     <ImageButton
                         android:id="@+id/event_detail_export"
                         android:layout_width="30dp"
@@ -322,13 +313,11 @@
     <LinearLayout
         android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="50dp"
+        android:divider="@drawable/divider"
+        android:dividerPadding="8dp"
         android:orientation="horizontal"
+        android:showDividers="middle"
         android:weightSum="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -336,29 +325,34 @@
 
         <Button
             android:id="@+id/event_detail_but_assos"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_weight="0.5"
-            android:background="@drawable/chat_message_background"
-            android:text="Association" />
+            android:text="@string/no_association" />
+
+        <Button
+            android:id="@+id/event_detail_like_button"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|center_horizontal|center"
+            android:background="@drawable/ic_like_24dp"
+            android:contentDescription="@string/card_event_image_description" />
 
         <Button
             android:id="@+id/event_detail_chatRoom"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_weight="0.5"
-            android:background="@drawable/chat_message_background"
-            android:text="Chat room" />
+            android:text="@string/no_chat" />
 
     </LinearLayout>
 

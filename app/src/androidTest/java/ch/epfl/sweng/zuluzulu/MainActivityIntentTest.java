@@ -9,11 +9,6 @@ import org.junit.Test;
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-
 /**
  * This class is to test if the MainActivity starts the right fragment depending on the intent
  * input
@@ -37,16 +32,5 @@ public class MainActivityIntentTest {
         mActivityRule.launchActivity(intent);
 
         Utility.checkFragmentIsOpen(R.id.login_fragment);
-    }
-
-    /**
-     * Check if it goes to the main
-     */
-    @Test
-    public void onCreateGoesToMain() {
-        Intent i = new Intent();
-        mActivityRule.launchActivity(i);
-
-        onView(withId(R.id.main_fragment)).check(matches(isDisplayed()));
     }
 }

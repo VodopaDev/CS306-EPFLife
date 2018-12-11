@@ -32,9 +32,9 @@ public class AuthenticatedUser extends User {
         this.semester = semester;
         this.firstNames = firstNames;
         this.lastNames = lastNames;
-        this.followedAssociations = followedAssociations;
-        this.followedChannels = followedChannels;
-        this.followedEvents = followedEvents;
+        this.followedAssociations = new ArrayList<>(followedAssociations);
+        this.followedChannels = new ArrayList<>(followedChannels);
+        this.followedEvents = new ArrayList<>(followedEvents);
         addRole(UserRole.USER);
     }
 
@@ -60,7 +60,7 @@ public class AuthenticatedUser extends User {
 
     public void setFollowedAssociation(List<String> associationsIds) {
         assert (associationsIds != null);
-        followedAssociations = associationsIds;
+        followedAssociations = new ArrayList<>(associationsIds);
     }
 
     public List<String> getFollowedAssociations() {
@@ -93,7 +93,7 @@ public class AuthenticatedUser extends User {
 
     public void setFollowedEvents(List<String> eventsIds) {
         assert (eventsIds != null);
-        followedEvents = eventsIds;
+        followedEvents = new ArrayList<>(eventsIds);
     }
 
     //----- Channel related methods -----\\
@@ -122,7 +122,7 @@ public class AuthenticatedUser extends User {
 
     public void setFollowedChannels(List<String> channelsIds) {
         assert (channelsIds != null);
-        followedChannels = channelsIds;
+        followedChannels = new ArrayList<>(channelsIds);
     }
 
     @Override

@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.Adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.R;
@@ -45,6 +48,7 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<SuperMessage> {
         LinearLayout messageContent = view.findViewById(R.id.chat_message_content);
         TextView message = view.findViewById(R.id.chat_message_msg);
         TextView senderName = view.findViewById(R.id.chat_message_senderName);
+        TextView timeView = view.findViewById(R.id.chat_message_time);
 
         int backgroundResource = isOwnMessage ? R.drawable.chat_message_background_ownmessage : R.drawable.chat_message_background;
         messageContent.setBackgroundResource(backgroundResource);
@@ -60,6 +64,28 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<SuperMessage> {
 
         message.setText(currentChatMessage.getMessage());
 
+        Date time = currentChatMessage.getTime();
+        setUpTimeView(timeView, time);
+
         return view;
+    }
+
+    /**
+     * Set up the correct time field on each message
+     *
+     * @param timeView The view to set up
+     * @param time     The time of the message
+     */
+    private void setUpTimeView(TextView timeView, Date time) {
+        boolean sameDay = DateUtils.isToday(time.getTime());
+        if (sameDay) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(time);
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
+            timeView.setText(hour + ":" + minute);
+        } else {
+            timeView.setVisibility(View.GONE);
+        }
     }
 }
