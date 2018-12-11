@@ -43,7 +43,6 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:orientation="horizontal"
-        android:weightSum="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -52,23 +51,24 @@
             android:id="@+id/chat_message_edit"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.8"
-            android:ems="10"
+            android:ems="14"
             android:fadeScrollbars="false"
             android:hint="@string/chat_message"
             android:inputType="textMultiLine"
             android:minLines="1"
             android:scrollbars="vertical" />
 
-        <Button
+        <ImageButton
             android:id="@+id/chat_send_button"
+            style="@android:style/Widget.ImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:text="@string/chat_send"
+            android:layout_gravity="center_vertical"
+            android:scaleType="fitCenter"
+            android:src="@drawable/send_message"
             android:textAllCaps="false"
             android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textStyle="bold" />
+            android:textStyle="normal" />
 
     </LinearLayout>
 
