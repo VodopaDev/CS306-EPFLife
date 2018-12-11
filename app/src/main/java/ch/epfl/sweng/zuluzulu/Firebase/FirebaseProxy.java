@@ -478,13 +478,28 @@ public class FirebaseProxy implements Proxy {
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
+    @Override
     public void updatePost(Post post) {
-        IdlingResourceFactory.incrementCountingIdlingResource();
+        if(post.getOriginalPostId() == null)
+            updateOriginalPost(post);
+        else
+            updateReplyPost(post);
+    }
+
+    private void updateOriginalPost(Post post){
         channelCollection.document(post.getChannelId())
                 .collection("posts")
                 .document(post.getId())
                 .update(post.getData());
-        IdlingResourceFactory.decrementCountingIdlingResource();
+    }
+
+    private void updateReplyPost(Post post) {
+        channelCollection.document(post.getChannelId())
+                .collection("posts")
+                .document(post.getOriginalPostId())
+                .collection("replies")
+                .document(post.getId())
+                .update(post.getData());
     }
 
     public void addMessage(ChatMessage message) {
