@@ -109,18 +109,26 @@ public class ChannelFragment extends SuperFragment {
      */
     private void getChannelsFromDatabase() {
         List<String> ids = new ArrayList<>();
-        ids.addAll(user.getFollowedChannels());
         ids.addAll(GLOBAL_CHANNEL_IDS);
+        ids.addAll(user.getFollowedChannels());
 
         DatabaseFactory.getDependency().getChannelsFromIds(ids, result -> {
             listOfChannels.clear();
+            List<Channel> listOfGlobalChannels = new ArrayList<>();
+            List<Channel> listOfFollowedChannels = new ArrayList<>();
             for (Channel channel : result) {
                 if (channel.canBeSeenBy(user.getSection(), userLocation)) {
-                    listOfChannels.add(channel);
+                    if (GLOBAL_CHANNEL_IDS.contains(channel.getId())) {
+                        listOfGlobalChannels.add(channel);
+                    } else {
+                        listOfFollowedChannels.add(channel);
+                    }
                 }
             }
+            Collections.sort(listOfFollowedChannels, (o1, o2) -> o1.getName().compareTo(o2.getName()));
+            listOfChannels.addAll(listOfGlobalChannels);
+            listOfChannels.addAll(listOfFollowedChannels);
             adapter.notifyDataSetChanged();
-            adapter.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
             swipeRefreshLayout.setRefreshing(false);
         });
     }
