@@ -36,13 +36,6 @@ public class LoginTest extends TestWithGuestAndFragment<LoginFragment> {
         onView(withId(R.id.login_fragment)).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void canSeetheWebView() throws InterruptedException {
-        onView(withId(R.id.sign_in_button)).perform(click());
-        TimeUnit.SECONDS.sleep(7);
-        onView(withId(R.id.webview)).check(matches(isDisplayed()));
-    }
-
 
     @Override
     public void initFragment() {
