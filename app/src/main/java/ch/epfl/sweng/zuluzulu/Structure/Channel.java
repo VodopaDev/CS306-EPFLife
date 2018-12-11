@@ -18,7 +18,7 @@ import ch.epfl.sweng.zuluzulu.Utility.Utils;
  */
 public class Channel extends FirebaseStructure {
     private static final double MAX_DISTANCE_TO_ACCESS_CHANNEL = 50;
-    private static final double MAX_DISTANCE_TO_SEE_CHANNEL = 50000;
+    private static final double MAX_DISTANCE_TO_SEE_CHANNEL = 1000;
     private String name;
     private String shortDescription;
     private Map<String, Object> restrictions;
