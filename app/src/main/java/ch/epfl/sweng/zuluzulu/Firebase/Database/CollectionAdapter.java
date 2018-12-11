@@ -40,7 +40,7 @@ public class CollectionAdapter implements DatabaseCollection {
 
     @Override
     public Task<QuerySnapshot> getAndAddOnSuccessListener(OperationWithFirebaseMapList listener) {
-        Task<QuerySnapshot> task =  collection.get();
+        Task<QuerySnapshot> task = collection.get();
 
         task.addOnSuccessListener(queryDocumentSnapshots -> {
                     List<FirebaseMapDecorator> list = new ArrayList<>();
@@ -49,7 +49,7 @@ public class CollectionAdapter implements DatabaseCollection {
                     }
                     listener.applyList(list);
                 }
-            );
+        );
 
         return task;
     }

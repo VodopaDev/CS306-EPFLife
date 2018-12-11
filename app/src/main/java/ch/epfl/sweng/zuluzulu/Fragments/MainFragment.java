@@ -14,10 +14,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Adapters.UpcomingEventArrayAdapter;
-
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
+import ch.epfl.sweng.zuluzulu.Adapters.UpcomingEventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -41,18 +40,13 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_LOGIN_FRAGMENT;
 public class MainFragment extends SuperFragment {
     public static final String TAG = "MAIN_TAG";
     private static final String ARG_USER = "ARG_USER";
-
-    private User user;
-    private Comparator<Event> currentComparator;
-
-    private List<Event> upcoming_events;
-    private UpcomingEventArrayAdapter event_adapter;
-
     List<Association> random_assos;
     AssociationArrayAdapter assos_adapter;
-
     Button sign_in_button;
-
+    private User user;
+    private Comparator<Event> currentComparator;
+    private List<Event> upcoming_events;
+    private UpcomingEventArrayAdapter event_adapter;
     private ArrayList<Association> associations_array;
     private ArrayList<Event> events_array;
     private AssociationArrayAdapter associations_adapter;
@@ -148,6 +142,7 @@ public class MainFragment extends SuperFragment {
 
     /**
      * Return a view visible by an authenticated user
+     *
      * @param inflater
      * @param container
      * @return
@@ -197,6 +192,7 @@ public class MainFragment extends SuperFragment {
 
     /**
      * Create a view visible by a guest
+     *
      * @param inflater
      * @param container
      * @return the guest's view
