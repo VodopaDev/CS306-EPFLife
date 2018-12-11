@@ -46,7 +46,7 @@ public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAd
 
     @Override
     public void onBindViewHolder(@NonNull AddAssociationViewHolder holder, int position) {
-        // - get element from your dataset at this position
+        // - getAndAddOnSuccessListener element from your dataset at this position
         // - replace the contents of the view with that element
         if (position < 0 || position >= associationList.size()) {
             return;

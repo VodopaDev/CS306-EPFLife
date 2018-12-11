@@ -8,7 +8,6 @@ import android.view.Gravity;
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -179,8 +178,7 @@ public class Utility {
                 "1",
                 Timestamp.now().toDate(),
                 "#F0E68C",
-                0,
-                0,
+                new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>()
         );
@@ -207,7 +205,7 @@ public class Utility {
                 .setAssosId("0")
                 .setShortDesc("Is this a real event?")
                 .setLongDesc("Of course not, you should check this beautiful description")
-                .setDate(new EventDate(new Date(10000000), new Date(10500000)))
+                .setDate(new EventDate(new Date(1514764800000L), new Date(1517443200000L)))
                 .setFollowers(Collections.singletonList("0"))
                 .setOrganizer("I'm the organizer")
                 .setPlace("Not at EPFL")
@@ -220,6 +218,28 @@ public class Utility {
                 .setSpeaker("Nico")
                 .build();
     }
+
+//    public static Event currentTimeEvent() {
+//        return new EventBuilder()
+//                .setId("0")
+//                .setName("Current time")
+//                .setChannelId("0")
+//                .setAssosId("0")
+//                .setShortDesc("Is this a real event?")
+//                .setLongDesc("Of course not, you should check this beautiful description")
+//                .setDate(new EventDate(new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis())))
+//                .setFollowers(Collections.singletonList("0"))
+//                .setOrganizer("I'm the organizer")
+//                .setPlace("Not at EPFL")
+//                .setIconUri(null)
+//                .setBannerUri(null)
+//                .setUrlPlaceAndRoom("myplace")
+//                .setWebsite("https://www.epfl.ch")
+//                .setContact("Nico")
+//                .setCategory("no category")
+//                .setSpeaker("Nico")
+//                .build();
+//    }
 
     public static ChatMessage defaultMessage0() {
         return new ChatMessage("0", "0", "message?", new Date(2000), "auth", "0");

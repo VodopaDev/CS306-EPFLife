@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import java.util.ArrayList;
@@ -85,6 +84,11 @@ public class UserDatabase {
         return null;
     }
 
+    /**
+     * Create a user in the local database using a cursor
+     * @param cursor cursor containing the user's data
+     * @return the newly created user
+     */
     private AuthenticatedUser createUser(Cursor cursor) {
         String semester = cursor.getString(cursor.getColumnIndexOrThrow(UserDatabaseContract.FeedEntry.COLUMN_NAME_SEMESTER));
 

@@ -45,7 +45,6 @@ public class AssociationFragment extends SuperFragment {
     private List<Association> assosFiltered;
     private AssociationArrayAdapter assosAdapter;
 
-    private ListView listviewAssos;
     private TextView plainTextFilter;
 
     public AssociationFragment() {
@@ -83,7 +82,7 @@ public class AssociationFragment extends SuperFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_association, container, false);
 
-        listviewAssos = view.findViewById(R.id.association_fragment_listview);
+        ListView listviewAssos = view.findViewById(R.id.association_fragment_listview);
         listviewAssos.setAdapter(assosAdapter);
 
         Button buttonAssosFav = view.findViewById(R.id.association_fragment_fav_button);
@@ -125,6 +124,9 @@ public class AssociationFragment extends SuperFragment {
         return view;
     }
 
+    /**
+     * Fill the all and followed association list from the database
+     */
     private void fillAssociationLists() {
         assosAll.clear();
         assosFiltered.clear();
@@ -146,6 +148,12 @@ public class AssociationFragment extends SuperFragment {
         });
     }
 
+    /**
+     * Select the new list of associations to filter and change the buttons appearance accordingly
+     * @param newSelected new button to be selected
+     * @param newUnselected new button to unselect
+     * @param newToFilter new association list to filter
+     */
     private void updateListView(Button newSelected, Button newUnselected, List<Association> newToFilter) {
         newSelected.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
         newUnselected.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));

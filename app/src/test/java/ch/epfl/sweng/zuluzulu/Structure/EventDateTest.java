@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.Date;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
@@ -34,6 +35,32 @@ public class EventDateTest {
         EventDate date = new EventDate(d, d);
         assertThat(date.getStartDate(), is(d));
         assertThat(date.getEndDate(), is(d));
+    }
+
+    @Test
+    public void getDateTime() {
+        Date d = new Date();
+        EventDate date = new EventDate(d, d);
+        assertThat(date.getDateTimeUser(), instanceOf(String.class));
+    }
+
+    @Test
+    public void getDateTimeLater() {
+        Date d = new Date();
+        d.setYear(d.getYear()+1);
+        EventDate date = new EventDate(d, d);
+        assertThat(date.getDateTimeUser(), instanceOf(String.class));
+    }
+
+    @Test
+    public void getDateTimeLaterDifferentEnd() {
+        Date d = new Date();
+        d.setYear(d.getYear()+1);
+        d.setHours(0);
+        Date e = new Date();
+        e.setYear(e.getYear()+2);
+        EventDate date = new EventDate(d, e);
+        assertThat(date.getDateTimeUser(), instanceOf(String.class));
     }
 
     @Test(expected = IllegalArgumentException.class)

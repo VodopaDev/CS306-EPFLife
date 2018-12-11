@@ -17,7 +17,7 @@ public class UserDatabaseContract {
     public static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME;
 
-    private UserDatabaseContract(){};
+    private UserDatabaseContract(){}
 
 
     /* Inner class that defines the table contents */
@@ -31,5 +31,4 @@ public class UserDatabaseContract {
         public static final String COLUMN_NAME_SEMESTER = "semestre";
         public static final String COLUMN_NAME_EMAIL = "email";
     }
-
 }

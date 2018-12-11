@@ -1,6 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Firebase;
 
-import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.espresso.IdlingRegistry;
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.Before;
@@ -8,14 +8,11 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
 
 import ch.epfl.sweng.zuluzulu.Database.FirebaseMock;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.FirebaseFactory;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.MainActivity;
-import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Utility;
 
 import static org.junit.Assert.*;
@@ -25,12 +22,12 @@ public class FirebaseProxyTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    FirebaseProxy proxy;
+    private FirebaseProxy proxy;
 
     @Before
     public void setUp() {
         FirebaseFactory.setDependency(new FirebaseMock());
-
+        IdlingRegistry.getInstance().register(IdlingResourceFactory.getCountingIdlingResource());
         proxy = FirebaseProxy.getInstance();
     }
 
@@ -117,6 +114,36 @@ public class FirebaseProxyTest {
     }
 
     @Test
+    public void addChannelToUserFollowedChannels() {
+        proxy.addChannelToUserFollowedChannels(Utility.defaultChannel(), Utility.createTestAuthenticated());
+    }
+
+    @Test
+    public void addEventToUserFollowedEvents() {
+        proxy.addEventToUserFollowedEvents(Utility.defaultEvent(), Utility.createTestAuthenticated());
+    }
+
+    @Test
+    public void addAssociationToUserFollowedAssociations() {
+        proxy.addAssociationToUserFollowedAssociations(Utility.defaultAssociation(), Utility.createTestAuthenticated());
+    }
+
+    @Test
+    public void removeChannelFromUserFollowedChannels() {
+        proxy.removeChannelFromUserFollowedChannels(Utility.defaultChannel(), Utility.createTestAuthenticated());
+    }
+
+    @Test
+    public void removeEventFromUserFollowedEvents() {
+        proxy.removeEventFromUserFollowedEvents(Utility.defaultEvent(), Utility.createTestAuthenticated());
+    }
+
+    @Test
+    public void removeAssociationFromUserFollowedAssociations() {
+        proxy.removeAssociationFromUserFollowedAssociations(Utility.defaultAssociation(), Utility.createTestAuthenticated());
+    }
+
+    @Test
     public void getRepliesFromPost() {
         proxy.getRepliesFromPost("1", "1", x -> {
         });
@@ -156,6 +183,16 @@ public class FirebaseProxyTest {
     @Test
     public void updateUser1() {
         proxy.updateUser(Utility.createTestAuthenticated());
+    }
+
+    @Test
+    public void getAllUsers() {
+        proxy.getAllUsers( x -> {});
+    }
+
+    @Test
+    public void updateUserRole() {
+        proxy.updateUserRole( "0", new ArrayList<>());
     }
 
     @Test
