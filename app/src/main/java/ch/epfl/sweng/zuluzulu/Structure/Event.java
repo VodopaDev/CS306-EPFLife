@@ -90,6 +90,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return a name-increasing comparator
+     *
      * @return name-increasing comparator
      */
     public static Comparator<Event> nameComparator() {
@@ -98,6 +99,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return a date-increasing comparator
+     *
      * @return date-increasing comparator
      */
     public static Comparator<Event> dateComparator() {
@@ -106,6 +108,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return a like-increasing comparator
+     *
      * @return like-increasing comparator
      */
     public static Comparator<Event> likeComparator() {
@@ -121,6 +124,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's association id
+     *
      * @return event's association id
      */
     public String getAssociationId() {
@@ -129,6 +133,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's name
+     *
      * @return event's name
      */
     public String getName() {
@@ -137,6 +142,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's short description
+     *
      * @return event's short description
      */
     public String getShortDescription() {
@@ -145,6 +151,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's long description
+     *
      * @return event's long description
      */
     public String getLongDescription() {
@@ -153,6 +160,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's channel id
+     *
      * @return event's channel id
      */
     public String getChannelId() {
@@ -161,6 +169,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the Association's icon Uri
+     *
      * @return the icon Uri
      */
     public Uri getIconUri() {
@@ -169,6 +178,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the Association's banner Uri
+     *
      * @return the banner Uri
      */
     public Uri getBannerUri() {
@@ -177,6 +187,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's organizer
+     *
      * @return event's organizer
      */
     public String getOrganizer() {
@@ -185,6 +196,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's place
+     *
      * @return event's place
      */
     public String getPlace() {
@@ -193,6 +205,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's likes
+     *
      * @return event's likes
      */
     public Integer getLikes() {
@@ -201,6 +214,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Add a user to the event followers
+     *
      * @param userId user to add to followers
      * @return true if the user wasn't already in the event's followers
      */
@@ -210,6 +224,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Remove a user from the event followers
+     *
      * @param userId user to remove from followers
      * @return true if the user was already in the event's followers
      */
@@ -245,6 +260,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's url_place_and_room
+     *
      * @return event's url_place_and_room
      */
     public String getUrlPlaceAndRoom() {
@@ -253,6 +269,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's website
+     *
      * @return event's website
      */
     public String getWebsite() {
@@ -261,6 +278,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's contact
+     *
      * @return event's contact
      */
     public String getContact() {
@@ -269,6 +287,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's category
+     *
      * @return event's category
      */
     public String getCategory() {
@@ -277,6 +296,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's speaker
+     *
      * @return event's speaker
      */
     public String getSpeaker() {
@@ -285,6 +305,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's starting date
+     *
      * @return event's starting date
      */
     public Date getStartDate() {
@@ -293,6 +314,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's ending date
+     *
      * @return event's ending date
      */
     public Date getEndDate() {
@@ -301,6 +323,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's starting date as a string
+     *
      * @return event's starting date as a string
      */
     public String getStartDateString() {
@@ -309,6 +332,7 @@ public class Event extends FirebaseStructure {
 
     /**
      * Return the event's ending date as a string
+     *
      * @return event's ending date as a string
      */
     public String getEndDateString() {

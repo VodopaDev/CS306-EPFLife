@@ -17,18 +17,20 @@ public class UserDatabase {
 
     /**
      * Create the user database
+     *
      * @param context Activity context
      */
-    public UserDatabase(Context context){
+    public UserDatabase(Context context) {
         this.mDbHelper = new UserDatabaseHelper(context);
     }
 
     /**
      * put the user to the local databaes
+     *
      * @param user user
      * @return -1 id error, otherwise the row
      */
-    public long put(AuthenticatedUser user){
+    public long put(AuthenticatedUser user) {
         // Gets the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
@@ -48,6 +50,7 @@ public class UserDatabase {
 
     /**
      * return the user if in database, null otherwise
+     *
      * @return User or null
      */
     public AuthenticatedUser getUser() {
@@ -64,20 +67,20 @@ public class UserDatabase {
                 UserDatabaseContract.FeedEntry.COLUMN_NAME_LAST_NAME
         };
 
-        Cursor cursor = db.query(UserDatabaseContract.FeedEntry.TABLE_NAME, projection,null, null, null, null, null);
+        Cursor cursor = db.query(UserDatabaseContract.FeedEntry.TABLE_NAME, projection, null, null, null, null, null);
 
         List<AuthenticatedUser> list = new ArrayList<>();
-        while(cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
             AuthenticatedUser user = createUser(cursor);
 
-            if(user != null && user.getSciper().length() >= 5) {
+            if (user != null && user.getSciper().length() >= 5) {
                 list.add(user);
             }
 
         }
         cursor.close();
 
-        if(!list.isEmpty()){
+        if (!list.isEmpty()) {
             return list.get(0);
         }
 
@@ -86,6 +89,7 @@ public class UserDatabase {
 
     /**
      * Create a user in the local database using a cursor
+     *
      * @param cursor cursor containing the user's data
      * @return the newly created user
      */
@@ -121,16 +125,17 @@ public class UserDatabase {
 
     /**
      * Delete the user from the database
+     *
      * @param user User
      * @return row on success, or -1
      */
-    public int delete(AuthenticatedUser user){
+    public int delete(AuthenticatedUser user) {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         // Define 'where' part of query.
         String selection = UserDatabaseContract.FeedEntry.COLUMN_NAME_SCIPER + " LIKE ?";
         // Specify arguments in placeholder order.
-        String[] selectionArgs = { user.getSciper() };
+        String[] selectionArgs = {user.getSciper()};
         // Issue SQL statement.
         return db.delete(UserDatabaseContract.FeedEntry.TABLE_NAME, selection, selectionArgs);
     }
