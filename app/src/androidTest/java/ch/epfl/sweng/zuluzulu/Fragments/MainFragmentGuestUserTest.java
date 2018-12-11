@@ -13,6 +13,7 @@ import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithGuestAndFragment;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -28,6 +29,11 @@ public class MainFragmentGuestUserTest extends TestWithGuestAndFragment<MainFrag
     @Test
     public void clickOnEvent() {
         onView(withText("Fiesta time")).perform(click());
+    }
+
+    @Test
+    public void clickOnAssos() {
+        onView(withText("Agepoly")).perform(click());
     }
 
     @Test
