@@ -90,7 +90,7 @@ public class UpcomingEventArrayAdapter extends ArrayAdapter<Event> {
 
         clickOnList(event_view, event);
 
-        holder.start_date.setText(event.getDateTimeUser());
+        holder.start_date.setText(event.getDateTimeUser(false));
 
         return event_view;
     }

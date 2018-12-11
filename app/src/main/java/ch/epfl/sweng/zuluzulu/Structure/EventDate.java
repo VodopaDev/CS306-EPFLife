@@ -192,13 +192,13 @@ public class EventDate implements Serializable {
         this.endDate = endDate;
     }
 
-    public String getDateTimeUser() {
+    public String getDateTimeUser(boolean fullDate) {
         StringBuilder sb = new StringBuilder();
 
         long nb_hours = (getStartDate().getTime() - new Date().getTime()) / 3600000;
         long nb_days = nb_hours / 24;
 
-        if (nb_days <= 30) {
+        if (nb_days <= 30 && !fullDate) {
             printTimeRemaining(nb_days, nb_hours, sb);
         } else {
             printDateStart(sb);

@@ -339,7 +339,7 @@ public class Event extends FirebaseStructure {
         return date.getEndDateString();
     }
 
-    public String getDateTimeUser() {
-        return date.getDateTimeUser();
+    public String getDateTimeUser(boolean fullDate) {
+        return date.getDateTimeUser(fullDate);
     }
 }
