@@ -27,6 +27,8 @@ import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.User.UserRole;
 
 public class FirebaseProxy implements Proxy {
 
@@ -506,26 +508,39 @@ public class FirebaseProxy implements Proxy {
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
-    public void getUserWithIdOrCreateIt(String id, OnResult<Map<String, Object>> onResult) {
+    public void getUserWithIdOrCreateIt(String id, OnResult<AuthenticatedUser> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         userCollection.document(id).getAndAddOnSuccessListener(fmap -> {
-            Map<String, Object> map = new HashMap<>();
             if (fmap == null) {
-                map.put("followed_associations", new ArrayList<String>());
-                map.put("followed_events", new ArrayList<String>());
-                map.put("followed_channels", new ArrayList<String>());
-                map.put("roles", Arrays.asList("USER"));
-                map.put("first_name", "");
-                map.put("last_name", "");
-                map.put("section", "");
-                map.put("semester", "");
-                map.put("gaspar", "");
-                map.put("email", "");
-                map.put("sciper", "");
+                onResult.apply(null);
             } else {
-                map.putAll(Objects.requireNonNull(fmap.getMap()));
+                try {
+                    List<String> receivedAssociations = (List<String>) fmap.get("followed_associations");
+                    List<String> receivedEvents = (List<String>) fmap.get("followed_events");
+                    List<String> receivedChannels = (List<String>) fmap.get("followed_channels");
+
+                    AuthenticatedUser user = new User.UserBuilder()
+                            .setSciper(fmap.getString("sciper"))
+                            .setFirst_names("first_name")
+                            .setLast_names("last_name")
+                            .setSection("section")
+                            .setSemester("semester")
+                            .setGaspar("gaspar")
+                            .setEmail("email")
+                            .setFollowedAssociations(receivedAssociations)
+                            .setFollowedEvents(receivedEvents)
+                            .setFollowedChannels(receivedChannels)
+                            .buildAuthenticatedUser();
+
+                    for (String role : (List<String>) fmap.get("roles"))
+                        user.addRole(UserRole.valueOf(role));
+
+                    onResult.apply(user);
+                } catch (Exception e){
+                    onResult.apply(null);
+                }
+
             }
-            onResult.apply(map);
             IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot set user " + id));
     }

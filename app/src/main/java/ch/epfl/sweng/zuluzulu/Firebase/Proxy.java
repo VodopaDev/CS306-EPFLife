@@ -74,7 +74,7 @@ public interface Proxy {
 
     void getRepliesFromPost(String channelId, String postId, OnResult<List<Post>> onResult);
 
-    void getUserWithIdOrCreateIt(String sciper, OnResult<Map<String, Object>> onResult);
+    void getUserWithIdOrCreateIt(String sciper, OnResult<AuthenticatedUser> onResult);
 
     void getAllUsers(OnResult<List<Map<String, Object>>> onResult);
 
