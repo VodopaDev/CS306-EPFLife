@@ -24,7 +24,7 @@ import ch.epfl.sweng.zuluzulu.Utility;
 public class CollectionMock implements DatabaseCollection {
     private Map<String, Object> map;
 
-    CollectionMock(){
+    CollectionMock() {
         map = Utility.createMapWithAll();
     }
 

@@ -15,11 +15,11 @@ public class UserDatabaseTest {
             new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void TestAll(){
+    public void TestAll() {
         UserDatabase db = new UserDatabase(mActivityRule.getActivity().getApplicationContext());
         db.put(Utility.createTestAuthenticated());
         db.getUser();
-        assert(db.delete(Utility.createTestAuthenticated()) >= 0);
+        assert (db.delete(Utility.createTestAuthenticated()) >= 0);
     }
 
 }

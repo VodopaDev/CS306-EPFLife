@@ -38,7 +38,7 @@ public class AssociationDetailFragmentTest extends TestWithAuthenticatedAndFragm
     }
 
     @Test
-    public void testChatButton(){
+    public void testChatButton() {
         onView(withId(R.id.association_detail_chat_button)).perform(click());
     }
 }

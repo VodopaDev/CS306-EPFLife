@@ -480,13 +480,13 @@ public class FirebaseProxy implements Proxy {
 
     @Override
     public void updatePost(Post post) {
-        if(post.getOriginalPostId() == null)
+        if (post.getOriginalPostId() == null)
             updateOriginalPost(post);
         else
             updateReplyPost(post);
     }
 
-    private void updateOriginalPost(Post post){
+    private void updateOriginalPost(Post post) {
         channelCollection.document(post.getChannelId())
                 .collection("posts")
                 .document(post.getId())

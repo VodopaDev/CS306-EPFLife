@@ -30,7 +30,7 @@ public class MockedProxy implements Proxy {
         put("0", Utility.defaultAssociation());
     }};
 
-    private Map<String, Event> eventMap =  new HashMap<String, Event>() {{
+    private Map<String, Event> eventMap = new HashMap<String, Event>() {{
         put("0", Utility.defaultEvent());
 //        put("1", Utility.currentTimeEvent());
     }};
@@ -158,8 +158,8 @@ public class MockedProxy implements Proxy {
 
         Log.d("GET_CHAN", "");
         ArrayList<Channel> result = new ArrayList<>();
-        for(String id: ids)
-            if(channelMap.containsKey(id))
+        for (String id : ids)
+            if (channelMap.containsKey(id))
                 result.add(channelMap.get(id).channel);
         onResult.apply(result);
     }
@@ -213,7 +213,7 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult) {
-        if(channelId != null && channelMap.containsKey(channelId)) {
+        if (channelId != null && channelMap.containsKey(channelId)) {
             ArrayList<ChatMessage> result = new ArrayList<>();
             result.addAll(channelMap.get(channelId).messageMap.values());
             onResult.apply(result);
