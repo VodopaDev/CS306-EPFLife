@@ -13,7 +13,9 @@ import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 import ch.epfl.sweng.zuluzulu.Utility;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public class AssociationDetailFragmentTest extends TestWithAuthenticatedAndFragment<AssociationDetailFragment> {
@@ -26,12 +28,17 @@ public class AssociationDetailFragmentTest extends TestWithAuthenticatedAndFragm
 
     @Test
     public void notFollowedAssociationTest() {
-        onView(withId(R.id.association_detail_fav)).perform(ViewActions.click());
-        onView(withId(R.id.association_detail_fav)).perform(ViewActions.click());
+        onView(withId(R.id.association_detail_fav)).perform(click());
+        onView(withId(R.id.association_detail_fav)).perform(click());
     }
 
     @Test
-    public void tchatTest(){
-        onView(withId(R.id.association_detail_chat_name)).perform(ViewActions.click());
+    public void testEventsButton() {
+        onView(withId(R.id.association_detail_events_button)).perform(click());
+    }
+
+    @Test
+    public void testChatButton(){
+        onView(withId(R.id.association_detail_chat_button)).perform(click());
     }
 }
