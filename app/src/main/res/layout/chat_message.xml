@@ -14,13 +14,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/chat_message_background"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/chat_message_senderName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:paddingLeft="5dp"
             android:text="Name"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -36,9 +38,12 @@
                 android:id="@+id/chat_message_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
                 android:layout_weight="0.8"
                 android:maxWidth="275dp"
+                android:paddingLeft="5dp"
                 android:text="Message random un peu long pour voir comment il se display sur le layout du chat message"
                 android:textSize="16sp" />
 
@@ -51,6 +56,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="0.2"
                 android:inputType="time"
+                android:paddingRight="5dp"
                 android:text="12:00"
                 android:textColor="@color/colorGrayDarkTransparent"
                 android:textSize="12sp" />
