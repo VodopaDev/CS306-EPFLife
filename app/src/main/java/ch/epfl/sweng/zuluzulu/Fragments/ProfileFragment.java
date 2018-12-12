@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
@@ -192,17 +193,20 @@ public class ProfileFragment extends SuperFragment {
         }
         if (localFile != null) {
             pathToTemp = localFile.getAbsolutePath();
+            IdlingResourceFactory.incrementCountingIdlingResource();
             pictureRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    IdlingResourceFactory.decrementCountingIdlingResource();
                     // Local temp file has been created
                     setRescaledImage(pathToTemp);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
+                    IdlingResourceFactory.decrementCountingIdlingResource();
                     // Handle any errors
-                    //Toast.makeText(getActivity(), "Unsuccessful load", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Unsuccessful load", Toast.LENGTH_SHORT).show();
                 }
             });
         }
