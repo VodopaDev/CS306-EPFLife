@@ -19,7 +19,7 @@ public final class GPS {
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
     private static final long MIN_DISTANCE_TO_REQUEST_LOCATION = 5; // In meters
-    private static final long MIN_TIME_FOR_UPDATES = 3000; // 1 sec
+    private static final long MIN_TIME_FOR_UPDATES = 3000; // 3 sec
     private static final int TWO_MINUTES = 1000 * 60 * 2; // 2 min
     private static Context mcontext;
     private static Location location;
@@ -44,6 +44,7 @@ public final class GPS {
         public void onProviderDisabled(String provider) {
         }
     };
+
     private static LocationManager locationManager;
 
     private static boolean isActivated = false;
@@ -59,7 +60,7 @@ public final class GPS {
     public static boolean start(Context context) {
         mcontext = context;
         if (ContextCompat.checkSelfPermission(mcontext, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(mcontext, "Permission to GPS not granted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mcontext, "Permission au GPS non donnée", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             locationManager = (LocationManager) mcontext.getSystemService(LOCATION_SERVICE);
@@ -82,7 +83,7 @@ public final class GPS {
                 }
                 isActivated = isGPSEnabled || isNetworkEnabled;
                 if (!isActivated) {
-                    Toast.makeText(mcontext, "Please activate your GPS to have access to all features", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mcontext, "Active le GPS pour avoir accès à toutes les options", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Log.e("Location manager", "Cannot getAndAddOnSuccessListener location manager");

@@ -187,12 +187,13 @@ public class FirebaseProxyTest {
 
     @Test
     public void getAllUsers() {
-        proxy.getAllUsers( x -> {});
+        proxy.getAllUsers(x -> {
+        });
     }
 
     @Test
     public void updateUserRole() {
-        proxy.updateUserRole( "0", new ArrayList<>());
+        proxy.updateUserRole("0", new ArrayList<>());
     }
 
     @Test

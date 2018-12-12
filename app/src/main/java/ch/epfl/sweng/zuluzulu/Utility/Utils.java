@@ -89,7 +89,33 @@ public interface Utils {
         return now - dateTime;
     }
 
+    /**
+     * Draw a Snackbar
+     *
+     * @param container The container view
+     */
     static void showConnectSnackbar(View container) {
         Snackbar.make(container, "Login to access more features ⭐", 5000).show();
     }
+
+    /**
+     * Convert hour and minute from integer to beautiful string
+     *
+     * @param hour The hour
+     * @param minute The minutes
+     *
+     * @return The string of the hour and the minutes
+     */
+    static String hourAndMinutesFrom(int hour, int minute) {
+        String strHour = String.valueOf(hour);
+        String strMinute = String.valueOf(minute);
+        if (strHour.length() < 2) {
+            strHour = "0" + strHour;
+        }
+        if (strMinute.length() < 2) {
+            strMinute = "0" + strMinute;
+        }
+        return strHour + ":" + strMinute;
+    }
+
 }

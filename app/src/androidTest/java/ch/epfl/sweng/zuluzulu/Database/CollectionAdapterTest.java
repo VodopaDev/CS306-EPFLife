@@ -23,7 +23,7 @@ public class CollectionAdapterTest {
     private CollectionAdapter db;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         FirebaseFactory.setDependency(new FirebaseMock());
         db = new CollectionAdapter(FirebaseFirestore.getInstance().collection("co"));
     }
@@ -41,7 +41,8 @@ public class CollectionAdapterTest {
 
     @Test
     public void get() {
-        assertNotNull(db.getAndAddOnSuccessListener(x -> {}));
+        assertNotNull(db.getAndAddOnSuccessListener(x -> {
+        }));
     }
 
     @Test
@@ -66,6 +67,7 @@ public class CollectionAdapterTest {
 
     @Test
     public void listenet() {
-        db.addSnapshotListener((x) -> {});
+        db.addSnapshotListener((x) -> {
+        });
     }
 }
