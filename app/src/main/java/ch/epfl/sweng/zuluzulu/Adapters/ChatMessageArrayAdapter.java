@@ -81,8 +81,14 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<SuperMessage> {
         if (sameDay) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(time);
-            int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            int minute = calendar.get(Calendar.MINUTE);
+            String hour = String.valueOf(calendar.get(Calendar.HOUR_OF_DAY));
+            String minute = String.valueOf(calendar.get(Calendar.MINUTE));
+            if (hour.length() < 2) {
+                hour = "0" + hour;
+            }
+            if (minute.length() < 2) {
+                minute = "0" + minute;
+            }
             timeView.setText(hour + ":" + minute);
         } else {
             timeView.setVisibility(View.GONE);
