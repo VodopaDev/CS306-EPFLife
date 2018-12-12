@@ -511,35 +511,26 @@ public class FirebaseProxy implements Proxy {
     public void getUserWithIdOrCreateIt(String id, OnResult<AuthenticatedUser> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         userCollection.document(id).getAndAddOnSuccessListener(fmap -> {
-            if (fmap == null) {
+            try {
+                AuthenticatedUser user = new User.UserBuilder()
+                        .setSciper(fmap.getString("sciper"))
+                        .setFirst_names(fmap.getString("first_name"))
+                        .setLast_names(fmap.getString("last_name"))
+                        .setSection(fmap.getString("section"))
+                        .setSemester(fmap.getString("semester"))
+                        .setGaspar(fmap.getString("gaspar"))
+                        .setEmail(fmap.getString("email"))
+                        .setFollowedAssociations((List<String>) fmap.get("followed_associations"))
+                        .setFollowedEvents((List<String>) fmap.get("followed_events"))
+                        .setFollowedChannels((List<String>) fmap.get("followed_channels"))
+                        .buildAuthenticatedUser();
+
+                for (String role : (List<String>) fmap.get("roles"))
+                    user.addRole(UserRole.valueOf(role));
+
+                onResult.apply(user);
+            } catch (Exception e) {
                 onResult.apply(null);
-            } else {
-                try {
-                    List<String> receivedAssociations = (List<String>) fmap.get("followed_associations");
-                    List<String> receivedEvents = (List<String>) fmap.get("followed_events");
-                    List<String> receivedChannels = (List<String>) fmap.get("followed_channels");
-
-                    AuthenticatedUser user = new User.UserBuilder()
-                            .setSciper(fmap.getString("sciper"))
-                            .setFirst_names(fmap.getString("first_name"))
-                            .setLast_names(fmap.getString("last_name"))
-                            .setSection(fmap.getString("section"))
-                            .setSemester(fmap.getString("semester"))
-                            .setGaspar(fmap.getString("gaspar"))
-                            .setEmail(fmap.getString("email"))
-                            .setFollowedAssociations(receivedAssociations)
-                            .setFollowedEvents(receivedEvents)
-                            .setFollowedChannels(receivedChannels)
-                            .buildAuthenticatedUser();
-
-                    for (String role : (List<String>) fmap.get("roles"))
-                        user.addRole(UserRole.valueOf(role));
-
-                    onResult.apply(user);
-                } catch (Exception e){
-                    onResult.apply(null);
-                }
-
             }
             IdlingResourceFactory.decrementCountingIdlingResource();
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot set user " + id));

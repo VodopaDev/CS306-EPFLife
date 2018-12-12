@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AddEventFragment;
@@ -56,7 +57,6 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
-    private static final int W_STORAGE_PERM_CODE = 260;
     // Const used to send a Increment or Decrement message
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -196,6 +196,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         AuthenticatedUser localUser = userDatabase.getUser();
         if (localUser != null) {
             user = localUser;
+            DatabaseFactory.getDependency().getUserWithIdOrCreateIt(user.getSciper(), result -> {
+                if (result != null) {
+                    user = result;
+                }
+            });
         } else {
             user = new User.UserBuilder().buildGuestUser();
         }
