@@ -204,7 +204,7 @@ public class EventTest {
     @Test
     public void dateStringAreCorrect() {
         initWorkingAssociation();
-        String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+        String DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_PATTERN);
 
         assertEquals(simpleDateFormat.format(START_DATE), event0.getStartDateString());

@@ -134,7 +134,8 @@ public class MainFragment extends SuperFragment {
                 int rand = (int) (Math.random() * (result.size()));
                 random_assos.add(result.get(rand));
                 rand = (int) (Math.random() * (result.size()));
-                random_assos.add(result.get(rand));
+                if(!random_assos.contains(result.get(rand)))
+                    random_assos.add(result.get(rand));
                 assos_adapter.notifyDataSetChanged();
             }
         });
