@@ -23,18 +23,18 @@ public class EventFragmentGuestTest extends TestWithGuestAndFragment<EventFragme
 
     @Override
     @Before
-    public void init(){
+    public void init() {
         super.init();
         onView(withId(R.id.event_fragment_filter_button)).perform(click());
     }
 
     @Test
-    public void warningWhenGuestClickOnFav(){
+    public void warningWhenGuestClickOnFav() {
         onView(withId(R.id.event_fragment_fav_button)).perform(click());
     }
 
     @Test
-    public void clickOnDisableCheckbox(){
+    public void clickOnDisableCheckbox() {
         onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(click());
         onView(withId(R.id.event_fragment_checkBox_sort_date)).perform(click());
     }

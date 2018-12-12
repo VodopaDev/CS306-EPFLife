@@ -6,9 +6,6 @@ import android.util.Log;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;

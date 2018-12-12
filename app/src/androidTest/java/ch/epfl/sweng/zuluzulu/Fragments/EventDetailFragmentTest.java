@@ -42,12 +42,12 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
     }
 
     @Test
-    public void isInEventDetailFragment(){
+    public void isInEventDetailFragment() {
         onView(withId(R.id.event_detail_desc)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void canFollowAndUnfollow(){
+    public void canFollowAndUnfollow() {
         assertTrue(user.isFollowedEvent("0"));
         onView(withId(R.id.event_detail_like_button)).perform(ViewActions.click());
         assertFalse(user.isFollowedEvent("0"));
@@ -56,7 +56,7 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
     }
 
     @Test
-    public void canExportEvent(){
+    public void canExportEvent() {
         Intent resultData = new Intent();
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
         intending(anyIntent()).respondWith(result);
@@ -64,13 +64,13 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
     }
 
     @Test
-    public void canAccessChannel(){
+    public void canAccessChannel() {
         onView(withId(R.id.event_detail_chatRoom)).perform(ViewActions.click());
         onView(withId(R.id.chat_posts_buttons)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void canAccessAssociation(){
+    public void canAccessAssociation() {
         onView(withId(R.id.event_detail_but_assos)).perform(ViewActions.click());
         onView(withId(R.id.association_detail_icon)).check(matches(isDisplayed()));
     }

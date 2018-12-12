@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.action.ViewActions;
 
 import org.junit.Test;

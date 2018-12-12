@@ -38,6 +38,7 @@ public class EventBuilderTest {
         new EventBuilder().setLongDesc(null);
 
     }
+
     @Test(expected = AssertionError.class)
     public void nullSpeaker() {
         new EventBuilder().setSpeaker(null);
@@ -47,18 +48,22 @@ public class EventBuilderTest {
     public void nullDate() {
         new EventBuilder().setDate(null);
     }
+
     @Test(expected = AssertionError.class)
     public void nullCategory() {
         new EventBuilder().setCategory(null);
     }
+
     @Test(expected = AssertionError.class)
     public void nullContact() {
         new EventBuilder().setContact(null);
     }
+
     @Test(expected = AssertionError.class)
     public void nullWebsite() {
         new EventBuilder().setWebsite(null);
     }
+
     @Test(expected = AssertionError.class)
     public void nullUrlPlace() {
         new EventBuilder().setUrlPlaceAndRoom(null);

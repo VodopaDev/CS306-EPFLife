@@ -41,7 +41,7 @@ public class EventFragmentAuthTest extends TestWithAuthenticatedAndFragment<Even
 
     @Override
     @Before
-    public void init(){
+    public void init() {
         super.init();
         onView(withId(R.id.event_fragment_filter_button)).perform(click());
     }
@@ -86,7 +86,7 @@ public class EventFragmentAuthTest extends TestWithAuthenticatedAndFragment<Even
     }
 
     @Test
-    public void sortWithKeywordNoResultTest(){
+    public void sortWithKeywordNoResultTest() {
         onView(withId(R.id.event_fragment_search_bar)).perform(typeText("random test that produces no result"));
         onView(withId(R.id.event_fragment_listview)).check(matches(not(hasDescendant(withText("Fiesta time")))));
         onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(0)));
@@ -143,7 +143,7 @@ public class EventFragmentAuthTest extends TestWithAuthenticatedAndFragment<Even
     }
 
     @Test
-    public void filterWithDateAddAnEventInEventFilteredList(){
+    public void filterWithDateAddAnEventInEventFilteredList() {
         onView(withId(R.id.event_fragment_from_date)).perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2017, 1, 1));
         onView(withText("OK")).perform(click());
@@ -154,7 +154,7 @@ public class EventFragmentAuthTest extends TestWithAuthenticatedAndFragment<Even
     }
 
     @Test
-    public void filterWithDateDontAddAnEventInEventFilteredList(){
+    public void filterWithDateDontAddAnEventInEventFilteredList() {
         onView(withId(R.id.event_fragment_from_date)).perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2001, 1, 1));
         onView(withText("OK")).perform(click());
@@ -165,14 +165,14 @@ public class EventFragmentAuthTest extends TestWithAuthenticatedAndFragment<Even
     }
 
     @Test
-    public void authenticatedCanClickFavorite(){
+    public void authenticatedCanClickFavorite() {
         onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
         onView(withId(R.id.event_fragment_fav_button)).perform(click());
         onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
     }
 
     @Test
-    public void authenticatedCanUnfollowAndFollowAnEvent(){
+    public void authenticatedCanUnfollowAndFollowAnEvent() {
         onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
         onData(anything())
                 .inAdapterView(withId(R.id.event_fragment_listview))
