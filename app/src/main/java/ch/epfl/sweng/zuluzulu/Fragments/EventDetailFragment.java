@@ -89,7 +89,7 @@ public class EventDetailFragment extends SuperFragment {
         event_desc.setText(event.getLongDescription());
 
         TextView event_date = view.findViewById(R.id.event_detail_date);
-        event_date.setText(event.getDateTimeUser());
+        event_date.setText(event.getDateTimeUser(true));
 
         TextView event_organizer = view.findViewById(R.id.event_detail_organizer);
         event_organizer.setText(event.getOrganizer());
