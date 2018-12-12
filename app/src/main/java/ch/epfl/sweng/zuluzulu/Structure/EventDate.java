@@ -1,17 +1,20 @@
 package ch.epfl.sweng.zuluzulu.Structure;
 
+import com.google.firebase.Timestamp;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
  * represent a date of an event
  */
 public class EventDate implements Serializable {
-    private static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
-    private static final String DATE_TIME_READ_HOURS = "yyyy-MM-dd HH:mm";
-    private static final String DATE_TIME_READ_NO_HOURS = "yyyy-MM-dd";
+    private static final String DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm:ss";
+    private static final String DATE_TIME_READ_HOURS = "dd.MM.yyyy HH:mm";
+    private static final String DATE_TIME_READ_NO_HOURS = "dd.MM.yyyy";
 
     private Date startDate;
     private Date endDate;
@@ -189,13 +192,13 @@ public class EventDate implements Serializable {
         this.endDate = endDate;
     }
 
-    public String getDateTimeUser() {
+    public String getDateTimeUser(boolean fullDate) {
         StringBuilder sb = new StringBuilder();
 
         long nb_hours = (getStartDate().getTime() - new Date().getTime()) / 3600000;
         long nb_days = nb_hours / 24;
 
-        if (nb_days <= 30) {
+        if (nb_days <= 30 && !fullDate) {
             printTimeRemaining(nb_days, nb_hours, sb);
         } else {
             printDateStart(sb);
@@ -204,13 +207,32 @@ public class EventDate implements Serializable {
     }
 
     private void printTimeRemaining(long nb_days, long nb_hours, StringBuilder sb) {
+        long nb_hours_end = (getEndDate().getTime() - new Date().getTime())/3600000;
+        long nb_days_end = nb_hours_end/24;
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(Timestamp.now().toDate());
+        int dayActu = calendar.get(Calendar.DAY_OF_MONTH);
+
+        calendar.setTime(getStartDate());
+        int dayOfEvent = calendar.get(Calendar.DAY_OF_MONTH);
+        int hourOfEvent = calendar.get(Calendar.HOUR_OF_DAY);
+        String minuteOfDay = String.format("%02d", calendar.get(Calendar.MINUTE));
+
         if (nb_days <= 0) {
-            if (nb_hours <= 0)
-                sb.append("Now");
-            else
-                sb.append("In " + nb_hours + " Hours");
+            if(nb_hours_end <= 0)
+                sb.append("Terminé");
+            else if(nb_hours <= 0)
+                sb.append("Maintenant - " + dateRemoveZeroHour(getEndDate()));
+            else {
+                if(dayActu - dayOfEvent == 0)
+                    sb.append("Aujourd'hui à " + hourOfEvent + "h" + minuteOfDay + " (dans " + nb_hours + " heures)");
+                else
+                    sb.append("Demain à " + hourOfEvent + "h" + minuteOfDay + " (dans " + nb_hours + " heures)");
+            }
         } else
-            sb.append("In " + nb_days + " Days");
+            sb.append("Dans " + nb_days + " jours");
     }
 
     private void printDateStart(StringBuilder sb) {
