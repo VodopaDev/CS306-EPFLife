@@ -199,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             DatabaseFactory.getDependency().getUserWithIdOrCreateIt(user.getSciper(), result -> {
                 if (result != null) {
                     user = result;
+                    selectItem(navigationView.getMenu().findItem(R.id.nav_main), true);
                 }
             });
         } else {
