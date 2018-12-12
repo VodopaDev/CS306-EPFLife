@@ -22,7 +22,7 @@ public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragmen
     public void initFragment() {
 
         DatabaseFactory.setDependency(new MockedProxy());
-        fragment = ProfileFragment.newInstance(user.getData(), true);
+        fragment = ProfileFragment.newInstance(user, true);
     }
 
     @Test
