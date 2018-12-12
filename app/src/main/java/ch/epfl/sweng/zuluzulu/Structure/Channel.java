@@ -18,7 +18,7 @@ import ch.epfl.sweng.zuluzulu.Utility.Utils;
  */
 public class Channel extends FirebaseStructure {
     private static final double MAX_DISTANCE_TO_ACCESS_CHANNEL = 50;
-    private static final double MAX_DISTANCE_TO_SEE_CHANNEL = 500;
+    private static final double MAX_DISTANCE_TO_SEE_CHANNEL = 1000000;
     private String name;
     private String shortDescription;
     private Map<String, Object> restrictions;
@@ -117,7 +117,6 @@ public class Channel extends FirebaseStructure {
      * @return whether the user can access it or not
      */
     public boolean canBeSeenBy(String userSection, GeoPoint userLocation) {
-
         String section = restrictions.containsKey("section") ? (String) restrictions.get("section") : null;
         GeoPoint channelLocation = restrictions.containsKey("location") ? (GeoPoint) restrictions.get("location") : null;
         return hasGoodSection(section, userSection) && hasGoodLocation(channelLocation, userLocation);
@@ -145,8 +144,11 @@ public class Channel extends FirebaseStructure {
      * @return true if requestedLocation and userLocation are the same or if there is no requestedLocation, false otherwise
      */
     private boolean hasGoodLocation(GeoPoint requestedLocation, GeoPoint userLocation) {
-        if (requestedLocation == null || userLocation == null)
+        if (requestedLocation == null)
             return true;
+
+        if (userLocation == null)
+            return false;
 
         distance = Utils.distanceBetween(requestedLocation, userLocation);
         double diff_distance = distance - MAX_DISTANCE_TO_ACCESS_CHANNEL;

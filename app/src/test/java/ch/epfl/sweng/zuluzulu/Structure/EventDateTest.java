@@ -48,7 +48,7 @@ public class EventDateTest {
     @Test
     public void getDateTimeLater() {
         Date d = new Date();
-        d.setYear(d.getYear()+1);
+        d.setYear(d.getYear() + 1);
         EventDate date = new EventDate(d, d);
         assertThat(date.getDateTimeUser(false), instanceOf(String.class));
         assertThat(date.getDateTimeUser(true), instanceOf(String.class));
@@ -57,10 +57,10 @@ public class EventDateTest {
     @Test
     public void getDateTimeLaterDifferentEnd() {
         Date d = new Date();
-        d.setYear(d.getYear()+1);
+        d.setYear(d.getYear() + 1);
         d.setHours(0);
         Date e = new Date();
-        e.setYear(e.getYear()+2);
+        e.setYear(e.getYear() + 2);
         EventDate date = new EventDate(d, e);
         assertThat(date.getDateTimeUser(false), instanceOf(String.class));
         assertThat(date.getDateTimeUser(true), instanceOf(String.class));

@@ -207,8 +207,8 @@ public class EventDate implements Serializable {
     }
 
     private void printTimeRemaining(long nb_days, long nb_hours, StringBuilder sb) {
-        long nb_hours_end = (getEndDate().getTime() - new Date().getTime())/3600000;
-        long nb_days_end = nb_hours_end/24;
+        long nb_hours_end = (getEndDate().getTime() - new Date().getTime()) / 3600000;
+        long nb_days_end = nb_hours_end / 24;
 
         Calendar calendar = Calendar.getInstance();
 
@@ -221,12 +221,12 @@ public class EventDate implements Serializable {
         String minuteOfDay = String.format("%02d", calendar.get(Calendar.MINUTE));
 
         if (nb_days <= 0) {
-            if(nb_hours_end <= 0)
+            if (nb_hours_end <= 0)
                 sb.append("Terminé");
-            else if(nb_hours <= 0)
+            else if (nb_hours <= 0)
                 sb.append("Maintenant - " + dateRemoveZeroHour(getEndDate()));
             else {
-                if(dayActu - dayOfEvent == 0)
+                if (dayActu - dayOfEvent == 0)
                     sb.append("Aujourd'hui à " + hourOfEvent + "h" + minuteOfDay + " (dans " + nb_hours + " heures)");
                 else
                     sb.append("Demain à " + hourOfEvent + "h" + minuteOfDay + " (dans " + nb_hours + " heures)");

@@ -100,7 +100,7 @@ public class PostFragmentTest extends TestWithAuthenticatedAndFragment<PostFragm
     }
 
     @Test
-    public void testUserCanReachOtherProfileThroughPost(){
+    public void testUserCanReachOtherProfileThroughPost() {
         onView(withId(R.id.posts_list_view)).check(matches(isDisplayed()));
         onView(withId(R.id.posts_new_post_button)).check(matches(isDisplayed()));
         onData(instanceOf(Post.class)).atPosition(0).check(matches(isDisplayed()));

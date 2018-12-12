@@ -14,6 +14,7 @@ import android.widget.ListView;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,8 +39,8 @@ import ch.epfl.sweng.zuluzulu.Utility.Utils;
  */
 public class ChannelFragment extends SuperFragment {
     private static final String ARG_USER = "ARG_USER";
-    // TODO: fill with all the globals channels
-    private static final List<String> GLOBAL_CHANNEL_IDS = Collections.emptyList();
+
+    private static final List<String> GLOBAL_CHANNEL_IDS = new ArrayList(Arrays.asList("Global", "Section IN", "Section SC", "Sat"));
 
     private View view;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -107,14 +108,27 @@ public class ChannelFragment extends SuperFragment {
      */
     private void getChannelsFromDatabase() {
         List<String> ids = new ArrayList<>();
-        ids.addAll(user.getFollowedChannels());
         ids.addAll(GLOBAL_CHANNEL_IDS);
+        ids.addAll(user.getFollowedChannels());
 
         DatabaseFactory.getDependency().getChannelsFromIds(ids, result -> {
             listOfChannels.clear();
-            listOfChannels.addAll(result);
+            List<Channel> listOfGlobalChannels = new ArrayList<>();
+            List<Channel> listOfFollowedChannels = new ArrayList<>();
+            for (Channel channel : result) {
+                if (channel.canBeSeenBy(user.getSection(), userLocation)) {
+                    if (GLOBAL_CHANNEL_IDS.contains(channel.getId())) {
+                        listOfGlobalChannels.add(channel);
+                    } else {
+                        listOfFollowedChannels.add(channel);
+                    }
+                }
+            }
+            Collections.sort(listOfGlobalChannels, (o1, o2) -> o1.getName().compareTo(o2.getName()));
+            Collections.sort(listOfFollowedChannels, (o1, o2) -> o1.getName().compareTo(o2.getName()));
+            listOfChannels.addAll(listOfGlobalChannels);
+            listOfChannels.addAll(listOfFollowedChannels);
             adapter.notifyDataSetChanged();
-            adapter.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
             swipeRefreshLayout.setRefreshing(false);
         });
     }
@@ -124,7 +138,7 @@ public class ChannelFragment extends SuperFragment {
      */
     private void refresh() {
         if (!GPS.isActivated()) {
-            Snackbar.make(view, "Please activate your GPS to have access to all channels", 2000).show();
+            Snackbar.make(view, "Active ton GPS pour avoir accès à tous les canaux", 2000).show();
             userLocation = null;
         }
         swipeRefreshLayout.setRefreshing(true);

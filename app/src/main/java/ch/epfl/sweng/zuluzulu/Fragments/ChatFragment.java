@@ -9,8 +9,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.google.firebase.Timestamp;
 
@@ -34,7 +34,7 @@ import static ch.epfl.sweng.zuluzulu.Structure.SuperMessage.increasingTimeCompar
  */
 public class ChatFragment extends SuperChatPostsFragment {
     private static final int MAX_MESSAGE_LENGTH = 100;
-    private Button sendButton;
+    private ImageButton sendButton;
     private EditText textEdit;
 
     private ChatMessageArrayAdapter adapter;

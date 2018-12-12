@@ -20,6 +20,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Structure.SuperMessage;
 import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.Utility.Utils;
 
 public class ChatMessageArrayAdapter extends ArrayAdapter<SuperMessage> {
 
@@ -83,7 +84,7 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<SuperMessage> {
             calendar.setTime(time);
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minute = calendar.get(Calendar.MINUTE);
-            timeView.setText(hour + ":" + minute);
+            timeView.setText(Utils.hourAndMinutesFrom(hour, minute));
         } else {
             timeView.setVisibility(View.GONE);
         }
