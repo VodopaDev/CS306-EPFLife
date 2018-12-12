@@ -3,11 +3,15 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
@@ -24,6 +28,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
 
 public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragment> {
+    @Rule
+    public final IntentsTestRule<MainActivity> mActivityRule =
+            new IntentsTestRule<>(MainActivity.class);
 
     @Override
     public void initFragment() {

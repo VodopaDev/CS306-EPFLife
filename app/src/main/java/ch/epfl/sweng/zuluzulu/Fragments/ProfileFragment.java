@@ -219,7 +219,7 @@ public class ProfileFragment extends SuperFragment {
         // Create an image file name
         File directory = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                userData.getSciper(),  /* prefix */
+                "user" + userData.getSciper(),  /* prefix */
                 ".jpg",         /* suffix */
                 directory      /* directory */
         );
