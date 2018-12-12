@@ -66,10 +66,15 @@ public interface Proxy {
     All these methods should also add/remove the user sciper from the "followers" field of an event.
      */
     void addChannelToUserFollowedChannels(Channel channel, AuthenticatedUser user);
+
     void addEventToUserFollowedEvents(Event event, AuthenticatedUser user);
+
     void addAssociationToUserFollowedAssociations(Association association, AuthenticatedUser user);
+
     void removeChannelFromUserFollowedChannels(Channel channel, AuthenticatedUser user);
+
     void removeEventFromUserFollowedEvents(Event event, AuthenticatedUser user);
+
     void removeAssociationFromUserFollowedAssociations(Association association, AuthenticatedUser user);
 
     void getRepliesFromPost(String channelId, String postId, OnResult<List<Post>> onResult);

@@ -26,6 +26,24 @@ public abstract class SuperMessage extends FirebaseStructure {
         super(data);
     }
 
+    /**
+     * Comparator to compare messages with decreasing time
+     *
+     * @return Comparator to compare messages with decreasing time
+     */
+    public static Comparator<? extends SuperMessage> decreasingTimeComparator() {
+        return (Comparator<SuperMessage>) (o1, o2) -> o2.getTime().compareTo(o1.getTime());
+    }
+
+    /**
+     * Comparator to compare messages with increasing time
+     *
+     * @return Comparator to compare messages with increasing time
+     */
+    public static Comparator<? extends SuperMessage> increasingTimeComparator() {
+        return (Comparator<SuperMessage>) (o1, o2) -> o1.getTime().compareTo(o2.getTime());
+    }
+
     public boolean isAnonymous() {
         return senderName.isEmpty();
     }
@@ -52,23 +70,5 @@ public abstract class SuperMessage extends FirebaseStructure {
 
     public String getChannelId() {
         return channelId;
-    }
-
-    /**
-     * Comparator to compare messages with decreasing time
-     *
-     * @return Comparator to compare messages with decreasing time
-     */
-    public static Comparator<? extends SuperMessage> decreasingTimeComparator() {
-        return (Comparator<SuperMessage>) (o1, o2) -> o2.getTime().compareTo(o1.getTime());
-    }
-
-    /**
-     * Comparator to compare messages with increasing time
-     *
-     * @return Comparator to compare messages with increasing time
-     */
-    public static Comparator<? extends SuperMessage> increasingTimeComparator() {
-        return (Comparator<SuperMessage>) (o1, o2) -> o1.getTime().compareTo(o2.getTime());
     }
 }

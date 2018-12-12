@@ -26,10 +26,11 @@ import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AddEventFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AdminPanelFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.ChangeUserRoleFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.MementoFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.CalendarFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
@@ -37,7 +38,6 @@ import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.MementoFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.PostFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ReplyFragment;
@@ -56,15 +56,13 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
+    private static final int W_STORAGE_PERM_CODE = 260;
     // Const used to send a Increment or Decrement message
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-
     private SuperFragment current_fragment;
     private Stack<SuperFragment> previous_fragments;
     private User user;
-    private static final int W_STORAGE_PERM_CODE = 260;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             selectItem(navigationView.getMenu().findItem(R.id.nav_main), true);
         }
     }
-
 
 
     /**

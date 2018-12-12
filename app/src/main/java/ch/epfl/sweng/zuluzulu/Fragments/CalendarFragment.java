@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Locale;
 
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
-import ch.epfl.sweng.zuluzulu.BuildConfig;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Event;
@@ -148,13 +147,14 @@ public class CalendarFragment extends SuperFragment {
 
     /**
      * Return if an event is going on between two dates
+     *
      * @param event event to check
      * @param start lower_bound date
-     * @param end upper_bound date
+     * @param end   upper_bound date
      * @return true if an event is going on between the two dates
      */
-    private boolean isCurrentlyGoing(Event event, Date start, Date end){
-        assert(start.before(end));
+    private boolean isCurrentlyGoing(Event event, Date start, Date end) {
+        assert (start.before(end));
         return (event.getStartDate().after(start) && event.getStartDate().before(end)) ||
                 (event.getEndDate().after(start) && event.getStartDate().before(end)) ||
                 (event.getStartDate().before(start) && event.getEndDate().after(end));
@@ -162,15 +162,16 @@ public class CalendarFragment extends SuperFragment {
 
     /**
      * Return the start and end of a day of a date
+     *
      * @param date date
      * @return the beginning and ending of the day in a pair
      */
-    private Pair<Date,Date> getStartAndEndOfTheDay(Date date){
+    private Pair<Date, Date> getStartAndEndOfTheDay(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH), 0, 0, 1);
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 0, 0, 1);
         Date start = calendar.getTime();
-        calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
         Date end = calendar.getTime();
         Log.d("TODAY and TOMORROW", start.toString() + "   " + end.toString());
         return new Pair<>(start, end);

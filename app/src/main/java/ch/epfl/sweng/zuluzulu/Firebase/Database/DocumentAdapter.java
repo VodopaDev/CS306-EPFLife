@@ -36,7 +36,7 @@ public class DocumentAdapter implements DatabaseDocument {
     public Task<DocumentSnapshot> getAndAddOnSuccessListener(OperationWithFirebaseMap listener) {
         Task<DocumentSnapshot> task = document.get();
         task.addOnSuccessListener(documentSnapshot -> {
-            if(documentSnapshot.exists()) {
+            if (documentSnapshot.exists()) {
                 listener.apply(new FirebaseMapDecorator(documentSnapshot));
             } else {
                 listener.apply(null);

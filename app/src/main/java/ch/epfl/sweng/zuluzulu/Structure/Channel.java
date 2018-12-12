@@ -94,6 +94,7 @@ public class Channel extends FirebaseStructure {
 
     /**
      * Return if the channel is accessible
+     *
      * @return if the channel is accessible
      */
     public boolean isAccessible() {
@@ -102,6 +103,7 @@ public class Channel extends FirebaseStructure {
 
     /**
      * Return the distance
+     *
      * @return the distance
      */
     public double getDistance() {
@@ -116,15 +118,16 @@ public class Channel extends FirebaseStructure {
      */
     public boolean canBeSeenBy(String userSection, GeoPoint userLocation) {
 
-        String section = restrictions.containsKey("section") ? (String) restrictions.get("section"): null;
-        GeoPoint channelLocation = restrictions.containsKey("location") ? (GeoPoint) restrictions.get("location"): null;
+        String section = restrictions.containsKey("section") ? (String) restrictions.get("section") : null;
+        GeoPoint channelLocation = restrictions.containsKey("location") ? (GeoPoint) restrictions.get("location") : null;
         return hasGoodSection(section, userSection) && hasGoodLocation(channelLocation, userLocation);
     }
 
     /**
      * Check if a user has the correct section to see a channel
+     *
      * @param requestSection expected section
-     * @param userSection user's section
+     * @param userSection    user's section
      * @return true if requestSection and userSection are the same or if there is no requestSection, false otherwise
      */
     private boolean hasGoodSection(String requestSection, String userSection) {
@@ -136,8 +139,9 @@ public class Channel extends FirebaseStructure {
 
     /**
      * Check if a user has the correct location to see a channel
+     *
      * @param requestedLocation expected location
-     * @param userLocation user's location
+     * @param userLocation      user's location
      * @return true if requestedLocation and userLocation are the same or if there is no requestedLocation, false otherwise
      */
     private boolean hasGoodLocation(GeoPoint requestedLocation, GeoPoint userLocation) {

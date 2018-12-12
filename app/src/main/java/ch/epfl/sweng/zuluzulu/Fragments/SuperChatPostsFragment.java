@@ -24,12 +24,10 @@ import ch.epfl.sweng.zuluzulu.User.User;
  */
 public abstract class SuperChatPostsFragment extends SuperFragment {
 
+    public static final String VISIT_PROFILE_STRING = "Visiter le profile de ";
     protected static final String ARG_USER = "ARG_USER";
     protected static final String ARG_CHANNEL = "ARG_CHANNEL";
     protected static final String ARG_POST = "ARG_POST";
-
-    public static final String VISIT_PROFILE_STRING = "Visiter le profile de ";
-
     protected List<SuperMessage> messages = new ArrayList<>();
 
     protected ListView listView;

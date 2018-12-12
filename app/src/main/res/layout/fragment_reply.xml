@@ -49,12 +49,12 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="0.8"
             android:ems="10"
+            android:fadeScrollbars="false"
             android:hint="Reply"
             android:inputType="textMultiLine"
-            android:minLines="1"
             android:maxLines="4"
-            android:scrollbars="vertical"
-            android:fadeScrollbars="false"/>
+            android:minLines="1"
+            android:scrollbars="vertical" />
 
         <Button
             android:id="@+id/reply_send_button"
