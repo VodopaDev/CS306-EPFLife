@@ -1,5 +1,8 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.app.Activity;
+import android.app.Instrumentation;
+import android.content.Intent;
 import android.support.test.espresso.matcher.ViewMatchers;
 
 import org.junit.Test;
@@ -10,7 +13,11 @@ import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intending;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.anyIntent;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -27,8 +34,18 @@ public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragmen
 
     @Test
     public void checkName() {
-        mActivityRule.getActivity().isAuthenticated();
         onView(ViewMatchers.withId(R.id.profile_gaspar_text)).check(matches(isCompletelyDisplayed()));
+    }
+
+    @Test
+    public void checkPicture() {
+        Intent resultData = new Intent();
+        Instrumentation.ActivityResult result =
+                new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+
+        intending(anyIntent()).respondWith(result);
+
+        onView(ViewMatchers.withId(R.id.profile_image)).perform(click());
     }
 
     @Test
