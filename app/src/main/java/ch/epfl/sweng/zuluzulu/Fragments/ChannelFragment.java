@@ -125,6 +125,7 @@ public class ChannelFragment extends SuperFragment {
                     }
                 }
             }
+            Collections.sort(listOfGlobalChannels, (o1, o2) -> o1.getName().compareTo(o2.getName()));
             Collections.sort(listOfFollowedChannels, (o1, o2) -> o1.getName().compareTo(o2.getName()));
             listOfChannels.addAll(listOfGlobalChannels);
             listOfChannels.addAll(listOfFollowedChannels);
