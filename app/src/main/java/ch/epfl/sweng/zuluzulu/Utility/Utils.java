@@ -95,7 +95,7 @@ public interface Utils {
      * @param container The container view
      */
     static void showConnectSnackbar(View container) {
-        Snackbar.make(container, "Login to access more features ⭐", 5000).show();
+        Snackbar.make(container, "Connecte-toi pour avoir accès à toutes les options", 5000).show();
     }
 
     /**
@@ -107,6 +107,9 @@ public interface Utils {
      * @return The string of the hour and the minutes
      */
     static String hourAndMinutesFrom(int hour, int minute) {
+        if (!(0 <= hour && hour <= 23) || !(0 <= minute && minute <= 59)) {
+            throw new IllegalArgumentException();
+        }
         String strHour = String.valueOf(hour);
         String strMinute = String.valueOf(minute);
         if (strHour.length() < 2) {

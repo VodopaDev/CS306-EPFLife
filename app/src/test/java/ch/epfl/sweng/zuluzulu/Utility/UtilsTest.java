@@ -65,4 +65,32 @@ public class UtilsTest {
     public void testMillisecondSinceWithNullDate() {
         getMillisecondsSince(null);
     }
+
+    @Test
+    public void testHourAndMinutes() {
+        for (int hour = 0; hour <= 23; hour++) {
+            for (int minute = 0; minute <= 59; minute++) {
+                String strHour = String.valueOf(hour);
+                String strMinute = String.valueOf(minute);
+                if (strHour.length() < 2) {
+                    strHour = "0" + strHour;
+                }
+                if (strMinute.length() < 2) {
+                    strMinute = "0" + strMinute;
+                }
+                String expected = strHour + ":" + strMinute;
+                assertEquals(expected, Utils.hourAndMinutesFrom(hour, minute));
+            }
+        }
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalHourInHourAndMinutes() {
+        Utils.hourAndMinutesFrom(-2, 45);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIllegalMinuteInHourAndMinutes() {
+        Utils.hourAndMinutesFrom(12, 103);
+    }
 }
