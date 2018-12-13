@@ -44,7 +44,7 @@ public class MainActivityListenerTest extends TestWithAdminAndFragment<MainFragm
     }
 
     @Test
-    public void     communicationTest() throws Throwable {
+    public void communicationTest() throws Throwable {
         mActivityRule.runOnUiThread(new Runnable() {
             @Override
             public void run() {

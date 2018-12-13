@@ -44,7 +44,7 @@ import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
  * Use the {@link LoginFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginFragment extends SuperFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class LoginFragment extends SuperFragment {
     public final static String TAG = "Login TAG";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -112,6 +112,7 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
             }
         });
 
+        showProgress(false);
         String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
         webview.loadUrl(codeRequestUrl);
 
@@ -126,8 +127,6 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         // Pass the user to the activity
             Map<Integer, Object> toTransfer = new HashMap<Integer, Object>();
             toTransfer.put(0, user);
-            toTransfer.put(1, code);
-            toTransfer.put(2, config);
             mListener.onFragmentInteraction(CommunicationTag.SET_USER, toTransfer);
             mListener.onFragmentInteraction(CommunicationTag.OPEN_MAIN_FRAGMENT, null);
             showProgress(false);
@@ -139,11 +138,6 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         Map<String, String> tokens;
         try {
             tokens = AuthServer.fetchTokens(config, code);
-        } catch (IOException e) {
-            return;
-        }
-
-        try {
             user = AuthServer.fetchUser(tokens.get("Tequila.profile"));
         } catch (IOException e) {
             return;
@@ -200,21 +194,5 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
-    }
-
-    @NonNull
-    @Override
-    public android.support.v4.content.Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull android.support.v4.content.Loader<Cursor> loader, Cursor cursor) {
-
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull android.support.v4.content.Loader<Cursor> loader) {
-
     }
 }
