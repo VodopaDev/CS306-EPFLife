@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.ProfileFragment">
 
-
     <ImageButton
         android:id="@+id/profile_image"
         android:layout_width="0dp"
@@ -15,6 +14,8 @@
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:background="#00000000"
+        android:minHeight="25dp"
+        android:minWidth="25dp"
         android:src="@drawable/ic_profile_240dp"
         app:layout_constraintBottom_toTopOf="@+id/profile_name_text"
         app:layout_constraintEnd_toEndOf="parent"

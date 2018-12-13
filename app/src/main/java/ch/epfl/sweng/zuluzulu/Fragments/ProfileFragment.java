@@ -32,9 +32,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
@@ -269,7 +266,9 @@ public class ProfileFragment extends SuperFragment {
      */
     private void setRescaledImage(String path) {
         int targetH = pic.getHeight();
-
+        if(targetH == 0){
+            targetH = 1;
+        }
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(path, bmOptions);
