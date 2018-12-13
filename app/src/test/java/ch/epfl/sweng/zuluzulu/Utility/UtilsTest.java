@@ -12,6 +12,7 @@ import java.util.Date;
 
 import static ch.epfl.sweng.zuluzulu.Utility.Utils.*;
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
 @RunWith(JUnit4.class)
@@ -92,5 +93,19 @@ public class UtilsTest {
     @Test(expected = IllegalArgumentException.class)
     public void testIllegalMinuteInHourAndMinutes() {
         Utils.hourAndMinutesFrom(12, 103);
+    }
+
+    @Test
+    public void testValidHour() {
+        assertTrue(Utils.validHour(12));
+        assertFalse(Utils.validHour(-2));
+        assertFalse(Utils.validHour(24));
+    }
+
+    @Test
+    public void testValidMinute() {
+        assertTrue(Utils.validMinute(50));
+        assertFalse(Utils.validMinute(-1));
+        assertFalse(Utils.validMinute(60));
     }
 }

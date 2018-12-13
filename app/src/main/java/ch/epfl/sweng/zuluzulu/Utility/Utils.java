@@ -107,7 +107,7 @@ public interface Utils {
      * @return The string of the hour and the minutes
      */
     static String hourAndMinutesFrom(int hour, int minute) {
-        if (!(0 <= hour && hour <= 23) || !(0 <= minute && minute <= 59)) {
+        if (!validHour(hour) || !validMinute(minute)) {
             throw new IllegalArgumentException();
         }
         String strHour = String.valueOf(hour);
@@ -119,6 +119,28 @@ public interface Utils {
             strMinute = "0" + strMinute;
         }
         return strHour + ":" + strMinute;
+    }
+
+    /**
+     * Check whether a hour is valid
+     *
+     * @param hour The hour to check
+     *
+     * @return whether the hour is valid
+     */
+    static boolean validHour(int hour) {
+        return 0 <= hour && hour <= 23;
+    }
+
+    /**
+     * Check whether a minute is valid
+     *
+     * @param minute The minute to check
+     *
+     * @return whether the minute is valid
+     */
+    static boolean validMinute(int minute) {
+        return 0 <= minute && minute <= 59;
     }
 
 }
