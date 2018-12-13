@@ -71,7 +71,7 @@ public class EventDateTest {
         new EventDate("11.11.1111", "11:11:11", "11.11.1111", "11:11:11").setEndDate(null);
     }
 
-    @Test(expected = AssertionError.class)
+    @Test(expected = AssertionError .class)
     public void getWithNullStartTime() {
         new EventDate("11.11.1111", "11:11:11", "11.11.1111", null);
     }
