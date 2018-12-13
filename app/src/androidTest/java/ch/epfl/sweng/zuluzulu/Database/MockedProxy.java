@@ -22,7 +22,8 @@ import ch.epfl.sweng.zuluzulu.Utility;
 
 import static ch.epfl.sweng.zuluzulu.Utility.createFilledUserBuilder;
 import static ch.epfl.sweng.zuluzulu.Utility.createTestAuthenticated;
-import static ch.epfl.sweng.zuluzulu.Utility.defaultPost;
+import static ch.epfl.sweng.zuluzulu.Utility.defaultPost0;
+import static ch.epfl.sweng.zuluzulu.Utility.defaultPost1;
 
 public class MockedProxy implements Proxy {
 
@@ -40,7 +41,8 @@ public class MockedProxy implements Proxy {
         ChannelRepresentation rep = new ChannelRepresentation(Utility.defaultChannel());
         rep.messageMap.put("0", Utility.defaultMessage0());
         rep.messageMap.put("1", Utility.defaultMessage1());
-        rep.postMap.put("0", new Pair<>(defaultPost(), new HashMap<>()));
+        rep.postMap.put("0", new Pair<>(defaultPost0(), new HashMap<>()));
+        rep.postMap.put("1", new Pair<>(defaultPost1(), new HashMap<>()));
         put("0", rep);
     }};
 
