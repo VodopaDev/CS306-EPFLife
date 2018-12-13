@@ -34,56 +34,27 @@ public class MementoFragmentTest {
             @Override
             public BufferedReader read(String name) {
                 return new BufferedReader(new StringReader("[{\n" +
-                        "        \"translation_id\": \"76058\",\n" +
-                        "        \"title\": \"Nocturne de JDR-Poly\",\n" +
-                        "        \"slug\": \"nocturne-de-jdr-poly-35\",\n" +
-                        "        \"absolute_slug\": \"https://memento.epfl.ch/event/nocturne-de-jdr-poly-35\",\n" +
-                        "        \"lang\": \"fr\",\n" +
-                        "        \"state\": \"Published\",\n" +
-                        "        \"description\": \"<strong>Ouvertes à tous, les Nocturnes proposées par JDR-Poly sont de nouveau de la partie ! L'association de jeu de rôle de l'EPFL le plaisir de vous convier à l'une de ses soirées d'initiation, ouvertes à tous. Que vous soyez un débutant, un vétéran ou même un maître du jeu, nous serons heureux de vous accueillir en INM 202 à 19h10 afin de passer une soirée dans la bonne humeur, ponctuée par les doux bruits des dés. Plus d'informations :<a href=\\\"https://jdrpoly.ch/events/1\\\"> https://jdrpoly.ch/events/1</a></strong>\",\n" +
-                        "        \"image_description\": \"\",\n" +
-                        "        \"creation_date\": \"2018-09-11T19:27:52\",\n" +
-                        "        \"last_modification_date\": \"2018-09-11T19:30:18\",\n" +
-                        "        \"trash_date\": null,\n" +
-                        "        \"delete_date\": null,\n" +
-                        "        \"cancel_reason\": \"\",\n" +
-                        "        \"event_id\": \"43016\",\n" +
-                        "        \"event_visual_absolute_url\": \"https://memento.epfl.ch/image/12316/112x112.jpg\",\n" +
-                        "        \"event_start_date\": \"2018-12-19\",\n" +
-                        "        \"event_end_date\": \"2018-12-19\",\n" +
-                        "        \"event_start_time\": \"19:10:00\",\n" +
-                        "        \"event_end_time\": \"23:50:00\",\n" +
-                        "        \"event_place_and_room\": \"EPFL, INM 202\",\n" +
-                        "        \"event_url_place_and_room\": \"http://plan.epfl.ch/?room=INM%20202\",\n" +
-                        "        \"event_speaker\": \"\",\n" +
-                        "        \"event_organizer\": \"JDR-Poly\",\n" +
-                        "        \"event_contact\": \"communication@jdrpoly.ch\",\n" +
-                        "        \"event_theme\": \"Jeu de rôle, Association\",\n" +
-                        "        \"event_filters\": \"Jeu de rôle, JDR, JDR-Poly\",\n" +
-                        "        \"event_canceled\": \"False\",\n" +
-                        "        \"event_category_id\": \"9\",\n" +
-                        "        \"event_category_code\": \"MANIF\",\n" +
-                        "        \"event_category_fr\": \"Manifestations culturelles\",\n" +
-                        "        \"event_category_en\": \"Cultural events\",\n" +
-                        "        \"event_is_internal\": \"False\",\n" +
-                        "        \"event_vulgarization\": \"Tout public\",\n" +
-                        "        \"event_invitation\": \"Libre\",\n" +
-                        "        \"event_label_link\": \"\",\n" +
-                        "        \"event_url_link\": \"\",\n" +
-                        "        \"event_is_to_homepage\": \"False\",\n" +
-                        "        \"event_is_from_migration\": \"False\"\n" +
-                        "    }\n" +
-                        "]"));
+                        "        \"title\": \"MoveOn - Free dance lessons\"," +
+                        "        \"description\": \"<p>MoveOn, a commission of Agepoly, offer free disco-fox lessons. Disco-fox is a couple dance that is performed on current music, on what you can hear on the radio for example. The lessons take place in the Polydôme at EPFL on Tuesdays. <br>\\r\\n<br>\\r\\n18h30 : Hustle (4-count disco-fox, recommended for complete beginners)<br>\\r\\n19h45 : Disco-fox, with choreography <br>\\r\\n<br>\\r\\nThe lessons are for beginners. No registration, you can just come to the lesson. <br>\\r\\n<br>\\r\\nMore infos : fb.me/moveonepfl</p>\",\n" +
+                        "        \"event_id\": \"43453\"," +
+                        "        \"event_start_date\": \"2018-09-25\"," +
+                        "        \"event_end_date\": \"2018-12-18\"," +
+                        "        \"event_start_time\": \"18:30:00\"," +
+                        "        \"event_end_time\": \"21:00:00\"," +
+                        "        \"event_place_and_room\": \"PO 094.0\"," +
+                        "        \"event_url_place_and_room\": \"https://plan.epfl.ch/?room=PO094.0\"," +
+                        "        \"event_visual_absolute_url\": \"https://memento.epfl.ch/image/11476/112x112.jpg\"," +
+                        "        \"event_speaker\": \"Mike Bardet, Eva Lorendeaux\"," +
+                        "        \"event_organizer\": \"Mike Bardet\"," +
+                        "        \"event_contact\": \"Mike Bardet\"," +
+                        "        \"event_url_link\": \"\"," +
+                        "        \"event_url_place_and_room\": \"https://plan.epfl.ch/?room=PO094.0\",\n" +
+                        "        \"event_category_fr\": \"Divers\",\n" + "\"event_speaker\": \"Roda Fawaz\"\n" + "    }]"));
             }
         };
         // Change the factory
         UrlReaderFactory.setDependency(reader);
         adminUser();
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         Utility.openMenu();
     }
 
