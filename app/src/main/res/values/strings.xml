@@ -108,4 +108,6 @@
     <string name="site_de_l_v_nement">Site de l\'évènement</string>
     <string name="ev_nements">Evènements</string>
 
+    <string name="login_for_more_features">Connecte-toi pour avoir accès à toutes les options</string>
+
 </resources>

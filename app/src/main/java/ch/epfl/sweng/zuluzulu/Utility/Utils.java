@@ -11,6 +11,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import ch.epfl.sweng.zuluzulu.R;
+
 /**
  * Interface that contains general useful functions
  */
@@ -95,7 +97,7 @@ public interface Utils {
      * @param container The container view
      */
     static void showConnectSnackbar(View container) {
-        Snackbar.make(container, "Connecte-toi pour avoir accès à toutes les options", 5000).show();
+        Snackbar.make(container, container.getContext().getString(R.string.login_for_more_features), 5000).show();
     }
 
     /**
