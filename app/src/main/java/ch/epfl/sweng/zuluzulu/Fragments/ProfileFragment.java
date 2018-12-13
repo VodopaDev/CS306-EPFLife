@@ -267,7 +267,7 @@ public class ProfileFragment extends SuperFragment {
     private void setRescaledImage(String path) {
         int targetH = pic.getHeight();
         if(targetH == 0){
-            targetH = 1;
+            targetH = 50;
         }
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
