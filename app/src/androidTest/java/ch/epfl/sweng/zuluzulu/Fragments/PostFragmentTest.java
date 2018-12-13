@@ -68,8 +68,9 @@ public class PostFragmentTest extends TestWithAuthenticatedAndFragment<PostFragm
 
     @Test
     public void upAndDownButtonAreVisible() {
-        onData(anything()).inAdapterView(withId(R.id.posts_list_view)).onChildView(withId(R.id.post_up_button)).check(matches(isDisplayed()));
-        onData(anything()).inAdapterView(withId(R.id.posts_list_view)).onChildView(withId(R.id.post_down_button)).check(matches(isDisplayed()));
+        onData(instanceOf(Post.class)).atPosition(0).onChildView(withId(R.id.post_up_button)).check(matches(isDisplayed()));
+        onData(instanceOf(Post.class)).atPosition(0).onChildView(withId(R.id.post_down_button)).check(matches(isDisplayed()));
+
     }
 
     @Test
