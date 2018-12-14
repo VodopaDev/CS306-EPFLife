@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -261,32 +263,6 @@ public class ProfileFragment extends SuperFragment {
     }
 
     /**
-     * helper method that takes a path to a file and scale it to make it fit inside the imagebutton
-     *
-     * @param path the path to the file to rescale
-     */
-    private void setRescaledImage(String path) {
-        int targetH = pic.getHeight();
-        if(targetH == 0){
-            targetH = 50;
-        }
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, bmOptions);
-
-        int photoH = bmOptions.outHeight;
-
-        int scaling = photoH / targetH;
-
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaling;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
-        pic.setImageBitmap(bitmap);
-    }
-
-    /**
      * receives the result of the camera activity, set the picture, and upload it to the storage
      *
      * @param requestCode
@@ -314,6 +290,93 @@ public class ProfileFragment extends SuperFragment {
                 }
             });
         }
+    }
+
+    /**
+     * helper method that takes a path to a file and scale it to make it fit inside the imagebutton
+     *
+     * @param path the path to the file to rescale
+     */
+    private void setRescaledImage(String path) {
+        int targetH = pic.getHeight();
+        if(targetH == 0){
+            targetH = 50;
+        }
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, bmOptions);
+
+        int photoH = bmOptions.outHeight;
+
+        int scaling = photoH / targetH;
+
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaling;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
+
+
+        bitmap = rotateImageDependingOnPhoneModel(bitmap, pathToImage);
+
+
+
+        pic.setImageBitmap(bitmap);
+    }
+
+
+
+
+    /**
+     * helper method that checks the angle the picture as been rotated and put it back straight
+     * @param bitmap the possibly rotated picture
+     * @param path the path to the picture
+     * @return the bitmap with the good orientation
+     */
+    private Bitmap rotateImageDependingOnPhoneModel(Bitmap bitmap , String path){
+        ExifInterface exifInterface;
+        try{
+         exifInterface = new ExifInterface(path);
+        }catch (Exception e){
+            return bitmap;
+        }
+        int angleToRotate = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED);
+
+        Bitmap rotatedBitmap;
+        switch(angleToRotate) {
+
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                rotatedBitmap = rotateBitmap(bitmap, 90);
+                break;
+
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                rotatedBitmap = rotateBitmap(bitmap, 180);
+                break;
+
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                rotatedBitmap = rotateBitmap(bitmap, 270);
+                break;
+
+            case ExifInterface.ORIENTATION_NORMAL:
+            default:
+                rotatedBitmap = bitmap;
+        }
+
+        return rotatedBitmap;
+    }
+
+    /**
+     * rotate a bitmap
+     * @param bitmap the bitmap to rotate
+     * @param angle the angle to rotate the bitmap
+     * @return the bitmap rotated
+     */
+    private Bitmap rotateBitmap(Bitmap bitmap, float angle) {
+        Matrix m = new Matrix();
+        m.postRotate(angle);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
+                m, true);
     }
 
 
