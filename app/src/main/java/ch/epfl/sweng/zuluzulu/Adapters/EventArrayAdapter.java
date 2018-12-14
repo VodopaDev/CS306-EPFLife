@@ -22,6 +22,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility.ImageLoader;
+import ch.epfl.sweng.zuluzulu.Utility.Utils;
 
 
 /**
@@ -91,12 +92,10 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         holder.start_date.setText(event.getDateTimeUser(false));
         holder.likes.setText(context.getResources().getQuantityString(R.plurals.evend_card_followers, event.getLikes(), event.getLikes()));
 
-        if (user != null && user.isConnected()) {
-            holder.likes_button.setSelected(user.isFollowedEvent(event.getId()));
-
-            holder.likes_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        holder.likes_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(user != null && user.isConnected()) {
                     if (!user.isFollowedEvent(event.getId())) {
                         event.addFollower(user.getSciper());
                         user.addFollowedEvent(event.getId());
@@ -114,8 +113,15 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
                         Snackbar.make(parent, context.getString(R.string.event_unfollowed), Snackbar.LENGTH_SHORT).show();
                     }
                     holder.likes.setText(context.getResources().getQuantityString(R.plurals.evend_card_followers, event.getLikes(), event.getLikes()));
+                } else {
+                    Utils.showConnectSnackbar(parent);
                 }
-            });
+            }
+        });
+
+        if (user != null && user.isConnected()) {
+            holder.likes_button.setSelected(user.isFollowedEvent(event.getId()));
+
         } else {
             holder.likes_button.setSelected(false);
         }

@@ -137,14 +137,12 @@ public class EventDetailFragment extends SuperFragment {
     }
 
     private void setLikeButtonBehaviour(ImageButton event_like_button) {
-        System.out.println("behaviour");
 
         event_like_button.setSelected(user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event.getId()));
 
         event_like_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    System.out.println("here");
                     if (user.isConnected()) {
                         AuthenticatedUser auth = (AuthenticatedUser) user;
                         if (auth.isFollowedEvent(event.getId())) {
