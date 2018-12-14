@@ -89,6 +89,8 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         ImageLoader.loadUriIntoImageView(holder.icon, event.getIconUri(), getContext());
         holder.start_date.setText(event.getDateTimeUser(false));
         holder.likes.setText(String.valueOf(event.getLikes()));
+        holder.likes_button.setSelected(user.isFollowedEvent(event.getId()));
+
         if (user != null && user.isConnected()) {
             holder.likes_button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -97,19 +99,21 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
                         event.addFollower(user.getSciper());
                         user.addFollowedEvent(event.getId());
                         user.addFollowedChannel(event.getChannelId());
+                        holder.likes_button.setSelected(true);
                         DatabaseFactory.getDependency().addEventToUserFollowedEvents(event, user);
                     } else {
                         event.removeFollower(user.getSciper());
                         user.removeFollowedEvent(event.getId());
                         user.removeFollowedChannel(event.getChannelId());
                         holder.likes.setText(String.valueOf(event.getLikes()));
+                        holder.likes_button.setSelected(false);
                         DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event, user);
                     }
                     holder.likes.setText(String.valueOf(event.getLikes()));
                 }
             });
         } else {
-            holder.likes_button.setEnabled(false);
+            holder.likes_button.setSelected(false);
         }
 
         event_view.setOnClickListener(new View.OnClickListener() {

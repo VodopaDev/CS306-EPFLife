@@ -73,8 +73,7 @@ dependencies {
     implementation 'com.github.npanigrahy:Custom-Calendar-View:v1.0'
     // recyclerview
     implementation 'com.android.support:recyclerview-v7:28.0.0'
-    //Used for google map integration
-    implementation 'com.google.android.gms:play-services-maps:15.0.0'
+
     implementation 'com.google.android.gms:play-services-location:15.0.0'
     //implementation 'com.google.android.gms:play-services:15.0.0'
     implementation 'com.android.support:customtabs:28.0.0'
