@@ -207,6 +207,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      */
 
     private void selectItem(MenuItem menuItem, boolean mustOpenFragment) {
+        previous_fragments.clear();
+        current_fragment = MainFragment.newInstance(user);
 
         SuperFragment fragment;
 
@@ -275,8 +277,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             if (fragmentManager != null) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.fragmentContent, fragment).commit();
-                if (!backPressed)
+                if (!backPressed) {
                     previous_fragments.push(current_fragment);
+                }
                 current_fragment = fragment;
             }
         }
@@ -385,8 +388,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     @Override
     public void onBackPressed() {
-        if (!previous_fragments.empty())
+        if (!previous_fragments.empty()) {
+            MenuItem checkedItem = navigationView.getCheckedItem();
+            if(checkedItem != null && checkedItem.getItemId() != R.id.nav_main && previous_fragments.peek() instanceof MainFragment){
+                navigationView.getCheckedItem().setChecked(false);
+                navigationView.setCheckedItem(R.id.nav_main);
+            }
             openFragment(previous_fragments.pop(), true);
+        }
     }
 
     @Override
