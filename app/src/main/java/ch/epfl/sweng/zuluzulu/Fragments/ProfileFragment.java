@@ -33,6 +33,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -265,16 +266,14 @@ public class ProfileFragment extends SuperFragment {
     /**
      * receives the result of the camera activity, set the picture, and upload it to the storage
      *
-     * @param requestCode
-     * @param resultCode
-     * @param data
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_CODE && resultCode == Activity.RESULT_OK) {
 
-            //scale the image and put it in the imagebutton
-            setRescaledImage(pathToImage);
+            Bitmap correctImage = setRescaledImage(pathToImage);
+
+            writeBitmapInSDCard(correctImage,pathToImage);
 
             Uri file = Uri.fromFile(new File(pathToImage));
             UploadTask uploadTask = pictureRef.putFile(file);
@@ -297,7 +296,7 @@ public class ProfileFragment extends SuperFragment {
      *
      * @param path the path to the file to rescale
      */
-    private void setRescaledImage(String path) {
+    private Bitmap setRescaledImage(String path) {
         int targetH = pic.getHeight();
         if(targetH == 0){
             targetH = 50;
@@ -322,6 +321,8 @@ public class ProfileFragment extends SuperFragment {
 
 
         pic.setImageBitmap(bitmap);
+
+        return bitmap;
     }
 
 
@@ -377,6 +378,26 @@ public class ProfileFragment extends SuperFragment {
         m.postRotate(angle);
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
                 m, true);
+    }
+
+    /**
+     * write the bitmap at the specified place in the SD Card as a JPEG
+     * @param bitmap the bitmap to write
+     * @param path the path in the SD Card
+     */
+    private void writeBitmapInSDCard(Bitmap bitmap, String path){
+        File toWriteInSDCard = new File(path);
+
+        if (toWriteInSDCard.exists ()) toWriteInSDCard.delete ();
+        try {
+            FileOutputStream out = new FileOutputStream(toWriteInSDCard);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
