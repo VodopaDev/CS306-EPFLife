@@ -47,4 +47,9 @@ public class MainFragmentGuestUserTest extends TestWithGuestAndFragment<MainFrag
     public void canClickOnSignIn() {
         onView(withId(R.id.main_page_button_sign_in)).perform(ViewActions.click());
     }
+
+    @Test
+    public void testUserCanSwipeUp() {
+        onView(withId(R.id.swiperefresh_main)).perform(ViewActions.swipeDown());
+    }
 }

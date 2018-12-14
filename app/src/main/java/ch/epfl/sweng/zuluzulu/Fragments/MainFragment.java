@@ -2,7 +2,9 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.Manifest;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +48,7 @@ public class MainFragment extends SuperFragment {
     private ArrayList<Event> events_array;
     private AssociationArrayAdapter associations_adapter;
     private EventArrayAdapter events_adapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public MainFragment() {
     }
@@ -79,6 +82,45 @@ public class MainFragment extends SuperFragment {
         associations_adapter = new AssociationArrayAdapter(getContext(), associations_array, mListener);
         events_adapter = new EventArrayAdapter(getContext(), events_array, mListener, user);
 
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View view;
+        if (user.isConnected()) {
+            boolean hadPermissions = GPS.start(getContext());
+            if (!hadPermissions) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS.MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            view = createConnectedUserView(inflater, container);
+
+            swipeRefreshLayout = view.findViewById(R.id.swiperefresh_main_user);
+            swipeRefreshLayout.setOnRefreshListener(this::refresh);
+
+            fillConnectedUserAssociationsList();
+            fillConnectedUserEventsList();
+
+        } else {
+            view = createNotConnectedUserView(inflater, container);
+
+            swipeRefreshLayout = view.findViewById(R.id.swiperefresh_main);
+            swipeRefreshLayout.setOnRefreshListener(this::refresh);
+
+            fillUpcomingEventLists();
+            fillRandomAssociationLists();
+        }
+
+        return view;
+    }
+
+    /**
+     * Refresh the list of the channels
+     */
+    private void refresh() {
+        swipeRefreshLayout.setRefreshing(true);
         if (user.isConnected()) {
             fillConnectedUserAssociationsList();
             fillConnectedUserEventsList();
@@ -89,39 +131,21 @@ public class MainFragment extends SuperFragment {
     }
 
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        if (user.isConnected()) {
-            boolean hadPermissions = GPS.start(getContext());
-            if (!hadPermissions) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS.MY_PERMISSIONS_REQUEST_LOCATION);
-            }
-            return createConnectedUserView(inflater, container);
-        } else {
-            return createNotConnectedUserView(inflater, container);
-        }
-    }
-
-
     private void fillUpcomingEventLists() {
         DatabaseFactory.getDependency().getEventsFromToday(result -> {
             if (result != null) {
+                events_array.clear();
                 events_array.addAll(result);
                 events_adapter.notifyDataSetChanged();
             }
-        }, 3);
-    }
-
-    private void sortWithCurrentComparator() {
-        Collections.sort(events_array, currentComparator);
-        events_adapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
+        }, 2);
     }
 
     private void fillRandomAssociationLists() {
-        associations_array.clear();
         DatabaseFactory.getDependency().getAllAssociations(result -> {
             if (result != null && !result.isEmpty()) {
+                associations_array.clear();
                 int rand = (int) (Math.random() * (result.size()));
                 associations_array.add(result.get(rand));
                 rand = (int) (Math.random() * (result.size()));
@@ -179,6 +203,7 @@ public class MainFragment extends SuperFragment {
                 Collections.sort(events_array, Event.dateComparator());
                 events_adapter.notifyDataSetChanged();
             }
+            swipeRefreshLayout.setRefreshing(false);
         });
     }
 
