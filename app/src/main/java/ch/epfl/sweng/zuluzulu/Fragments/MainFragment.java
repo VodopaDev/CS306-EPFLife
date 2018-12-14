@@ -12,11 +12,9 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
-import ch.epfl.sweng.zuluzulu.Adapters.UpcomingEventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -40,13 +38,10 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_LOGIN_FRAGMENT;
 public class MainFragment extends SuperFragment {
     public static final String TAG = "MAIN_TAG";
     private static final String ARG_USER = "ARG_USER";
-    List<Association> random_assos;
-    AssociationArrayAdapter assos_adapter;
+
     Button sign_in_button;
     private User user;
     private Comparator<Event> currentComparator;
-    private List<Event> upcoming_events;
-    private UpcomingEventArrayAdapter event_adapter;
     private ArrayList<Association> associations_array;
     private ArrayList<Event> events_array;
     private AssociationArrayAdapter associations_adapter;
@@ -77,11 +72,7 @@ public class MainFragment extends SuperFragment {
             user = (User) getArguments().getSerializable(ARG_USER);
         }
 
-        upcoming_events = new ArrayList<>();
-        event_adapter = new UpcomingEventArrayAdapter(getContext(), upcoming_events, mListener, user);
         currentComparator = Event.dateComparator();
-        random_assos = new ArrayList<>();
-        assos_adapter = new AssociationArrayAdapter(getContext(), random_assos, mListener);
 
         associations_array = new ArrayList<>();
         events_array = new ArrayList<>();
@@ -116,27 +107,27 @@ public class MainFragment extends SuperFragment {
     private void fillUpcomingEventLists() {
         DatabaseFactory.getDependency().getEventsFromToday(result -> {
             if (result != null) {
-                upcoming_events.addAll(result);
-                event_adapter.notifyDataSetChanged();
+                events_array.addAll(result);
+                events_adapter.notifyDataSetChanged();
             }
         }, 3);
     }
 
     private void sortWithCurrentComparator() {
-        Collections.sort(upcoming_events, currentComparator);
-        event_adapter.notifyDataSetChanged();
+        Collections.sort(events_array, currentComparator);
+        events_adapter.notifyDataSetChanged();
     }
 
     private void fillRandomAssociationLists() {
-        random_assos.clear();
+        associations_array.clear();
         DatabaseFactory.getDependency().getAllAssociations(result -> {
             if (result != null && !result.isEmpty()) {
                 int rand = (int) (Math.random() * (result.size()));
-                random_assos.add(result.get(rand));
+                associations_array.add(result.get(rand));
                 rand = (int) (Math.random() * (result.size()));
-                if (!random_assos.contains(result.get(rand)))
-                    random_assos.add(result.get(rand));
-                assos_adapter.notifyDataSetChanged();
+                if (!associations_array.contains(result.get(rand)))
+                    associations_array.add(result.get(rand));
+                associations_adapter.notifyDataSetChanged();
             }
         });
     }
@@ -202,10 +193,10 @@ public class MainFragment extends SuperFragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         ListView listview_event = view.findViewById(R.id.main_page_list_event);
-        listview_event.setAdapter(event_adapter);
+        listview_event.setAdapter(events_adapter);
 
         ListView listview_assos = view.findViewById(R.id.main_page_random_assos);
-        listview_assos.setAdapter(assos_adapter);
+        listview_assos.setAdapter(associations_adapter);
 
         sign_in_button = view.findViewById(R.id.main_page_button_sign_in);
 
@@ -217,6 +208,5 @@ public class MainFragment extends SuperFragment {
         });
 
         return view;
-
     }
 }

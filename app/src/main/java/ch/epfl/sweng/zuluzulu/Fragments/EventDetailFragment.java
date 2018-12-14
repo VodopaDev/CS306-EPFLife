@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -152,6 +153,7 @@ public class EventDetailFragment extends SuperFragment {
                             event.removeFollower(user.getSciper());
                             DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event, auth);
                             DatabaseFactory.getDependency().removeChannelFromUserFollowedChannels(channel, auth);
+                            Snackbar.make(getView(), getContext().getString(R.string.event_unfollowed), Snackbar.LENGTH_SHORT).show();
                             event_like_button.setSelected(false);
                         } else {
                             auth.addFollowedEvent(event.getId());
@@ -159,6 +161,7 @@ public class EventDetailFragment extends SuperFragment {
                             event.addFollower(user.getSciper());
                             DatabaseFactory.getDependency().addEventToUserFollowedEvents(event, auth);
                             DatabaseFactory.getDependency().addChannelToUserFollowedChannels(channel, auth);
+                            Snackbar.make(getView(), getContext().getString(R.string.event_followed), Snackbar.LENGTH_SHORT).show();
                             event_like_button.setSelected(true);
                         }
                         event_like.setText(String.valueOf(event.getLikes()));
