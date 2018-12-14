@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         // Needed to have access to the Firestore
         FirebaseProxy.init(getApplicationContext());
 
@@ -80,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         navigationView = initNavigationView();
         initDrawerContent();
-
 
         Intent i = getIntent();
 
