@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +15,10 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
@@ -145,24 +149,24 @@ public class EventDetailFragment extends SuperFragment {
             public void onClick(View view) {
                     if (user.isConnected()) {
                         AuthenticatedUser auth = (AuthenticatedUser) user;
+                        Snackbar snack;
                         if (auth.isFollowedEvent(event.getId())) {
                             auth.removeFollowedEvent(event.getId());
                             auth.removeFollowedChannel(event.getChannelId());
                             event.removeFollower(user.getSciper());
                             DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event, auth);
                             DatabaseFactory.getDependency().removeChannelFromUserFollowedChannels(channel, auth);
-                            Snackbar.make(getView(), getContext().getString(R.string.event_unfollowed), Snackbar.LENGTH_SHORT).show();
                             event_like_button.setSelected(false);
+                            Toast.makeText(getActivity(), getContext().getString(R.string.event_unfollowed), Toast.LENGTH_SHORT).show();
                         } else {
                             auth.addFollowedEvent(event.getId());
                             auth.addFollowedChannel(event.getChannelId());
                             event.addFollower(user.getSciper());
                             DatabaseFactory.getDependency().addEventToUserFollowedEvents(event, auth);
                             DatabaseFactory.getDependency().addChannelToUserFollowedChannels(channel, auth);
-                            Snackbar.make(getView(), getContext().getString(R.string.event_followed), Snackbar.LENGTH_SHORT).show();
                             event_like_button.setSelected(true);
+                            Toast.makeText(getActivity(), getContext().getString(R.string.event_followed), Toast.LENGTH_SHORT).show();
                         }
-                        event_like.setText(String.valueOf(event.getLikes()));
                     } else {
                         Utils.showConnectSnackbar(getView());
                     }

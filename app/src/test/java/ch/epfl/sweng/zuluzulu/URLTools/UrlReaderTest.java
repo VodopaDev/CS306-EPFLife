@@ -38,7 +38,7 @@ public class UrlReaderTest {
     }
 
     @Test
-    public void canRedirectUrl() {
+    public void cdcanRedirectUrl() {
         BufferedReader result = this.reader.read("http://epfl.ch");
         assertNotNull(result);
     }
