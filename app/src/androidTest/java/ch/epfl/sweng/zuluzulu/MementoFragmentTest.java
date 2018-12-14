@@ -1,9 +1,14 @@
 package ch.epfl.sweng.zuluzulu;
 
+import android.support.test.rule.ActivityTestRule;
+
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
@@ -14,9 +19,11 @@ import ch.epfl.sweng.zuluzulu.URLTools.UrlReader;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlReaderFactory;
 
 
-public class MementoFragmentTest extends TestWithAdminAndFragment<MainFragment> {
-
-    @Override
+public class MementoFragmentTest {
+    @Rule
+    public final ActivityTestRule<MainActivity> mActivityRule =
+            new ActivityTestRule<>(MainActivity.class);
+    @Before
     public void initFragment() {
         DatabaseFactory.setDependency(new MockedProxy());
     }

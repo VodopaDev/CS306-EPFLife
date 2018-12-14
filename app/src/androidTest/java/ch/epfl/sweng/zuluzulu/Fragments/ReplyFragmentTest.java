@@ -33,7 +33,7 @@ public class ReplyFragmentTest extends TestWithAuthenticatedAndFragment<ReplyFra
     @Override
     public void initFragment() {
         DatabaseFactory.setDependency(new MockedProxy());
-        fragment = ReplyFragment.newInstance(user, Utility.defaultChannel(), Utility.defaultPost());
+        fragment = ReplyFragment.newInstance(user, Utility.defaultChannel(), Utility.defaultPost0());
     }
 
     @Test

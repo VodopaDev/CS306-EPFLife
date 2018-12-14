@@ -84,6 +84,7 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     DatabaseFactory.getDependency().getUserWithIdOrCreateIt(message.getSenderSciper(), result -> {
+                                        System.out.println(result.getSciper());
                                         mListener.onFragmentInteraction(CommunicationTag.OPEN_PROFILE_FRAGMENT, result);
                                     });
                                 }

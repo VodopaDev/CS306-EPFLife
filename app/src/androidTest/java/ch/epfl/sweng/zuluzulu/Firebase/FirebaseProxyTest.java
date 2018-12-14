@@ -157,12 +157,12 @@ public class FirebaseProxyTest {
 
     @Test
     public void addPost() {
-        proxy.addPost(Utility.defaultPost());
+        proxy.addPost(Utility.defaultPost0());
     }
 
     @Test
     public void addReply() {
-        proxy.addReply(Utility.defaultPost());
+        proxy.addReply(Utility.defaultPost0());
     }
 
     @Test
@@ -172,7 +172,7 @@ public class FirebaseProxyTest {
 
     @Test
     public void updatePost() {
-        proxy.updatePost(Utility.defaultPost());
+        proxy.updatePost(Utility.defaultPost0());
     }
 
     @Test

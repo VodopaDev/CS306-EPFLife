@@ -12,6 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +91,7 @@ public class MementoFragment extends SuperFragment {
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Memento loader");
         UrlHandler urlHandler = new UrlHandler(this::handleMemento, new MementoParser());
-        urlHandler.execute(ASSOCIATION_MEMENTO_URL);
+        urlHandler.execute(ASSOCIATION_MEMENTO_URL,ASSOCIATION_MEMENTO_URL);
 
         // Send increment to wait async execution in test
         IdlingResourceFactory.incrementCountingIdlingResource();
@@ -139,13 +141,15 @@ public class MementoFragment extends SuperFragment {
         }
     }
 
-    private Event createEvent(JSONObject jsonobject) throws JSONException, IllegalArgumentException {
+    private Event createEvent(JSONObject jsonobject) throws JSONException, IllegalArgumentException, ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         return new EventBuilder()
                 // Use this to avoid collision
                 .setId(Integer.toString(jsonobject.getString("title").hashCode()))
                 .setDate(new EventDate(
-                        jsonobject.getString("event_start_date"), jsonobject.getString("event_start_time"),
-                        jsonobject.getString("event_end_date"), jsonobject.getString("event_end_time")))
+                        simpleDateFormat.parse(jsonobject.getString("event_start_date") + " " + jsonobject.getString("event_start_time")),
+                        simpleDateFormat.parse(jsonobject.getString("event_end_date") +" "+ jsonobject.getString("event_end_time"))))
                 .setUrlPlaceAndRoom(jsonobject.getString("event_url_place_and_room"))
                 .setAssosId("0")
                 .setChannelId(DatabaseFactory.getDependency().getNewChannelId())
