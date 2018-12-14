@@ -46,6 +46,5 @@ public class MainFragmentGuestUserTest extends TestWithGuestAndFragment<MainFrag
     @Test
     public void canClickOnSignIn() {
         onView(withId(R.id.main_page_button_sign_in)).perform(ViewActions.click());
-        Utility.checkFragmentIsOpen(R.id.login_fragment);
     }
 }
