@@ -9,6 +9,7 @@ import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -170,7 +171,7 @@ public class Utility {
         );
     }
 
-    public static Post defaultPost() {
+    public static Post defaultPost0() {
         return new Post(
                 "0",
                 "0",
@@ -179,6 +180,23 @@ public class Utility {
                 "Nico",
                 "1",
                 Timestamp.now().toDate(),
+                "#F0E68C",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+    }
+    public static Post defaultPost1() {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        return new Post(
+                "1",
+                "0",
+                null,
+                "mon message ne sert à rien",
+                "Nico",
+                "1",
+                cal.getTime(),
                 "#F0E68C",
                 new ArrayList<>(),
                 new ArrayList<>(),

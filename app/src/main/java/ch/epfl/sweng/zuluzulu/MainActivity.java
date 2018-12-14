@@ -16,12 +16,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 import android.view.MenuItem;
 
-import com.google.android.gms.maps.MapsInitializer;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
 import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AddEventFragment;
@@ -43,7 +42,6 @@ import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ReplyFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.WebViewFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.WritePostFragment;
 import ch.epfl.sweng.zuluzulu.LocalDatabase.UserDatabase;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
@@ -57,7 +55,6 @@ import ch.epfl.sweng.zuluzulu.User.UserRole;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
-    private static final int W_STORAGE_PERM_CODE = 260;
     // Const used to send a Increment or Decrement message
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -69,12 +66,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         // Needed to have access to the Firestore
         FirebaseProxy.init(getApplicationContext());
-
-        // Needed to use Google Maps
-        MapsInitializer.initialize(getApplicationContext());
 
         // Initialize the fragment stack used for the back button
         previous_fragments = new Stack<>();
@@ -86,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
         navigationView = initNavigationView();
         initDrawerContent();
-
 
         Intent i = getIntent();
 
@@ -197,6 +189,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         AuthenticatedUser localUser = userDatabase.getUser();
         if (localUser != null) {
             user = localUser;
+            DatabaseFactory.getDependency().getUserWithIdOrCreateIt(user.getSciper(), result -> {
+                if (result != null) {
+                    user = result;
+                    selectItem(navigationView.getMenu().findItem(R.id.nav_main), true);
+                }
+            });
         } else {
             user = new User.UserBuilder().buildGuestUser();
         }
@@ -236,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 fragment = SettingsFragment.newInstance();
                 break;
             case R.id.nav_profile:
-                fragment = ProfileFragment.newInstance(((AuthenticatedUser) user).getData(), true);
+                fragment = ProfileFragment.newInstance((AuthenticatedUser) user, true);
                 break;
             case R.id.nav_logout:
                 UserDatabase userDatabase = new UserDatabase(getApplicationContext());
@@ -298,9 +296,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
                 updateMenuItems();
                 break;
-            case OPENING_WEBVIEW:
-                openFragmentWithStringData(WebViewFragment.newInstance(), WebViewFragment.URL, (String) data);
-                break;
             case OPEN_CREATE_EVENT:
                 openFragment(AddEventFragment.newInstance());
                 break;
@@ -357,8 +352,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 selectItem(navigationView.getMenu().findItem(R.id.nav_login), false);
                 break;
             case OPEN_PROFILE_FRAGMENT:
-                Map<String, Object> profileData = data == null ? ((AuthenticatedUser) user).getData() : (Map<String, Object>) data;
-                boolean profileOwner = profileData.get("sciper").equals(user.getSciper());
+                AuthenticatedUser profileData = data == null ? (AuthenticatedUser) user : (AuthenticatedUser) data;
+                boolean profileOwner = profileData.getSciper().equals(user.getSciper());
                 openFragment(ProfileFragment.newInstance(profileData, profileOwner));
                 selectItem(navigationView.getMenu().findItem(R.id.nav_profile), false);
                 break;

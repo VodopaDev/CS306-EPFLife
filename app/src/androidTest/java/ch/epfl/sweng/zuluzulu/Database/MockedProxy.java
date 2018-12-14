@@ -22,7 +22,8 @@ import ch.epfl.sweng.zuluzulu.Utility;
 
 import static ch.epfl.sweng.zuluzulu.Utility.createFilledUserBuilder;
 import static ch.epfl.sweng.zuluzulu.Utility.createTestAuthenticated;
-import static ch.epfl.sweng.zuluzulu.Utility.defaultPost;
+import static ch.epfl.sweng.zuluzulu.Utility.defaultPost0;
+import static ch.epfl.sweng.zuluzulu.Utility.defaultPost1;
 
 public class MockedProxy implements Proxy {
 
@@ -40,7 +41,8 @@ public class MockedProxy implements Proxy {
         ChannelRepresentation rep = new ChannelRepresentation(Utility.defaultChannel());
         rep.messageMap.put("0", Utility.defaultMessage0());
         rep.messageMap.put("1", Utility.defaultMessage1());
-        rep.postMap.put("0", new Pair<>(defaultPost(), new HashMap<>()));
+        rep.postMap.put("0", new Pair<>(defaultPost0(), new HashMap<>()));
+        rep.postMap.put("1", new Pair<>(defaultPost1(), new HashMap<>()));
         put("0", rep);
     }};
 
@@ -273,7 +275,7 @@ public class MockedProxy implements Proxy {
     }
 
     @Override
-    public void getUserWithIdOrCreateIt(String sciper, OnResult<Map<String, Object>> onResult) {
+    public void getUserWithIdOrCreateIt(String sciper, OnResult<AuthenticatedUser> onResult) {
         Map<String, Object> map = new HashMap<>();
         map.put("sciper", sciper);
         if (sciper != null && userMap.containsKey(sciper)) {
@@ -281,7 +283,7 @@ public class MockedProxy implements Proxy {
             map.put("followed_associations", userMap.get(sciper).getFollowedAssociations());
             map.put("followed_channels", userMap.get(sciper).getFollowedChannels());
             map.put("roles", userMap.get(sciper).getRoles());
-            onResult.apply(map);
+            onResult.apply(userMap.get(sciper));
         } else if (sciper != null && !userMap.containsKey(sciper)) {
             User.UserBuilder b = new User.UserBuilder();
             b.setEmail(sciper + "@epfl.ch");
@@ -301,7 +303,7 @@ public class MockedProxy implements Proxy {
                 map.put("followed_associations", new ArrayList<>());
                 map.put("followed_channels", new ArrayList<>());
                 map.put("roles", new ArrayList<>(Collections.singletonList("USER")));
-                onResult.apply(map);
+                onResult.apply(userMap.get(sciper));
             }
         }
     }

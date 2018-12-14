@@ -33,7 +33,6 @@ public class AdminPanelFragment extends SuperFragment {
      *
      * @return A new instance of fragment AdminPanelFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static AdminPanelFragment newInstance() {
         AdminPanelFragment fragment = new AdminPanelFragment();
         Bundle args = new Bundle();
@@ -44,8 +43,6 @@ public class AdminPanelFragment extends SuperFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
     }
 
     @Override

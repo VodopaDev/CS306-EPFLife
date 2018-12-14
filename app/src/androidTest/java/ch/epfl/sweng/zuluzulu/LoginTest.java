@@ -26,27 +26,18 @@ public class LoginTest extends TestWithGuestAndFragment<LoginFragment> {
         Utility.openMenu();
     }
 
-    /**
-     * Test connection is accepted with correct credentials
-     */
-    @Test
-    public void isOnTheLogin() {
-        //You have to test if it works for wrong credentials, if it login properly and if you have any
-        //other idea you are welcome to test them
-        onView(withId(R.id.login_fragment)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void canSeetheWebView() throws InterruptedException {
-        onView(withId(R.id.sign_in_button)).perform(click());
-        TimeUnit.SECONDS.sleep(7);
-        onView(withId(R.id.webview)).check(matches(isDisplayed()));
-    }
-
-
     @Override
     public void initFragment() {
         fragment = LoginFragment.newInstance();
         DatabaseFactory.setDependency(new MockedProxy());
     }
+
+    /**
+     * Test connection is accepted with correct credentials
+     */
+    @Test
+    public void isOnTheLogin() {
+        onView(withId(R.id.login_fragment)).check(matches(isDisplayed()));
+    }
+
 }
