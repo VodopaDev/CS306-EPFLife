@@ -134,7 +134,8 @@ public class ProfileFragment extends SuperFragment {
         user_view.setText(username);
 
         pic = view.findViewById(R.id.profile_image);
-        pic.setOnClickListener(new View.OnClickListener() {
+
+        user_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (profileOwner && askPermissions()) {

@@ -52,7 +52,7 @@ public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragmen
 
         intending(anyIntent()).respondWith(result);
 
-        onView(ViewMatchers.withId(R.id.profile_image)).perform(click());
+        onView(ViewMatchers.withId(R.id.profile_name_text)).perform(click());
     }
 
     @Test
