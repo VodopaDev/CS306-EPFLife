@@ -43,7 +43,6 @@ public class MainFragment extends SuperFragment {
 
     Button sign_in_button;
     private User user;
-    private Comparator<Event> currentComparator;
     private ArrayList<Association> associations_array;
     private ArrayList<Event> events_array;
     private AssociationArrayAdapter associations_adapter;
@@ -74,8 +73,6 @@ public class MainFragment extends SuperFragment {
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Home");
             user = (User) getArguments().getSerializable(ARG_USER);
         }
-
-        currentComparator = Event.dateComparator();
 
         associations_array = new ArrayList<>();
         events_array = new ArrayList<>();
@@ -130,13 +127,13 @@ public class MainFragment extends SuperFragment {
         }
     }
 
-
     private void fillUpcomingEventLists() {
         DatabaseFactory.getDependency().getEventsFromToday(result -> {
             if (result != null) {
                 events_array.clear();
                 events_array.addAll(result);
                 events_adapter.notifyDataSetChanged();
+                Collections.sort(events_array, Event.dateComparator());
             }
             swipeRefreshLayout.setRefreshing(false);
         }, 2);
