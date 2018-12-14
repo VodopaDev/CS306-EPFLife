@@ -21,6 +21,10 @@
 
         <TextView
             android:id="@+id/main_page_upcoming_events"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:paddingRight="4dp"
+            android:paddingLeft="4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -46,6 +50,10 @@
 
         <TextView
             android:id="@+id/main_page_lv_random_assos"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:paddingRight="4dp"
+            android:paddingLeft="4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

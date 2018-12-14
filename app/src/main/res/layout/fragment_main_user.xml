@@ -17,6 +17,10 @@
 
             <TextView
                 android:id="@+id/main_fragment_followed_associations_text"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp"
+                android:paddingRight="4dp"
+                android:paddingLeft="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimaryDark"
@@ -35,6 +39,10 @@
 
             <TextView
                 android:id="@+id/main_fragment_followed_events_text"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp"
+                android:paddingRight="4dp"
+                android:paddingLeft="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimaryDark"
