@@ -117,4 +117,6 @@
         <item quantity="other"><big><b>%1$d</b></big> followers</item>
     </plurals>
 
+    <string name="login_for_more_features">Connecte-toi pour avoir accès à toutes les options</string>
+
 </resources>
