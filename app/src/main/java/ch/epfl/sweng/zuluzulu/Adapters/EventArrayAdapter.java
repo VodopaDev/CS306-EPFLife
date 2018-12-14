@@ -89,9 +89,9 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         ImageLoader.loadUriIntoImageView(holder.icon, event.getIconUri(), getContext());
         holder.start_date.setText(event.getDateTimeUser(false));
         holder.likes.setText(String.valueOf(event.getLikes()));
-        holder.likes_button.setSelected(user.isFollowedEvent(event.getId()));
-
         if (user != null && user.isConnected()) {
+            holder.likes_button.setSelected(user.isFollowedEvent(event.getId()));
+
             holder.likes_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

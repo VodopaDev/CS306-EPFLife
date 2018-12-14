@@ -147,7 +147,6 @@ public class EventDetailFragment extends SuperFragment {
                     if (user.isConnected()) {
                         AuthenticatedUser auth = (AuthenticatedUser) user;
                         if (auth.isFollowedEvent(event.getId())) {
-                            System.out.println("add");
                             auth.removeFollowedEvent(event.getId());
                             auth.removeFollowedChannel(event.getChannelId());
                             event.removeFollower(user.getSciper());
@@ -155,7 +154,6 @@ public class EventDetailFragment extends SuperFragment {
                             DatabaseFactory.getDependency().removeChannelFromUserFollowedChannels(channel, auth);
                             event_like_button.setSelected(false);
                         } else {
-                            System.out.println("remove");
                             auth.addFollowedEvent(event.getId());
                             auth.addFollowedChannel(event.getChannelId());
                             event.addFollower(user.getSciper());

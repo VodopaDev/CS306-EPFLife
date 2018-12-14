@@ -149,9 +149,9 @@ public class Utility {
         builder.setSemester("BA5");
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
-        builder.setFollowedAssociations(Collections.singletonList("0"));
-        builder.setFollowedEvents(Collections.singletonList("0"));
-        builder.setFollowedChannels(Collections.singletonList("0"));
+        builder.setFollowedAssociations(new ArrayList<String>(Arrays.asList("0")));
+        builder.setFollowedEvents(new ArrayList<String>(Arrays.asList("0")));
+        builder.setFollowedChannels(new ArrayList<String>(Arrays.asList("0")));
 
         return builder;
     }
@@ -239,27 +239,27 @@ public class Utility {
                 .build();
     }
 
-//    public static Event currentTimeEvent() {
-//        return new EventBuilder()
-//                .setId("0")
-//                .setName("Current time")
-//                .setChannelId("0")
-//                .setAssosId("0")
-//                .setShortDesc("Is this a real event?")
-//                .setLongDesc("Of course not, you should check this beautiful description")
-//                .setDate(new EventDate(new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis())))
-//                .setFollowers(Collections.singletonList("0"))
-//                .setOrganizer("I'm the organizer")
-//                .setPlace("Not at EPFL")
-//                .setIconUri(null)
-//                .setBannerUri(null)
-//                .setUrlPlaceAndRoom("myplace")
-//                .setWebsite("https://www.epfl.ch")
-//                .setContact("Nico")
-//                .setCategory("no category")
-//                .setSpeaker("Nico")
-//                .build();
-//    }
+    public static Event currentTimeEvent() {
+        return new EventBuilder()
+                .setId("0")
+                .setName("Current time")
+                .setChannelId("0")
+                .setAssosId("0")
+                .setShortDesc("Is this a real event?")
+                .setLongDesc("Of course not, you should check this beautiful description")
+                .setDate(new EventDate(new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis())))
+                .setFollowers(Collections.singletonList("0"))
+                .setOrganizer("I'm the organizer")
+                .setPlace("Not at EPFL")
+                .setIconUri(null)
+                .setBannerUri(null)
+                .setUrlPlaceAndRoom("myplace")
+                .setWebsite("https://www.epfl.ch")
+                .setContact("Nico")
+                .setCategory("no category")
+                .setSpeaker("Nico")
+                .build();
+    }
 
     public static ChatMessage defaultMessage0() {
         return new ChatMessage("0", "0", "message?", new Date(2000), "auth", "0");
@@ -267,7 +267,7 @@ public class Utility {
 
     public static ChatMessage defaultMessage1() {
         return new ChatMessage("1", "0", "message!", new Date(20000), "admin", "1");
-    }
+  }
 
     public static Map<String, Object> createMapWithAll() {
         HashMap<String, Object> map = new HashMap<>();
