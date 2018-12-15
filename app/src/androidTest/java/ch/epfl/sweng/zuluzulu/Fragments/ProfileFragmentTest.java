@@ -2,15 +2,23 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.app.Activity;
 import android.app.Instrumentation;
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.v4.content.ContextCompat;
+import android.widget.ImageButton;
 
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.io.File;
+
+import ch.epfl.sweng.zuluzulu.BitmapUtils;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
@@ -21,14 +29,19 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intending;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.anyIntent;
-import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
+import static android.support.test.espresso.intent.Intents.release;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
+
 
 public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragment> {
+    private Bitmap picture;
+
     @Rule
     public final IntentsTestRule<MainActivity> mActivityRule =
             new IntentsTestRule<>(MainActivity.class);
@@ -38,6 +51,35 @@ public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragmen
 
         DatabaseFactory.setDependency(new MockedProxy());
         fragment = ProfileFragment.newInstance(user, true);
+
+        Drawable draw = ContextCompat.getDrawable(mActivityRule.getActivity(), R.drawable.ic_add_circle_red);
+
+        /*int width = draw.getIntrinsicWidth();
+        int height = draw.getIntrinsicHeight();
+
+        picture = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(picture);
+        draw.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        draw.draw(canvas);*/
+
+        picture = drawableToBitmap(draw);
+
+        File directory = mActivityRule.getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = new File (directory + "/user0" + ".jpg");
+        String path = image.getAbsolutePath();
+
+        BitmapUtils.writeBitmapInSDCard(picture, path);
+    }
+
+    private Bitmap drawableToBitmap(Drawable draw){
+        int width = draw.getIntrinsicWidth();
+        int height = draw.getIntrinsicHeight();
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(picture);
+        draw.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        draw.draw(canvas);
+        return bitmap;
     }
 
     @Test
@@ -48,13 +90,18 @@ public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragmen
     @Test
     @Ignore
     public void checkPicture() {
-        Intent resultData = new Intent();
         Instrumentation.ActivityResult result =
-                new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+                new Instrumentation.ActivityResult(Activity.RESULT_OK, null);
 
-        intending(anyIntent()).respondWith(result);
+        intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(result);
 
         onView(ViewMatchers.withId(R.id.profile_name_text)).perform(click());
+
+        ImageButton pic = mActivityRule.getActivity().findViewById(R.id.profile_image);
+
+
+        Bitmap obtained = drawableToBitmap(pic.getDrawable());
+        assertThat(obtained, is(picture));
     }
 
     @Test

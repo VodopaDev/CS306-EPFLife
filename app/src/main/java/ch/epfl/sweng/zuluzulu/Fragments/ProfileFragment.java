@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,7 +32,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -42,6 +40,7 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.UserRole;
+import ch.epfl.sweng.zuluzulu.BitmapUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -220,16 +219,10 @@ public class ProfileFragment extends SuperFragment {
      * @throws IOException if creation fails
      */
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
+    private File createFileForPicture() throws IOException {
         File directory = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                "user" + userData.getSciper(),  /* prefix */
-                ".jpg",         /* suffix */
-                directory      /* directory */
-        );
+        File image = new File (directory + "/user" + userData.getSciper() + ".jpg");
 
-        // Save a file: path for use with ACTION_VIEW intents
         pathToImage = image.getAbsolutePath();
         return image;
     }
@@ -241,12 +234,10 @@ public class ProfileFragment extends SuperFragment {
      */
     private void goToCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File picture = null;
+            File picture;
             try {
-                picture = createImageFile();
+                picture = createFileForPicture();
             } catch (IOException ex) {
                 Log.e("creating picture file", "unable to create a file for intent");
                 return;
@@ -273,10 +264,10 @@ public class ProfileFragment extends SuperFragment {
 
             Bitmap correctImage = setRescaledImage(pathToImage);
 
-            writeBitmapInSDCard(correctImage,pathToImage);
+            BitmapUtils.writeBitmapInSDCard(correctImage,pathToImage);
 
-            Uri file = Uri.fromFile(new File(pathToImage));
-            UploadTask uploadTask = pictureRef.putFile(file);
+            Uri uriFile = Uri.fromFile(new File(pathToImage));
+            UploadTask uploadTask = pictureRef.putFile(uriFile);
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
@@ -297,29 +288,24 @@ public class ProfileFragment extends SuperFragment {
      * @param path the path to the file to rescale
      */
     private Bitmap setRescaledImage(String path) {
-        int targetH = pic.getHeight();
-        if(targetH == 0){
-            targetH = 50;
+        int targetHeight = pic.getHeight();
+        if(targetHeight == 0){
+            targetHeight = 50;
         }
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(path, bmOptions);
 
-        int photoH = bmOptions.outHeight;
+        int currentHeight = bmOptions.outHeight;
 
-        int scaling = photoH / targetH;
+        int scaling = currentHeight / targetHeight;
 
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaling;
         bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
-
-
         bitmap = rotateImageDependingOnPhoneModel(bitmap, pathToImage);
-
-
-
         pic.setImageBitmap(bitmap);
 
         return bitmap;
@@ -343,20 +329,19 @@ public class ProfileFragment extends SuperFragment {
         }
         int angleToRotate = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                 ExifInterface.ORIENTATION_UNDEFINED);
-
         Bitmap rotatedBitmap;
         switch(angleToRotate) {
 
             case ExifInterface.ORIENTATION_ROTATE_90:
-                rotatedBitmap = rotateBitmap(bitmap, 90);
+                rotatedBitmap = BitmapUtils.rotateBitmap(bitmap, 90);
                 break;
 
             case ExifInterface.ORIENTATION_ROTATE_180:
-                rotatedBitmap = rotateBitmap(bitmap, 180);
+                rotatedBitmap = BitmapUtils.rotateBitmap(bitmap, 180);
                 break;
 
             case ExifInterface.ORIENTATION_ROTATE_270:
-                rotatedBitmap = rotateBitmap(bitmap, 270);
+                rotatedBitmap = BitmapUtils.rotateBitmap(bitmap, 270);
                 break;
 
             case ExifInterface.ORIENTATION_NORMAL:
@@ -367,38 +352,6 @@ public class ProfileFragment extends SuperFragment {
         return rotatedBitmap;
     }
 
-    /**
-     * rotate a bitmap
-     * @param bitmap the bitmap to rotate
-     * @param angle the angle to rotate the bitmap
-     * @return the bitmap rotated
-     */
-    private Bitmap rotateBitmap(Bitmap bitmap, float angle) {
-        Matrix m = new Matrix();
-        m.postRotate(angle);
-        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
-                m, true);
-    }
-
-    /**
-     * write the bitmap at the specified place in the SD Card as a JPEG
-     * @param bitmap the bitmap to write
-     * @param path the path in the SD Card
-     */
-    private void writeBitmapInSDCard(Bitmap bitmap, String path){
-        File toWriteInSDCard = new File(path);
-
-        if (toWriteInSDCard.exists ()) toWriteInSDCard.delete ();
-        try {
-            FileOutputStream out = new FileOutputStream(toWriteInSDCard);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 
 }
