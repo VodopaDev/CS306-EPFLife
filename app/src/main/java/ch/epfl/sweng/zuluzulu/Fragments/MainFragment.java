@@ -2,18 +2,17 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.Manifest;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 import ch.epfl.sweng.zuluzulu.Adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Adapters.EventArrayAdapter;
@@ -97,8 +96,8 @@ public class MainFragment extends SuperFragment {
             swipeRefreshLayout = view.findViewById(R.id.swiperefresh_main_user);
             swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
-            fillConnectedUserAssociationsList();
-            fillConnectedUserEventsList();
+            fillConnectedUserAssociationsList(view);
+            fillConnectedUserEventsList(view);
 
         } else {
             view = createNotConnectedUserView(inflater, container);
@@ -106,8 +105,8 @@ public class MainFragment extends SuperFragment {
             swipeRefreshLayout = view.findViewById(R.id.swiperefresh_main);
             swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
-            fillUpcomingEventLists();
-            fillRandomAssociationLists();
+            fillUpcomingEventLists(view);
+            fillRandomAssociationLists(view);
         }
 
         return view;
@@ -119,15 +118,18 @@ public class MainFragment extends SuperFragment {
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
         if (user.isConnected()) {
-            fillConnectedUserAssociationsList();
-            fillConnectedUserEventsList();
+            fillConnectedUserAssociationsList(getView());
+            fillConnectedUserEventsList(getView());
         } else {
-            fillUpcomingEventLists();
-            fillRandomAssociationLists();
+            fillUpcomingEventLists(getView());
+            fillRandomAssociationLists(getView());
         }
     }
 
-    private void fillUpcomingEventLists() {
+    private void fillUpcomingEventLists(View view) {
+        LinearLayout progressBar  = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress_event);
+        progressBar.setVisibility(View.VISIBLE);
+
         DatabaseFactory.getDependency().getEventsFromToday(result -> {
             if (result != null) {
                 events_array.clear();
@@ -135,11 +137,15 @@ public class MainFragment extends SuperFragment {
                 events_adapter.notifyDataSetChanged();
                 Collections.sort(events_array, Event.dateComparator());
             }
+            progressBar.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
         }, 2);
     }
 
-    private void fillRandomAssociationLists() {
+    private void fillRandomAssociationLists(View view) {
+        LinearLayout progressBar  = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress_assos);
+        progressBar.setVisibility(View.VISIBLE);
+
         DatabaseFactory.getDependency().getAllAssociations(result -> {
             if (result != null && !result.isEmpty()) {
                 associations_array.clear();
@@ -150,6 +156,7 @@ public class MainFragment extends SuperFragment {
                     associations_array.add(result.get(rand));
                 associations_adapter.notifyDataSetChanged();
             }
+            progressBar.setVisibility(View.GONE);
         });
     }
 
@@ -172,7 +179,10 @@ public class MainFragment extends SuperFragment {
     /**
      * Fill the association_array with user's followed associations
      */
-    private void fillConnectedUserAssociationsList() {
+    private void fillConnectedUserAssociationsList(View view) {
+        LinearLayout progressBar  = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress_user_assos);
+        progressBar.setVisibility(View.VISIBLE);
+
         DatabaseFactory.getDependency().getAllAssociations(result -> {
             if (result != null) {
                 associations_array.clear();
@@ -182,6 +192,7 @@ public class MainFragment extends SuperFragment {
                 }
                 associations_adapter.notifyDataSetChanged();
             }
+            progressBar.setVisibility(View.GONE);
         });
 
     }
@@ -189,7 +200,10 @@ public class MainFragment extends SuperFragment {
     /**
      * Fill the event_array with user's followed events
      */
-    private void fillConnectedUserEventsList() {
+    private void fillConnectedUserEventsList(View view) {
+        LinearLayout progressBar  = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress_user_event);
+        progressBar.setVisibility(View.VISIBLE);
+
         DatabaseFactory.getDependency().getAllEvents(result -> {
             if (result != null) {
                 events_array.clear();
@@ -200,6 +214,7 @@ public class MainFragment extends SuperFragment {
                 Collections.sort(events_array, Event.dateComparator());
                 events_adapter.notifyDataSetChanged();
             }
+            progressBar.setVisibility(View.GONE);
             swipeRefreshLayout.setRefreshing(false);
         });
     }

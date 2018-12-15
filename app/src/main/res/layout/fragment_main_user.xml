@@ -21,28 +21,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/main_fragment_followed_associations_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimaryDark"
-                    android:paddingLeft="4dp"
-                    android:paddingTop="4dp"
-                    android:paddingRight="4dp"
-                    android:paddingBottom="4dp"
-                    android:text="@string/main_fragment_text_favorite_associations"
-                    android:textColor="@color/white"
-                    android:textSize="26sp" />
-
-                <ch.epfl.sweng.zuluzulu.Utility.MyListView
-                    android:id="@+id/main_fragment_followed_associations_listview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp" />
-
-                <TextView
                     android:id="@+id/main_fragment_followed_events_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -51,18 +29,88 @@
                     android:paddingTop="4dp"
                     android:paddingRight="4dp"
                     android:paddingBottom="4dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
                     android:text="@string/main_fragment_text_favorite_events"
                     android:textColor="@color/white"
                     android:textSize="26sp" />
 
-                <ch.epfl.sweng.zuluzulu.Utility.MyListView
-                    android:id="@+id/main_fragment_followed_events_listview"
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/linlaHeaderProgress_user_event"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <ProgressBar
+                            android:id="@+id/pbHeaderProgress_user_event"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <ch.epfl.sweng.zuluzulu.Utility.MyListView
+                        android:id="@+id/main_fragment_followed_events_listview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/main_fragment_followed_associations_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/colorPrimaryDark"
+                    android:paddingLeft="4dp"
+                    android:paddingTop="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingBottom="4dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp" />
+                    android:text="@string/main_fragment_text_favorite_associations"
+                    android:textColor="@color/white"
+                    android:textSize="26sp" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/linlaHeaderProgress_user_assos"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <ProgressBar
+                            android:id="@+id/pbHeaderProgress_user_assos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <ch.epfl.sweng.zuluzulu.Utility.MyListView
+                        android:id="@+id/main_fragment_followed_associations_listview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp" />
+                </LinearLayout>
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 

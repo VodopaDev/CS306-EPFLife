@@ -41,25 +41,45 @@
                     android:textColor="@color/white"
                     android:textSize="24sp" />
 
-                <ch.epfl.sweng.zuluzulu.Utility.MyListView
-                    android:id="@+id/main_page_list_event"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"></ch.epfl.sweng.zuluzulu.Utility.MyListView>
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:id="@+id/linlaHeaderProgress_event"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:visibility="gone" >
+
+                        <ProgressBar
+                            android:id="@+id/pbHeaderProgress_event"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"></ProgressBar>
+                    </LinearLayout>
+
+                    <ch.epfl.sweng.zuluzulu.Utility.MyListView
+                        android:id="@+id/main_page_list_event"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp" />
+                </LinearLayout>
+
 
                 <TextView
                     android:id="@+id/main_page_lv_random_assos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
                     android:background="@color/colorPrimaryDark"
                     android:paddingLeft="4dp"
                     android:paddingTop="4dp"
@@ -68,6 +88,26 @@
                     android:text="@string/main_page_random_assos"
                     android:textColor="@color/white"
                     android:textSize="24sp" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/linlaHeaderProgress_assos"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="gone" >
+                    <ProgressBar
+                        android:id="@+id/pbHeaderProgress_assos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+                    </ProgressBar>
+                </LinearLayout>
 
                 <ch.epfl.sweng.zuluzulu.Utility.MyListView
                     android:id="@+id/main_page_random_assos"
@@ -80,23 +120,19 @@
 
 
                 </ch.epfl.sweng.zuluzulu.Utility.MyListView>
-
+            </LinearLayout>
                 <Button
                     android:id="@+id/main_page_button_sign_in"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
                     android:background="@color/colorPrimaryDark"
                     android:text="@string/action_sign_in"
                     android:textColor="@color/white" />
-
             </LinearLayout>
-
         </android.support.v4.widget.NestedScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 </android.support.constraint.ConstraintLayout>
