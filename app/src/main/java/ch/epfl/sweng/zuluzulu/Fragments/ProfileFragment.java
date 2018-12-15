@@ -135,11 +135,17 @@ public class ProfileFragment extends SuperFragment {
 
         pic = view.findViewById(R.id.profile_image);
 
+        try {
+            createImageFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         view.findViewById(R.id.profile_add_photo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (profileOwner && askPermissions()) {
-                    goToCamera();
+      //              goToCamera();
                 }
             }
         });
