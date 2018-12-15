@@ -64,7 +64,7 @@ public class ProfileFragmentTest {
 
         intending(anyIntent()).respondWith(result);
 
-       // onView(ViewMatchers.withId(R.id.profile_add_photo)).perform(click());
+        onView(ViewMatchers.withId(R.id.profile_add_photo)).perform(click());
       //  Utility.openMenu();
     }
 
