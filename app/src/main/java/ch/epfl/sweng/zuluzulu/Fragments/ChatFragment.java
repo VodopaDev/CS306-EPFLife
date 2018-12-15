@@ -79,13 +79,7 @@ public class ChatFragment extends SuperChatPostsFragment {
         setUpPostsButton();
         setUpProfileListener();
 
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null){
-            System.out.println("HELLO");
-        }
-
-            return view;
+        return view;
     }
 
     /**
