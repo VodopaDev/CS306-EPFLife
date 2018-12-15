@@ -139,7 +139,7 @@ public class ProfileFragment extends SuperFragment {
             @Override
             public void onClick(View v) {
                 if (profileOwner && askPermissions()) {
-                    goToCamera();
+                //    goToCamera();
                 }
             }
         });

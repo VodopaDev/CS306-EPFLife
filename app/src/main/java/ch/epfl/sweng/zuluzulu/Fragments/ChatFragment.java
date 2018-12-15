@@ -1,8 +1,10 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -77,7 +79,13 @@ public class ChatFragment extends SuperChatPostsFragment {
         setUpPostsButton();
         setUpProfileListener();
 
-        return view;
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null){
+            System.out.println("HELLO");
+        }
+
+            return view;
     }
 
     /**
