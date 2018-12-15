@@ -112,9 +112,9 @@
     <string name="event_unfollowed">Vous ne suivez plus cet évènement</string>
     <string name="event_card_default_followers">0 followers</string>
     <plurals name="evend_card_followers">
-        <item quantity="zero"><big><b>%1$d</b></big> follower</item>
-        <item quantity="one"><big><b>%1$d</b></big> follower</item>
-        <item quantity="other"><big><b>%1$d</b></big> followers</item>
+        <item quantity="zero">%1$d follower</item>
+        <item quantity="one">%1$d follower</item>
+        <item quantity="other">%1$d followers</item>
     </plurals>
 
     <string name="login_for_more_features">Connecte-toi pour avoir accès à toutes les options</string>

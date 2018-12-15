@@ -86,6 +86,5 @@ public class MainActivityListenerTest extends TestWithAdminAndFragment<MainFragm
                 assertTrue(getMainActivity().getCurrentFragment() instanceof AssociationDetailFragment);
             }
         });
-
     }
 }
