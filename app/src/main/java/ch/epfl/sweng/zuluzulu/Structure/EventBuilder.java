@@ -6,7 +6,7 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.R;
 
 public final class EventBuilder {
-    private static final int SHORT_DESC_MAXLENGTH = 100;
+    private static final int SHORT_DESC_MAXLENGTH = 75;
 
     private String id;
     private String name;

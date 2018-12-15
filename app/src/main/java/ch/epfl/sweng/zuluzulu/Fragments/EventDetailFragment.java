@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +15,10 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
@@ -28,13 +34,11 @@ import ch.epfl.sweng.zuluzulu.Utility.Utils;
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_ASSOCIATION_DETAIL_FRAGMENT;
 
 public class EventDetailFragment extends SuperFragment {
-
     public static final String TAG = "EVENT_DETAIL__TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_EVENT = "ARG_EVENT";
 
     private TextView event_like;
-    private Button event_like_button;
     private Event event;
     private User user;
 
@@ -82,8 +86,8 @@ public class EventDetailFragment extends SuperFragment {
         event_like.setText(String.valueOf(event.getLikes()));
 
         // Favorite button
-        event_like_button = view.findViewById(R.id.event_detail_like_button);
-        setLikeButtonBehaviour();
+        ImageButton event_like_button = view.findViewById(R.id.event_detail_like_button);
+        setLikeButtonBehaviour(event_like_button);
 
         TextView event_desc = view.findViewById(R.id.event_detail_desc);
         event_desc.setText(event.getLongDescription());
@@ -136,33 +140,36 @@ public class EventDetailFragment extends SuperFragment {
         return view;
     }
 
-    private void setLikeButtonBehaviour() {
-        if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event.getId()))
-            event_like_button.setBackgroundResource(R.drawable.ic_like_already_24dp);
-        else
-            event_like_button.setBackgroundResource(R.drawable.ic_like_24dp);
+    private void setLikeButtonBehaviour(ImageButton event_like_button) {
 
-        event_like_button.setOnClickListener(v -> {
-            if (user.isConnected()) {
-                AuthenticatedUser auth = (AuthenticatedUser) user;
-                if (auth.isFollowedEvent(event.getId())) {
-                    auth.removeFollowedEvent(event.getId());
-                    auth.removeFollowedChannel(event.getChannelId());
-                    event.removeFollower(user.getSciper());
-                    DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event, auth);
-                    DatabaseFactory.getDependency().removeChannelFromUserFollowedChannels(channel, auth);
-                    event_like_button.setBackgroundResource(R.drawable.ic_like_24dp);
-                } else {
-                    auth.addFollowedEvent(event.getId());
-                    auth.addFollowedChannel(event.getChannelId());
-                    event.addFollower(user.getSciper());
-                    DatabaseFactory.getDependency().addEventToUserFollowedEvents(event, auth);
-                    DatabaseFactory.getDependency().addChannelToUserFollowedChannels(channel, auth);
-                    event_like_button.setBackgroundResource(R.drawable.ic_like_already_24dp);
-                }
-                event_like.setText(String.valueOf(event.getLikes()));
-            } else {
-                Utils.showConnectSnackbar(getView());
+        event_like_button.setSelected(user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event.getId()));
+
+        event_like_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    if (user.isConnected()) {
+                        AuthenticatedUser auth = (AuthenticatedUser) user;
+                        Snackbar snack;
+                        if (auth.isFollowedEvent(event.getId())) {
+                            auth.removeFollowedEvent(event.getId());
+                            auth.removeFollowedChannel(event.getChannelId());
+                            event.removeFollower(user.getSciper());
+                            DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event, auth);
+                            DatabaseFactory.getDependency().removeChannelFromUserFollowedChannels(channel, auth);
+                            event_like_button.setSelected(false);
+                            Toast.makeText(getActivity(), getContext().getString(R.string.event_unfollowed), Toast.LENGTH_SHORT).show();
+                        } else {
+                            auth.addFollowedEvent(event.getId());
+                            auth.addFollowedChannel(event.getChannelId());
+                            event.addFollower(user.getSciper());
+                            DatabaseFactory.getDependency().addEventToUserFollowedEvents(event, auth);
+                            DatabaseFactory.getDependency().addChannelToUserFollowedChannels(channel, auth);
+                            event_like_button.setSelected(true);
+                            Toast.makeText(getActivity(), getContext().getString(R.string.event_followed), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Utils.showConnectSnackbar(getView());
+                    }
             }
         });
     }

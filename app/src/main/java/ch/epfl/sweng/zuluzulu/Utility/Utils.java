@@ -6,7 +6,6 @@ import android.view.View;
 
 import com.google.firebase.firestore.GeoPoint;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -17,9 +16,6 @@ import ch.epfl.sweng.zuluzulu.R;
  * Interface that contains general useful functions
  */
 public interface Utils {
-
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
-    SimpleDateFormat stringToDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
      * Create a GeoPoint from a Location

@@ -2,6 +2,7 @@ package ch.epfl.sweng.zuluzulu.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import ch.epfl.sweng.zuluzulu.Structure.Event;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
 import ch.epfl.sweng.zuluzulu.Utility.ImageLoader;
+import ch.epfl.sweng.zuluzulu.Utility.Utils;
 
 
 /**
@@ -88,28 +90,40 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         holder.short_desc.setText(event.getShortDescription());
         ImageLoader.loadUriIntoImageView(holder.icon, event.getIconUri(), getContext());
         holder.start_date.setText(event.getDateTimeUser(false));
-        holder.likes.setText(String.valueOf(event.getLikes()));
-        if (user != null && user.isConnected()) {
-            holder.likes_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+        holder.likes.setText(context.getResources().getQuantityString(R.plurals.evend_card_followers, event.getLikes(), event.getLikes()));
+
+        holder.likes_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(user != null && user.isConnected()) {
                     if (!user.isFollowedEvent(event.getId())) {
                         event.addFollower(user.getSciper());
                         user.addFollowedEvent(event.getId());
                         user.addFollowedChannel(event.getChannelId());
+                        holder.likes_button.setSelected(true);
                         DatabaseFactory.getDependency().addEventToUserFollowedEvents(event, user);
+                        Snackbar.make(parent, context.getString(R.string.event_followed), Snackbar.LENGTH_SHORT).show();
                     } else {
                         event.removeFollower(user.getSciper());
                         user.removeFollowedEvent(event.getId());
                         user.removeFollowedChannel(event.getChannelId());
                         holder.likes.setText(String.valueOf(event.getLikes()));
+                        holder.likes_button.setSelected(false);
                         DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event, user);
+                        Snackbar.make(parent, context.getString(R.string.event_unfollowed), Snackbar.LENGTH_SHORT).show();
                     }
-                    holder.likes.setText(String.valueOf(event.getLikes()));
+                    holder.likes.setText(context.getResources().getQuantityString(R.plurals.evend_card_followers, event.getLikes(), event.getLikes()));
+                } else {
+                    Utils.showConnectSnackbar(parent);
                 }
-            });
+            }
+        });
+
+        if (user != null && user.isConnected()) {
+            holder.likes_button.setSelected(user.isFollowedEvent(event.getId()));
+
         } else {
-            holder.likes_button.setEnabled(false);
+            holder.likes_button.setSelected(false);
         }
 
         event_view.setOnClickListener(new View.OnClickListener() {

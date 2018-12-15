@@ -22,7 +22,7 @@ public class Utility {
     private static final String firstName = "James";
     private static final String lastName = "Bond";
     private static final List<String> favAssos = Arrays.asList("0", "1");
-    private static final List<String> followedEvents = Collections.singletonList("1");
+    private static final List<String> followedEvents = new ArrayList<String>(Arrays.asList("0", "1"));
     private static final List<String> followedChats = new ArrayList<>();
 
     private Utility() {

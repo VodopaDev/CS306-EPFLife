@@ -1,6 +1,10 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.support.test.espresso.action.ViewActions;
+
 import org.junit.Test;
+
+import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
@@ -34,5 +38,11 @@ public class MainFragmentAuthentUserTest extends TestWithAuthenticatedAndFragmen
     public void anElementIspresent() {
         onView(withId(R.id.main_fragment_followed_associations_listview)).check(matches(hasDescendant(withText("Agepoly"))));
         onView(withId(R.id.main_fragment_followed_events_listview)).check(matches(hasDescendant(withText("Fiesta time"))));
+    }
+
+
+    @Test
+    public void testUserCanSwipeUp() {
+        onView(withId(R.id.swiperefresh_main_user)).perform(ViewActions.swipeDown());
     }
 }

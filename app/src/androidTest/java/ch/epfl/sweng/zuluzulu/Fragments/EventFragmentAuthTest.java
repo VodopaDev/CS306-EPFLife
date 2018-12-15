@@ -13,6 +13,8 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.Structure.Event;
+import ch.epfl.sweng.zuluzulu.Structure.Post;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -27,6 +29,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.not;
 
@@ -165,15 +168,8 @@ public class EventFragmentAuthTest extends TestWithAuthenticatedAndFragment<Even
     }
 
     @Test
-    public void authenticatedCanClickFavorite() {
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
-        onView(withId(R.id.event_fragment_fav_button)).perform(click());
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
-    }
-
-    @Test
     public void authenticatedCanUnfollowAndFollowAnEvent() {
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(2)));
         onData(anything())
                 .inAdapterView(withId(R.id.event_fragment_listview))
                 .atPosition(0)
@@ -182,14 +178,14 @@ public class EventFragmentAuthTest extends TestWithAuthenticatedAndFragment<Even
         onView(withId(R.id.event_fragment_fav_button)).perform(click());
         onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(0)));
         onView(withId(R.id.event_fragment_all_button)).perform(click());
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(2)));
         onData(anything())
                 .inAdapterView(withId(R.id.event_fragment_listview))
                 .atPosition(0)
                 .onChildView(withId(R.id.card_event_like_button))
                 .perform(click());
         onView(withId(R.id.event_fragment_fav_button)).perform(click());
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(2)));
     }
 
     @Test
