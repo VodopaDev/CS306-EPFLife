@@ -282,7 +282,9 @@ public class ProfileFragment extends SuperFragment {
         bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
-        pic.setImageBitmap(bitmap);
+        if(bmOptions.outHeight != 0) {
+            pic.setImageBitmap(bitmap);
+        }
     }
 
     /**
@@ -301,14 +303,17 @@ public class ProfileFragment extends SuperFragment {
 
             Uri file = Uri.fromFile(new File(pathToImage));
             UploadTask uploadTask = pictureRef.putFile(file);
+            IdlingResourceFactory.incrementCountingIdlingResource();
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
+                    IdlingResourceFactory.decrementCountingIdlingResource();
                     Toast.makeText(getActivity(), "Unsuccessful upload", Toast.LENGTH_SHORT).show();
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    IdlingResourceFactory.decrementCountingIdlingResource();
                     Toast.makeText(getActivity(), "Successful upload", Toast.LENGTH_SHORT).show();
                 }
             });
