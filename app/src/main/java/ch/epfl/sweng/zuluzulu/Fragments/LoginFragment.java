@@ -125,11 +125,11 @@ public class LoginFragment extends SuperFragment {
      */
     private void transfer_main() {
         // Pass the user to the activity
-            Map<Integer, Object> toTransfer = new HashMap<Integer, Object>();
-            toTransfer.put(0, user);
-            mListener.onFragmentInteraction(CommunicationTag.SET_USER, toTransfer);
-            mListener.onFragmentInteraction(CommunicationTag.OPEN_MAIN_FRAGMENT, null);
-            showProgress(false);
+        Map<Integer, Object> toTransfer = new HashMap<Integer, Object>();
+        toTransfer.put(0, user);
+        mListener.onFragmentInteraction(CommunicationTag.SET_USER, toTransfer);
+        mListener.onFragmentInteraction(CommunicationTag.OPEN_MAIN_FRAGMENT, null);
+        showProgress(false);
     }
 
     private void finishLogin() {
@@ -149,7 +149,7 @@ public class LoginFragment extends SuperFragment {
 
     private void updateUserAndFinishLogin() {
         DatabaseFactory.getDependency().getUserWithIdOrCreateIt(user.getSciper(), result -> {
-            if(result == null) {
+            if (result == null) {
                 DatabaseFactory.getDependency().updateUser((AuthenticatedUser) user);
             } else {
                 this.user = result;
@@ -164,7 +164,7 @@ public class LoginFragment extends SuperFragment {
      * Shows the progress UI
      */
     private void showProgress(final boolean show) {
-        if(show){
+        if (show) {
             mProgressView.setVisibility(View.VISIBLE);
         } else {
             mProgressView.setVisibility(View.GONE);
