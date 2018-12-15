@@ -56,33 +56,21 @@ public class UserDatabase {
     public AuthenticatedUser getUser() {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-        String[] projection = {
-                BaseColumns._ID,
-                UserDatabaseContract.FeedEntry.COLUMN_NAME_SCIPER,
-                UserDatabaseContract.FeedEntry.COLUMN_NAME_GASPAR,
+        String[] projection = {BaseColumns._ID,
+                UserDatabaseContract.FeedEntry.COLUMN_NAME_SCIPER, UserDatabaseContract.FeedEntry.COLUMN_NAME_GASPAR,
                 UserDatabaseContract.FeedEntry.COLUMN_NAME_SECTION,
-                UserDatabaseContract.FeedEntry.COLUMN_NAME_SEMESTER,
-                UserDatabaseContract.FeedEntry.COLUMN_NAME_FIRST_NAME,
-                UserDatabaseContract.FeedEntry.COLUMN_NAME_EMAIL,
-                UserDatabaseContract.FeedEntry.COLUMN_NAME_LAST_NAME
+                UserDatabaseContract.FeedEntry.COLUMN_NAME_SEMESTER, UserDatabaseContract.FeedEntry.COLUMN_NAME_FIRST_NAME,
+                UserDatabaseContract.FeedEntry.COLUMN_NAME_EMAIL, UserDatabaseContract.FeedEntry.COLUMN_NAME_LAST_NAME
         };
 
-        Cursor cursor = null;
         ArrayList<AuthenticatedUser> list = new ArrayList<>();
-        try {
-            cursor = db.query(UserDatabaseContract.FeedEntry.TABLE_NAME, projection, null, null, null, null, null);
-
+        try (Cursor cursor = db.query(UserDatabaseContract.FeedEntry.TABLE_NAME, projection, null, null, null, null, null)) {
             while (cursor.moveToNext()) {
                 AuthenticatedUser user = createUser(cursor);
 
                 if (user != null && user.getSciper().length() >= 5) {
                     list.add(user);
                 }
-
-            }
-        } finally {
-            if(cursor != null) {
-                cursor.close();
             }
         }
 
