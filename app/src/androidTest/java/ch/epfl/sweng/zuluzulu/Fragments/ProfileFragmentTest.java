@@ -16,6 +16,7 @@ import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
+import ch.epfl.sweng.zuluzulu.Utility;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -54,6 +55,7 @@ public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragmen
         intending(anyIntent()).respondWith(result);
 
         onView(ViewMatchers.withId(R.id.profile_add_photo)).perform(click());
+        Utility.openMenu();
     }
 
     @Test
