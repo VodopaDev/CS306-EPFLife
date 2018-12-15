@@ -46,7 +46,6 @@ public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragmen
     }
 
     @Test
-    @Ignore
     public void checkPicture() {
         Intent resultData = new Intent();
         Instrumentation.ActivityResult result =
