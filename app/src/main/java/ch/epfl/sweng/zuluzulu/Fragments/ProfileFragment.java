@@ -138,7 +138,7 @@ public class ProfileFragment extends SuperFragment {
         view.findViewById(R.id.profile_add_photo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (profileOwner && askPermissions() && false) {
+                if (profileOwner && askPermissions()) {
                     goToCamera();
                 }
             }
