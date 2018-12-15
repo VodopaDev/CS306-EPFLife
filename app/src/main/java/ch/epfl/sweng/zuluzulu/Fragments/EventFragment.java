@@ -259,7 +259,7 @@ public class EventFragment extends SuperFragment {
 
         followedEvents.clear();
         for (Event event : allEvents)
-            if (user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event.getId()))
+            if (((AuthenticatedUser) user).isFollowedEvent(event.getId()))
                 followedEvents.add(event);
 
         button_event_all.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
