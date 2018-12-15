@@ -241,7 +241,7 @@ public class ProfileFragment extends SuperFragment {
         // Ensure that there's a camera activity to handle the intent
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
             // Create the File where the photo should go
-          /*  File picture = null;
+            File picture = null;
             try {
                 picture = createImageFile();
             } catch (IOException ex) {
@@ -254,8 +254,8 @@ public class ProfileFragment extends SuperFragment {
                         "ch.epfl.sweng.zuluzulu.fileprovider",
                         picture);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                startActivityForResult(intent, CAMERA_CODE);
-            }*/
+          //      startActivityForResult(intent, CAMERA_CODE);
+            }
         }
     }
 
