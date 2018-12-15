@@ -257,7 +257,6 @@ public class ProfileFragment extends SuperFragment {
                 startActivityForResult(intent, CAMERA_CODE);
             }
         }
-
     }
 
     /**
@@ -295,7 +294,7 @@ public class ProfileFragment extends SuperFragment {
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAMERA_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == CAMERA_CODE && resultCode == Activity.RESULT_OK && false) {
 
             //scale the image and put it in the imagebutton
             setRescaledImage(pathToImage);
