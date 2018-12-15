@@ -322,24 +322,24 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 openFragment(WritePostFragment.newInstance(user, channel));
                 break;
             case OPEN_ASSOCIATION_FRAGMENT:
-                openFragment(AssociationFragment.newInstance(user));
                 selectItem(navigationView.getMenu().findItem(R.id.nav_associations), false);
+                openFragment(AssociationFragment.newInstance(user));
                 break;
             case OPEN_ASSOCIATION_DETAIL_FRAGMENT:
                 Association association = (Association) data;
                 openFragment(AssociationDetailFragment.newInstance(user, association));
                 break;
             case OPEN_ABOUT_US_FRAGMENT:
-                openFragment(AboutZuluzuluFragment.newInstance());
                 selectItem(navigationView.getMenu().findItem(R.id.nav_about), false);
+                openFragment(AboutZuluzuluFragment.newInstance());
                 break;
             case OPEN_MAIN_FRAGMENT:
-                openFragment(MainFragment.newInstance(user));
                 selectItem(navigationView.getMenu().findItem(R.id.nav_main), false);
+                openFragment(MainFragment.newInstance(user));
                 break;
             case OPEN_EVENT_FRAGMENT:
-                openFragment(EventFragment.newInstance(user));
                 selectItem(navigationView.getMenu().findItem(R.id.nav_events), false);
+                openFragment(EventFragment.newInstance(user));
                 break;
             case OPEN_EVENT_DETAIL_FRAGMENT:
                 Event event = (Event) data;
@@ -347,22 +347,22 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case OPEN_CHANNEL_FRAGMENT:
                 User visitedUser = data == null ? user : (User) data;
-                openFragment(ChannelFragment.newInstance(visitedUser));
                 selectItem(navigationView.getMenu().findItem(R.id.nav_chat), false);
+                openFragment(ChannelFragment.newInstance(visitedUser));
                 break;
             case OPEN_LOGIN_FRAGMENT:
-                openFragment(LoginFragment.newInstance());
                 selectItem(navigationView.getMenu().findItem(R.id.nav_login), false);
+                openFragment(LoginFragment.newInstance());
                 break;
             case OPEN_PROFILE_FRAGMENT:
                 AuthenticatedUser profileData = data == null ? (AuthenticatedUser) user : (AuthenticatedUser) data;
                 boolean profileOwner = profileData.getSciper().equals(user.getSciper());
-                openFragment(ProfileFragment.newInstance(profileData, profileOwner));
                 selectItem(navigationView.getMenu().findItem(R.id.nav_profile), false);
+                openFragment(ProfileFragment.newInstance(profileData, profileOwner));
                 break;
             case OPEN_SETTINGS_FRAGMENT:
-                openFragment(SettingsFragment.newInstance());
                 selectItem(navigationView.getMenu().findItem(R.id.nav_settings), false);
+                openFragment(SettingsFragment.newInstance());
                 break;
 
             // Admin

@@ -55,11 +55,11 @@ public class MainActivityListenerTest extends TestWithAdminAndFragment<MainFragm
                 getMainActivity().onFragmentInteraction(OPEN_MAIN_FRAGMENT, user);
                 assertTrue(getMainActivity().getCurrentFragment() instanceof MainFragment);
 
-                getMainActivity().onFragmentInteraction(OPEN_SETTINGS_FRAGMENT, user);
-                assertTrue(getMainActivity().getCurrentFragment() instanceof SettingsFragment);
-
                 getMainActivity().onFragmentInteraction(OPEN_ABOUT_US_FRAGMENT, user);
                 assertTrue(getMainActivity().getCurrentFragment() instanceof AboutZuluzuluFragment);
+
+                getMainActivity().onFragmentInteraction(OPEN_SETTINGS_FRAGMENT, user);
+                assertTrue(getMainActivity().getCurrentFragment() instanceof SettingsFragment);
 
                 getMainActivity().onFragmentInteraction(OPEN_PROFILE_FRAGMENT, user);
                 assertTrue(getMainActivity().getCurrentFragment() instanceof ProfileFragment);
