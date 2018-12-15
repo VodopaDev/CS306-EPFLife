@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu.Fragments;
+package ch.epfl.sweng.zuluzulu.A;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -12,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;

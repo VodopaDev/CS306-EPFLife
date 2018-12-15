@@ -67,18 +67,24 @@ public class UserDatabase {
                 UserDatabaseContract.FeedEntry.COLUMN_NAME_LAST_NAME
         };
 
-        Cursor cursor = db.query(UserDatabaseContract.FeedEntry.TABLE_NAME, projection, null, null, null, null, null);
+        Cursor cursor = null;
+        ArrayList<AuthenticatedUser> list = new ArrayList<>();
+        try {
+            cursor = db.query(UserDatabaseContract.FeedEntry.TABLE_NAME, projection, null, null, null, null, null);
 
-        List<AuthenticatedUser> list = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            AuthenticatedUser user = createUser(cursor);
+            while (cursor.moveToNext()) {
+                AuthenticatedUser user = createUser(cursor);
 
-            if (user != null && user.getSciper().length() >= 5) {
-                list.add(user);
+                if (user != null && user.getSciper().length() >= 5) {
+                    list.add(user);
+                }
+
             }
-
+        } finally {
+            if(cursor != null) {
+                cursor.close();
+            }
         }
-        cursor.close();
 
         if (!list.isEmpty()) {
             return list.get(0);
