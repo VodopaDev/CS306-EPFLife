@@ -1,27 +1,21 @@
-package ch.epfl.sweng.zuluzulu.A;
+package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.provider.MediaStore;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.rule.GrantPermissionRule;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
-import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
-import ch.epfl.sweng.zuluzulu.User.Admin;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Utility;
 
@@ -30,8 +24,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.anyIntent;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
-import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -41,6 +33,10 @@ public class ProfileFragmentTest {
     @Rule
     public final IntentsTestRule<MainActivity> mActivityRule =
             new IntentsTestRule<>(MainActivity.class);
+
+    @Rule
+    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA);
+
 
     private AuthenticatedUser user;
 
@@ -65,7 +61,6 @@ public class ProfileFragmentTest {
         intending(anyIntent()).respondWith(result);
 
         onView(ViewMatchers.withId(R.id.profile_add_photo)).perform(click());
-      //  Utility.openMenu();
     }
 
     @Test

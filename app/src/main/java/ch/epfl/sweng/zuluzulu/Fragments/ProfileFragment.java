@@ -297,8 +297,7 @@ public class ProfileFragment extends SuperFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_CODE && resultCode == Activity.RESULT_OK) {
-            throw new UnsupportedOperationException();
-            /*
+
             //scale the image and put it in the imagebutton
             setRescaledImage(pathToImage);
 
@@ -318,7 +317,6 @@ public class ProfileFragment extends SuperFragment {
                     Toast.makeText(getActivity(), "Successful upload", Toast.LENGTH_SHORT).show();
                 }
             });
-            */
         }
     }
 
