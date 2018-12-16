@@ -177,14 +177,13 @@ public class ProfileFragment extends SuperFragment {
 
         boolean storage_write = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         boolean storage_read = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-        boolean ok = storage_read && storage_write;
         if (!storage_write) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
         } else if (!storage_read) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
         }
 
-        return ok || (internal++ < 3 && askPermissions());
+        return (storage_read && storage_write) || (internal++ < 3 && askPermissions());
     }
 
     /**
