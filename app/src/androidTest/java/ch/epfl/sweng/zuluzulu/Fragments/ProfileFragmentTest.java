@@ -76,7 +76,7 @@ public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragmen
         int height = draw.getIntrinsicHeight();
 
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(picture);
+        Canvas canvas = new Canvas(bitmap);
         draw.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         draw.draw(canvas);
         return bitmap;
@@ -88,7 +88,6 @@ public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragmen
     }
 
     @Test
-    @Ignore
     public void checkPicture() {
         Instrumentation.ActivityResult result =
                 new Instrumentation.ActivityResult(Activity.RESULT_OK, null);
@@ -101,7 +100,12 @@ public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragmen
 
 
         Bitmap obtained = drawableToBitmap(pic.getDrawable());
-        assertThat(obtained, is(picture));
+        if(obtained.sameAs(picture)){
+            assert true;
+        }
+        else{
+            assert false;
+        }
     }
 
     @Test
