@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,12 +42,11 @@ public class LoginFragment extends SuperFragment {
      */
     private View mProgressView;
 
-    private WebView webview;
-
     private String redirectURICode;
     private OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
-    private String code;
     private User user;
+    private WebView webview;
+    private String codeRequestUrl;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -69,6 +71,10 @@ public class LoginFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (getArguments() != null) {
+            codeRequestUrl = (String) getArguments().getSerializable("uri");
+        }
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
@@ -91,7 +97,6 @@ public class LoginFragment extends SuperFragment {
                 if (url.contains("code=")) {
                     redirectURICode = url;
                     showProgress(true);
-                    webview.setVisibility(View.INVISIBLE);
                     finishLogin();
                     return true;
                 }
@@ -100,11 +105,15 @@ public class LoginFragment extends SuperFragment {
         });
 
         showProgress(false);
-        String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
+
+        if(codeRequestUrl == null) {
+            codeRequestUrl = AuthClient.createCodeRequestUrl(config);
+        }
         webview.loadUrl(codeRequestUrl);
 
         return view;
     }
+
 
     /**
      * Is executed once the session is active
@@ -120,16 +129,17 @@ public class LoginFragment extends SuperFragment {
     }
 
     private void finishLogin() {
-        code = AuthClient.extractCode(redirectURICode);
+        String code = AuthClient.extractCode(redirectURICode);
 
         Map<String, String> tokens;
         try {
             tokens = AuthServer.fetchTokens(config, code);
             user = AuthServer.fetchUser(tokens.get("Tequila.profile"));
-        } catch (IOException e) {
-            return;
+        } catch (Exception e) {
+            user = new User.UserBuilder().buildGuestUser();
         }
 
+        showProgress(false);
 
         updateUserAndFinishLogin();
     }
@@ -142,7 +152,6 @@ public class LoginFragment extends SuperFragment {
                 this.user = result;
             }
             transfer_main();
-            showProgress(false);
         });
     }
 

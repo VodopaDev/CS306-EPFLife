@@ -28,7 +28,6 @@ public class FirebaseProxyTest {
 
     @Before
     public void setUp() {
-        FirebaseFactory.setDependency(new FirebaseMock());
         DatabaseFactory.setDependency(new MockedProxy());
         IdlingRegistry.getInstance().register(IdlingResourceFactory.getCountingIdlingResource());
         proxy = FirebaseProxy.getInstance();

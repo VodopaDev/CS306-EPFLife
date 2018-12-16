@@ -272,11 +272,11 @@ public class ProfileFragment extends SuperFragment {
         }
     }
 
-    /**
-     * helper method that takes a path to a file and scale it to make it fit inside the imagebutton
-     *
-     * @param path the path to the file to rescale
-     */
+        /**
+         * helper method that takes a path to a file and scale it to make it fit inside the imagebutton
+         *
+         * @param path the path to the file to rescale
+         */
     private void setRescaledImage(String path) {
         int targetH = pic.getHeight();
         if (targetH == 0) {
