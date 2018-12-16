@@ -25,8 +25,8 @@ public class LoginTest extends TestWithGuestAndFragment<LoginFragment> {
 
     @Override
     public void initFragment() {
-        fragment = LoginFragment.newInstance();
         DatabaseFactory.setDependency(new MockedProxy());
+        fragment = LoginFragment.newInstance();
     }
 
     /**

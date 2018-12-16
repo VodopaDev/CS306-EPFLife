@@ -222,14 +222,14 @@ public class ProfileFragment extends SuperFragment {
      */
     private File createImageFile() throws IOException {
         // Create an image file name
-        File directory = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 "user" + userData.getSciper(),  /* prefix */
                 ".jpg",         /* suffix */
-                directory      /* directory */
+                storageDir      /* directory */
         );
 
-        // Save a file: path for use with ACTION_VIEW intents
+        // Save a p: path for use with ACTION_VIEW intents
         pathToImage = image.getAbsolutePath();
         return image;
     }

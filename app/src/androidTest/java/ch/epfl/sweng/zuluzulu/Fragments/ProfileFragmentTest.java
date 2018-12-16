@@ -3,46 +3,47 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
-import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
+import android.support.test.runner.intent.IntentCallback;
+import android.support.test.runner.intent.IntentMonitorRegistry;
 
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Utility;
 
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.anyIntent;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.core.AllOf.allOf;
 
 public class ProfileFragmentTest {
     @Rule
-    public final ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+    public IntentsTestRule<MainActivity> intentsTestRule =
+            new IntentsTestRule<MainActivity>(MainActivity.class);
 
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA);
@@ -58,9 +59,16 @@ public class ProfileFragmentTest {
 
     @Before
     public void init() {
+      /*  Intent resultData = new Intent();
+
+        Instrumentation.ActivityResult result =
+                new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+
+        intending(anyIntent()).respondWith(result);
+*/
         user = Utility.createTestAdmin();
         SuperFragment fragment = ProfileFragment.newInstance(user, true);
-        mActivityRule.getActivity().openFragment(fragment);
+        intentsTestRule.getActivity().openFragment(fragment);
     }
 
     @Test
@@ -69,19 +77,34 @@ public class ProfileFragmentTest {
     }
 
     @Test
-    public void checkPicture() {
-        Intent resultData = new Intent();
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(
-                Activity.RESULT_OK, resultData);
+    public void checkPicture() {// Build the result to return when the activity is launched.
+        intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(
+                new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
 
-        Matcher<Intent> expectedIntent = hasAction(MediaStore.ACTION_IMAGE_CAPTURE);
-        Intents.init();
-        intending(anyIntent()).respondWith(result);
+        IntentCallback intentCallback = new IntentCallback() {
+            @Override
+            public void onIntentSent(Intent intent) {
+                if (intent.getAction().equals("android.media.action.IMAGE_CAPTURE")) {
+                    try {
+                        Uri imageUri = intent.getParcelableExtra(MediaStore.EXTRA_OUTPUT);
+                        Context context = getTargetContext();
+                        Bitmap icon = BitmapFactory.decodeResource(
+                                context.getResources(),
+                                R.drawable.default_icon);
+                        OutputStream out = getTargetContext().getContentResolver().openOutputStream(imageUri);
+                        icon.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        out.flush();
+                        out.close();
+                    } catch (IOException e) {
+                        throw new IllegalArgumentException();
+                    }
+                }
+            }
+        };
+        IntentMonitorRegistry.getInstance().addIntentCallback(intentCallback);
 
-        //Click the select button
         onView(withId(R.id.profile_add_photo)).perform(click());
-        intended(expectedIntent);
-        Intents.release();
+        Utility.checkFragmentIsOpen(R.id.profile_fragment);
     }
 
     @Test

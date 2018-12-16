@@ -12,10 +12,10 @@ public class TestWithAdmin extends TestWithAuthenticatedUser {
 
     @Before
     public void setUpLogin() {
+        DatabaseFactory.setDependency(new MockedProxy());
+
         this.admin = Utility.createTestAdmin();
         Utility.addUserToMainIntent(mActivityRule, this.admin);
-
-        DatabaseFactory.setDependency(new MockedProxy());
     }
 
     @Override
