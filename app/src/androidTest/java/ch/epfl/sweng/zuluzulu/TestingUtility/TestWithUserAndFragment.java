@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.MainActivity;
@@ -26,6 +28,7 @@ public abstract class TestWithUserAndFragment<U extends User, F extends SuperFra
 
     @Before
     public void init() {
+        DatabaseFactory.setDependency(new MockedProxy());
         // Add the user
         initUser();
         Utility.addUserToMainIntent(mActivityRule, user);
