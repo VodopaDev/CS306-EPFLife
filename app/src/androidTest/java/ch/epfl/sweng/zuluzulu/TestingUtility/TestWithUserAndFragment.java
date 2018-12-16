@@ -28,7 +28,6 @@ public abstract class TestWithUserAndFragment<U extends User, F extends SuperFra
 
     @Before
     public void init() {
-        DatabaseFactory.setDependency(new MockedProxy());
         // Add the user
         initUser();
         Utility.addUserToMainIntent(mActivityRule, user);

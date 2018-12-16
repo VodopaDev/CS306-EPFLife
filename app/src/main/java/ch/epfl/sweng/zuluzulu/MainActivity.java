@@ -291,13 +291,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case SET_USER:
                 Map<Integer, Object> received = (HashMap<Integer, Object>) data;
                 this.user = (User) received.get(0);
-
                 if (user != null && user.isConnected()) {
                     UserDatabase userDatabase = new UserDatabase(getApplicationContext());
                     userDatabase.put((AuthenticatedUser) user);
+                    updateMenuItems();
+                } else{
+                    this.user = new User.UserBuilder().buildGuestUser();
                 }
 
-                updateMenuItems();
                 break;
             case OPEN_CREATE_EVENT:
                 openFragment(AddEventFragment.newInstance());

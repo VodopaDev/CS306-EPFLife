@@ -32,8 +32,8 @@ public class LoginTest extends TestWithGuestAndFragment<LoginFragment> {
      * Test connection is accepted with correct credentials
      */
     @Test
-    public void isOnTheLogin() {
-        onView(withId(R.id.login_fragment)).check(matches(isDisplayed()));
+    public void isUrlRedirectedToMain() {
+        onView(withId(R.id.main_fragment)).check(matches(isDisplayed()));
     }
 
 }
