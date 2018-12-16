@@ -99,9 +99,8 @@ public interface Utils {
     /**
      * Convert hour and minute from integer to beautiful string
      *
-     * @param hour The hour
+     * @param hour   The hour
      * @param minute The minutes
-     *
      * @return The string of the hour and the minutes
      */
     static String hourAndMinutesFrom(int hour, int minute) {
@@ -123,7 +122,6 @@ public interface Utils {
      * Check whether a hour is valid
      *
      * @param hour The hour to check
-     *
      * @return whether the hour is valid
      */
     static boolean validHour(int hour) {
@@ -134,7 +132,6 @@ public interface Utils {
      * Check whether a minute is valid
      *
      * @param minute The minute to check
-     *
      * @return whether the minute is valid
      */
     static boolean validMinute(int minute) {

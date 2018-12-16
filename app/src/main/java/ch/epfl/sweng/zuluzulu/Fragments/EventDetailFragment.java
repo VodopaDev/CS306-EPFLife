@@ -148,29 +148,29 @@ public class EventDetailFragment extends SuperFragment {
         event_like_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    if (user.isConnected()) {
-                        AuthenticatedUser auth = (AuthenticatedUser) user;
-                        Snackbar snack;
-                        if (auth.isFollowedEvent(event.getId())) {
-                            auth.removeFollowedEvent(event.getId());
-                            auth.removeFollowedChannel(event.getChannelId());
-                            event.removeFollower(user.getSciper());
-                            DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event, auth);
-                            DatabaseFactory.getDependency().removeChannelFromUserFollowedChannels(channel, auth);
-                            event_like_button.setSelected(false);
-                            Toast.makeText(getActivity(), getContext().getString(R.string.event_unfollowed), Toast.LENGTH_SHORT).show();
-                        } else {
-                            auth.addFollowedEvent(event.getId());
-                            auth.addFollowedChannel(event.getChannelId());
-                            event.addFollower(user.getSciper());
-                            DatabaseFactory.getDependency().addEventToUserFollowedEvents(event, auth);
-                            DatabaseFactory.getDependency().addChannelToUserFollowedChannels(channel, auth);
-                            event_like_button.setSelected(true);
-                            Toast.makeText(getActivity(), getContext().getString(R.string.event_followed), Toast.LENGTH_SHORT).show();
-                        }
+                if (user.isConnected()) {
+                    AuthenticatedUser auth = (AuthenticatedUser) user;
+                    Snackbar snack;
+                    if (auth.isFollowedEvent(event.getId())) {
+                        auth.removeFollowedEvent(event.getId());
+                        auth.removeFollowedChannel(event.getChannelId());
+                        event.removeFollower(user.getSciper());
+                        DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event, auth);
+                        DatabaseFactory.getDependency().removeChannelFromUserFollowedChannels(channel, auth);
+                        event_like_button.setSelected(false);
+                        Toast.makeText(getActivity(), getContext().getString(R.string.event_unfollowed), Toast.LENGTH_SHORT).show();
                     } else {
-                        Utils.showConnectSnackbar(getView());
+                        auth.addFollowedEvent(event.getId());
+                        auth.addFollowedChannel(event.getChannelId());
+                        event.addFollower(user.getSciper());
+                        DatabaseFactory.getDependency().addEventToUserFollowedEvents(event, auth);
+                        DatabaseFactory.getDependency().addChannelToUserFollowedChannels(channel, auth);
+                        event_like_button.setSelected(true);
+                        Toast.makeText(getActivity(), getContext().getString(R.string.event_followed), Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Utils.showConnectSnackbar(getView());
+                }
             }
         });
     }

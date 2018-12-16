@@ -1,41 +1,65 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.rule.GrantPermissionRule;
+import android.support.test.runner.intent.IntentCallback;
+import android.support.test.runner.intent.IntentMonitorRegistry;
 
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import java.io.IOException;
+import java.io.OutputStream;
+
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
-import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Utility;
 
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intending;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.anyIntent;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragment> {
+public class ProfileFragmentTest {
     @Rule
-    public final IntentsTestRule<MainActivity> mActivityRule =
-            new IntentsTestRule<>(MainActivity.class);
+    public IntentsTestRule<MainActivity> intentsTestRule =
+            new IntentsTestRule<MainActivity>(MainActivity.class);
 
-    @Override
-    public void initFragment() {
+    @Rule
+    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA);
 
-        DatabaseFactory.setDependency(new MockedProxy());
-        fragment = ProfileFragment.newInstance(user, true);
+    @Rule
+    public GrantPermissionRule permissionRule1 = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+
+    @Rule
+    public GrantPermissionRule permissionRule2 = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+
+    private AuthenticatedUser user;
+
+    @Before
+    public void init() {
+        user = Utility.createTestAdmin();
+        SuperFragment fragment = ProfileFragment.newInstance(user, true);
+        intentsTestRule.getActivity().openFragment(fragment);
     }
 
     @Test
@@ -44,15 +68,34 @@ public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragmen
     }
 
     @Test
-    @Ignore
-    public void checkPicture() {
-        Intent resultData = new Intent();
-        Instrumentation.ActivityResult result =
-                new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
+    public void checkPicture() {// Build the result to return when the activity is launched.
+        intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(
+                new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
 
-        intending(anyIntent()).respondWith(result);
+        IntentCallback intentCallback = new IntentCallback() {
+            @Override
+            public void onIntentSent(Intent intent) {
+                if (intent.getAction().equals("android.media.action.IMAGE_CAPTURE")) {
+                    try {
+                        Uri imageUri = intent.getParcelableExtra(MediaStore.EXTRA_OUTPUT);
+                        Context context = getTargetContext();
+                        Bitmap icon = BitmapFactory.decodeResource(
+                                context.getResources(),
+                                R.drawable.default_icon);
+                        OutputStream out = getTargetContext().getContentResolver().openOutputStream(imageUri);
+                        icon.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        out.flush();
+                        out.close();
+                    } catch (IOException e) {
+                        throw new IllegalArgumentException();
+                    }
+                }
+            }
+        };
+        IntentMonitorRegistry.getInstance().addIntentCallback(intentCallback);
 
-        onView(ViewMatchers.withId(R.id.profile_name_text)).perform(click());
+        onView(withId(R.id.profile_add_photo)).perform(click());
+        Utility.checkFragmentIsOpen(R.id.profile_fragment);
     }
 
     @Test

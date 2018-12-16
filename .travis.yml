@@ -24,7 +24,12 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 script:
-  - travis_wait 45 ./gradlew build connectedCheck jacocoTestReport --info
+  - ./gradlew build installDebug
+  - adb shell pm grant ch.epfl.sweng.zuluzulu android.permission.ACCESS_FINE_LOCATION
+  - adb shell pm grant ch.epfl.sweng.zuluzulu android.permission.CAMERA
+  - adb shell pm grant ch.epfl.sweng.zuluzulu android.permission.WRITE_EXTERNAL_STORAGE
+  - adb shell pm grant ch.epfl.sweng.zuluzulu android.permission.READ_EXTERNAL_STORAGE
+  - ./gradlew build connectedCheck jacocoTestReport --info
 after_script:
   # Report test coverage to Code Climate
   - export JACOCO_SOURCE_PATH=app/src/main/java/

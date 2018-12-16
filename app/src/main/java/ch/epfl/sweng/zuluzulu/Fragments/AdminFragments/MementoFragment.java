@@ -92,7 +92,7 @@ public class MementoFragment extends SuperFragment {
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Memento loader");
         UrlHandler urlHandler = new UrlHandler(this::handleMemento, new MementoParser());
-        urlHandler.execute(ASSOCIATION_MEMENTO_URL,ASSOCIATION_MEMENTO_URL);
+        urlHandler.execute(ASSOCIATION_MEMENTO_URL, ASSOCIATION_MEMENTO_URL);
 
         // Send increment to wait async execution in test
         IdlingResourceFactory.incrementCountingIdlingResource();
@@ -150,7 +150,7 @@ public class MementoFragment extends SuperFragment {
                 .setId(Integer.toString(jsonobject.getString("title").hashCode()))
                 .setDate(new EventDate(
                         simpleDateFormat.parse(jsonobject.getString("event_start_date") + " " + jsonobject.getString("event_start_time")),
-                        simpleDateFormat.parse(jsonobject.getString("event_end_date") +" "+ jsonobject.getString("event_end_time"))))
+                        simpleDateFormat.parse(jsonobject.getString("event_end_date") + " " + jsonobject.getString("event_end_time"))))
                 .setUrlPlaceAndRoom(jsonobject.getString("event_url_place_and_room"))
                 .setAssosId("0")
                 .setChannelId(DatabaseFactory.getDependency().getNewChannelId())
