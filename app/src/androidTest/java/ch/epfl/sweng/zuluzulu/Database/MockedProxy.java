@@ -304,7 +304,11 @@ public class MockedProxy implements Proxy {
                 map.put("followed_channels", new ArrayList<>());
                 map.put("roles", new ArrayList<>(Collections.singletonList("USER")));
                 onResult.apply(userMap.get(sciper));
+            } else {
+                onResult.apply(null);
             }
+        } else{
+            onResult.apply(null);
         }
     }
 
