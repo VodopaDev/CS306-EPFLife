@@ -4,6 +4,7 @@ import android.support.test.espresso.IdlingRegistry;
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -26,7 +27,7 @@ public class FirebaseProxyTest {
 
     private FirebaseProxy proxy;
 
-    @Before
+    @BeforeClass
     public void setUp() {
         DatabaseFactory.setDependency(new MockedProxy());
         IdlingRegistry.getInstance().register(IdlingResourceFactory.getCountingIdlingResource());
