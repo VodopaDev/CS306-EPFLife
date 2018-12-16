@@ -6,6 +6,7 @@ import org.junit.runners.JUnit4;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +27,7 @@ public class EventTest {
     private static final String LONG_DESC = "This is only random bla bla bla";
     private static final String TEST_URI_STRING = "https://firebasestorage.googleapis.com/v0/b/softdep-7cf7a.appspot.com/o/assos%2Fasso1_icon.png?alt=media&token=391a7bfc-1597-4935-9afe-e08ecd734e03";
     private static final Date START_DATE = new Date(2L);
-    private static final List<String> FOLLOWERS = Arrays.asList("100,200");
+    private static final List<String> FOLLOWERS = Collections.singletonList("100,200");
     private static final String ORGANIZER = "Pascal Martin";
     private static final String PLACE = "CE";
     private static final String CONTACT = "ME";
@@ -121,6 +122,7 @@ public class EventTest {
         assertEquals(START_DATE, event0.getEndDate());
     }
 
+    @SuppressWarnings("EqualsWithItself")
     @Test
     public void comparableToIsCorrect() {
         initWorkingAssociation();
@@ -128,6 +130,7 @@ public class EventTest {
                 Event.nameComparator().compare(event0, event0));
     }
 
+    @SuppressWarnings("EqualsWithItself")
     @Test
     public void dateComparatorTest() {
         initWorkingAssociation();
@@ -200,9 +203,9 @@ public class EventTest {
     }
 
     @Test
-    public void dateStringAreCorrect(){
+    public void dateStringAreCorrect() {
         initWorkingAssociation();
-        String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+        String DATE_TIME_PATTERN = "dd.MM.yyyy HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_PATTERN);
 
         assertEquals(simpleDateFormat.format(START_DATE), event0.getStartDateString());
@@ -210,7 +213,7 @@ public class EventTest {
     }
 
     @Test
-    public void getDataIsCorrect(){
+    public void getDataIsCorrect() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", ID);
         map.put("channel_id", CHANNEL_ID);
@@ -234,7 +237,6 @@ public class EventTest {
         event0 = new Event(new FirebaseMapDecorator(map));
         assertEquals(map, event0.getData());
     }
-
 
 
 }

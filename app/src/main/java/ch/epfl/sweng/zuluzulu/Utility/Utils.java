@@ -1,21 +1,21 @@
 package ch.epfl.sweng.zuluzulu.Utility;
 
 import android.location.Location;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import com.google.firebase.firestore.GeoPoint;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+
+import ch.epfl.sweng.zuluzulu.R;
 
 /**
  * Interface that contains general useful functions
  */
 public interface Utils {
-
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
-    SimpleDateFormat stringToDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
      * Create a GeoPoint from a Location
@@ -60,8 +60,8 @@ public interface Utils {
     /**
      * Return a random integer in the range [min, max]
      *
-     * @param min the smallest integer you can get
-     * @param max the biggest integer you can get
+     * @param min the smallest integer you can getAndAddOnSuccessListener
+     * @param max the biggest integer you can getAndAddOnSuccessListener
      * @return the random integer
      */
     static int randomInt(int min, int max) {
@@ -86,4 +86,59 @@ public interface Utils {
         long now = Calendar.getInstance().getTimeInMillis();
         return now - dateTime;
     }
+
+    /**
+     * Draw a Snackbar
+     *
+     * @param container The container view
+     */
+    static void showConnectSnackbar(View container) {
+        Snackbar.make(container, container.getContext().getString(R.string.login_for_more_features), 5000).show();
+    }
+
+    /**
+     * Convert hour and minute from integer to beautiful string
+     *
+     * @param hour The hour
+     * @param minute The minutes
+     *
+     * @return The string of the hour and the minutes
+     */
+    static String hourAndMinutesFrom(int hour, int minute) {
+        if (!validHour(hour) || !validMinute(minute)) {
+            throw new IllegalArgumentException();
+        }
+        String strHour = String.valueOf(hour);
+        String strMinute = String.valueOf(minute);
+        if (strHour.length() < 2) {
+            strHour = "0" + strHour;
+        }
+        if (strMinute.length() < 2) {
+            strMinute = "0" + strMinute;
+        }
+        return strHour + ":" + strMinute;
+    }
+
+    /**
+     * Check whether a hour is valid
+     *
+     * @param hour The hour to check
+     *
+     * @return whether the hour is valid
+     */
+    static boolean validHour(int hour) {
+        return 0 <= hour && hour <= 23;
+    }
+
+    /**
+     * Check whether a minute is valid
+     *
+     * @param minute The minute to check
+     *
+     * @return whether the minute is valid
+     */
+    static boolean validMinute(int minute) {
+        return 0 <= minute && minute <= 59;
+    }
+
 }

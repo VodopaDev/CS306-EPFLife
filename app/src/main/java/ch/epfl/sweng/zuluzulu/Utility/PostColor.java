@@ -6,12 +6,12 @@ import java.util.List;
 
 public enum PostColor {
 
-    RED("#FF0000"),
-    GREEN("#32CD32"),
-    BLUE("#1E90FF"),
-    ORANGE("#FFA500"),
-    YELLOW("#F0E68C"),
-    PURPLE("#EE82EE");
+    RED("#DD5F60"),
+    GREEN("#9FC41A"),
+    BLUE("#06A4CA"),
+    CYAN("#8BBDB0"),
+    ORANGE("#FFB900"),
+    YELLOW("#FFB902");
 
     private String value;
 

@@ -22,9 +22,10 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.CoreMatchers.anything;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.StringStartsWith.startsWith;
 
 @RunWith(AndroidJUnit4.class)
 public class PostFragmentTest extends TestWithAuthenticatedAndFragment<PostFragment> {
@@ -66,8 +67,9 @@ public class PostFragmentTest extends TestWithAuthenticatedAndFragment<PostFragm
 
     @Test
     public void upAndDownButtonAreVisible() {
-        onData(anything()).inAdapterView(withId(R.id.posts_list_view)).onChildView(withId(R.id.post_up_button)).check(matches(isDisplayed()));
-        onData(anything()).inAdapterView(withId(R.id.posts_list_view)).onChildView(withId(R.id.post_down_button)).check(matches(isDisplayed()));
+        onData(instanceOf(Post.class)).atPosition(0).onChildView(withId(R.id.post_up_button)).check(matches(isDisplayed()));
+        onData(instanceOf(Post.class)).atPosition(0).onChildView(withId(R.id.post_down_button)).check(matches(isDisplayed()));
+
     }
 
     @Test
@@ -76,8 +78,6 @@ public class PostFragmentTest extends TestWithAuthenticatedAndFragment<PostFragm
         onView(withId(R.id.reply_list_view)).check(matches(isDisplayed()));
     }
 
-    // TODO: add conversation in the mockec firebase for these tests
-    /*
     @Test
     public void testUserCanUpDownPost() {
         onData(instanceOf(Post.class)).atPosition(0).onChildView(withId(R.id.post_up_button)).check(matches(isDisplayed()));
@@ -88,12 +88,22 @@ public class PostFragmentTest extends TestWithAuthenticatedAndFragment<PostFragm
     public void testUserCanDownPost() {
         onData(instanceOf(Post.class)).atPosition(0).onChildView(withId(R.id.post_down_button)).perform(click());
     }
-    */
 
     @Test
     public void testUserCanFilterPosts() {
         onView(withId(R.id.post_filter_time)).perform(click());
         onView(withId(R.id.post_filter_nbReplies)).perform(click());
         onView(withId(R.id.post_filter_nbUps)).perform(click());
+    }
+
+    @Test
+    public void testUserCanReachOtherProfileThroughPost() {
+        onView(withId(R.id.posts_list_view)).check(matches(isDisplayed()));
+        onView(withId(R.id.posts_new_post_button)).check(matches(isDisplayed()));
+        onData(instanceOf(Post.class)).atPosition(0).check(matches(isDisplayed()));
+        onData(instanceOf(Post.class)).atPosition(0).perform(ViewActions.longClick());
+        onView(withText(startsWith(SuperChatPostsFragment.VISIT_PROFILE_STRING))).check(matches(isDisplayed()));
+        onView(withText("Oui")).perform(click());
+        Utility.checkFragmentIsOpen(R.id.profile_fragment);
     }
 }

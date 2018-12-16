@@ -35,6 +35,10 @@ public class FirebaseMapDecorator {
         this.map = snap.getData();
     }
 
+    public Map<String, Object> getMap() {
+        return this.map;
+    }
+
     /**
      * Get an Integer-casted value from the adapted map
      *

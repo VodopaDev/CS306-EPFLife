@@ -6,27 +6,27 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.google.firebase.Timestamp;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.Comparator;
 
 import ch.epfl.sweng.zuluzulu.Adapters.ChatMessageArrayAdapter;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
+import ch.epfl.sweng.zuluzulu.Structure.SuperMessage;
 import ch.epfl.sweng.zuluzulu.User.User;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_POST_FRAGMENT;
+import static ch.epfl.sweng.zuluzulu.Structure.SuperMessage.increasingTimeComparator;
 
 /**
  * A {@link SuperChatPostsFragment} subclass.
@@ -34,10 +34,9 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_POST_FRAGMENT;
  */
 public class ChatFragment extends SuperChatPostsFragment {
     private static final int MAX_MESSAGE_LENGTH = 100;
-    private Button sendButton;
+    private ImageButton sendButton;
     private EditText textEdit;
 
-    private List<ChatMessage> messages = new ArrayList<>();
     private ChatMessageArrayAdapter adapter;
 
     public ChatFragment() {
@@ -59,9 +58,9 @@ public class ChatFragment extends SuperChatPostsFragment {
         postsButton = view.findViewById(R.id.posts_button);
 
         chatButton.setEnabled(false);
-        chatButton.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
+        chatButton.setBackgroundColor(getResources().getColor(R.color.white));
         postsButton.setEnabled(true);
-        postsButton.setBackgroundColor(getResources().getColor(R.color.white));
+        postsButton.setBackgroundColor(getResources().getColor(R.color.colorGrayDarkTransparent));
 
         sendButton.setEnabled(false);
 
@@ -76,6 +75,7 @@ public class ChatFragment extends SuperChatPostsFragment {
         setUpSendButton();
         setUpEditText();
         setUpPostsButton();
+        setUpProfileListener();
 
         return view;
     }
@@ -88,7 +88,7 @@ public class ChatFragment extends SuperChatPostsFragment {
             ChatMessage chatMessage = new ChatMessage(
                     DatabaseFactory.getDependency().getNewMessageId(channel.getId()),
                     channel.getId(),
-                    textEdit.getText().toString(),
+                    textEdit.getText().toString().trim().replaceAll("([\\n\\r]+\\s*)*$", ""),
                     Timestamp.now().toDate(),
                     anonymous ? "" : user.getFirstNames(),
                     user.getSciper());
@@ -130,32 +130,29 @@ public class ChatFragment extends SuperChatPostsFragment {
      */
     private void loadInitialMessages() {
         DatabaseFactory.getDependency().getMessagesFromChannel(channel.getId(), result -> {
-            Log.d("TEST", result.size() + " messages");
             messages.clear();
             messages.addAll(result);
-            Collections.sort(messages, (o1, o2) -> {
-                if (o1.getTime().before(o2.getTime()))
-                    return -1;
-                else
-                    return 1;
-            });
-            adapter.notifyDataSetChanged();
-            listView.setSelection(adapter.getCount() - 1);
+            sortMessages();
         });
     }
 
+    /**
+     * Set up the listener on database changes to update the list of messages
+     */
     private void setUpDataOnChangeListener() {
         DatabaseFactory.getDependency().updateOnNewMessagesFromChannel(channel.getId(), result -> {
             messages.clear();
             messages.addAll(result);
-            Collections.sort(messages, (o1, o2) -> {
-                if (o1.getTime().before(o2.getTime()))
-                    return -1;
-                else
-                    return 1;
-            });
-            adapter.notifyDataSetChanged();
-            listView.setSelection(adapter.getCount() - 1);
+            sortMessages();
         });
+    }
+
+    /**
+     * Sort the list of messages by time and notify adapter
+     */
+    private void sortMessages() {
+        Collections.sort(messages, (Comparator<SuperMessage>) increasingTimeComparator());
+        adapter.notifyDataSetChanged();
+        listView.setSelection(adapter.getCount() - 1);
     }
 }

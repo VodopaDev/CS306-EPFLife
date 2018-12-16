@@ -38,7 +38,7 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
     /**
      * got to add an event
      */
-    private void goToAddEvent(){
+    private void goToAddEvent() {
         onView(ViewMatchers.withId(R.id.event_add_button)).perform(click());
     }
 
@@ -50,29 +50,28 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment
         goToAddEvent();
         onView(withId(R.id.create_event_button)).perform(click());
 
-        onView(withId(R.id.add_event_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.add_event_fragment)).check(matches(isDisplayed()));
     }
 
     /**
      * Test if both fields Title and Description have too much text
      */
     @Test
-    public void testTooManyCharactersInBoth(){
+    public void testTooManyCharactersInBoth() {
         goToAddEvent();
         onView(withId(R.id.event_title)).perform(replaceText("This is a title much too long to be able to put it on the database"));
         onView(withId(R.id.long_desc_text)).perform(replaceText("Okay I am now writing a whole story about the life of this test. So once upon a time, a test was created, it was supposed to be super useful and everyone was happy, until they started it, and it failed. And then started hours and hours of debugging" +
                 " continuously until it passed. That was the story, thank you")).perform(closeSoftKeyboard());
         onView(withId(R.id.create_event_button)).perform(click());
-        onView(withId(R.id.add_event_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.add_event_fragment)).check(matches(isDisplayed()));
     }
-
 
 
     /**
      * create an event and controls that it is indeed created in the event list
      */
     @Test
-    public void testCreateEvent(){
+    public void testCreateEvent() {
         goToAddEvent();
         onView(withId(R.id.event_title)).perform(replaceText("Test Event"));
         onView(withId(R.id.long_desc_text)).perform(replaceText("this is an awesome test event")).perform(closeSoftKeyboard());

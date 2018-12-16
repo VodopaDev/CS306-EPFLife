@@ -2,9 +2,9 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/chat_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/chat_background"
     tools:context=".Fragments.ChatFragment">
 
     <include
@@ -23,6 +23,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="10.0sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -41,30 +42,38 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:background="@drawable/chat_message_edit_background"
         android:orientation="horizontal"
+        android:weightSum="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent">
 
         <EditText
             android:id="@+id/chat_message_edit"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.8"
-            android:ems="10"
+            android:layout_weight="0.85"
+            android:fadeScrollbars="false"
             android:hint="@string/chat_message"
-            android:inputType="text" />
+            android:inputType="textMultiLine"
+            android:minLines="1"
+            android:scrollbars="vertical" />
 
-        <Button
+        <ImageButton
             android:id="@+id/chat_send_button"
-            android:layout_width="wrap_content"
+            style="@android:style/Widget.ImageButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:text="@string/chat_send"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="0.15"
+            android:scaleType="fitCenter"
+            android:src="@drawable/send_message"
             android:textAllCaps="false"
-            android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textStyle="bold" />
+            android:textAppearance="@style/TextAppearance.AppCompat" />
+
     </LinearLayout>
 
 

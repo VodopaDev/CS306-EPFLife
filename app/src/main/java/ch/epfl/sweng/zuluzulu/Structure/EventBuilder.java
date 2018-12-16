@@ -6,7 +6,7 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.R;
 
 public final class EventBuilder {
-    private static final int SHORT_DESC_MAXLENGTH = 100;
+    private static final int SHORT_DESC_MAXLENGTH = 75;
 
     private String id;
     private String name;
@@ -53,8 +53,8 @@ public final class EventBuilder {
                 followers,
                 organizer,
                 place,
-                bannerUri,
                 iconUri,
+                bannerUri,
                 url_place_and_room,
                 website, contact,
                 category,

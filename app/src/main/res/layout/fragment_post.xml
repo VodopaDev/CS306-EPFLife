@@ -14,7 +14,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
-        android:id="@+id/relativeLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/post_fragment_liner_layout"
@@ -38,12 +37,12 @@
 
         <Button
             android:id="@+id/posts_new_post_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="13dp"
-            android:text="New Post" />
+            android:background="@drawable/add_post" />
 
     </RelativeLayout>
 

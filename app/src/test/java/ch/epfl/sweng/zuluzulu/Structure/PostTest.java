@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
-import ch.epfl.sweng.zuluzulu.Structure.Post;
 
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -32,9 +32,7 @@ public class PostTest {
     private static final String message1 = "James message";
     private static final String color1 = "#e8b30f";
     private static final Date time = new Date();
-    private static final int nbUps1 = 1;
-    private static final int nbResponses1 = 0;
-    private List<String> upScipers1 = Collections.singletonList(currentUserId);
+    private List<String> upScipers1 = singletonList(currentUserId);
     private List<String> downScipers1 = new ArrayList<>();
 
     private static final String id2 = "2";
@@ -43,10 +41,8 @@ public class PostTest {
     private static final String sciper2 = "222222";
     private static final String message2 = "Bond's message";
     private static final String color2 = "#f8b30f";
-    private static final int nbUps2 = -1;
-    private static final int nbResponses2 = 5;
     private List<String> upScipers2 = new ArrayList<>();
-    private List<String> downScipers2 = Collections.singletonList(currentUserId);
+    private List<String> downScipers2 = singletonList(currentUserId);
 
     private Post post1;
     private Post post2;
@@ -61,8 +57,7 @@ public class PostTest {
                 sciper1,
                 time,
                 color1,
-                nbResponses1,
-                nbUps1,
+                new ArrayList<>(),
                 new ArrayList<>(upScipers1),
                 new ArrayList<>(downScipers1)
         );
@@ -75,8 +70,7 @@ public class PostTest {
                 sciper2,
                 time,
                 color2,
-                nbResponses2,
-                nbUps2,
+                new ArrayList<>(singletonList(id2)),
                 new ArrayList<>(upScipers2),
                 new ArrayList<>(downScipers2)
         );
@@ -88,7 +82,7 @@ public class PostTest {
     }
 
     @Test
-    public void fmapConstructorTest(){
+    public void fmapConstructorTest() {
         Map<String, Object> map = new HashMap<>();
         map.put("id", id1);
         map.put("channel_id", channelId);
@@ -98,30 +92,14 @@ public class PostTest {
         map.put("time", time);
         map.put("sender_sciper", sciper1);
         map.put("color", color1);
-        map.put("nb_ups", 1L);
-        map.put("nb_responses", 1L);
+        map.put("replies", new ArrayList<>());
         map.put("up_scipers", upScipers1);
         map.put("down_scipers", downScipers1);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("id", id1);
-        result.put("channel_id", channelId);
-        result.put("original_post_id", originalPostId1);
-        result.put("sender_name", senderName1);
-        result.put("message", message1);
-        result.put("time", time);
-        result.put("sender_sciper", sciper1);
-        result.put("color", color1);
-        result.put("nb_ups", 1);
-        result.put("nb_responses", 1);
-        result.put("up_scipers", upScipers1);
-        result.put("down_scipers", downScipers1);
-
-        assertEquals(result, new Post(new FirebaseMapDecorator(map)).getData());
+        assertEquals(map, new Post(new FirebaseMapDecorator(map)).getData());
     }
 
     @Test
-    public void upvoteDownvote(){
+    public void upvoteDownvote() {
         assertTrue(post1.isUpByUser(currentUserId));
         assertFalse(post1.upvoteWithUser(currentUserId));
         assertFalse(post1.downvoteWithUser(currentUserId));
@@ -143,11 +121,10 @@ public class PostTest {
         assertEquals(message1, post1.getMessage());
         assertEquals(time, post1.getTime());
         assertEquals(color1, post1.getColor());
-        assertEquals(nbUps1, post1.getNbUps());
-        assertEquals(nbResponses1, post1.getNbResponses());
+        assertEquals(1, post1.getNbUps());
+        assertEquals(1, post2.getNbReplies());
+        assertEquals(singletonList(id2), post2.getReplies());
         assertEquals(channelId, post1.getChannelId());
-        assertEquals(upScipers1, post1.getUpScipers());
-        assertEquals(downScipers1, post1.getDownScipers());
         assertEquals(id1, post1.getId());
 
         assertTrue(post1.isReply());

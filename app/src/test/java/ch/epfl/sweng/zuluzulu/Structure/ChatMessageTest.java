@@ -57,13 +57,13 @@ public class ChatMessageTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void incorrectMapThrowException(){
-        new ChatMessage(new FirebaseMapDecorator(Collections.singletonMap("id","lol")));
+    public void incorrectMapThrowException() {
+        new ChatMessage(new FirebaseMapDecorator(Collections.singletonMap("id", "lol")));
     }
 
     @Test
-    public void fmapConstructorMapTest(){
-        HashMap<String,Object> map = new HashMap<>();
+    public void fmapConstructorMapTest() {
+        HashMap<String, Object> map = new HashMap<>();
         map.put("id", id1);
         map.put("channel_id", channelId);
         map.put("sender_sciper", sciper1);

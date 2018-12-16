@@ -3,22 +3,19 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -27,7 +24,6 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
-import ch.epfl.sweng.zuluzulu.User.UserRole;
 import ch.epfl.sweng.zuluzulu.tequila.AuthClient;
 import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
 import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
@@ -40,7 +36,7 @@ import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
  * Use the {@link LoginFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginFragment extends SuperFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class LoginFragment extends SuperFragment {
     public final static String TAG = "Login TAG";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -48,13 +44,12 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
     private View mProgressView;
     private View mLoginFormView;
 
+    private WebView webview;
+
     private String redirectURICode;
     private OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
     private String code;
     private User user;
-    private String codeRequestUrl;
-
-    private boolean codeUrlRequestWorks = false;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -81,38 +76,37 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        try {
-            redirectURICode = this.getArguments().getString(TAG);
-        } catch (NullPointerException e) {
-            redirectURICode = null;
-        }
-        if (redirectURICode != null) {
-            finishLogin();
-        }
 
-        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Login");
+        mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, getResources().getString(R.string.action_sign_in));
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        Button mSignInButton = view.findViewById(R.id.sign_in_button);
-        mSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
 
         mLoginFormView = view.findViewById(R.id.login_form);
         mProgressView = view.findViewById(R.id.login_progress);
+        webview = view.findViewById(R.id.webview);
+        webview.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView wView, String url) {
+                if (url.contains("code=")) {
+                    redirectURICode = url;
+                    showProgress(true);
+                    webview.setVisibility(View.INVISIBLE);
+                    finishLogin();
+                    return true;
+                }
+                return false;
+            }
+        });
 
-        if (codeUrlRequestWorks) {
-            showProgress(true);
-        }
+        showProgress(false);
+        String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
+        webview.loadUrl(codeRequestUrl);
 
         return view;
     }
@@ -121,21 +115,13 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
      * Is executed once the session is active
      * Log in the main activity
      */
-    private void transfer_main(boolean isWebView) {
+    private void transfer_main() {
         // Pass the user to the activity
-
-        if (isWebView) {
-            mListener.onFragmentInteraction(CommunicationTag.OPENING_WEBVIEW, codeRequestUrl);
-        } else {
-            Map<Integer, Object> toTransfer = new HashMap<Integer, Object>();
+            Map<Integer, Object> toTransfer = new HashMap<>();
             toTransfer.put(0, user);
-            toTransfer.put(1, code);
-            toTransfer.put(2, config);
             mListener.onFragmentInteraction(CommunicationTag.SET_USER, toTransfer);
             mListener.onFragmentInteraction(CommunicationTag.OPEN_MAIN_FRAGMENT, null);
-        }
-
-        showProgress(false);
+            showProgress(false);
     }
 
     private void finishLogin() {
@@ -144,46 +130,27 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
         Map<String, String> tokens;
         try {
             tokens = AuthServer.fetchTokens(config, code);
-        } catch (IOException e) {
-            return;
-        }
-
-        try {
             user = AuthServer.fetchUser(tokens.get("Tequila.profile"));
         } catch (IOException e) {
             return;
         }
 
-        codeUrlRequestWorks = true;
 
         updateUserAndFinishLogin();
     }
 
     private void updateUserAndFinishLogin() {
         DatabaseFactory.getDependency().getUserWithIdOrCreateIt(user.getSciper(), result -> {
-            List<String> receivedAssociations = result.getStringList("followed_associations");
-            List<String> receivedEvents = result.getStringList("followed_events");
-            List<String> receivedChannels = result.getStringList("followed_channels");
-
-            for (String role : result.getStringList("roles"))
-                user.addRole(UserRole.valueOf(role));
-            ((AuthenticatedUser) user).setFollowedAssociation(receivedAssociations);
-            ((AuthenticatedUser) user).setFollowedEvents(receivedEvents);
-            ((AuthenticatedUser) user).setFollowedChannels(receivedChannels);
-            transfer_main(false);
+            if(result == null) {
+                DatabaseFactory.getDependency().updateUser((AuthenticatedUser) user);
+            } else {
+                this.user = result;
+            }
+            transfer_main();
+            showProgress(false);
         });
     }
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid username, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
-    private void attemptLogin() {
-        showProgress(true);
-        codeRequestUrl = AuthClient.createCodeRequestUrl(config);
-        transfer_main(true);
-    }
 
     /**
      * Shows the progress UI and hides the login form.
@@ -219,21 +186,5 @@ public class LoginFragment extends SuperFragment implements LoaderManager.Loader
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
-    }
-
-    @NonNull
-    @Override
-    public android.support.v4.content.Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull android.support.v4.content.Loader<Cursor> loader, Cursor cursor) {
-
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull android.support.v4.content.Loader<Cursor> loader) {
-
     }
 }

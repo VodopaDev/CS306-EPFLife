@@ -9,8 +9,11 @@ import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
@@ -40,9 +43,10 @@ public class Utility {
 
     /**
      * Create a guest user
+     *
      * @return Return a Guest
      */
-    public static Guest createTestGuest(){
+    public static Guest createTestGuest() {
         return (new User.UserBuilder()).buildGuestUser();
     }
 
@@ -57,7 +61,7 @@ public class Utility {
         assert (user != null);
         assert (user.isConnected());
 
-        return (AuthenticatedUser)user;
+        return (AuthenticatedUser) user;
     }
 
     /**
@@ -71,7 +75,7 @@ public class Utility {
         assert (user != null);
         assert (user.hasRole(UserRole.ADMIN));
 
-        return (Admin)user;
+        return (Admin) user;
     }
 
     /**
@@ -136,18 +140,18 @@ public class Utility {
      *
      * @return UserBuilder
      */
-    private static User.UserBuilder createFilledUserBuilder() {
+    public static User.UserBuilder createFilledUserBuilder() {
         User.UserBuilder builder = new User.UserBuilder();
-        builder.setSciper("123456");
+        builder.setSciper("0");
         builder.setGaspar("gaspar");
         builder.setEmail("test@epfl.ch");
         builder.setSection("IN");
         builder.setSemester("BA5");
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
-        builder.setFollowedAssociations(Collections.singletonList("1"));
-        builder.setFollowedEvents(Arrays.asList("1", "2", "3"));
-        builder.setFollowedChannels(Collections.singletonList("1"));
+        builder.setFollowedAssociations(new ArrayList<>(Collections.singletonList("0")));
+        builder.setFollowedEvents(new ArrayList<>(Collections.singletonList("0")));
+        builder.setFollowedChannels(new ArrayList<>(Collections.singletonList("0")));
 
         return builder;
     }
@@ -159,67 +163,154 @@ public class Utility {
      */
     public static Channel defaultChannel() {
         return new Channel(
-                "1",
+                "0",
                 "Testing channel",
                 "The name is self explaining",
-                Collections.EMPTY_MAP,
+                new HashMap<>(),
                 null
         );
     }
 
-    public static Post defaultPost() {
+    public static Post defaultPost0() {
         return new Post(
-                "1",
-                "1",
+                "0",
+                "0",
                 null,
                 "mon message ne sert à rien",
                 "Nico",
-                "270103",
+                "1",
                 Timestamp.now().toDate(),
                 "#F0E68C",
-                0,
-                0,
-                Collections.EMPTY_LIST,
-                Collections.EMPTY_LIST
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+    }
+    public static Post defaultPost1() {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        return new Post(
+                "1",
+                "0",
+                null,
+                "mon message ne sert à rien",
+                "Nico",
+                "1",
+                cal.getTime(),
+                "#F0E68C",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>()
         );
     }
 
-    public static Association defaultAssociation(){
+    public static Association defaultAssociation() {
         return new Association(
-                "1",
+                "0",
                 "Agepoly",
                 "Small description",
                 "A bit longer description without a lot of details",
                 null,
                 null,
-                Collections.singletonList("1"),
-                "1"
+                Collections.singletonList("0"),
+                "0"
         );
     }
 
-    public static Event defaultEvent(){
+    public static Event defaultEvent() {
         return new EventBuilder()
-                .setId("1")
+                .setId("0")
                 .setName("Fiesta time")
-                .setChannelId("1")
-                .setAssosId("1")
+                .setChannelId("0")
+                .setAssosId("0")
                 .setShortDesc("Is this a real event?")
                 .setLongDesc("Of course not, you should check this beautiful description")
-                .setDate(new EventDate(new Date(10000000), new Date(10500000)))
-                .setFollowers(new ArrayList<>())
+                .setDate(new EventDate(new Date(1514764800000L), new Date(1517443200000L)))
+                .setFollowers(Collections.singletonList("0"))
                 .setOrganizer("I'm the organizer")
                 .setPlace("Not at EPFL")
                 .setIconUri(null)
                 .setBannerUri(null)
                 .setUrlPlaceAndRoom("myplace")
-                .setWebsite("www.fakefiesta.com")
+                .setWebsite("https://www.epfl.ch")
                 .setContact("Nico")
                 .setCategory("no category")
                 .setSpeaker("Nico")
                 .build();
     }
 
-    public static ChatMessage defaultMessage() {
-        return new ChatMessage("1", "1", "message", new Date(), "sender", "111111");
+    public static Event currentTimeEvent() {
+        return new EventBuilder()
+                .setId("0")
+                .setName("Current time")
+                .setChannelId("0")
+                .setAssosId("0")
+                .setShortDesc("Is this a real event?")
+                .setLongDesc("Of course not, you should check this beautiful description")
+                .setDate(new EventDate(new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis())))
+                .setFollowers(Collections.singletonList("0"))
+                .setOrganizer("I'm the organizer")
+                .setPlace("Not at EPFL")
+                .setIconUri(null)
+                .setBannerUri(null)
+                .setUrlPlaceAndRoom("myplace")
+                .setWebsite("https://www.epfl.ch")
+                .setContact("Nico")
+                .setCategory("no category")
+                .setSpeaker("Nico")
+                .build();
+    }
+
+    public static ChatMessage defaultMessage0() {
+        return new ChatMessage("0", "0", "message?", new Date(2000), "auth", "0");
+    }
+
+    public static ChatMessage defaultMessage1() {
+        return new ChatMessage("1", "0", "message!", new Date(20000), "admin", "1");
+  }
+
+    public static Map<String, Object> createMapWithAll() {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("id", "");
+        map.put("name", "");
+        map.put("short_description", "");
+        map.put("long_description", "");
+        map.put("category", "");
+        map.put("icon_uri", "");
+        map.put("banner_uri", "");
+        map.put("followers", "");
+        map.put("channel_id", "");
+        map.put("association_id", "");
+        map.put("start_date", "");
+        map.put("end_date", "");
+        map.put("place", "");
+        map.put("organizer", "");
+        map.put("url_place_and_room", "");
+        map.put("website", "");
+        map.put("contact", "");
+        map.put("speaker", "");
+        map.put("followed_associations", new ArrayList<String>());
+        map.put("followed_events", new ArrayList<String>());
+        map.put("followed_channels", new ArrayList<String>());
+        map.put("roles", Collections.singletonList("USER"));
+        map.put("first_name", "");
+        map.put("last_name", "");
+        map.put("section", "");
+        map.put("semester", "");
+        map.put("gaspar", "");
+        map.put("email", "");
+        map.put("sciper", "");
+        map.put("sender_name", "");
+        map.put("sender_sciper", "");
+        map.put("message", "");
+        map.put("time", new Date());
+        map.put("restrictions", "");
+        map.put("color", "");
+        map.put("nb_ups", 1L);
+        map.put("nb_responses", 1L);
+        map.put("up_scipers", new ArrayList<String>());
+        map.put("down_scipers", new ArrayList<String>());
+
+        return map;
     }
 }

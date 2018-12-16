@@ -2,190 +2,107 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/association_detail_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.AssociationDetailFragment">
 
-    <ImageView
-        android:id="@+id/association_detail_banner"
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="@android:color/holo_red_dark"
-        android:clickable="false"
-        android:contentDescription="@string/card_association_image_description"
-        android:scaleType="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/association_detail_icon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_gravity="bottom|start"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:adjustViewBounds="false"
-        android:background="@color/colorWhiteTransparent"
-        android:clickable="false"
-        android:contentDescription="@string/card_association_image_description"
-        app:layout_constraintBottom_toBottomOf="@+id/association_detail_banner"
-        app:layout_constraintStart_toStartOf="@+id/association_detail_banner" />
-
-    <ImageButton
-        android:id="@+id/association_detail_fav"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@color/colorTransparent"
-        android:clickable="true"
-        android:contentDescription="@string/association_detail_fav_button"
-        android:focusable="true"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/association_detail_banner"
-        app:layout_constraintEnd_toEndOf="@+id/association_detail_banner" />
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/association_detail_banner">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/association_detail_upcoming_event"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="@color/colorGrayDarkTransparent">
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginBottom="2dp"
-                android:layout_marginEnd="2dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="2dp"
-                android:src="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/association_detail_upcoming_event_icon"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:src="@android:drawable/ic_delete"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/association_detail_upcoming_event_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/colorGrayDark"
-                android:textSize="24sp"
-                app:layout_constraintStart_toEndOf="@+id/association_detail_upcoming_event_icon"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/association_detail_upcoming_event_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/association_detail_upcoming_event_icon" />
-        </android.support.constraint.ConstraintLayout>
-
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="10dp">
-
-        </android.support.constraint.ConstraintLayout>
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/association_detail_chat"
+        <ImageView
+            android:id="@+id/association_detail_banner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorGrayDarkTransparent">
+            android:background="@android:color/holo_red_dark"
+            android:clickable="false"
+            android:contentDescription="@string/card_association_image_description"
+            android:scaleType="center" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/background2"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginBottom="2dp"
-                android:layout_marginEnd="2dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="2dp"
-                android:src="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/association_detail_chat_icon"
+                android:id="@+id/association_detail_icon"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:layout_marginBottom="8dp"
+                android:layout_gravity="bottom|start"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_chat"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:background="@android:color/white"
+                android:clickable="false"
+                android:contentDescription="@string/card_association_image_description" />
 
-            <TextView
-                android:id="@+id/association_detail_chat_name"
+            <Space
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:textColor="@color/colorGrayDark"
-                android:textSize="24sp"
-                app:layout_constraintStart_toEndOf="@+id/association_detail_chat_icon"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
-            <TextView
-                android:id="@+id/association_detail_chat_desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@+id/background2"
-                app:layout_constraintStart_toEndOf="@+id/association_detail_chat_icon" />
+            <ImageButton
+                android:id="@+id/association_detail_fav"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="bottom"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/fav_off"
+                android:clickable="true"
+                android:contentDescription="@string/association_detail_fav_button"
+                android:focusable="true" />
 
-        </android.support.constraint.ConstraintLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:lineSpacingExtra="4sp"
+            android:text="@string/description_associaiton_longue" />
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/association_detail_events_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/ev_nements" />
+
+        <Button
+            android:id="@+id/association_detail_chat_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/chat" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

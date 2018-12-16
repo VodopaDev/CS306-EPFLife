@@ -1,5 +1,7 @@
 package ch.epfl.sweng.zuluzulu.User;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,9 +34,9 @@ public class AuthenticatedUser extends User {
         this.semester = semester;
         this.firstNames = firstNames;
         this.lastNames = lastNames;
-        this.followedAssociations = followedAssociations;
-        this.followedChannels = followedChannels;
-        this.followedEvents = followedEvents;
+        this.followedAssociations = new ArrayList<>(followedAssociations);
+        this.followedChannels = new ArrayList<>(followedChannels);
+        this.followedEvents = new ArrayList<>(followedEvents);
         addRole(UserRole.USER);
     }
 
@@ -60,7 +62,7 @@ public class AuthenticatedUser extends User {
 
     public void setFollowedAssociation(List<String> associationsIds) {
         assert (associationsIds != null);
-        followedAssociations = associationsIds;
+        followedAssociations = new ArrayList<>(associationsIds);
     }
 
     public List<String> getFollowedAssociations() {
@@ -93,7 +95,7 @@ public class AuthenticatedUser extends User {
 
     public void setFollowedEvents(List<String> eventsIds) {
         assert (eventsIds != null);
-        followedEvents = eventsIds;
+        followedEvents = new ArrayList<>(eventsIds);
     }
 
     //----- Channel related methods -----\\
@@ -122,7 +124,7 @@ public class AuthenticatedUser extends User {
 
     public void setFollowedChannels(List<String> channelsIds) {
         assert (channelsIds != null);
-        followedChannels = channelsIds;
+        followedChannels = new ArrayList<>(channelsIds);
     }
 
     @Override
@@ -166,7 +168,7 @@ public class AuthenticatedUser extends User {
     }
 
     public Map<String, Object> getData() {
-        ArrayList<String> roles = new ArrayList<>();
+        List<String> roles = new ArrayList<>();
         for (UserRole role : this.roles)
             roles.add(role.name());
 
@@ -175,9 +177,17 @@ public class AuthenticatedUser extends User {
         map.put("followed_events", followedEvents);
         map.put("followed_channels", followedChannels);
         map.put("roles", roles);
+        map.put("first_name", firstNames);
+        map.put("last_name", lastNames);
+        map.put("section", section);
+        map.put("semester", semester);
+        map.put("gaspar", gaspar);
+        map.put("email", email);
+        map.put("sciper", sciper);
         return map;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return firstNames + " " + lastNames

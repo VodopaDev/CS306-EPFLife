@@ -10,6 +10,10 @@ import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseCollection;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.DatabaseDocument;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.OperationWithFirebaseMap;
+import ch.epfl.sweng.zuluzulu.Firebase.FirebaseMapDecorator;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
+import ch.epfl.sweng.zuluzulu.Utility;
 
 public class DocumentMock implements DatabaseDocument {
     private static final String TAG = "DocumentMock";
@@ -18,11 +22,11 @@ public class DocumentMock implements DatabaseDocument {
     public Task<Void> set(@NonNull Map<String, Object> data) {
 
         // Just print instead of pushing to firebase
-        for(String key : data.keySet()) {
+        for (String key : data.keySet()) {
             Log.d(TAG, key);
         }
 
-        return new TaskMock<Void>();
+        return new TaskMock<>();
     }
 
     @Override
@@ -37,9 +41,15 @@ public class DocumentMock implements DatabaseDocument {
     }
 
     @Override
-    public Task<DocumentSnapshot> get() {
+    public Task<DocumentSnapshot> getAndAddOnSuccessListener(OperationWithFirebaseMap listener) {
+        Map<String, Object> map = Utility.createMapWithAll();
+
+        FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
+        listener.apply(fmap);
+        IdlingResourceFactory.incrementCountingIdlingResource();
         return new TaskMock<>();
     }
+
 
     @Override
     public DatabaseCollection collection(String messages) {

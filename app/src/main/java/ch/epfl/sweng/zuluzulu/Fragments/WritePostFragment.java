@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,7 +20,6 @@ import android.widget.EditText;
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
@@ -74,7 +74,7 @@ public class WritePostFragment extends SuperFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_write_post, container, false);
 
         color = PostColor.getRandomColor();
@@ -104,13 +104,12 @@ public class WritePostFragment extends SuperFragment {
                     DatabaseFactory.getDependency().getNewPostId(channel.getId()),
                     channel.getId(),
                     null,
-                    editText.getText().toString(),
+                    editText.getText().toString().trim().replaceAll("([\\n\\r]+\\s*)*$", ""),
                     anonymous ? "" : user.getFirstNames(),
                     user.getSciper(),
                     Timestamp.now().toDate(),
                     color.getValue(),
-                    0,
-                    0,
+                    new ArrayList<>(),
                     new ArrayList<>(),
                     new ArrayList<>()
             );

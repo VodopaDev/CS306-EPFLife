@@ -43,7 +43,7 @@ public class UserTest {
         builder.setEmail("admin@epfl.ch");
         builder.setSection("IN");
         builder.setSemester("BA5");
-        builder.setSciper("121212");
+        builder.setSciper("0");
         builder.setGaspar("admin");
         builder.setFirst_names("admin_first_name");
         builder.setLast_names("admin_last_name");
@@ -74,7 +74,7 @@ public class UserTest {
         assertEquals(user.getEmail(), "test@epfl.ch");
         assertEquals(user.getSection(), "IN");
         assertEquals(user.getSemester(), "BA5");
-        assertEquals(user.getSciper(), "123456");
+        assertEquals(user.getSciper(), "0");
         assertEquals(user.getGaspar(), "gaspar");
         assertEquals(user.getFirstNames(), "James");
         assertEquals(user.getLastNames(), "Bond");
@@ -105,7 +105,7 @@ public class UserTest {
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail("fake_mail");
         builder.setSection("section");
-        builder.setSciper("1212");
+        builder.setSciper("0");
         builder.setGaspar("test");
         builder.setFirst_names("first_name");
         builder.setLast_names("last_name");
@@ -127,7 +127,7 @@ public class UserTest {
         User user = Utility.createTestUser();
 
         String expected = "James Bond"
-                + "\nsciper: 123456"
+                + "\nsciper: 0"
                 + "\ngaspar: gaspar"
                 + "\nemail: test@epfl.ch"
                 + "\nsection: IN"

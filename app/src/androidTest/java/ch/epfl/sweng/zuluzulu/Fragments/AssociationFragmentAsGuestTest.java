@@ -37,7 +37,7 @@ public class AssociationFragmentAsGuestTest extends TestWithGuestAndFragment<Ass
     }
 
     @Test
-    public void guestCantClickOnFavorites(){
+    public void guestCantClickOnFavorites() {
         onView(withId(R.id.association_fragment_fav_button)).perform(ViewActions.click());
     }
 

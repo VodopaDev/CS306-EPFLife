@@ -1,6 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Firebase;
 
-import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.espresso.IdlingRegistry;
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.Before;
@@ -8,14 +8,11 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
 
 import ch.epfl.sweng.zuluzulu.Database.FirebaseMock;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.FirebaseFactory;
+import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.MainActivity;
-import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.Utility;
 
 import static org.junit.Assert.*;
@@ -25,30 +22,33 @@ public class FirebaseProxyTest {
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class);
 
-    FirebaseProxy proxy;
+    private FirebaseProxy proxy;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         FirebaseFactory.setDependency(new FirebaseMock());
-
+        IdlingRegistry.getInstance().register(IdlingResourceFactory.getCountingIdlingResource());
         proxy = FirebaseProxy.getInstance();
     }
 
     @Test
     public void getAllAssociations() {
-        proxy.getAllAssociations(x -> {});
+        proxy.getAllAssociations(x -> {
+        });
     }
 
     @Test
     public void getAssociationFromId() {
-        proxy.getAssociationFromId("1", x -> {});
+        proxy.getAssociationFromId("1", x -> {
+        });
     }
 
     @Test
     public void getAssociationsFromIds() {
         ArrayList<String> list = new ArrayList();
         list.add("1");
-        proxy.getAssociationsFromIds(list, x -> {});
+        proxy.getAssociationsFromIds(list, x -> {
+        });
     }
 
     @Test
@@ -63,66 +63,106 @@ public class FirebaseProxyTest {
 
     @Test
     public void getAllEvents() {
-        proxy.getAllEvents(x -> {});
+        proxy.getAllEvents(x -> {
+        });
     }
 
     @Test
     public void getEventFromId() {
-        proxy.getEventFromId("1", x -> {});
+        proxy.getEventFromId("1", x -> {
+        });
     }
 
     @Test
     public void getEventsFromIds() {
         ArrayList<String> list = new ArrayList();
         list.add("1");
-        proxy.getEventsFromIds(list, x -> {});
+        proxy.getEventsFromIds(list, x -> {
+        });
     }
 
     @Test
     public void getAllChannels() {
-        proxy.getAllChannels(x -> {});
+        proxy.getAllChannels(x -> {
+        });
     }
 
     @Test
     public void getChannelFromId() {
-        proxy.getChannelFromId("1", x -> {});
+        proxy.getChannelFromId("1", x -> {
+        });
     }
 
     @Test
     public void getChannelsFromIds() {
         ArrayList<String> list = new ArrayList();
         list.add("1");
-        proxy.getChannelsFromIds(list, x -> {});
+        proxy.getChannelsFromIds(list, x -> {
+        });
     }
 
     @Test
     public void getMessagesFromChannel() {
-        proxy.getMessagesFromChannel("1", x -> {});
+        proxy.getMessagesFromChannel("1", x -> {
+        });
     }
 
     @Test
     public void getPostsFromChannel() {
-        proxy.getPostsFromChannel("1", x -> {});
+        proxy.getPostsFromChannel("1", x -> {
+        });
+    }
+
+    @Test
+    public void addChannelToUserFollowedChannels() {
+        proxy.addChannelToUserFollowedChannels(Utility.defaultChannel(), Utility.createTestAuthenticated());
+    }
+
+    @Test
+    public void addEventToUserFollowedEvents() {
+        proxy.addEventToUserFollowedEvents(Utility.defaultEvent(), Utility.createTestAuthenticated());
+    }
+
+    @Test
+    public void addAssociationToUserFollowedAssociations() {
+        proxy.addAssociationToUserFollowedAssociations(Utility.defaultAssociation(), Utility.createTestAuthenticated());
+    }
+
+    @Test
+    public void removeChannelFromUserFollowedChannels() {
+        proxy.removeChannelFromUserFollowedChannels(Utility.defaultChannel(), Utility.createTestAuthenticated());
+    }
+
+    @Test
+    public void removeEventFromUserFollowedEvents() {
+        proxy.removeEventFromUserFollowedEvents(Utility.defaultEvent(), Utility.createTestAuthenticated());
+    }
+
+    @Test
+    public void removeAssociationFromUserFollowedAssociations() {
+        proxy.removeAssociationFromUserFollowedAssociations(Utility.defaultAssociation(), Utility.createTestAuthenticated());
     }
 
     @Test
     public void getRepliesFromPost() {
-        proxy.getRepliesFromPost("1", "1", x -> {});
+        proxy.getRepliesFromPost("1", "1", x -> {
+        });
     }
 
     @Test
     public void updateOnNewMessagesFromChannel() {
-        proxy.updateOnNewMessagesFromChannel("1", x -> {});
+        proxy.updateOnNewMessagesFromChannel("1", x -> {
+        });
     }
 
     @Test
     public void addPost() {
-        proxy.addPost(Utility.defaultPost());
+        proxy.addPost(Utility.defaultPost0());
     }
 
     @Test
     public void addReply() {
-        proxy.addReply(Utility.defaultPost());
+        proxy.addReply(Utility.defaultPost0());
     }
 
     @Test
@@ -132,12 +172,12 @@ public class FirebaseProxyTest {
 
     @Test
     public void updatePost() {
-        proxy.updatePost(Utility.defaultPost());
+        proxy.updatePost(Utility.defaultPost0());
     }
 
     @Test
     public void addMessage() {
-        proxy.addMessage(Utility.defaultMessage());
+        proxy.addMessage(Utility.defaultMessage0());
     }
 
     @Test
@@ -146,8 +186,20 @@ public class FirebaseProxyTest {
     }
 
     @Test
+    public void getAllUsers() {
+        proxy.getAllUsers(x -> {
+        });
+    }
+
+    @Test
+    public void updateUserRole() {
+        proxy.updateUserRole("0", new ArrayList<>());
+    }
+
+    @Test
     public void getUserWithIdOrCreateIt() {
-        proxy.getUserWithIdOrCreateIt("1", x -> {});
+        proxy.getUserWithIdOrCreateIt("1", x -> {
+        });
     }
 
     @Test

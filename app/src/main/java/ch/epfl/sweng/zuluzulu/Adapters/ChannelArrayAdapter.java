@@ -54,7 +54,7 @@ public class ChannelArrayAdapter extends ArrayAdapter<Channel> {
         if (!isClickable) {
             TextView distanceView = view.findViewById(R.id.channel_distance);
             int distance = (int) Math.round(currentChannel.getDistance());
-            distanceView.setText("You are close to the channel (" + distance + "m).");
+            distanceView.setText("Tu es proche du canal (" + distance + "m).");
         }
 
         return view;

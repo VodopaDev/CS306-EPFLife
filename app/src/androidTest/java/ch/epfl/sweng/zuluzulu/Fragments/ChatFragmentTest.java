@@ -9,15 +9,22 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAuthenticatedAndFragment;
 import ch.epfl.sweng.zuluzulu.Utility;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.StringStartsWith.startsWith;
 
 @RunWith(AndroidJUnit4.class)
 public class ChatFragmentTest extends TestWithAuthenticatedAndFragment<ChatFragment> {
@@ -62,5 +69,23 @@ public class ChatFragmentTest extends TestWithAuthenticatedAndFragment<ChatFragm
     public void testUserCanSendMessage() {
         onView(withId(R.id.chat_message_edit)).perform(ViewActions.typeText("test")).perform(ViewActions.closeSoftKeyboard());
         onView(withId(R.id.chat_send_button)).perform(ViewActions.click());
+    }
+
+    @Test
+    public void testUserCanVisitOtherProfileByClickingOnChatMessage() {
+        onView(withId(R.id.chat_list_view)).check(matches(isDisplayed()));
+        onData(instanceOf(ChatMessage.class)).atPosition(1).check(matches(isDisplayed()));
+        onData(instanceOf(ChatMessage.class)).atPosition(1).perform(ViewActions.longClick());
+        onView(withText(startsWith(SuperChatPostsFragment.VISIT_PROFILE_STRING))).check(matches(isDisplayed()));
+        onView(withText("Oui")).perform(click());
+        Utility.checkFragmentIsOpen(R.id.profile_fragment);
+    }
+
+    @Test
+    public void testUserCannotReachOwnProfile() {
+        onView(withId(R.id.chat_list_view)).check(matches(isDisplayed()));
+        onData(instanceOf(ChatMessage.class)).atPosition(0).check(matches(isDisplayed()));
+        onData(instanceOf(ChatMessage.class)).atPosition(0).perform(ViewActions.longClick());
+        onView(withText(startsWith(SuperChatPostsFragment.VISIT_PROFILE_STRING))).check(doesNotExist());
     }
 }

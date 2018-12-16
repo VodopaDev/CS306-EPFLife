@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.Fragments.AssociationsGeneratorFragment;
+import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.Utility;
 
@@ -60,7 +60,7 @@ public class UrlHandlerTest {
         // Create the object
         /*
          * In my async task, I give to it the lambda function that will be executed.
-         * Here it's a test made function. In the Fragment, it's the function that will get the datas
+         * Here it's a test made function. In the Fragment, it's the function that will getAndAddOnSuccessListener the datas
          * and print them in the view.
          *
          * This test function handler() will be executed when the action is finished
@@ -141,7 +141,7 @@ public class UrlHandlerTest {
     }
 
     /**
-     * This function will get the datas
+     * This function will getAndAddOnSuccessListener the datas
      *
      * @param result arrayList
      * @return Void
@@ -149,7 +149,7 @@ public class UrlHandlerTest {
     private Void handler(List<String> result) {
         // Do any logic. Here we want result not to be null
         succes = false;
-        if(result != null && !result.isEmpty()){
+        if (result != null && !result.isEmpty()) {
             succes = result.get(0).toLowerCase().contains("lauzhack");
         }
 
