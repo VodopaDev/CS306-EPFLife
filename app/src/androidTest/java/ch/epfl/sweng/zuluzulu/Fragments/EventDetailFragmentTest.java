@@ -38,7 +38,7 @@ public class EventDetailFragmentTest extends TestWithAuthenticatedAndFragment<Ev
     @Override
     public void initFragment() {
         DatabaseFactory.setDependency(new MockedProxy());
-        fragment = EventDetailFragment.newInstance(user, Utility.defaultEvent());
+        fragment = EventDetailFragment.newInstance(user, Utility.defaultEvent().build());
     }
 
     @Test

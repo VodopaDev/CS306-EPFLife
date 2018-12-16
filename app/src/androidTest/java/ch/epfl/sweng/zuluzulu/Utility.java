@@ -2,6 +2,7 @@ package ch.epfl.sweng.zuluzulu;
 
 import android.content.Intent;
 import android.support.test.espresso.contrib.DrawerActions;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.view.Gravity;
 
@@ -15,6 +16,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.MainActivity;
+import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Structure.Association;
 import ch.epfl.sweng.zuluzulu.Structure.Channel;
 import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
@@ -103,7 +106,7 @@ public class Utility {
      * Open the menu from the mainActivity
      */
     public static void openMenu() {
-        onView(withId(R.id.drawer_layout))
+        onView(ViewMatchers.withId(R.id.drawer_layout))
                 .check(matches(isClosed(Gravity.LEFT)))
                 .perform(DrawerActions.open());
     }
@@ -217,7 +220,7 @@ public class Utility {
         );
     }
 
-    public static Event defaultEvent() {
+    public static EventBuilder defaultEvent() {
         return new EventBuilder()
                 .setId("0")
                 .setName("Fiesta time")
@@ -235,11 +238,10 @@ public class Utility {
                 .setWebsite("https://www.epfl.ch")
                 .setContact("Nico")
                 .setCategory("no category")
-                .setSpeaker("Nico")
-                .build();
+                .setSpeaker("Nico");
     }
 
-    public static Event currentTimeEvent() {
+    public static EventBuilder currentTimeEvent() {
         return new EventBuilder()
                 .setId("0")
                 .setName("Current time")
@@ -257,8 +259,7 @@ public class Utility {
                 .setWebsite("https://www.epfl.ch")
                 .setContact("Nico")
                 .setCategory("no category")
-                .setSpeaker("Nico")
-                .build();
+                .setSpeaker("Nico");
     }
 
     public static ChatMessage defaultMessage0() {
