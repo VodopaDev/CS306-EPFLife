@@ -61,7 +61,7 @@ public class FirebaseProxyTest {
 
     @Test
     public void addEvent() {
-        proxy.addEvent(Utility.defaultEvent());
+        proxy.addEvent(Utility.defaultEvent().build());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class FirebaseProxyTest {
 
     @Test
     public void addEventToUserFollowedEvents() {
-        proxy.addEventToUserFollowedEvents(Utility.defaultEvent(), Utility.createTestAuthenticated());
+        proxy.addEventToUserFollowedEvents(Utility.defaultEvent().build(), Utility.createTestAuthenticated());
     }
 
     @Test
@@ -138,7 +138,7 @@ public class FirebaseProxyTest {
 
     @Test
     public void removeEventFromUserFollowedEvents() {
-        proxy.removeEventFromUserFollowedEvents(Utility.defaultEvent(), Utility.createTestAuthenticated());
+        proxy.removeEventFromUserFollowedEvents(Utility.defaultEvent().build(), Utility.createTestAuthenticated());
     }
 
     @Test
