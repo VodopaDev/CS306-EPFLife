@@ -5,6 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 
@@ -26,7 +27,7 @@ public abstract class TestWithUserAndFragment<U extends User, F extends SuperFra
     public final ActivityTestRule<MainActivity> mActivityRule =
             new ActivityTestRule<>(MainActivity.class, false, false);
 
-    @Before
+    @BeforeClass
     public void init() {
         DatabaseFactory.setDependency(new MockedProxy());
         // Add the user
