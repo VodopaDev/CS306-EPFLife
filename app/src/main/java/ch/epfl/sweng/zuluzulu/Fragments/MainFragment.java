@@ -131,7 +131,7 @@ public class MainFragment extends SuperFragment {
         events_array.clear();
         events_adapter.notifyDataSetChanged();
 
-        LinearLayout progressBar  = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress_event);
+        LinearLayout progressBar = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress_event);
         progressBar.setVisibility(View.VISIBLE);
 
         DatabaseFactory.getDependency().getEventsFromToday(result -> {
@@ -150,7 +150,7 @@ public class MainFragment extends SuperFragment {
         associations_array.clear();
         associations_adapter.notifyDataSetChanged();
 
-        LinearLayout progressBar  = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress_assos);
+        LinearLayout progressBar = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress_assos);
         progressBar.setVisibility(View.VISIBLE);
 
         DatabaseFactory.getDependency().getAllAssociations(result -> {
@@ -189,7 +189,7 @@ public class MainFragment extends SuperFragment {
         associations_array.clear();
         associations_adapter.notifyDataSetChanged();
 
-        LinearLayout progressBar  = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress_user_assos);
+        LinearLayout progressBar = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress_user_assos);
         progressBar.setVisibility(View.VISIBLE);
 
         DatabaseFactory.getDependency().getAllAssociations(result -> {
@@ -212,7 +212,7 @@ public class MainFragment extends SuperFragment {
         events_array.clear();
         events_adapter.notifyDataSetChanged();
 
-        LinearLayout progressBar  = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress_user_event);
+        LinearLayout progressBar = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress_user_event);
         progressBar.setVisibility(View.VISIBLE);
 
         DatabaseFactory.getDependency().getAllEvents(result -> {

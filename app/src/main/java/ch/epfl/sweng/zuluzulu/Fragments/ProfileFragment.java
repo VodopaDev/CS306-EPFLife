@@ -54,6 +54,8 @@ public class ProfileFragment extends SuperFragment {
     private static final int CAMERA_CODE = 1234;
     private static final int W_STORAGE_PERM_CODE = 260;
 
+    private int internal = 0;
+
     private AuthenticatedUser userData;
 
     private boolean profileOwner;
@@ -135,7 +137,7 @@ public class ProfileFragment extends SuperFragment {
         pic = view.findViewById(R.id.profile_image);
 
         View add_picture_view = view.findViewById(R.id.profile_add_photo);
-        if(profileOwner) {
+        if (profileOwner) {
             add_picture_view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -172,12 +174,18 @@ public class ProfileFragment extends SuperFragment {
      * @return if the permissions are granted
      */
     private boolean askPermissions() {
+
         boolean storage_write = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         boolean storage_read = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         if (!storage_write) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
         } else if (!storage_read) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
+        }
+
+        if (!(storage_read && storage_write) && internal < 2) {
+            internal++;
+            askPermissions();
         }
 
         return storage_read && storage_write;
@@ -269,7 +277,7 @@ public class ProfileFragment extends SuperFragment {
      */
     private void setRescaledImage(String path) {
         int targetH = pic.getHeight();
-        if(targetH == 0){
+        if (targetH == 0) {
             targetH = 50;
         }
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -285,7 +293,7 @@ public class ProfileFragment extends SuperFragment {
         bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
-        if(bmOptions.outHeight != 0) {
+        if (bmOptions.outHeight != 0) {
             pic.setImageBitmap(bitmap);
         }
     }

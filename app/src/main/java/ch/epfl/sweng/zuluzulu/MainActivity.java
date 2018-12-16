@@ -390,7 +390,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public void onBackPressed() {
         if (!previous_fragments.empty()) {
             MenuItem checkedItem = navigationView.getCheckedItem();
-            if(checkedItem != null && checkedItem.getItemId() != R.id.nav_main && previous_fragments.peek() instanceof MainFragment){
+            if (checkedItem != null && checkedItem.getItemId() != R.id.nav_main && previous_fragments.peek() instanceof MainFragment) {
                 navigationView.getCheckedItem().setChecked(false);
                 navigationView.setCheckedItem(R.id.nav_main);
             }
