@@ -24,7 +24,8 @@ public class LoginTest extends TestWithGuestAndFragment<LoginFragment> {
     }
 
     /**
-     * Test connection is accepted with correct credentials
+     * Test connection is refuesd with bad credentials
+     * Actually just test the app doesn't crash.
      */
     @Test
     public void isUrlRedirectedToMain() {
