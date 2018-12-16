@@ -146,7 +146,7 @@ public class LoginFragment extends SuperFragment {
 
     private void updateUserAndFinishLogin() {
         DatabaseFactory.getDependency().getUserWithIdOrCreateIt(user.getSciper(), result -> {
-            if (result == null) {
+            if (result == null && user.isConnected()) {
                 DatabaseFactory.getDependency().updateUser((AuthenticatedUser) user);
             } else {
                 this.user = result;
