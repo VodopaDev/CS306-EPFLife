@@ -48,7 +48,7 @@
 
     <!-- Chat related -->
     <string name="chat_send">Envoyer</string>
-    <string name="chat_message">Message</string>
+    <string name="chat_message">Taper message</string>
 
     <!-- Settings related -->
     <string name="settings_dark_mode">Dark Theme</string>
@@ -118,5 +118,6 @@
     </plurals>
 
     <string name="login_for_more_features">Connecte-toi pour avoir accès à toutes les options</string>
+    <string name="bonnes_ondes_seulement">Bonnes ondes seulement...</string>
 
 </resources>

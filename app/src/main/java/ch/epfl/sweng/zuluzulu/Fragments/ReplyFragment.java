@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.google.firebase.Timestamp;
 
@@ -36,7 +37,7 @@ public class ReplyFragment extends SuperChatPostsFragment {
     private PostArrayAdapter adapter;
 
     private EditText replyText;
-    private Button sendButton;
+    private ImageButton sendButton;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     public ReplyFragment() {
