@@ -9,7 +9,6 @@
         android:id="@+id/swiperefresh_replies"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,12 +29,8 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="60dp"
+        android:background="@android:color/white"
         android:orientation="horizontal"
         android:weightSum="1"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -44,25 +39,32 @@
 
         <EditText
             android:id="@+id/reply_text_edit"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.8"
-            android:ems="10"
-            android:fadeScrollbars="false"
-            android:hint="Reply"
+            android:layout_weight="0.85"
+            android:hint="@string/bonnes_ondes_seulement"
             android:inputType="textMultiLine"
-            android:minLines="1"
             android:maxLines="12"
+            android:minLines="1"
             android:scrollbars="vertical" />
 
-        <Button
+        <ImageButton
             android:id="@+id/reply_send_button"
-            android:layout_width="wrap_content"
+            style="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="0.2"
-            android:text="Send" />
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="0.15"
+            android:background="@null"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/send_message"
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

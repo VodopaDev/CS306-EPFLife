@@ -149,9 +149,9 @@ public class Utility {
         builder.setSemester("BA5");
         builder.setFirst_names("James");
         builder.setLast_names("Bond");
-        builder.setFollowedAssociations(new ArrayList<String>(Arrays.asList("0")));
-        builder.setFollowedEvents(new ArrayList<String>(Arrays.asList("0")));
-        builder.setFollowedChannels(new ArrayList<String>(Arrays.asList("0")));
+        builder.setFollowedAssociations(new ArrayList<>(Collections.singletonList("0")));
+        builder.setFollowedEvents(new ArrayList<>(Collections.singletonList("0")));
+        builder.setFollowedChannels(new ArrayList<>(Collections.singletonList("0")));
 
         return builder;
     }
@@ -292,7 +292,7 @@ public class Utility {
         map.put("followed_associations", new ArrayList<String>());
         map.put("followed_events", new ArrayList<String>());
         map.put("followed_channels", new ArrayList<String>());
-        map.put("roles", Arrays.asList("USER"));
+        map.put("roles", Collections.singletonList("USER"));
         map.put("first_name", "");
         map.put("last_name", "");
         map.put("section", "");

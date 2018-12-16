@@ -21,7 +21,6 @@ public final class GPS {
     private static final long MIN_DISTANCE_TO_REQUEST_LOCATION = 5; // In meters
     private static final long MIN_TIME_FOR_UPDATES = 3000; // 3 sec
     private static final int TWO_MINUTES = 1000 * 60 * 2; // 2 min
-    private static Context mcontext;
     private static Location location;
     private static LocationListener locationListener = new LocationListener() {
         @Override
@@ -58,12 +57,11 @@ public final class GPS {
      * @return Whether the user has given permission or not
      */
     public static boolean start(Context context) {
-        mcontext = context;
-        if (ContextCompat.checkSelfPermission(mcontext, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(mcontext, "Permission au GPS non donnée", Toast.LENGTH_SHORT).show();
+        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(context, "Permission au GPS non donnée", Toast.LENGTH_SHORT).show();
             return false;
         } else {
-            locationManager = (LocationManager) mcontext.getSystemService(LOCATION_SERVICE);
+            locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
             if (locationManager != null) {
                 boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
                 boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -83,7 +81,7 @@ public final class GPS {
                 }
                 isActivated = isGPSEnabled || isNetworkEnabled;
                 if (!isActivated) {
-                    Toast.makeText(mcontext, "Active le GPS pour avoir accès à toutes les options", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Active le GPS pour avoir accès à toutes les options", Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Log.e("Location manager", "Cannot getAndAddOnSuccessListener location manager");
