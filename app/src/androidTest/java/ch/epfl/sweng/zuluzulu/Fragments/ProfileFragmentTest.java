@@ -34,7 +34,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDis
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
-
+import static org.junit.Assert.assertTrue;
 
 
 public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragment> {
@@ -51,14 +51,6 @@ public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragmen
         fragment = ProfileFragment.newInstance(user, true);
 
         Drawable draw = ContextCompat.getDrawable(mActivityRule.getActivity(), R.drawable.ic_add_circle_red);
-
-        /*int width = draw.getIntrinsicWidth();
-        int height = draw.getIntrinsicHeight();
-
-        picture = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(picture);
-        draw.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        draw.draw(canvas);*/
 
         picture = drawableToBitmap(draw);
 
@@ -98,12 +90,8 @@ public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragmen
 
 
         Bitmap obtained = drawableToBitmap(pic.getDrawable());
-        if(obtained.sameAs(picture)){
-            assert true;
-        }
-        else{
-            assert false;
-        }
+
+        assertTrue(obtained.getWidth() == picture.getWidth() && obtained.getHeight() == picture.getHeight());
     }
 
     @Test
