@@ -35,6 +35,12 @@ public class ProfileFragmentTest {
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA);
 
+    @Rule
+    public GrantPermissionRule permissionRule1 = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+
+    @Rule
+    public GrantPermissionRule permissionRule2 = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
 
     private AuthenticatedUser user;
 
