@@ -1,6 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Fragments.AdminFragments;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -12,6 +11,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,7 +37,9 @@ public class AddEventFragment extends SuperFragment {
     private Spinner spinner;
 
     //for date (number of days adapt depending on the month chosen)
-    private DatePicker date_pick;
+    private DatePicker start_date_pick;
+    private DatePicker end_date_pick;
+    private Date today = new Date();
 
     //for time
     private List<String> hours = new ArrayList<>();
@@ -54,7 +56,6 @@ public class AddEventFragment extends SuperFragment {
     private TextView place;
     private TextView organizer;
     private TextView website;
-    private TextView duration;
     private TextView speaker;
     private TextView category;
     private TextView contact;
@@ -97,17 +98,11 @@ public class AddEventFragment extends SuperFragment {
 
     }
 
-    /**
-     * Takes the current selected Item of a spinner with numbers and convert it to int
-     *
-     * @return the int value of the selected content of the spinner
-     */
-    private int getIntSpinnerContent(Spinner spinner) {
-        return Integer.parseInt(spinner.getSelectedItem().toString());
-    }
+
 
     /**
-     * Set the onClick of the button with sending the event to the database
+     * Set the onClick of the button, gathering all the informations on the fragment and
+     * sending the event to the database
      */
     private void setUpCreateEventButton() {
         create_event.setOnClickListener(new View.OnClickListener() {
@@ -115,23 +110,8 @@ public class AddEventFragment extends SuperFragment {
             public void onClick(View v) {
 
                 //Set the starting date
-                int hour = getIntSpinnerContent(spinner_hours)-1;
-                int minute = getIntSpinnerContent(spinner_minutes);
-                int day = date_pick.getDayOfMonth();
-                int month = date_pick.getMonth();
-                int year = date_pick.getYear() - 1900;
-                Date date = new Date(year, month, day, hour, minute);
-
-                //Set the end date (to avoid adding another calendar to the layout I compute the duration in days and add it to the date
-                // to find the end date)
-                int dur = Integer.parseInt(duration.getText().toString());
-                dur = dur * DAYSTOSEC * 1000;
-                long d = date.getTime();
-                d = d + dur;
-                Date end_date = new Date();
-                end_date.setTime(d);
-                end_date.setHours(getIntSpinnerContent(spinner_end_hours)-1);
-                end_date.setMinutes(getIntSpinnerContent(spinner_end_minutes));
+                Date date = getDateAndTime(start_date_pick,spinner_hours,spinner_minutes);
+                Date end_date = getDateAndTime(end_date_pick,spinner_end_hours,spinner_end_minutes);
 
                 //Set the other fields
                 String name = spinner.getSelectedItem().toString();
@@ -144,8 +124,15 @@ public class AddEventFragment extends SuperFragment {
                 String cat = category.getText().toString();
                 String cont = contact.getText().toString();
 
-                if (!checkIfValid(tit, desc)) {
+                if (!checkIfValid(tit, desc, date,end_date)) {
                     return;
+                }
+
+                String mapUrl;
+                if(!pla.isEmpty()){
+                    mapUrl = "https://plan.epfl.ch/?room=" + pla.replaceAll("\\s+","");
+                } else {
+                    mapUrl = "https://plan.epfl.ch";
                 }
 
                 Event event = new EventBuilder().
@@ -161,12 +148,14 @@ public class AddEventFragment extends SuperFragment {
                         setPlace(pla).
                         setIconUri(EPFL_LOGO).
                         setBannerUri(EPFL_LOGO).
-                        setUrlPlaceAndRoom("https://plan.epfl.ch/?room=" + pla.replaceAll("\\s+","")).
+                        setUrlPlaceAndRoom(mapUrl).
                         setWebsite(web).
                         setContact(cont).
                         setCategory(cat).
                         setSpeaker(speak).
                         build();
+
+
 
                 DatabaseFactory.getDependency().addEvent(event);
 
@@ -184,13 +173,10 @@ public class AddEventFragment extends SuperFragment {
         organizer = view.findViewById(R.id.organizer);
         place = view.findViewById(R.id.place);
         website = view.findViewById(R.id.website);
-        duration = view.findViewById(R.id.duration);
         speaker = view.findViewById(R.id.speaker);
         category = view.findViewById(R.id.category);
         contact = view.findViewById(R.id.contact);
 
-        //the button "create event" that when clicked gather the data from all spinners and
-        //textviews and push an event on the database
         create_event = view.findViewById(R.id.create_event_button);
         setUpCreateEventButton();
 
@@ -210,7 +196,8 @@ public class AddEventFragment extends SuperFragment {
         spinner = view.findViewById(R.id.spinner);
         fillAssociationNames();
 
-        date_pick = (DatePicker) view.findViewById(R.id.date_for_add);
+        start_date_pick = (DatePicker) view.findViewById(R.id.date_for_add);
+        end_date_pick = (DatePicker) view.findViewById(R.id.end_date_for_add);
 
 
 
@@ -220,24 +207,53 @@ public class AddEventFragment extends SuperFragment {
     }
 
     /**
+     * Helper method that gets the date and time from a date picker and two spinners representing the hours and minutes
+     * @param datePick the DatePicker that contains the date
+     * @param hours the hours
+     * @param minutes the minutes
+     * @return the full date
+     */
+    private Date getDateAndTime(DatePicker datePick, Spinner hours, Spinner minutes){
+        int hour = getIntSpinnerContent(hours)-1;
+        int minute = getIntSpinnerContent(minutes);
+        int day = datePick.getDayOfMonth();
+        int month = datePick.getMonth();
+        int year = datePick.getYear() - 1900;
+        return new Date(year, month, day, hour, minute);
+    }
+
+    /**
+     * Takes the current selected Item of a spinner with numbers and convert it to int
+     *
+     * @return the int value of the selected content of the spinner
+     */
+    private int getIntSpinnerContent(Spinner spinner) {
+        return Integer.parseInt(spinner.getSelectedItem().toString());
+    }
+
+
+    /**
+     *
      * check if the arguments are valid for creating an event
      *
      * @param title       , the title of the event
      * @param description , the long description of the event
+     * @param start , the starting date of the event
+     * @param end , the end date of the event
      * @return if the arguments are valid
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean checkIfValid(String title, String description) {
-        if (title.length() > 30)
-            return viewSetError(title_view, "title is too long");
+    private boolean checkIfValid(String title, String description, Date start, Date end) {
+        boolean isValid = true;
         if (title.isEmpty())
-            return viewSetError(title_view, "please write a title");
-        if (description.length() > 80)
-            return viewSetError(description_view, "description is too long");
+            isValid = viewSetError(title_view, "please write a title");
         if (description.isEmpty())
-            return viewSetError(description_view, "please write a description");
+            isValid = viewSetError(description_view, "please write a description");
+        if (start.before(today) || end.before(start)){
+            Toast.makeText(getActivity(), "Set a correct date", Toast.LENGTH_SHORT).show();
+            isValid = false;
+        }
 
-        return true;
+        return isValid;
     }
 
     /**

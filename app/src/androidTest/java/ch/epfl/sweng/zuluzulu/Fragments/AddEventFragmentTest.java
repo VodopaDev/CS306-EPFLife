@@ -1,14 +1,14 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.runner.AndroidJUnit4;
-import android.widget.Spinner;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AddEventFragment;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
@@ -21,58 +21,67 @@ import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.core.AllOf.allOf;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-public class AddEventFragmentTest extends TestWithAdminAndFragment<EventFragment> {
+public class AddEventFragmentTest extends TestWithAdminAndFragment<AddEventFragment> {
 
     @Override
     public void initFragment() {
         DatabaseFactory.setDependency(new MockedProxy());
-        fragment = EventFragment.newInstance(user);
+        fragment = AddEventFragment.newInstance();
     }
 
-    /**
-     * got to add an event
-     */
-    private void goToAddEvent() {
-        onView(ViewMatchers.withId(R.id.event_add_button)).perform(click());
-    }
 
     /**
      * Test if both fields Title and Description are left empty
      */
     @Test
     public void testEmptyTitleAndDesc() {
-        goToAddEvent();
         onView(withId(R.id.create_event_button)).perform(click());
 
         onView(withId(R.id.add_event_fragment)).check(matches(isDisplayed()));
     }
 
-    /**
-     * Test if both fields Title and Description have too much text
-     */
     @Test
-    public void testTooManyCharactersInBoth() {
-        goToAddEvent();
-        onView(withId(R.id.event_title)).perform(replaceText("This is a title much too long to be able to put it on the database"));
-        onView(withId(R.id.long_desc_text)).perform(replaceText("Okay I am now writing a whole story about the life of this test. So once upon a time, a test was created, it was supposed to be super useful and everyone was happy, until they started it, and it failed. And then started hours and hours of debugging" +
-                " continuously until it passed. That was the story, thank you")).perform(closeSoftKeyboard());
+    public void testWithWrongDate(){
+        onView(withId(R.id.event_title)).perform(replaceText("Test Event"));
+        onView(withId(R.id.long_desc_text)).perform(replaceText("this is an awesome test event")).perform(closeSoftKeyboard());
+
+        onView(withId(R.id.date_for_add)).perform(PickerActions.setDate(2010, 1, 1));
         onView(withId(R.id.create_event_button)).perform(click());
         onView(withId(R.id.add_event_fragment)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.end_date_for_add)).perform(ViewActions.scrollTo());
+
+        onView(withId(R.id.end_date_for_add)).perform(PickerActions.setDate(2000, 1, 1));
+        onView(withId(R.id.create_event_button)).perform(ViewActions.scrollTo());
+        onView(withId(R.id.create_event_button)).perform(click());
+        onView(withId(R.id.add_event_fragment)).check(matches(isDisplayed()));
+
+
+
     }
 
+    @Test
+    public void testCreateCompleteEvent(){
+        onView(withId(R.id.event_title)).perform(replaceText("Test Event"));
+        onView(withId(R.id.long_desc_text)).perform(replaceText("this is an awesome test event")).perform(closeSoftKeyboard());
+        onView(withId(R.id.date_for_add)).perform(ViewActions.scrollTo()).perform(PickerActions.setDate(2019, 1, 1));
+        onView(withId(R.id.end_date_for_add)).perform(ViewActions.scrollTo()).perform(PickerActions.setDate(2019, 2, 1));
+        onView(withId(R.id.organizer)).perform(ViewActions.scrollTo()).perform(replaceText("test organizer")).perform(closeSoftKeyboard());
+        onView(withId(R.id.category)).perform(ViewActions.scrollTo()).perform(replaceText("test category")).perform(closeSoftKeyboard());
+        onView(withId(R.id.contact)).perform(ViewActions.scrollTo()).perform(replaceText("test contact")).perform(closeSoftKeyboard());
+        onView(withId(R.id.place)).perform(ViewActions.scrollTo()).perform(replaceText("CO 1")).perform(closeSoftKeyboard());
+        onView(withId(R.id.speaker)).perform(ViewActions.scrollTo()).perform(replaceText("test speaker")).perform(closeSoftKeyboard());
+        onView(withId(R.id.website)).perform(ViewActions.scrollTo()).perform(replaceText("http://google.com")).perform(closeSoftKeyboard());
+        onView(withId(R.id.create_event_button)).perform(ViewActions.scrollTo()).perform(click());
+    }
 
     /**
      * create an event and controls that it is indeed created in the event list
      */
     @Test
-    public void testCreateEvent() {
-        goToAddEvent();
+    public void testCreateMinEvent() {
         onView(withId(R.id.event_title)).perform(replaceText("Test Event"));
         onView(withId(R.id.long_desc_text)).perform(replaceText("this is an awesome test event")).perform(closeSoftKeyboard());
         onView(withId(R.id.create_event_button)).perform(click());
