@@ -128,14 +128,10 @@ public class MainFragment extends SuperFragment {
     }
 
     private void fillUpcomingEventLists(View view) {
-<<<<<<< HEAD
         events_array.clear();
         events_adapter.notifyDataSetChanged();
 
         LinearLayout progressBar  = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress_event);
-=======
-        LinearLayout progressBar  = view.findViewById(R.id.linlaHeaderProgress_event);
->>>>>>> 0ed3b100bbdc3ad89b17e8ce8e1fdd8d30e8abba
         progressBar.setVisibility(View.VISIBLE);
 
         DatabaseFactory.getDependency().getEventsFromToday(result -> {
@@ -151,14 +147,10 @@ public class MainFragment extends SuperFragment {
     }
 
     private void fillRandomAssociationLists(View view) {
-<<<<<<< HEAD
         associations_array.clear();
         associations_adapter.notifyDataSetChanged();
 
         LinearLayout progressBar  = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress_assos);
-=======
-        LinearLayout progressBar  = view.findViewById(R.id.linlaHeaderProgress_assos);
->>>>>>> 0ed3b100bbdc3ad89b17e8ce8e1fdd8d30e8abba
         progressBar.setVisibility(View.VISIBLE);
 
         DatabaseFactory.getDependency().getAllAssociations(result -> {
@@ -194,14 +186,10 @@ public class MainFragment extends SuperFragment {
      * Fill the association_array with user's followed associations
      */
     private void fillConnectedUserAssociationsList(View view) {
-<<<<<<< HEAD
         associations_array.clear();
         associations_adapter.notifyDataSetChanged();
 
         LinearLayout progressBar  = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress_user_assos);
-=======
-        LinearLayout progressBar  = view.findViewById(R.id.linlaHeaderProgress_user_assos);
->>>>>>> 0ed3b100bbdc3ad89b17e8ce8e1fdd8d30e8abba
         progressBar.setVisibility(View.VISIBLE);
 
         DatabaseFactory.getDependency().getAllAssociations(result -> {
@@ -221,14 +209,10 @@ public class MainFragment extends SuperFragment {
      * Fill the event_array with user's followed events
      */
     private void fillConnectedUserEventsList(View view) {
-<<<<<<< HEAD
         events_array.clear();
         events_adapter.notifyDataSetChanged();
 
         LinearLayout progressBar  = (LinearLayout) view.findViewById(R.id.linlaHeaderProgress_user_event);
-=======
-        LinearLayout progressBar  = view.findViewById(R.id.linlaHeaderProgress_user_event);
->>>>>>> 0ed3b100bbdc3ad89b17e8ce8e1fdd8d30e8abba
         progressBar.setVisibility(View.VISIBLE);
 
         DatabaseFactory.getDependency().getAllEvents(result -> {
