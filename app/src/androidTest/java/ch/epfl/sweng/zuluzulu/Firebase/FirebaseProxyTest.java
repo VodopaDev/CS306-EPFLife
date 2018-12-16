@@ -10,6 +10,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.zuluzulu.Database.FirebaseMock;
+import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.Firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.Firebase.Database.FirebaseFactory;
 import ch.epfl.sweng.zuluzulu.IdlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.MainActivity;
@@ -27,6 +29,7 @@ public class FirebaseProxyTest {
     @Before
     public void setUp() {
         FirebaseFactory.setDependency(new FirebaseMock());
+        DatabaseFactory.setDependency(new MockedProxy());
         IdlingRegistry.getInstance().register(IdlingResourceFactory.getCountingIdlingResource());
         proxy = FirebaseProxy.getInstance();
     }
