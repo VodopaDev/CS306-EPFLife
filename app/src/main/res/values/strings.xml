@@ -22,7 +22,6 @@
     <string name="support">Support :</string>
     <string name="Group">ZuluZulu</string>
     <string name="numVersion">Alpha</string>
-    <string name="drawer_associations_generator">Ajouter des associations</string>
 
     <string name="contactEmail">zuluzulu@epfl.ch</string>
     <string name="supportEmail">EPFLife@epfl.ch</string>
@@ -39,7 +38,6 @@
     <string name="fragment_event_checkbox_sort_name">Nom</string>
     <string name="fragment_event_checkbox_sort_date">Date</string>
     <string name="card_event_image_description">Photo</string>
-    <string name="fragment_event_like_button">Follow</string>
     <string name="fragment_event_search_bar_text">Recherche</string>
 
     <!-- Main related -->
@@ -47,8 +45,7 @@
     <string name="main_fragment_text_favorite_events">Événements suivis</string>
 
     <!-- Chat related -->
-    <string name="chat_send">Envoyer</string>
-    <string name="chat_message">Message</string>
+    <string name="chat_message">Taper message</string>
 
     <!-- Settings related -->
     <string name="settings_dark_mode">Dark Theme</string>
@@ -78,13 +75,7 @@
 
 
     <string name="drawer_calendar">Calendrier</string>
-    <string name="fragment_assos_sort_id">ID</string>
-    <string name="fragment_assos_sort_name">Nom</string>
 
-    <string name="generator_association_name">Nom de l\'association</string>
-
-    <string name="nav_memento">Memento</string>
-    <string name="like_icon">Follower icon</string>
     <string name="event_detail_speaker">Speaker :</string>
     <string name="event_detail_tv_website">Site internet :</string>
     <string name="event_detail_tv_contact">Contact :</string>
@@ -118,5 +109,6 @@
     </plurals>
 
     <string name="login_for_more_features">Connecte-toi pour avoir accès à toutes les options</string>
+    <string name="bonnes_ondes_seulement">Bonnes ondes seulement...</string>
 
 </resources>

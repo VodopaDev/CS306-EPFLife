@@ -26,7 +26,7 @@ public class DocumentMock implements DatabaseDocument {
             Log.d(TAG, key);
         }
 
-        return new TaskMock<Void>();
+        return new TaskMock<>();
     }
 
     @Override

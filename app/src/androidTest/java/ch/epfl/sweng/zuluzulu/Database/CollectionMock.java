@@ -37,7 +37,7 @@ public class CollectionMock implements DatabaseCollection {
 
     @Override
     public Task<DocumentReference> add(@NonNull Map<String, Object> data) {
-        return new TaskMock<DocumentReference>();
+        return new TaskMock<>();
     }
 
     @Override

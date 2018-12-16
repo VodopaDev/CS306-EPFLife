@@ -28,8 +28,10 @@ import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
 import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 
 public class AddEventFragment extends SuperFragment {
+
     private static final String EPFL_LOGO = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon).toString();
     private static final int[] INDICES = {0, 2, 4, 6, 7, 9, 11};
+
     //for association name
     private Map<String, String> association_map = new HashMap<>();
     private Spinner spinner;
@@ -66,7 +68,6 @@ public class AddEventFragment extends SuperFragment {
     }
 
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
         //fill the list for the months spinner
@@ -94,8 +95,6 @@ public class AddEventFragment extends SuperFragment {
 
         //fills the minute list for the spinner
         addIntsToList(minutes, 0, 60, 10);
-
-
     }
 
     /**
@@ -324,7 +323,7 @@ public class AddEventFragment extends SuperFragment {
      *
      * @param t            , the textview we take care of
      * @param errorMessage , the message we want to show
-     * @return
+     * @return false
      */
     private boolean viewSetError(TextView t, String errorMessage) {
         t.requestFocus();

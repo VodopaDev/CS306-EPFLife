@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Fragments.AdminFragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -84,7 +85,7 @@ public class MementoFragment extends SuperFragment {
             this.user = (User) getArguments().getSerializable(TAG);
         }
 
-        this.events = new ArrayList<Event>();
+        this.events = new ArrayList<>();
 
         this.eventAdapter = new EventArrayAdapter(getContext(), events, mListener, user);
 
@@ -169,7 +170,7 @@ public class MementoFragment extends SuperFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_memento, container, false);

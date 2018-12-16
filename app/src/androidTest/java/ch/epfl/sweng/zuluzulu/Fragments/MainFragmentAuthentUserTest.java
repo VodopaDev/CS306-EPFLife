@@ -4,8 +4,6 @@ import android.support.test.espresso.action.ViewActions;
 
 import org.junit.Test;
 
-import java.util.concurrent.TimeUnit;
-
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
