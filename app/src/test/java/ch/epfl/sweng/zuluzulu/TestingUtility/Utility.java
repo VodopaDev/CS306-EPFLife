@@ -2,7 +2,6 @@ package ch.epfl.sweng.zuluzulu.TestingUtility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +21,7 @@ public class Utility {
     private static final String firstName = "James";
     private static final String lastName = "Bond";
     private static final List<String> favAssos = Arrays.asList("0", "1");
-    private static final List<String> followedEvents = new ArrayList<String>(Arrays.asList("0", "1"));
+    private static final List<String> followedEvents = new ArrayList<>(Arrays.asList("0", "1"));
     private static final List<String> followedChats = new ArrayList<>();
 
     private Utility() {

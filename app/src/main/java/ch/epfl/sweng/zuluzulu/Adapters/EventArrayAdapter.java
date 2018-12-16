@@ -2,6 +2,7 @@ package ch.epfl.sweng.zuluzulu.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,8 +67,9 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
      * @param parent      the ListView to put the view
      * @return the Event card view
      */
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View event_view = convertView;
         final EventHolder holder = event_view == null ? new EventHolder() : (EventHolder) event_view.getTag();
 

@@ -2,7 +2,6 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/event_detail_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.EventDetailFragment">
@@ -61,7 +60,6 @@
                         android:layout_marginLeft="8dp" />
 
                     <TextView
-                        android:id="@+id/event_detail_tv_like"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|start"
@@ -93,7 +91,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/event_detail_tv_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -116,7 +113,6 @@
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/event_detail_tv_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -139,7 +135,6 @@
                     android:text="@string/date_de_l_n_nement" />
 
                 <TextView
-                    android:id="@+id/event_detail_tv_organizer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -162,7 +157,6 @@
                     android:text="@string/organisateur_de_l_n_nement" />
 
                 <TextView
-                    android:id="@+id/event_detail_tv_speaker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -185,7 +179,6 @@
                     android:text="@string/speaker_de_l_venement" />
 
                 <TextView
-                    android:id="@+id/event_detail_tv_place"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -208,7 +201,6 @@
                     android:text="@string/lieu_de_l_v_nement" />
 
                 <TextView
-                    android:id="@+id/event_detail_tv_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -231,7 +223,6 @@
                     android:text="@string/type_de_l_v_nement" />
 
                 <TextView
-                    android:id="@+id/event_detail_tv_contact"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -254,7 +245,6 @@
                     android:text="@string/contact_pour_l_v_nement" />
 
                 <TextView
-                    android:id="@+id/event_detail_tv_website"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -279,7 +269,6 @@
 
 
                 <TextView
-                    android:id="@+id/event_detail_tv_plan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"

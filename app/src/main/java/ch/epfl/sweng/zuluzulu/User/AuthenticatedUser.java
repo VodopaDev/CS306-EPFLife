@@ -1,5 +1,7 @@
 package ch.epfl.sweng.zuluzulu.User;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -185,6 +187,7 @@ public class AuthenticatedUser extends User {
         return map;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return firstNames + " " + lastNames

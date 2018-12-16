@@ -106,9 +106,8 @@ public class ProfileFragment extends SuperFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -216,7 +215,6 @@ public class ProfileFragment extends SuperFragment {
      * @return the file
      * @throws IOException if creation fails
      */
-
     private File createImageFile() throws IOException {
         // Create an image file name
         File directory = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -241,7 +239,7 @@ public class ProfileFragment extends SuperFragment {
         // Ensure that there's a camera activity to handle the intent
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
             // Create the File where the photo should go
-            File picture = null;
+            File picture;
             try {
                 picture = createImageFile();
             } catch (IOException ex) {
@@ -286,13 +284,6 @@ public class ProfileFragment extends SuperFragment {
         pic.setImageBitmap(bitmap);
     }
 
-    /**
-     * receives the result of the camera activity, set the picture, and upload it to the storage
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_CODE && resultCode == Activity.RESULT_OK) {
