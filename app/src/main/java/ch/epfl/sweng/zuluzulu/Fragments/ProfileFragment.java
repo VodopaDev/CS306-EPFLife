@@ -108,9 +108,8 @@ public class ProfileFragment extends SuperFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -220,6 +219,7 @@ public class ProfileFragment extends SuperFragment {
      */
 
     private File createFileForPicture() throws IOException {
+
         File directory = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = new File (directory + "/user" + userData.getSciper() + ".jpg");
 
@@ -242,7 +242,6 @@ public class ProfileFragment extends SuperFragment {
                 Log.e("creating picture file", "unable to create a file for intent");
                 return;
             }
-            // Continue only if the File was successfully created
             if (picture != null) {
                 Uri uri = FileProvider.getUriForFile(getActivity(),
                         "ch.epfl.sweng.zuluzulu.fileprovider",
@@ -310,7 +309,6 @@ public class ProfileFragment extends SuperFragment {
 
         return bitmap;
     }
-
 
 
 

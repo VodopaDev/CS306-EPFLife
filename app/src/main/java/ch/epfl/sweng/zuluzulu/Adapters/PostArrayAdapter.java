@@ -29,10 +29,7 @@ public class PostArrayAdapter extends ArrayAdapter<SuperMessage> {
 
     private Post currentPost;
     private TextView timeAgo;
-    private TextView nbUpsText;
     private TextView nbResponsesText;
-    private ImageView upButton;
-    private ImageView downButton;
 
     public PostArrayAdapter(@NonNull Context context, List<SuperMessage> list, User user) {
         super(context, 0, list);
@@ -53,9 +50,9 @@ public class PostArrayAdapter extends ArrayAdapter<SuperMessage> {
         TextView message = view.findViewById(R.id.post_msg);
         TextView senderName = view.findViewById(R.id.post_senderName);
         timeAgo = view.findViewById(R.id.post_time_ago_textview);
-        upButton = view.findViewById(R.id.post_up_button);
-        downButton = view.findViewById(R.id.post_down_button);
-        nbUpsText = view.findViewById(R.id.post_nb_ups_textview);
+        ImageView upButton = view.findViewById(R.id.post_up_button);
+        ImageView downButton = view.findViewById(R.id.post_down_button);
+        TextView nbUpsText = view.findViewById(R.id.post_nb_ups_textview);
         nbResponsesText = view.findViewById(R.id.post_nb_responses_textview);
 
         linearLayout.setBackgroundColor(Color.parseColor(currentPost.getColor()));

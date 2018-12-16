@@ -2,6 +2,7 @@ package ch.epfl.sweng.zuluzulu.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,8 +51,9 @@ public class UserRoleArrayAdapter extends ArrayAdapter<Map<String, Object>> {
      * @param parent      the ListView to put the view
      * @return the Association card view
      */
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View user_view = convertView;
         UserRoleHolder holder = user_view == null ? new UserRoleHolder() : (UserRoleHolder) user_view.getTag();
 

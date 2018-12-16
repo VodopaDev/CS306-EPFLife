@@ -1,5 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.support.test.espresso.action.ViewActions;
+
 import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
@@ -34,5 +36,11 @@ public class MainFragmentAuthentUserTest extends TestWithAuthenticatedAndFragmen
     public void anElementIspresent() {
         onView(withId(R.id.main_fragment_followed_associations_listview)).check(matches(hasDescendant(withText("Agepoly"))));
         onView(withId(R.id.main_fragment_followed_events_listview)).check(matches(hasDescendant(withText("Fiesta time"))));
+    }
+
+
+    @Test
+    public void testUserCanSwipeUp() {
+        onView(withId(R.id.swiperefresh_main_user)).perform(ViewActions.swipeDown());
     }
 }

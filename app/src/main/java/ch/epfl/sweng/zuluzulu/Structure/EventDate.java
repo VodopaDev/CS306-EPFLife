@@ -114,7 +114,7 @@ public class EventDate implements Serializable {
     private static Date createDate(String date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_PATTERN);
 
-        Date start_date = null;
+        Date start_date;
         try {
             start_date = simpleDateFormat.parse(date);
         } catch (ParseException e) {

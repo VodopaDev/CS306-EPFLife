@@ -2,8 +2,10 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,8 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.google.firebase.Timestamp;
 
@@ -34,7 +36,7 @@ public class ReplyFragment extends SuperChatPostsFragment {
     private PostArrayAdapter adapter;
 
     private EditText replyText;
-    private Button sendButton;
+    private ImageButton sendButton;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     public ReplyFragment() {
@@ -63,10 +65,13 @@ public class ReplyFragment extends SuperChatPostsFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reply, container, false);
 
+        ConstraintLayout rootView = view.findViewById(R.id.reply_fragment);
         listView = view.findViewById(R.id.reply_list_view);
         replyText = view.findViewById(R.id.reply_text_edit);
         sendButton = view.findViewById(R.id.reply_send_button);
         swipeRefreshLayout = view.findViewById(R.id.swiperefresh_replies);
+
+        rootView.setBackgroundColor(Color.parseColor(postOriginal.getColor()));
 
         messages.add(postOriginal);
         adapter = new PostArrayAdapter(view.getContext(), messages, user);

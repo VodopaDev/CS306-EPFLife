@@ -8,7 +8,6 @@ import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithGuestAndFragment;
-import ch.epfl.sweng.zuluzulu.Utility;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -46,5 +45,10 @@ public class MainFragmentGuestUserTest extends TestWithGuestAndFragment<MainFrag
     @Test
     public void canClickOnSignIn() {
         onView(withId(R.id.main_page_button_sign_in)).perform(ViewActions.click());
+    }
+
+    @Test
+    public void testUserCanSwipeUp() {
+        onView(withId(R.id.swiperefresh_main)).perform(ViewActions.swipeDown());
     }
 }

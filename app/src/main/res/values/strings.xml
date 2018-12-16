@@ -22,7 +22,6 @@
     <string name="support">Support :</string>
     <string name="Group">ZuluZulu</string>
     <string name="numVersion">Alpha</string>
-    <string name="drawer_associations_generator">Ajouter des associations</string>
 
     <string name="contactEmail">zuluzulu@epfl.ch</string>
     <string name="supportEmail">EPFLife@epfl.ch</string>
@@ -35,11 +34,10 @@
     <!-- Event related -->
     <string name="fragment_event_button_all">Tout voir</string>
     <string name="fragment_event_button_fav">Favoris</string>
-    <string name="fragment_event_checkbox_sort_likes">Like</string>
+    <string name="fragment_event_checkbox_sort_likes">Followers</string>
     <string name="fragment_event_checkbox_sort_name">Nom</string>
     <string name="fragment_event_checkbox_sort_date">Date</string>
     <string name="card_event_image_description">Photo</string>
-    <string name="fragment_event_like_button">Like</string>
     <string name="fragment_event_search_bar_text">Recherche</string>
 
     <!-- Main related -->
@@ -47,8 +45,7 @@
     <string name="main_fragment_text_favorite_events">Événements suivis</string>
 
     <!-- Chat related -->
-    <string name="chat_send">Envoyer</string>
-    <string name="chat_message">Message</string>
+    <string name="chat_message">Taper message</string>
 
     <!-- Settings related -->
     <string name="settings_dark_mode">Dark Theme</string>
@@ -70,7 +67,7 @@
     <string name="chat">Chat</string>
     <string name="channel_icon">Icon du channel</string>
     <string name="anonymity">Annonymat</string>
-    <string name="event_detail_like">Likes:</string>
+    <string name="event_detail_like">Nombre de followers :</string>
     <string name="event_detail_tv_desc">Description :</string>
     <string name="event_detail_tv_date">Date:</string>
     <string name="event_detail_tv_organizer">Organisateur :</string>
@@ -78,13 +75,7 @@
 
 
     <string name="drawer_calendar">Calendrier</string>
-    <string name="fragment_assos_sort_id">ID</string>
-    <string name="fragment_assos_sort_name">Nom</string>
 
-    <string name="generator_association_name">Nom de l\'association</string>
-
-    <string name="nav_memento">Memento</string>
-    <string name="like_icon">Like icon</string>
     <string name="event_detail_speaker">Speaker :</string>
     <string name="event_detail_tv_website">Site internet :</string>
     <string name="event_detail_tv_contact">Contact :</string>
@@ -94,10 +85,10 @@
     <string name="drawer_admin_panel">Accès administrateur</string>
     <string name="user_role_searchbar_hint">User sciper</string>
     <string name="main_page_upcoming_event">Événements à venir</string>
-    <string name="main_page_random_assos">Quelques associations</string>
+    <string name="main_page_random_assos">Associations à découvrir</string>
     <string name="no_association">Pas d\'association</string>
     <string name="no_chat">Pas de chat</string>
-    <string name="description_de_l_association_tr_s_tr_s_tr_s_longue_description_de_l_association_d_ailleurs_pour_meubler_un_peu_j_cris_directement_ce_qui_me_passe_par_la_t_te_sans_du_tout_r_fl_chir_ce_que_j_cris_je_suis_en_shs_je_me_fais_chier_en_plein_cours_sur_la_m_moire_alors_je_passe_mon_temps_sur_ce_projet_parce_que_c_est_quand_m_me_plus_int_ressant_que_savoir_si_mon_hypocampe_enregistre_bien_ou_pas_enfin_bref_tout_a_pour_faire_une_magnifique_description_de_l_association_qui_n_existait_pas_avant_a_c_est_fou_c_est_une_app_sur_les_associations_mais_on_a_pas_de_description_correcte_d_une_association_affich_e_dans_ce_fragment_juste_2_pauvres_bouttons_dont_1_qui_marche_pas_j_ai_la_flemme_de_continuer_crire_alors_je_vais_remplir_par_des_copi_s_coll_s_description_de_l_association_tr_s_tr_s_tr_s_longue_description_de_l_association_d_ailleurs_pour_meubler_un_peu_j_cris_directement_ce_qui_me_passe_par_la_t_te_sans_du_tout_r_fl_chir_ce_que_j_cris_je_suis_en_shs_je_me_fais_chier_en_plein_cours_sur_la_m_moire_alors_je_passe_mon_temps_sur_ce_projet_parce_que_c_est_quand_m_me_plus_int_ressant_que_savoir_si_mon_hypocampe_enregistre_bien_ou_pas_enfin_bref_tout_a_pour_faire_une_magnifique_description_de_l_association_qui_n_existait_pas_avant_a_c_est_fou_c_est_une_app_sur_les_associations_mais_on_a_pas_de_description_correcte_d_une_association_affich_e_dans_ce_fragment_juste_2_pauvres_bouttons_dont_1_qui_marche_pas_j_ai_la_flemme_de_continuer_crire_alors_je_vais_remplir_par_des_copi_s_coll_s_description_de_l_association_tr_s_tr_s_tr_s_longue_description_de_l_association_d_ailleurs_pour_meubler_un_peu_j_cris_directement_ce_qui_me_passe_par_la_t_te_sans_du_tout_r_fl_chir_ce_que_j_cris_je_suis_en_shs_je_me_fais_chier_en_plein_cours_sur_la_m_moire_alors_je_passe_mon_temps_sur_ce_projet_parce_que_c_est_quand_m_me_plus_int_ressant_que_savoir_si_mon_hypocampe_enregistre_bien_ou_pas_enfin_bref_tout_a_pour_faire_une_magnifique_description_de_l_association_qui_n_existait_pas_avant_a_c_est_fou_c_est_une_app_sur_les_associations_mais_on_a_pas_de_description_correcte_d_une_association_affich_e_dans_ce_fragment_juste_2_pauvres_bouttons_dont_1_qui_marche_pas_j_ai_la_flemme_de_continuer_crire_alors_je_vais_remplir_par_des_copi_s_coll_s_description_de_l_association_tr_s_tr_s_tr_s_longue_description_de_l_association_d_ailleurs_pour_meubler_un_peu_j_cris_directement_ce_qui_me_passe_par_la_t_te_sans_du_tout_r_fl_chir_ce_que_j_cris_je_suis_en_shs_je_me_fais_chier_en_plein_cours_sur_la_m_moire_alors_je_passe_mon_temps_sur_ce_projet_parce_que_c_est_quand_m_me_plus_int_ressant_que_savoir_si_mon_hypocampe_enregistre_bien_ou_pas_enfin_bref_tout_a_pour_faire_une_magnifique_description_de_l_association_qui_n_existait_pas_avant_a_c_est_fou_c_est_une_app_sur_les_associations_mais_on_a_pas_de_description_correcte_d_une_association_affich_e_dans_ce_fragment_juste_2_pauvres_bouttons_dont_1_qui_marche_pas_j_ai_la_flemme_de_continuer_crire_alors_je_vais_remplir_par_des_copi_s_coll_s">Description de l\'association... Très très très longue description de l\'association. D\'ailleurs pour meubler un peu j\'écris directement ce qui me passe par la tête sans du tout réfléchir à ce que j\'écris je suis en shs je me fais chier en plein cours sur la mémoire alors je passe mon temps sur ce projet parce que c\'est quand même plus intéressant que savoir si mon hypocampe enregistre bien ou pas enfin bref tout ça pour faire une magnifique description de l\'association qui n\'existait pas avant ça c\'est fou c\'est une app sur les associations mais on a pas de description correcte d\'une association affichée dans ce fragment juste 2 pauvres bouttons dont 1 qui marche pas. J\'ai la flemme de continuer à écrire alors je vais remplir par des copiés collés. Description de l\'association... Très très très longue description de l\'association. D\'ailleurs pour meubler un peu j\'écris directement ce qui me passe par la tête sans du tout réfléchir à ce que j\'écris je suis en shs je me fais chier en plein cours sur la mémoire alors je passe mon temps sur ce projet parce que c\'est quand même plus intéressant que savoir si mon hypocampe enregistre bien ou pas enfin bref tout ça pour faire une magnifique description de l\'association qui n\'existait pas avant ça c\'est fou c\'est une app sur les associations mais on a pas de description correcte d\'une association affichée dans ce fragment juste 2 pauvres bouttons dont 1 qui marche pas. J\'ai la flemme de continuer à écrire alors je vais remplir par des copiés collés.Description de l\'association... Très très très longue description de l\'association. D\'ailleurs pour meubler un peu j\'écris directement ce qui me passe par la tête sans du tout réfléchir à ce que j\'écris je suis en shs je me fais chier en plein cours sur la mémoire alors je passe mon temps sur ce projet parce que c\'est quand même plus intéressant que savoir si mon hypocampe enregistre bien ou pas enfin bref tout ça pour faire une magnifique description de l\'association qui n\'existait pas avant ça c\'est fou c\'est une app sur les associations mais on a pas de description correcte d\'une association affichée dans ce fragment juste 2 pauvres bouttons dont 1 qui marche pas. J\'ai la flemme de continuer à écrire alors je vais remplir par des copiés collés.Description de l\'association... Très très très longue description de l\'association. D\'ailleurs pour meubler un peu j\'écris directement ce qui me passe par la tête sans du tout réfléchir à ce que j\'écris je suis en shs je me fais chier en plein cours sur la mémoire alors je passe mon temps sur ce projet parce que c\'est quand même plus intéressant que savoir si mon hypocampe enregistre bien ou pas enfin bref tout ça pour faire une magnifique description de l\'association qui n\'existait pas avant ça c\'est fou c\'est une app sur les associations mais on a pas de description correcte d\'une association affichée dans ce fragment juste 2 pauvres bouttons dont 1 qui marche pas. J\'ai la flemme de continuer à écrire alors je vais remplir par des copiés collés.</string>
+    <string name="description_associaiton_longue">Description de l\'association... Très très très longue description de l\'association. D\'ailleurs pour meubler un peu j\'écris directement ce qui me passe par la tête sans du tout réfléchir à ce que j\'écris je suis en shs je me fais chier en plein cours sur la mémoire alors je passe mon temps sur ce projet parce que c\'est quand même plus intéressant que savoir si mon hypocampe enregistre bien ou pas enfin bref tout ça pour faire une magnifique description de l\'association qui n\'existait pas avant ça c\'est fou c\'est une app sur les associations mais on a pas de description correcte d\'une association affichée dans ce fragment juste 2 pauvres bouttons dont 1 qui marche pas. J\'ai la flemme de continuer à écrire alors je vais remplir par des copiés collés. Description de l\'association... Très très très longue description de l\'association. D\'ailleurs pour meubler un peu j\'écris directement ce qui me passe par la tête sans du tout réfléchir à ce que j\'écris je suis en shs je me fais chier en plein cours sur la mémoire alors je passe mon temps sur ce projet parce que c\'est quand même plus intéressant que savoir si mon hypocampe enregistre bien ou pas enfin bref tout ça pour faire une magnifique description de l\'association qui n\'existait pas avant ça c\'est fou c\'est une app sur les associations mais on a pas de description correcte d\'une association affichée dans ce fragment juste 2 pauvres bouttons dont 1 qui marche pas. J\'ai la flemme de continuer à écrire alors je vais remplir par des copiés collés.Description de l\'association... Très très très longue description de l\'association. D\'ailleurs pour meubler un peu j\'écris directement ce qui me passe par la tête sans du tout réfléchir à ce que j\'écris je suis en shs je me fais chier en plein cours sur la mémoire alors je passe mon temps sur ce projet parce que c\'est quand même plus intéressant que savoir si mon hypocampe enregistre bien ou pas enfin bref tout ça pour faire une magnifique description de l\'association qui n\'existait pas avant ça c\'est fou c\'est une app sur les associations mais on a pas de description correcte d\'une association affichée dans ce fragment juste 2 pauvres bouttons dont 1 qui marche pas. J\'ai la flemme de continuer à écrire alors je vais remplir par des copiés collés.Description de l\'association... Très très très longue description de l\'association. D\'ailleurs pour meubler un peu j\'écris directement ce qui me passe par la tête sans du tout réfléchir à ce que j\'écris je suis en shs je me fais chier en plein cours sur la mémoire alors je passe mon temps sur ce projet parce que c\'est quand même plus intéressant que savoir si mon hypocampe enregistre bien ou pas enfin bref tout ça pour faire une magnifique description de l\'association qui n\'existait pas avant ça c\'est fou c\'est une app sur les associations mais on a pas de description correcte d\'une association affichée dans ce fragment juste 2 pauvres bouttons dont 1 qui marche pas. J\'ai la flemme de continuer à écrire alors je vais remplir par des copiés collés.</string>
     <string name="description_de_l_v_nement">Description de l\'évènement</string>
     <string name="date_de_l_n_nement">Date de l\'énènement</string>
     <string name="organisateur_de_l_n_nement">Organisateur de l\'énènement</string>
@@ -107,5 +98,17 @@
     <string name="contact_pour_l_v_nement">Contact pour l\'évènement</string>
     <string name="site_de_l_v_nement">Site de l\'évènement</string>
     <string name="ev_nements">Evènements</string>
+    <string name="follow">follow</string>
+    <string name="event_followed">Vous suivez désormais cet évènement</string>
+    <string name="event_unfollowed">Vous ne suivez plus cet évènement</string>
+    <string name="event_card_default_followers">0 followers</string>
+    <plurals name="evend_card_followers">
+        <item quantity="zero">%1$d follower</item>
+        <item quantity="one">%1$d follower</item>
+        <item quantity="other">%1$d followers</item>
+    </plurals>
+
+    <string name="login_for_more_features">Connecte-toi pour avoir accès à toutes les options</string>
+    <string name="bonnes_ondes_seulement">Bonnes ondes seulement...</string>
 
 </resources>

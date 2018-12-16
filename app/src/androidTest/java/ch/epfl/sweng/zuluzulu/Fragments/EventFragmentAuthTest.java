@@ -165,15 +165,8 @@ public class EventFragmentAuthTest extends TestWithAuthenticatedAndFragment<Even
     }
 
     @Test
-    public void authenticatedCanClickFavorite() {
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
-        onView(withId(R.id.event_fragment_fav_button)).perform(click());
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
-    }
-
-    @Test
     public void authenticatedCanUnfollowAndFollowAnEvent() {
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(2)));
         onData(anything())
                 .inAdapterView(withId(R.id.event_fragment_listview))
                 .atPosition(0)
@@ -182,14 +175,14 @@ public class EventFragmentAuthTest extends TestWithAuthenticatedAndFragment<Even
         onView(withId(R.id.event_fragment_fav_button)).perform(click());
         onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(0)));
         onView(withId(R.id.event_fragment_all_button)).perform(click());
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(2)));
         onData(anything())
                 .inAdapterView(withId(R.id.event_fragment_listview))
                 .atPosition(0)
                 .onChildView(withId(R.id.card_event_like_button))
                 .perform(click());
         onView(withId(R.id.event_fragment_fav_button)).perform(click());
-        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(1)));
+        onView(withId(R.id.event_fragment_listview)).check(matches(hasChildCount(2)));
     }
 
     @Test

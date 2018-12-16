@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Fragments.AdminFragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -63,7 +64,7 @@ public class ChangeUserRoleFragment extends SuperFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_change_user_role, container, false);
         searchBar = view.findViewById(R.id.user_role_searchbar);
         userRoleListview = view.findViewById(R.id.user_role_list);

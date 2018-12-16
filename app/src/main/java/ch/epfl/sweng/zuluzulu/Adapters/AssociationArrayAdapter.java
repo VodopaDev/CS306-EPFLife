@@ -2,6 +2,7 @@ package ch.epfl.sweng.zuluzulu.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,8 +52,9 @@ public class AssociationArrayAdapter extends ArrayAdapter<Association> {
      * @param parent      the ListView to put the view
      * @return the Association card view
      */
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View asso_view = convertView;
         final AssociationHolder holder = asso_view == null ? new AssociationHolder() : (AssociationHolder) asso_view.getTag();
 

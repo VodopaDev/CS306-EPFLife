@@ -48,7 +48,6 @@ public class ChannelTest {
     private Channel channelSAT;
 
     private String section1 = "IN";
-    private String section2 = "SC";
 
     @Before
     public void init() {
@@ -114,6 +113,7 @@ public class ChannelTest {
     @Test
     public void testChannelWithSectionRestriction() {
         assertTrue(channelGlobal.canBeSeenBy(section1, nullPoint));
+        String section2 = "SC";
         assertTrue(channelGlobal.canBeSeenBy(section2, nullPoint));
 
         assertFalse(channelIN.canBeSeenBy(null, nullPoint));

@@ -8,13 +8,10 @@ import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.util.concurrent.TimeUnit;
 
 import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.MementoFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
-import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlReader;
 import ch.epfl.sweng.zuluzulu.URLTools.UrlReaderFactory;
 
