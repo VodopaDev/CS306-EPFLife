@@ -174,7 +174,14 @@ public class ProfileFragment extends SuperFragment {
      * @return if the permissions are granted
      */
     private boolean askPermissions() {
+        return (hasPermission()) || (internal++ < 3 && askPermissions());
+    }
 
+    /**
+     * Check if user has permission
+     * @return boolean
+     */
+    private boolean hasPermission(){
         boolean storage_write = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         boolean storage_read = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         if (!storage_write) {
@@ -183,7 +190,7 @@ public class ProfileFragment extends SuperFragment {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
         }
 
-        return (storage_read && storage_write) || (internal++ < 3 && askPermissions());
+        return storage_read && storage_write;
     }
 
     /**
