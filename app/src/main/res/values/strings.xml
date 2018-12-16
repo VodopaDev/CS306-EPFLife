@@ -109,6 +109,7 @@
     </plurals>
 
     <string name="login_for_more_features">Connecte-toi pour avoir accès à toutes les options</string>
+    <string name="profile_new_picture">Nouvelle photo</string>
     <string name="bonnes_ondes_seulement">Bonnes ondes seulement...</string>
 
 </resources>

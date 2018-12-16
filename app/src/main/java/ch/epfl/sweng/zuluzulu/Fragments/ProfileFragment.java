@@ -54,6 +54,8 @@ public class ProfileFragment extends SuperFragment {
     private static final int CAMERA_CODE = 1234;
     private static final int W_STORAGE_PERM_CODE = 260;
 
+    private int internal = 0;
+
     private AuthenticatedUser userData;
 
     private boolean profileOwner;
@@ -134,14 +136,19 @@ public class ProfileFragment extends SuperFragment {
 
         pic = view.findViewById(R.id.profile_image);
 
-        user_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (profileOwner && askPermissions()) {
-                    goToCamera();
+        View add_picture_view = view.findViewById(R.id.profile_add_photo);
+        if (profileOwner) {
+            add_picture_view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (askPermissions()) {
+                        goToCamera();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            add_picture_view.setVisibility(View.GONE);
+        }
 
         if (askPermissions()) {
             setBitmapFromStorage();
@@ -167,6 +174,14 @@ public class ProfileFragment extends SuperFragment {
      * @return if the permissions are granted
      */
     private boolean askPermissions() {
+        return (hasPermission()) || (internal++ < 3 && askPermissions());
+    }
+
+    /**
+     * Check if user has permission
+     * @return boolean
+     */
+    private boolean hasPermission(){
         boolean storage_write = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         boolean storage_read = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         if (!storage_write) {
@@ -217,14 +232,14 @@ public class ProfileFragment extends SuperFragment {
      */
     private File createImageFile() throws IOException {
         // Create an image file name
-        File directory = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 "user" + userData.getSciper(),  /* prefix */
                 ".jpg",         /* suffix */
-                directory      /* directory */
+                storageDir      /* directory */
         );
 
-        // Save a file: path for use with ACTION_VIEW intents
+        // Save a p: path for use with ACTION_VIEW intents
         pathToImage = image.getAbsolutePath();
         return image;
     }
@@ -255,17 +270,16 @@ public class ProfileFragment extends SuperFragment {
                 startActivityForResult(intent, CAMERA_CODE);
             }
         }
-
     }
 
-    /**
-     * helper method that takes a path to a file and scale it to make it fit inside the imagebutton
-     *
-     * @param path the path to the file to rescale
-     */
+        /**
+         * helper method that takes a path to a file and scale it to make it fit inside the imagebutton
+         *
+         * @param path the path to the file to rescale
+         */
     private void setRescaledImage(String path) {
         int targetH = pic.getHeight();
-        if(targetH == 0){
+        if (targetH == 0) {
             targetH = 50;
         }
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -281,7 +295,9 @@ public class ProfileFragment extends SuperFragment {
         bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
-        pic.setImageBitmap(bitmap);
+        if (bmOptions.outHeight != 0) {
+            pic.setImageBitmap(bitmap);
+        }
     }
 
     @Override
@@ -293,14 +309,17 @@ public class ProfileFragment extends SuperFragment {
 
             Uri file = Uri.fromFile(new File(pathToImage));
             UploadTask uploadTask = pictureRef.putFile(file);
+            IdlingResourceFactory.incrementCountingIdlingResource();
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
+                    IdlingResourceFactory.decrementCountingIdlingResource();
                     Toast.makeText(getActivity(), "Unsuccessful upload", Toast.LENGTH_SHORT).show();
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    IdlingResourceFactory.decrementCountingIdlingResource();
                     Toast.makeText(getActivity(), "Successful upload", Toast.LENGTH_SHORT).show();
                 }
             });

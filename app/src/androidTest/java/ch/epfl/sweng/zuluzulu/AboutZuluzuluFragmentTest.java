@@ -40,6 +40,6 @@ public class AboutZuluzuluFragmentTest {
         intending(anyIntent()).respondWith(result);
 
         onView(withId(R.id.send_mail)).perform(click());
-
+        Utility.openMenu();
     }
 }

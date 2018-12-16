@@ -1,9 +1,5 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
@@ -13,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -42,14 +41,12 @@ public class LoginFragment extends SuperFragment {
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private View mProgressView;
-    private View mLoginFormView;
-
-    private WebView webview;
 
     private String redirectURICode;
     private OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
-    private String code;
     private User user;
+    private WebView webview;
+    private String codeRequestUrl;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -74,6 +71,10 @@ public class LoginFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (getArguments() != null) {
+            codeRequestUrl = (String) getArguments().getSerializable("uri");
+        }
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
@@ -87,8 +88,8 @@ public class LoginFragment extends SuperFragment {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
 
-        mLoginFormView = view.findViewById(R.id.login_form);
-        mProgressView = view.findViewById(R.id.login_progress);
+        mProgressView = view.findViewById(R.id.linlaHeaderProgress_login_progress);
+
         webview = view.findViewById(R.id.webview);
         webview.setWebViewClient(new WebViewClient() {
             @Override
@@ -96,7 +97,6 @@ public class LoginFragment extends SuperFragment {
                 if (url.contains("code=")) {
                     redirectURICode = url;
                     showProgress(true);
-                    webview.setVisibility(View.INVISIBLE);
                     finishLogin();
                     return true;
                 }
@@ -105,11 +105,15 @@ public class LoginFragment extends SuperFragment {
         });
 
         showProgress(false);
-        String codeRequestUrl = AuthClient.createCodeRequestUrl(config);
+
+        if(codeRequestUrl == null) {
+            codeRequestUrl = AuthClient.createCodeRequestUrl(config);
+        }
         webview.loadUrl(codeRequestUrl);
 
         return view;
     }
+
 
     /**
      * Is executed once the session is active
@@ -117,74 +121,49 @@ public class LoginFragment extends SuperFragment {
      */
     private void transfer_main() {
         // Pass the user to the activity
-            Map<Integer, Object> toTransfer = new HashMap<>();
-            toTransfer.put(0, user);
-            mListener.onFragmentInteraction(CommunicationTag.SET_USER, toTransfer);
-            mListener.onFragmentInteraction(CommunicationTag.OPEN_MAIN_FRAGMENT, null);
-            showProgress(false);
+        Map<Integer, Object> toTransfer = new HashMap<Integer, Object>();
+        toTransfer.put(0, user);
+        mListener.onFragmentInteraction(CommunicationTag.SET_USER, toTransfer);
+        mListener.onFragmentInteraction(CommunicationTag.OPEN_MAIN_FRAGMENT, null);
+        showProgress(false);
     }
 
     private void finishLogin() {
-        code = AuthClient.extractCode(redirectURICode);
+        String code = AuthClient.extractCode(redirectURICode);
 
         Map<String, String> tokens;
         try {
             tokens = AuthServer.fetchTokens(config, code);
             user = AuthServer.fetchUser(tokens.get("Tequila.profile"));
-        } catch (IOException e) {
-            return;
+        } catch (Exception e) {
+            user = new User.UserBuilder().buildGuestUser();
         }
 
+        showProgress(false);
 
         updateUserAndFinishLogin();
     }
 
     private void updateUserAndFinishLogin() {
         DatabaseFactory.getDependency().getUserWithIdOrCreateIt(user.getSciper(), result -> {
-            if(result == null) {
+            if (result == null && user.isConnected()) {
                 DatabaseFactory.getDependency().updateUser((AuthenticatedUser) user);
             } else {
                 this.user = result;
             }
             transfer_main();
-            showProgress(false);
         });
     }
 
 
     /**
-     * Shows the progress UI and hides the login form.
+     * Shows the progress UI
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
+        if (show) {
+            mProgressView.setVisibility(View.VISIBLE);
         } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mProgressView.setVisibility(View.GONE);
         }
     }
 }

@@ -97,7 +97,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         holder.likes_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(user != null && user.isConnected()) {
+                if (user != null && user.isConnected()) {
                     if (!user.isFollowedEvent(event.getId())) {
                         event.addFollower(user.getSciper());
                         user.addFollowedEvent(event.getId());

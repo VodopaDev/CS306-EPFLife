@@ -29,6 +29,17 @@ public class MenuAsAuthenticatedTest extends TestWithAuthenticatedUser {
         Utility.checkFragmentIsOpen(R.id.channel_fragment);
     }
 
+
+    @Test
+    public void testUserCanOpenCalendar() {
+        onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.nav_calendar));
+
+
+        // Check if it's open
+        Utility.checkFragmentIsOpen(R.id.fragment_calendar);
+    }
+
     @Test
     public void testUserCanOpenProfileFragment() {
         onView(withId(R.id.nav_view))
