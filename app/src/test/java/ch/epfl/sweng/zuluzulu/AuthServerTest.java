@@ -1,5 +1,7 @@
 package ch.epfl.sweng.zuluzulu;
 
+import com.google.gson.Gson;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -33,5 +35,11 @@ public class AuthServerTest {
             return;
         }
         throw new Exception("could getAndAddOnSuccessListener a user from a non valid token?");
+    }
+
+    @Test
+    public void createUser(){
+        String json = "{ \"Sciper\": 268785, \"authscheme\": \"OAuth2\", \"Firstname\": \"Dahn Samuel Darius\", \"Username\": \"youssefi\", \"Email\": \"dahn.youssefi@epfl.ch\", \"Name\": \"Youssefi\", \"Unit\": \"IN-BA5\", \"scope\": \"Tequila.profile\" }";
+        AuthServer.createUser(new Gson().fromJson(json, AuthServer.JsonProfile.class));
     }
 }
