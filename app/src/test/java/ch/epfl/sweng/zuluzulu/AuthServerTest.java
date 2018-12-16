@@ -41,5 +41,7 @@ public class AuthServerTest {
     public void createUser(){
         String json = "{ \"Sciper\": 268785, \"authscheme\": \"OAuth2\", \"Firstname\": \"Dahn Samuel Darius\", \"Username\": \"youssefi\", \"Email\": \"dahn.youssefi@epfl.ch\", \"Name\": \"Youssefi\", \"Unit\": \"IN-BA5\", \"scope\": \"Tequila.profile\" }";
         AuthServer.createUser(new Gson().fromJson(json, AuthServer.JsonProfile.class));
+        String json2 = "{ \"Sciper\": 268785, \"authscheme\": \"OAuth2\", \"Firstname\": \"Dahn Samuel Darius\", \"Username\": \"youssefi\", \"Email\": \"dahn.youssefi@epfl.ch\", \"Name\": \"Youssefi\", \"scope\": \"Tequila.profile\" }";
+        AuthServer.createUser(new Gson().fromJson(json2, AuthServer.JsonProfile.class));
     }
 }
