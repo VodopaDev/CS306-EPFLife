@@ -84,7 +84,7 @@ public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragmen
 
         intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(result);
 
-        onView(ViewMatchers.withId(R.id.profile_name_text)).perform(click());
+        onView(ViewMatchers.withId(R.id.profile_image)).perform(click());
 
         ImageButton pic = mActivityRule.getActivity().findViewById(R.id.profile_image);
 
