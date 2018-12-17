@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/chat_background"
-    tools:context=".Fragments.ChatFragment">
+    tools:context=".fragments.ChatFragment">
 
     <include
         android:id="@+id/chat_posts_buttons"

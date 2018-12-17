@@ -52,7 +52,7 @@
                             android:layout_height="wrap_content" />
                     </LinearLayout>
 
-                    <ch.epfl.sweng.zuluzulu.Utility.MyListView
+                    <ch.epfl.sweng.zuluzulu.utility.MyListView
                         android:id="@+id/main_fragment_followed_events_listview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
                             android:layout_height="wrap_content" />
                     </LinearLayout>
 
-                    <ch.epfl.sweng.zuluzulu.Utility.MyListView
+                    <ch.epfl.sweng.zuluzulu.utility.MyListView
                         android:id="@+id/main_fragment_followed_associations_listview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

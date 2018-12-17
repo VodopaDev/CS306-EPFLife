@@ -9,27 +9,23 @@ import android.view.Gravity;
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.epfl.sweng.zuluzulu.MainActivity;
-import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Structure.Association;
-import ch.epfl.sweng.zuluzulu.Structure.Channel;
-import ch.epfl.sweng.zuluzulu.Structure.ChatMessage;
-import ch.epfl.sweng.zuluzulu.Structure.Event;
-import ch.epfl.sweng.zuluzulu.Structure.EventBuilder;
-import ch.epfl.sweng.zuluzulu.Structure.EventDate;
-import ch.epfl.sweng.zuluzulu.Structure.Post;
-import ch.epfl.sweng.zuluzulu.User.Admin;
-import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.User.Guest;
-import ch.epfl.sweng.zuluzulu.User.User;
-import ch.epfl.sweng.zuluzulu.User.UserRole;
+import ch.epfl.sweng.zuluzulu.structure.Association;
+import ch.epfl.sweng.zuluzulu.structure.Channel;
+import ch.epfl.sweng.zuluzulu.structure.ChatMessage;
+import ch.epfl.sweng.zuluzulu.structure.EventBuilder;
+import ch.epfl.sweng.zuluzulu.structure.EventDate;
+import ch.epfl.sweng.zuluzulu.structure.Post;
+import ch.epfl.sweng.zuluzulu.user.Admin;
+import ch.epfl.sweng.zuluzulu.user.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.user.Guest;
+import ch.epfl.sweng.zuluzulu.user.User;
+import ch.epfl.sweng.zuluzulu.user.UserRole;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;

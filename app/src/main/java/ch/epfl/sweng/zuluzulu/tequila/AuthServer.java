@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.user.User;
 
 /**
  * Interface for authentication on a server.

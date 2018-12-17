@@ -6,11 +6,11 @@ import org.junit.runners.JUnit4;
 
 import java.util.ArrayList;
 
-import ch.epfl.sweng.zuluzulu.TestingUtility.Utility;
-import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.User.Guest;
-import ch.epfl.sweng.zuluzulu.User.User;
-import ch.epfl.sweng.zuluzulu.User.UserRole;
+import ch.epfl.sweng.zuluzulu.testingUtility.Utility;
+import ch.epfl.sweng.zuluzulu.user.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.user.Guest;
+import ch.epfl.sweng.zuluzulu.user.User;
+import ch.epfl.sweng.zuluzulu.user.UserRole;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;

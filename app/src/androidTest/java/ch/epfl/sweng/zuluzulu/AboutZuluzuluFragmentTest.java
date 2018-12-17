@@ -9,8 +9,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.fragments.AboutZuluzuluFragment;
+import ch.epfl.sweng.zuluzulu.fragments.SuperFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;

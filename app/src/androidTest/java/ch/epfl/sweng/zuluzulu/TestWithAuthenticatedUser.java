@@ -5,9 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 import org.junit.Before;
 import org.junit.Rule;
 
-import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
-import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.user.AuthenticatedUser;
 
 /**
  * This class allow us to create the main activity as if we were connected.

@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.User.User;
+import ch.epfl.sweng.zuluzulu.user.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.user.User;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;

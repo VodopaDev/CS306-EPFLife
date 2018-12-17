@@ -6,8 +6,8 @@ import android.support.test.rule.ActivityTestRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
-import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 
 /**
  * This class is to test if the MainActivity starts the right fragment depending on the intent
