@@ -59,10 +59,8 @@ public class AssociationsParser implements Parser<List<String>> {
 
         // remplace html unicode to char
         String sb = url + ',' + name + ',' + clean_description;
-        String result = sb
-                .replaceAll("&#8217;", "'").replaceAll("&#8211;", "-")
-                .replaceAll("&gt;", ">").replaceAll("&amp;", "&");
 
-        return result;
+        return sb.replaceAll("&#8217;", "'").replaceAll("&#8211;", "-")
+                .replaceAll("&gt;", ">").replaceAll("&amp;", "&");
     }
 }

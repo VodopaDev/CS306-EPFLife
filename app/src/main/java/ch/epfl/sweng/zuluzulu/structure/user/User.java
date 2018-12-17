@@ -14,9 +14,9 @@ abstract public class User implements Serializable {
     /**
      * This list will contain the roles of the User
      */
-    final protected Set<UserRole> roles;
+    final Set<UserRole> roles;
 
-    protected User() {
+    User() {
         this.roles = new TreeSet<>();
     }
 

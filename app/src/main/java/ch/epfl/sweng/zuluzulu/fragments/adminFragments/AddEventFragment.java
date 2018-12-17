@@ -240,17 +240,16 @@ public class AddEventFragment extends SuperFragment {
      * @return if the arguments are valid
      */
     private boolean checkIfValid(String title, String description, Date start, Date end) {
-        boolean isValid = true;
         if (title.isEmpty())
-            isValid = viewSetError(title_view, "please write a title");
+            return viewSetError(title_view, "please write a title");
         if (description.isEmpty())
-            isValid = viewSetError(description_view, "please write a description");
+            return viewSetError(description_view, "please write a description");
         if (start.before(today) || end.before(start)){
             Toast.makeText(getActivity(), "Set a correct date", Toast.LENGTH_SHORT).show();
-            isValid = false;
+            return false;
         }
 
-        return isValid;
+        return true;
     }
 
     /**

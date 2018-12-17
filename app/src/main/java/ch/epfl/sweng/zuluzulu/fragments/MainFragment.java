@@ -41,7 +41,7 @@ public class MainFragment extends SuperFragment {
     public static final String TAG = "MAIN_TAG";
     private static final String ARG_USER = "ARG_USER";
 
-    Button sign_in_button;
+    private Button sign_in_button;
     private User user;
     private ArrayList<Association> associations_array;
     private ArrayList<Event> events_array;
@@ -174,7 +174,7 @@ public class MainFragment extends SuperFragment {
      * @param container container to inflate
      * @return a connected user specific view
      */
-    public View createConnectedUserView(LayoutInflater inflater, ViewGroup container) {
+    private View createConnectedUserView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_main_user, container, false);
         ListView associations_listView = view.findViewById(R.id.main_fragment_followed_associations_listview);
         ListView events_listView = view.findViewById(R.id.main_fragment_followed_events_listview);
@@ -237,7 +237,7 @@ public class MainFragment extends SuperFragment {
      * @param container
      * @return the guest's view
      */
-    public View createNotConnectedUserView(LayoutInflater inflater, ViewGroup container) {
+    private View createNotConnectedUserView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         ListView listview_event = view.findViewById(R.id.main_page_list_event);
