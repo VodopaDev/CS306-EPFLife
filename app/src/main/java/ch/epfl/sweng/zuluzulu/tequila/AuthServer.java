@@ -46,6 +46,11 @@ public final class AuthServer {
             throw new IOException("Error from Tequila:" + profile.error);
         }
 
+        return createUser(profile);
+    }
+
+    public static User createUser(JsonProfile profile){
+
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail(profile.email);
         if (profile.section != null) {
@@ -75,7 +80,7 @@ public final class AuthServer {
         public String token;
     }
 
-    private static final class JsonProfile {
+    public static final class JsonProfile {
         @SerializedName("error")
         public String error;
 
