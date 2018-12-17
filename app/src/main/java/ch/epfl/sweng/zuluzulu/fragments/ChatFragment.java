@@ -23,7 +23,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
 import ch.epfl.sweng.zuluzulu.structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.structure.SuperMessage;
-import ch.epfl.sweng.zuluzulu.user.User;
+import ch.epfl.sweng.zuluzulu.structure.user.User;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_POST_FRAGMENT;
 import static ch.epfl.sweng.zuluzulu.structure.SuperMessage.increasingTimeComparator;

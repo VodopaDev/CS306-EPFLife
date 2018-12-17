@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.structure.user;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,10 +7,10 @@ import org.junit.runners.JUnit4;
 import java.util.ArrayList;
 
 import ch.epfl.sweng.zuluzulu.testingUtility.Utility;
-import ch.epfl.sweng.zuluzulu.user.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.user.Guest;
-import ch.epfl.sweng.zuluzulu.user.User;
-import ch.epfl.sweng.zuluzulu.user.UserRole;
+import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.structure.user.Guest;
+import ch.epfl.sweng.zuluzulu.structure.user.User;
+import ch.epfl.sweng.zuluzulu.structure.user.UserRole;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;

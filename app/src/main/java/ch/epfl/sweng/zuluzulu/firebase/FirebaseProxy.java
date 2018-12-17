@@ -24,9 +24,9 @@ import ch.epfl.sweng.zuluzulu.structure.Channel;
 import ch.epfl.sweng.zuluzulu.structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.structure.Event;
 import ch.epfl.sweng.zuluzulu.structure.Post;
-import ch.epfl.sweng.zuluzulu.user.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.user.User;
-import ch.epfl.sweng.zuluzulu.user.UserRole;
+import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.structure.user.User;
+import ch.epfl.sweng.zuluzulu.structure.user.UserRole;
 
 public class FirebaseProxy implements Proxy {
 

@@ -8,8 +8,8 @@ import android.provider.BaseColumns;
 
 import java.util.ArrayList;
 
-import ch.epfl.sweng.zuluzulu.user.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.user.User;
+import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.structure.user.User;
 
 public class UserDatabase {
     private final UserDatabaseHelper mDbHelper;

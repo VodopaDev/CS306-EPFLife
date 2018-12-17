@@ -15,8 +15,8 @@ import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.structure.Association;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
-import ch.epfl.sweng.zuluzulu.user.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.user.User;
+import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.structure.user.User;
 import ch.epfl.sweng.zuluzulu.utility.ImageLoader;
 
 import static ch.epfl.sweng.zuluzulu.utility.ImageLoader.loadUriIntoImageView;

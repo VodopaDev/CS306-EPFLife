@@ -22,7 +22,7 @@ import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
 import ch.epfl.sweng.zuluzulu.structure.Post;
-import ch.epfl.sweng.zuluzulu.user.User;
+import ch.epfl.sweng.zuluzulu.structure.user.User;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_CHAT_FRAGMENT;
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_WRITE_POST_FRAGMENT;

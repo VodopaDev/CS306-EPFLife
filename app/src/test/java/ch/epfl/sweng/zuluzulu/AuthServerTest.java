@@ -9,7 +9,7 @@ import org.junit.runners.JUnit4;
 import java.io.IOException;
 import java.util.Map;
 
-import ch.epfl.sweng.zuluzulu.user.User;
+import ch.epfl.sweng.zuluzulu.structure.user.User;
 import ch.epfl.sweng.zuluzulu.tequila.AuthServer;
 import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
 

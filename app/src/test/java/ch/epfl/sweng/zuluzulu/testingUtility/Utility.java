@@ -8,8 +8,8 @@ import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
-import ch.epfl.sweng.zuluzulu.user.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.user.User;
+import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.structure.user.User;
 
 public class Utility {
 

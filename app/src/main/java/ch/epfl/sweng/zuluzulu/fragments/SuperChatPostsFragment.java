@@ -16,8 +16,8 @@ import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
 import ch.epfl.sweng.zuluzulu.structure.SuperMessage;
-import ch.epfl.sweng.zuluzulu.user.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.user.User;
+import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.structure.user.User;
 
 /**
  * A simple {@link SuperFragment} subclass.

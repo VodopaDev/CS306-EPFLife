@@ -24,7 +24,7 @@ import java.io.OutputStream;
 
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.user.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Utility;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;

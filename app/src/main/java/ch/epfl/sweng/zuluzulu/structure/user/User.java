@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu.user;
+package ch.epfl.sweng.zuluzulu.structure.user;
 
 import java.io.Serializable;
 import java.util.ArrayList;

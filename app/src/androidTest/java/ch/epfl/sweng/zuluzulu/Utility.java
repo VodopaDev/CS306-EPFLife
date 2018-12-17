@@ -21,11 +21,11 @@ import ch.epfl.sweng.zuluzulu.structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.structure.EventBuilder;
 import ch.epfl.sweng.zuluzulu.structure.EventDate;
 import ch.epfl.sweng.zuluzulu.structure.Post;
-import ch.epfl.sweng.zuluzulu.user.Admin;
-import ch.epfl.sweng.zuluzulu.user.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.user.Guest;
-import ch.epfl.sweng.zuluzulu.user.User;
-import ch.epfl.sweng.zuluzulu.user.UserRole;
+import ch.epfl.sweng.zuluzulu.structure.user.Admin;
+import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.structure.user.Guest;
+import ch.epfl.sweng.zuluzulu.structure.user.User;
+import ch.epfl.sweng.zuluzulu.structure.user.UserRole;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;

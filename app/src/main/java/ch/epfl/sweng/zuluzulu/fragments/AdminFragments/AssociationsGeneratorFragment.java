@@ -29,8 +29,8 @@ import ch.epfl.sweng.zuluzulu.urlTools.AssociationsParser;
 import ch.epfl.sweng.zuluzulu.urlTools.IconParser;
 import ch.epfl.sweng.zuluzulu.urlTools.OnClickRecyclerView;
 import ch.epfl.sweng.zuluzulu.urlTools.UrlHandler;
-import ch.epfl.sweng.zuluzulu.user.User;
-import ch.epfl.sweng.zuluzulu.user.UserRole;
+import ch.epfl.sweng.zuluzulu.structure.user.User;
+import ch.epfl.sweng.zuluzulu.structure.user.UserRole;
 
 
 /**

@@ -24,7 +24,7 @@ import ch.epfl.sweng.zuluzulu.adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.structure.Event;
-import ch.epfl.sweng.zuluzulu.user.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
 
 
 public class CalendarFragment extends SuperFragment {

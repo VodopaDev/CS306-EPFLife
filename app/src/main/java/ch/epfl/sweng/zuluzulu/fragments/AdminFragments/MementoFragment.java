@@ -30,8 +30,8 @@ import ch.epfl.sweng.zuluzulu.structure.EventBuilder;
 import ch.epfl.sweng.zuluzulu.structure.EventDate;
 import ch.epfl.sweng.zuluzulu.urlTools.MementoParser;
 import ch.epfl.sweng.zuluzulu.urlTools.UrlHandler;
-import ch.epfl.sweng.zuluzulu.user.User;
-import ch.epfl.sweng.zuluzulu.user.UserRole;
+import ch.epfl.sweng.zuluzulu.structure.user.User;
+import ch.epfl.sweng.zuluzulu.structure.user.UserRole;
 
 
 /**

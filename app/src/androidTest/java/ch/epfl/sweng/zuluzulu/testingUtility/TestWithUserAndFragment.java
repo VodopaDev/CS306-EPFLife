@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import ch.epfl.sweng.zuluzulu.fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.idlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.MainActivity;
-import ch.epfl.sweng.zuluzulu.user.User;
+import ch.epfl.sweng.zuluzulu.structure.user.User;
 import ch.epfl.sweng.zuluzulu.Utility;
 
 @RunWith(AndroidJUnit4.class)

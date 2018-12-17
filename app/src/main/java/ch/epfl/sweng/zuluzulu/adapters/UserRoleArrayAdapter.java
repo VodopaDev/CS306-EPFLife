@@ -20,7 +20,7 @@ import java.util.Set;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.user.UserRole;
+import ch.epfl.sweng.zuluzulu.structure.user.UserRole;
 
 public class UserRoleArrayAdapter extends ArrayAdapter<Map<String, Object>> {
     private static final int layout_resource_id = R.layout.card_user_role;

@@ -4,7 +4,7 @@ import org.junit.Before;
 
 import ch.epfl.sweng.zuluzulu.database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.user.Admin;
+import ch.epfl.sweng.zuluzulu.structure.user.Admin;
 
 public class TestWithAdmin extends TestWithAuthenticatedUser {
 

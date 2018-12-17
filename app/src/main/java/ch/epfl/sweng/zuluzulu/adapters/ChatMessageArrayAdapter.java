@@ -19,7 +19,7 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.structure.SuperMessage;
-import ch.epfl.sweng.zuluzulu.user.User;
+import ch.epfl.sweng.zuluzulu.structure.user.User;
 import ch.epfl.sweng.zuluzulu.utility.Utils;
 
 public class ChatMessageArrayAdapter extends ArrayAdapter<SuperMessage> {
