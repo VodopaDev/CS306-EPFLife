@@ -3,12 +3,10 @@ package ch.epfl.sweng.zuluzulu;
 import android.net.Uri;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.widget.ImageView;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import ch.epfl.sweng.zuluzulu.utility.ImageLoader;
 

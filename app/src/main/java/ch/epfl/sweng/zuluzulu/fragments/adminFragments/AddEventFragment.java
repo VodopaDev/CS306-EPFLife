@@ -196,8 +196,8 @@ public class AddEventFragment extends SuperFragment {
         spinner = view.findViewById(R.id.spinner);
         fillAssociationNames();
 
-        start_date_pick = (DatePicker) view.findViewById(R.id.date_for_add);
-        end_date_pick = (DatePicker) view.findViewById(R.id.end_date_for_add);
+        start_date_pick = view.findViewById(R.id.date_for_add);
+        end_date_pick = view.findViewById(R.id.end_date_for_add);
 
 
 

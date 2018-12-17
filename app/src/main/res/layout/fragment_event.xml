@@ -38,7 +38,8 @@
             android:layout_weight="1"
             android:background="#00000000"
             android:scaleType="fitCenter"
-            android:src="@drawable/setting" />
+            android:src="@drawable/setting"
+            android:contentDescription="TODO" />
 
     </LinearLayout>
 
@@ -113,7 +114,7 @@
             android:layout_marginTop="8dp"
             android:clickable="true"
             android:ems="10"
-            android:focusable="false"
+            android:focusable="true"
             android:hint="To date"
             android:inputType="date"
             android:longClickable="false"
@@ -137,7 +138,7 @@
             android:layout_marginTop="8dp"
             android:clickable="true"
             android:ems="10"
-            android:focusable="false"
+            android:focusable="true"
             android:hint="From date"
             android:inputType="date"
             android:longClickable="false"
@@ -201,7 +202,8 @@
         android:src="@drawable/add_button"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="TODO" />
 
 
 </android.support.constraint.ConstraintLayout>

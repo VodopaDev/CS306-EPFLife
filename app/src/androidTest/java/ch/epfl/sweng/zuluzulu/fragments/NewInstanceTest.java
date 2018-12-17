@@ -2,11 +2,8 @@ package ch.epfl.sweng.zuluzulu.fragments;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.bumptech.glide.util.Util;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import ch.epfl.sweng.zuluzulu.Utility;
 

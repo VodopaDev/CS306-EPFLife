@@ -216,8 +216,7 @@ public class MockedProxy implements Proxy {
     @Override
     public void getMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult) {
         if (channelId != null && channelMap.containsKey(channelId)) {
-            ArrayList<ChatMessage> result = new ArrayList<>();
-            result.addAll(channelMap.get(channelId).messageMap.values());
+            ArrayList<ChatMessage> result = new ArrayList<>(channelMap.get(channelId).messageMap.values());
             onResult.apply(result);
         }
     }
@@ -267,9 +266,7 @@ public class MockedProxy implements Proxy {
     @Override
     public void getRepliesFromPost(String channelId, String postId, OnResult<List<Post>> onResult) {
         if (channelId != null && channelMap.containsKey(channelId) && postId != null && channelMap.get(channelId).postMap.containsKey(postId)) {
-            ArrayList<Post> result = new ArrayList<>();
-            for (Post post : channelMap.get(channelId).postMap.get(postId).second.values())
-                result.add(post);
+            ArrayList<Post> result = new ArrayList<>(channelMap.get(channelId).postMap.get(postId).second.values());
             onResult.apply(result);
         }
     }

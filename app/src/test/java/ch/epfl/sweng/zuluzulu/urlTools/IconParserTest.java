@@ -25,7 +25,7 @@ public class IconParserTest {
     public void parseIconWrongData() {
         List<String> result = parser.parse(new BufferedReader(new StringReader("test")));
         assertNotNull(result);
-        assertTrue(result.size() == 0);
+        assertEquals(0, result.size());
     }
 
     @Test
@@ -38,7 +38,7 @@ public class IconParserTest {
         List<String> result = parser.parse(new BufferedReader(
                 new StringReader("<link href=\"my.ico\" />")));
         assertNotNull(result);
-        assertTrue(result.size() == 1);
+        assertEquals(1, result.size());
     }
 
     @Test

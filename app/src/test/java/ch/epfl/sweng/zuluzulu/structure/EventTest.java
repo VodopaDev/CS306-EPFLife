@@ -15,6 +15,7 @@ import ch.epfl.sweng.zuluzulu.firebase.FirebaseMapDecorator;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 @RunWith(JUnit4.class)
@@ -107,8 +108,8 @@ public class EventTest {
     @Test
     public void uriAreCorrect() {
         initWorkingAssociation();
-        assertEquals(null, event0.getIconUri());
-        assertEquals(null, event0.getBannerUri());
+        assertNull(event0.getIconUri());
+        assertNull(event0.getBannerUri());
         // always null in tests since Uri.parse is android function
         // doesn't work in tests
     }

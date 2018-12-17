@@ -63,7 +63,8 @@
             android:scaleType="fitCenter"
             android:src="@drawable/send_message"
             android:textAllCaps="false"
-            android:textAppearance="@style/TextAppearance.AppCompat" />
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:contentDescription="TODO" />
 
     </LinearLayout>
 

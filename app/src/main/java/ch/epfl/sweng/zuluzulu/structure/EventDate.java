@@ -224,15 +224,15 @@ public class EventDate implements Serializable {
             if (nb_hours_end <= 0)
                 sb.append("Terminé");
             else if (nb_hours <= 0)
-                sb.append("Maintenant - " + dateRemoveZeroHour(getEndDate()));
+                sb.append("Maintenant - ").append(dateRemoveZeroHour(getEndDate()));
             else {
                 if (dayActu - dayOfEvent == 0)
-                    sb.append("Aujourd'hui à " + hourOfEvent + "h" + minuteOfDay + " (dans " + nb_hours + " heures)");
+                    sb.append("Aujourd'hui à ").append(hourOfEvent).append("h").append(minuteOfDay).append(" (dans ").append(nb_hours).append(" heures)");
                 else
-                    sb.append("Demain à " + hourOfEvent + "h" + minuteOfDay + " (dans " + nb_hours + " heures)");
+                    sb.append("Demain à ").append(hourOfEvent).append("h").append(minuteOfDay).append(" (dans ").append(nb_hours).append(" heures)");
             }
         } else
-            sb.append("Dans " + nb_days + " jours");
+            sb.append("Dans ").append(nb_days).append(" jours");
     }
 
     private void printDateStart(StringBuilder sb) {

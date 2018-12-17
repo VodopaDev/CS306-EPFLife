@@ -25,7 +25,7 @@ public class MementoParserTest {
     public void parseMementoData() {
         List<String> result = parser.parse(new BufferedReader(new StringReader("[{}]")));
         assertNotNull(result);
-        assertTrue(result.size() == 1);
+        assertEquals(1, result.size());
     }
 
 

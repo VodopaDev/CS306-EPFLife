@@ -34,7 +34,8 @@
         android:layout_marginTop="8dp"
         android:src="@drawable/search"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="TODO" />
 
     <ListView
         android:id="@+id/user_role_list"

@@ -2,7 +2,6 @@ package ch.epfl.sweng.zuluzulu.utility;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;

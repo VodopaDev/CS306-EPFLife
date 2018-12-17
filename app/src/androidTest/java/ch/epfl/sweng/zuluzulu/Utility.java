@@ -78,18 +78,12 @@ public class Utility {
     }
 
     /**
-     * Add user to main
-     * <p>
-     * !!! TO READ !!!
-     *
+     * Add user to main     *
      * @param mActivityRule Activity rule
      * @param user          User
-     * @warning NEED TO BE CALLED TO CREATE THE ACTIVITY
+     * NEED TO BE CALLED TO CREATE THE ACTIVITY
      * USE IN RULE : new ActivityTestRule<>(MainActivity.class, false, false);
-     * <p>
      * It's allow us to not start the Activity before !
-     * <p>
-     * !!! TO READ !!!
      */
     public static void addUserToMainIntent(ActivityTestRule<MainActivity> mActivityRule, User user) {
         // Put the user into the main

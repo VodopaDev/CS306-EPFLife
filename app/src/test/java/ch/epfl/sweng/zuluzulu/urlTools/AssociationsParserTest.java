@@ -24,14 +24,14 @@ public class AssociationsParserTest {
     public void parseAssociationsDataWrongData() {
         List<String> result = parser.parse(new BufferedReader(new StringReader("test")));
         assertNotNull(result);
-        assertTrue(result.size() == 0);
+        assertEquals(0, result.size());
     }
 
     @Test
     public void parseAssociationsData() {
         List<String> result = parser.parse(new BufferedReader(new StringReader("&#8211; <a href=\"http://lauzhack.com\">LauzHack</a> (Organisation d&#8217;un Hackaton)<br />")));
         assertNotNull(result);
-        assertTrue(result.size() == 1);
+        assertEquals(1, result.size());
     }
 
     @Test
