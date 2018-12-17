@@ -20,10 +20,10 @@ import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.structure.user.User;
 import ch.epfl.sweng.zuluzulu.Utility;
 
-import static ch.epfl.sweng.zuluzulu.utility.createFilledUserBuilder;
-import static ch.epfl.sweng.zuluzulu.utility.createTestAuthenticated;
-import static ch.epfl.sweng.zuluzulu.utility.defaultPost0;
-import static ch.epfl.sweng.zuluzulu.utility.defaultPost1;
+import static ch.epfl.sweng.zuluzulu.Utility.createFilledUserBuilder;
+import static ch.epfl.sweng.zuluzulu.Utility.createTestAuthenticated;
+import static ch.epfl.sweng.zuluzulu.Utility.defaultPost0;
+import static ch.epfl.sweng.zuluzulu.Utility.defaultPost1;
 
 public class MockedProxy implements Proxy {
 

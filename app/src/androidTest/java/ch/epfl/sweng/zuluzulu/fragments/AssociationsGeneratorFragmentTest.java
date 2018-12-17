@@ -9,7 +9,7 @@ import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.fragments.AdminFragments.AssociationsGeneratorFragment;
+import ch.epfl.sweng.zuluzulu.fragments.adminFragments.AssociationsGeneratorFragment;
 import ch.epfl.sweng.zuluzulu.R;
 
 import java.io.BufferedReader;

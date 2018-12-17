@@ -4,7 +4,7 @@
     android:id="@+id/associations_generator_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.AdminFragments.AssociationsGeneratorFragment">
+    tools:context=".fragments.adminFragments.AssociationsGeneratorFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/associations_generator_recyclerview"

@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 
 
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.fragments.AdminFragments.AddEventFragment;
+import ch.epfl.sweng.zuluzulu.fragments.adminFragments.AddEventFragment;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.database.MockedProxy;
 import ch.epfl.sweng.zuluzulu.testingUtility.TestWithAdminAndFragment;

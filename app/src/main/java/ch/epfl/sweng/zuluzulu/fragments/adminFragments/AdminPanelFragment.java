@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu.fragments.AdminFragments;
+package ch.epfl.sweng.zuluzulu.fragments.adminFragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
