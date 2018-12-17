@@ -212,6 +212,10 @@ public class FirebaseProxy implements Proxy {
 
     //----- Event related methods -----\\
 
+    /**
+     * add an event to the database
+     * @param event the event we want to add
+     */
     @Override
     public void addEvent(Event event) {
         IdlingResourceFactory.incrementCountingIdlingResource();
@@ -275,6 +279,10 @@ public class FirebaseProxy implements Proxy {
 
     //----- Channel related methods -----\\
 
+    /**
+     * create a channel for an association
+     * @param association the association we want to create a channel for
+     */
     private void createChannel(Association association) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         Map<String, Object> map = new HashMap<>();
@@ -287,6 +295,10 @@ public class FirebaseProxy implements Proxy {
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
+    /**
+     * create a channel for an event
+     * @param event the event we want to create a channel for
+     */
     private void createChannel(Event event) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         Map<String, Object> map = new HashMap<>();
@@ -341,6 +353,11 @@ public class FirebaseProxy implements Proxy {
         );
     }
 
+    /**
+     * get the messages of a channel
+     * @param id the id of the channel
+     * @param onResult the onResult for the list of messages
+     */
     @Override
     public void getMessagesFromChannel(String id, OnResult<List<ChatMessage>> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
@@ -355,6 +372,11 @@ public class FirebaseProxy implements Proxy {
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot getAndAddOnSuccessListener MessagesFromChannel " + id));
     }
 
+    /**
+     * get the posts of a channel
+     * @param id the id of the channel
+     * @param onResult the onResult for the list of post
+     */
     @Override
     public void getPostsFromChannel(String id, OnResult<List<Post>> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
@@ -387,11 +409,21 @@ public class FirebaseProxy implements Proxy {
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot getAndAddOnSuccessListener PostsFromChannel " + id));
     }
 
+    /**
+     * add the channel to the list of followed channels of a user
+     * @param channel the channel we want to add
+     * @param user the user
+     */
     @Override
     public void addChannelToUserFollowedChannels(Channel channel, AuthenticatedUser user) {
         userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayUnion(channel.getId()));
     }
 
+    /**
+     * add the event to the list of followed events of a user
+     * @param event the event we want to add
+     * @param user the user
+     */
     @Override
     public void addEventToUserFollowedEvents(Event event, AuthenticatedUser user) {
         userCollection.document(user.getSciper()).update("followed_events", FieldValue.arrayUnion(event.getId()));
@@ -399,17 +431,32 @@ public class FirebaseProxy implements Proxy {
         eventCollection.document(event.getId()).update("followers", FieldValue.arrayUnion(user.getSciper()));
     }
 
+    /**
+     * add the association to the list of followed associations of a user
+     * @param association the association we want to add
+     * @param user the user
+     */
     @Override
     public void addAssociationToUserFollowedAssociations(Association association, AuthenticatedUser user) {
         userCollection.document(user.getSciper()).update("followed_associations", FieldValue.arrayUnion(association.getId()));
         userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayUnion(association.getChannelId()));
     }
 
+    /**
+     * remove the channel of the list of followed channels of a user
+     * @param channel the channel we want to remove
+     * @param user the user
+     */
     @Override
     public void removeChannelFromUserFollowedChannels(Channel channel, AuthenticatedUser user) {
         userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayRemove(channel.getId()));
     }
 
+    /**
+     * remove the event of the list of followed events of a user
+     * @param event the event we want to remove
+     * @param user the user
+     */
     @Override
     public void removeEventFromUserFollowedEvents(Event event, AuthenticatedUser user) {
         userCollection.document(user.getSciper()).update("followed_events", FieldValue.arrayRemove(event.getId()));
@@ -417,12 +464,23 @@ public class FirebaseProxy implements Proxy {
         eventCollection.document(event.getId()).update("followers", FieldValue.arrayRemove(user.getSciper()));
     }
 
+    /**
+     * remove the association of the list of followed associations of a user
+     * @param association the association we want to remove
+     * @param user the user
+     */
     @Override
     public void removeAssociationFromUserFollowedAssociations(Association association, AuthenticatedUser user) {
         userCollection.document(user.getSciper()).update("followed_associations", FieldValue.arrayRemove(association.getId()));
         userCollection.document(user.getSciper()).update("followed_channels", FieldValue.arrayRemove(association.getChannelId()));
     }
 
+    /**
+     * get the replies from a post
+     * @param channelId the id of the channel containing the post
+     * @param postId the id of the post
+     * @param onResult the onResult of the list of posts
+     */
     @Override
     public void getRepliesFromPost(String channelId, String postId, OnResult<List<Post>> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
@@ -439,6 +497,11 @@ public class FirebaseProxy implements Proxy {
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot getAndAddOnSuccessListener Replies from Post  " + postId));
     }
 
+    /**
+     * update the channel when receiving a new message
+     * @param channelId the channel to update
+     * @param onResult the OnResult of the list of messages
+     */
     @Override
     public void updateOnNewMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult) {
         channelCollection.document(channelId).collection("messages").addSnapshotListener(fmapList -> {
@@ -452,6 +515,10 @@ public class FirebaseProxy implements Proxy {
         );
     }
 
+    /**
+     * add a post to a channel
+     * @param post the post we want to add
+     */
     @Override
     public void addPost(Post post) {
         IdlingResourceFactory.incrementCountingIdlingResource();
@@ -462,6 +529,10 @@ public class FirebaseProxy implements Proxy {
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
+    /**
+     * add a reply to a post
+     * @param post the reply
+     */
     @Override
     public void addReply(Post post) {
         IdlingResourceFactory.incrementCountingIdlingResource();
@@ -478,6 +549,10 @@ public class FirebaseProxy implements Proxy {
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
+    /**
+     * update a post
+     * @param post the post we want to modify
+     */
     @Override
     public void updatePost(Post post) {
         if (post.getOriginalPostId() == null)
@@ -486,6 +561,10 @@ public class FirebaseProxy implements Proxy {
             updateReplyPost(post);
     }
 
+    /**
+     * update a source post
+     * @param post the post to modify
+     */
     private void updateOriginalPost(Post post) {
         channelCollection.document(post.getChannelId())
                 .collection("posts")
@@ -493,6 +572,10 @@ public class FirebaseProxy implements Proxy {
                 .update(post.getData());
     }
 
+    /**
+     * update a reply post
+     * @param post the reply to modify
+     */
     private void updateReplyPost(Post post) {
         channelCollection.document(post.getChannelId())
                 .collection("posts")
@@ -502,6 +585,10 @@ public class FirebaseProxy implements Proxy {
                 .update(post.getData());
     }
 
+    /**
+     * add a message to a channel
+     * @param message the message to add
+     */
     public void addMessage(ChatMessage message) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         channelCollection.document(message.getChannelId())
@@ -514,6 +601,10 @@ public class FirebaseProxy implements Proxy {
 
     //----- User related methods -----\\
 
+    /**
+     * update the user on the database
+     * @param user the user to update
+     */
     @Override
     public void updateUser(AuthenticatedUser user) {
         IdlingResourceFactory.incrementCountingIdlingResource();
@@ -521,6 +612,11 @@ public class FirebaseProxy implements Proxy {
         IdlingResourceFactory.decrementCountingIdlingResource();
     }
 
+    /**
+     * get a user from an id and if it doesn't exist, create it on the database
+     * @param id the id of the user
+     * @param onResult the OnResult for authenticated user
+     */
     public void getUserWithIdOrCreateIt(String id, OnResult<AuthenticatedUser> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         userCollection.document(id).getAndAddOnSuccessListener(fmap -> {
@@ -549,6 +645,10 @@ public class FirebaseProxy implements Proxy {
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot set user " + id));
     }
 
+    /**
+     * get all the users of the database
+     * @param onResult the OnResult of all the data
+     */
     @Override
     public void getAllUsers(OnResult<List<Map<String, Object>>> onResult) {
         IdlingResourceFactory.incrementCountingIdlingResource();
@@ -563,6 +663,11 @@ public class FirebaseProxy implements Proxy {
         }).addOnFailureListener(onFailureWithErrorMessage("Cannot fetch all users"));
     }
 
+    /**
+     * update the role of a user
+     * @param sciper the sciper of the user
+     * @param roles the new roles
+     */
     @Override
     public void updateUserRole(String sciper, List<String> roles) {
         userCollection.document(sciper).update("roles", roles);
@@ -570,31 +675,59 @@ public class FirebaseProxy implements Proxy {
 
     //----- Generating new id to store -----\\
 
+    /**
+     * get a new Id for a channel
+     * @return the new id
+     */
     @Override
     public String getNewChannelId() {
         return channelCollection.document().getId();
     }
 
+    /**
+     * get a new Id for an event
+     * @return the new id
+     */
     @Override
     public String getNewEventId() {
         return eventCollection.document().getId();
     }
 
+    /**
+     * get a new id for an association
+     * @return the new id
+     */
     @Override
     public String getNewAssociationId() {
         return assoCollection.document().getId();
     }
 
+    /**
+     * get a new id for a post
+     * @param channelId the id of the channel containing the post
+     * @return the new id
+     */
     @Override
     public String getNewPostId(String channelId) {
         return channelCollection.document(channelId).collection("posts").document().getId();
     }
 
+    /**
+     * get a new id for a message
+     * @param channelId the id of the channel containing the message
+     * @return the new id
+     */
     @Override
     public String getNewMessageId(String channelId) {
         return channelCollection.document(channelId).collection("messages").document().getId();
     }
 
+    /**
+     * get a new id for a reply
+     * @param channelId the id of the channel containing the reply
+     * @param originalPostId the post the reply is answering to
+     * @return the new id
+     */
     @Override
     public String getNewReplyId(String channelId, String originalPostId) {
         return channelCollection.document(channelId).collection("posts").document(originalPostId).collection("replies").document().getId();

@@ -12,13 +12,13 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.R;
@@ -29,7 +29,6 @@ import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 
 public class AddEventFragment extends SuperFragment {
 
-    private final static int DAYSTOSEC = 86400;
     private static final String EPFL_LOGO = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
 
     //for association name
@@ -80,7 +79,7 @@ public class AddEventFragment extends SuperFragment {
     }
 
     /**
-     * fill lists requiring double digits numbers
+     * fill lists of integers requiring double digits numbers
      *
      * @param list              , the list we want to fill
      * @param startingValue     the first value that the list will have
@@ -158,6 +157,7 @@ public class AddEventFragment extends SuperFragment {
 
 
                 DatabaseFactory.getDependency().addEvent(event);
+                mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_FRAGMENT, null);
 
             }
         });

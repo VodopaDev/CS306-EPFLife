@@ -2,7 +2,6 @@ package ch.epfl.sweng.zuluzulu.Utility;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -13,12 +12,12 @@ public interface BitmapUtils {
      * @param bitmap the bitmap to rotate
      * @param angle the angle to rotate the bitmap
      * @return the bitmap rotated
+     * solution found here : "https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a"
      */
     static Bitmap rotateBitmap(Bitmap bitmap, float angle) {
         Matrix m = new Matrix();
         m.postRotate(angle);
-        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
-                m, true);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
     }
 
     /**
