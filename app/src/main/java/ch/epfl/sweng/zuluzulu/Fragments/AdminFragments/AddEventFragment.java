@@ -1,17 +1,17 @@
 package ch.epfl.sweng.zuluzulu.Fragments.AdminFragments;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,24 +29,17 @@ import ch.epfl.sweng.zuluzulu.Structure.EventDate;
 
 public class AddEventFragment extends SuperFragment {
 
-    private static final String EPFL_LOGO = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon).toString();
-    private static final int[] INDICES = {0, 2, 4, 6, 7, 9, 11};
+    private final static int DAYSTOSEC = 86400;
+    private static final String EPFL_LOGO = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
 
     //for association name
     private Map<String, String> association_map = new HashMap<>();
     private Spinner spinner;
-    private int numberOfEvents;
 
     //for date (number of days adapt depending on the month chosen)
-    private List<String> short_months = new ArrayList<>();
-    private List<String> thirty_one_days = new ArrayList<>();
-    private List<String> thirty_days;
-    private List<String> feb_days;
-    private List<String> years = new ArrayList();
-    private List<String> thirty_one_days_months = new ArrayList<>();
-    private Spinner spinner_days;
-    private Spinner spinner_months;
-    private Spinner spinner_years;
+    private DatePicker start_date_pick;
+    private DatePicker end_date_pick;
+    private Date today = new Date();
 
     //for time
     private List<String> hours = new ArrayList<>();
@@ -54,14 +47,23 @@ public class AddEventFragment extends SuperFragment {
     private Spinner spinner_hours;
     private Spinner spinner_minutes;
 
+    private Spinner spinner_end_hours;
+    private Spinner spinner_end_minutes;
+
     //for description_view
     private TextView title_view;
     private TextView description_view;
     private TextView place;
     private TextView organizer;
+    private TextView website;
+    private TextView speaker;
+    private TextView category;
+    private TextView contact;
 
     //for validating and create the event
     private Button create_event;
+
+
 
     public static AddEventFragment newInstance() {
         return new AddEventFragment();
@@ -69,26 +71,6 @@ public class AddEventFragment extends SuperFragment {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //fill the list for the months spinner
-        populateShortMonths();
-
-        //makes a sublist containing all the months with 31 days
-        fillMonthsSublist(thirty_one_days_months, INDICES);
-
-        //a list of 31 days
-        for (int i = 1; i <= 31; i++) {
-            thirty_one_days.add(String.valueOf(i));
-        }
-        //goes to 30 for months with a day less
-        thirty_days = thirty_one_days.subList(0, 30);
-        //special case for february
-        feb_days = thirty_one_days.subList(0, 28);
-
-        //fills the year list for the spinner
-        for (int i = 0; i <= 10; i++) {
-            years.add(String.valueOf(2018 + i));
-        }
 
         //fills the hour list for the spinner
         addIntsToList(hours, 0, 24, 1);
@@ -116,68 +98,41 @@ public class AddEventFragment extends SuperFragment {
 
     }
 
-    /**
-     * simply fill short_months with the 12 months of the year
-     */
-    private void populateShortMonths() {
-        short_months.add("Jan");
-        short_months.add("Feb");
-        short_months.add("Mar");
-        short_months.add("Apr");
-        short_months.add("May");
-        short_months.add("Jun");
-        short_months.add("Jul");
-        short_months.add("Aug");
-        short_months.add("Sep");
-        short_months.add("Oct");
-        short_months.add("Nov");
-        short_months.add("Dec");
-    }
+
 
     /**
-     * create a sublist of months containing only those we select
-     *
-     * @param months the sublist we want to fill
-     * @param array  the array of indices that indicate the months we want
-     */
-    private void fillMonthsSublist(List<String> months, int[] array) {
-        for (int i : array) {
-            months.add(short_months.get(i));
-        }
-    }
-
-    /**
-     * Takes the current selected Item of a spinner with numbers and convert it to int
-     *
-     * @return the int value of the selected content of the spinner
-     */
-    private int getNumberSpinnerContent(Spinner spinner) {
-        return Integer.parseInt(spinner.getSelectedItem().toString());
-    }
-
-    /**
-     * Set the onClick of the button with sending the event to the database
+     * Set the onClick of the button, gathering all the informations on the fragment and
+     * sending the event to the database
      */
     private void setUpCreateEventButton() {
         create_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                int hour = getNumberSpinnerContent(spinner_hours);
-                int minute = getNumberSpinnerContent(spinner_minutes);
-                int day = getNumberSpinnerContent(spinner_days);
-                int month = short_months.indexOf(spinner_months.getSelectedItem().toString());
-                int year = getNumberSpinnerContent(spinner_years) - 1900;
-                Date date = new Date(year, month, day, hour, minute);
+                //Set the starting date
+                Date date = getDateAndTime(start_date_pick,spinner_hours,spinner_minutes);
+                Date end_date = getDateAndTime(end_date_pick,spinner_end_hours,spinner_end_minutes);
 
+                //Set the other fields
                 String name = spinner.getSelectedItem().toString();
                 String tit = title_view.getText().toString();
                 String desc = description_view.getText().toString();
                 String pla = place.getText().toString();
                 String org = organizer.getText().toString();
+                String web = website.getText().toString();
+                String speak = speaker.getText().toString();
+                String cat = category.getText().toString();
+                String cont = contact.getText().toString();
 
-                if (!checkIfValid(tit, desc)) {
+                if (!checkIfValid(tit, desc, date,end_date)) {
                     return;
+                }
+
+                String mapUrl;
+                if(!pla.isEmpty()){
+                    mapUrl = "https://plan.epfl.ch/?room=" + pla.replaceAll("\\s+","");
+                } else {
+                    mapUrl = "https://plan.epfl.ch";
                 }
 
                 Event event = new EventBuilder().
@@ -187,76 +142,27 @@ public class AddEventFragment extends SuperFragment {
                         setLongDesc(desc).
                         setChannelId(DatabaseFactory.getDependency().getNewChannelId()).
                         setAssosId(association_map.get(name)).
-                        setDate(new EventDate(date, date)).
+                        setDate(new EventDate(date, end_date)).
                         setFollowers(new ArrayList<>()).
                         setOrganizer(org).
                         setPlace(pla).
                         setIconUri(EPFL_LOGO).
                         setBannerUri(EPFL_LOGO).
-                        setUrlPlaceAndRoom("EPFL").
-                        setWebsite("http://epfl.ch").
-                        setContact("contact@epfl.ch").
-                        setCategory("none").
-                        setSpeaker("speaker").
+                        setUrlPlaceAndRoom(mapUrl).
+                        setWebsite(web).
+                        setContact(cont).
+                        setCategory(cat).
+                        setSpeaker(speak).
                         build();
 
+
+
                 DatabaseFactory.getDependency().addEvent(event);
+
             }
         });
     }
 
-    /**
-     * Method that setup the fact that there are different days depending on the month
-     * and update the spinners values accordingly
-     */
-    private void setUpDayMonthInteraction() {
-        spinner_months.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> parent, View view, int pos,
-                                       long id) {
-
-                String selected_mon = ((TextView) view).getText().toString();
-                int selected = Integer.parseInt(spinner_days.getSelectedItem().toString());
-
-                if (selected_mon.equals("Feb")) {
-                    //case we select february
-                    setSpinner(spinner_days, feb_days);
-                    helperSetup(selected, 28, 27);
-
-                } else {
-                    if (thirty_one_days_months.contains(selected_mon)) {
-                        //case we select a 31 days month
-                        setSpinner(spinner_days, thirty_one_days);
-                        spinner_days.setSelection(selected - 1);
-                    } else {
-                        //case we select a 30 days month
-                        setSpinner(spinner_days, thirty_days);
-                        helperSetup(selected, 30, 29);
-                    }
-                }
-            }
-
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-
-        });
-    }
-
-    /**
-     * little method that check the selected day is within the boundaries
-     * of the days of the month and adapt the value
-     *
-     * @param selected       current selected value
-     * @param conditionValue the max value (exclusive) selected can have for the current month
-     * @param setValue       set the spinner at this value if selected is out of bound
-     */
-    private void helperSetup(int selected, int conditionValue, int setValue) {
-        if (selected < conditionValue) {
-            spinner_days.setSelection(selected - 1);
-        } else {
-            spinner_days.setSelection(setValue);
-        }
-
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -266,23 +172,13 @@ public class AddEventFragment extends SuperFragment {
         description_view = view.findViewById(R.id.long_desc_text);
         organizer = view.findViewById(R.id.organizer);
         place = view.findViewById(R.id.place);
+        website = view.findViewById(R.id.website);
+        speaker = view.findViewById(R.id.speaker);
+        category = view.findViewById(R.id.category);
+        contact = view.findViewById(R.id.contact);
 
-        //the button "create event" that when clicked gather the data from all spinners and
-        //textviews and push an event on the database
         create_event = view.findViewById(R.id.create_event_button);
         setUpCreateEventButton();
-
-
-        //fill the different spinners for the dates.
-        spinner_days = view.findViewById(R.id.spinner_day);
-        setSpinner(spinner_days, thirty_one_days);
-
-        spinner_months = view.findViewById(R.id.spinner_month);
-        setSpinner(spinner_months, short_months);
-        setUpDayMonthInteraction();
-
-        spinner_years = view.findViewById(R.id.spinner_year);
-        setSpinner(spinner_years, years);
 
         spinner_hours = view.findViewById(R.id.spinner_hour);
         setSpinner(spinner_hours, hours);
@@ -290,32 +186,74 @@ public class AddEventFragment extends SuperFragment {
         spinner_minutes = view.findViewById(R.id.spinner_minute);
         setSpinner(spinner_minutes, minutes);
 
+        spinner_end_hours = view.findViewById(R.id.end_spinner_hour);
+        setSpinner(spinner_end_hours, hours);
+
+        spinner_end_minutes = view.findViewById(R.id.end_spinner_minute);
+        setSpinner(spinner_end_minutes, minutes);
+
         //fill the spinner for associations.
         spinner = view.findViewById(R.id.spinner);
         fillAssociationNames();
 
+        start_date_pick = (DatePicker) view.findViewById(R.id.date_for_add);
+        end_date_pick = (DatePicker) view.findViewById(R.id.end_date_for_add);
+
+
+
         return view;
+
+
     }
 
     /**
+     * Helper method that gets the date and time from a date picker and two spinners representing the hours and minutes
+     * @param datePick the DatePicker that contains the date
+     * @param hours the hours
+     * @param minutes the minutes
+     * @return the full date
+     */
+    private Date getDateAndTime(DatePicker datePick, Spinner hours, Spinner minutes){
+        int hour = getIntSpinnerContent(hours)-1;
+        int minute = getIntSpinnerContent(minutes);
+        int day = datePick.getDayOfMonth();
+        int month = datePick.getMonth();
+        int year = datePick.getYear() - 1900;
+        return new Date(year, month, day, hour, minute);
+    }
+
+    /**
+     * Takes the current selected Item of a spinner with numbers and convert it to int
+     *
+     * @return the int value of the selected content of the spinner
+     */
+    private int getIntSpinnerContent(Spinner spinner) {
+        return Integer.parseInt(spinner.getSelectedItem().toString());
+    }
+
+
+    /**
+     *
      * check if the arguments are valid for creating an event
      *
      * @param title       , the title of the event
      * @param description , the long description of the event
+     * @param start , the starting date of the event
+     * @param end , the end date of the event
      * @return if the arguments are valid
      */
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean checkIfValid(String title, String description) {
-        if (title.length() > 30)
-            return viewSetError(title_view, "title is too long");
+    private boolean checkIfValid(String title, String description, Date start, Date end) {
+        boolean isValid = true;
         if (title.isEmpty())
-            return viewSetError(title_view, "please write a title");
-        if (description.length() > 80)
-            return viewSetError(description_view, "description is too long");
+            isValid = viewSetError(title_view, "please write a title");
         if (description.isEmpty())
-            return viewSetError(description_view, "please write a description");
+            isValid = viewSetError(description_view, "please write a description");
+        if (start.before(today) || end.before(start)){
+            Toast.makeText(getActivity(), "Set a correct date", Toast.LENGTH_SHORT).show();
+            isValid = false;
+        }
 
-        return true;
+        return isValid;
     }
 
     /**
