@@ -9,14 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -102,7 +96,7 @@ public class LoginFragment extends SuperFragment {
                 }
                 return false;
             }
-        });
+        }); //if the webView loads the redirectURI, the app starts finishing logging in
 
         showProgress(false);
 
@@ -116,8 +110,8 @@ public class LoginFragment extends SuperFragment {
 
 
     /**
-     * Is executed once the session is active
-     * Log in the main activity
+     * Is executed once the session is active, transfer the user to the app
+     * and open the main activity
      */
     private void transfer_main() {
         // Pass the user to the activity
@@ -128,6 +122,11 @@ public class LoginFragment extends SuperFragment {
         showProgress(false);
     }
 
+
+    /**
+     * Once the credentials have been accepted, get the tokens, then
+     * get the user from tequila, filling the User in local
+     */
     private void finishLogin() {
         String code = AuthClient.extractCode(redirectURICode);
 
@@ -144,6 +143,10 @@ public class LoginFragment extends SuperFragment {
         updateUserAndFinishLogin();
     }
 
+    /**
+     * check if we already got the user, if not create a new one on the database before
+     * sending the user to the main activity
+     */
     private void updateUserAndFinishLogin() {
         DatabaseFactory.getDependency().getUserWithIdOrCreateIt(user.getSciper(), result -> {
             if (result == null && user.isConnected()) {
