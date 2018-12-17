@@ -97,6 +97,22 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
+    /**
+     * Open the menu
+     * @param item menu item
+     * @return boolean
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     /**
      * Open fragment and add tag
@@ -110,17 +126,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         toSend.putString(tag, data);
         fragment.setArguments(toSend);
         openFragment(fragment);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     /**
@@ -291,13 +296,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             case SET_USER:
                 Map<Integer, Object> received = (HashMap<Integer, Object>) data;
                 this.user = (User) received.get(0);
-
                 if (user != null && user.isConnected()) {
                     UserDatabase userDatabase = new UserDatabase(getApplicationContext());
                     userDatabase.put((AuthenticatedUser) user);
+                    updateMenuItems();
+                } else{
+                    this.user = new User.UserBuilder().buildGuestUser();
                 }
 
-                updateMenuItems();
                 break;
             case OPEN_CREATE_EVENT:
                 openFragment(AddEventFragment.newInstance());
@@ -390,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     public void onBackPressed() {
         if (!previous_fragments.empty()) {
             MenuItem checkedItem = navigationView.getCheckedItem();
-            if(checkedItem != null && checkedItem.getItemId() != R.id.nav_main && previous_fragments.peek() instanceof MainFragment){
+            if (checkedItem != null && checkedItem.getItemId() != R.id.nav_main && previous_fragments.peek() instanceof MainFragment) {
                 navigationView.getCheckedItem().setChecked(false);
                 navigationView.setCheckedItem(R.id.nav_main);
             }

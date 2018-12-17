@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.User;
@@ -56,29 +55,23 @@ public class UserDatabase {
     public AuthenticatedUser getUser() {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-        String[] projection = {
-                BaseColumns._ID,
-                UserDatabaseContract.FeedEntry.COLUMN_NAME_SCIPER,
-                UserDatabaseContract.FeedEntry.COLUMN_NAME_GASPAR,
+        String[] projection = {BaseColumns._ID,
+                UserDatabaseContract.FeedEntry.COLUMN_NAME_SCIPER, UserDatabaseContract.FeedEntry.COLUMN_NAME_GASPAR,
                 UserDatabaseContract.FeedEntry.COLUMN_NAME_SECTION,
-                UserDatabaseContract.FeedEntry.COLUMN_NAME_SEMESTER,
-                UserDatabaseContract.FeedEntry.COLUMN_NAME_FIRST_NAME,
-                UserDatabaseContract.FeedEntry.COLUMN_NAME_EMAIL,
-                UserDatabaseContract.FeedEntry.COLUMN_NAME_LAST_NAME
+                UserDatabaseContract.FeedEntry.COLUMN_NAME_SEMESTER, UserDatabaseContract.FeedEntry.COLUMN_NAME_FIRST_NAME,
+                UserDatabaseContract.FeedEntry.COLUMN_NAME_EMAIL, UserDatabaseContract.FeedEntry.COLUMN_NAME_LAST_NAME
         };
 
-        Cursor cursor = db.query(UserDatabaseContract.FeedEntry.TABLE_NAME, projection, null, null, null, null, null);
+        ArrayList<AuthenticatedUser> list = new ArrayList<>();
+        try (Cursor cursor = db.query(UserDatabaseContract.FeedEntry.TABLE_NAME, projection, null, null, null, null, null)) {
+            while (cursor.moveToNext()) {
+                AuthenticatedUser user = createUser(cursor);
 
-        List<AuthenticatedUser> list = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            AuthenticatedUser user = createUser(cursor);
-
-            if (user != null && user.getSciper().length() >= 5) {
-                list.add(user);
+                if (user != null && user.getSciper().length() >= 5) {
+                    list.add(user);
+                }
             }
-
         }
-        cursor.close();
 
         if (!list.isEmpty()) {
             return list.get(0);

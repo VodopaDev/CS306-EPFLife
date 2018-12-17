@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu;
+package ch.epfl.sweng.zuluzulu.Utility;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;

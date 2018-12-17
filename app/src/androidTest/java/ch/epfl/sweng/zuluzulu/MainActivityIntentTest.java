@@ -28,7 +28,7 @@ public class MainActivityIntentTest {
 
 
         Intent intent = new Intent();
-        intent.putExtra("redirectUri", "blablablaIHavecode=1234");
+        intent.putExtra("redirectUri", "code=http://epfl.ch");
         mActivityRule.launchActivity(intent);
 
         Utility.checkFragmentIsOpen(R.id.login_fragment);

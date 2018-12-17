@@ -32,8 +32,8 @@ public class MockedProxy implements Proxy {
     }};
 
     private Map<String, Event> eventMap = new HashMap<String, Event>() {{
-        put("0", Utility.defaultEvent());
-        put("1", Utility.currentTimeEvent());
+        put("0", Utility.defaultEvent().build());
+        put("1", Utility.currentTimeEvent().build());
     }};
 
 
@@ -304,7 +304,11 @@ public class MockedProxy implements Proxy {
                 map.put("followed_channels", new ArrayList<>());
                 map.put("roles", new ArrayList<>(Collections.singletonList("USER")));
                 onResult.apply(userMap.get(sciper));
+            } else {
+                onResult.apply(null);
             }
+        } else{
+            onResult.apply(null);
         }
     }
 

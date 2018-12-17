@@ -28,8 +28,6 @@ public abstract class TestWithAuthenticatedUser {
     public void setUpLogin() {
         this.user = Utility.createTestAuthenticated();
         Utility.addUserToMainIntent(mActivityRule, this.user);
-
-        DatabaseFactory.setDependency(new MockedProxy());
     }
 
     /**

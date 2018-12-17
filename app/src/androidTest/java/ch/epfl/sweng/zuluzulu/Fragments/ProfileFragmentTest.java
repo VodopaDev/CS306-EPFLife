@@ -1,75 +1,67 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
-import android.support.v4.content.ContextCompat;
-import android.widget.ImageButton;
-
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.io.File;
-
-import ch.epfl.sweng.zuluzulu.BitmapUtils;
-import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.support.test.rule.GrantPermissionRule;
+import android.support.test.runner.intent.IntentCallback;
+import android.support.test.runner.intent.IntentMonitorRegistry;
+import org.junit.Before;
+import java.io.IOException;
+import java.io.OutputStream;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
-import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
+import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.Utility;
 
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intending;
-
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertTrue;
 
 
-public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragment> {
-    private Bitmap picture;
+
+public class ProfileFragmentTest {
+    @Rule
+    public IntentsTestRule<MainActivity> intentsTestRule =
+            new IntentsTestRule<MainActivity>(MainActivity.class);
 
     @Rule
-    public final IntentsTestRule<MainActivity> mActivityRule =
-            new IntentsTestRule<>(MainActivity.class);
+    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA);
 
-    @Override
-    public void initFragment() {
 
-        DatabaseFactory.setDependency(new MockedProxy());
-        fragment = ProfileFragment.newInstance(user, true);
+    @Rule
+    public GrantPermissionRule permissionRule1 = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
 
-        Drawable draw = ContextCompat.getDrawable(mActivityRule.getActivity(), R.drawable.ic_add_circle_red);
+    @Rule
+    public GrantPermissionRule permissionRule2 = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        picture = drawableToBitmap(draw);
 
-        File directory = mActivityRule.getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = new File (directory + "/user0" + ".jpg");
-        String path = image.getAbsolutePath();
+    private AuthenticatedUser user;
 
-        BitmapUtils.writeBitmapInSDCard(picture, path);
-    }
 
-    private Bitmap drawableToBitmap(Drawable draw){
-        int width = draw.getIntrinsicWidth();
-        int height = draw.getIntrinsicHeight();
+    @Before
+    public void init() {
+        user = Utility.createTestAdmin();
+        SuperFragment fragment = ProfileFragment.newInstance(user, true);
+        intentsTestRule.getActivity().openFragment(fragment);
 
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        draw.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        draw.draw(canvas);
-        return bitmap;
     }
 
     @Test
@@ -78,20 +70,35 @@ public class ProfileFragmentTest extends TestWithAdminAndFragment<ProfileFragmen
     }
 
     @Test
-    public void checkPicture() {
-        Instrumentation.ActivityResult result =
-                new Instrumentation.ActivityResult(Activity.RESULT_OK, null);
+    public void checkPicture() {// Build the result to return when the activity is launched.
+        intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(
+                new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
 
-        intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(result);
+        IntentCallback intentCallback = new IntentCallback() {
+            @Override
+            public void onIntentSent(Intent intent) {
+                if (intent.getAction().equals("android.media.action.IMAGE_CAPTURE")) {
+                    try {
+                        Uri imageUri = intent.getParcelableExtra(MediaStore.EXTRA_OUTPUT);
+                        Context context = getTargetContext();
+                        Bitmap icon = BitmapFactory.decodeResource(
+                                context.getResources(),
+                                R.drawable.default_icon);
+                        OutputStream out = getTargetContext().getContentResolver().openOutputStream(imageUri);
+                        icon.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        out.flush();
+                        out.close();
+                    } catch (IOException e) {
+                        throw new IllegalArgumentException();
+                    }
+                }
+            }
+        };
+        IntentMonitorRegistry.getInstance().addIntentCallback(intentCallback);
 
-        onView(ViewMatchers.withId(R.id.profile_image)).perform(click());
+        onView(withId(R.id.profile_add_photo)).perform(click());
+        Utility.checkFragmentIsOpen(R.id.profile_fragment);
 
-        ImageButton pic = mActivityRule.getActivity().findViewById(R.id.profile_image);
-
-
-        Bitmap obtained = drawableToBitmap(pic.getDrawable());
-
-        assertTrue(obtained.getWidth() == picture.getWidth() && obtained.getHeight() == picture.getHeight());
     }
 
     @Test

@@ -40,7 +40,7 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.UserRole;
-import ch.epfl.sweng.zuluzulu.BitmapUtils;
+import ch.epfl.sweng.zuluzulu.Utility.BitmapUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,6 +55,8 @@ public class ProfileFragment extends SuperFragment {
     private static final String OWNER_TAG = "OWNER_TAG";
     private static final int CAMERA_CODE = 1234;
     private static final int W_STORAGE_PERM_CODE = 260;
+
+    private int internal = 0;
 
     private AuthenticatedUser userData;
 
@@ -136,14 +138,20 @@ public class ProfileFragment extends SuperFragment {
 
         pic = view.findViewById(R.id.profile_image);
 
-        pic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (profileOwner && askPermissions()) {
-                    goToCamera();
+
+        View add_picture_view = view.findViewById(R.id.profile_add_photo);
+        if (profileOwner) {
+            add_picture_view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (askPermissions()) {
+                        goToCamera();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            add_picture_view.setVisibility(View.GONE);
+        }
 
         if (askPermissions()) {
             setBitmapFromStorage();
@@ -169,15 +177,26 @@ public class ProfileFragment extends SuperFragment {
      * @return if the permissions are granted
      */
     private boolean askPermissions() {
+        return (hasPermission()) || (internal++ < 3 && askPermissions());
+    }
+
+    /**
+     * Check if user has permission
+     * @return boolean
+     */
+    private boolean hasPermission(){
         boolean storage_write = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         boolean storage_read = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        boolean camera = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
         if (!storage_write) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
         } else if (!storage_read) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE+1);
+        } else if (!camera) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, W_STORAGE_PERM_CODE+2);
         }
 
-        return storage_read && storage_write;
+        return storage_read && storage_write && camera;
     }
 
     /**
@@ -213,14 +232,14 @@ public class ProfileFragment extends SuperFragment {
 
     /**
      * create the file in which we will put the image
+     * and save the path to the file into pathToImage
      *
      * @return the file
      * @throws IOException if creation fails
      */
-
     private File createFileForPicture() throws IOException {
 
-        File directory = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = new File (directory + "/user" + userData.getSciper() + ".jpg");
 
         pathToImage = image.getAbsolutePath();
@@ -250,8 +269,8 @@ public class ProfileFragment extends SuperFragment {
                 startActivityForResult(intent, CAMERA_CODE);
             }
         }
-
     }
+
 
     /**
      * receives the result of the camera activity, set the picture, and upload it to the storage
@@ -267,14 +286,17 @@ public class ProfileFragment extends SuperFragment {
 
             Uri uriFile = Uri.fromFile(new File(pathToImage));
             UploadTask uploadTask = pictureRef.putFile(uriFile);
+            IdlingResourceFactory.incrementCountingIdlingResource();
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
+                    IdlingResourceFactory.decrementCountingIdlingResource();
                     Toast.makeText(getActivity(), "Unsuccessful upload", Toast.LENGTH_SHORT).show();
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    IdlingResourceFactory.decrementCountingIdlingResource();
                     Toast.makeText(getActivity(), "Successful upload", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -290,6 +312,7 @@ public class ProfileFragment extends SuperFragment {
         int targetHeight = pic.getHeight();
         if(targetHeight == 0){
             targetHeight = 50;
+
         }
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
@@ -304,11 +327,16 @@ public class ProfileFragment extends SuperFragment {
         bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
+
         bitmap = rotateImageDependingOnPhoneModel(bitmap, pathToImage);
-        pic.setImageBitmap(bitmap);
+        if (bmOptions.outHeight != 0) {
+            pic.setImageBitmap(bitmap);
+        }
 
         return bitmap;
+
     }
+
 
 
 
@@ -345,6 +373,7 @@ public class ProfileFragment extends SuperFragment {
             case ExifInterface.ORIENTATION_NORMAL:
             default:
                 rotatedBitmap = bitmap;
+
         }
 
         return rotatedBitmap;
