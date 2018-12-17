@@ -52,10 +52,10 @@ public class EventDetailFragment extends SuperFragment {
 
     public static EventDetailFragment newInstance(User user, Event event) {
         if (event == null)
-            throw new NullPointerException("Error creating an EventDetailFragment:\n" +
+            throw new IllegalArgumentException("Error creating an EventDetailFragment:\n" +
                     "Event is null");
         if (user == null)
-            throw new NullPointerException("Error creating an EventDetailFragment:\n" +
+            throw new IllegalArgumentException("Error creating an EventDetailFragment:\n" +
                     "User is null");
 
         EventDetailFragment fragment = new EventDetailFragment();

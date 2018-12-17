@@ -47,10 +47,10 @@ public class AssociationDetailFragment extends SuperFragment {
      */
     public static AssociationDetailFragment newInstance(User user, Association asso) {
         if (asso == null)
-            throw new NullPointerException("Error creating an AssociationDetailFragment:\n" +
+            throw new IllegalArgumentException("Error creating an AssociationDetailFragment:\n" +
                     "Association is null");
         if (user == null)
-            throw new NullPointerException("Error creating an AssociationDetailFragment:\n" +
+            throw new IllegalArgumentException("Error creating an AssociationDetailFragment:\n" +
                     "User is null");
 
         AssociationDetailFragment fragment = new AssociationDetailFragment();
