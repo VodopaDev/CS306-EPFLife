@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0E68C"
-    tools:context=".Fragments.WritePostFragment">
+    tools:context=".fragments.WritePostFragment">
 
     <Button
         android:id="@+id/write_post_send_button"

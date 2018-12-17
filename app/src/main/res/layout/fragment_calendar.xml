@@ -5,7 +5,7 @@
     android:id="@+id/fragment_calendar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.CalendarFragment">
+    tools:context=".fragments.CalendarFragment">
 
 
     <android.support.v4.widget.NestedScrollView
@@ -32,7 +32,7 @@
                 app:currentDayOfMonthColor="@color/colorPrimaryDark"
                 app:selectedDayBackgroundColor="@color/colorPrimaryDark" />
 
-            <ch.epfl.sweng.zuluzulu.Utility.MyListView
+            <ch.epfl.sweng.zuluzulu.utility.MyListView
                 android:id="@+id/calendar_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

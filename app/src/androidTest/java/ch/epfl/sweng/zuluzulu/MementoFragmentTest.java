@@ -9,11 +9,11 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.StringReader;
 
-import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
-import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.MementoFragment;
-import ch.epfl.sweng.zuluzulu.URLTools.UrlReader;
-import ch.epfl.sweng.zuluzulu.URLTools.UrlReaderFactory;
+import ch.epfl.sweng.zuluzulu.database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.fragments.adminFragments.MementoFragment;
+import ch.epfl.sweng.zuluzulu.urlTools.UrlReader;
+import ch.epfl.sweng.zuluzulu.urlTools.UrlReaderFactory;
 
 
 public class MementoFragmentTest {

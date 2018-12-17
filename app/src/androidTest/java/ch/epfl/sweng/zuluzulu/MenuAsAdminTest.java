@@ -4,10 +4,10 @@ import android.support.test.espresso.contrib.NavigationViewActions;
 
 import org.junit.Test;
 
-import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
-import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
-import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
+import ch.epfl.sweng.zuluzulu.database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.fragments.MainFragment;
+import ch.epfl.sweng.zuluzulu.testingUtility.TestWithAdminAndFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Fragments.AboutZuluzuluFragment">
+    tools:context=".fragments.AboutZuluzuluFragment">
 
     <TextView
         android:layout_width="match_parent"
@@ -34,7 +34,8 @@
             android:layout_width="16dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_settings" />
+            android:src="@drawable/ic_settings"
+            android:contentDescription="TODO" />
 
         <TextView
             android:layout_width="110dp"
@@ -65,7 +66,8 @@
             android:layout_width="16dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_assoc" />
+            android:src="@drawable/ic_assoc"
+            android:contentDescription="TODO" />
 
         <TextView
             android:layout_width="110dp"
@@ -97,7 +99,8 @@
             android:layout_width="16dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_profile" />
+            android:src="@drawable/ic_profile"
+            android:contentDescription="TODO" />
 
         <TextView
             android:layout_width="110dp"
@@ -128,7 +131,8 @@
             android:layout_width="16dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_login_logout" />
+            android:src="@drawable/ic_login_logout"
+            android:contentDescription="TODO" />
 
         <TextView
             android:layout_width="110dp"

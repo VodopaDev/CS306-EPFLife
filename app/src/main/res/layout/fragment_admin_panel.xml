@@ -5,7 +5,7 @@
     android:id="@+id/admin_panel_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.AdminFragments.AdminPanelFragment">
+    tools:context=".fragments.adminFragments.AdminPanelFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -46,7 +46,8 @@
                 android:src="@drawable/ic_chat"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="TODO" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -79,7 +80,8 @@
                 android:src="@drawable/ic_calendar"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="TODO" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -109,7 +111,8 @@
                 android:src="@drawable/ic_event"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="TODO" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -140,7 +143,8 @@
                 android:src="@drawable/user"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="TODO" />
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
@@ -157,7 +161,8 @@
                 android:src="@drawable/ic_assoc"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="TODO" />
 
             <TextView
                 android:layout_width="0dp"

@@ -20,38 +20,38 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.Firebase.FirebaseProxy;
-import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AddEventFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AdminPanelFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.AssociationsGeneratorFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.ChangeUserRoleFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.AdminFragments.MementoFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.CalendarFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.EventDetailFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.LoginFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.PostFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.ReplyFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.SuperFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.WritePostFragment;
-import ch.epfl.sweng.zuluzulu.LocalDatabase.UserDatabase;
-import ch.epfl.sweng.zuluzulu.Structure.Association;
-import ch.epfl.sweng.zuluzulu.Structure.Channel;
-import ch.epfl.sweng.zuluzulu.Structure.Event;
-import ch.epfl.sweng.zuluzulu.Structure.GPS;
-import ch.epfl.sweng.zuluzulu.Structure.Post;
-import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.User.User;
-import ch.epfl.sweng.zuluzulu.User.UserRole;
+import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.firebase.FirebaseProxy;
+import ch.epfl.sweng.zuluzulu.fragments.AboutZuluzuluFragment;
+import ch.epfl.sweng.zuluzulu.fragments.adminFragments.AddEventFragment;
+import ch.epfl.sweng.zuluzulu.fragments.adminFragments.AdminPanelFragment;
+import ch.epfl.sweng.zuluzulu.fragments.adminFragments.AssociationsGeneratorFragment;
+import ch.epfl.sweng.zuluzulu.fragments.adminFragments.ChangeUserRoleFragment;
+import ch.epfl.sweng.zuluzulu.fragments.adminFragments.MementoFragment;
+import ch.epfl.sweng.zuluzulu.fragments.AssociationDetailFragment;
+import ch.epfl.sweng.zuluzulu.fragments.AssociationFragment;
+import ch.epfl.sweng.zuluzulu.fragments.CalendarFragment;
+import ch.epfl.sweng.zuluzulu.fragments.ChannelFragment;
+import ch.epfl.sweng.zuluzulu.fragments.ChatFragment;
+import ch.epfl.sweng.zuluzulu.fragments.EventDetailFragment;
+import ch.epfl.sweng.zuluzulu.fragments.EventFragment;
+import ch.epfl.sweng.zuluzulu.fragments.LoginFragment;
+import ch.epfl.sweng.zuluzulu.fragments.MainFragment;
+import ch.epfl.sweng.zuluzulu.fragments.PostFragment;
+import ch.epfl.sweng.zuluzulu.fragments.ProfileFragment;
+import ch.epfl.sweng.zuluzulu.fragments.ReplyFragment;
+import ch.epfl.sweng.zuluzulu.fragments.SettingsFragment;
+import ch.epfl.sweng.zuluzulu.fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.fragments.WritePostFragment;
+import ch.epfl.sweng.zuluzulu.localDatabase.UserDatabase;
+import ch.epfl.sweng.zuluzulu.structure.Association;
+import ch.epfl.sweng.zuluzulu.structure.Channel;
+import ch.epfl.sweng.zuluzulu.structure.Event;
+import ch.epfl.sweng.zuluzulu.structure.GPS;
+import ch.epfl.sweng.zuluzulu.structure.Post;
+import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
+import ch.epfl.sweng.zuluzulu.structure.user.User;
+import ch.epfl.sweng.zuluzulu.structure.user.UserRole;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
@@ -153,15 +153,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private void initDrawerContent() {
         updateMenuItems();
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                        if (!menuItem.isChecked()) {
-                            selectItem(menuItem, true);
-                        }
-                        drawerLayout.closeDrawers();
-                        return true;
+                menuItem -> {
+                    if (!menuItem.isChecked()) {
+                        selectItem(menuItem, true);
                     }
+                    drawerLayout.closeDrawers();
+                    return true;
                 }
         );
     }
@@ -195,10 +192,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (localUser != null) {
             user = localUser;
             DatabaseFactory.getDependency().getUserWithIdOrCreateIt(user.getSciper(), result -> {
-                if (result != null) {
                     user = result;
-                    selectItem(navigationView.getMenu().findItem(R.id.nav_main), true);
-                }
+                    if(navigationView != null)
+                        selectItem(navigationView.getMenu().findItem(R.id.nav_main), true);
             });
         } else {
             user = new User.UserBuilder().buildGuestUser();

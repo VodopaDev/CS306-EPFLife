@@ -5,19 +5,19 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
-import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.Fragments.AboutZuluzuluFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.AssociationDetailFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.AssociationFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.ChannelFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.ChatFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.EventFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.MainFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.PostFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.ProfileFragment;
-import ch.epfl.sweng.zuluzulu.Fragments.SettingsFragment;
-import ch.epfl.sweng.zuluzulu.TestingUtility.TestWithAdminAndFragment;
+import ch.epfl.sweng.zuluzulu.database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.fragments.AboutZuluzuluFragment;
+import ch.epfl.sweng.zuluzulu.fragments.AssociationDetailFragment;
+import ch.epfl.sweng.zuluzulu.fragments.AssociationFragment;
+import ch.epfl.sweng.zuluzulu.fragments.ChannelFragment;
+import ch.epfl.sweng.zuluzulu.fragments.ChatFragment;
+import ch.epfl.sweng.zuluzulu.fragments.EventFragment;
+import ch.epfl.sweng.zuluzulu.fragments.MainFragment;
+import ch.epfl.sweng.zuluzulu.fragments.PostFragment;
+import ch.epfl.sweng.zuluzulu.fragments.ProfileFragment;
+import ch.epfl.sweng.zuluzulu.fragments.SettingsFragment;
+import ch.epfl.sweng.zuluzulu.testingUtility.TestWithAdminAndFragment;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_ABOUT_US_FRAGMENT;
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_ASSOCIATION_DETAIL_FRAGMENT;
@@ -45,46 +45,43 @@ public class MainActivityListenerTest extends TestWithAdminAndFragment<MainFragm
 
     @Test
     public void communicationTest() throws Throwable {
-        mActivityRule.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                // Utils to modify the main activity
-                getMainActivity().onFragmentInteraction(SET_TITLE, "new_title");
-                assertEquals("new_title", getMainActivity().getTitle());
+        mActivityRule.runOnUiThread(() -> {
+            // Utils to modify the main activity
+            getMainActivity().onFragmentInteraction(SET_TITLE, "new_title");
+            assertEquals("new_title", getMainActivity().getTitle());
 
-                getMainActivity().onFragmentInteraction(OPEN_MAIN_FRAGMENT, user);
-                assertTrue(getMainActivity().getCurrentFragment() instanceof MainFragment);
+            getMainActivity().onFragmentInteraction(OPEN_MAIN_FRAGMENT, user);
+            assertTrue(getMainActivity().getCurrentFragment() instanceof MainFragment);
 
-                getMainActivity().onFragmentInteraction(OPEN_ABOUT_US_FRAGMENT, user);
-                assertTrue(getMainActivity().getCurrentFragment() instanceof AboutZuluzuluFragment);
+            getMainActivity().onFragmentInteraction(OPEN_ABOUT_US_FRAGMENT, user);
+            assertTrue(getMainActivity().getCurrentFragment() instanceof AboutZuluzuluFragment);
 
-                getMainActivity().onFragmentInteraction(OPEN_SETTINGS_FRAGMENT, user);
-                assertTrue(getMainActivity().getCurrentFragment() instanceof SettingsFragment);
+            getMainActivity().onFragmentInteraction(OPEN_SETTINGS_FRAGMENT, user);
+            assertTrue(getMainActivity().getCurrentFragment() instanceof SettingsFragment);
 
-                getMainActivity().onFragmentInteraction(OPEN_PROFILE_FRAGMENT, user);
-                assertTrue(getMainActivity().getCurrentFragment() instanceof ProfileFragment);
+            getMainActivity().onFragmentInteraction(OPEN_PROFILE_FRAGMENT, user);
+            assertTrue(getMainActivity().getCurrentFragment() instanceof ProfileFragment);
 
-                getMainActivity().onFragmentInteraction(OPEN_CHAT_FRAGMENT, Utility.defaultChannel());
-                assertTrue(getMainActivity().getCurrentFragment() instanceof ChatFragment);
+            getMainActivity().onFragmentInteraction(OPEN_CHAT_FRAGMENT, Utility.defaultChannel());
+            assertTrue(getMainActivity().getCurrentFragment() instanceof ChatFragment);
 
-                getMainActivity().onFragmentInteraction(OPEN_POST_FRAGMENT, Utility.defaultChannel());
-                assertTrue(getMainActivity().getCurrentFragment() instanceof PostFragment);
+            getMainActivity().onFragmentInteraction(OPEN_POST_FRAGMENT, Utility.defaultChannel());
+            assertTrue(getMainActivity().getCurrentFragment() instanceof PostFragment);
 
-                getMainActivity().onFragmentInteraction(OPEN_CHANNEL_FRAGMENT, user);
-                assertTrue(getMainActivity().getCurrentFragment() instanceof ChannelFragment);
+            getMainActivity().onFragmentInteraction(OPEN_CHANNEL_FRAGMENT, user);
+            assertTrue(getMainActivity().getCurrentFragment() instanceof ChannelFragment);
 
-                getMainActivity().onFragmentInteraction(OPEN_EVENT_FRAGMENT, user);
-                assertTrue(getMainActivity().getCurrentFragment() instanceof EventFragment);
+            getMainActivity().onFragmentInteraction(OPEN_EVENT_FRAGMENT, user);
+            assertTrue(getMainActivity().getCurrentFragment() instanceof EventFragment);
 
-                //getMainActivity().onFragmentInteraction(OPEN_EVENT_DETAIL_FRAGMENT, Utility.defaultEvent());
-                //assertTrue(getMainActivity().getCurrentFragment() instanceof EventDetailFragment);
+            //getMainActivity().onFragmentInteraction(OPEN_EVENT_DETAIL_FRAGMENT, Utility.defaultEvent());
+            //assertTrue(getMainActivity().getCurrentFragment() instanceof EventDetailFragment);
 
-                getMainActivity().onFragmentInteraction(OPEN_ASSOCIATION_FRAGMENT, user);
-                assertTrue(getMainActivity().getCurrentFragment() instanceof AssociationFragment);
+            getMainActivity().onFragmentInteraction(OPEN_ASSOCIATION_FRAGMENT, user);
+            assertTrue(getMainActivity().getCurrentFragment() instanceof AssociationFragment);
 
-                getMainActivity().onFragmentInteraction(OPEN_ASSOCIATION_DETAIL_FRAGMENT, Utility.defaultAssociation());
-                assertTrue(getMainActivity().getCurrentFragment() instanceof AssociationDetailFragment);
-            }
+            getMainActivity().onFragmentInteraction(OPEN_ASSOCIATION_DETAIL_FRAGMENT, Utility.defaultAssociation());
+            assertTrue(getMainActivity().getCurrentFragment() instanceof AssociationDetailFragment);
         });
     }
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.PostFragment">
+    tools:context=".fragments.PostFragment">
 
     <include
         android:id="@+id/chat_posts_buttons"
@@ -68,7 +68,8 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_weight="0.33"
-            android:src="@drawable/time_selected" />
+            android:src="@drawable/time_selected"
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/post_filter_nbReplies"
@@ -77,7 +78,8 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_weight="0.33"
-            android:src="@drawable/replies_notselected" />
+            android:src="@drawable/replies_notselected"
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/post_filter_nbUps"
@@ -86,7 +88,8 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_weight="0.33"
-            android:src="@drawable/up_notselected" />
+            android:src="@drawable/up_notselected"
+            android:contentDescription="TODO" />
 
     </LinearLayout>
 

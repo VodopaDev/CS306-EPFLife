@@ -2,9 +2,9 @@ package ch.epfl.sweng.zuluzulu;
 
 import org.junit.Before;
 
-import ch.epfl.sweng.zuluzulu.Database.MockedProxy;
-import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.User.Admin;
+import ch.epfl.sweng.zuluzulu.database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.structure.user.Admin;
 
 public class TestWithAdmin extends TestWithAuthenticatedUser {
 
