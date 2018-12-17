@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -39,6 +40,7 @@ import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.User.UserRole;
+import ch.epfl.sweng.zuluzulu.Utility.BitmapUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -136,6 +138,7 @@ public class ProfileFragment extends SuperFragment {
 
         pic = view.findViewById(R.id.profile_image);
 
+
         View add_picture_view = view.findViewById(R.id.profile_add_photo);
         if (profileOwner) {
             add_picture_view.setOnClickListener(new View.OnClickListener() {
@@ -229,20 +232,16 @@ public class ProfileFragment extends SuperFragment {
 
     /**
      * create the file in which we will put the image
+     * and save the path to the file into pathToImage
      *
      * @return the file
      * @throws IOException if creation fails
      */
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                "user" + userData.getSciper(),  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
+    private File createFileForPicture() throws IOException {
 
-        // Save a p: path for use with ACTION_VIEW intents
+        File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = new File (directory + "/user" + userData.getSciper() + ".jpg");
+
         pathToImage = image.getAbsolutePath();
         return image;
     }
@@ -254,17 +253,14 @@ public class ProfileFragment extends SuperFragment {
      */
     private void goToCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-            // Create the File where the photo should go
             File picture;
             try {
-                picture = createImageFile();
+                picture = createFileForPicture();
             } catch (IOException ex) {
                 Log.e("creating picture file", "unable to create a file for intent");
                 return;
             }
-            // Continue only if the File was successfully created
             if (picture != null) {
                 Uri uri = FileProvider.getUriForFile(getActivity(),
                         "ch.epfl.sweng.zuluzulu.fileprovider",
@@ -275,43 +271,21 @@ public class ProfileFragment extends SuperFragment {
         }
     }
 
-        /**
-         * helper method that takes a path to a file and scale it to make it fit inside the imagebutton
-         *
-         * @param path the path to the file to rescale
-         */
-    private void setRescaledImage(String path) {
-        int targetH = pic.getHeight();
-        if (targetH == 0) {
-            targetH = 50;
-        }
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, bmOptions);
 
-        int photoH = bmOptions.outHeight;
-
-        int scaling = photoH / targetH;
-
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaling;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
-        if (bmOptions.outHeight != 0) {
-            pic.setImageBitmap(bitmap);
-        }
-    }
-
+    /**
+     * receives the result of the camera activity, set the picture, and upload it to the storage
+     *
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_CODE && resultCode == Activity.RESULT_OK) {
 
-            //scale the image and put it in the imagebutton
-            setRescaledImage(pathToImage);
+            Bitmap correctImage = setRescaledImage(pathToImage);
 
-            Uri file = Uri.fromFile(new File(pathToImage));
-            UploadTask uploadTask = pictureRef.putFile(file);
+            BitmapUtils.writeBitmapInSDCard(correctImage,pathToImage);
+
+            Uri uriFile = Uri.fromFile(new File(pathToImage));
+            UploadTask uploadTask = pictureRef.putFile(uriFile);
             IdlingResourceFactory.incrementCountingIdlingResource();
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -328,6 +302,83 @@ public class ProfileFragment extends SuperFragment {
             });
         }
     }
+
+    /**
+     * helper method that takes a path to a file and scale it to make it fit inside the imagebutton
+     *
+     * @param path the path to the file to rescale
+     */
+    private Bitmap setRescaledImage(String path) {
+        int targetHeight = pic.getHeight();
+        if(targetHeight == 0){
+            targetHeight = 50;
+
+        }
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, bmOptions);
+
+        int currentHeight = bmOptions.outHeight;
+
+        int scaling = currentHeight / targetHeight;
+
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaling;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
+
+        bitmap = rotateImageDependingOnPhoneModel(bitmap, pathToImage);
+        if (bmOptions.outHeight != 0) {
+            pic.setImageBitmap(bitmap);
+        }
+
+        return bitmap;
+
+    }
+
+
+
+
+    /**
+     * helper method that checks the angle the picture as been rotated and put it back straight
+     * @param bitmap the possibly rotated picture
+     * @param path the path to the picture
+     * @return the bitmap with the good orientation
+     */
+    private Bitmap rotateImageDependingOnPhoneModel(Bitmap bitmap , String path){
+        ExifInterface exifInterface;
+        try{
+         exifInterface = new ExifInterface(path);
+        }catch (Exception e){
+            return bitmap;
+        }
+        int angleToRotate = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED);
+        Bitmap rotatedBitmap;
+        switch(angleToRotate) {
+
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                rotatedBitmap = BitmapUtils.rotateBitmap(bitmap, 90);
+                break;
+
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                rotatedBitmap = BitmapUtils.rotateBitmap(bitmap, 180);
+                break;
+
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                rotatedBitmap = BitmapUtils.rotateBitmap(bitmap, 270);
+                break;
+
+            case ExifInterface.ORIENTATION_NORMAL:
+            default:
+                rotatedBitmap = bitmap;
+
+        }
+
+        return rotatedBitmap;
+    }
+
 
 
 }

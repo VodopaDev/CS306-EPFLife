@@ -3,25 +3,22 @@ package ch.epfl.sweng.zuluzulu.Fragments;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
+import org.junit.Rule;
+import org.junit.Test;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.intent.IntentCallback;
 import android.support.test.runner.intent.IntentMonitorRegistry;
-
 import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
 import java.io.IOException;
 import java.io.OutputStream;
-
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.User.AuthenticatedUser;
@@ -38,6 +35,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
 
+
+
 public class ProfileFragmentTest {
     @Rule
     public IntentsTestRule<MainActivity> intentsTestRule =
@@ -45,6 +44,7 @@ public class ProfileFragmentTest {
 
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA);
+
 
     @Rule
     public GrantPermissionRule permissionRule1 = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -55,11 +55,13 @@ public class ProfileFragmentTest {
 
     private AuthenticatedUser user;
 
+
     @Before
     public void init() {
         user = Utility.createTestAdmin();
         SuperFragment fragment = ProfileFragment.newInstance(user, true);
         intentsTestRule.getActivity().openFragment(fragment);
+
     }
 
     @Test
@@ -96,6 +98,7 @@ public class ProfileFragmentTest {
 
         onView(withId(R.id.profile_add_photo)).perform(click());
         Utility.checkFragmentIsOpen(R.id.profile_fragment);
+
     }
 
     @Test
