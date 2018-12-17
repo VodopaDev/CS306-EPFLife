@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -39,11 +40,14 @@ public class EventDetailFragment extends SuperFragment {
     private Event event;
     private User user;
 
+
     private Button channelButton;
     private Channel channel;
 
+
     private Button associationButton;
     private Association association;
+
 
 
     public static EventDetailFragment newInstance(User user, Event event) {
@@ -98,12 +102,12 @@ public class EventDetailFragment extends SuperFragment {
         TextView event_place = view.findViewById(R.id.event_detail_place);
         event_place.setText(event.getPlace());
 
+
         TextView event_contact = view.findViewById(R.id.event_detail_contact);
         event_contact.setText(event.getContact());
 
         TextView event_website = view.findViewById(R.id.event_detail_website);
         event_website.setText(event.getWebsite());
-
 
         TextView event_speaker = view.findViewById(R.id.event_detail_speaker);
         event_speaker.setText(event.getSpeaker());
@@ -133,13 +137,13 @@ public class EventDetailFragment extends SuperFragment {
         loadChannel();
         loadAssociation();
 
-
         return view;
     }
 
     private void setLikeButtonBehaviour(ImageButton event_like_button) {
 
         event_like_button.setSelected(user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event.getId()));
+
 
         event_like_button.setOnClickListener(new View.OnClickListener() {
             @Override
