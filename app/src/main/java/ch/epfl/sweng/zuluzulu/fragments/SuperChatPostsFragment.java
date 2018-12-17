@@ -40,6 +40,12 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
     protected boolean anonymous;
 
     public static SuperChatPostsFragment newInstanceOf(String type, User user, Channel channel) {
+        if(type == null)
+            throw new IllegalArgumentException("type can't be null");
+        if(user == null)
+            throw new IllegalArgumentException("user can't be null");
+        if(channel == null)
+            throw new IllegalArgumentException("channel can't be null");
         SuperChatPostsFragment fragment;
         switch (type) {
             case "chat":

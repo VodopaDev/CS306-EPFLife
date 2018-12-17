@@ -55,6 +55,10 @@ public class WritePostFragment extends SuperFragment {
     }
 
     public static WritePostFragment newInstance(User user, Channel channel) {
+        if(user == null)
+            throw new IllegalArgumentException("user can't be null");
+        if(channel == null)
+            throw new IllegalArgumentException("channel can't be null");
         WritePostFragment fragment = new WritePostFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);

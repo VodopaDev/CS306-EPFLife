@@ -44,6 +44,12 @@ public class ReplyFragment extends SuperChatPostsFragment {
     }
 
     public static ReplyFragment newInstance(User user, Channel channel, Post postOriginal) {
+        if(user == null)
+            throw new IllegalArgumentException("user can't be null");
+        if(channel == null)
+            throw new IllegalArgumentException("channel can't be null");
+        if(postOriginal == null)
+            throw new IllegalArgumentException("original post can't be null");
         ReplyFragment fragment = new ReplyFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);

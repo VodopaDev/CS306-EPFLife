@@ -44,6 +44,10 @@ public class ChatFragment extends SuperChatPostsFragment {
     }
 
     public static ChatFragment newInstance(User user, Channel channel) {
+        if(user == null)
+            throw new IllegalArgumentException("user can't be null");
+        if(channel == null)
+            throw new IllegalArgumentException("channel can't be null");
         return (ChatFragment) newInstanceOf("chat", user, channel);
     }
 

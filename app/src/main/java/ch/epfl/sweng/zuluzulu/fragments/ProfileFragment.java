@@ -78,6 +78,8 @@ public class ProfileFragment extends SuperFragment {
      * @return A new instance of fragment ProfileFragment.
      */
     public static ProfileFragment newInstance(AuthenticatedUser userData, boolean profileOwner) {
+        if(userData == null)
+            throw new IllegalArgumentException("user can't be null");
         Bundle bundle = new Bundle();
         bundle.putBoolean(OWNER_TAG, profileOwner);
         bundle.putSerializable(USER_DATA_TAG, userData);

@@ -91,6 +91,8 @@ public class EventFragment extends SuperFragment {
      * @return A new instance of fragment EventFragment.
      */
     public static EventFragment newInstance(User user) {
+        if(user == null)
+            throw new IllegalArgumentException("user can't be null");
         EventFragment fragment = new EventFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);

@@ -62,6 +62,8 @@ public class ChannelFragment extends SuperFragment {
      * @return A new instance of fragment ChannelFragment.
      */
     public static ChannelFragment newInstance(User user) {
+        if(user == null)
+            throw new IllegalArgumentException("user can't be null");
         ChannelFragment fragment = new ChannelFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);

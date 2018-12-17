@@ -59,6 +59,8 @@ public class MainFragment extends SuperFragment {
      * @return A new instance of fragment MainFragment.
      */
     public static MainFragment newInstance(User u) {
+        if(u == null)
+            throw new IllegalArgumentException("user can't be null");
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, u);

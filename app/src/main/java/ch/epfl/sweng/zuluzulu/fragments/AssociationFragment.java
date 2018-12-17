@@ -52,6 +52,8 @@ public class AssociationFragment extends SuperFragment {
     }
 
     public static AssociationFragment newInstance(User user) {
+        if(user == null)
+            throw new IllegalArgumentException("user can't be null");
         AssociationFragment fragment = new AssociationFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);

@@ -55,6 +55,8 @@ public class CalendarFragment extends SuperFragment {
      * @return A new instance of fragment CalendarFragment.
      */
     public static CalendarFragment newInstance(AuthenticatedUser user) {
+        if(user == null)
+            throw new IllegalArgumentException("user can't be null");
         CalendarFragment fragment = new CalendarFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);
