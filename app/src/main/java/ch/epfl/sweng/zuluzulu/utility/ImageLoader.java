@@ -20,10 +20,15 @@ public interface ImageLoader {
      * @param context   context to use
      */
     static void loadUriIntoImageView(ImageView container, Uri uri, Context context) {
+        if(container == null)
+            throw new IllegalArgumentException("Can't load an Uri in a null ImageView");
+        if (uri == null)
+            throw new IllegalArgumentException("Can't load a null Uri in an ImageView");
         if (context == null) {
             Log.e("GLIDE", "Can't load an Uri in an ImageView with a null Context");
             return;
         }
+
         if (uri.toString().contains("http")) {
             Headers auth = new LazyHeaders.Builder() // This can be cached in a field and reused later.
                     .addHeader("Cookie", "gdpr=accept")
@@ -49,8 +54,10 @@ public interface ImageLoader {
      * @param context   context to use
      */
     static void loadDrawableIntoImageView(ImageView container, int drawable, Context context) {
+        if(container == null)
+            throw new IllegalArgumentException("Can't load an Uri in a null ImageView");
         if (context == null) {
-            Log.e("GLIDE", "Can't load a drawable in an ImageView with a null Context");
+            Log.e("GLIDE", "Can't load an Uri in an ImageView with a null Context");
             return;
         }
 
