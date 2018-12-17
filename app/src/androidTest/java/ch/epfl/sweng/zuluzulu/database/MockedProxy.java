@@ -273,13 +273,7 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getUserWithIdOrCreateIt(String sciper, OnResult<AuthenticatedUser> onResult) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("sciper", sciper);
         if (sciper != null && userMap.containsKey(sciper)) {
-            map.put("followed_events", userMap.get(sciper).getFollowedEvents());
-            map.put("followed_associations", userMap.get(sciper).getFollowedAssociations());
-            map.put("followed_channels", userMap.get(sciper).getFollowedChannels());
-            map.put("roles", userMap.get(sciper).getRoles());
             onResult.apply(userMap.get(sciper));
         } else if (sciper != null && !userMap.containsKey(sciper)) {
             User.UserBuilder b = new User.UserBuilder();
@@ -296,16 +290,8 @@ public class MockedProxy implements Proxy {
             AuthenticatedUser user = b.buildAuthenticatedUser();
             if (user != null) {
                 userMap.put(sciper, user);
-                map.put("followed_events", new ArrayList<>());
-                map.put("followed_associations", new ArrayList<>());
-                map.put("followed_channels", new ArrayList<>());
-                map.put("roles", new ArrayList<>(Collections.singletonList("USER")));
                 onResult.apply(userMap.get(sciper));
-            } else {
-                onResult.apply(null);
             }
-        } else{
-            onResult.apply(null);
         }
     }
 

@@ -192,10 +192,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (localUser != null) {
             user = localUser;
             DatabaseFactory.getDependency().getUserWithIdOrCreateIt(user.getSciper(), result -> {
-                if (result != null) {
                     user = result;
-                    selectItem(navigationView.getMenu().findItem(R.id.nav_main), true);
-                }
+                    if(navigationView != null)
+                        selectItem(navigationView.getMenu().findItem(R.id.nav_main), true);
             });
         } else {
             user = new User.UserBuilder().buildGuestUser();
