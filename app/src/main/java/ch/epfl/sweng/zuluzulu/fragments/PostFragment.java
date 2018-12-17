@@ -129,13 +129,10 @@ public class PostFragment extends SuperChatPostsFragment {
      * Set up the listener on a post to go to the reply fragment when we click on it
      */
     private void setUpReplyListener() {
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Post post = (Post) messages.get(position);
-                Pair data = new Pair(channel, post);
-                mListener.onFragmentInteraction(CommunicationTag.OPEN_REPLY_FRAGMENT, data);
-            }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Post post = (Post) messages.get(position);
+            Pair data = new Pair(channel, post);
+            mListener.onFragmentInteraction(CommunicationTag.OPEN_REPLY_FRAGMENT, data);
         });
     }
 
@@ -143,26 +140,11 @@ public class PostFragment extends SuperChatPostsFragment {
      * Set up the onClick listeners on the filter buttons
      */
     private void setUpFilterButtons() {
-        filterTimeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateFilter((Comparator<Post>) Post.decreasingTimeComparator());
-            }
-        });
+        filterTimeButton.setOnClickListener(v -> updateFilter((Comparator<Post>) Post.decreasingTimeComparator()));
 
-        filterRepliesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateFilter(Post.decreasingNbRepliesComparator());
-            }
-        });
+        filterRepliesButton.setOnClickListener(v -> updateFilter(Post.decreasingNbRepliesComparator()));
 
-        filterUpsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateFilter(Post.decreasingNbUpsComparator());
-            }
-        });
+        filterUpsButton.setOnClickListener(v -> updateFilter(Post.decreasingNbUpsComparator()));
     }
 
     /**

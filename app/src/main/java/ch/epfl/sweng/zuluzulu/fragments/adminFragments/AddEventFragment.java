@@ -105,61 +105,58 @@ public class AddEventFragment extends SuperFragment {
      * sending the event to the database
      */
     private void setUpCreateEventButton() {
-        create_event.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        create_event.setOnClickListener(v -> {
 
-                //Set the starting date
-                Date date = getDateAndTime(start_date_pick,spinner_hours,spinner_minutes);
-                Date end_date = getDateAndTime(end_date_pick,spinner_end_hours,spinner_end_minutes);
+            //Set the starting date
+            Date date = getDateAndTime(start_date_pick,spinner_hours,spinner_minutes);
+            Date end_date = getDateAndTime(end_date_pick,spinner_end_hours,spinner_end_minutes);
 
-                //Set the other fields
-                String name = spinner.getSelectedItem().toString();
-                String tit = title_view.getText().toString();
-                String desc = description_view.getText().toString();
-                String pla = place.getText().toString();
-                String org = organizer.getText().toString();
-                String web = website.getText().toString();
-                String speak = speaker.getText().toString();
-                String cat = category.getText().toString();
-                String cont = contact.getText().toString();
+            //Set the other fields
+            String name = spinner.getSelectedItem().toString();
+            String tit = title_view.getText().toString();
+            String desc = description_view.getText().toString();
+            String pla = place.getText().toString();
+            String org = organizer.getText().toString();
+            String web = website.getText().toString();
+            String speak = speaker.getText().toString();
+            String cat = category.getText().toString();
+            String cont = contact.getText().toString();
 
-                if (!checkIfValid(tit, desc, date,end_date)) {
-                    return;
-                }
-
-                String mapUrl;
-                if(!pla.isEmpty()){
-                    mapUrl = "https://plan.epfl.ch/?room=" + pla.replaceAll("\\s+","");
-                } else {
-                    mapUrl = "https://plan.epfl.ch";
-                }
-
-                Event event = new EventBuilder().
-                        setId(DatabaseFactory.getDependency().getNewEventId()).
-                        setName(name).
-                        setShortDesc(tit).
-                        setLongDesc(desc).
-                        setChannelId(DatabaseFactory.getDependency().getNewChannelId()).
-                        setAssosId(association_map.get(name)).
-                        setDate(new EventDate(date, end_date)).
-                        setFollowers(new ArrayList<>()).
-                        setOrganizer(org).
-                        setPlace(pla).
-                        setIconUri(EPFL_LOGO).
-                        setBannerUri(EPFL_LOGO).
-                        setUrlPlaceAndRoom(mapUrl).
-                        setWebsite(web).
-                        setContact(cont).
-                        setCategory(cat).
-                        setSpeaker(speak).
-                        build();
-
-
-
-                DatabaseFactory.getDependency().addEvent(event);
-
+            if (!checkIfValid(tit, desc, date,end_date)) {
+                return;
             }
+
+            String mapUrl;
+            if(!pla.isEmpty()){
+                mapUrl = "https://plan.epfl.ch/?room=" + pla.replaceAll("\\s+","");
+            } else {
+                mapUrl = "https://plan.epfl.ch";
+            }
+
+            Event event = new EventBuilder().
+                    setId(DatabaseFactory.getDependency().getNewEventId()).
+                    setName(name).
+                    setShortDesc(tit).
+                    setLongDesc(desc).
+                    setChannelId(DatabaseFactory.getDependency().getNewChannelId()).
+                    setAssosId(association_map.get(name)).
+                    setDate(new EventDate(date, end_date)).
+                    setFollowers(new ArrayList<>()).
+                    setOrganizer(org).
+                    setPlace(pla).
+                    setIconUri(EPFL_LOGO).
+                    setBannerUri(EPFL_LOGO).
+                    setUrlPlaceAndRoom(mapUrl).
+                    setWebsite(web).
+                    setContact(cont).
+                    setCategory(cat).
+                    setSpeaker(speak).
+                    build();
+
+
+
+            DatabaseFactory.getDependency().addEvent(event);
+
         });
     }
 

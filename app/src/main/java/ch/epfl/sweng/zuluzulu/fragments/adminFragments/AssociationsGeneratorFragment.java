@@ -163,13 +163,10 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
         this.datas = new ArrayList<>();
         this.associations = new ArrayList<>();
-        this.adapter = new AddAssociationAdapter(this.getContext(), this.associations, new OnClickRecyclerView() {
-            @Override
-            public void onClick(int i) {
-                if (checkBound(i)) {
-                    DatabaseFactory.getDependency().addAssociation(associations.get(i));
-                    Snackbar.make(getView(), associations.get(i).getName() + " added", Snackbar.LENGTH_SHORT).show();
-                }
+        this.adapter = new AddAssociationAdapter(this.getContext(), this.associations, i -> {
+            if (checkBound(i)) {
+                DatabaseFactory.getDependency().addAssociation(associations.get(i));
+                Snackbar.make(getView(), associations.get(i).getName() + " added", Snackbar.LENGTH_SHORT).show();
             }
         });
 

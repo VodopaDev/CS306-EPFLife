@@ -56,13 +56,10 @@ public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAd
         ImageLoader.loadUriIntoImageView(holder.icon, associationList.get(position).getIconUri(), context);
 
         holder.add_button.setEnabled(this.checked.get(position, true));
-        holder.add_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                holder.add_button.setEnabled(false);
-                checked.put(holder.getAdapterPosition(), false);
-                listener.onClick(holder.getAdapterPosition());
-            }
+        holder.add_button.setOnClickListener(view -> {
+            holder.add_button.setEnabled(false);
+            checked.put(holder.getAdapterPosition(), false);
+            listener.onClick(holder.getAdapterPosition());
         });
     }
 

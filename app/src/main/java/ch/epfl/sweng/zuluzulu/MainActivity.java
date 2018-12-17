@@ -153,15 +153,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     private void initDrawerContent() {
         updateMenuItems();
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                        if (!menuItem.isChecked()) {
-                            selectItem(menuItem, true);
-                        }
-                        drawerLayout.closeDrawers();
-                        return true;
+                menuItem -> {
+                    if (!menuItem.isChecked()) {
+                        selectItem(menuItem, true);
                     }
+                    drawerLayout.closeDrawers();
+                    return true;
                 }
         );
     }

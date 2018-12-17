@@ -55,11 +55,6 @@ public class AdminPanelFragment extends SuperFragment {
     }
 
     private View.OnClickListener sendTagOnClick(CommunicationTag tag) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onFragmentInteraction(tag, null);
-            }
-        };
+        return v -> mListener.onFragmentInteraction(tag, null);
     }
 }

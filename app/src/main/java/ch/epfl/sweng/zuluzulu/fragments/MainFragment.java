@@ -248,12 +248,7 @@ public class MainFragment extends SuperFragment {
 
         sign_in_button = view.findViewById(R.id.main_page_button_sign_in);
 
-        sign_in_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onFragmentInteraction(OPEN_LOGIN_FRAGMENT, user);
-            }
-        });
+        sign_in_button.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_LOGIN_FRAGMENT, user));
 
         return view;
     }

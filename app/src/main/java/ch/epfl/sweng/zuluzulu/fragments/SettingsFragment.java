@@ -61,22 +61,14 @@ public class SettingsFragment extends SuperFragment {
         preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
 
         Button button_clear = view.findViewById(R.id.button_clear_cache);
-        button_clear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar clear_snackbar = Snackbar.make(v, "Cache cleared", LENGTH_SHORT);
-                clear_snackbar.show();
-            }
+        button_clear.setOnClickListener(v -> {
+            Snackbar clear_snackbar = Snackbar.make(v, "Cache cleared", LENGTH_SHORT);
+            clear_snackbar.show();
         });
 
         Switch switchAnonym = view.findViewById(R.id.switch_chat_anonym);
         switchAnonym.setChecked(preferences.getBoolean(PREF_KEY_ANONYM, false));
-        switchAnonym.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                preferences.edit().putBoolean(PREF_KEY_ANONYM, switchAnonym.isChecked()).apply();
-            }
-        });
+        switchAnonym.setOnClickListener(v -> preferences.edit().putBoolean(PREF_KEY_ANONYM, switchAnonym.isChecked()).apply());
 
         return view;
     }

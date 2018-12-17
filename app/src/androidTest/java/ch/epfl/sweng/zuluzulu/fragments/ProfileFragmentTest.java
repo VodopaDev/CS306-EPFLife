@@ -40,7 +40,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 public class ProfileFragmentTest {
     @Rule
     public IntentsTestRule<MainActivity> intentsTestRule =
-            new IntentsTestRule<MainActivity>(MainActivity.class);
+            new IntentsTestRule<>(MainActivity.class);
 
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.CAMERA);
@@ -74,23 +74,20 @@ public class ProfileFragmentTest {
         intending(hasAction(MediaStore.ACTION_IMAGE_CAPTURE)).respondWith(
                 new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
 
-        IntentCallback intentCallback = new IntentCallback() {
-            @Override
-            public void onIntentSent(Intent intent) {
-                if (intent.getAction().equals("android.media.action.IMAGE_CAPTURE")) {
-                    try {
-                        Uri imageUri = intent.getParcelableExtra(MediaStore.EXTRA_OUTPUT);
-                        Context context = getTargetContext();
-                        Bitmap icon = BitmapFactory.decodeResource(
-                                context.getResources(),
-                                R.drawable.default_icon);
-                        OutputStream out = getTargetContext().getContentResolver().openOutputStream(imageUri);
-                        icon.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                        out.flush();
-                        out.close();
-                    } catch (IOException e) {
-                        throw new IllegalArgumentException();
-                    }
+        IntentCallback intentCallback = intent -> {
+            if (intent.getAction().equals("android.media.action.IMAGE_CAPTURE")) {
+                try {
+                    Uri imageUri = intent.getParcelableExtra(MediaStore.EXTRA_OUTPUT);
+                    Context context = getTargetContext();
+                    Bitmap icon = BitmapFactory.decodeResource(
+                            context.getResources(),
+                            R.drawable.default_icon);
+                    OutputStream out = getTargetContext().getContentResolver().openOutputStream(imageUri);
+                    icon.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                    out.flush();
+                    out.close();
+                } catch (IOException e) {
+                    throw new IllegalArgumentException();
                 }
             }
         };

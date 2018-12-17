@@ -117,7 +117,7 @@ public class LoginFragment extends SuperFragment {
      */
     private void transfer_main() {
         // Pass the user to the activity
-        Map<Integer, Object> toTransfer = new HashMap<Integer, Object>();
+        Map<Integer, Object> toTransfer = new HashMap<>();
         toTransfer.put(0, user);
         mListener.onFragmentInteraction(CommunicationTag.SET_USER, toTransfer);
         mListener.onFragmentInteraction(CommunicationTag.OPEN_MAIN_FRAGMENT, null);

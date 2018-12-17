@@ -122,28 +122,25 @@ public class ReplyFragment extends SuperChatPostsFragment {
      * Set up the listener on the send button
      */
     private void setUpSendButton() {
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String newId = DatabaseFactory.getDependency().getNewReplyId(postOriginal.getChannelId(), postOriginal.getId());
-                Post post = new Post(
-                        newId,
-                        postOriginal.getChannelId(),
-                        postOriginal.getId(),
-                        replyText.getText().toString().trim().replaceAll("([\\n\\r]+\\s*)*$", ""),
-                        anonymous ? "" : user.getFirstNames(),
-                        user.getSciper(),
-                        Timestamp.now().toDate(),
-                        postOriginal.getColor(),
-                        new ArrayList<>(),
-                        new ArrayList<>(),
-                        new ArrayList<>()
-                );
-                postOriginal.addReply(newId);
-                DatabaseFactory.getDependency().addReply(post);
-                loadReplies(true);
-                replyText.getText().clear();
-            }
+        sendButton.setOnClickListener(v -> {
+            String newId = DatabaseFactory.getDependency().getNewReplyId(postOriginal.getChannelId(), postOriginal.getId());
+            Post post = new Post(
+                    newId,
+                    postOriginal.getChannelId(),
+                    postOriginal.getId(),
+                    replyText.getText().toString().trim().replaceAll("([\\n\\r]+\\s*)*$", ""),
+                    anonymous ? "" : user.getFirstNames(),
+                    user.getSciper(),
+                    Timestamp.now().toDate(),
+                    postOriginal.getColor(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    new ArrayList<>()
+            );
+            postOriginal.addReply(newId);
+            DatabaseFactory.getDependency().addReply(post);
+            loadReplies(true);
+            replyText.getText().clear();
         });
     }
 

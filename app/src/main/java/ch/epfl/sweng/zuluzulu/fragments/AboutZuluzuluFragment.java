@@ -53,11 +53,7 @@ public class AboutZuluzuluFragment extends SuperFragment {
             return null;
         }
         Button button = view.findViewById(R.id.send_mail);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onSendEmail();
-            }
-        });
+        button.setOnClickListener(v -> onSendEmail());
         // Inflate the layout for this fragment
         return view;
     }

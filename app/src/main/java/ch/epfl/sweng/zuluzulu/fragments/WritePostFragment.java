@@ -126,21 +126,13 @@ public class WritePostFragment extends SuperFragment {
      * Set up an onClick listener on the layout to be able to change the color of the post
      */
     private void setUpColorListener() {
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int oldColor = Color.parseColor(color.getValue());
-                color = PostColor.getRandomColorButNot(color);
-                int newColor = Color.parseColor(color.getValue());
-                ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), oldColor, newColor);
-                colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animator) {
-                        layout.setBackgroundColor((Integer) animator.getAnimatedValue());
-                    }
-                });
-                colorAnimation.start();
-            }
+        layout.setOnClickListener(v -> {
+            int oldColor = Color.parseColor(color.getValue());
+            color = PostColor.getRandomColorButNot(color);
+            int newColor = Color.parseColor(color.getValue());
+            ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), oldColor, newColor);
+            colorAnimation.addUpdateListener(animator -> layout.setBackgroundColor((Integer) animator.getAnimatedValue()));
+            colorAnimation.start();
         });
     }
 

@@ -100,20 +100,14 @@ public class PostArrayAdapter extends ArrayAdapter<SuperMessage> {
     }
 
     private void setUpUpDownButtons(Post post, ImageView upButton, ImageView downButton, TextView nbUpsText) {
-        upButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateDatabase(true, post, nbUpsText);
-                updateUpsButtons(post, upButton, downButton);
-            }
+        upButton.setOnClickListener(v -> {
+            updateDatabase(true, post, nbUpsText);
+            updateUpsButtons(post, upButton, downButton);
         });
 
-        downButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateDatabase(false, post, nbUpsText);
-                updateUpsButtons(post, upButton, downButton);
-            }
+        downButton.setOnClickListener(v -> {
+            updateDatabase(false, post, nbUpsText);
+            updateUpsButtons(post, upButton, downButton);
         });
     }
 

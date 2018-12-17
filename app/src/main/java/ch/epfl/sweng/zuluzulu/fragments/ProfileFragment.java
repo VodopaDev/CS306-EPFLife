@@ -143,12 +143,9 @@ public class ProfileFragment extends SuperFragment {
 
         View add_picture_view = view.findViewById(R.id.profile_add_photo);
         if (profileOwner) {
-            add_picture_view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (askPermissions()) {
-                        goToCamera();
-                    }
+            add_picture_view.setOnClickListener(v -> {
+                if (askPermissions()) {
+                    goToCamera();
                 }
             });
         } else {
@@ -214,20 +211,14 @@ public class ProfileFragment extends SuperFragment {
         if (localFile != null) {
             pathToTemp = localFile.getAbsolutePath();
             IdlingResourceFactory.incrementCountingIdlingResource();
-            pictureRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    IdlingResourceFactory.decrementCountingIdlingResource();
-                    // Local temp file has been created
-                    setRescaledImage(pathToTemp);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    IdlingResourceFactory.decrementCountingIdlingResource();
-                    // Handle any errors
-                    Toast.makeText(getActivity(), "Unsuccessful load", Toast.LENGTH_SHORT).show();
-                }
+            pictureRef.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+                IdlingResourceFactory.decrementCountingIdlingResource();
+                // Local temp file has been created
+                setRescaledImage(pathToTemp);
+            }).addOnFailureListener(exception -> {
+                IdlingResourceFactory.decrementCountingIdlingResource();
+                // Handle any errors
+                Toast.makeText(getActivity(), "Unsuccessful load", Toast.LENGTH_SHORT).show();
             });
         }
     }
@@ -289,18 +280,12 @@ public class ProfileFragment extends SuperFragment {
             Uri uriFile = Uri.fromFile(new File(pathToImage));
             UploadTask uploadTask = pictureRef.putFile(uriFile);
             IdlingResourceFactory.incrementCountingIdlingResource();
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    IdlingResourceFactory.decrementCountingIdlingResource();
-                    Toast.makeText(getActivity(), "Unsuccessful upload", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    IdlingResourceFactory.decrementCountingIdlingResource();
-                    Toast.makeText(getActivity(), "Successful upload", Toast.LENGTH_SHORT).show();
-                }
+            uploadTask.addOnFailureListener(exception -> {
+                IdlingResourceFactory.decrementCountingIdlingResource();
+                Toast.makeText(getActivity(), "Unsuccessful upload", Toast.LENGTH_SHORT).show();
+            }).addOnSuccessListener(taskSnapshot -> {
+                IdlingResourceFactory.decrementCountingIdlingResource();
+                Toast.makeText(getActivity(), "Successful upload", Toast.LENGTH_SHORT).show();
             });
         }
     }

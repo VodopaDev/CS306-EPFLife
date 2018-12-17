@@ -78,29 +78,21 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
      * Set up long click listener on the posts or messages
      */
     protected void setUpProfileListener() {
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                SuperMessage message = messages.get(position);
-                if (!message.isAnonymous() && !message.isOwnMessage(user.getSciper())) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        listView.setOnItemLongClickListener((parent, view, position, id) -> {
+            SuperMessage message = messages.get(position);
+            if (!message.isAnonymous() && !message.isOwnMessage(user.getSciper())) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-                    AlertDialog dlg = builder.setTitle(VISIT_PROFILE_STRING + message.getSenderName() + " ?")
-                            .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    DatabaseFactory.getDependency().getUserWithIdOrCreateIt(message.getSenderSciper(), result -> {
-                                        System.out.println(result.getSciper());
-                                        mListener.onFragmentInteraction(CommunicationTag.OPEN_PROFILE_FRAGMENT, result);
-                                    });
-                                }
-                            })
-                            .create();
-                    dlg.setCanceledOnTouchOutside(true);
-                    dlg.show();
-                }
-                return true;
+                AlertDialog dlg = builder.setTitle(VISIT_PROFILE_STRING + message.getSenderName() + " ?")
+                        .setPositiveButton("Oui", (dialog, which) -> DatabaseFactory.getDependency().getUserWithIdOrCreateIt(message.getSenderSciper(), result -> {
+                            System.out.println(result.getSciper());
+                            mListener.onFragmentInteraction(CommunicationTag.OPEN_PROFILE_FRAGMENT, result);
+                        }))
+                        .create();
+                dlg.setCanceledOnTouchOutside(true);
+                dlg.show();
             }
+            return true;
         });
     }
 }
