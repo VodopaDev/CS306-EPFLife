@@ -12,16 +12,16 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ch.epfl.sweng.zuluzulu.CommunicationTag;
+import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.fragments.SuperFragment;
-import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.structure.Association;
 import ch.epfl.sweng.zuluzulu.structure.Event;
 import ch.epfl.sweng.zuluzulu.structure.EventBuilder;
@@ -29,7 +29,6 @@ import ch.epfl.sweng.zuluzulu.structure.EventDate;
 
 public class AddEventFragment extends SuperFragment {
 
-    private final static int DAYSTOSEC = 86400;
     private static final String EPFL_LOGO = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
 
     //for association name
@@ -80,7 +79,7 @@ public class AddEventFragment extends SuperFragment {
     }
 
     /**
-     * fill lists requiring double digits numbers
+     * fill lists of integers requiring double digits numbers
      *
      * @param list              , the list we want to fill
      * @param startingValue     the first value that the list will have
@@ -106,7 +105,6 @@ public class AddEventFragment extends SuperFragment {
      */
     private void setUpCreateEventButton() {
         create_event.setOnClickListener(v -> {
-
             //Set the starting date
             Date date = getDateAndTime(start_date_pick,spinner_hours,spinner_minutes);
             Date end_date = getDateAndTime(end_date_pick,spinner_end_hours,spinner_end_minutes);
@@ -153,9 +151,8 @@ public class AddEventFragment extends SuperFragment {
                     setSpeaker(speak).
                     build();
 
-
-
             DatabaseFactory.getDependency().addEvent(event);
+            mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_FRAGMENT, null);
 
         });
     }
@@ -240,16 +237,17 @@ public class AddEventFragment extends SuperFragment {
      * @return if the arguments are valid
      */
     private boolean checkIfValid(String title, String description, Date start, Date end) {
+        boolean isValid = true;
         if (title.isEmpty())
-            return viewSetError(title_view, "please write a title");
+            isValid = viewSetError(title_view, "please write a title");
         if (description.isEmpty())
-            return viewSetError(description_view, "please write a description");
+            isValid = viewSetError(description_view, "please write a description");
         if (start.before(today) || end.before(start)){
             Toast.makeText(getActivity(), "Set a correct date", Toast.LENGTH_SHORT).show();
-            return false;
+            isValid = false;
         }
 
-        return true;
+        return isValid;
     }
 
     /**

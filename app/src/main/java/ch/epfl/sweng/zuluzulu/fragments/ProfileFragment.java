@@ -55,6 +55,9 @@ public class ProfileFragment extends SuperFragment {
     private static final String OWNER_TAG = "OWNER_TAG";
     private static final int CAMERA_CODE = 1234;
     private static final int W_STORAGE_PERM_CODE = 260;
+    private static final int ANGLE_ROTATED_90 = 90;
+    private static final int ANGLE_ROTATED_180 = 180;
+    private static final int ANGLE_ROTATED_270 = 270;
 
     private int internal = 0;
 
@@ -230,7 +233,7 @@ public class ProfileFragment extends SuperFragment {
      * @return the file
      * @throws IOException if creation fails
      */
-    private File createFileForPicture() throws IOException {
+    private File createFileForPicture(){
 
         File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = new File (directory + "/user" + userData.getSciper() + ".jpg");
@@ -243,21 +246,17 @@ public class ProfileFragment extends SuperFragment {
     /**
      * generates an intent for the camera with the right uri and file
      * so that the camera saves the file in the SD and on the firebaseStorage
+     *
+     * adapted from : https://developer.android.com/training/camera/photobasics
      */
     private void goToCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
             File picture;
-            try {
-                picture = createFileForPicture();
-            } catch (IOException ex) {
-                Log.e("creating picture file", "unable to create a file for intent");
-                return;
-            }
+            picture = createFileForPicture();
+
             if (picture != null) {
-                Uri uri = FileProvider.getUriForFile(getActivity(),
-                        "ch.epfl.sweng.zuluzulu.fileprovider",
-                        picture);
+                Uri uri = FileProvider.getUriForFile(getActivity(), "ch.epfl.sweng.zuluzulu.fileprovider", picture);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(intent, CAMERA_CODE);
             }
@@ -294,6 +293,8 @@ public class ProfileFragment extends SuperFragment {
      * helper method that takes a path to a file and scale it to make it fit inside the imagebutton
      *
      * @param path the path to the file to rescale
+     *
+     * adapted from : https://developer.android.com/training/camera/photobasics
      */
     private Bitmap setRescaledImage(String path) {
         int targetHeight = pic.getHeight();
@@ -301,22 +302,22 @@ public class ProfileFragment extends SuperFragment {
             targetHeight = 50;
 
         }
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, bmOptions);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
 
-        int currentHeight = bmOptions.outHeight;
+        int currentHeight = options.outHeight;
 
         int scaling = currentHeight / targetHeight;
 
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaling;
-        bmOptions.inPurgeable = true;
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = scaling;
+        options.inPurgeable = true;
 
-        Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
+        Bitmap bitmap = BitmapFactory.decodeFile(path, options);
 
         bitmap = rotateImageDependingOnPhoneModel(bitmap, pathToImage);
-        if (bmOptions.outHeight != 0) {
+        if (options.outHeight != 0) {
             pic.setImageBitmap(bitmap);
         }
 
@@ -332,6 +333,8 @@ public class ProfileFragment extends SuperFragment {
      * @param bitmap the possibly rotated picture
      * @param path the path to the picture
      * @return the bitmap with the good orientation
+     *
+     * adapted from : https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a
      */
     private Bitmap rotateImageDependingOnPhoneModel(Bitmap bitmap , String path){
         ExifInterface exifInterface;
@@ -340,30 +343,25 @@ public class ProfileFragment extends SuperFragment {
         }catch (Exception e){
             return bitmap;
         }
-        int angleToRotate = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION,
-                ExifInterface.ORIENTATION_UNDEFINED);
-        Bitmap rotatedBitmap;
+        int angleToRotate = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        Bitmap correctBitmap;
         switch(angleToRotate) {
-
             case ExifInterface.ORIENTATION_ROTATE_90:
-                rotatedBitmap = BitmapUtils.rotateBitmap(bitmap, 90);
+                correctBitmap = BitmapUtils.rotateBitmap(bitmap, ANGLE_ROTATED_90);
                 break;
-
             case ExifInterface.ORIENTATION_ROTATE_180:
-                rotatedBitmap = BitmapUtils.rotateBitmap(bitmap, 180);
+                correctBitmap = BitmapUtils.rotateBitmap(bitmap, ANGLE_ROTATED_180);
                 break;
-
             case ExifInterface.ORIENTATION_ROTATE_270:
-                rotatedBitmap = BitmapUtils.rotateBitmap(bitmap, 270);
+                correctBitmap = BitmapUtils.rotateBitmap(bitmap, ANGLE_ROTATED_270);
                 break;
-
             case ExifInterface.ORIENTATION_NORMAL:
             default:
-                rotatedBitmap = bitmap;
+                correctBitmap = bitmap;
 
         }
 
-        return rotatedBitmap;
+        return correctBitmap;
     }
 
 
