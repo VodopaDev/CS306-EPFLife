@@ -89,6 +89,7 @@ public class AdminPanelFragmentAsAdminTest extends TestWithAdminAndFragment {
     }
 
     private void changeFactory(String s) {
+ android.util.Log.d("Function called", "changeFactory");
         UrlReader reader = new UrlReader() {
             @Override
             public BufferedReader read(String name) {

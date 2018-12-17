@@ -62,6 +62,7 @@ public class EventDate implements Serializable {
      * @param start_time_string start time
      */
     private static Date stringToStartDate(String start_date_string, String start_time_string) {
+        android.util.Log.d("Function called", "stringToStartDate");
         if (start_date_string == null || "2018-01-01".length() != start_date_string.length()) {
             throw new IllegalArgumentException();
         }

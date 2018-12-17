@@ -26,12 +26,14 @@ public class AboutZuluzuluFragmentTest {
 
     @Before
     public void init() {
+ android.util.Log.d("Function called", "init");
         SuperFragment fragment = AboutZuluzuluFragment.newInstance();
         mActivityRule.getActivity().openFragment(fragment);
     }
 
     @Test
     public void canSendEmail() {
+ android.util.Log.d("Function called", "canSendEmail");
         // Use this to ignore the request
         Intent resultData = new Intent();
         Instrumentation.ActivityResult result =

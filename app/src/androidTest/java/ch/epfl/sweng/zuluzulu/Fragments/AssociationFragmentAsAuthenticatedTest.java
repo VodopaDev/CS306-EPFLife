@@ -19,6 +19,7 @@ public class AssociationFragmentAsAuthenticatedTest extends TestWithAuthenticate
 
     @Override
     public void initFragment() {
+ android.util.Log.d("Function called", "initFragment");
         DatabaseFactory.setDependency(new MockedProxy());
 
         fragment = AssociationFragment.newInstance(user);
@@ -26,6 +27,7 @@ public class AssociationFragmentAsAuthenticatedTest extends TestWithAuthenticate
 
     @Test
     public void authenticatedCanClickOnFavorites() {
+ android.util.Log.d("Function called", "authenticatedCanClickOnFavorites");
         onView(withText(R.string.fragment_assos_button_fav)).perform(ViewActions.click());
         onView(withText(R.string.fragment_assos_button_all)).perform(ViewActions.click());
 

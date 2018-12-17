@@ -16,6 +16,7 @@ public class LoginTest extends TestWithGuestAndFragment<LoginFragment> {
 
     @Override
     public void initFragment() {
+ android.util.Log.d("Function called", "initFragment");
         DatabaseFactory.setDependency(new MockedProxy());
         Bundle toSend = new Bundle(1);
         toSend.putString("uri", "http://epfl.ch/code=1234");
@@ -29,6 +30,7 @@ public class LoginTest extends TestWithGuestAndFragment<LoginFragment> {
      */
     @Test
     public void isUrlRedirectedToMain() {
+ android.util.Log.d("Function called", "isUrlRedirectedToMain");
         Utility.openMenu();
     }
 

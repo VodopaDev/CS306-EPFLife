@@ -107,6 +107,7 @@ public class ChannelFragment extends SuperFragment {
      * Read data from the database and getAndAddOnSuccessListener the list of the channels
      */
     private void getChannelsFromDatabase() {
+        android.util.Log.d("Function called", "getChannelsFromDatabase");
         List<String> ids = new ArrayList<>();
         ids.addAll(GLOBAL_CHANNEL_IDS);
         ids.addAll(user.getFollowedChannels());
@@ -137,6 +138,7 @@ public class ChannelFragment extends SuperFragment {
      * Refresh the list of the channels
      */
     private void refresh() {
+        android.util.Log.d("Function called", "refresh");
         if (!GPS.isActivated()) {
             Snackbar.make(view, "Active ton GPS pour avoir accès à tous les canaux", 2000).show();
             userLocation = null;
@@ -150,6 +152,7 @@ public class ChannelFragment extends SuperFragment {
      * Refresh the current position
      */
     private void refreshPosition() {
+        android.util.Log.d("Function called", "refreshPosition");
         Location gpsLocation = GPS.getLocation();
         if (gpsLocation != null) {
             userLocation = Utils.toGeoPoint(gpsLocation);

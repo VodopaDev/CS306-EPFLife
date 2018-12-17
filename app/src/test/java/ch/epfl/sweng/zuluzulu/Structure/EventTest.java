@@ -43,6 +43,7 @@ public class EventTest {
     private Event event0;
 
     private void initWorkingAssociation() {
+ android.util.Log.d("Function called", "initWorkingAssociation");
 
         Map<String, Object> map = new HashMap<>();
         map.put("id", ID);

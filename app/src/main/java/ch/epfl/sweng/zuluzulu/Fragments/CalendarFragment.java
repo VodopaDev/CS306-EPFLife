@@ -134,6 +134,7 @@ public class CalendarFragment extends SuperFragment {
      * Fill the event list from the database
      */
     private void fillFollowedEventsList() {
+        android.util.Log.d("Function called", "fillFollowedEventsList");
         DatabaseFactory.getDependency().getEventsFromIds(user.getFollowedEvents(), result -> {
             for (Event event : result) {
                 followedEvents.add(event);
@@ -157,6 +158,7 @@ public class CalendarFragment extends SuperFragment {
      * @return true if an event is going on between the two dates
      */
     private boolean isCurrentlyGoing(Event event, Date start, Date end) {
+        android.util.Log.d("Function called", "isCurrentlyGoing");
         assert (start.before(end));
         return (event.getStartDate().after(start) && event.getStartDate().before(end)) ||
                 (event.getEndDate().after(start) && event.getStartDate().before(end)) ||
@@ -170,6 +172,7 @@ public class CalendarFragment extends SuperFragment {
      * @return the beginning and ending of the day in a pair
      */
     private Pair<Date, Date> getStartAndEndOfTheDay(Date date) {
+        android.util.Log.d("Function called", "getStartAndEndOfTheDay");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 0, 0, 1);

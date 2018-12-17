@@ -49,7 +49,7 @@ public final class AuthServer {
         return createUser(profile);
     }
 
-    public static User createUser(JsonProfile profile){
+    public static User createUser(JsonProfile profile) {
 
         User.UserBuilder builder = new User.UserBuilder();
         builder.setEmail(profile.email);

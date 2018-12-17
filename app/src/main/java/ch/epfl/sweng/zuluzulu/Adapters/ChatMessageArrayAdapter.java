@@ -78,6 +78,7 @@ public class ChatMessageArrayAdapter extends ArrayAdapter<SuperMessage> {
      * @param time     The time of the message
      */
     private void setUpTimeView(TextView timeView, Date time) {
+        android.util.Log.d("Function called", "setUpTimeView");
         boolean sameDay = DateUtils.isToday(time.getTime());
         if (sameDay) {
             Calendar calendar = Calendar.getInstance();

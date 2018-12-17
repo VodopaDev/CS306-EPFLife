@@ -23,6 +23,8 @@ public final class GPS {
     private static final int TWO_MINUTES = 1000 * 60 * 2; // 2 min
     private static Location location;
     private static LocationListener locationListener = new LocationListener() {
+ android.util.Log.d("Function called","LocationListener");
+
         @Override
         public void onLocationChanged(Location newLocation) {
             if (newLocation != null && isBetterLocation(newLocation, location)) {
@@ -126,6 +128,7 @@ public final class GPS {
      * @return whether the new location is better or not
      */
     private static boolean isBetterLocation(Location location, Location currentBestLocation) {
+        android.util.Log.d("Function called", "isBetterLocation");
         if (currentBestLocation == null) {
             // A new location is always better than no location
             return true;
@@ -162,6 +165,7 @@ public final class GPS {
      * Checks whether two providers are the same
      */
     private static boolean isSameProvider(String provider1, String provider2) {
+        android.util.Log.d("Function called", "isSameProvider");
         if (provider1 == null) {
             return provider2 == null;
         }

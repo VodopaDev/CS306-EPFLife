@@ -101,6 +101,7 @@ public class AssociationDetailFragment extends SuperFragment {
      * Set up the favorite button's behaviour
      */
     private void setFavButtonBehaviour() {
+        android.util.Log.d("Function called", "setFavButtonBehaviour");
         if (user.isConnected() && ((AuthenticatedUser) user).isFollowedAssociation(asso.getId()))
             ImageLoader.loadDrawableIntoImageView(asso_fav, R.drawable.fav_on, getContext());
         else
@@ -130,6 +131,7 @@ public class AssociationDetailFragment extends SuperFragment {
      * Fetch the appropriate chat channel from the database
      */
     private void loadChat() {
+        android.util.Log.d("Function called", "loadChat");
         if (asso.getChannelId() == null) {
             chatButton.setEnabled(false);
         } else {
@@ -147,6 +149,7 @@ public class AssociationDetailFragment extends SuperFragment {
      * Set up the chat button to redirect to the correct chat page
      */
     private void setUpChatButton() {
+        android.util.Log.d("Function called", "setUpChatButton");
         chatButton.setOnClickListener(v -> {
             if (channel != null) {
                 if (user.isConnected())
@@ -161,6 +164,7 @@ public class AssociationDetailFragment extends SuperFragment {
      * Set up the events button to redirect to the list of related events
      */
     private void setUpEventsButton() {
+        android.util.Log.d("Function called", "setUpEventsButton");
         eventsButton.setOnClickListener(v -> {
             // Todo Redirect to the list of events related to the association
             mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_FRAGMENT, user);

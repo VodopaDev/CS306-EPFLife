@@ -90,6 +90,7 @@ public class PostFragment extends SuperChatPostsFragment {
      * Add an onClick listener on the button to switch to the chat fragment
      */
     private void setUpChatButton() {
+        android.util.Log.d("Function called", "setUpChatButton");
         chatButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_CHAT_FRAGMENT, channel));
     }
 

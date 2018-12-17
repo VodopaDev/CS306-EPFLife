@@ -172,6 +172,7 @@ public class EventFragment extends SuperFragment {
      * Before doing so, clear all event lists of the class to avoid duplication
      */
     private void fillEventLists() {
+        android.util.Log.d("Function called", "fillEventLists");
         DatabaseFactory.getDependency().getAllEvents(result -> {
             allEvents.clear();
             followedEvents.clear();
@@ -190,6 +191,7 @@ public class EventFragment extends SuperFragment {
      * @param comparator comparator to use when the checkbox is clicked
      */
     private void setSortingBehaviourOnCheckbox(CheckBox checkBox, Comparator<Event> comparator) {
+        android.util.Log.d("Function called", "setSortingBehaviourOnCheckbox");
         checkBox.setOnClickListener(v -> {
             if (checkBox.isEnabled()) {
                 selectClickedCheckbox(checkBox);
@@ -203,6 +205,7 @@ public class EventFragment extends SuperFragment {
      * Sort the displayed list of event using the currently selected comparator
      */
     private void sortWithCurrentComparator() {
+        android.util.Log.d("Function called", "sortWithCurrentComparator");
         Collections.sort(eventsFiltered, currentComparator);
         event_adapter.notifyDataSetChanged();
     }
@@ -211,6 +214,7 @@ public class EventFragment extends SuperFragment {
      * Set the behaviour of the search bar to filter events when a string is inputted
      */
     private void setFilteringWithText() {
+        android.util.Log.d("Function called", "setFilteringWithText");
         event_search_bar.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -234,6 +238,7 @@ public class EventFragment extends SuperFragment {
      * @param checkBox checkbox to select and disable
      */
     private void selectClickedCheckbox(CheckBox checkBox) {
+        android.util.Log.d("Function called", "selectClickedCheckbox");
         checkbox_event_sort_date.setEnabled(true);
         checkbox_event_sort_like.setEnabled(true);
         checkbox_event_sort_name.setEnabled(true);
@@ -250,6 +255,7 @@ public class EventFragment extends SuperFragment {
      * @param newEventsToFilter the new events to filter
      */
     private void updateListView(Button selectedButton, ArrayList<Event> newEventsToFilter) {
+        android.util.Log.d("Function called", "updateListView");
         event_search_bar.getText().clear();
         event_search_bar.clearFocus();
         event_fragment_from_date.getText().clear();
@@ -290,6 +296,7 @@ public class EventFragment extends SuperFragment {
      * @param s substring that must be contained in the name/description of the event
      */
     private void filterWithText(String s) {
+        android.util.Log.d("Function called", "filterWithText");
         dateFrom = null;
         dateTo = null;
         event_fragment_from_date.clearFocus();
@@ -313,6 +320,7 @@ public class EventFragment extends SuperFragment {
      * @return the OnClickListener that prompt a DatePicker on click
      */
     private View.OnClickListener dateOnClick(boolean startDate) {
+        android.util.Log.d("Function called", "dateOnClick");
         return v -> {
             DatePickerDialog.OnDateSetListener datePicker = (view, year, monthOfYear, dayOfMonth) -> {
                 eventCalendar.set(Calendar.YEAR, year);
@@ -336,6 +344,7 @@ public class EventFragment extends SuperFragment {
      * Fill the eventsToFilter using dates
      */
     private void filterWithDate() {
+        android.util.Log.d("Function called", "filterWithDate");
         sanitizeDates();
         event_search_bar.getText().clear();
         eventsFiltered.clear();
@@ -352,6 +361,7 @@ public class EventFragment extends SuperFragment {
      * Also switch the bound dates if the are in the wrong order
      */
     private void sanitizeDates() {
+        android.util.Log.d("Function called", "sanitizeDates");
         if (dateTo == null || dateTo.after(MAX_DATE))
             dateTo = MAX_DATE;
         if (dateFrom == null || dateFrom.before(MIN_DATE))

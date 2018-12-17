@@ -62,6 +62,7 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
     }
 
     private void changeFactory(String s) {
+ android.util.Log.d("Function called", "changeFactory");
         UrlReader reader = new UrlReader() {
             @Override
             public BufferedReader read(String name) {
@@ -97,6 +98,7 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
      * Create a fragment with non admin user
      */
     private void nonAdminUser() {
+ android.util.Log.d("Function called", "nonAdminUser");
         mActivityRule.getActivity().openFragment(AssociationsGeneratorFragment.newInstance(Utility.createTestAuthenticated()));
     }
 
@@ -104,6 +106,7 @@ public class AssociationsGeneratorFragmentTest extends TestWithAdminAndFragment<
      * Create the fragment with admin user
      */
     private void adminUser() {
+ android.util.Log.d("Function called", "adminUser");
         mActivityRule.getActivity().openFragment(AssociationsGeneratorFragment.newInstance(user));
     }
 

@@ -96,6 +96,7 @@ public class ChangeUserRoleFragment extends SuperFragment {
     }
 
     private void fillAllUsers() {
+        android.util.Log.d("Function called", "fillAllUsers");
         DatabaseFactory.getDependency().getAllUsers(result -> {
             allUsers.clear();
             filteredUsers.clear();

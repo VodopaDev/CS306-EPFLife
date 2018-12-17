@@ -130,6 +130,7 @@ public class Channel extends FirebaseStructure {
      * @return true if requestSection and userSection are the same or if there is no requestSection, false otherwise
      */
     private boolean hasGoodSection(String requestSection, String userSection) {
+        android.util.Log.d("Function called", "hasGoodSection");
         if (requestSection == null)
             return true;
 
@@ -144,6 +145,7 @@ public class Channel extends FirebaseStructure {
      * @return true if requestedLocation and userLocation are the same or if there is no requestedLocation, false otherwise
      */
     private boolean hasGoodLocation(GeoPoint requestedLocation, GeoPoint userLocation) {
+        android.util.Log.d("Function called", "hasGoodLocation");
         if (requestedLocation == null)
             return true;
 

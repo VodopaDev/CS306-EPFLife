@@ -180,23 +180,25 @@ public class ProfileFragment extends SuperFragment {
      * @return if the permissions are granted
      */
     private boolean askPermissions() {
+        android.util.Log.d("Function called", "askPermissions");
         return (hasPermission()) || (internal++ < 3 && askPermissions());
     }
 
     /**
      * Check if user has permission
+     *
      * @return boolean
      */
-    private boolean hasPermission(){
+    private boolean hasPermission() {
         boolean storage_write = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         boolean storage_read = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         boolean camera = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
         if (!storage_write) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE);
         } else if (!storage_read) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE+1);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, W_STORAGE_PERM_CODE + 1);
         } else if (!camera) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, W_STORAGE_PERM_CODE+2);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, W_STORAGE_PERM_CODE + 2);
         }
 
         return storage_read && storage_write && camera;
@@ -206,6 +208,7 @@ public class ProfileFragment extends SuperFragment {
      * download the file from firebase and set it into the imagebutton
      */
     private void setBitmapFromStorage() {
+        android.util.Log.d("Function called", "setBitmapFromStorage");
         File localFile = null;
         try {
             localFile = File.createTempFile("images", "jpg");
@@ -240,10 +243,10 @@ public class ProfileFragment extends SuperFragment {
      * @return the file
      * @throws IOException if creation fails
      */
-    private File createFileForPicture(){
+    private File createFileForPicture() {
 
         File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File image = new File (directory + "/user" + userData.getSciper() + ".jpg");
+        File image = new File(directory + "/user" + userData.getSciper() + ".jpg");
 
         pathToImage = image.getAbsolutePath();
         return image;
@@ -253,10 +256,11 @@ public class ProfileFragment extends SuperFragment {
     /**
      * generates an intent for the camera with the right uri and file
      * so that the camera saves the file in the SD and on the firebaseStorage
-     *
+     * <p>
      * adapted from : https://developer.android.com/training/camera/photobasics
      */
     private void goToCamera() {
+        android.util.Log.d("Function called", "goToCamera");
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
             File picture;
@@ -273,7 +277,6 @@ public class ProfileFragment extends SuperFragment {
 
     /**
      * receives the result of the camera activity, set the picture, and upload it to the storage
-     *
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -281,7 +284,7 @@ public class ProfileFragment extends SuperFragment {
 
             Bitmap correctImage = setRescaledImage(pathToImage);
 
-            BitmapUtils.writeBitmapInSDCard(correctImage,pathToImage);
+            BitmapUtils.writeBitmapInSDCard(correctImage, pathToImage);
 
             Uri uriFile = Uri.fromFile(new File(pathToImage));
             UploadTask uploadTask = pictureRef.putFile(uriFile);
@@ -306,12 +309,13 @@ public class ProfileFragment extends SuperFragment {
      * helper method that takes a path to a file and scale it to make it fit inside the imagebutton
      *
      * @param path the path to the file to rescale
-     *
-     * adapted from : https://developer.android.com/training/camera/photobasics
+     *             <p>
+     *             adapted from : https://developer.android.com/training/camera/photobasics
      */
     private Bitmap setRescaledImage(String path) {
+        android.util.Log.d("Function called", "setRescaledImage");
         int targetHeight = pic.getHeight();
-        if(targetHeight == 0){
+        if (targetHeight == 0) {
             targetHeight = 50;
 
         }
@@ -339,26 +343,25 @@ public class ProfileFragment extends SuperFragment {
     }
 
 
-
-
     /**
      * helper method that checks the angle the picture as been rotated and put it back straight
-     * @param bitmap the possibly rotated picture
-     * @param path the path to the picture
-     * @return the bitmap with the good orientation
      *
+     * @param bitmap the possibly rotated picture
+     * @param path   the path to the picture
+     * @return the bitmap with the good orientation
+     * <p>
      * adapted from : https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a
      */
-    private Bitmap rotateImageDependingOnPhoneModel(Bitmap bitmap , String path){
+    private Bitmap rotateImageDependingOnPhoneModel(Bitmap bitmap, String path) {
         ExifInterface exifInterface;
-        try{
-         exifInterface = new ExifInterface(path);
-        }catch (Exception e){
+        try {
+            exifInterface = new ExifInterface(path);
+        } catch (Exception e) {
             return bitmap;
         }
         int angleToRotate = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
         Bitmap correctBitmap;
-        switch(angleToRotate) {
+        switch (angleToRotate) {
             case ExifInterface.ORIENTATION_ROTATE_90:
                 correctBitmap = BitmapUtils.rotateBitmap(bitmap, ANGLE_ROTATED_90);
                 break;
@@ -376,7 +379,6 @@ public class ProfileFragment extends SuperFragment {
 
         return correctBitmap;
     }
-
 
 
 }

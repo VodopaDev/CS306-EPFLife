@@ -19,12 +19,14 @@ public class DatabaseFactoryTest {
 
     @Test
     public void getDependency() {
+ android.util.Log.d("Function called", "getDependency");
         assertThat(DatabaseFactory.getDependency(), instanceOf(Proxy.class));
 
     }
 
     @Test
     public void setDependency() {
+ android.util.Log.d("Function called", "setDependency");
         DatabaseFactory.setDependency(new MockedProxy());
         assertThat(DatabaseFactory.getDependency(), instanceOf(Proxy.class));
     }

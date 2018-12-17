@@ -7,6 +7,7 @@ public class FirebaseMock implements Database {
 
     @Override
     public DatabaseCollection collection(String collectionPath) {
+ android.util.Log.d("Function called", "collection");
         return new CollectionMock();
     }
 }

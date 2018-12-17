@@ -56,6 +56,7 @@ public class UrlHandler extends AsyncTask<String, Void, List<String>> {
      * @return T Return object of type T with all the values founded
      */
     private List<String> parseUrl(String url) {
+        android.util.Log.d("Function called", "parseUrl");
         BufferedReader bf = urlReader.read(url);
 
         if (bf == null) {

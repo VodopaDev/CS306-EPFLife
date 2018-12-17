@@ -2,6 +2,7 @@ package ch.epfl.sweng.zuluzulu.Utility;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -9,8 +10,9 @@ public interface BitmapUtils {
 
     /**
      * rotate a bitmap
+     *
      * @param bitmap the bitmap to rotate
-     * @param angle the angle to rotate the bitmap
+     * @param angle  the angle to rotate the bitmap
      * @return the bitmap rotated
      * solution found here : "https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a"
      */
@@ -22,13 +24,14 @@ public interface BitmapUtils {
 
     /**
      * write the bitmap at the specified place in the SD Card as a JPEG
+     *
      * @param bitmap the bitmap to write
-     * @param path the path in the SD Card
+     * @param path   the path in the SD Card
      */
-    static void writeBitmapInSDCard(Bitmap bitmap, String path){
+    static void writeBitmapInSDCard(Bitmap bitmap, String path) {
         File toWriteInSDCard = new File(path);
 
-        if (toWriteInSDCard.exists ()) toWriteInSDCard.delete ();
+        if (toWriteInSDCard.exists()) toWriteInSDCard.delete();
         try {
             FileOutputStream out = new FileOutputStream(toWriteInSDCard);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);

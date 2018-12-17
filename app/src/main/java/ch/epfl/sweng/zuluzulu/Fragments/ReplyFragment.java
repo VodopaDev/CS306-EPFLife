@@ -95,6 +95,7 @@ public class ReplyFragment extends SuperChatPostsFragment {
      * Set up the listener on the text edit field
      */
     private void setUpReplyText() {
+        android.util.Log.d("Function called", "setUpReplyText");
         replyText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -116,6 +117,7 @@ public class ReplyFragment extends SuperChatPostsFragment {
      * Set up the listener on the send button
      */
     private void setUpSendButton() {
+        android.util.Log.d("Function called", "setUpSendButton");
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,6 +147,7 @@ public class ReplyFragment extends SuperChatPostsFragment {
      * Refresh the replies by reading in the database
      */
     private void loadReplies(boolean newReply) {
+        android.util.Log.d("Function called", "loadReplies");
         messages.clear();
         messages.add(postOriginal);
         DatabaseFactory.getDependency().getRepliesFromPost(postOriginal.getChannelId(), postOriginal.getId(), result -> {
@@ -168,6 +171,7 @@ public class ReplyFragment extends SuperChatPostsFragment {
      * This function is called when the user swipes down to refresh the list of replies
      */
     private void refresh() {
+        android.util.Log.d("Function called", "refresh");
         swipeRefreshLayout.setRefreshing(true);
         loadReplies(false);
     }

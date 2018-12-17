@@ -10,6 +10,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class LogoutTest extends TestWithAuthenticatedUser {
     @Test
     public void logout() {
+ android.util.Log.d("Function called", "logout");
         Utility.openMenu();
 
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_logout));

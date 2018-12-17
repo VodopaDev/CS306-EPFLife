@@ -26,6 +26,7 @@ public class MainActivityAsGuestTest extends TestWithGuestAndFragment<MainFragme
 
     @Override
     public void initFragment() {
+ android.util.Log.d("Function called", "initFragment");
         DatabaseFactory.setDependency(new MockedProxy());
 
         fragment = MainFragment.newInstance(user);
@@ -33,6 +34,7 @@ public class MainActivityAsGuestTest extends TestWithGuestAndFragment<MainFragme
 
     @Test
     public void isAuthenticated() {
+ android.util.Log.d("Function called", "isAuthenticated");
         // check not authenticated
         assertFalse(getMainActivity().isAuthenticated());
     }
@@ -49,6 +51,7 @@ public class MainActivityAsGuestTest extends TestWithGuestAndFragment<MainFragme
 
     @Test
     public void getUser() {
+ android.util.Log.d("Function called", "getUser");
         assertNotNull(getMainActivity().getUser());
     }
 

@@ -27,17 +27,20 @@ import static ch.epfl.sweng.zuluzulu.Utility.defaultPost1;
 
 public class MockedProxy implements Proxy {
 
-    private Map<String, Association> associationMap = new HashMap<String, Association>() {{
+    private Map<String, Association> associationMap = new HashMap<String, Association>() {
+ android.util.Log.d("Function called", "Association>");{
         put("0", Utility.defaultAssociation());
     }};
 
-    private Map<String, Event> eventMap = new HashMap<String, Event>() {{
+    private Map<String, Event> eventMap = new HashMap<String, Event>() {
+ android.util.Log.d("Function called", "Event>");{
         put("0", Utility.defaultEvent().build());
         put("1", Utility.currentTimeEvent().build());
     }};
 
 
-    private Map<String, ChannelRepresentation> channelMap = new HashMap<String, ChannelRepresentation>() {{
+    private Map<String, ChannelRepresentation> channelMap = new HashMap<String, ChannelRepresentation>() {
+ android.util.Log.d("Function called", "ChannelRepresentation>");{
         ChannelRepresentation rep = new ChannelRepresentation(Utility.defaultChannel());
         rep.messageMap.put("0", Utility.defaultMessage0());
         rep.messageMap.put("1", Utility.defaultMessage1());
@@ -46,7 +49,8 @@ public class MockedProxy implements Proxy {
         put("0", rep);
     }};
 
-    private Map<String, AuthenticatedUser> userMap = new HashMap<String, AuthenticatedUser>() {{
+    private Map<String, AuthenticatedUser> userMap = new HashMap<String, AuthenticatedUser>() {
+ android.util.Log.d("Function called", "AuthenticatedUser>");{
         put("1", createFilledUserBuilder().setSciper("1").buildAdmin());
         put("0", createTestAuthenticated());
     }};

@@ -147,6 +147,7 @@ public class UrlHandlerTest {
      * @return Void
      */
     private Void handler(List<String> result) {
+ android.util.Log.d("Function called", "handler");
         // Do any logic. Here we want result not to be null
         succes = false;
         if (result != null && !result.isEmpty()) {

@@ -1,7 +1,6 @@
 package ch.epfl.sweng.zuluzulu.Fragments;
 
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -47,7 +46,6 @@ public class EventDetailFragment extends SuperFragment {
 
     private Button associationButton;
     private Association association;
-
 
 
     public static EventDetailFragment newInstance(User user, Event event) {

@@ -63,6 +63,7 @@ public class FirebaseProxy implements Proxy {
      * and I can't inject from tests because tests are called after launching the main
      */
     private void create() {
+        android.util.Log.d("Function called", "create");
         Database firebaseInstance = FirebaseFactory.getDependency();
         userCollection = firebaseInstance.collection("new_user");
         assoCollection = firebaseInstance.collection("new_asso");
@@ -79,6 +80,7 @@ public class FirebaseProxy implements Proxy {
      * @param <T>      The object
      */
     private <T> void getAll(DatabaseQuery query, OnResult<List<T>> onResult, mapToObject<T> creator) {
+        android.util.Log.d("Function called", "getAll");
         IdlingResourceFactory.incrementCountingIdlingResource();
         query.get().addOnSuccessListener(queryDocumentSnapshots -> {
             List<T> resultList = new ArrayList<>();
@@ -106,6 +108,7 @@ public class FirebaseProxy implements Proxy {
      * @param <T>        The object
      */
     private <T> void getObjectById(DatabaseCollection collection, String id, OnResult<T> onResult, mapToObject<T> creator) {
+        android.util.Log.d("Function called", "getObjectById");
         IdlingResourceFactory.incrementCountingIdlingResource();
         collection.document(id).getAndAddOnSuccessListener(fmap -> {
             T object = null;
@@ -129,6 +132,7 @@ public class FirebaseProxy implements Proxy {
      * @param <T>        The object
      */
     private <T> void getFromIds(DatabaseCollection collection, List<String> ids, OnResult<List<T>> onResult, mapToObject<T> creator) {
+        android.util.Log.d("Function called", "getFromIds");
         IdlingResourceFactory.incrementCountingIdlingResource();
         List<T> result = new ArrayList<>();
         Counter counter = new Counter(ids.size());
@@ -214,6 +218,7 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * add an event to the database
+     *
      * @param event the event we want to add
      */
     @Override
@@ -281,9 +286,11 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * create a channel for an association
+     *
      * @param association the association we want to create a channel for
      */
     private void createChannel(Association association) {
+        android.util.Log.d("Function called", "createChannel");
         IdlingResourceFactory.incrementCountingIdlingResource();
         Map<String, Object> map = new HashMap<>();
         map.put("id", association.getChannelId());
@@ -297,9 +304,11 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * create a channel for an event
+     *
      * @param event the event we want to create a channel for
      */
     private void createChannel(Event event) {
+        android.util.Log.d("Function called", "createChannel");
         IdlingResourceFactory.incrementCountingIdlingResource();
         Map<String, Object> map = new HashMap<>();
         map.put("id", event.getChannelId());
@@ -355,7 +364,8 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * get the messages of a channel
-     * @param id the id of the channel
+     *
+     * @param id       the id of the channel
      * @param onResult the onResult for the list of messages
      */
     @Override
@@ -374,7 +384,8 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * get the posts of a channel
-     * @param id the id of the channel
+     *
+     * @param id       the id of the channel
      * @param onResult the onResult for the list of post
      */
     @Override
@@ -411,8 +422,9 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * add the channel to the list of followed channels of a user
+     *
      * @param channel the channel we want to add
-     * @param user the user
+     * @param user    the user
      */
     @Override
     public void addChannelToUserFollowedChannels(Channel channel, AuthenticatedUser user) {
@@ -421,8 +433,9 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * add the event to the list of followed events of a user
+     *
      * @param event the event we want to add
-     * @param user the user
+     * @param user  the user
      */
     @Override
     public void addEventToUserFollowedEvents(Event event, AuthenticatedUser user) {
@@ -433,8 +446,9 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * add the association to the list of followed associations of a user
+     *
      * @param association the association we want to add
-     * @param user the user
+     * @param user        the user
      */
     @Override
     public void addAssociationToUserFollowedAssociations(Association association, AuthenticatedUser user) {
@@ -444,8 +458,9 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * remove the channel of the list of followed channels of a user
+     *
      * @param channel the channel we want to remove
-     * @param user the user
+     * @param user    the user
      */
     @Override
     public void removeChannelFromUserFollowedChannels(Channel channel, AuthenticatedUser user) {
@@ -454,8 +469,9 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * remove the event of the list of followed events of a user
+     *
      * @param event the event we want to remove
-     * @param user the user
+     * @param user  the user
      */
     @Override
     public void removeEventFromUserFollowedEvents(Event event, AuthenticatedUser user) {
@@ -466,8 +482,9 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * remove the association of the list of followed associations of a user
+     *
      * @param association the association we want to remove
-     * @param user the user
+     * @param user        the user
      */
     @Override
     public void removeAssociationFromUserFollowedAssociations(Association association, AuthenticatedUser user) {
@@ -477,9 +494,10 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * get the replies from a post
+     *
      * @param channelId the id of the channel containing the post
-     * @param postId the id of the post
-     * @param onResult the onResult of the list of posts
+     * @param postId    the id of the post
+     * @param onResult  the onResult of the list of posts
      */
     @Override
     public void getRepliesFromPost(String channelId, String postId, OnResult<List<Post>> onResult) {
@@ -499,8 +517,9 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * update the channel when receiving a new message
+     *
      * @param channelId the channel to update
-     * @param onResult the OnResult of the list of messages
+     * @param onResult  the OnResult of the list of messages
      */
     @Override
     public void updateOnNewMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult) {
@@ -517,6 +536,7 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * add a post to a channel
+     *
      * @param post the post we want to add
      */
     @Override
@@ -531,6 +551,7 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * add a reply to a post
+     *
      * @param post the reply
      */
     @Override
@@ -551,6 +572,7 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * update a post
+     *
      * @param post the post we want to modify
      */
     @Override
@@ -563,9 +585,11 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * update a source post
+     *
      * @param post the post to modify
      */
     private void updateOriginalPost(Post post) {
+        android.util.Log.d("Function called", "updateOriginalPost");
         channelCollection.document(post.getChannelId())
                 .collection("posts")
                 .document(post.getId())
@@ -574,9 +598,11 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * update a reply post
+     *
      * @param post the reply to modify
      */
     private void updateReplyPost(Post post) {
+        android.util.Log.d("Function called", "updateReplyPost");
         channelCollection.document(post.getChannelId())
                 .collection("posts")
                 .document(post.getOriginalPostId())
@@ -587,6 +613,7 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * add a message to a channel
+     *
      * @param message the message to add
      */
     public void addMessage(ChatMessage message) {
@@ -603,6 +630,7 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * update the user on the database
+     *
      * @param user the user to update
      */
     @Override
@@ -614,7 +642,8 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * get a user from an id and if it doesn't exist, create it on the database
-     * @param id the id of the user
+     *
+     * @param id       the id of the user
      * @param onResult the OnResult for authenticated user
      */
     public void getUserWithIdOrCreateIt(String id, OnResult<AuthenticatedUser> onResult) {
@@ -647,6 +676,7 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * get all the users of the database
+     *
      * @param onResult the OnResult of all the data
      */
     @Override
@@ -665,8 +695,9 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * update the role of a user
+     *
      * @param sciper the sciper of the user
-     * @param roles the new roles
+     * @param roles  the new roles
      */
     @Override
     public void updateUserRole(String sciper, List<String> roles) {
@@ -677,6 +708,7 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * get a new Id for a channel
+     *
      * @return the new id
      */
     @Override
@@ -686,6 +718,7 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * get a new Id for an event
+     *
      * @return the new id
      */
     @Override
@@ -695,6 +728,7 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * get a new id for an association
+     *
      * @return the new id
      */
     @Override
@@ -704,6 +738,7 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * get a new id for a post
+     *
      * @param channelId the id of the channel containing the post
      * @return the new id
      */
@@ -714,6 +749,7 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * get a new id for a message
+     *
      * @param channelId the id of the channel containing the message
      * @return the new id
      */
@@ -724,7 +760,8 @@ public class FirebaseProxy implements Proxy {
 
     /**
      * get a new id for a reply
-     * @param channelId the id of the channel containing the reply
+     *
+     * @param channelId      the id of the channel containing the reply
      * @param originalPostId the post the reply is answering to
      * @return the new id
      */
@@ -740,6 +777,7 @@ public class FirebaseProxy implements Proxy {
      * @return OnFailureListener with customized text
      */
     private OnFailureListener onFailureWithErrorMessage(String message) {
+        android.util.Log.d("Function called", "onFailureWithErrorMessage");
         return e -> {
             Log.e("PROXY", message);
             IdlingResourceFactory.decrementCountingIdlingResource();

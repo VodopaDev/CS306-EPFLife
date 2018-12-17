@@ -151,6 +151,7 @@ public final class EventBuilder {
      * @return boolean
      */
     private boolean correctUri(String uri) {
+        android.util.Log.d("Function called", "correctUri");
         return uri != null && uri.length() >= 6;
     }
 

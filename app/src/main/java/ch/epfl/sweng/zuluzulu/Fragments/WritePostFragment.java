@@ -99,6 +99,7 @@ public class WritePostFragment extends SuperFragment {
      * Set up an onClick listener on the send button
      */
     private void setUpSendButton() {
+        android.util.Log.d("Function called", "setUpSendButton");
         sendButton.setOnClickListener(v -> {
             Post post = new Post(
                     DatabaseFactory.getDependency().getNewPostId(channel.getId()),
@@ -122,6 +123,7 @@ public class WritePostFragment extends SuperFragment {
      * Set up an onClick listener on the layout to be able to change the color of the post
      */
     private void setUpColorListener() {
+        android.util.Log.d("Function called", "setUpColorListener");
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,6 +146,7 @@ public class WritePostFragment extends SuperFragment {
      * Set up an onTextChanged listener on the message field to know when the post is ready to be sent
      */
     private void setUpTextEditListener() {
+        android.util.Log.d("Function called", "setUpTextEditListener");
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

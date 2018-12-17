@@ -50,6 +50,7 @@ public class Utility {
      * @return Return a Guest
      */
     public static Guest createTestGuest() {
+ android.util.Log.d("Function called", "createTestGuest");
         return (new User.UserBuilder()).buildGuestUser();
     }
 
@@ -59,6 +60,7 @@ public class Utility {
      * @return Return an AithenticatedUser
      */
     public static AuthenticatedUser createTestAuthenticated() {
+ android.util.Log.d("Function called", "createTestAuthenticated");
         User.UserBuilder builder = createFilledUserBuilder();
         User user = builder.buildAuthenticatedUser();
         assert (user != null);
@@ -73,6 +75,7 @@ public class Utility {
      * @return Return an Admin
      */
     public static Admin createTestAdmin() {
+ android.util.Log.d("Function called", "createTestAdmin");
         User.UserBuilder builder = createFilledUserBuilder();
         User user = builder.buildAdmin();
         assert (user != null);
@@ -96,6 +99,7 @@ public class Utility {
      * !!! TO READ !!!
      */
     public static void addUserToMainIntent(ActivityTestRule<MainActivity> mActivityRule, User user) {
+ android.util.Log.d("Function called", "addUserToMainIntent");
         // Put the user into the main
         Intent i = new Intent();
         i.putExtra("user", user);
@@ -106,6 +110,7 @@ public class Utility {
      * Open the menu from the mainActivity
      */
     public static void openMenu() {
+ android.util.Log.d("Function called", "openMenu");
         onView(ViewMatchers.withId(R.id.drawer_layout))
                 .check(matches(isClosed(Gravity.LEFT)))
                 .perform(DrawerActions.open());
@@ -115,6 +120,7 @@ public class Utility {
      * Close the menu from the mainActivity
      */
     public static void closeMenu() {
+ android.util.Log.d("Function called", "closeMenu");
         onView(withId(R.id.drawer_layout))
                 .check(matches(isOpen(Gravity.LEFT)))
                 .perform(DrawerActions.close());
@@ -126,6 +132,7 @@ public class Utility {
      * @param id fragment id
      */
     public static void checkFragmentIsOpen(int id) {
+ android.util.Log.d("Function called", "checkFragmentIsOpen");
         onView(withId(id)).check(matches(isDisplayed()));
     }
 
@@ -135,6 +142,7 @@ public class Utility {
      * @param id fragment id
      */
     public static void checkFragmentIsClosed(int id) {
+ android.util.Log.d("Function called", "checkFragmentIsClosed");
         onView(withId(id)).check(doesNotExist());
     }
 
@@ -144,6 +152,7 @@ public class Utility {
      * @return UserBuilder
      */
     public static User.UserBuilder createFilledUserBuilder() {
+ android.util.Log.d("Function called", "createFilledUserBuilder");
         User.UserBuilder builder = new User.UserBuilder();
         builder.setSciper("0");
         builder.setGaspar("gaspar");
@@ -165,6 +174,7 @@ public class Utility {
      * @return a default channel
      */
     public static Channel defaultChannel() {
+ android.util.Log.d("Function called", "defaultChannel");
         return new Channel(
                 "0",
                 "Testing channel",
@@ -175,6 +185,7 @@ public class Utility {
     }
 
     public static Post defaultPost0() {
+ android.util.Log.d("Function called", "defaultPost0");
         return new Post(
                 "0",
                 "0",
@@ -190,6 +201,7 @@ public class Utility {
         );
     }
     public static Post defaultPost1() {
+ android.util.Log.d("Function called", "defaultPost1");
         final Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);
         return new Post(
@@ -208,6 +220,7 @@ public class Utility {
     }
 
     public static Association defaultAssociation() {
+ android.util.Log.d("Function called", "defaultAssociation");
         return new Association(
                 "0",
                 "Agepoly",
@@ -221,6 +234,7 @@ public class Utility {
     }
 
     public static EventBuilder defaultEvent() {
+ android.util.Log.d("Function called", "defaultEvent");
         return new EventBuilder()
                 .setId("0")
                 .setName("Fiesta time")
@@ -242,6 +256,7 @@ public class Utility {
     }
 
     public static EventBuilder currentTimeEvent() {
+ android.util.Log.d("Function called", "currentTimeEvent");
         return new EventBuilder()
                 .setId("0")
                 .setName("Current time")
@@ -263,14 +278,17 @@ public class Utility {
     }
 
     public static ChatMessage defaultMessage0() {
+ android.util.Log.d("Function called", "defaultMessage0");
         return new ChatMessage("0", "0", "message?", new Date(2000), "auth", "0");
     }
 
     public static ChatMessage defaultMessage1() {
+ android.util.Log.d("Function called", "defaultMessage1");
         return new ChatMessage("1", "0", "message!", new Date(20000), "admin", "1");
   }
 
     public static Map<String, Object> createMapWithAll() {
+ android.util.Log.d("Function called", "createMapWithAll");
         HashMap<String, Object> map = new HashMap<>();
         map.put("id", "");
         map.put("name", "");

@@ -26,6 +26,7 @@ public abstract class TestWithAuthenticatedUser {
 
     @Before
     public void setUpLogin() {
+ android.util.Log.d("Function called", "setUpLogin");
         this.user = Utility.createTestAuthenticated();
         Utility.addUserToMainIntent(mActivityRule, this.user);
     }

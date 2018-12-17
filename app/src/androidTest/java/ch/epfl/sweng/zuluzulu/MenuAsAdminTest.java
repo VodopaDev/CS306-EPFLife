@@ -18,12 +18,14 @@ public class MenuAsAdminTest extends TestWithAdminAndFragment<MainFragment> {
 
     @Override
     public void initFragment() {
+ android.util.Log.d("Function called", "initFragment");
         DatabaseFactory.setDependency(new MockedProxy());
         fragment = MainFragment.newInstance(user);
     }
 
     @Test
     public void testCanOpenAdminPanel() {
+ android.util.Log.d("Function called", "testCanOpenAdminPanel");
         Utility.openMenu();
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_admin_panel));
         onView(withId(R.id.panel_channel)).check(matches(isDisplayed()));

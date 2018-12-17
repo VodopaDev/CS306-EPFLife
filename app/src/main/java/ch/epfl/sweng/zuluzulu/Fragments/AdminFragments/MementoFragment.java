@@ -104,6 +104,7 @@ public class MementoFragment extends SuperFragment {
      * @param result Json aray datas
      */
     private void handleMemento(List<String> result) {
+        android.util.Log.d("Function called", "handleMemento");
         if (result != null) {
             for (int i = 0; i < result.size(); i++) {
                 if (result.get(i) != null && !result.get(i).isEmpty()) {
@@ -117,12 +118,14 @@ public class MementoFragment extends SuperFragment {
     }
 
     private void addDatabase() {
+        android.util.Log.d("Function called", "addDatabase");
         for (Event event : events) {
             DatabaseFactory.getDependency().addEvent(event);
         }
     }
 
     private void addEvent(String datas) {
+        android.util.Log.d("Function called", "addEvent");
         if (datas == null || datas.isEmpty()) {
             return;
         }

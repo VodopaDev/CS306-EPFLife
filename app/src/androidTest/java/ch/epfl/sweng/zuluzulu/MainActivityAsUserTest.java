@@ -20,6 +20,7 @@ public class MainActivityAsUserTest extends TestWithAuthenticatedAndFragment<Mai
 
     @Override
     public void initFragment() {
+ android.util.Log.d("Function called", "initFragment");
         DatabaseFactory.setDependency(new MockedProxy());
 
         fragment = MainFragment.newInstance(user);
@@ -27,12 +28,14 @@ public class MainActivityAsUserTest extends TestWithAuthenticatedAndFragment<Mai
 
     @Test
     public void isAuthenticated() {
+ android.util.Log.d("Function called", "isAuthenticated");
         // check not authenticated
         assertTrue(mActivityRule.getActivity().isAuthenticated());
     }
 
     @Test
     public void userFragmentOpen() {
+ android.util.Log.d("Function called", "userFragmentOpen");
         onView(withId(R.id.main_user_fragment)).check(matches(isDisplayed()));
     }
 }

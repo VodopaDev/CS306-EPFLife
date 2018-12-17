@@ -76,6 +76,7 @@ public class PostArrayAdapter extends ArrayAdapter<SuperMessage> {
     }
 
     private void setUpNbResponses(View view) {
+        android.util.Log.d("Function called", "setUpNbResponses");
         int nbResponses = currentPost.getNbReplies();
         nbResponsesText.setText("" + currentPost.getNbReplies());
         if (nbResponses == 0 || currentPost.isReply()) {
@@ -87,6 +88,7 @@ public class PostArrayAdapter extends ArrayAdapter<SuperMessage> {
      * Set up the correct time passed since the creation of the post in the field
      */
     private void setUpTimeAgoField() {
+        android.util.Log.d("Function called", "setUpTimeAgoField");
         long differenceInSeconds = Utils.getMillisecondsSince(currentPost.getTime()) / 1000;
         if (differenceInSeconds < 60) {
             timeAgo.setText(differenceInSeconds + "s");
@@ -100,6 +102,7 @@ public class PostArrayAdapter extends ArrayAdapter<SuperMessage> {
     }
 
     private void setUpUpDownButtons(Post post, ImageView upButton, ImageView downButton, TextView nbUpsText) {
+        android.util.Log.d("Function called", "setUpUpDownButtons");
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +121,7 @@ public class PostArrayAdapter extends ArrayAdapter<SuperMessage> {
     }
 
     private void updateDatabase(boolean up, Post post, TextView nbUpsText) {
+        android.util.Log.d("Function called", "updateDatabase");
         if ((!up && post.downvoteWithUser(user.getSciper())) || (up && post.upvoteWithUser(user.getSciper()))) {
             DatabaseFactory.getDependency().updatePost(post);
             nbUpsText.setText("" + post.getNbUps());
@@ -125,6 +129,7 @@ public class PostArrayAdapter extends ArrayAdapter<SuperMessage> {
     }
 
     private void updateUpsButtons(Post post, ImageView upButton, ImageView downButton) {
+        android.util.Log.d("Function called", "updateUpsButtons");
         if (post.isUpByUser(user.getSciper())) {
             upButton.setImageResource(R.drawable.up_gray);
             downButton.setImageResource(R.drawable.down_transparent);

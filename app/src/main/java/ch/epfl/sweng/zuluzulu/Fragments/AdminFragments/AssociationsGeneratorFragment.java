@@ -74,6 +74,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
      * @param results Received datas
      */
     private void handleAssociations(List<String> results) {
+        android.util.Log.d("Function called", "handleAssociations");
         if (results != null) {
             this.datas.addAll(results);
             int index = 0;
@@ -114,6 +115,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
      * @param result Icon found
      */
     private void handleIcon(final int index, List<String> result) {
+        android.util.Log.d("Function called", "handleIcon");
         String value = EPFL_LOGO;
         if (result != null && !result.isEmpty() && checkBound(index)) {
             value = result.get(0);
@@ -138,6 +140,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     }
 
     private String createUrl(String base, String icon_path) {
+        android.util.Log.d("Function called", "createUrl");
         String value = EPFL_LOGO;
         try {
             URL url = new URL(base);
@@ -154,6 +157,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     }
 
     private boolean checkBound(int index) {
+        android.util.Log.d("Function called", "checkBound");
         return index >= 0 && index < datas.size() && datas.size() == associations.size();
     }
 

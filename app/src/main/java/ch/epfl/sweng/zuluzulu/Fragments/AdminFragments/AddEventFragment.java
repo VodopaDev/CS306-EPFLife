@@ -12,6 +12,7 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -63,7 +64,6 @@ public class AddEventFragment extends SuperFragment {
     private Button create_event;
 
 
-
     public static AddEventFragment newInstance() {
         return new AddEventFragment();
     }
@@ -87,6 +87,7 @@ public class AddEventFragment extends SuperFragment {
      * @param increment         of how much we increment per iteration
      */
     private void addIntsToList(List<String> list, int startingValue, int exclusiveMaxValue, int increment) {
+        android.util.Log.d("Function called", "addIntsToList");
         for (int i = startingValue; i < exclusiveMaxValue; i += increment) {
             if (i < 10) {
                 list.add("0" + String.valueOf(i));
@@ -98,19 +99,19 @@ public class AddEventFragment extends SuperFragment {
     }
 
 
-
     /**
      * Set the onClick of the button, gathering all the informations on the fragment and
      * sending the event to the database
      */
     private void setUpCreateEventButton() {
+        android.util.Log.d("Function called", "setUpCreateEventButton");
         create_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //Set the starting date
-                Date date = getDateAndTime(start_date_pick,spinner_hours,spinner_minutes);
-                Date end_date = getDateAndTime(end_date_pick,spinner_end_hours,spinner_end_minutes);
+                Date date = getDateAndTime(start_date_pick, spinner_hours, spinner_minutes);
+                Date end_date = getDateAndTime(end_date_pick, spinner_end_hours, spinner_end_minutes);
 
                 //Set the other fields
                 String name = spinner.getSelectedItem().toString();
@@ -123,13 +124,13 @@ public class AddEventFragment extends SuperFragment {
                 String cat = category.getText().toString();
                 String cont = contact.getText().toString();
 
-                if (!checkIfValid(tit, desc, date,end_date)) {
+                if (!checkIfValid(tit, desc, date, end_date)) {
                     return;
                 }
 
                 String mapUrl;
-                if(!pla.isEmpty()){
-                    mapUrl = "https://plan.epfl.ch/?room=" + pla.replaceAll("\\s+","");
+                if (!pla.isEmpty()) {
+                    mapUrl = "https://plan.epfl.ch/?room=" + pla.replaceAll("\\s+", "");
                 } else {
                     mapUrl = "https://plan.epfl.ch";
                 }
@@ -153,7 +154,6 @@ public class AddEventFragment extends SuperFragment {
                         setCategory(cat).
                         setSpeaker(speak).
                         build();
-
 
 
                 DatabaseFactory.getDependency().addEvent(event);
@@ -200,7 +200,6 @@ public class AddEventFragment extends SuperFragment {
         end_date_pick = (DatePicker) view.findViewById(R.id.end_date_for_add);
 
 
-
         return view;
 
 
@@ -208,13 +207,14 @@ public class AddEventFragment extends SuperFragment {
 
     /**
      * Helper method that gets the date and time from a date picker and two spinners representing the hours and minutes
+     *
      * @param datePick the DatePicker that contains the date
-     * @param hours the hours
-     * @param minutes the minutes
+     * @param hours    the hours
+     * @param minutes  the minutes
      * @return the full date
      */
-    private Date getDateAndTime(DatePicker datePick, Spinner hours, Spinner minutes){
-        int hour = getIntSpinnerContent(hours)-1;
+    private Date getDateAndTime(DatePicker datePick, Spinner hours, Spinner minutes) {
+        int hour = getIntSpinnerContent(hours) - 1;
         int minute = getIntSpinnerContent(minutes);
         int day = datePick.getDayOfMonth();
         int month = datePick.getMonth();
@@ -228,27 +228,28 @@ public class AddEventFragment extends SuperFragment {
      * @return the int value of the selected content of the spinner
      */
     private int getIntSpinnerContent(Spinner spinner) {
+        android.util.Log.d("Function called", "getIntSpinnerContent");
         return Integer.parseInt(spinner.getSelectedItem().toString());
     }
 
 
     /**
-     *
      * check if the arguments are valid for creating an event
      *
      * @param title       , the title of the event
      * @param description , the long description of the event
-     * @param start , the starting date of the event
-     * @param end , the end date of the event
+     * @param start       , the starting date of the event
+     * @param end         , the end date of the event
      * @return if the arguments are valid
      */
     private boolean checkIfValid(String title, String description, Date start, Date end) {
+        android.util.Log.d("Function called", "checkIfValid");
         boolean isValid = true;
         if (title.isEmpty())
             isValid = viewSetError(title_view, "please write a title");
         if (description.isEmpty())
             isValid = viewSetError(description_view, "please write a description");
-        if (start.before(today) || end.before(start)){
+        if (start.before(today) || end.before(start)) {
             Toast.makeText(getActivity(), "Set a correct date", Toast.LENGTH_SHORT).show();
             isValid = false;
         }
@@ -264,6 +265,7 @@ public class AddEventFragment extends SuperFragment {
      * @return false
      */
     private boolean viewSetError(TextView t, String errorMessage) {
+        android.util.Log.d("Function called", "viewSetError");
         t.requestFocus();
         t.setError(errorMessage);
         return false;
@@ -276,6 +278,7 @@ public class AddEventFragment extends SuperFragment {
      * @param list    , the content of the spinner
      */
     private void setSpinner(Spinner spinner, List<String> list) {
+        android.util.Log.d("Function called", "setSpinner");
         ArrayAdapter adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -286,6 +289,7 @@ public class AddEventFragment extends SuperFragment {
      * on the database.
      */
     private void fillAssociationNames() {
+        android.util.Log.d("Function called", "fillAssociationNames");
         DatabaseFactory.getDependency().getAllAssociations(result -> {
             for (Association association : result) {
                 association_map.put(association.getName(), association.getId());

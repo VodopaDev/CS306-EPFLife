@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.Firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -100,7 +102,7 @@ public class LoginFragment extends SuperFragment {
 
         showProgress(false);
 
-        if(codeRequestUrl == null) {
+        if (codeRequestUrl == null) {
             codeRequestUrl = AuthClient.createCodeRequestUrl(config);
         }
         webview.loadUrl(codeRequestUrl);
@@ -114,6 +116,7 @@ public class LoginFragment extends SuperFragment {
      * and open the main activity
      */
     private void transfer_main() {
+        android.util.Log.d("Function called", "transfer_main");
         // Pass the user to the activity
         Map<Integer, Object> toTransfer = new HashMap<Integer, Object>();
         toTransfer.put(0, user);
@@ -128,6 +131,7 @@ public class LoginFragment extends SuperFragment {
      * get the user from tequila, filling the User in local
      */
     private void finishLogin() {
+        android.util.Log.d("Function called", "finishLogin");
         String code = AuthClient.extractCode(redirectURICode);
 
         Map<String, String> tokens;
@@ -148,6 +152,7 @@ public class LoginFragment extends SuperFragment {
      * sending the user to the main activity
      */
     private void updateUserAndFinishLogin() {
+        android.util.Log.d("Function called", "updateUserAndFinishLogin");
         DatabaseFactory.getDependency().getUserWithIdOrCreateIt(user.getSciper(), result -> {
             if (result == null && user.isConnected()) {
                 DatabaseFactory.getDependency().updateUser((AuthenticatedUser) user);
@@ -163,6 +168,7 @@ public class LoginFragment extends SuperFragment {
      * Shows the progress UI
      */
     private void showProgress(final boolean show) {
+        android.util.Log.d("Function called", "showProgress");
         if (show) {
             mProgressView.setVisibility(View.VISIBLE);
         } else {

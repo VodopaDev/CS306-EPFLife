@@ -24,6 +24,7 @@ public class MainActivityIntentTest {
      */
     @Test
     public void intentRedirectLogin() {
+ android.util.Log.d("Function called", "intentRedirectLogin");
         DatabaseFactory.setDependency(new MockedProxy());
 
 

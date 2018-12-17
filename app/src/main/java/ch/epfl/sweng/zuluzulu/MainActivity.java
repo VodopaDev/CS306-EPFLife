@@ -99,11 +99,13 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     /**
      * Open the menu
+     *
      * @param item menu item
      * @return boolean
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        android.util.Log.d("Function called", "onOptionsItemSelected");
         switch (item.getItemId()) {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
@@ -122,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * @param data     String data
      */
     private void openFragmentWithStringData(SuperFragment fragment, String tag, String data) {
+        android.util.Log.d("Function called", "openFragmentWithStringData");
         Bundle toSend = new Bundle(1);
         toSend.putString(tag, data);
         fragment.setArguments(toSend);
@@ -134,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * @return The navigation view
      */
     private NavigationView initNavigationView() {
+        android.util.Log.d("Function called", "initNavigationView");
         NavigationView navigationView = findViewById(R.id.nav_view);
         Toolbar toolbar = findViewById(R.id.toolbar);
 
@@ -151,11 +155,13 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * Attach the drawer_view to the navigation view and set a listener on the menu
      */
     private void initDrawerContent() {
+        android.util.Log.d("Function called", "initDrawerContent");
         updateMenuItems();
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                        android.util.Log.d("Function called", "onNavigationItemSelected");
                         if (!menuItem.isChecked()) {
                             selectItem(menuItem, true);
                         }
@@ -170,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * Attach the drawer_view to the navigation view
      */
     private void updateMenuItems() {
+        android.util.Log.d("Function called", "updateMenuItems");
         navigationView.getMenu().clear();
         if (getUser().hasRole(UserRole.ADMIN)) {
             navigationView.inflateMenu(R.menu.drawer_view_admin);
@@ -186,10 +193,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * @return boolean
      */
     public boolean isAuthenticated() {
+        android.util.Log.d("Function called", "isAuthenticated");
         return user.isConnected();
     }
 
     private void createUser() {
+        android.util.Log.d("Function called", "createUser");
         UserDatabase userDatabase = new UserDatabase(getApplicationContext());
         AuthenticatedUser localUser = userDatabase.getUser();
         if (localUser != null) {
@@ -212,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      */
 
     private void selectItem(MenuItem menuItem, boolean mustOpenFragment) {
+        android.util.Log.d("Function called", "selectItem");
         previous_fragments.clear();
         current_fragment = MainFragment.newInstance(user);
 
@@ -273,10 +283,12 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
     }
 
     public void openFragment(SuperFragment fragment) {
+        android.util.Log.d("Function called", "openFragment");
         openFragment(fragment, false);
     }
 
     public void openFragment(SuperFragment fragment, boolean backPressed) {
+        android.util.Log.d("Function called", "openFragment");
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             if (fragmentManager != null) {
@@ -292,6 +304,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     @Override
     public void onFragmentInteraction(CommunicationTag tag, Object data) {
+        android.util.Log.d("Function called", "onFragmentInteraction");
         switch (tag) {
             case SET_USER:
                 Map<Integer, Object> received = (HashMap<Integer, Object>) data;
@@ -300,7 +313,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                     UserDatabase userDatabase = new UserDatabase(getApplicationContext());
                     userDatabase.put((AuthenticatedUser) user);
                     updateMenuItems();
-                } else{
+                } else {
                     this.user = new User.UserBuilder().buildGuestUser();
                 }
 
@@ -394,6 +407,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     @Override
     public void onBackPressed() {
+        android.util.Log.d("Function called", "onBackPressed");
         if (!previous_fragments.empty()) {
             MenuItem checkedItem = navigationView.getCheckedItem();
             if (checkedItem != null && checkedItem.getItemId() != R.id.nav_main && previous_fragments.peek() instanceof MainFragment) {
@@ -406,12 +420,14 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     @Override
     public void onStop() {
+        android.util.Log.d("Function called", "onStop");
         super.onStop();
         GPS.stop();
     }
 
     @Override
     public void onRestart() {
+        android.util.Log.d("Function called", "onRestart");
         super.onRestart();
         if (user.isConnected()) {
             boolean hadPermissions = GPS.start(this);
@@ -427,6 +443,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * @return current fragment
      */
     public SuperFragment getCurrentFragment() {
+        android.util.Log.d("Function called", "getCurrentFragment");
         return current_fragment;
     }
 
@@ -436,6 +453,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
      * @return current user
      */
     public User getUser() {
+        android.util.Log.d("Function called", "getUser");
         return user;
     }
 }

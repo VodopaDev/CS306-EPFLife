@@ -17,6 +17,7 @@ public class FirebaseAdapterTest {
 
     @Test
     public void collection() {
+ android.util.Log.d("Function called", "collection");
         assertNotNull(new FirebaseAdapter().collection("path"));
     }
 }

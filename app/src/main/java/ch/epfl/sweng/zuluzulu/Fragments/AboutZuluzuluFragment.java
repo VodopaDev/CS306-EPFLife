@@ -66,6 +66,7 @@ public class AboutZuluzuluFragment extends SuperFragment {
      * Open an external app to send an email to the user
      */
     private void onSendEmail() {
+        android.util.Log.d("Function called", "onSendEmail");
         Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 
         // Add object and subject

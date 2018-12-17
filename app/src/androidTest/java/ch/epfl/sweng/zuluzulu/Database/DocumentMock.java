@@ -20,6 +20,7 @@ public class DocumentMock implements DatabaseDocument {
 
     @Override
     public Task<Void> set(@NonNull Map<String, Object> data) {
+ android.util.Log.d("Function called", "set");
 
         // Just print instead of pushing to firebase
         for (String key : data.keySet()) {
@@ -31,17 +32,20 @@ public class DocumentMock implements DatabaseDocument {
 
     @Override
     public Task<Void> update(String field, Object value, Object... moreFieldAndValues) {
+ android.util.Log.d("Function called", "update");
         Log.d(TAG, field + " -> " + value);
         return new TaskMock<>();
     }
 
     @Override
     public Task<Void> update(Map<String, Object> data) {
+ android.util.Log.d("Function called", "update");
         return new TaskMock<>();
     }
 
     @Override
     public Task<DocumentSnapshot> getAndAddOnSuccessListener(OperationWithFirebaseMap listener) {
+ android.util.Log.d("Function called", "getAndAddOnSuccessListener");
         Map<String, Object> map = Utility.createMapWithAll();
 
         FirebaseMapDecorator fmap = new FirebaseMapDecorator(map);
@@ -53,11 +57,13 @@ public class DocumentMock implements DatabaseDocument {
 
     @Override
     public DatabaseCollection collection(String messages) {
+ android.util.Log.d("Function called", "collection");
         return new CollectionMock();
     }
 
     @Override
     public String getId() {
+ android.util.Log.d("Function called", "getId");
         return "1";
     }
 }

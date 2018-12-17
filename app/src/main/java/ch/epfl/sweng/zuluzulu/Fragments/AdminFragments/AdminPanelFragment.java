@@ -55,6 +55,7 @@ public class AdminPanelFragment extends SuperFragment {
     }
 
     private View.OnClickListener sendTagOnClick(CommunicationTag tag) {
+        android.util.Log.d("Function called", "sendTagOnClick");
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {

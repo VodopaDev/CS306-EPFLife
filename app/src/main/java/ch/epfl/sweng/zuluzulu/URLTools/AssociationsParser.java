@@ -53,6 +53,7 @@ public class AssociationsParser implements Parser<List<String>> {
     }
 
     private String createResult(String url, String name, String description) {
+        android.util.Log.d("Function called", "createResult");
         // remove the span tag
         String clean_description = description.replaceAll("<.*?>", "");
 

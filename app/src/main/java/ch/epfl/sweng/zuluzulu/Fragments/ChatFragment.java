@@ -84,6 +84,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Add an onClick listener on the button to send the message to the database
      */
     private void setUpSendButton() {
+        android.util.Log.d("Function called", "setUpSendButton");
         sendButton.setOnClickListener(v -> {
             ChatMessage chatMessage = new ChatMessage(
                     DatabaseFactory.getDependency().getNewMessageId(channel.getId()),
@@ -101,6 +102,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Add an onClick listener on the button to switch to the posts fragment
      */
     private void setUpPostsButton() {
+        android.util.Log.d("Function called", "setUpPostsButton");
         postsButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_POST_FRAGMENT, channel));
     }
 
@@ -108,6 +110,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Add a listener on the edit text view to check that the message is not empty
      */
     private void setUpEditText() {
+        android.util.Log.d("Function called", "setUpEditText");
         textEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence text, int start, int count, int after) {
@@ -129,6 +132,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Refresh the chat by reading all the messages in the database
      */
     private void loadInitialMessages() {
+        android.util.Log.d("Function called", "loadInitialMessages");
         DatabaseFactory.getDependency().getMessagesFromChannel(channel.getId(), result -> {
             messages.clear();
             messages.addAll(result);

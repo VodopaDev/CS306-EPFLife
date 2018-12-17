@@ -21,18 +21,22 @@ abstract public class User implements Serializable {
     }
 
     public String getFirstNames() {
+        android.util.Log.d("Function called", "getFirstNames");
         return null;
     }
 
     public String getLastNames() {
+        android.util.Log.d("Function called", "getLastNames");
         return null;
     }
 
     public String getEmail() {
+        android.util.Log.d("Function called", "getEmail");
         return null;
     }
 
     public String getSection() {
+        android.util.Log.d("Function called", "getSection");
         return null;
     }
 
@@ -251,6 +255,7 @@ abstract public class User implements Serializable {
          * @return boolean
          */
         private boolean hasRequirementsForAuthentication() {
+            android.util.Log.d("Function called", "hasRequirementsForAuthentication");
             return this.sciper != null
                     && this.email != null
                     && this.section != null
