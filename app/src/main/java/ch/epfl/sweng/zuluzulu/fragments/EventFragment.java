@@ -321,9 +321,9 @@ public class EventFragment extends SuperFragment {
                 eventCalendar.set(Calendar.MONTH, monthOfYear);
                 eventCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 if (startDate)
-                    dateFrom = (Date) eventCalendar.getTime().clone();
+                    dateFrom = eventCalendar.getTime();
                 else
-                    dateTo = (Date) eventCalendar.getTime().clone();
+                    dateTo = eventCalendar.getTime();
                 filterWithDate();
             };
 
