@@ -17,6 +17,7 @@ import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
 public class AddEventFragmentTest extends TestWithAdminAndFragment<AddEventFragment> {
@@ -66,7 +67,7 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<AddEventFragm
      */
     @Test
     public void testCreateCompleteEvent(){
-        onView(withId(R.id.event_title)).perform(replaceText("Test Event"));
+        onView(withId(R.id.event_title)).perform(replaceText("It is a Test Event"));
         onView(withId(R.id.long_desc_text)).perform(replaceText("this is an awesome test event")).perform(closeSoftKeyboard());
         onView(withId(R.id.date_for_add)).perform(ViewActions.scrollTo()).perform(PickerActions.setDate(2019, 1, 1));
         onView(withId(R.id.end_date_for_add)).perform(ViewActions.scrollTo()).perform(PickerActions.setDate(2019, 2, 1));
@@ -77,6 +78,10 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<AddEventFragm
         onView(withId(R.id.speaker)).perform(ViewActions.scrollTo()).perform(replaceText("test speaker")).perform(closeSoftKeyboard());
         onView(withId(R.id.website)).perform(ViewActions.scrollTo()).perform(replaceText("http://google.com")).perform(closeSoftKeyboard());
         onView(withId(R.id.create_event_button)).perform(ViewActions.scrollTo()).perform(click());
+        onView(withId(R.id.event_fragment_listview)).check(matches(isDisplayed()));
+        onView(withId(R.id.event_fragment_filter_button)).perform(click());
+        onView(withId(R.id.event_fragment_search_bar)).perform(replaceText("It is a test")).perform(closeSoftKeyboard());
+        onView(withText("It is a Test Event")).check(matches(isDisplayed()));
     }
 
     /**
@@ -84,10 +89,14 @@ public class AddEventFragmentTest extends TestWithAdminAndFragment<AddEventFragm
      */
     @Test
     public void testCreateMinEvent() {
-        onView(withId(R.id.event_title)).perform(replaceText("Test Event"));
+        onView(withId(R.id.event_title)).perform(replaceText("It is a Test Event"));
         onView(withId(R.id.long_desc_text)).perform(replaceText("this is an awesome test event")).perform(closeSoftKeyboard());
         onView(withId(R.id.date_for_add)).perform(ViewActions.scrollTo()).perform(PickerActions.setDate(2019, 1, 1));
         onView(withId(R.id.end_date_for_add)).perform(ViewActions.scrollTo()).perform(PickerActions.setDate(2019, 2, 1));
         onView(withId(R.id.create_event_button)).perform(ViewActions.scrollTo()).perform(click());
+        onView((withId(R.id.event_fragment_listview))).check(matches(isDisplayed()));
+        onView(withId(R.id.event_fragment_filter_button)).perform(click());
+        onView(withId(R.id.event_fragment_search_bar)).perform(replaceText("It is a test")).perform(closeSoftKeyboard());
+        onView((withText("It is a Test Event"))).check(matches(isDisplayed()));
     }
 }

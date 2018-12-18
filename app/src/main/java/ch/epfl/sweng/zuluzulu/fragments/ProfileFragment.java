@@ -103,7 +103,7 @@ public class ProfileFragment extends SuperFragment {
             userData = (AuthenticatedUser) getArguments().getSerializable(USER_DATA_TAG);
             profileOwner = (Boolean) getArguments().get(OWNER_TAG);
 
-            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, userData.getFirstNames() + "'s Profile");
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Profil de " + userData.getFirstNames());
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference();
             pictureRef = storageRef.child("images/" + userData.getSciper() + ".jpg");

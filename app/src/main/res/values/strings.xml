@@ -41,11 +41,11 @@
     <string name="fragment_event_search_bar_text">Recherche</string>
 
     <!-- Main related -->
-    <string name="main_fragment_text_favorite_associations">Associations suivis</string>
+    <string name="main_fragment_text_favorite_associations">Associations suivies</string>
     <string name="main_fragment_text_favorite_events">Événements suivis</string>
 
     <!-- Chat related -->
-    <string name="chat_message">Taper message</string>
+    <string name="chat_message">Écrivez votre message</string>
 
     <!-- Settings related -->
     <string name="settings_dark_mode">Dark Theme</string>
@@ -95,12 +95,12 @@
     <string name="speaker_de_l_venement">Speaker de l\'évenement</string>
     <string name="lieu_de_l_v_nement">Lieu de l\'évènement</string>
     <string name="type_de_l_v_nement">Type de l\'évènement</string>
-    <string name="contact_pour_l_v_nement">Contact pour l\'évènement</string>
+    <string name="contact_pour_l_v_nement">Contact pour l\'événement</string>
     <string name="site_de_l_v_nement">Site de l\'évènement</string>
-    <string name="ev_nements">Evènements</string>
+    <string name="ev_nements">Événements</string>
     <string name="follow">follow</string>
-    <string name="event_followed">Vous suivez désormais cet évènement</string>
-    <string name="event_unfollowed">Vous ne suivez plus cet évènement</string>
+    <string name="event_followed">Vous suivez désormais cet événement</string>
+    <string name="event_unfollowed">Vous ne suivez plus cet événement</string>
     <string name="event_card_default_followers">0 followers</string>
     <plurals name="evend_card_followers">
         <item quantity="zero">%1$d follower</item>
