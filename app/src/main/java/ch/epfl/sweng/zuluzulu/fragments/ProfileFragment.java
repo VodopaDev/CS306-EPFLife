@@ -97,7 +97,7 @@ public class ProfileFragment extends FragmentWithUser<AuthenticatedUser> {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             profileOwner = (Boolean) getArguments().get(OWNER_TAG);
-            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, user.getFirstNames() + "'s Profile");
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Profil de " + userData.getFirstNames());
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference();
             pictureRef = storageRef.child("images/" + user.getSciper() + ".jpg");

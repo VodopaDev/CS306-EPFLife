@@ -285,7 +285,9 @@ public class AddEventFragment extends SuperFragment {
                 association_map.put(association.getName(), association.getId());
                 Log.d("EVENT_CREATOR", "added association " + association.getName());
             }
-            setSpinner(spinner, new ArrayList<>(association_map.keySet()));
+            List<String> names = new ArrayList<>(association_map.keySet());
+            java.util.Collections.sort(names);
+            setSpinner(spinner, names);
         });
     }
 }
