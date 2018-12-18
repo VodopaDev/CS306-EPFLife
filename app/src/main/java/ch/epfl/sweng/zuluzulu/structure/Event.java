@@ -15,25 +15,24 @@ import java.util.Set;
 import ch.epfl.sweng.zuluzulu.firebase.FirebaseMapDecorator;
 
 public class Event extends FirebaseStructure {
-    private String name;
-    private String shortDescription;
-    private String longDescription;
-    private String channelId;
-    private String associationId;
+    private final String name;
+    private final String shortDescription;
+    private final String longDescription;
+    private final String channelId;
+    private final String associationId;
 
-    private EventDate date;
-    private String organizer;
-    private String place;
-    private String bannerUri;
-    private String iconUri;
-    private String url_place_and_room;
-    private String website;
-    private String contact;
-    private String category;
-    private String speaker;
+    private final EventDate date;
+    private final String organizer;
+    private final String place;
+    private final String bannerUri;
+    private final String iconUri;
+    private final String url_place_and_room;
+    private final String website;
+    private final String contact;
+    private final String category;
+    private final String speaker;
 
-    // TODO: make it in the cloud :)
-    private Set<String> followers;
+    private final Set<String> followers;
 
     protected Event(String id, String name, String shortDesc, String longDesc, String channelId, String associationId, EventDate date,
                     List<String> followers, String organizer, String place, String iconUri, String bannerUri,

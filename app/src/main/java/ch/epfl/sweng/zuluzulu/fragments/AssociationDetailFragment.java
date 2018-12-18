@@ -26,7 +26,7 @@ public class AssociationDetailFragment extends SuperFragment {
     public static final String TAG = "ASSOCIATION_DETAIL__TAG";
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_ASSO = "ARG_ASSO";
-    private static final String FAV_CONTENT = "Cette associaton est dans tes favoris";
+    private static final String FAV_CONTENT = "Cette association est dans tes favoris";
     private static final String NOT_FAV_CONTENT = "Cette association n'est pas dans tes favoris";
 
     private ImageButton asso_fav;

@@ -13,7 +13,7 @@ import ch.epfl.sweng.zuluzulu.firebase.FirebaseMapDecorator;
  * is corresponding to the class you want to build) and a Firestore path to fetch the online data.
  */
 public abstract class FirebaseStructure implements Serializable {
-    private String id;
+    private final String id;
 
     /**
      * Construct a FirebaseStructure from a FirebaseMap
