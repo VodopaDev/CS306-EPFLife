@@ -8,7 +8,6 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -20,6 +19,7 @@ import ch.epfl.sweng.zuluzulu.adapters.PostArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.SuperChatPostsFragment;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
 import ch.epfl.sweng.zuluzulu.structure.Post;
 import ch.epfl.sweng.zuluzulu.structure.user.User;
@@ -94,14 +94,14 @@ public class PostFragment extends SuperChatPostsFragment {
      * Add an onClick listener on the button to switch to the chat fragment
      */
     private void setUpChatButton() {
-        chatButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_CHAT_FRAGMENT, channel));
+        chatButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_CHAT_FRAGMENT, data));
     }
 
     /**
      * Load the posts from the database and notify the adapter of the changes
      */
     private void loadAllPosts() {
-        DatabaseFactory.getDependency().getPostsFromChannel(channel.getId(), result -> {
+        DatabaseFactory.getDependency().getPostsFromChannel(data.getId(), result -> {
             messages.clear();
             messages.addAll(result);
             sortPostsWithCurrentComparator();
@@ -114,7 +114,7 @@ public class PostFragment extends SuperChatPostsFragment {
      * Set up an onClick listener on the button to write a new post
      */
     private void setUpNewPostButton() {
-        writePostButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_WRITE_POST_FRAGMENT, channel));
+        writePostButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_WRITE_POST_FRAGMENT, data));
     }
 
     /**
@@ -131,7 +131,7 @@ public class PostFragment extends SuperChatPostsFragment {
     private void setUpReplyListener() {
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Post post = (Post) messages.get(position);
-            Pair data = new Pair(channel, post);
+            Pair data = new Pair(this.data, post);
             mListener.onFragmentInteraction(CommunicationTag.OPEN_REPLY_FRAGMENT, data);
         });
     }

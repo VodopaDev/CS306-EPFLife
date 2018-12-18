@@ -1,4 +1,4 @@
-package ch.epfl.sweng.zuluzulu.fragments;
+package ch.epfl.sweng.zuluzulu.fragments.superFragments;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;

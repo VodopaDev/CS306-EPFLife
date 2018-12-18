@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUserAndData;
 import ch.epfl.sweng.zuluzulu.structure.Association;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
 import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
@@ -21,20 +23,15 @@ import ch.epfl.sweng.zuluzulu.utility.ImageLoader;
 
 import static ch.epfl.sweng.zuluzulu.utility.ImageLoader.loadUriIntoImageView;
 
-public class AssociationDetailFragment extends FragmentWithUser<User> {
-
+public class AssociationDetailFragment extends FragmentWithUserAndData<User, Association> {
     public static final String TAG = "ASSOCIATION_DETAIL__TAG";
-    private static final String ARG_ASSO = "ARG_ASSO";
     private static final String FAV_CONTENT = "Cette association est dans tes favoris";
     private static final String NOT_FAV_CONTENT = "Cette association n'est pas dans tes favoris";
 
     private ImageButton asso_fav;
     private Button eventsButton;
     private Button chatButton;
-
     private Channel channel;
-
-    private Association asso;
 
     /**
      * Initialize a new AssociationDetailFragment
@@ -54,7 +51,7 @@ public class AssociationDetailFragment extends FragmentWithUser<User> {
         AssociationDetailFragment fragment = new AssociationDetailFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);
-        args.putSerializable(ARG_ASSO, asso);
+        args.putSerializable(ARG_DATA, asso);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,8 +60,7 @@ public class AssociationDetailFragment extends FragmentWithUser<User> {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            asso = (Association) getArguments().getSerializable(ARG_ASSO);
-            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, asso.getName());
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, data.getName());
         }
     }
 
@@ -78,11 +74,11 @@ public class AssociationDetailFragment extends FragmentWithUser<User> {
 
         // Association icon
         ImageView asso_icon = view.findViewById(R.id.association_detail_icon);
-        loadUriIntoImageView(asso_icon, asso.getIconUri(), getContext());
+        loadUriIntoImageView(asso_icon, data.getIconUri(), getContext());
 
         // Association banner
         ImageView asso_banner = view.findViewById(R.id.association_detail_banner);
-        loadUriIntoImageView(asso_banner, asso.getBannerUri(), getContext());
+        loadUriIntoImageView(asso_banner, data.getBannerUri(), getContext());
 
         eventsButton = view.findViewById(R.id.association_detail_events_button);
         chatButton = view.findViewById(R.id.association_detail_chat_button);
@@ -98,7 +94,7 @@ public class AssociationDetailFragment extends FragmentWithUser<User> {
      * Set up the favorite button's behaviour
      */
     private void setFavButtonBehaviour() {
-        if (user.isConnected() && ((AuthenticatedUser) user).isFollowedAssociation(asso.getId()))
+        if (user.isConnected() && ((AuthenticatedUser) user).isFollowedAssociation(data.getId()))
             ImageLoader.loadDrawableIntoImageView(asso_fav, R.drawable.fav_on, getContext());
         else
             ImageLoader.loadDrawableIntoImageView(asso_fav, R.drawable.fav_off, getContext());
@@ -106,12 +102,12 @@ public class AssociationDetailFragment extends FragmentWithUser<User> {
         asso_fav.setOnClickListener(v -> {
             if (user.isConnected()) {
                 AuthenticatedUser auth = (AuthenticatedUser) user;
-                if (auth.isFollowedAssociation(asso.getId())) {
-                    auth.removeFavAssociation(asso.getId());
+                if (auth.isFollowedAssociation(data.getId())) {
+                    auth.removeFavAssociation(data.getId());
                     ImageLoader.loadDrawableIntoImageView(asso_fav, R.drawable.fav_off, getContext());
                     asso_fav.setContentDescription(NOT_FAV_CONTENT);
                 } else {
-                    auth.addFollowedAssociation(asso.getId());
+                    auth.addFollowedAssociation(data.getId());
                     ImageLoader.loadDrawableIntoImageView(asso_fav, R.drawable.fav_on, getContext());
                     asso_fav.setContentDescription(FAV_CONTENT);
                 }
@@ -127,10 +123,10 @@ public class AssociationDetailFragment extends FragmentWithUser<User> {
      * Fetch the appropriate chat channel from the database
      */
     private void loadChat() {
-        if (asso.getChannelId() == null) {
+        if (data.getChannelId() == null) {
             chatButton.setEnabled(false);
         } else {
-            DatabaseFactory.getDependency().getChannelFromId(asso.getChannelId(), result -> {
+            DatabaseFactory.getDependency().getChannelFromId(data.getChannelId(), result -> {
                 if (result != null) {
                     channel = result;
                 } else {
@@ -159,7 +155,6 @@ public class AssociationDetailFragment extends FragmentWithUser<User> {
      */
     private void setUpEventsButton() {
         eventsButton.setOnClickListener(v -> {
-            // Todo Redirect to the list of events related to the association
             mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_FRAGMENT, user);
         });
     }

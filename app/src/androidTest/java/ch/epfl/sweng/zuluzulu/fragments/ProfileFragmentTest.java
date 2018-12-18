@@ -10,7 +10,6 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import org.junit.Rule;
 import org.junit.Test;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.test.rule.GrantPermissionRule;
@@ -21,6 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.Utility;
 

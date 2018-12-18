@@ -23,6 +23,7 @@ import java.util.Locale;
 import ch.epfl.sweng.zuluzulu.adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser;
 import ch.epfl.sweng.zuluzulu.structure.Event;
 import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
 

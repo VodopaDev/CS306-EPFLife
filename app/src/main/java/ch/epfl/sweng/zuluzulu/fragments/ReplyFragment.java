@@ -24,12 +24,14 @@ import java.util.Collections;
 import ch.epfl.sweng.zuluzulu.adapters.PostArrayAdapter;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.SuperChatPostsFragment;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
 import ch.epfl.sweng.zuluzulu.structure.Post;
 import ch.epfl.sweng.zuluzulu.structure.user.User;
 
-public class ReplyFragment extends SuperChatPostsFragment {
+import static ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser.ARG_USER;
 
+public class ReplyFragment extends SuperChatPostsFragment {
     private static final int REPLY_MAX_LENGTH = 100;
 
     private Post postOriginal;
@@ -53,7 +55,7 @@ public class ReplyFragment extends SuperChatPostsFragment {
         ReplyFragment fragment = new ReplyFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);
-        args.putSerializable(ARG_CHANNEL, channel);
+        args.putSerializable(ARG_DATA, channel);
         args.putSerializable(ARG_POST, postOriginal);
         fragment.setArguments(args);
         return fragment;

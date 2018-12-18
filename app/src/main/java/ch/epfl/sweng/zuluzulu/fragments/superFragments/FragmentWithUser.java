@@ -1,10 +1,10 @@
-package ch.epfl.sweng.zuluzulu.fragments;
+package ch.epfl.sweng.zuluzulu.fragments.superFragments;
 
 import android.os.Bundle;
 import ch.epfl.sweng.zuluzulu.structure.user.User;
 
 public class FragmentWithUser<U extends User> extends SuperFragment {
-    protected static final String ARG_USER = "ARG_USER";
+    public static final String ARG_USER = "ARG_USER";
     protected U user;
 
     @Override
