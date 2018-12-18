@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import java.util.HashMap;
@@ -97,6 +98,9 @@ public class LoginFragment extends SuperFragment {
                 return false;
             }
         }); //if the webView loads the redirectURI, the app starts finishing logging in
+        webview.setInitialScale(115);
+        WebSettings webSettings = webview.getSettings();
+        webSettings.setDefaultZoom(WebSettings.ZoomDensity.FAR);
 
         showProgress(false);
 
