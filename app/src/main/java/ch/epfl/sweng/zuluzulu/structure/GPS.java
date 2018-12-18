@@ -69,8 +69,9 @@ public final class GPS {
                 requestLocationWithProvider(LocationManager.NETWORK_PROVIDER, context);
             if (!isGPSEnabled && !isNetworkEnabled)
                 Toast.makeText(context, "Active le GPS pour avoir accès à toutes les options", Toast.LENGTH_SHORT).show();
+            isActivated = isGPSEnabled || isNetworkEnabled;
         } else
-            Log.e("Location manager", "Cannot getAndAddOnSuccessListener location manager");
+            Log.e("Location manager", "Cannot get location manager");
 
         return true;
     }
