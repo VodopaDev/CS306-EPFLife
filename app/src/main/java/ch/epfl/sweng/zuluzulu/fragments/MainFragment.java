@@ -28,6 +28,7 @@ import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.structure.user.User;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_LOGIN_FRAGMENT;
+import static ch.epfl.sweng.zuluzulu.fragments.SuperChatPostsFragment.ARG_USER;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,12 +38,9 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_LOGIN_FRAGMENT;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends SuperFragment {
+public class MainFragment extends FragmentWithUser {
     public static final String TAG = "MAIN_TAG";
-    private static final String ARG_USER = "ARG_USER";
 
-    private Button sign_in_button;
-    private User user;
     private ArrayList<Association> associations_array;
     private ArrayList<Event> events_array;
     private AssociationArrayAdapter associations_adapter;
@@ -58,12 +56,12 @@ public class MainFragment extends SuperFragment {
      *
      * @return A new instance of fragment MainFragment.
      */
-    public static MainFragment newInstance(User u) {
-        if(u == null)
+    public static MainFragment newInstance(User user) {
+        if(user == null)
             throw new IllegalArgumentException("user can't be null");
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_USER, u);
+        args.putSerializable(ARG_USER, user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,7 +71,6 @@ public class MainFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Home");
-            user = (User) getArguments().getSerializable(ARG_USER);
         }
 
         associations_array = new ArrayList<>();
@@ -246,7 +243,7 @@ public class MainFragment extends SuperFragment {
         ListView listview_assos = view.findViewById(R.id.main_page_random_assos);
         listview_assos.setAdapter(associations_adapter);
 
-        sign_in_button = view.findViewById(R.id.main_page_button_sign_in);
+        Button sign_in_button = view.findViewById(R.id.main_page_button_sign_in);
 
         sign_in_button.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_LOGIN_FRAGMENT, user));
 
