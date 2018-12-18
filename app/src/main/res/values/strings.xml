@@ -95,12 +95,12 @@
     <string name="speaker_de_l_venement">Speaker de l\'évenement</string>
     <string name="lieu_de_l_v_nement">Lieu de l\'évènement</string>
     <string name="type_de_l_v_nement">Type de l\'évènement</string>
-    <string name="contact_pour_l_v_nement">Contact pour l\'évènement</string>
+    <string name="contact_pour_l_v_nement">Contact pour l\'événement</string>
     <string name="site_de_l_v_nement">Site de l\'évènement</string>
-    <string name="ev_nements">Evènements</string>
+    <string name="ev_nements">Événements</string>
     <string name="follow">follow</string>
-    <string name="event_followed">Vous suivez désormais cet évènement</string>
-    <string name="event_unfollowed">Vous ne suivez plus cet évènement</string>
+    <string name="event_followed">Vous suivez désormais cet événement</string>
+    <string name="event_unfollowed">Vous ne suivez plus cet événement</string>
     <string name="event_card_default_followers">0 followers</string>
     <plurals name="evend_card_followers">
         <item quantity="zero">%1$d follower</item>
