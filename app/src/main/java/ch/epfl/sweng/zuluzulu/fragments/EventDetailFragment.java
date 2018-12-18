@@ -77,16 +77,35 @@ public class EventDetailFragment extends FragmentWithUser<User> {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_detail, container, false);
 
-
         view.findViewById(R.id.event_detail_export).setOnClickListener(v -> exportEventToCalendar());
 
         event_like = view.findViewById(R.id.event_detail_tv_numberLikes);
         event_like.setText(String.valueOf(event.getLikes()));
+        setViewFields(view);
 
         // Favorite button
         ImageButton event_like_button = view.findViewById(R.id.event_detail_like_button);
         setLikeButtonBehaviour(event_like_button);
 
+        setWebView(view);
+
+        // load event icon and banner
+        ImageLoader.loadUriIntoImageView(view.findViewById(R.id.event_detail_icon), event.getIconUri(), getContext());
+        ImageLoader.loadUriIntoImageView(view.findViewById(R.id.event_detail_banner), event.getBannerUri(), getContext());
+
+        channelButton = view.findViewById(R.id.event_detail_chatRoom);
+        associationButton = view.findViewById(R.id.event_detail_but_assos);
+        loadChannel();
+        loadAssociation();
+
+        return view;
+    }
+
+    /**
+     * set the event basic fields to display (ie:name, description, icon, place...)
+     * @param view container view
+     */
+    private void setViewFields(View view){
         TextView event_desc = view.findViewById(R.id.event_detail_desc);
         event_desc.setText(event.getLongDescription());
 
@@ -111,30 +130,23 @@ public class EventDetailFragment extends FragmentWithUser<User> {
 
         TextView event_category = view.findViewById(R.id.event_detail_category);
         event_category.setText(event.getCategory());
+    }
 
+    /**
+     * Set the event webview to display the map
+     * @param view container view
+     */
+    private void setWebView(View view){
         WebView myWebView = view.findViewById(R.id.webview);
         myWebView.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                // do your handling codes here, which url is the requested url
-                // probably you need to open that url rather than redirect:
                 view.loadUrl(url);
-                return false; // then it is not handled by default action
+                return false;
             }
         });
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         myWebView.loadUrl(event.getUrlPlaceAndRoom());
-
-        // load event icon and banner
-        ImageLoader.loadUriIntoImageView(view.findViewById(R.id.event_detail_icon), event.getIconUri(), getContext());
-        ImageLoader.loadUriIntoImageView(view.findViewById(R.id.event_detail_banner), event.getBannerUri(), getContext());
-
-        channelButton = view.findViewById(R.id.event_detail_chatRoom);
-        associationButton = view.findViewById(R.id.event_detail_but_assos);
-        loadChannel();
-        loadAssociation();
-
-        return view;
     }
 
     private void setLikeButtonBehaviour(ImageButton event_like_button) {
