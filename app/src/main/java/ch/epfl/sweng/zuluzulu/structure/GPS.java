@@ -10,6 +10,8 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.Collections;
+
 import static android.content.Context.LOCATION_SERVICE;
 
 /**
@@ -57,37 +59,37 @@ public final class GPS {
      * @return Whether the user has given permission or not
      */
     public static boolean start(Context context) {
+        locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+        if (locationManager != null) {
+            boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            if (isGPSEnabled)
+                requestLocationWithProvider(LocationManager.GPS_PROVIDER, context);
+            if (isNetworkEnabled)
+                requestLocationWithProvider(LocationManager.NETWORK_PROVIDER, context);
+            if (!isGPSEnabled && !isNetworkEnabled)
+                Toast.makeText(context, "Active le GPS pour avoir accès à toutes les options", Toast.LENGTH_SHORT).show();
+        } else
+            Log.e("Location manager", "Cannot getAndAddOnSuccessListener location manager");
+
+        return true;
+    }
+
+    /**
+     * Update the location using the given provider
+     * @param provider provide to use for location
+     * @param context context to use to show error message
+     */
+    private static void requestLocationWithProvider(String provider, Context context){
         if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(context, "Permission au GPS non donnée", Toast.LENGTH_SHORT).show();
-            return false;
-        } else {
-            locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
-            if (locationManager != null) {
-                boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-                if (isGPSEnabled) {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, locationListener);
-                    Location tempLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    if (tempLocation != null && isBetterLocation(tempLocation, location)) {
-                        location = tempLocation;
-                    }
-                }
-                if (isNetworkEnabled) {
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, locationListener);
-                    Location tempLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    if (tempLocation != null && isBetterLocation(tempLocation, location)) {
-                        location = tempLocation;
-                    }
-                }
-                isActivated = isGPSEnabled || isNetworkEnabled;
-                if (!isActivated) {
-                    Toast.makeText(context, "Active le GPS pour avoir accès à toutes les options", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Log.e("Location manager", "Cannot getAndAddOnSuccessListener location manager");
-            }
+            return;
         }
-        return true;
+        locationManager.requestLocationUpdates(provider, MIN_TIME_FOR_UPDATES, MIN_DISTANCE_TO_REQUEST_LOCATION, locationListener);
+        Location tempLocation = locationManager.getLastKnownLocation(provider);
+        if (tempLocation != null && isBetterLocation(tempLocation, location)) {
+            location = tempLocation;
+        }
     }
 
     /**
