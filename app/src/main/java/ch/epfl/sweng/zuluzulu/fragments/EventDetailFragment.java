@@ -31,14 +31,12 @@ import ch.epfl.sweng.zuluzulu.utility.Utils;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_ASSOCIATION_DETAIL_FRAGMENT;
 
-public class EventDetailFragment extends SuperFragment {
+public class EventDetailFragment extends FragmentWithUser<User> {
     public static final String TAG = "EVENT_DETAIL__TAG";
-    private static final String ARG_USER = "ARG_USER";
     private static final String ARG_EVENT = "ARG_EVENT";
 
     private TextView event_like;
     private Event event;
-    private User user;
 
 
     private Button channelButton;
@@ -70,7 +68,6 @@ public class EventDetailFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (User) getArguments().getSerializable(ARG_USER);
             event = (Event) getArguments().getSerializable(ARG_EVENT);
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, event.getName());
         }

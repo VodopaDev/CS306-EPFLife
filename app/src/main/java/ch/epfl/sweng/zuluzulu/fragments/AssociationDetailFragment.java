@@ -21,10 +21,9 @@ import ch.epfl.sweng.zuluzulu.utility.ImageLoader;
 
 import static ch.epfl.sweng.zuluzulu.utility.ImageLoader.loadUriIntoImageView;
 
-public class AssociationDetailFragment extends SuperFragment {
+public class AssociationDetailFragment extends FragmentWithUser<User> {
 
     public static final String TAG = "ASSOCIATION_DETAIL__TAG";
-    private static final String ARG_USER = "ARG_USER";
     private static final String ARG_ASSO = "ARG_ASSO";
     private static final String FAV_CONTENT = "Cette association est dans tes favoris";
     private static final String NOT_FAV_CONTENT = "Cette association n'est pas dans tes favoris";
@@ -36,7 +35,6 @@ public class AssociationDetailFragment extends SuperFragment {
     private Channel channel;
 
     private Association asso;
-    private User user;
 
     /**
      * Initialize a new AssociationDetailFragment
@@ -65,7 +63,6 @@ public class AssociationDetailFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (User) getArguments().getSerializable(ARG_USER);
             asso = (Association) getArguments().getSerializable(ARG_ASSO);
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, asso.getName());
         }

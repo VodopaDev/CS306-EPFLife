@@ -37,9 +37,7 @@ import ch.epfl.sweng.zuluzulu.utility.Utils;
  * Use the {@link ChannelFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChannelFragment extends SuperFragment {
-    private static final String ARG_USER = "ARG_USER";
-
+public class ChannelFragment extends FragmentWithUser<AuthenticatedUser> {
     private static final List<String> GLOBAL_CHANNEL_IDS = new ArrayList(Arrays.asList("Global", "Section IN", "Section SC", "Sat"));
 
     private View view;
@@ -47,8 +45,6 @@ public class ChannelFragment extends SuperFragment {
 
     private List<Channel> listOfChannels = new ArrayList<>();
     private ChannelArrayAdapter adapter;
-
-    private AuthenticatedUser user;
     private GeoPoint userLocation;
 
     public ChannelFragment() {
@@ -75,7 +71,6 @@ public class ChannelFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Channels");
         }
     }

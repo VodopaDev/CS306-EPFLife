@@ -48,7 +48,6 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     private static final String EPFL_LOGO = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon).toString();
 
     private List<String> datas;
-    private Proxy db = DatabaseFactory.getDependency();
     private List<Association> associations;
     private AddAssociationAdapter adapter;
 

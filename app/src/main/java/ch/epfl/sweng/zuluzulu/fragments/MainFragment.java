@@ -38,7 +38,7 @@ import static ch.epfl.sweng.zuluzulu.fragments.SuperChatPostsFragment.ARG_USER;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends FragmentWithUser {
+public class MainFragment extends FragmentWithUser<User> {
     public static final String TAG = "MAIN_TAG";
 
     private ArrayList<Association> associations_array;

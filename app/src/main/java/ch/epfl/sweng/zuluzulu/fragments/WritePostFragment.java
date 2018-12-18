@@ -36,7 +36,7 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_POST_FRAGMENT;
  * A {@link SuperFragment} subclass.
  * This fragment is used to write new posts
  */
-public class WritePostFragment extends SuperFragment {
+public class WritePostFragment extends FragmentWithUser<AuthenticatedUser> {
     private static final String ARG_USER = "ARG_USER";
     private static final String ARG_CHANNEL = "ARG_CHANNEL";
     private static final int POST_MAX_LENGTH = 200;
@@ -44,8 +44,6 @@ public class WritePostFragment extends SuperFragment {
     private ConstraintLayout layout;
     private EditText editText;
     private Button sendButton;
-
-    private AuthenticatedUser user;
     private Channel channel;
     private PostColor color;
     private boolean anonymous;
@@ -71,7 +69,6 @@ public class WritePostFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
             channel = (Channel) getArguments().getSerializable(ARG_CHANNEL);
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, channel.getName());
         }

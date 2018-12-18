@@ -34,11 +34,7 @@ import ch.epfl.sweng.zuluzulu.structure.user.User;
  * Use the {@link AssociationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AssociationFragment extends SuperFragment {
-    private static final String ARG_USER = "ARG_USER";
-
-    private User user;
-
+public class AssociationFragment extends FragmentWithUser<User> {
     private List<Association> assosAll;
     private List<Association> assosFav;
     private List<Association> assosToFilter;
@@ -65,7 +61,6 @@ public class AssociationFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (User) getArguments().getSerializable(ARG_USER);
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, getResources().getString(R.string.drawer_associations));
         }
 

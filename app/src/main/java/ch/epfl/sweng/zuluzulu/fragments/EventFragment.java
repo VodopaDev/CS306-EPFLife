@@ -44,12 +44,9 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_CREATE_EVENT;
  * Use the {@link EventFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventFragment extends SuperFragment {
-    private static final String ARG_USER = "ARG_USER";
+public class EventFragment extends FragmentWithUser<User> {
     private final Date MIN_DATE = new Date(946724400000L);  // 01/01/2000
     private final Date MAX_DATE = new Date(1735729200000L); // 01/01/2025
-
-    private User user;
 
     private ArrayList<Event> allEvents;
     private ArrayList<Event> followedEvents;

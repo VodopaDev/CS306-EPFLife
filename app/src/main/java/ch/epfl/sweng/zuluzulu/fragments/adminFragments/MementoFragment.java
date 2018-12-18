@@ -21,6 +21,7 @@ import java.util.List;
 import ch.epfl.sweng.zuluzulu.adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.fragments.FragmentWithUser;
 import ch.epfl.sweng.zuluzulu.fragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.idlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
@@ -28,6 +29,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.structure.Event;
 import ch.epfl.sweng.zuluzulu.structure.EventBuilder;
 import ch.epfl.sweng.zuluzulu.structure.EventDate;
+import ch.epfl.sweng.zuluzulu.structure.user.Admin;
 import ch.epfl.sweng.zuluzulu.urlTools.MementoParser;
 import ch.epfl.sweng.zuluzulu.urlTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.structure.user.User;
@@ -42,14 +44,12 @@ import ch.epfl.sweng.zuluzulu.structure.user.UserRole;
  * Use the {@link MementoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MementoFragment extends SuperFragment {
+public class MementoFragment extends FragmentWithUser<Admin> {
     final static public String EPFL_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/epfl/events/fr/?format=json";
-    final static public String ENAC_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/enac/events/fr/?format=json";
     final static public String ASSOCIATION_MEMENTO_URL = "https://memento.epfl.ch/api/jahia/mementos/associations/events/fr/?format=json";
     private static final String TAG = "MEMENTO_FRAGMENT";
     private static final UserRole ROLE_REQUIRED = UserRole.ADMIN;
     private EventArrayAdapter eventAdapter;
-    private User user;
     private ArrayList<Event> events;
 
     public MementoFragment() {
@@ -68,7 +68,7 @@ public class MementoFragment extends SuperFragment {
         }
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable(TAG, user);
+        bundle.putSerializable(ARG_USER, user);
 
         // Transmit data
         MementoFragment fragment = new MementoFragment();
@@ -80,19 +80,13 @@ public class MementoFragment extends SuperFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            this.user = (User) getArguments().getSerializable(TAG);
-        }
-
         this.events = new ArrayList<>();
-
         this.eventAdapter = new EventArrayAdapter(getContext(), events, mListener, user);
 
 
         mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Memento loader");
         UrlHandler urlHandler = new UrlHandler(this::handleMemento, new MementoParser());
-        urlHandler.execute(ASSOCIATION_MEMENTO_URL, ASSOCIATION_MEMENTO_URL);
+        urlHandler.execute(ASSOCIATION_MEMENTO_URL, EPFL_MEMENTO_URL);
 
         // Send increment to wait async execution in test
         IdlingResourceFactory.incrementCountingIdlingResource();

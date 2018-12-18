@@ -50,8 +50,7 @@ import ch.epfl.sweng.zuluzulu.Utility.BitmapUtils;
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends SuperFragment {
-    private static final String USER_DATA_TAG = "USER_DATA_TAG";
+public class ProfileFragment extends FragmentWithUser<AuthenticatedUser> {
     private static final String OWNER_TAG = "OWNER_TAG";
     private static final int CAMERA_CODE = 1234;
     private static final int W_STORAGE_PERM_CODE = 260;
@@ -60,9 +59,6 @@ public class ProfileFragment extends SuperFragment {
     private static final int ANGLE_ROTATED_270 = 270;
 
     private int internal = 0;
-
-    private AuthenticatedUser userData;
-
     private boolean profileOwner;
 
     private ImageButton pic;
@@ -79,15 +75,15 @@ public class ProfileFragment extends SuperFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param userData User data
+     * @param user User data
      * @return A new instance of fragment ProfileFragment.
      */
-    public static ProfileFragment newInstance(AuthenticatedUser userData, boolean profileOwner) {
-        if(userData == null)
+    public static ProfileFragment newInstance(AuthenticatedUser user, boolean profileOwner) {
+        if(user == null)
             throw new IllegalArgumentException("user can't be null");
         Bundle bundle = new Bundle();
         bundle.putBoolean(OWNER_TAG, profileOwner);
-        bundle.putSerializable(USER_DATA_TAG, userData);
+        bundle.putSerializable(ARG_USER, user);
 
         // Transmit data
         ProfileFragment profileFragment = new ProfileFragment();
@@ -100,13 +96,11 @@ public class ProfileFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            userData = (AuthenticatedUser) getArguments().getSerializable(USER_DATA_TAG);
             profileOwner = (Boolean) getArguments().get(OWNER_TAG);
-
-            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, userData.getFirstNames() + "'s Profile");
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, user.getFirstNames() + "'s Profile");
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference();
-            pictureRef = storageRef.child("images/" + userData.getSciper() + ".jpg");
+            pictureRef = storageRef.child("images/" + user.getSciper() + ".jpg");
 
         } else {
             throw new AssertionError("No argument");
@@ -124,16 +118,16 @@ public class ProfileFragment extends SuperFragment {
         TextView user_view = view.findViewById(R.id.profile_name_text);
 
         StringBuilder builder = new StringBuilder();
-        if (userData.getFirstNames() != null && userData.getFirstNames().length() > 1) {
-            builder.append(userData.getFirstNames().substring(0, 1).toUpperCase());
-            builder.append(userData.getFirstNames().substring(1));
+        if (user.getFirstNames() != null && user.getFirstNames().length() > 1) {
+            builder.append(user.getFirstNames().substring(0, 1).toUpperCase());
+            builder.append(user.getFirstNames().substring(1));
         }
-        if (userData.getLastNames() != null && userData.getLastNames().length() > 1) {
-            builder.append(" ").append(userData.getLastNames().substring(0, 1).toUpperCase());
-            builder.append(userData.getLastNames().substring(1));
+        if (user.getLastNames() != null && user.getLastNames().length() > 1) {
+            builder.append(" ").append(user.getLastNames().substring(0, 1).toUpperCase());
+            builder.append(user.getLastNames().substring(1));
         }
 
-        if (userData.getRoles().contains(UserRole.ADMIN.toString())) {
+        if (user.getRoles().contains(UserRole.ADMIN.toString())) {
             builder.append(" - ADMIN");
         }
 
@@ -159,16 +153,16 @@ public class ProfileFragment extends SuperFragment {
             setBitmapFromStorage();
         }
         TextView gasparView = view.findViewById(R.id.profile_gaspar_text);
-        gasparView.setText(userData.getGaspar());
+        gasparView.setText(user.getGaspar());
 
         TextView emailView = view.findViewById(R.id.profile_email_edit);
-        emailView.setText(userData.getEmail());
+        emailView.setText(user.getEmail());
 
         TextView sciperView = view.findViewById(R.id.profile_sciper_edit);
-        sciperView.setText(userData.getSciper());
+        sciperView.setText(user.getSciper());
 
         TextView unit = view.findViewById(R.id.profile_unit_edit);
-        unit.setText(new StringBuilder().append(userData.getSection()).append("-").append(userData.getSemester()));
+        unit.setText(new StringBuilder().append(user.getSection()).append("-").append(user.getSemester()));
 
         return view;
     }
@@ -234,9 +228,8 @@ public class ProfileFragment extends SuperFragment {
      * @throws IOException if creation fails
      */
     private File createFileForPicture(){
-
         File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File image = new File (directory + "/user" + userData.getSciper() + ".jpg");
+        File image = new File (directory + "/user" + user.getSciper() + ".jpg");
 
         pathToImage = image.getAbsolutePath();
         return image;
