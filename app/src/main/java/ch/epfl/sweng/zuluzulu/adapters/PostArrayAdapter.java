@@ -19,6 +19,7 @@ import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.structure.Post;
 import ch.epfl.sweng.zuluzulu.structure.SuperMessage;
 import ch.epfl.sweng.zuluzulu.structure.user.User;
+import ch.epfl.sweng.zuluzulu.utility.TimeUtility;
 import ch.epfl.sweng.zuluzulu.utility.Utils;
 
 public class PostArrayAdapter extends ArrayAdapter<SuperMessage> {
@@ -87,7 +88,7 @@ public class PostArrayAdapter extends ArrayAdapter<SuperMessage> {
      * Set up the correct time passed since the creation of the post in the field
      */
     private void setUpTimeAgoField() {
-        long differenceInSeconds = Utils.getMillisecondsSince(currentPost.getTime()) / 1000;
+        long differenceInSeconds = TimeUtility.getMillisecondsSince(currentPost.getTime()) / 1000;
         if (differenceInSeconds < 60) {
             timeAgo.setText(differenceInSeconds + "s");
         } else if (differenceInSeconds < 3600) {

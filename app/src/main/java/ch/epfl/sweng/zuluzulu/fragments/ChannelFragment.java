@@ -27,6 +27,7 @@ import ch.epfl.sweng.zuluzulu.structure.Channel;
 import ch.epfl.sweng.zuluzulu.structure.GPS;
 import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.structure.user.User;
+import ch.epfl.sweng.zuluzulu.utility.GeopointUtility;
 import ch.epfl.sweng.zuluzulu.utility.Utils;
 
 /**
@@ -149,7 +150,7 @@ public class ChannelFragment extends FragmentWithUser<AuthenticatedUser> {
     private void refreshPosition() {
         Location gpsLocation = GPS.getLocation();
         if (gpsLocation != null) {
-            userLocation = Utils.toGeoPoint(gpsLocation);
+            userLocation = GeopointUtility.toGeoPoint(gpsLocation);
         }
     }
 }

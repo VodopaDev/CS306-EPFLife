@@ -37,7 +37,6 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_POST_FRAGMENT;
  * This fragment is used to write new posts
  */
 public class WritePostFragment extends FragmentWithUser<AuthenticatedUser> {
-    private static final String ARG_USER = "ARG_USER";
     private static final String ARG_CHANNEL = "ARG_CHANNEL";
     private static final int POST_MAX_LENGTH = 200;
 

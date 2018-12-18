@@ -7,17 +7,17 @@ import android.widget.ListView;
 /**
  * List view wrap the height : see https://stackoverflow.com/questions/11295080/android-wrap-content-is-not-working-with-listview
  */
-public class MyListView extends ListView {
+public class NonScrollableListView extends ListView {
 
-    public MyListView(Context context, AttributeSet attrs) {
+    public NonScrollableListView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MyListView(Context context) {
+    public NonScrollableListView(Context context) {
         super(context);
     }
 
-    public MyListView(Context context, AttributeSet attrs, int defStyle) {
+    public NonScrollableListView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
