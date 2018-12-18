@@ -14,14 +14,13 @@ public interface Utils {
     /**
      * Return a random integer in the range [min, max]
      *
-     * @param min the smallest integer you can getAndAddOnSuccessListener
-     * @param max the biggest integer you can getAndAddOnSuccessListener
+     * @param min the smallest integer you can get
+     * @param max the biggest integer you can get
      * @return the random integer
      */
     static int randomInt(int min, int max) {
-        if (max < min) {
+        if (max < min)
             throw new IllegalArgumentException("Max must be bigger than min");
-        }
         Random rand = new Random();
         return rand.nextInt((max - min) + 1) + min;
     }
