@@ -273,13 +273,11 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getUserWithIdOrCreateIt(String sciper, OnResult<AuthenticatedUser> onResult) {
-        if(sciper == null){
+        if(sciper == null)
             onResult.apply(null);
-        }
-        else if (sciper != null && userMap.containsKey(sciper)) {
+        else if (userMap.containsKey(sciper))
             onResult.apply(userMap.get(sciper));
-        }
-        else if (sciper != null && !userMap.containsKey(sciper)) {
+        else if (!userMap.containsKey(sciper)) {
             User.UserBuilder b = new User.UserBuilder();
             b.setEmail(sciper + "@epfl.ch");
             b.setFirst_names("Je suis un test");
