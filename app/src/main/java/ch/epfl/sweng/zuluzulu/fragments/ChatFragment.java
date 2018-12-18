@@ -91,8 +91,8 @@ public class ChatFragment extends SuperChatPostsFragment {
     private void setUpSendButton() {
         sendButton.setOnClickListener(v -> {
             ChatMessage chatMessage = new ChatMessage(
-                    DatabaseFactory.getDependency().getNewMessageId(channel.getId()),
-                    channel.getId(),
+                    DatabaseFactory.getDependency().getNewMessageId(data.getId()),
+                    data.getId(),
                     textEdit.getText().toString().trim().replaceAll("([\\n\\r]+\\s*)*$", ""),
                     Timestamp.now().toDate(),
                     anonymous ? "" : user.getFirstNames(),
@@ -106,7 +106,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Add an onClick listener on the button to switch to the posts fragment
      */
     private void setUpPostsButton() {
-        postsButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_POST_FRAGMENT, channel));
+        postsButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_POST_FRAGMENT, data));
     }
 
     /**
@@ -134,7 +134,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Refresh the chat by reading all the messages in the database
      */
     private void loadInitialMessages() {
-        DatabaseFactory.getDependency().getMessagesFromChannel(channel.getId(), result -> {
+        DatabaseFactory.getDependency().getMessagesFromChannel(data.getId(), result -> {
             messages.clear();
             messages.addAll(result);
             sortMessages();
@@ -145,7 +145,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Set up the listener on database changes to update the list of messages
      */
     private void setUpDataOnChangeListener() {
-        DatabaseFactory.getDependency().updateOnNewMessagesFromChannel(channel.getId(), result -> {
+        DatabaseFactory.getDependency().updateOnNewMessagesFromChannel(data.getId(), result -> {
             messages.clear();
             messages.addAll(result);
             sortMessages();

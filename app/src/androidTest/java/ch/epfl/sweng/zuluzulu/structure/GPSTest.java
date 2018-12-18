@@ -5,10 +5,13 @@ import android.location.LocationManager;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import ch.epfl.sweng.zuluzulu.MainActivity;
+import ch.epfl.sweng.zuluzulu.database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
@@ -20,6 +23,11 @@ public class GPSTest {
 
     @Rule
     public GrantPermissionRule permissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
+
+    @Before
+    public void init(){
+        DatabaseFactory.setDependency(new MockedProxy());
+    }
 
     @Test
     public void testOnLocationChanged() throws Throwable {

@@ -629,16 +629,17 @@ public class FirebaseProxy implements Proxy {
                         .setSemester(fmap.getString("semester"))
                         .setGaspar(fmap.getString("gaspar"))
                         .setEmail(fmap.getString("email"))
-                        .setFollowedAssociations((List<String>) fmap.get("followed_associations"))
-                        .setFollowedEvents((List<String>) fmap.get("followed_events"))
-                        .setFollowedChannels((List<String>) fmap.get("followed_channels"))
+                        .setFollowedAssociations(fmap.getStringList("followed_associations"))
+                        .setFollowedEvents(fmap.getStringList("followed_events"))
+                        .setFollowedChannels(fmap.getStringList("followed_channels"))
                         .buildAuthenticatedUser();
 
-                for (String role : (List<String>) fmap.get("roles"))
+                for (String role : fmap.getStringList("roles"))
                     user.addRole(UserRole.valueOf(role));
 
                 onResult.apply(user);
             } catch (Exception e) {
+                e.printStackTrace();
                 onResult.apply(null);
             }
             IdlingResourceFactory.decrementCountingIdlingResource();

@@ -41,7 +41,7 @@ public class EventDetailFragment extends FragmentWithUserAndData<User, Event> {
 
     private Button associationButton;
     private Association association;
-    
+
     public static EventDetailFragment newInstance(User user, Event event) {
         if (event == null)
             throw new IllegalArgumentException("Error creating an EventDetailFragment:\n" +
