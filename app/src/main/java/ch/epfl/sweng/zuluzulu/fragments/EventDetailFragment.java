@@ -156,7 +156,7 @@ public class EventDetailFragment extends FragmentWithUser<User> {
 
         event_like_button.setOnClickListener(view -> {
             if (user.isConnected()) {
-                AuthenticatedUser auth = (AuthenticatedUser) user;o
+                AuthenticatedUser auth = (AuthenticatedUser) user;
                 if (auth.isFollowedEvent(event.getId())) {
                     auth.removeFollowedEvent(event.getId());
                     auth.removeFollowedChannel(event.getChannelId());
