@@ -33,6 +33,7 @@ import static ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser.A
 
 public class ReplyFragment extends SuperChatPostsFragment {
     private static final int REPLY_MAX_LENGTH = 100;
+    private static final String ARG_POST = "ARG_POST";
 
     private Post postOriginal;
     private PostArrayAdapter adapter;

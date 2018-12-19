@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,7 @@ public class ChannelFragment extends FragmentWithUser<AuthenticatedUser> {
      *
      * @return A new instance of fragment ChannelFragment.
      */
-    public static ChannelFragment newInstance(User user) {
+    public static ChannelFragment newInstance(AuthenticatedUser user) {
         if(user == null)
             throw new IllegalArgumentException("user can't be null");
         ChannelFragment fragment = new ChannelFragment();

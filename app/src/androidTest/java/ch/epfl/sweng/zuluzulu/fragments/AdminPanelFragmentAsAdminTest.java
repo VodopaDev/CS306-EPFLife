@@ -71,12 +71,6 @@ public class AdminPanelFragmentAsAdminTest extends TestWithAdminAndFragment {
     }
 
     @Test
-    public void canOpenChannelManagerFragment() {
-        onView(withId(R.id.panel_channel)).perform(ViewActions.click());
-        Utility.checkFragmentIsOpen(R.id.admin_panel_fragment);
-    }
-
-    @Test
     public void canOpenUserRoleFragment() {
         onView(withId(R.id.panel_user)).perform(ViewActions.click());
         Utility.checkFragmentIsOpen(R.id.user_role_fragment);

@@ -1,6 +1,7 @@
 package ch.epfl.sweng.zuluzulu.fragments.superFragments;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import ch.epfl.sweng.zuluzulu.structure.FirebaseStructure;
 import ch.epfl.sweng.zuluzulu.structure.user.User;

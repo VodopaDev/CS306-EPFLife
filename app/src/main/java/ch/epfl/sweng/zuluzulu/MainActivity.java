@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 fragment = MainFragment.newInstance(user);
                 break;
             case R.id.nav_chat:
-                fragment = ChannelFragment.newInstance(user);
+                fragment = ChannelFragment.newInstance((AuthenticatedUser) user);
                 break;
             case R.id.nav_admin_panel:
                 fragment = AdminPanelFragment.newInstance();
@@ -347,9 +347,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 openFragment(EventDetailFragment.newInstance(user, event));
                 break;
             case OPEN_CHANNEL_FRAGMENT:
-                User visitedUser = data == null ? user : (User) data;
                 selectItem(navigationView.getMenu().findItem(R.id.nav_chat), false);
-                openFragment(ChannelFragment.newInstance(visitedUser));
+                openFragment(ChannelFragment.newInstance((AuthenticatedUser) user));
                 break;
             case OPEN_LOGIN_FRAGMENT:
                 selectItem(navigationView.getMenu().findItem(R.id.nav_login), false);
@@ -372,10 +371,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case OPEN_MANAGE_USER:
                 openFragment(ChangeUserRoleFragment.newInstance());
-                break;
-            case OPEN_MANAGE_CHANNEL:
-                //TODO: to add when finished
-                //openFragment(...);
                 break;
             case OPEN_MANAGE_ASSOCIATION:
                 openFragment(AssociationsGeneratorFragment.newInstance(user));

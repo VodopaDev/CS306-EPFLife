@@ -49,7 +49,7 @@ public class ChatFragment extends SuperChatPostsFragment {
             throw new IllegalArgumentException("user can't be null");
         if(channel == null)
             throw new IllegalArgumentException("channel can't be null");
-        return (ChatFragment) newInstanceOf("chat", user, channel);
+        return (ChatFragment)newInstanceOf("chat", user, channel);
     }
 
     @Override

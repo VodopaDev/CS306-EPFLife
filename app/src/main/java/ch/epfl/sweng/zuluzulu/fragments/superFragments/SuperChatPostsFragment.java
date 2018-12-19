@@ -3,6 +3,7 @@ package ch.epfl.sweng.zuluzulu.fragments.superFragments;
 
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -24,15 +25,12 @@ import static ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser.A
  * A simple {@link SuperFragment} subclass.
  */
 public abstract class SuperChatPostsFragment extends FragmentWithUserAndData<User, Channel> {
-
     public static final String VISIT_PROFILE_STRING = "Visiter le profile de ";
-    protected static final String ARG_POST = "ARG_POST";
     protected List<SuperMessage> messages = new ArrayList<>();
 
     protected ListView listView;
     protected Button chatButton;
     protected Button postsButton;
-    protected AuthenticatedUser user;
 
     protected boolean anonymous;
 
