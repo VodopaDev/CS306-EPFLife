@@ -3,12 +3,12 @@ package ch.epfl.sweng.zuluzulu.fragments.superFragments;
 
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
@@ -16,7 +16,6 @@ import ch.epfl.sweng.zuluzulu.fragments.ChatFragment;
 import ch.epfl.sweng.zuluzulu.fragments.PostFragment;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
 import ch.epfl.sweng.zuluzulu.structure.SuperMessage;
-import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.structure.user.User;
 
 import static ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser.ARG_USER;
@@ -26,7 +25,7 @@ import static ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser.A
  */
 public abstract class SuperChatPostsFragment extends FragmentWithUserAndData<User, Channel> {
     public static final String VISIT_PROFILE_STRING = "Visiter le profile de ";
-    protected List<SuperMessage> messages = new ArrayList<>();
+    protected final List<SuperMessage> messages = new ArrayList<>();
 
     protected ListView listView;
     protected Button chatButton;
@@ -74,7 +73,7 @@ public abstract class SuperChatPostsFragment extends FragmentWithUserAndData<Use
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
             SuperMessage message = messages.get(position);
             if (!message.isAnonymous() && !message.isOwnMessage(user.getSciper())) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
 
                 AlertDialog dlg = builder.setTitle(VISIT_PROFILE_STRING + message.getSenderName() + " ?")
                         .setPositiveButton("Oui", (dialog, which) -> DatabaseFactory.getDependency().getUserWithIdOrCreateIt(message.getSenderSciper(), result -> {

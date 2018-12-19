@@ -21,13 +21,12 @@ import ch.epfl.sweng.zuluzulu.structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.structure.SuperMessage;
 import ch.epfl.sweng.zuluzulu.structure.user.User;
 import ch.epfl.sweng.zuluzulu.utility.TimeUtility;
-import ch.epfl.sweng.zuluzulu.utility.Utils;
 
 public class ChatMessageArrayAdapter extends ArrayAdapter<SuperMessage> {
 
-    private Context mContext;
-    private List<SuperMessage> messages;
-    private User user;
+    private final Context mContext;
+    private final List<SuperMessage> messages;
+    private final User user;
 
     public ChatMessageArrayAdapter(@NonNull Context context, List<SuperMessage> list, User user) {
         super(context, 0, list);

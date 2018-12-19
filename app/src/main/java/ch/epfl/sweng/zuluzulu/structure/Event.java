@@ -217,8 +217,8 @@ public class Event extends FirebaseStructure {
      * @param userId user to add to followers
      * @return true if the user wasn't already in the event's followers
      */
-    public boolean addFollower(String userId) {
-        return followers.add(userId);
+    public void addFollower(String userId) {
+        followers.add(userId);
     }
 
     /**
@@ -227,8 +227,8 @@ public class Event extends FirebaseStructure {
      * @param userId user to remove from followers
      * @return true if the user was already in the event's followers
      */
-    public boolean removeFollower(String userId) {
-        return followers.remove(userId);
+    public void removeFollower(String userId) {
+        followers.remove(userId);
     }
 
     public Map<String, Object> getData() {

@@ -30,6 +30,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser;
@@ -179,7 +180,7 @@ public class ProfileFragment extends FragmentWithUser<AuthenticatedUser> {
      * @return boolean
      */
     private boolean hasPermission(){
-        boolean storage_write = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        boolean storage_write = ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         boolean storage_read = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         boolean camera = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
         if (!storage_write) {
@@ -242,7 +243,7 @@ public class ProfileFragment extends FragmentWithUser<AuthenticatedUser> {
      */
     private void goToCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+        if (intent.resolveActivity(Objects.requireNonNull(getActivity()).getPackageManager()) != null) {
             File picture;
             picture = createFileForPicture();
 

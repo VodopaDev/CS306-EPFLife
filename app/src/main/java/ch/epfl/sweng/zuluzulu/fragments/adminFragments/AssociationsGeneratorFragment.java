@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.adapters.AddAssociationAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -163,7 +164,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         this.adapter = new AddAssociationAdapter(this.getContext(), this.associations, i -> {
             if (checkBound(i)) {
                 DatabaseFactory.getDependency().addAssociation(associations.get(i));
-                Snackbar.make(getView(), associations.get(i).getName() + " added", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(Objects.requireNonNull(getView()), associations.get(i).getName() + " added", Snackbar.LENGTH_SHORT).show();
             }
         });
 

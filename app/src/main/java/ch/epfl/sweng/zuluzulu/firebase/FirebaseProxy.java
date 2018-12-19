@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.firebase.Database.DatabaseCollection;
@@ -286,7 +287,7 @@ public class FirebaseProxy implements Proxy {
     private void createChannel(Association association) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         Map<String, Object> map = new HashMap<>();
-        map.put("id", association.getChannelId());
+        map.put("id", Objects.requireNonNull(association.getChannelId()));
         map.put("name", association.getName());
         map.put("short_description", association.getShortDescription());
         map.put("restrictions", new HashMap<>());
@@ -635,7 +636,7 @@ public class FirebaseProxy implements Proxy {
                         .buildAuthenticatedUser();
 
                 for (String role : fmap.getStringList("roles"))
-                    user.addRole(UserRole.valueOf(role));
+                    Objects.requireNonNull(user).addRole(UserRole.valueOf(role));
 
                 onResult.apply(user);
             } catch (Exception e) {
@@ -749,7 +750,7 @@ public class FirebaseProxy implements Proxy {
 
     private class Counter {
         private int counter = 0;
-        private int end;
+        private final int end;
 
         public Counter(int end) {
             this.end = end;

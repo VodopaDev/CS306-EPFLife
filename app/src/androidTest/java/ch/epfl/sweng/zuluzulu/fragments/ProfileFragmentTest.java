@@ -18,6 +18,8 @@ import android.support.test.runner.intent.IntentMonitorRegistry;
 import org.junit.Before;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
+
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.fragments.superFragments.SuperFragment;
@@ -39,7 +41,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 public class ProfileFragmentTest {
     @Rule
-    public IntentsTestRule<MainActivity> intentsTestRule =
+    public final IntentsTestRule<MainActivity> intentsTestRule =
             new IntentsTestRule<>(MainActivity.class);
 
     @Rule
@@ -74,7 +76,7 @@ public class ProfileFragmentTest {
                 new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
 
         IntentCallback intentCallback = intent -> {
-            if (intent.getAction().equals("android.media.action.IMAGE_CAPTURE")) {
+            if (Objects.requireNonNull(intent.getAction()).equals("android.media.action.IMAGE_CAPTURE")) {
                 try {
                     Uri imageUri = intent.getParcelableExtra(MediaStore.EXTRA_OUTPUT);
                     Context context = getTargetContext();
@@ -83,7 +85,7 @@ public class ProfileFragmentTest {
                             R.drawable.default_icon);
                     OutputStream out = getTargetContext().getContentResolver().openOutputStream(imageUri);
                     icon.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                    out.flush();
+                    Objects.requireNonNull(out).flush();
                     out.close();
                 } catch (IOException e) {
                     throw new IllegalArgumentException();

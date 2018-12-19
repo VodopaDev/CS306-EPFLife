@@ -19,7 +19,7 @@ import ch.epfl.sweng.zuluzulu.idlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.Utility;
 
 public class CollectionMock implements DatabaseCollection {
-    private Map<String, Object> map;
+    private final Map<String, Object> map;
 
     CollectionMock() {
         map = Utility.createMapWithAll();

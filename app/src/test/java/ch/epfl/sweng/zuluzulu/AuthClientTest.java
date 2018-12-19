@@ -10,9 +10,9 @@ import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
 
 @RunWith(JUnit4.class)
 public class AuthClientTest {
-    private OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
+    private final OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
     private String code = "1234";
-    private String redirecUri = "ImARedirectUri&code=1234";
+    private final String redirecUri = "ImARedirectUri&code=1234";
 
     @Test
     public void creadeCodeRequestUrlIsWorking() throws Exception {

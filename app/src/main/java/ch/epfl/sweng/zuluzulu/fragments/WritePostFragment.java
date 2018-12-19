@@ -20,11 +20,11 @@ import android.widget.EditText;
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser;
 import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUserAndData;
 import ch.epfl.sweng.zuluzulu.fragments.superFragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
@@ -78,7 +78,7 @@ public class WritePostFragment extends FragmentWithUserAndData<AuthenticatedUser
         View view = inflater.inflate(R.layout.fragment_write_post, container, false);
 
         color = PostColor.getRandomColor();
-        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences preferences = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE);
         anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
         layout = view.findViewById(R.id.write_post_layout);

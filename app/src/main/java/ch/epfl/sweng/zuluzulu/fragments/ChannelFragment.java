@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,6 @@ import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
 import ch.epfl.sweng.zuluzulu.structure.GPS;
 import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.structure.user.User;
 import ch.epfl.sweng.zuluzulu.utility.GeopointUtility;
 
 /**
@@ -45,7 +43,7 @@ public class ChannelFragment extends FragmentWithUser<AuthenticatedUser> {
     private View view;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private List<Channel> listOfChannels = new ArrayList<>();
+    private final List<Channel> listOfChannels = new ArrayList<>();
     private ChannelArrayAdapter adapter;
     private GeoPoint userLocation;
 

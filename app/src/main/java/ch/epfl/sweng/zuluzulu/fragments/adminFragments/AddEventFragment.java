@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.R;
@@ -32,17 +33,17 @@ public class AddEventFragment extends SuperFragment {
     private static final String EPFL_LOGO = "https://mediacom.epfl.ch/files/content/sites/mediacom/files/EPFL-Logo.jpg";
 
     //for association name
-    private Map<String, String> association_map = new HashMap<>();
+    private final Map<String, String> association_map = new HashMap<>();
     private Spinner spinner;
 
     //for date (number of days adapt depending on the month chosen)
     private DatePicker start_date_pick;
     private DatePicker end_date_pick;
-    private Date today = new Date();
+    private final Date today = new Date();
 
     //for time
-    private List<String> hours = new ArrayList<>();
-    private List<String> minutes = new ArrayList<>();
+    private final List<String> hours = new ArrayList<>();
+    private final List<String> minutes = new ArrayList<>();
     private Spinner spinner_hours;
     private Spinner spinner_minutes;
 
@@ -72,22 +73,20 @@ public class AddEventFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
 
         //fills the hour list for the spinner
-        addIntsToList(hours, 0, 24, 1);
+        addIntsToList(hours, 24, 1);
 
         //fills the minute list for the spinner
-        addIntsToList(minutes, 0, 60, 10);
+        addIntsToList(minutes, 60, 10);
     }
 
     /**
      * fill lists of integers requiring double digits numbers
-     *
-     * @param list              , the list we want to fill
-     * @param startingValue     the first value that the list will have
+     *  @param list              , the list we want to fill
      * @param exclusiveMaxValue the max value (exclusive) that the list will have
      * @param increment         of how much we increment per iteration
      */
-    private void addIntsToList(List<String> list, int startingValue, int exclusiveMaxValue, int increment) {
-        for (int i = startingValue; i < exclusiveMaxValue; i += increment) {
+    private void addIntsToList(List<String> list, int exclusiveMaxValue, int increment) {
+        for (int i = 0; i < exclusiveMaxValue; i += increment) {
             if (i < 10) {
                 list.add("0" + String.valueOf(i));
             } else {
@@ -270,7 +269,7 @@ public class AddEventFragment extends SuperFragment {
      * @param list    , the content of the spinner
      */
     private void setSpinner(Spinner spinner, List<String> list) {
-        ArrayAdapter adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, list);
+        ArrayAdapter adapter = new ArrayAdapter<>(Objects.requireNonNull(getContext()), android.R.layout.simple_spinner_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }

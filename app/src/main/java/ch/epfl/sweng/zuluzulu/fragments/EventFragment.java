@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -137,7 +138,7 @@ public class EventFragment extends FragmentWithUser<User> {
             if (user.isConnected())
                 updateListView(button_event_fav, followedEvents);
             else
-                Snackbar.make(getView(), "Login to access your favorite event", 5000).show();
+                Snackbar.make(Objects.requireNonNull(getView()), "Login to access your favorite event", 5000).show();
         });
         button_event_all.setOnClickListener(v -> updateListView(button_event_all, allEvents));
 

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -90,7 +91,7 @@ public class AssociationFragment extends FragmentWithUser<User> {
             if (user.isConnected())
                 updateListView(buttonAssosFav, buttonAssosAll, assosFav);
             else
-                Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
+                Snackbar.make(Objects.requireNonNull(getView()), "Login to access your favorite associations", 5000).show();
         });
         buttonAssosAll.setOnClickListener(v -> updateListView(buttonAssosAll, buttonAssosFav, assosAll));
 

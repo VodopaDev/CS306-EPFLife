@@ -69,6 +69,7 @@ public class EventBuilderTest {
         new EventBuilder().setUrlPlaceAndRoom(null);
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Test
     public void longShortDescIsTrimmed() {
         final String NAME1 = "ForumEpfl";
@@ -167,6 +168,7 @@ public class EventBuilderTest {
         assertEquals(ASSOCIATION_ID, event0.getAssociationId());
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Test
     public void nonConformUriAreChangedToDefaultUri() {
         final String DEFAULT_URI = "android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon;

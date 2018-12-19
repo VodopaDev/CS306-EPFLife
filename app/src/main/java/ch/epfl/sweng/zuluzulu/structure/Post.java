@@ -106,8 +106,10 @@ public class Post extends SuperMessage {
         return new ArrayList<>(replies);
     }
 
-    public boolean addReply(String replyId) {
-        return originalPostId == null && replies.add(replyId);
+    public void addReply(String replyId) {
+        if (originalPostId == null) {
+            replies.add(replyId);
+        }
     }
 
     /**

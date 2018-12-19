@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.adapters.UserRoleArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -102,7 +103,7 @@ public class ChangeUserRoleFragment extends SuperFragment {
             allUsers.addAll(result);
             Collections.sort(allUsers, ((o1, o2) -> {
                 assert (o1.containsKey("sciper") && o2.containsKey("sciper"));
-                return Integer.parseInt((String) o1.get("sciper")) - Integer.parseInt((String) o2.get("sciper"));
+                return Integer.parseInt((String) Objects.requireNonNull(o1.get("sciper"))) - Integer.parseInt((String) Objects.requireNonNull(o2.get("sciper")));
             }));
             filteredUsers.addAll(allUsers);
             adapter.notifyDataSetChanged();

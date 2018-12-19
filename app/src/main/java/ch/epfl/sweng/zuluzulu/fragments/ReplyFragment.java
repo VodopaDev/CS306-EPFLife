@@ -20,6 +20,7 @@ import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.adapters.PostArrayAdapter;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
@@ -87,7 +88,7 @@ public class ReplyFragment extends SuperChatPostsFragment {
         listView.setAdapter(adapter);
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
-        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences preferences = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE);
         anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
         sendButton.setEnabled(false);
@@ -159,8 +160,10 @@ public class ReplyFragment extends SuperChatPostsFragment {
             Collections.sort(messages, (o1, o2) -> {
                 if (o1.getTime().before(o2.getTime()))
                     return -1;
-                else
+                else if (o1.getTime().after(o2.getTime()))
                     return 1;
+                else
+                    return 0;
             });
             adapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);

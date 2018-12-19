@@ -37,7 +37,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
 
     private final OnFragmentInteractionListener mListener;
 
-    private AuthenticatedUser user;
+    private final AuthenticatedUser user;
 
     /**
      * Basic constructor of an EventArrayAdapter

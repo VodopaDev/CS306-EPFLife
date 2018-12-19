@@ -10,10 +10,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import java.util.Objects;
+
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser;
 import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUserAndData;
 import ch.epfl.sweng.zuluzulu.structure.Association;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
@@ -114,7 +115,7 @@ public class AssociationDetailFragment extends FragmentWithUserAndData<User, Ass
 
                 DatabaseFactory.getDependency().updateUser(auth);
             } else {
-                Snackbar.make(getView(), "Connecte-toi pour accéder à tes associations favorites", 5000).show();
+                Snackbar.make(Objects.requireNonNull(getView()), "Connecte-toi pour accéder à tes associations favorites", 5000).show();
             }
         });
     }
@@ -145,7 +146,7 @@ public class AssociationDetailFragment extends FragmentWithUserAndData<User, Ass
                 if (user.isConnected())
                     mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, channel);
                 else
-                    Snackbar.make(getView(), "Connecte-toi pour accéder au chat de l'association", 5000).show();
+                    Snackbar.make(Objects.requireNonNull(getView()), "Connecte-toi pour accéder au chat de l'association", 5000).show();
             }
         });
     }
@@ -154,9 +155,7 @@ public class AssociationDetailFragment extends FragmentWithUserAndData<User, Ass
      * Set up the events button to redirect to the list of related events
      */
     private void setUpEventsButton() {
-        eventsButton.setOnClickListener(v -> {
-            mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_FRAGMENT, user);
-        });
+        eventsButton.setOnClickListener(v -> mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_FRAGMENT, user));
     }
 
 }

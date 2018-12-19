@@ -12,7 +12,6 @@ import java.util.Map;
 import ch.epfl.sweng.zuluzulu.firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.utility.GeopointUtility;
-import ch.epfl.sweng.zuluzulu.utility.Utils;
 
 /**
  * Class that represents a channel in a view

@@ -16,6 +16,7 @@ import com.google.firebase.Timestamp;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.adapters.ChatMessageArrayAdapter;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
@@ -72,7 +73,7 @@ public class ChatFragment extends SuperChatPostsFragment {
         adapter = new ChatMessageArrayAdapter(view.getContext(), messages, user);
         listView.setAdapter(adapter);
 
-        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences preferences = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE);
         anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
         loadInitialMessages();

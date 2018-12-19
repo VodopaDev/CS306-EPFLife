@@ -39,7 +39,7 @@ public class LoginFragment extends SuperFragment {
     private View mProgressView;
 
     private String redirectURICode;
-    private OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
+    private final OAuth2Config config = new OAuth2Config(new String[]{"Tequila.profile"}, "b7b4aa5bfef2562c2a3c3ea6@epfl.ch", "15611c6de307cd5035a814a2c209c115", "epflife://login");
     private User user;
     private WebView webview;
     private String codeRequestUrl;

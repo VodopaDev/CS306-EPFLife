@@ -10,8 +10,6 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.Collections;
-
 import static android.content.Context.LOCATION_SERVICE;
 
 /**
@@ -24,7 +22,7 @@ public final class GPS {
     private static final long MIN_TIME_FOR_UPDATES = 3000; // 3 sec
     private static final int TWO_MINUTES = 1000 * 60 * 2; // 2 min
     private static Location location;
-    private static LocationListener locationListener = new LocationListener() {
+    private static final LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location newLocation) {
             if (newLocation != null && isBetterLocation(newLocation, location)) {

@@ -17,10 +17,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser;
 import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUserAndData;
 import ch.epfl.sweng.zuluzulu.structure.Association;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
@@ -157,7 +158,7 @@ public class EventDetailFragment extends FragmentWithUserAndData<User, Event> {
                     DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(data, auth);
                     DatabaseFactory.getDependency().removeChannelFromUserFollowedChannels(channel, auth);
                     event_like_button.setSelected(false);
-                    Toast.makeText(getActivity(), getContext().getString(R.string.event_unfollowed), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), Objects.requireNonNull(getContext()).getString(R.string.event_unfollowed), Toast.LENGTH_SHORT).show();
                 } else {
                     auth.addFollowedEvent(data.getId());
                     auth.addFollowedChannel(data.getChannelId());
@@ -165,7 +166,7 @@ public class EventDetailFragment extends FragmentWithUserAndData<User, Event> {
                     DatabaseFactory.getDependency().addEventToUserFollowedEvents(data, auth);
                     DatabaseFactory.getDependency().addChannelToUserFollowedChannels(channel, auth);
                     event_like_button.setSelected(true);
-                    Toast.makeText(getActivity(), getContext().getString(R.string.event_followed), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), Objects.requireNonNull(getContext()).getString(R.string.event_followed), Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Utils.showConnectSnackbar(getView());

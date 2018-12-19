@@ -119,7 +119,7 @@ public class EventFragmentAuthTest extends TestWithAuthenticatedAndFragment<Even
     }
 
     @Test
-    public void datepickerOutOfBandDateSanitazition() {
+    public void datelineOutOfBandDateSanitation() {
         onView(withId(R.id.event_fragment_from_date)).perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(1990, 1, 1));
         onView(withText("OK")).perform(click());

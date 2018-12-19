@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.Objects;
 import java.util.concurrent.Executor;
 
 class TaskMock<T> extends Task<T> {
@@ -65,7 +66,7 @@ class TaskMock<T> extends Task<T> {
     @NonNull
     @Override
     public com.google.android.gms.tasks.Task<T> addOnFailureListener(@NonNull OnFailureListener onFailureListener) {
-        onFailureListener.onFailure(this.getException());
+        onFailureListener.onFailure(Objects.requireNonNull(this.getException()));
         return this;
     }
 

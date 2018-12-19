@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.adapters.EventArrayAdapter;
@@ -87,7 +88,7 @@ public class MainFragment extends FragmentWithUser<User> {
 
         View view;
         if (user.isConnected()) {
-            boolean hadPermissions = GPS.start(getContext());
+            boolean hadPermissions = GPS.start(Objects.requireNonNull(getContext()));
             if (!hadPermissions) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS.MY_PERMISSIONS_REQUEST_LOCATION);
             }
@@ -118,10 +119,10 @@ public class MainFragment extends FragmentWithUser<User> {
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
         if (user.isConnected()) {
-            fillConnectedUserAssociationsList(getView());
+            fillConnectedUserAssociationsList(Objects.requireNonNull(getView()));
             fillConnectedUserEventsList(getView());
         } else {
-            fillUpcomingEventLists(getView());
+            fillUpcomingEventLists(Objects.requireNonNull(getView()));
             fillRandomAssociationLists(getView());
         }
     }

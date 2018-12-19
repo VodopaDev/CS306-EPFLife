@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.adapters.PostArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
@@ -77,7 +78,7 @@ public class PostFragment extends SuperChatPostsFragment {
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
 
-        anonymous = getActivity().getPreferences(Context.MODE_PRIVATE).getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
+        anonymous = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE).getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
         currentComparator = (Comparator<Post>) Post.decreasingTimeComparator();
 
         loadAllPosts();
