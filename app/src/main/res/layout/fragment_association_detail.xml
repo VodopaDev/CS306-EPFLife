@@ -71,6 +71,7 @@
         app:layout_constraintTop_toBottomOf="@+id/frameLayout">
 
         <TextView
+            android:id="@+id/association_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
