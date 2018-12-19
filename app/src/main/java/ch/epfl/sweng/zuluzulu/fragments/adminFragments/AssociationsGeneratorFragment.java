@@ -88,14 +88,14 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                 index++;
 
                 Association association = new Association(
-                        DatabaseFactory.getDependency().getNewAssociationId(), //id
+                        Integer.toString(data.split(",")[1].hashCode()), //id
                         data.split(",")[1], // name
                         data.split(",")[2], // short description
                         data.split(",")[2], // long description
                         EPFL_LOGO, // icon uri
                         EPFL_LOGO, // banner_icon
                         new ArrayList<>(), // events
-                        DatabaseFactory.getDependency().getNewChannelId() // channel id
+                        Integer.toString(data.split(",")[1].hashCode()) // channel id
                 );
                 associations.add(association);
             }
