@@ -10,9 +10,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import java.util.Objects;
+
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUserAndData;
 import ch.epfl.sweng.zuluzulu.structure.Association;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
 import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
@@ -21,22 +24,15 @@ import ch.epfl.sweng.zuluzulu.utility.ImageLoader;
 
 import static ch.epfl.sweng.zuluzulu.utility.ImageLoader.loadUriIntoImageView;
 
-public class AssociationDetailFragment extends SuperFragment {
-
+public class AssociationDetailFragment extends FragmentWithUserAndData<User, Association> {
     public static final String TAG = "ASSOCIATION_DETAIL__TAG";
-    private static final String ARG_USER = "ARG_USER";
-    private static final String ARG_ASSO = "ARG_ASSO";
-    private static final String FAV_CONTENT = "Cette associaton est dans tes favoris";
+    private static final String FAV_CONTENT = "Cette association est dans tes favoris";
     private static final String NOT_FAV_CONTENT = "Cette association n'est pas dans tes favoris";
 
     private ImageButton asso_fav;
     private Button eventsButton;
     private Button chatButton;
-
     private Channel channel;
-
-    private Association asso;
-    private User user;
 
     /**
      * Initialize a new AssociationDetailFragment
@@ -56,7 +52,7 @@ public class AssociationDetailFragment extends SuperFragment {
         AssociationDetailFragment fragment = new AssociationDetailFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);
-        args.putSerializable(ARG_ASSO, asso);
+        args.putSerializable(ARG_DATA, asso);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,9 +61,7 @@ public class AssociationDetailFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (User) getArguments().getSerializable(ARG_USER);
-            asso = (Association) getArguments().getSerializable(ARG_ASSO);
-            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, asso.getName());
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, data.getName());
         }
     }
 
@@ -81,11 +75,11 @@ public class AssociationDetailFragment extends SuperFragment {
 
         // Association icon
         ImageView asso_icon = view.findViewById(R.id.association_detail_icon);
-        loadUriIntoImageView(asso_icon, asso.getIconUri(), getContext());
+        loadUriIntoImageView(asso_icon, data.getIconUri(), getContext());
 
         // Association banner
         ImageView asso_banner = view.findViewById(R.id.association_detail_banner);
-        loadUriIntoImageView(asso_banner, asso.getBannerUri(), getContext());
+        loadUriIntoImageView(asso_banner, data.getBannerUri(), getContext());
 
         eventsButton = view.findViewById(R.id.association_detail_events_button);
         chatButton = view.findViewById(R.id.association_detail_chat_button);
@@ -101,7 +95,7 @@ public class AssociationDetailFragment extends SuperFragment {
      * Set up the favorite button's behaviour
      */
     private void setFavButtonBehaviour() {
-        if (user.isConnected() && ((AuthenticatedUser) user).isFollowedAssociation(asso.getId()))
+        if (user.isConnected() && ((AuthenticatedUser) user).isFollowedAssociation(data.getId()))
             ImageLoader.loadDrawableIntoImageView(asso_fav, R.drawable.fav_on, getContext());
         else
             ImageLoader.loadDrawableIntoImageView(asso_fav, R.drawable.fav_off, getContext());
@@ -109,19 +103,19 @@ public class AssociationDetailFragment extends SuperFragment {
         asso_fav.setOnClickListener(v -> {
             if (user.isConnected()) {
                 AuthenticatedUser auth = (AuthenticatedUser) user;
-                if (auth.isFollowedAssociation(asso.getId())) {
-                    auth.removeFavAssociation(asso.getId());
+                if (auth.isFollowedAssociation(data.getId())) {
+                    auth.removeFavAssociation(data.getId());
                     ImageLoader.loadDrawableIntoImageView(asso_fav, R.drawable.fav_off, getContext());
                     asso_fav.setContentDescription(NOT_FAV_CONTENT);
                 } else {
-                    auth.addFollowedAssociation(asso.getId());
+                    auth.addFollowedAssociation(data.getId());
                     ImageLoader.loadDrawableIntoImageView(asso_fav, R.drawable.fav_on, getContext());
                     asso_fav.setContentDescription(FAV_CONTENT);
                 }
 
                 DatabaseFactory.getDependency().updateUser(auth);
             } else {
-                Snackbar.make(getView(), "Connecte-toi pour accéder à tes associations favorites", 5000).show();
+                Snackbar.make(Objects.requireNonNull(getView()), "Connecte-toi pour accéder à tes associations favorites", 5000).show();
             }
         });
     }
@@ -130,10 +124,10 @@ public class AssociationDetailFragment extends SuperFragment {
      * Fetch the appropriate chat channel from the database
      */
     private void loadChat() {
-        if (asso.getChannelId() == null) {
+        if (data.getChannelId() == null) {
             chatButton.setEnabled(false);
         } else {
-            DatabaseFactory.getDependency().getChannelFromId(asso.getChannelId(), result -> {
+            DatabaseFactory.getDependency().getChannelFromId(data.getChannelId(), result -> {
                 if (result != null) {
                     channel = result;
                 } else {
@@ -152,7 +146,7 @@ public class AssociationDetailFragment extends SuperFragment {
                 if (user.isConnected())
                     mListener.onFragmentInteraction(CommunicationTag.OPEN_CHAT_FRAGMENT, channel);
                 else
-                    Snackbar.make(getView(), "Connecte-toi pour accéder au chat de l'association", 5000).show();
+                    Snackbar.make(Objects.requireNonNull(getView()), "Connecte-toi pour accéder au chat de l'association", 5000).show();
             }
         });
     }
@@ -161,10 +155,7 @@ public class AssociationDetailFragment extends SuperFragment {
      * Set up the events button to redirect to the list of related events
      */
     private void setUpEventsButton() {
-        eventsButton.setOnClickListener(v -> {
-            // Todo Redirect to the list of events related to the association
-            mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_FRAGMENT, user);
-        });
+        eventsButton.setOnClickListener(v -> mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_FRAGMENT, user));
     }
 
 }

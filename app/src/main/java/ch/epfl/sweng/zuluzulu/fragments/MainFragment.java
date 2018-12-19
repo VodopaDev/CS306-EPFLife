@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.adapters.EventArrayAdapter;
@@ -21,6 +22,7 @@ import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser;
 import ch.epfl.sweng.zuluzulu.structure.Association;
 import ch.epfl.sweng.zuluzulu.structure.Event;
 import ch.epfl.sweng.zuluzulu.structure.GPS;
@@ -37,12 +39,9 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_LOGIN_FRAGMENT;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends SuperFragment {
+public class MainFragment extends FragmentWithUser<User> {
     public static final String TAG = "MAIN_TAG";
-    private static final String ARG_USER = "ARG_USER";
 
-    private Button sign_in_button;
-    private User user;
     private ArrayList<Association> associations_array;
     private ArrayList<Event> events_array;
     private AssociationArrayAdapter associations_adapter;
@@ -58,12 +57,12 @@ public class MainFragment extends SuperFragment {
      *
      * @return A new instance of fragment MainFragment.
      */
-    public static MainFragment newInstance(User u) {
-        if(u == null)
+    public static MainFragment newInstance(User user) {
+        if(user == null)
             throw new IllegalArgumentException("user can't be null");
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_USER, u);
+        args.putSerializable(ARG_USER, user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,7 +72,6 @@ public class MainFragment extends SuperFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Home");
-            user = (User) getArguments().getSerializable(ARG_USER);
         }
 
         associations_array = new ArrayList<>();
@@ -90,7 +88,7 @@ public class MainFragment extends SuperFragment {
 
         View view;
         if (user.isConnected()) {
-            boolean hadPermissions = GPS.start(getContext());
+            boolean hadPermissions = GPS.start(Objects.requireNonNull(getContext()));
             if (!hadPermissions) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, GPS.MY_PERMISSIONS_REQUEST_LOCATION);
             }
@@ -121,10 +119,10 @@ public class MainFragment extends SuperFragment {
     private void refresh() {
         swipeRefreshLayout.setRefreshing(true);
         if (user.isConnected()) {
-            fillConnectedUserAssociationsList(getView());
+            fillConnectedUserAssociationsList(Objects.requireNonNull(getView()));
             fillConnectedUserEventsList(getView());
         } else {
-            fillUpcomingEventLists(getView());
+            fillUpcomingEventLists(Objects.requireNonNull(getView()));
             fillRandomAssociationLists(getView());
         }
     }
@@ -246,7 +244,7 @@ public class MainFragment extends SuperFragment {
         ListView listview_assos = view.findViewById(R.id.main_page_random_assos);
         listview_assos.setAdapter(associations_adapter);
 
-        sign_in_button = view.findViewById(R.id.main_page_button_sign_in);
+        Button sign_in_button = view.findViewById(R.id.main_page_button_sign_in);
 
         sign_in_button.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_LOGIN_FRAGMENT, user));
 

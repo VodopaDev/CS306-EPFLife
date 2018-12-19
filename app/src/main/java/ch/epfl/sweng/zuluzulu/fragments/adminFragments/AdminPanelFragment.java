@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
-import ch.epfl.sweng.zuluzulu.fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.R;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_CREATE_EVENT;

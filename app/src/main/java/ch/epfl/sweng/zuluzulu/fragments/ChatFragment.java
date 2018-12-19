@@ -16,10 +16,12 @@ import com.google.firebase.Timestamp;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.adapters.ChatMessageArrayAdapter;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.SuperChatPostsFragment;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
 import ch.epfl.sweng.zuluzulu.structure.ChatMessage;
 import ch.epfl.sweng.zuluzulu.structure.SuperMessage;
@@ -48,7 +50,7 @@ public class ChatFragment extends SuperChatPostsFragment {
             throw new IllegalArgumentException("user can't be null");
         if(channel == null)
             throw new IllegalArgumentException("channel can't be null");
-        return (ChatFragment) newInstanceOf("chat", user, channel);
+        return (ChatFragment)newInstanceOf("chat", user, channel);
     }
 
     @Override
@@ -71,7 +73,7 @@ public class ChatFragment extends SuperChatPostsFragment {
         adapter = new ChatMessageArrayAdapter(view.getContext(), messages, user);
         listView.setAdapter(adapter);
 
-        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences preferences = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE);
         anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
         loadInitialMessages();
@@ -90,8 +92,8 @@ public class ChatFragment extends SuperChatPostsFragment {
     private void setUpSendButton() {
         sendButton.setOnClickListener(v -> {
             ChatMessage chatMessage = new ChatMessage(
-                    DatabaseFactory.getDependency().getNewMessageId(channel.getId()),
-                    channel.getId(),
+                    DatabaseFactory.getDependency().getNewMessageId(data.getId()),
+                    data.getId(),
                     textEdit.getText().toString().trim().replaceAll("([\\n\\r]+\\s*)*$", ""),
                     Timestamp.now().toDate(),
                     anonymous ? "" : user.getFirstNames(),
@@ -105,7 +107,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Add an onClick listener on the button to switch to the posts fragment
      */
     private void setUpPostsButton() {
-        postsButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_POST_FRAGMENT, channel));
+        postsButton.setOnClickListener(v -> mListener.onFragmentInteraction(OPEN_POST_FRAGMENT, data));
     }
 
     /**
@@ -133,7 +135,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Refresh the chat by reading all the messages in the database
      */
     private void loadInitialMessages() {
-        DatabaseFactory.getDependency().getMessagesFromChannel(channel.getId(), result -> {
+        DatabaseFactory.getDependency().getMessagesFromChannel(data.getId(), result -> {
             messages.clear();
             messages.addAll(result);
             sortMessages();
@@ -144,7 +146,7 @@ public class ChatFragment extends SuperChatPostsFragment {
      * Set up the listener on database changes to update the list of messages
      */
     private void setUpDataOnChangeListener() {
-        DatabaseFactory.getDependency().updateOnNewMessagesFromChannel(channel.getId(), result -> {
+        DatabaseFactory.getDependency().updateOnNewMessagesFromChannel(data.getId(), result -> {
             messages.clear();
             messages.addAll(result);
             sortMessages();

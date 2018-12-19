@@ -13,7 +13,7 @@ public enum PostColor {
     ORANGE("#FFB900"),
     YELLOW("#FFB902");
 
-    private String value;
+    private final String value;
 
     PostColor(String value) {
         this.value = value;

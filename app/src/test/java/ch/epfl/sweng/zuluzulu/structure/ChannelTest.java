@@ -40,14 +40,14 @@ public class ChannelTest {
     private static final Map<String, Object> restrictions3 = new HashMap<>();
 
 
-    GeoPoint SATPoint = new GeoPoint(46.520562, 6.567852);
-    GeoPoint nullPoint = new GeoPoint(0, 0);
+    final GeoPoint SATPoint = new GeoPoint(46.520562, 6.567852);
+    final GeoPoint nullPoint = new GeoPoint(0, 0);
 
     private Channel channelGlobal;
     private Channel channelIN;
     private Channel channelSAT;
 
-    private String section1 = "IN";
+    private final String section1 = "IN";
 
     @Before
     public void init() {

@@ -10,6 +10,7 @@ import ch.epfl.sweng.zuluzulu.database.MockedProxy;
 
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.SuperChatPostsFragment;
 import ch.epfl.sweng.zuluzulu.structure.Post;
 import ch.epfl.sweng.zuluzulu.testingUtility.TestWithAuthenticatedAndFragment;
 import ch.epfl.sweng.zuluzulu.Utility;

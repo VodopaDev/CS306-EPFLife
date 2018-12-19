@@ -20,10 +20,13 @@ import android.widget.EditText;
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUserAndData;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
 import ch.epfl.sweng.zuluzulu.structure.Post;
 import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
@@ -36,17 +39,12 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_POST_FRAGMENT;
  * A {@link SuperFragment} subclass.
  * This fragment is used to write new posts
  */
-public class WritePostFragment extends SuperFragment {
-    private static final String ARG_USER = "ARG_USER";
-    private static final String ARG_CHANNEL = "ARG_CHANNEL";
+public class WritePostFragment extends FragmentWithUserAndData<AuthenticatedUser, Channel> {
     private static final int POST_MAX_LENGTH = 200;
 
     private ConstraintLayout layout;
     private EditText editText;
     private Button sendButton;
-
-    private AuthenticatedUser user;
-    private Channel channel;
     private PostColor color;
     private boolean anonymous;
 
@@ -62,7 +60,7 @@ public class WritePostFragment extends SuperFragment {
         WritePostFragment fragment = new WritePostFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);
-        args.putSerializable(ARG_CHANNEL, channel);
+        args.putSerializable(ARG_DATA, channel);
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,9 +69,7 @@ public class WritePostFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
-            channel = (Channel) getArguments().getSerializable(ARG_CHANNEL);
-            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, channel.getName());
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, data.getName());
         }
     }
 
@@ -82,7 +78,7 @@ public class WritePostFragment extends SuperFragment {
         View view = inflater.inflate(R.layout.fragment_write_post, container, false);
 
         color = PostColor.getRandomColor();
-        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences preferences = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE);
         anonymous = preferences.getBoolean(SettingsFragment.PREF_KEY_ANONYM, false);
 
         layout = view.findViewById(R.id.write_post_layout);
@@ -105,8 +101,8 @@ public class WritePostFragment extends SuperFragment {
     private void setUpSendButton() {
         sendButton.setOnClickListener(v -> {
             Post post = new Post(
-                    DatabaseFactory.getDependency().getNewPostId(channel.getId()),
-                    channel.getId(),
+                    DatabaseFactory.getDependency().getNewPostId(data.getId()),
+                    data.getId(),
                     null,
                     editText.getText().toString().trim().replaceAll("([\\n\\r]+\\s*)*$", ""),
                     anonymous ? "" : user.getFirstNames(),
@@ -118,7 +114,7 @@ public class WritePostFragment extends SuperFragment {
                     new ArrayList<>()
             );
             DatabaseFactory.getDependency().addPost(post);
-            mListener.onFragmentInteraction(OPEN_POST_FRAGMENT, channel);
+            mListener.onFragmentInteraction(OPEN_POST_FRAGMENT, data);
         });
     }
 

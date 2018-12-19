@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 
-import ch.epfl.sweng.zuluzulu.fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.idlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.MainActivity;
 import ch.epfl.sweng.zuluzulu.structure.user.User;

@@ -29,7 +29,7 @@ public class UserDatabase {
      * @param user user
      * @return -1 id error, otherwise the row
      */
-    public long put(AuthenticatedUser user) {
+    public void put(AuthenticatedUser user) {
         // Gets the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
@@ -44,7 +44,7 @@ public class UserDatabase {
 
         // Insert the new row, returning the primary key value of the new row
 
-        return db.insert(UserDatabaseContract.FeedEntry.TABLE_NAME, null, values);
+        db.insert(UserDatabaseContract.FeedEntry.TABLE_NAME, null, values);
     }
 
     /**

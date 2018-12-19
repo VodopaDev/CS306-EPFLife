@@ -1,41 +1,35 @@
-package ch.epfl.sweng.zuluzulu.fragments;
+package ch.epfl.sweng.zuluzulu.fragments.superFragments;
 
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
+import ch.epfl.sweng.zuluzulu.fragments.ChatFragment;
+import ch.epfl.sweng.zuluzulu.fragments.PostFragment;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
 import ch.epfl.sweng.zuluzulu.structure.SuperMessage;
-import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.structure.user.User;
+
+import static ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser.ARG_USER;
 
 /**
  * A simple {@link SuperFragment} subclass.
  */
-public abstract class SuperChatPostsFragment extends SuperFragment {
-
+public abstract class SuperChatPostsFragment extends FragmentWithUserAndData<User, Channel> {
     public static final String VISIT_PROFILE_STRING = "Visiter le profile de ";
-    static final String ARG_USER = "ARG_USER";
-    protected static final String ARG_CHANNEL = "ARG_CHANNEL";
-    protected static final String ARG_POST = "ARG_POST";
-    protected List<SuperMessage> messages = new ArrayList<>();
+    protected final List<SuperMessage> messages = new ArrayList<>();
 
     protected ListView listView;
     protected Button chatButton;
     protected Button postsButton;
-
-    protected AuthenticatedUser user;
-    protected Channel channel;
 
     protected boolean anonymous;
 
@@ -59,7 +53,7 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
         }
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);
-        args.putSerializable(ARG_CHANNEL, channel);
+        args.putSerializable(ARG_DATA, channel);
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,9 +62,7 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
-            channel = (Channel) getArguments().getSerializable(ARG_CHANNEL);
-            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, channel.getName());
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, data.getName());
         }
     }
 
@@ -81,7 +73,7 @@ public abstract class SuperChatPostsFragment extends SuperFragment {
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
             SuperMessage message = messages.get(position);
             if (!message.isAnonymous() && !message.isOwnMessage(user.getSciper())) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
 
                 AlertDialog dlg = builder.setTitle(VISIT_PROFILE_STRING + message.getSenderName() + " ?")
                         .setPositiveButton("Oui", (dialog, which) -> DatabaseFactory.getDependency().getUserWithIdOrCreateIt(message.getSenderSciper(), result -> {

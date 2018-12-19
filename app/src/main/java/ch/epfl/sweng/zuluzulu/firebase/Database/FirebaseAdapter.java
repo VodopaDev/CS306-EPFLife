@@ -3,7 +3,7 @@ package ch.epfl.sweng.zuluzulu.firebase.Database;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FirebaseAdapter implements Database {
-    private FirebaseFirestore firebase;
+    private final FirebaseFirestore firebase;
 
     public FirebaseAdapter() {
         firebase = FirebaseFirestore.getInstance();

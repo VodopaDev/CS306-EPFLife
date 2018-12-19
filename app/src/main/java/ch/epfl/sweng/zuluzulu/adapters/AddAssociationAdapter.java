@@ -73,10 +73,10 @@ public class AddAssociationAdapter extends RecyclerView.Adapter<AddAssociationAd
     // you provide access to all the views for a data item in a view holder
     public static class AddAssociationViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        ImageView icon;
-        TextView name;
-        TextView short_desc;
-        ImageButton add_button;
+        final ImageView icon;
+        final TextView name;
+        final TextView short_desc;
+        final ImageButton add_button;
 
         public AddAssociationViewHolder(View view) {
             super(view);

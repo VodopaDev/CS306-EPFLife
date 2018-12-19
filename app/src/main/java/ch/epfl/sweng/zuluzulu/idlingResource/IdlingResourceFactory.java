@@ -6,7 +6,7 @@ public class IdlingResourceFactory {
     // This resource is used for tests
     // That's the recommended way to implement it
     // @see https://developer.android.com/training/testing/espresso/idling-resource#integrate-recommended-approach
-    private static CountingIdlingResource resource = new CountingIdlingResource("Idling resource");
+    private static final CountingIdlingResource resource = new CountingIdlingResource("Idling resource");
 
     /**
      * Increment the countingIdlingResource

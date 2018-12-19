@@ -15,19 +15,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.adapters.AddAssociationAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
-import ch.epfl.sweng.zuluzulu.firebase.Proxy;
-import ch.epfl.sweng.zuluzulu.fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.idlingResource.IdlingResourceFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
 import ch.epfl.sweng.zuluzulu.structure.Association;
 import ch.epfl.sweng.zuluzulu.urlTools.AssociationsParser;
 import ch.epfl.sweng.zuluzulu.urlTools.IconParser;
-import ch.epfl.sweng.zuluzulu.urlTools.OnClickRecyclerView;
 import ch.epfl.sweng.zuluzulu.urlTools.UrlHandler;
 import ch.epfl.sweng.zuluzulu.structure.user.User;
 import ch.epfl.sweng.zuluzulu.structure.user.UserRole;
@@ -48,7 +47,6 @@ public class AssociationsGeneratorFragment extends SuperFragment {
     private static final String EPFL_LOGO = Uri.parse("android.resource://ch.epfl.sweng.zuluzulu/" + R.drawable.default_icon).toString();
 
     private List<String> datas;
-    private Proxy db = DatabaseFactory.getDependency();
     private List<Association> associations;
     private AddAssociationAdapter adapter;
 
@@ -166,7 +164,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
         this.adapter = new AddAssociationAdapter(this.getContext(), this.associations, i -> {
             if (checkBound(i)) {
                 DatabaseFactory.getDependency().addAssociation(associations.get(i));
-                Snackbar.make(getView(), associations.get(i).getName() + " added", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(Objects.requireNonNull(getView()), associations.get(i).getName() + " added", Snackbar.LENGTH_SHORT).show();
             }
         });
 

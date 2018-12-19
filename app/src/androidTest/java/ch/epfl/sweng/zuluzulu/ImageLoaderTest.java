@@ -4,10 +4,13 @@ import android.net.Uri;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.epfl.sweng.zuluzulu.database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.utility.ImageLoader;
 
 @RunWith(AndroidJUnit4.class)
@@ -15,6 +18,11 @@ public class ImageLoaderTest {
 
     @Rule
     public final ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
+
+    @Before
+    public void init(){
+        DatabaseFactory.setDependency(new MockedProxy());
+    }
 
     @Test(expected = IllegalArgumentException.class)
     public void nullContextThrowsExceptionForUri(){

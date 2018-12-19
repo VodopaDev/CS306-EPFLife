@@ -48,16 +48,16 @@ public class AuthenticatedUser extends User {
         return followedAssociations.contains(associationId);
     }
 
-    public boolean addFollowedAssociation(String associationId) {
+    public void addFollowedAssociation(String associationId) {
         if (associationId == null || associationId.isEmpty())
-            return false;
-        return followedAssociations.add(associationId);
+            return;
+        followedAssociations.add(associationId);
     }
 
-    public boolean removeFavAssociation(String associationId) {
+    public void removeFavAssociation(String associationId) {
         if (associationId == null || associationId.isEmpty())
-            return false;
-        return followedAssociations.remove(associationId);
+            return;
+        followedAssociations.remove(associationId);
     }
 
     public void setFollowedAssociation(List<String> associationsIds) {
@@ -77,16 +77,16 @@ public class AuthenticatedUser extends User {
         return followedEvents.contains(eventId);
     }
 
-    public boolean addFollowedEvent(String eventId) {
+    public void addFollowedEvent(String eventId) {
         if (eventId == null || eventId.isEmpty())
-            return false;
-        return followedEvents.add(eventId);
+            return;
+        followedEvents.add(eventId);
     }
 
-    public boolean removeFollowedEvent(String eventId) {
+    public void removeFollowedEvent(String eventId) {
         if (eventId == null || eventId.isEmpty())
-            return false;
-        return followedEvents.remove(eventId);
+            return;
+        followedEvents.remove(eventId);
     }
 
     public List<String> getFollowedEvents() {
@@ -106,16 +106,16 @@ public class AuthenticatedUser extends User {
         return followedChannels.contains(channelId);
     }
 
-    public boolean addFollowedChannel(String channelId) {
+    public void addFollowedChannel(String channelId) {
         if (channelId == null || channelId.isEmpty())
-            return false;
-        return followedChannels.add(channelId);
+            return;
+        followedChannels.add(channelId);
     }
 
-    public boolean removeFollowedChannel(String channelId) {
+    public void removeFollowedChannel(String channelId) {
         if (channelId == null || channelId.isEmpty())
-            return false;
-        return followedChannels.remove(channelId);
+            return;
+        followedChannels.remove(channelId);
     }
 
     public List<String> getFollowedChannels() {

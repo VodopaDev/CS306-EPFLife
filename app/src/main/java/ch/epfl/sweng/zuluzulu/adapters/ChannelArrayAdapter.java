@@ -19,8 +19,8 @@ import ch.epfl.sweng.zuluzulu.utility.ImageLoader;
 
 public class ChannelArrayAdapter extends ArrayAdapter<Channel> {
 
-    private Context mContext;
-    private List<Channel> channels;
+    private final Context mContext;
+    private final List<Channel> channels;
 
     public ChannelArrayAdapter(@NonNull Context context, List<Channel> list) {
         super(context, 0, list);

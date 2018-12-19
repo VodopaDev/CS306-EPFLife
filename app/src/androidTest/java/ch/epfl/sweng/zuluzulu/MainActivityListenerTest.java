@@ -68,7 +68,7 @@ public class MainActivityListenerTest extends TestWithAdminAndFragment<MainFragm
             getMainActivity().onFragmentInteraction(OPEN_POST_FRAGMENT, Utility.defaultChannel());
             assertTrue(getMainActivity().getCurrentFragment() instanceof PostFragment);
 
-            getMainActivity().onFragmentInteraction(OPEN_CHANNEL_FRAGMENT, user);
+            getMainActivity().onFragmentInteraction(OPEN_CHANNEL_FRAGMENT, null);
             assertTrue(getMainActivity().getCurrentFragment() instanceof ChannelFragment);
 
             getMainActivity().onFragmentInteraction(OPEN_EVENT_FRAGMENT, user);
