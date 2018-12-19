@@ -139,43 +139,32 @@ public class MementoFragment extends FragmentWithUser<Admin> {
     private Event createEvent(JSONObject jsonobject) throws JSONException, IllegalArgumentException, ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-
         Date start_date;
-        if("null".equals(jsonobject.getString("event_start_time"))){
+        if("null".equals(jsonobject.getString("event_start_time")))
             start_date = simpleDateFormat.parse(jsonobject.getString("event_start_date") + " " + "00:00:00");
-        } else {
+         else
             start_date = simpleDateFormat.parse(jsonobject.getString("event_start_date") + " " + jsonobject.getString("event_start_time"));
-        }
 
         Date end_date;
-        if("null".equals(jsonobject.getString("event_end_time"))){
-            end_date = simpleDateFormat.parse(jsonobject.getString("event_end_date") + " " + "00:00:00");
-        } else {
-            end_date = simpleDateFormat.parse(jsonobject.getString("event_end_date") + " " + jsonobject.getString("event_end_time"));
-        }
+        String end_date_string = jsonobject.getString("event_end_date");
+
+        if((jsonobject.getString("event_end_time").equals("null")))
+            end_date = simpleDateFormat.parse(end_date_string + " " + "00:00:00");
+         else
+            end_date = simpleDateFormat.parse(end_date_string + " " + jsonobject.getString("event_end_time"));
 
         return new EventBuilder()
                 // Use this to avoid collision
                 .setId(Integer.toString(jsonobject.getString("title").hashCode()))
-                .setDate(new EventDate(
-                        start_date,
-                        end_date))
-                .setUrlPlaceAndRoom(jsonobject.getString("event_url_place_and_room"))
-                .setAssosId("0")
-                .setChannelId(DatabaseFactory.getDependency().getNewChannelId())
-                .setFollowers(new ArrayList<>())
-                .setShortDesc(jsonobject.getString("description"))
-                .setName(jsonobject.getString("title"))
-                .setLongDesc(jsonobject.getString("description"))
-                .setOrganizer(jsonobject.getString("event_organizer"))
-                .setPlace(jsonobject.getString("event_place_and_room"))
-                .setBannerUri(null)
-                .setIconUri(jsonobject.getString("event_visual_absolute_url"))
-                .setWebsite(jsonobject.getString("event_url_link"))
-                .setContact(jsonobject.getString("event_contact"))
-                .setCategory(jsonobject.getString("event_category_fr"))
-                .setSpeaker(jsonobject.getString("event_speaker"))
-                .build();
+                .setDate(new EventDate(start_date, end_date))
+                .setUrlPlaceAndRoom(jsonobject.getString("event_url_place_and_room")).setAssosId("0")
+                .setChannelId(DatabaseFactory.getDependency().getNewChannelId()).setFollowers(new ArrayList<>())
+                .setShortDesc(jsonobject.getString("description")).setName(jsonobject.getString("title"))
+                .setLongDesc(jsonobject.getString("description")).setOrganizer(jsonobject.getString("event_organizer"))
+                .setPlace(jsonobject.getString("event_place_and_room")).setBannerUri(null)
+                .setIconUri(jsonobject.getString("event_visual_absolute_url")).setWebsite(jsonobject.getString("event_url_link"))
+                .setContact(jsonobject.getString("event_contact")).setCategory(jsonobject.getString("event_category_fr"))
+                .setSpeaker(jsonobject.getString("event_speaker")).build();
     }
 
     @Override
