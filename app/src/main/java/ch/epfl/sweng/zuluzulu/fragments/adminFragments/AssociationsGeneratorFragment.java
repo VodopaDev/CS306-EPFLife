@@ -95,7 +95,7 @@ public class AssociationsGeneratorFragment extends SuperFragment {
                         EPFL_LOGO, // icon uri
                         EPFL_LOGO, // banner_icon
                         new ArrayList<>(), // events
-                        DatabaseFactory.getDependency().getNewChannelId() // channel id
+                        Integer.toString(data.split(",")[1].hashCode()) // channel id
                 );
                 associations.add(association);
             }

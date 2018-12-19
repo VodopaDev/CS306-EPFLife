@@ -158,7 +158,7 @@ public class MementoFragment extends FragmentWithUser<Admin> {
                 .setId(Integer.toString(jsonobject.getString("title").hashCode()))
                 .setDate(new EventDate(start_date, end_date))
                 .setUrlPlaceAndRoom(jsonobject.getString("event_url_place_and_room")).setAssosId("0")
-                .setChannelId(DatabaseFactory.getDependency().getNewChannelId()).setFollowers(new ArrayList<>())
+                .setChannelId(Integer.toString(jsonobject.getString("title").hashCode())).setFollowers(new ArrayList<>())
                 .setShortDesc(jsonobject.getString("description")).setName(jsonobject.getString("title"))
                 .setLongDesc(jsonobject.getString("description")).setOrganizer(jsonobject.getString("event_organizer"))
                 .setPlace(jsonobject.getString("event_place_and_room")).setBannerUri(null)
