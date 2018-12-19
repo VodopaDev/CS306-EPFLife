@@ -61,7 +61,7 @@
     <!-- Main fragment related -->
 
     <!-- ABOUT ZUZULULU fragment -->
-    <string name="send_mail_button">Nous envoyer un émail !</string>
+    <string name="send_mail_button">Nous envoyer un e-mail !</string>
     <string name="profile_unit">Section</string>
     <string name="posts">Posts</string>
     <string name="chat">Chat</string>
@@ -69,7 +69,7 @@
     <string name="anonymity">Annonymat</string>
     <string name="event_detail_like">Nombre de followers :</string>
     <string name="event_detail_tv_desc">Description :</string>
-    <string name="event_detail_tv_date">Date:</string>
+    <string name="event_detail_tv_date">Date :</string>
     <string name="event_detail_tv_organizer">Organisateur :</string>
     <string name="event_detail_tv_place">Lieux :</string>
 
@@ -83,7 +83,7 @@
     <string name="event_detail_tv_plan">Plan :</string>
 
     <string name="drawer_admin_panel">Accès administrateur</string>
-    <string name="user_role_searchbar_hint">User sciper</string>
+    <string name="user_role_searchbar_hint">Sciper de l\'utilisateur</string>
     <string name="main_page_upcoming_event">Événements à venir</string>
     <string name="main_page_random_assos">Associations à découvrir</string>
     <string name="no_association">Pas d\'association</string>
@@ -98,10 +98,10 @@
     <string name="contact_pour_l_v_nement">Contact pour l\'événement</string>
     <string name="site_de_l_v_nement">Site de l\'évènement</string>
     <string name="ev_nements">Événements</string>
-    <string name="follow">follow</string>
+    <string name="follow">Suivre</string>
     <string name="event_followed">Vous suivez désormais cet événement</string>
     <string name="event_unfollowed">Vous ne suivez plus cet événement</string>
-    <string name="event_card_default_followers">0 followers</string>
+    <string name="event_card_default_followers">0 follower</string>
     <plurals name="evend_card_followers">
         <item quantity="zero">%1$d follower</item>
         <item quantity="one">%1$d follower</item>

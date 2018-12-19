@@ -219,7 +219,7 @@ public class EventDetailFragment extends FragmentWithUserAndData<User, Event> {
     private void loadChannel() {
         DatabaseFactory.getDependency().getChannelFromId(data.getChannelId(), result -> {
             channel = result;
-            String str = "Chat room";
+            String str = "Chat associé";
             channelButton.setText(str);
             setChannelButtonBehaviour();
         });
