@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.Objects;
 
@@ -83,6 +84,9 @@ public class AssociationDetailFragment extends FragmentWithUserAndData<User, Ass
 
         eventsButton = view.findViewById(R.id.association_detail_events_button);
         chatButton = view.findViewById(R.id.association_detail_chat_button);
+
+        TextView description = view.findViewById(R.id.association_description);
+        description.setText(data.getLongDescription());
 
         loadChat();
         setUpChatButton();

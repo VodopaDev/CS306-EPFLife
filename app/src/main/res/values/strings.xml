@@ -61,7 +61,7 @@
     <!-- Main fragment related -->
 
     <!-- ABOUT ZUZULULU fragment -->
-    <string name="send_mail_button">Nous envoyer un émail !</string>
+    <string name="send_mail_button">Nous envoyer un e-mail !</string>
     <string name="profile_unit">Section</string>
     <string name="posts">Posts</string>
     <string name="chat">Chat</string>
@@ -69,7 +69,7 @@
     <string name="anonymity">Annonymat</string>
     <string name="event_detail_like">Nombre de followers :</string>
     <string name="event_detail_tv_desc">Description :</string>
-    <string name="event_detail_tv_date">Date:</string>
+    <string name="event_detail_tv_date">Date :</string>
     <string name="event_detail_tv_organizer">Organisateur :</string>
     <string name="event_detail_tv_place">Lieux :</string>
 
@@ -83,12 +83,12 @@
     <string name="event_detail_tv_plan">Plan :</string>
 
     <string name="drawer_admin_panel">Accès administrateur</string>
-    <string name="user_role_searchbar_hint">User sciper</string>
+    <string name="user_role_searchbar_hint">Sciper de l\'utilisateur</string>
     <string name="main_page_upcoming_event">Événements à venir</string>
     <string name="main_page_random_assos">Associations à découvrir</string>
     <string name="no_association">Pas d\'association</string>
     <string name="no_chat">Pas de chat</string>
-    <string name="description_association_longue">Description de l\'association... Très très très longue description de l\'association. D\'ailleurs pour meubler un peu j\'écris directement ce qui me passe par la tête sans du tout réfléchir à ce que j\'écris je suis en shs je me fais chier en plein cours sur la mémoire alors je passe mon temps sur ce projet parce que c\'est quand même plus intéressant que savoir si mon hypocampe enregistre bien ou pas enfin bref tout ça pour faire une magnifique description de l\'association qui n\'existait pas avant ça c\'est fou c\'est une app sur les associations mais on a pas de description correcte d\'une association affichée dans ce fragment juste 2 pauvres bouttons dont 1 qui marche pas. J\'ai la flemme de continuer à écrire alors je vais remplir par des copiés collés. Description de l\'association... Très très très longue description de l\'association. D\'ailleurs pour meubler un peu j\'écris directement ce qui me passe par la tête sans du tout réfléchir à ce que j\'écris je suis en shs je me fais chier en plein cours sur la mémoire alors je passe mon temps sur ce projet parce que c\'est quand même plus intéressant que savoir si mon hypocampe enregistre bien ou pas enfin bref tout ça pour faire une magnifique description de l\'association qui n\'existait pas avant ça c\'est fou c\'est une app sur les associations mais on a pas de description correcte d\'une association affichée dans ce fragment juste 2 pauvres bouttons dont 1 qui marche pas. J\'ai la flemme de continuer à écrire alors je vais remplir par des copiés collés.Description de l\'association... Très très très longue description de l\'association. D\'ailleurs pour meubler un peu j\'écris directement ce qui me passe par la tête sans du tout réfléchir à ce que j\'écris je suis en shs je me fais chier en plein cours sur la mémoire alors je passe mon temps sur ce projet parce que c\'est quand même plus intéressant que savoir si mon hypocampe enregistre bien ou pas enfin bref tout ça pour faire une magnifique description de l\'association qui n\'existait pas avant ça c\'est fou c\'est une app sur les associations mais on a pas de description correcte d\'une association affichée dans ce fragment juste 2 pauvres bouttons dont 1 qui marche pas. J\'ai la flemme de continuer à écrire alors je vais remplir par des copiés collés.Description de l\'association... Très très très longue description de l\'association. D\'ailleurs pour meubler un peu j\'écris directement ce qui me passe par la tête sans du tout réfléchir à ce que j\'écris je suis en shs je me fais chier en plein cours sur la mémoire alors je passe mon temps sur ce projet parce que c\'est quand même plus intéressant que savoir si mon hypocampe enregistre bien ou pas enfin bref tout ça pour faire une magnifique description de l\'association qui n\'existait pas avant ça c\'est fou c\'est une app sur les associations mais on a pas de description correcte d\'une association affichée dans ce fragment juste 2 pauvres bouttons dont 1 qui marche pas. J\'ai la flemme de continuer à écrire alors je vais remplir par des copiés collés.</string>
+    <string name="description_association_longue">Cette association n\'a pas de description pour le moment</string>
     <string name="description_de_l_v_nement">Description de l\'évènement</string>
     <string name="date_de_l_n_nement">Date de l\'énènement</string>
     <string name="organisateur_de_l_n_nement">Organisateur de l\'énènement</string>
@@ -98,10 +98,10 @@
     <string name="contact_pour_l_v_nement">Contact pour l\'événement</string>
     <string name="site_de_l_v_nement">Site de l\'évènement</string>
     <string name="ev_nements">Événements</string>
-    <string name="follow">follow</string>
+    <string name="follow">Suivre</string>
     <string name="event_followed">Vous suivez désormais cet événement</string>
     <string name="event_unfollowed">Vous ne suivez plus cet événement</string>
-    <string name="event_card_default_followers">0 followers</string>
+    <string name="event_card_default_followers">0 follower</string>
     <plurals name="evend_card_followers">
         <item quantity="zero">%1$d follower</item>
         <item quantity="one">%1$d follower</item>
@@ -111,5 +111,6 @@
     <string name="login_for_more_features">Connecte-toi pour avoir accès à toutes les options</string>
     <string name="profile_new_picture">Nouvelle photo</string>
     <string name="bonnes_ondes_seulement">Bonnes ondes seulement...</string>
+    <string name="description">Description</string>
 
 </resources>
