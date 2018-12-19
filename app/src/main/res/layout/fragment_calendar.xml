@@ -32,7 +32,7 @@
                 app:currentDayOfMonthColor="@color/colorPrimaryDark"
                 app:selectedDayBackgroundColor="@color/colorPrimaryDark" />
 
-            <ch.epfl.sweng.zuluzulu.utility.MyListView
+            <ch.epfl.sweng.zuluzulu.utility.NonScrollableListView
                 android:id="@+id/calendar_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -11,12 +11,12 @@ public class UrlHandler extends AsyncTask<String, Void, List<String>> {
     private final static String TAG = "UrlHandler";
 
     // Function that will be executed onPostExecute
-    private UrlResultListener<List<String>> listener;
+    private final UrlResultListener<List<String>> listener;
 
-    private UrlReader urlReader;
+    private final UrlReader urlReader;
 
     // The function that will parse the data
-    private Parser<List<String>> parser;
+    private final Parser<List<String>> parser;
 
     /**
      * Create a new UrlHandler

@@ -23,15 +23,12 @@ import java.util.Locale;
 import ch.epfl.sweng.zuluzulu.adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser;
 import ch.epfl.sweng.zuluzulu.structure.Event;
 import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
 
 
-public class CalendarFragment extends SuperFragment {
-
-    private static final String ARG_USER = "ARG_USER";
-    private AuthenticatedUser user;
-
+public class CalendarFragment extends FragmentWithUser<AuthenticatedUser> {
     private Date today;
     private Date tomorrow;
 
@@ -67,10 +64,6 @@ public class CalendarFragment extends SuperFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
-        }
-
         followedEvents = new ArrayList<>();
         selectedDayEvents = new ArrayList<>();
         eventAdapter = new EventArrayAdapter(getContext(), selectedDayEvents, mListener, user);

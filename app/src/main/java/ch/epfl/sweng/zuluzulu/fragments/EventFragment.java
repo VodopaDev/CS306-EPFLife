@@ -23,12 +23,14 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.adapters.EventArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser;
 import ch.epfl.sweng.zuluzulu.structure.Event;
 import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.structure.user.User;
@@ -44,12 +46,9 @@ import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_CREATE_EVENT;
  * Use the {@link EventFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventFragment extends SuperFragment {
-    private static final String ARG_USER = "ARG_USER";
+public class EventFragment extends FragmentWithUser<User> {
     private final Date MIN_DATE = new Date(946724400000L);  // 01/01/2000
     private final Date MAX_DATE = new Date(1735729200000L); // 01/01/2025
-
-    private User user;
 
     private ArrayList<Event> allEvents;
     private ArrayList<Event> followedEvents;
@@ -139,7 +138,7 @@ public class EventFragment extends SuperFragment {
             if (user.isConnected())
                 updateListView(button_event_fav, followedEvents);
             else
-                Snackbar.make(getView(), "Login to access your favorite event", 5000).show();
+                Snackbar.make(Objects.requireNonNull(getView()), "Login to access your favorite event", 5000).show();
         });
         button_event_all.setOnClickListener(v -> updateListView(button_event_all, allEvents));
 

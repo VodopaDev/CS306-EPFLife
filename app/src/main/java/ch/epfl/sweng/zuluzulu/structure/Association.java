@@ -18,15 +18,15 @@ import ch.epfl.sweng.zuluzulu.R;
  * Has diverse getters and some functions to create views
  */
 public class Association extends FirebaseStructure implements Comparable<Association> {
-    private String name;
-    private String shortDescription;
-    private String longDescription;
+    private final String name;
+    private final String shortDescription;
+    private final String longDescription;
 
-    private String iconUri;
-    private String bannerUri;
+    private final String iconUri;
+    private final String bannerUri;
 
-    private List<String> upcomingEvents;
-    private String channelId;
+    private final List<String> upcomingEvents;
+    private final String channelId;
 
     public Association(String id, String name, String short_desc, String long_desc, String icon_uri, String banner_uri, List<String> events, String channel_id) {
         super(id);

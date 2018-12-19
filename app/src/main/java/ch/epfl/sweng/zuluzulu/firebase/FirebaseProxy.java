@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.firebase.Database.Database;
 import ch.epfl.sweng.zuluzulu.firebase.Database.DatabaseCollection;
@@ -286,7 +287,7 @@ public class FirebaseProxy implements Proxy {
     private void createChannel(Association association) {
         IdlingResourceFactory.incrementCountingIdlingResource();
         Map<String, Object> map = new HashMap<>();
-        map.put("id", association.getChannelId());
+        map.put("id", Objects.requireNonNull(association.getChannelId()));
         map.put("name", association.getName());
         map.put("short_description", association.getShortDescription());
         map.put("restrictions", new HashMap<>());
@@ -629,16 +630,17 @@ public class FirebaseProxy implements Proxy {
                         .setSemester(fmap.getString("semester"))
                         .setGaspar(fmap.getString("gaspar"))
                         .setEmail(fmap.getString("email"))
-                        .setFollowedAssociations((List<String>) fmap.get("followed_associations"))
-                        .setFollowedEvents((List<String>) fmap.get("followed_events"))
-                        .setFollowedChannels((List<String>) fmap.get("followed_channels"))
+                        .setFollowedAssociations(fmap.getStringList("followed_associations"))
+                        .setFollowedEvents(fmap.getStringList("followed_events"))
+                        .setFollowedChannels(fmap.getStringList("followed_channels"))
                         .buildAuthenticatedUser();
 
-                for (String role : (List<String>) fmap.get("roles"))
-                    user.addRole(UserRole.valueOf(role));
+                for (String role : fmap.getStringList("roles"))
+                    Objects.requireNonNull(user).addRole(UserRole.valueOf(role));
 
                 onResult.apply(user);
             } catch (Exception e) {
+                e.printStackTrace();
                 onResult.apply(null);
             }
             IdlingResourceFactory.decrementCountingIdlingResource();
@@ -748,7 +750,7 @@ public class FirebaseProxy implements Proxy {
 
     private class Counter {
         private int counter = 0;
-        private int end;
+        private final int end;
 
         public Counter(int end) {
             this.end = end;

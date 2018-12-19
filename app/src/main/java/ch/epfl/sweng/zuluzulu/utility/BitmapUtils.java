@@ -28,7 +28,7 @@ public interface BitmapUtils {
     static void writeBitmapInSDCard(Bitmap bitmap, String path){
         File toWriteInSDCard = new File(path);
 
-        if (toWriteInSDCard.exists ()) toWriteInSDCard.delete ();
+        if (toWriteInSDCard.exists()) toWriteInSDCard.delete();
         try {
             FileOutputStream out = new FileOutputStream(toWriteInSDCard);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);

@@ -37,7 +37,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
 
     private final OnFragmentInteractionListener mListener;
 
-    private AuthenticatedUser user;
+    private final AuthenticatedUser user;
 
     /**
      * Basic constructor of an EventArrayAdapter
@@ -50,11 +50,10 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         this.mListener = mListener;
         this.context = context;
         this.data = data;
-        if (user.isConnected()) {
+        if (user.isConnected())
             this.user = (AuthenticatedUser) user;
-        } else {
+        else
             this.user = null;
-        }
 
     }
 
@@ -70,67 +69,88 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        View event_view = convertView;
-        final EventHolder holder = event_view == null ? new EventHolder() : (EventHolder) event_view.getTag();
+        View eventView = convertView;
+        final EventHolder holder = eventView == null ? new EventHolder() : (EventHolder) eventView.getTag();
 
-        if (event_view == null) {
+        if (eventView == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-            event_view = inflater.inflate(layout_resource_id, parent, false);
-
-            holder.name = event_view.findViewById(R.id.card_event_name);
-            holder.short_desc = event_view.findViewById(R.id.card_event_short_desc);
-            holder.icon = event_view.findViewById(R.id.card_event_image);
-            holder.start_date = event_view.findViewById(R.id.card_event_date);
-            holder.likes = event_view.findViewById(R.id.card_event_like_text);
-            holder.likes_button = event_view.findViewById(R.id.card_event_like_button);
-
-            event_view.setTag(holder);
+            eventView = inflater.inflate(layout_resource_id, parent, false);
+            initHolderSubViews(eventView, holder);
         }
 
         final Event event = data.get(position);
+        setHolderContent(holder, event, parent);
+
+        eventView.setOnClickListener(v -> {
+            Log.d("FRAG_CHANGE", "Switching to " + event.getName() + "detailed view");
+            mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT, event);
+        });
+
+        return eventView;
+    }
+
+    /**
+     * Create a OnClickListener that follows/unfollows an Event
+     * @param event event to follow/unfollow
+     * @param holder event holder to modify
+     * @param parent parent containing the holder
+     */
+    private void followEventOnClick(final Event event, final EventHolder holder, final ViewGroup parent){
+        if (user != null && user.isConnected()) {
+            if (!user.isFollowedEvent(event.getId())) {
+                event.addFollower(user.getSciper());
+                user.addFollowedEvent(event.getId());
+                user.addFollowedChannel(event.getChannelId());
+                holder.likes_button.setSelected(true);
+                DatabaseFactory.getDependency().addEventToUserFollowedEvents(event, user);
+                Snackbar.make(parent, context.getString(R.string.event_followed), Snackbar.LENGTH_SHORT).show();
+            } else {
+                event.removeFollower(user.getSciper());
+                user.removeFollowedEvent(event.getId());
+                user.removeFollowedChannel(event.getChannelId());
+                holder.likes.setText(String.valueOf(event.getLikes()));
+                holder.likes_button.setSelected(false);
+                DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event, user);
+                Snackbar.make(parent, context.getString(R.string.event_unfollowed), Snackbar.LENGTH_SHORT).show();
+            }
+            holder.likes.setText(context.getResources().getQuantityString(R.plurals.evend_card_followers, event.getLikes(), event.getLikes()));
+        } else {
+            Utils.showConnectSnackbar(parent);
+        }
+    }
+
+    /**
+     * Set the event holder content with the selected event fields
+     * @param holder holder to fill
+     * @param event event to put in the holder
+     * @param parent parent containing the holder
+     */
+    private void setHolderContent(final EventHolder holder, final Event event, ViewGroup parent){
         holder.name.setText(event.getName());
         holder.short_desc.setText(event.getShortDescription());
         ImageLoader.loadUriIntoImageView(holder.icon, event.getIconUri(), getContext());
         holder.start_date.setText(event.getDateTimeUser(false));
         holder.likes.setText(context.getResources().getQuantityString(R.plurals.evend_card_followers, event.getLikes(), event.getLikes()));
-
-        holder.likes_button.setOnClickListener(v -> {
-            if (user != null && user.isConnected()) {
-                if (!user.isFollowedEvent(event.getId())) {
-                    event.addFollower(user.getSciper());
-                    user.addFollowedEvent(event.getId());
-                    user.addFollowedChannel(event.getChannelId());
-                    holder.likes_button.setSelected(true);
-                    DatabaseFactory.getDependency().addEventToUserFollowedEvents(event, user);
-                    Snackbar.make(parent, context.getString(R.string.event_followed), Snackbar.LENGTH_SHORT).show();
-                } else {
-                    event.removeFollower(user.getSciper());
-                    user.removeFollowedEvent(event.getId());
-                    user.removeFollowedChannel(event.getChannelId());
-                    holder.likes.setText(String.valueOf(event.getLikes()));
-                    holder.likes_button.setSelected(false);
-                    DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event, user);
-                    Snackbar.make(parent, context.getString(R.string.event_unfollowed), Snackbar.LENGTH_SHORT).show();
-                }
-                holder.likes.setText(context.getResources().getQuantityString(R.plurals.evend_card_followers, event.getLikes(), event.getLikes()));
-            } else {
-                Utils.showConnectSnackbar(parent);
-            }
-        });
-
-        if (user != null && user.isConnected()) {
+        holder.likes_button.setOnClickListener(v -> followEventOnClick(event, holder, parent));
+        if (user != null && user.isConnected())
             holder.likes_button.setSelected(user.isFollowedEvent(event.getId()));
-
-        } else {
+        else
             holder.likes_button.setSelected(false);
-        }
+    }
 
-        event_view.setOnClickListener(v -> {
-            Log.d("FRAG_CHANGE", "Switching to " + event.getName() + "detailed view");
-            mListener.onFragmentInteraction(CommunicationTag.OPEN_EVENT_DETAIL_FRAGMENT, event);
-        });
-
-        return event_view;
+    /**
+     * Init the event holder fields (ie name/icon/desc...) from the default EventView
+     * @param eventView eventView to display in the list view
+     * @param holder holder to hold the new event
+     */
+    private void initHolderSubViews(View eventView, EventHolder holder){
+        holder.name = eventView.findViewById(R.id.card_event_name);
+        holder.short_desc = eventView.findViewById(R.id.card_event_short_desc);
+        holder.icon = eventView.findViewById(R.id.card_event_image);
+        holder.start_date = eventView.findViewById(R.id.card_event_date);
+        holder.likes = eventView.findViewById(R.id.card_event_like_text);
+        holder.likes_button = eventView.findViewById(R.id.card_event_like_button);
+        eventView.setTag(holder);
     }
 
     /**

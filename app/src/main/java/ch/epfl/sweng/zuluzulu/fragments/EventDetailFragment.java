@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +17,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Objects;
+
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUserAndData;
 import ch.epfl.sweng.zuluzulu.structure.Association;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
 import ch.epfl.sweng.zuluzulu.structure.Event;
@@ -31,24 +33,15 @@ import ch.epfl.sweng.zuluzulu.utility.Utils;
 
 import static ch.epfl.sweng.zuluzulu.CommunicationTag.OPEN_ASSOCIATION_DETAIL_FRAGMENT;
 
-public class EventDetailFragment extends SuperFragment {
+public class EventDetailFragment extends FragmentWithUserAndData<User, Event> {
     public static final String TAG = "EVENT_DETAIL__TAG";
-    private static final String ARG_USER = "ARG_USER";
-    private static final String ARG_EVENT = "ARG_EVENT";
 
     private TextView event_like;
-    private Event event;
-    private User user;
-
-
     private Button channelButton;
     private Channel channel;
 
-
     private Button associationButton;
     private Association association;
-
-
 
     public static EventDetailFragment newInstance(User user, Event event) {
         if (event == null)
@@ -61,7 +54,7 @@ public class EventDetailFragment extends SuperFragment {
         EventDetailFragment fragment = new EventDetailFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_USER, user);
-        args.putSerializable(ARG_EVENT, event);
+        args.putSerializable(ARG_DATA, event);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,9 +63,7 @@ public class EventDetailFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (User) getArguments().getSerializable(ARG_USER);
-            event = (Event) getArguments().getSerializable(ARG_EVENT);
-            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, event.getName());
+            mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, data.getName());
         }
     }
 
@@ -80,57 +71,21 @@ public class EventDetailFragment extends SuperFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_detail, container, false);
 
-
         view.findViewById(R.id.event_detail_export).setOnClickListener(v -> exportEventToCalendar());
 
         event_like = view.findViewById(R.id.event_detail_tv_numberLikes);
-        event_like.setText(String.valueOf(event.getLikes()));
+        event_like.setText(String.valueOf(data.getLikes()));
+        setViewFields(view);
 
         // Favorite button
         ImageButton event_like_button = view.findViewById(R.id.event_detail_like_button);
         setLikeButtonBehaviour(event_like_button);
 
-        TextView event_desc = view.findViewById(R.id.event_detail_desc);
-        event_desc.setText(event.getLongDescription());
-
-        TextView event_date = view.findViewById(R.id.event_detail_date);
-        event_date.setText(event.getDateTimeUser(true));
-
-        TextView event_organizer = view.findViewById(R.id.event_detail_organizer);
-        event_organizer.setText(event.getOrganizer());
-
-        TextView event_place = view.findViewById(R.id.event_detail_place);
-        event_place.setText(event.getPlace());
-
-
-        TextView event_contact = view.findViewById(R.id.event_detail_contact);
-        event_contact.setText(event.getContact());
-
-        TextView event_website = view.findViewById(R.id.event_detail_website);
-        event_website.setText(event.getWebsite());
-
-        TextView event_speaker = view.findViewById(R.id.event_detail_speaker);
-        event_speaker.setText(event.getSpeaker());
-
-        TextView event_category = view.findViewById(R.id.event_detail_category);
-        event_category.setText(event.getCategory());
-
-        WebView myWebView = view.findViewById(R.id.webview);
-        myWebView.setWebViewClient(new WebViewClient() {
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                // do your handling codes here, which url is the requested url
-                // probably you need to open that url rather than redirect:
-                view.loadUrl(url);
-                return false; // then it is not handled by default action
-            }
-        });
-        WebSettings webSettings = myWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        myWebView.loadUrl(event.getUrlPlaceAndRoom());
+        setWebView(view);
 
         // load event icon and banner
-        ImageLoader.loadUriIntoImageView(view.findViewById(R.id.event_detail_icon), event.getIconUri(), getContext());
-        ImageLoader.loadUriIntoImageView(view.findViewById(R.id.event_detail_banner), event.getBannerUri(), getContext());
+        ImageLoader.loadUriIntoImageView(view.findViewById(R.id.event_detail_icon), data.getIconUri(), getContext());
+        ImageLoader.loadUriIntoImageView(view.findViewById(R.id.event_detail_banner), data.getBannerUri(), getContext());
 
         channelButton = view.findViewById(R.id.event_detail_chatRoom);
         associationButton = view.findViewById(R.id.event_detail_but_assos);
@@ -140,31 +95,78 @@ public class EventDetailFragment extends SuperFragment {
         return view;
     }
 
+    /**
+     * set the event basic fields to display (ie:name, description, icon, place...)
+     * @param view container view
+     */
+    private void setViewFields(View view){
+        TextView event_desc = view.findViewById(R.id.event_detail_desc);
+        event_desc.setText(data.getLongDescription());
+
+        TextView event_date = view.findViewById(R.id.event_detail_date);
+        event_date.setText(data.getDateTimeUser(true));
+
+        TextView event_organizer = view.findViewById(R.id.event_detail_organizer);
+        event_organizer.setText(data.getOrganizer());
+
+        TextView event_place = view.findViewById(R.id.event_detail_place);
+        event_place.setText(data.getPlace());
+
+
+        TextView event_contact = view.findViewById(R.id.event_detail_contact);
+        event_contact.setText(data.getContact());
+
+        TextView event_website = view.findViewById(R.id.event_detail_website);
+        event_website.setText(data.getWebsite());
+
+        TextView event_speaker = view.findViewById(R.id.event_detail_speaker);
+        event_speaker.setText(data.getSpeaker());
+
+        TextView event_category = view.findViewById(R.id.event_detail_category);
+        event_category.setText(data.getCategory());
+    }
+
+    /**
+     * Set the event webview to display the map
+     * @param view container view
+     */
+    private void setWebView(View view){
+        WebView myWebView = view.findViewById(R.id.webview);
+        myWebView.setWebViewClient(new WebViewClient() {
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return false;
+            }
+        });
+        WebSettings webSettings = myWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        myWebView.loadUrl(data.getUrlPlaceAndRoom());
+    }
+
     private void setLikeButtonBehaviour(ImageButton event_like_button) {
 
-        event_like_button.setSelected(user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(event.getId()));
+        event_like_button.setSelected(user.isConnected() && ((AuthenticatedUser) user).isFollowedEvent(data.getId()));
 
 
         event_like_button.setOnClickListener(view -> {
             if (user.isConnected()) {
                 AuthenticatedUser auth = (AuthenticatedUser) user;
-                Snackbar snack;
-                if (auth.isFollowedEvent(event.getId())) {
-                    auth.removeFollowedEvent(event.getId());
-                    auth.removeFollowedChannel(event.getChannelId());
-                    event.removeFollower(user.getSciper());
-                    DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(event, auth);
+                if (auth.isFollowedEvent(data.getId())) {
+                    auth.removeFollowedEvent(data.getId());
+                    auth.removeFollowedChannel(data.getChannelId());
+                    data.removeFollower(user.getSciper());
+                    DatabaseFactory.getDependency().removeEventFromUserFollowedEvents(data, auth);
                     DatabaseFactory.getDependency().removeChannelFromUserFollowedChannels(channel, auth);
                     event_like_button.setSelected(false);
-                    Toast.makeText(getActivity(), getContext().getString(R.string.event_unfollowed), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), Objects.requireNonNull(getContext()).getString(R.string.event_unfollowed), Toast.LENGTH_SHORT).show();
                 } else {
-                    auth.addFollowedEvent(event.getId());
-                    auth.addFollowedChannel(event.getChannelId());
-                    event.addFollower(user.getSciper());
-                    DatabaseFactory.getDependency().addEventToUserFollowedEvents(event, auth);
+                    auth.addFollowedEvent(data.getId());
+                    auth.addFollowedChannel(data.getChannelId());
+                    data.addFollower(user.getSciper());
+                    DatabaseFactory.getDependency().addEventToUserFollowedEvents(data, auth);
                     DatabaseFactory.getDependency().addChannelToUserFollowedChannels(channel, auth);
                     event_like_button.setSelected(true);
-                    Toast.makeText(getActivity(), getContext().getString(R.string.event_followed), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), Objects.requireNonNull(getContext()).getString(R.string.event_followed), Toast.LENGTH_SHORT).show();
                 }
             } else {
                 Utils.showConnectSnackbar(getView());
@@ -179,14 +181,14 @@ public class EventDetailFragment extends SuperFragment {
         Intent intent = new Intent(Intent.ACTION_INSERT);
         intent.setType("vnd.android.cursor.item/event");
 
-        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, event.getStartDate().getTime());
-        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.getEndDate().getTime());
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, data.getStartDate().getTime());
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, data.getEndDate().getTime());
         intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, false);
 
-        intent.putExtra(CalendarContract.Events.TITLE, event.getName());
-        intent.putExtra(CalendarContract.Events.DESCRIPTION, event.getLongDescription());
-        intent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.getPlace());
-        intent.putExtra(CalendarContract.Events.ORGANIZER, event.getOrganizer());
+        intent.putExtra(CalendarContract.Events.TITLE, data.getName());
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, data.getLongDescription());
+        intent.putExtra(CalendarContract.Events.EVENT_LOCATION, data.getPlace());
+        intent.putExtra(CalendarContract.Events.ORGANIZER, data.getOrganizer());
 
         startActivity(intent);
     }
@@ -215,7 +217,7 @@ public class EventDetailFragment extends SuperFragment {
      * Load the event's channel and set up the channel button if such a channel exists
      */
     private void loadChannel() {
-        DatabaseFactory.getDependency().getChannelFromId(event.getChannelId(), result -> {
+        DatabaseFactory.getDependency().getChannelFromId(data.getChannelId(), result -> {
             channel = result;
             String str = "Chat room";
             channelButton.setText(str);
@@ -227,7 +229,7 @@ public class EventDetailFragment extends SuperFragment {
      * Load the event's association and set up the association button if such an association exists
      */
     private void loadAssociation() {
-        DatabaseFactory.getDependency().getAssociationFromId(event.getAssociationId(), result -> {
+        DatabaseFactory.getDependency().getAssociationFromId(data.getAssociationId(), result -> {
             association = result;
             associationButton.setText(association.getName());
             setAssociationButtonBehavior();

@@ -12,9 +12,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Switch;
 
+import java.util.Objects;
+
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.SuperFragment;
 
 import static android.support.design.widget.Snackbar.LENGTH_SHORT;
 
@@ -58,7 +61,7 @@ public class SettingsFragment extends SuperFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        preferences = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE);
 
         Button button_clear = view.findViewById(R.id.button_clear_cache);
         button_clear.setOnClickListener(v -> {

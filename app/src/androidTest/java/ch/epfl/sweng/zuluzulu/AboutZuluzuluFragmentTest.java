@@ -9,8 +9,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import ch.epfl.sweng.zuluzulu.database.MockedProxy;
+import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.fragments.AboutZuluzuluFragment;
-import ch.epfl.sweng.zuluzulu.fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.SuperFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -26,6 +28,7 @@ public class AboutZuluzuluFragmentTest {
 
     @Before
     public void init() {
+        DatabaseFactory.setDependency(new MockedProxy());
         SuperFragment fragment = AboutZuluzuluFragment.newInstance();
         mActivityRule.getActivity().openFragment(fragment);
     }

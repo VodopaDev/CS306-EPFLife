@@ -17,11 +17,11 @@ import ch.epfl.sweng.zuluzulu.firebase.FirebaseMapDecorator;
  */
 public class Post extends SuperMessage {
 
-    private String color;
-    private Set<String> replies;
-    private Set<String> upScipers;
-    private Set<String> downScipers;
-    private String originalPostId;
+    private final String color;
+    private final Set<String> replies;
+    private final Set<String> upScipers;
+    private final Set<String> downScipers;
+    private final String originalPostId;
 
     public Post(String id, String channelId, String originalPostId, String message, String senderName, String senderSciper, Date time, String color, List<String> replies, List<String> upScipers, List<String> downScipers) {
         super(id, channelId, message, senderName, senderSciper, time);
@@ -106,8 +106,10 @@ public class Post extends SuperMessage {
         return new ArrayList<>(replies);
     }
 
-    public boolean addReply(String replyId) {
-        return originalPostId == null && replies.add(replyId);
+    public void addReply(String replyId) {
+        if (originalPostId == null) {
+            replies.add(replyId);
+        }
     }
 
     /**

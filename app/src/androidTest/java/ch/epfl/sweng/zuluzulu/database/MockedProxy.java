@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.firebase.OnResult;
 import ch.epfl.sweng.zuluzulu.firebase.Proxy;
@@ -27,17 +28,17 @@ import static ch.epfl.sweng.zuluzulu.Utility.defaultPost1;
 
 public class MockedProxy implements Proxy {
 
-    private Map<String, Association> associationMap = new HashMap<String, Association>() {{
+    private final Map<String, Association> associationMap = new HashMap<String, Association>() {{
         put("0", Utility.defaultAssociation());
     }};
 
-    private Map<String, Event> eventMap = new HashMap<String, Event>() {{
+    private final Map<String, Event> eventMap = new HashMap<String, Event>() {{
         put("0", Utility.defaultEvent().build());
         put("1", Utility.currentTimeEvent().build());
     }};
 
 
-    private Map<String, ChannelRepresentation> channelMap = new HashMap<String, ChannelRepresentation>() {{
+    private final Map<String, ChannelRepresentation> channelMap = new HashMap<String, ChannelRepresentation>() {{
         ChannelRepresentation rep = new ChannelRepresentation(Utility.defaultChannel());
         rep.messageMap.put("0", Utility.defaultMessage0());
         rep.messageMap.put("1", Utility.defaultMessage1());
@@ -46,7 +47,7 @@ public class MockedProxy implements Proxy {
         put("0", rep);
     }};
 
-    private Map<String, AuthenticatedUser> userMap = new HashMap<String, AuthenticatedUser>() {{
+    private final Map<String, AuthenticatedUser> userMap = new HashMap<String, AuthenticatedUser>() {{
         put("1", createFilledUserBuilder().setSciper("1").buildAdmin());
         put("0", createTestAuthenticated());
     }};
@@ -70,21 +71,21 @@ public class MockedProxy implements Proxy {
     public String getNewPostId(String channelId) {
         if (!channelMap.containsKey(channelId))
             return "0";
-        return String.valueOf(channelMap.get(channelId).postMap.size());
+        return String.valueOf(Objects.requireNonNull(channelMap.get(channelId)).postMap.size());
     }
 
     @Override
     public String getNewMessageId(String channelId) {
         if (!channelMap.containsKey(channelId))
             return "0";
-        return String.valueOf(channelMap.get(channelId).messageMap.size());
+        return String.valueOf(Objects.requireNonNull(channelMap.get(channelId)).messageMap.size());
     }
 
     @Override
     public String getNewReplyId(String channelId, String originalPostId) {
-        if (!channelMap.containsKey(channelId) || !channelMap.get(channelId).postMap.containsKey(originalPostId))
+        if (!channelMap.containsKey(channelId) || !Objects.requireNonNull(channelMap.get(channelId)).postMap.containsKey(originalPostId))
             return "0";
-        return String.valueOf(channelMap.get(channelId).postMap.get(originalPostId).second.size());
+        return String.valueOf(Objects.requireNonNull(channelMap.get(channelId)).postMap.get(originalPostId).second.size());
     }
 
     @Override
@@ -101,21 +102,21 @@ public class MockedProxy implements Proxy {
     public void addMessage(ChatMessage message) {
         if (!channelMap.containsKey(message.getChannelId()))
             return;
-        channelMap.get(message.getChannelId()).messageMap.put(message.getId(), message);
+        Objects.requireNonNull(channelMap.get(message.getChannelId())).messageMap.put(message.getId(), message);
     }
 
     @Override
     public void addPost(Post post) {
         if (!channelMap.containsKey(post.getChannelId()))
             return;
-        channelMap.get(post.getChannelId()).postMap.put(post.getId(), new Pair<>(post, Collections.EMPTY_MAP));
+        Objects.requireNonNull(channelMap.get(post.getChannelId())).postMap.put(post.getId(), new Pair<>(post, Collections.EMPTY_MAP));
     }
 
     @Override
     public void addReply(Post post) {
-        if (!channelMap.containsKey(post.getChannelId()) || !channelMap.get(post.getChannelId()).postMap.containsKey(post.getId()))
+        if (!channelMap.containsKey(post.getChannelId()) || !Objects.requireNonNull(channelMap.get(post.getChannelId())).postMap.containsKey(post.getId()))
             return;
-        channelMap.get(post.getChannelId()).postMap.get(post.getId()).second.put(post.getId(), post);
+        Objects.requireNonNull(channelMap.get(post.getChannelId())).postMap.get(post.getId()).second.put(post.getId(), post);
     }
 
     @Override
@@ -162,7 +163,7 @@ public class MockedProxy implements Proxy {
         ArrayList<Channel> result = new ArrayList<>();
         for (String id : ids)
             if (channelMap.containsKey(id))
-                result.add(channelMap.get(id).channel);
+                result.add(Objects.requireNonNull(channelMap.get(id)).channel);
         onResult.apply(result);
     }
 
@@ -193,7 +194,7 @@ public class MockedProxy implements Proxy {
     @Override
     public void getChannelFromId(String id, OnResult<Channel> onResult) {
         if (id != null && channelMap.containsKey(id))
-            onResult.apply(channelMap.get(id).channel);
+            onResult.apply(Objects.requireNonNull(channelMap.get(id)).channel);
     }
 
     @Override
@@ -216,7 +217,7 @@ public class MockedProxy implements Proxy {
     @Override
     public void getMessagesFromChannel(String channelId, OnResult<List<ChatMessage>> onResult) {
         if (channelId != null && channelMap.containsKey(channelId)) {
-            ArrayList<ChatMessage> result = new ArrayList<>(channelMap.get(channelId).messageMap.values());
+            ArrayList<ChatMessage> result = new ArrayList<>(Objects.requireNonNull(channelMap.get(channelId)).messageMap.values());
             onResult.apply(result);
         }
     }
@@ -226,7 +227,7 @@ public class MockedProxy implements Proxy {
         //TODO nico il faut ajouter le post dans la liste du channel... mais comment ? ici c'est pas idéal
         if (channelId != null && channelMap.containsKey(channelId)) {
             ArrayList<Post> result = new ArrayList<>();
-            for (Pair<Post, Map<String, Post>> pair : channelMap.get(channelId).postMap.values()) {
+            for (Pair<Post, Map<String, Post>> pair : Objects.requireNonNull(channelMap.get(channelId)).postMap.values()) {
                 result.add(pair.first);
             }
             onResult.apply(result);
@@ -265,8 +266,8 @@ public class MockedProxy implements Proxy {
 
     @Override
     public void getRepliesFromPost(String channelId, String postId, OnResult<List<Post>> onResult) {
-        if (channelId != null && channelMap.containsKey(channelId) && postId != null && channelMap.get(channelId).postMap.containsKey(postId)) {
-            ArrayList<Post> result = new ArrayList<>(channelMap.get(channelId).postMap.get(postId).second.values());
+        if (channelId != null && channelMap.containsKey(channelId) && postId != null && Objects.requireNonNull(channelMap.get(channelId)).postMap.containsKey(postId)) {
+            ArrayList<Post> result = new ArrayList<>(Objects.requireNonNull(channelMap.get(channelId)).postMap.get(postId).second.values());
             onResult.apply(result);
         }
     }
@@ -313,7 +314,7 @@ public class MockedProxy implements Proxy {
     @Override
     public void updateUserRole(String sciper, List<String> roles) {
         if (userMap.containsKey(sciper))
-            userMap.get(sciper).setRoles(roles);
+            Objects.requireNonNull(userMap.get(sciper)).setRoles(roles);
     }
 
     @Override
@@ -322,9 +323,9 @@ public class MockedProxy implements Proxy {
     }
 
     private final class ChannelRepresentation {
-        private Channel channel;
-        private Map<String, ChatMessage> messageMap;
-        private Map<String, Pair<Post, Map<String, Post>>> postMap;
+        private final Channel channel;
+        private final Map<String, ChatMessage> messageMap;
+        private final Map<String, Pair<Post, Map<String, Post>>> postMap;
 
         private ChannelRepresentation(Channel channel) {
             this.channel = channel;

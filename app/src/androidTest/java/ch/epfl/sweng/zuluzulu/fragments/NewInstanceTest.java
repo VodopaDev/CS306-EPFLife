@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.epfl.sweng.zuluzulu.Utility;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.SuperChatPostsFragment;
 
 @RunWith(AndroidJUnit4.class)
 public class NewInstanceTest {

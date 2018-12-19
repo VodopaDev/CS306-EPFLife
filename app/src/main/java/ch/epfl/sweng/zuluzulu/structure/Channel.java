@@ -11,7 +11,7 @@ import java.util.Map;
 
 import ch.epfl.sweng.zuluzulu.firebase.FirebaseMapDecorator;
 import ch.epfl.sweng.zuluzulu.R;
-import ch.epfl.sweng.zuluzulu.utility.Utils;
+import ch.epfl.sweng.zuluzulu.utility.GeopointUtility;
 
 /**
  * Class that represents a channel in a view
@@ -19,10 +19,10 @@ import ch.epfl.sweng.zuluzulu.utility.Utils;
 public class Channel extends FirebaseStructure {
     private static final double MAX_DISTANCE_TO_ACCESS_CHANNEL = 50;
     private static final double MAX_DISTANCE_TO_SEE_CHANNEL = 1000000;
-    private String name;
-    private String shortDescription;
-    private Map<String, Object> restrictions;
-    private String iconUri;
+    private final String name;
+    private final String shortDescription;
+    private final Map<String, Object> restrictions;
+    private final String iconUri;
 
     private boolean isAccessible = true;
     private double distance = 0;
@@ -150,7 +150,7 @@ public class Channel extends FirebaseStructure {
         if (userLocation == null)
             return false;
 
-        distance = Utils.distanceBetween(requestedLocation, userLocation);
+        distance = GeopointUtility.distanceBetween(requestedLocation, userLocation);
         double diff_distance = distance - MAX_DISTANCE_TO_ACCESS_CHANNEL;
         isAccessible = distance < MAX_DISTANCE_TO_ACCESS_CHANNEL;
 

@@ -15,6 +15,7 @@ import com.google.common.collect.Sets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
@@ -68,7 +69,7 @@ public class UserRoleArrayAdapter extends ArrayAdapter<Map<String, Object>> {
         final Map<String, Object> map = data.get(position);
         holder.sciper.setText((String) map.get("sciper"));
 
-        Set<String> roles = Sets.newHashSet((List<String>) map.get("roles"));
+        Set<String> roles = Sets.newHashSet((List<String>) Objects.requireNonNull(map.get("roles")));
         if (roles.contains(UserRole.ADMIN.toString()))
             holder.adminCheckbox.setChecked(true);
 

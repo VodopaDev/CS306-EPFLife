@@ -3,7 +3,6 @@ package ch.epfl.sweng.zuluzulu;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -41,7 +40,7 @@ import ch.epfl.sweng.zuluzulu.fragments.PostFragment;
 import ch.epfl.sweng.zuluzulu.fragments.ProfileFragment;
 import ch.epfl.sweng.zuluzulu.fragments.ReplyFragment;
 import ch.epfl.sweng.zuluzulu.fragments.SettingsFragment;
-import ch.epfl.sweng.zuluzulu.fragments.SuperFragment;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.SuperFragment;
 import ch.epfl.sweng.zuluzulu.fragments.WritePostFragment;
 import ch.epfl.sweng.zuluzulu.localDatabase.UserDatabase;
 import ch.epfl.sweng.zuluzulu.structure.Association;
@@ -192,9 +191,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         if (localUser != null) {
             user = localUser;
             DatabaseFactory.getDependency().getUserWithIdOrCreateIt(user.getSciper(), result -> {
-                    user = result;
-                    if(navigationView != null)
-                        selectItem(navigationView.getMenu().findItem(R.id.nav_main), true);
+                user = result;
+                if(navigationView != null)
+                    selectItem(navigationView.getMenu().findItem(R.id.nav_main), true);
             });
         } else {
             user = new User.UserBuilder().buildGuestUser();
@@ -252,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 fragment = MainFragment.newInstance(user);
                 break;
             case R.id.nav_chat:
-                fragment = ChannelFragment.newInstance(user);
+                fragment = ChannelFragment.newInstance((AuthenticatedUser) user);
                 break;
             case R.id.nav_admin_panel:
                 fragment = AdminPanelFragment.newInstance();
@@ -348,9 +347,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 openFragment(EventDetailFragment.newInstance(user, event));
                 break;
             case OPEN_CHANNEL_FRAGMENT:
-                User visitedUser = data == null ? user : (User) data;
                 selectItem(navigationView.getMenu().findItem(R.id.nav_chat), false);
-                openFragment(ChannelFragment.newInstance(visitedUser));
+                openFragment(ChannelFragment.newInstance((AuthenticatedUser) user));
                 break;
             case OPEN_LOGIN_FRAGMENT:
                 selectItem(navigationView.getMenu().findItem(R.id.nav_login), false);
@@ -373,10 +371,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                 break;
             case OPEN_MANAGE_USER:
                 openFragment(ChangeUserRoleFragment.newInstance());
-                break;
-            case OPEN_MANAGE_CHANNEL:
-                //TODO: to add when finished
-                //openFragment(...);
                 break;
             case OPEN_MANAGE_ASSOCIATION:
                 openFragment(AssociationsGeneratorFragment.newInstance(user));

@@ -16,12 +16,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import ch.epfl.sweng.zuluzulu.adapters.AssociationArrayAdapter;
 import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser;
 import ch.epfl.sweng.zuluzulu.structure.Association;
 import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
 import ch.epfl.sweng.zuluzulu.structure.user.User;
@@ -34,11 +36,7 @@ import ch.epfl.sweng.zuluzulu.structure.user.User;
  * Use the {@link AssociationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AssociationFragment extends SuperFragment {
-    private static final String ARG_USER = "ARG_USER";
-
-    private User user;
-
+public class AssociationFragment extends FragmentWithUser<User> {
     private List<Association> assosAll;
     private List<Association> assosFav;
     private List<Association> assosToFilter;
@@ -65,7 +63,6 @@ public class AssociationFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (User) getArguments().getSerializable(ARG_USER);
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, getResources().getString(R.string.drawer_associations));
         }
 
@@ -94,7 +91,7 @@ public class AssociationFragment extends SuperFragment {
             if (user.isConnected())
                 updateListView(buttonAssosFav, buttonAssosAll, assosFav);
             else
-                Snackbar.make(getView(), "Login to access your favorite associations", 5000).show();
+                Snackbar.make(Objects.requireNonNull(getView()), "Login to access your favorite associations", 5000).show();
         });
         buttonAssosAll.setOnClickListener(v -> updateListView(buttonAssosAll, buttonAssosFav, assosAll));
 

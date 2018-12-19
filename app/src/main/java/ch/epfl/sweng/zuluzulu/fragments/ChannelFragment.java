@@ -23,11 +23,11 @@ import ch.epfl.sweng.zuluzulu.CommunicationTag;
 import ch.epfl.sweng.zuluzulu.firebase.DatabaseFactory;
 import ch.epfl.sweng.zuluzulu.OnFragmentInteractionListener;
 import ch.epfl.sweng.zuluzulu.R;
+import ch.epfl.sweng.zuluzulu.fragments.superFragments.FragmentWithUser;
 import ch.epfl.sweng.zuluzulu.structure.Channel;
 import ch.epfl.sweng.zuluzulu.structure.GPS;
 import ch.epfl.sweng.zuluzulu.structure.user.AuthenticatedUser;
-import ch.epfl.sweng.zuluzulu.structure.user.User;
-import ch.epfl.sweng.zuluzulu.utility.Utils;
+import ch.epfl.sweng.zuluzulu.utility.GeopointUtility;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,18 +37,14 @@ import ch.epfl.sweng.zuluzulu.utility.Utils;
  * Use the {@link ChannelFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChannelFragment extends SuperFragment {
-    private static final String ARG_USER = "ARG_USER";
-
+public class ChannelFragment extends FragmentWithUser<AuthenticatedUser> {
     private static final List<String> GLOBAL_CHANNEL_IDS = new ArrayList(Arrays.asList("Global", "Section IN", "Section SC", "Sat"));
 
     private View view;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private List<Channel> listOfChannels = new ArrayList<>();
+    private final List<Channel> listOfChannels = new ArrayList<>();
     private ChannelArrayAdapter adapter;
-
-    private AuthenticatedUser user;
     private GeoPoint userLocation;
 
     public ChannelFragment() {
@@ -61,7 +57,7 @@ public class ChannelFragment extends SuperFragment {
      *
      * @return A new instance of fragment ChannelFragment.
      */
-    public static ChannelFragment newInstance(User user) {
+    public static ChannelFragment newInstance(AuthenticatedUser user) {
         if(user == null)
             throw new IllegalArgumentException("user can't be null");
         ChannelFragment fragment = new ChannelFragment();
@@ -75,7 +71,6 @@ public class ChannelFragment extends SuperFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (AuthenticatedUser) getArguments().getSerializable(ARG_USER);
             mListener.onFragmentInteraction(CommunicationTag.SET_TITLE, "Channels");
         }
     }
@@ -154,7 +149,7 @@ public class ChannelFragment extends SuperFragment {
     private void refreshPosition() {
         Location gpsLocation = GPS.getLocation();
         if (gpsLocation != null) {
-            userLocation = Utils.toGeoPoint(gpsLocation);
+            userLocation = GeopointUtility.toGeoPoint(gpsLocation);
         }
     }
 }

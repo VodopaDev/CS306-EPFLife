@@ -15,7 +15,7 @@ import ch.epfl.sweng.zuluzulu.tequila.OAuth2Config;
 
 @RunWith(JUnit4.class)
 public class AuthServerTest {
-    private OAuth2Config config = new OAuth2Config(new String[]{"tequila"}, "123", "1234", "blabla");
+    private final OAuth2Config config = new OAuth2Config(new String[]{"tequila"}, "123", "1234", "blabla");
 
     @Test
     public void fetchTokenReturnsAnErrorProperly() throws Exception {

@@ -32,8 +32,8 @@ public class PostTest {
     private static final String message1 = "James message";
     private static final String color1 = "#e8b30f";
     private static final Date time = new Date();
-    private List<String> upScipers1 = singletonList(currentUserId);
-    private List<String> downScipers1 = new ArrayList<>();
+    private final List<String> upScipers1 = singletonList(currentUserId);
+    private final List<String> downScipers1 = new ArrayList<>();
 
     private static final String id2 = "2";
     private static final String originalPostId2 = null;
@@ -41,8 +41,8 @@ public class PostTest {
     private static final String sciper2 = "222222";
     private static final String message2 = "Bond's message";
     private static final String color2 = "#f8b30f";
-    private List<String> upScipers2 = new ArrayList<>();
-    private List<String> downScipers2 = singletonList(currentUserId);
+    private final List<String> upScipers2 = new ArrayList<>();
+    private final List<String> downScipers2 = singletonList(currentUserId);
 
     private Post post1;
     private Post post2;
