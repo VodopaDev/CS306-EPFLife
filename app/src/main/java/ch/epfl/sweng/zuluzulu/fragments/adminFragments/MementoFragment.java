@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import ch.epfl.sweng.zuluzulu.adapters.EventArrayAdapter;
@@ -145,12 +146,27 @@ public class MementoFragment extends SuperFragment {
     private Event createEvent(JSONObject jsonobject) throws JSONException, IllegalArgumentException, ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+
+        Date start_date;
+        if("null".equals(jsonobject.getString("event_start_time"))){
+            start_date = simpleDateFormat.parse(jsonobject.getString("event_start_date") + " " + "00:00:00");
+        } else {
+            start_date = simpleDateFormat.parse(jsonobject.getString("event_start_date") + " " + jsonobject.getString("event_start_time"));
+        }
+
+        Date end_date;
+        if("null".equals(jsonobject.getString("event_end_time"))){
+            end_date = simpleDateFormat.parse(jsonobject.getString("event_end_date") + " " + "00:00:00");
+        } else {
+            end_date = simpleDateFormat.parse(jsonobject.getString("event_end_date") + " " + jsonobject.getString("event_end_time"));
+        }
+
         return new EventBuilder()
                 // Use this to avoid collision
                 .setId(Integer.toString(jsonobject.getString("title").hashCode()))
                 .setDate(new EventDate(
-                        simpleDateFormat.parse(jsonobject.getString("event_start_date") + " " + jsonobject.getString("event_start_time")),
-                        simpleDateFormat.parse(jsonobject.getString("event_end_date") + " " + jsonobject.getString("event_end_time"))))
+                        start_date,
+                        end_date))
                 .setUrlPlaceAndRoom(jsonobject.getString("event_url_place_and_room"))
                 .setAssosId("0")
                 .setChannelId(DatabaseFactory.getDependency().getNewChannelId())
